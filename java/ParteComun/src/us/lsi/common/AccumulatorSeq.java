@@ -7,13 +7,13 @@ package us.lsi.common;
  * @param <B> El tipo de la la base del acumulador
  * @param <R> El tipo del resultado del acumulador
  */
-public interface Accumulator<E, B, R> {
+public interface AccumulatorSeq<E, B, R> {
 	/**
 	 * Establece el esatdo inicial de la base del acumulador
 	 */
-	void setInitial();
+	B getInitial();
 	/**
-	 * @post El elemento e queda acumulado en la base
+	 * @post El elemento que queda acumulado en la base
 	 * @param <E> el tipo del elemento
 	 * @param e Un elemento
 	 */
@@ -26,5 +26,5 @@ public interface Accumulator<E, B, R> {
 	/**
 	 * @return Si el acumulador ha terminado el cálculo
 	 */
-	Boolean finish();
+	Boolean isDone();
 }
