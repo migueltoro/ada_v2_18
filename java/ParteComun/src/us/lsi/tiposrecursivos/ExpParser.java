@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
 import us.lsi.common.Maps2;
 import us.lsi.common.Preconditions;
 import us.lsi.regularexpressions.Tokenizer;
@@ -15,63 +14,65 @@ import us.lsi.tiposrecursivos.Exp.ExpType;
 
 public class ExpParser {
 
-	public static <R> Exp<R> scan(String s) {
+	public static Exp<Object> scan(String s) {
 		Tokenizer tk = Tokenizer.create(s, Operator.functions, Operator.reservedWords);
-		Map<String, Exp<?>> vars = new HashMap<>();
-		@SuppressWarnings("unchecked")
-		Exp<R> r = (Exp<R>) ExpParser.scanExp(tk, vars);
+		Map<String, Exp<Object>> vars = new HashMap<>();
+		Exp<Object> r = ExpParser.scanExp(tk, vars);
 		return r;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <R> Exp<R> scan(String s, Map<String, Exp<?>> vars) {
+	
+	public static Exp<Object> scan(String s, Map<String, Exp<Object>> vars) {
 		Tokenizer tk = Tokenizer.create(s, Operator.functions, Operator.reservedWords);
-		Map<String, Exp<?>> nVars = new HashMap<>(vars);
+		Map<String, Exp<Object>> nVars = new HashMap<>(vars);
 	    vars.values().stream().map(e->e.getVars()).forEach(m->nVars.putAll(m));		
-	    Exp<R> r = (Exp<R>) ExpParser.scanExp(tk, nVars);
+	    Exp<Object> r = ExpParser.scanExp(tk, nVars);
 		return r;
 	}
 	
-	protected static Exp<?> scanExp(Tokenizer tk, Map<String,Exp<?>> vars){
-		Exp<?> r = scanParticleMultiply(tk,vars);
+	protected static Exp<Object> scanExp(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = scanParticleMultiply(tk,vars);
 		String s;
 		while (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 2) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<?> exp = ExpParser.scanParticleMultiply(tk, vars);
-			r = Operator.getBinary(s,r.getType(),exp.getType()).exp(r,exp);
+			Exp<Object> exp = ExpParser.scanParticleMultiply(tk, vars);
+			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
+			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<?> scanParticleMultiply(Tokenizer tk, Map<String,Exp<?>> vars){
-		Exp<?> r = scanParticlePot(tk,vars);
+	protected static Exp<Object> scanParticleMultiply(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = scanParticlePot(tk,vars);
 		String s;
 		while (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 4) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<?> exp = ExpParser.scanParticlePot(tk, vars);
-			r = Operator.getBinary(s,r.getType(),exp.getType()).exp(r,exp);
+			Exp<Object> exp = ExpParser.scanParticlePot(tk, vars);
+			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
+			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<?> scanParticlePot(Tokenizer tk, Map<String,Exp<?>> vars){
-		Exp<?> r = scanParticleBasic(tk,vars);
+	protected static Exp<Object> scanParticlePot(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = scanParticleBasic(tk,vars);
 		String s;
 		if (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 6) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<?> exp = ExpParser.scanParticleBasic(tk, vars);
-			r = Operator.getBinary(s,r.getType(),exp.getType()).exp(r,exp);
+			Exp<Object> exp = ExpParser.scanParticleBasic(tk, vars);
+			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
+			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
-	protected static Exp<?> scanParticleBasic(Tokenizer tk, Map<String,Exp<?>> vars){
-		Exp<?> r = null;
+	protected static Exp<Object> scanParticleBasic(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = null;
 		String s;
 		TokenType tt = tk.seeNextTokenType();
 		switch (tt) {	
@@ -83,7 +84,7 @@ public class ExpParser {
 			break; 
 		case VariableIdentifier:
 			if (tk.seeNextToken().charAt(0) == ('_')) {
-				r = ExpParser.scanPlaceHolder(tk, vars);
+				r = ExpParser.scanFree(tk, vars);
 			} else {
 				r = ExpParser.scanVariable(tk, vars);
 			}
@@ -96,13 +97,9 @@ public class ExpParser {
 			tk.matchTokens(")");
 			break;
 		case Separator:	
-			tk.matchTokens("(");
-			if(Lists2.newList("int","double").contains(tk.seeNextToken())){
-				r = scanCastType(tk, vars);
-			} else {				
-				r = scanExp(tk, vars);
-				tk.matchTokens(")");
-			}			
+			tk.matchTokens("(");				
+			r = scanExp(tk, vars);
+			tk.matchTokens(")");			
 			break;
 		default:
 			Preconditions.checkState(false, 
@@ -112,103 +109,90 @@ public class ExpParser {
 		return r;
 	}
 
-	private static Exp<?> scanCastType(Tokenizer tk, Map<String, Exp<?>> vars){
-		String  op = tk.matchTokens("int","double");
-		tk.matchTokens(")");
-		Exp<?> exp = scanExp(tk, vars);
-		String name = "("+op+")";
-		return Operator.getUnary(name, exp.getType()).exp(exp);
-	}
 	
-	private static Exp<?> scanParameters(String name, Tokenizer tk,
-			Map<String, Exp<?>> vars) {
-		List<Exp<?>> exps = new ArrayList<>();
-		Exp<?> exp = ExpParser.scanExp(tk, vars);
+	private static Exp<Object> scanParameters(String name, Tokenizer tk, Map<String, Exp<Object>> vars) {
+		List<Exp<Object>> exps = new ArrayList<>();
+		Exp<Object> exp = ExpParser.scanExp(tk, vars);
 		exps.add(exp);
 		while (tk.seeNextToken().equals(",")) {
 			tk.matchTokens(",");
 			exp = ExpParser.scanExp(tk, vars);
 			exps.add(exp);
 		}
-		Exp<?> r = null;
+		Exp<Object> r = null;
 		int arity = exps.size();
-		boolean sameType = IntStream.range(0, exps.size() - 1).allMatch(
-				i -> exps.get(i).getType()
-						.equals(exps.get(i + 1).getType()));
-		if (sameType) {
-			switch (arity) {
-			case 1:r = Operator.getUnary(name, exp.getType()).exp(exp);break;
-			case 2:r = Operator.getBinary(name, exps.get(0).getType(),
-						exps.get(1).getType()).exp(exps.get(0), exps.get(1));break;
-			case 3:r = Operator.getTernary(name, exps.get(0).getType(),
-						exps.get(1).getType(), exps.get(2).getType())
-						.exp(exps.get(0), exps.get(1), exps.get(2));break;
-			default:
-				r = Operator.getUnary(name, exp.getType()).exp(exps);
+		boolean sameType = IntStream.range(0, exps.size() - 1)
+				.allMatch(i -> exps.get(i).getType().equals(exps.get(i + 1).getType()));
+		switch (arity) {
+		case 1:
+			UnaryOperator<Object, Object> uop = Operator.getUnary(name, exp.getType());
+			r = Exp.unary(exp, uop);
+			break;
+		case 2:
+			if (sameType) {
+				NaryOperator<Object, Object> nop = Operator.getNary(name, exp.getType());
+				r = Exp.nary(exps, nop);
+			} else {
+				BinaryOperator<Object, Object, Object> bop = Operator.getBinary(name, exps.get(0).getType(),
+						exps.get(1).getType());
+				r = Exp.binary(exps.get(0), exps.get(1), bop);
 			}
-		} else {
-			switch (arity) {
-			case 1:
-				r = Operator.getUnary(name, exp.getType()).exp(exp);
-				break;
-			case 2:
-				r = Operator.getBinary(name, exps.get(0).getType(),
-						exps.get(1).getType()).exp(exps.get(0), exps.get(1));
-				break;
-			case 3:
-				r = Operator.getTernary(name, exps.get(0).getType(),
-						exps.get(1).getType(), exps.get(2).getType())
-						.exp(exps.get(0), exps.get(1), exps.get(2));
-				break;
-			default:
-				Preconditions.checkState(false, String.format(
-						"No hay disponibles operadores de aridad %d", arity));
+			break;
+		default:
+			if (sameType) {
+				NaryOperator<Object, Object> nop = Operator.getNary(name, exp.getType());
+				r = Exp.nary(exps, nop);
+			} else {
+				TernaryOperator<Object, Object, Object, Object> top = Operator.getTernary(name, exps.get(0).getType(),
+						exps.get(1).getType(), exps.get(2).getType());
+				r = Exp.ternary(exps.get(0), exps.get(1), exps.get(2), top);
 			}
+			break;
 		}
 		return r;
 
 	}
 	
-	public static VariableExp<?> scanVariable(Tokenizer tk, Map<String,Exp<?>> vars){		
+	public static VariableExp<Object> scanVariable(Tokenizer tk, Map<String,Exp<Object>> vars){		
 		String s = tk.matchTokenTypes(TokenType.VariableIdentifier);
-		VariableExp<?> r=null;	
+		VariableExp<Object> r=null;	
 		if(vars.containsKey(s)){
-	        r = (VariableExp<?>) vars.get(s);
+	        r = (VariableExp<Object>) vars.get(s);
 		} else {
 			ExpType expType = VariableExp.getVariableType(s);
 			switch(expType){
-			case Boolean: r = Exp.<Boolean>variable(s, ExpType.Boolean);break;
-			case Integer: r = Exp.<Integer>variable(s, ExpType.Integer);break;
-			case Double:  r = Exp.<Double>variable(s, ExpType.Double);				
+			case Boolean: r = Exp.variable(s, ExpType.Boolean);break;
+			case Integer: r = Exp.variable(s, ExpType.Integer);break;
+			case Double:  r = Exp.variable(s, ExpType.Double);				
 			}
 			vars.put(s, r);
 		}
 		return r;
 	}
 
-	public static Exp<?> scanPlaceHolder(Tokenizer tk, Map<String,Exp<?>> vars){						
+	public static Exp<Object> scanFree(Tokenizer tk, Map<String,Exp<Object>> vars){						
 		String s = tk.matchTokenTypes(TokenType.VariableIdentifier);
-		Exp<?> r=null;	
+		Exp<Object> r=null;	
 		if(vars.containsKey(s)){
 	        r = vars.get(s);
 		} else {
 			ExpType expType = VariableExp.getVariableType(s.substring(1));
 			switch(expType){
-			case Boolean: r = Exp.<Boolean>free(s, ExpType.Boolean);break;
-			case Integer: r = Exp.<Integer>free(s, ExpType.Integer);break;
-			case Double:  r = Exp.<Double>free(s, ExpType.Double);				
+			case Boolean: r = Exp.free(s, ExpType.Boolean);break;
+			case Integer: r = Exp.free(s, ExpType.Integer);break;
+			case Double:  r = Exp.free(s, ExpType.Double);				
 			}
 			vars.put(s, r);
 		}
 		return r;
 	}
 
-	public static ConstantExp<Double> scanConstantDouble(Tokenizer tk){		
+	public static ConstantExp<Object> scanConstantDouble(Tokenizer tk){		
 		String s = tk.matchTokenTypes(TokenType.Double);
 		return Exp.constant(Double.parseDouble(s),ExpType.Double);
 	}
 
-	public static ConstantExp<Integer> scanConstantInteger(Tokenizer tk){		
+	public static ConstantExp<Object> scanConstantInteger(Tokenizer tk){		
 		String s = tk.matchTokenTypes(TokenType.Integer);
 		return Exp.constant(Integer.parseInt(s),ExpType.Integer);  
 	}
@@ -225,11 +209,11 @@ public class ExpParser {
 		String s9 = "iff(x==y,(int)(((x+3.2)*y+x)*sqrt(3.2^3)),(int)(sqrt(x*3.2)^3+ min(x,y,sqrt(x*3.2),sqrt(x*3.2)^3,x+y)))";
 		String s10 = "(int)(x^3+5.6)+9";
 		System.out.println(Operator.operators);
-		Exp<Double> ex1 = ExpParser.scan(s1);
+		Exp<Object> ex1 = ExpParser.scan(s1);
 		System.out.println("ex1 ="+ex1+","+ex1.getVars());
-		Map<String,Exp<?>> vars = Maps2.newHashMap("_z", ex1);
+		Map<String,Exp<Object>> vars = Maps2.newHashMap("_z", ex1);
 		System.out.println(vars);
-		Exp<Double> exp = ExpParser.scan(s5,vars);
+		Exp<Object> exp = ExpParser.scan(s5,vars);
 		System.out.println("exp ="+exp+","+exp.getVars());
 		
 		exp.get("x").<Double>asVariable().setValue(4.5);

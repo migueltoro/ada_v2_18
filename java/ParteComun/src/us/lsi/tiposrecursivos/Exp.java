@@ -28,11 +28,11 @@ public abstract class Exp<R> extends Element {
 		return Exp.byLevelsToExp(Exp.toLevels(ls));
 	}
 	
-	public static <R> Exp<R> parse(String s){
+	public static Exp<Object> parse(String s){
 		return ExpParser.scan(s);
 	}
 	
-	public static <R> Exp<R> string(String s, Map<String, Exp<?>> vars){
+	public static Exp<Object>parse(String s, Map<String, Exp<Object>> vars){
 		return ExpParser.scan(s, vars);
 	}
 	
@@ -166,16 +166,16 @@ public abstract class Exp<R> extends Element {
 	 * @return Si la expresión concuerda pattern se devuelve la expresión transformada según result. Si no concuerda
 	 * se devuelve la misma expresión
 	 */
-	public Exp<R> ifMatchTransform(String pattern, String result){
-		Exp<R> e = Exp.parse(pattern);		
+	public Exp<Object> ifMatchTransform(String pattern, String result){
+		Exp<Object> e = Exp.parse(pattern);		
 		return ifMatchTransform(e,this.getVars(),result);
 	}
 	
-	public abstract Exp<R> ifMatchTransform(Exp<?> pattern, Map<String,Exp<?>> vars,String result);
+	public abstract Exp<Object> ifMatchTransform(Exp<Object> pattern, Map<String,Exp<Object>> vars,String result);
 	
-	private Map<String, Exp<?>> vars;
+	private Map<String, Exp<Object>> vars;
 	
-	protected abstract Map<String, Exp<?>> vars();
+	protected abstract Map<String, Exp<Object>> vars();
 	
 	@SuppressWarnings("unchecked")
 	public <S> Exp<S> get(String s){
@@ -189,7 +189,7 @@ public abstract class Exp<R> extends Element {
 	/**
 	 * @return La asociación de los nombres de variables de la expresión con sus expresiones correspondientes.
 	 */
-	public Map<String, Exp<?>> getVars() {
+	public Map<String, Exp<Object>> getVars() {
 		if(vars==null){
 			vars = vars();
 		}
@@ -375,8 +375,8 @@ public abstract class Exp<R> extends Element {
 		BinaryExp<Double,Double,Double> plus = Exp.binary(x,y,Operator.getBinary("+", ExpType.Double, ExpType.Double));
 		BinaryExp<Double,Double,Double> multiply = Exp.binary(x,c,Operator.getBinary("*", ExpType.Double, ExpType.Double));
 		UnaryExp<Double, Double> sqrt = Exp.unary(multiply,Operator.getUnary("sqrt", ExpType.Double));
-		UnaryExp<Double, Double> pot1 = Exp.unary(sqrt,Operator.getUnary("^2",ExpType.Double));
-		UnaryExp<Double, Double> pot = Exp.unary(sqrt,Operator.getUnary("^3",ExpType.Double));
+		UnaryExp<Double, Double> pot1 = Exp.unary(sqrt,Operator.getUnary("square",ExpType.Double));
+		UnaryExp<Double, Double> pot = Exp.unary(sqrt,Operator.getUnary("cube",ExpType.Double));
 		NaryExp<Double,Double> s = Exp.nary(Operator.getNary("+",ExpType.Double),x,y,sqrt,pot,plus);
 		BinaryExp<Double,Double,Double> rr = Exp.binary(pot, s,Operator.getBinary("+",ExpType.Double, ExpType.Double));
 		System.out.println(pot1);
@@ -397,7 +397,7 @@ public abstract class Exp<R> extends Element {
 				Operator.getUnary("sqrt", ExpType.Double),
 				Operator.getBinary("*", ExpType.Double, ExpType.Double),
 				x,
-				Operator.getUnary("^3", ExpType.Double),				
+				Operator.getUnary("cube", ExpType.Double),				
 				Operator.getBinary("+", ExpType.Double, ExpType.Double),				
 				y,
 				c,
@@ -414,9 +414,9 @@ public abstract class Exp<R> extends Element {
 				Operator.getTernary("iff", ExpType.Boolean,ExpType.Double,ExpType.Double));
 		System.out.println(r);
 		
-		Exp<Double> e2 = Exp.parse("0.+3.^(2+5)+x^2+sqrt(4.+x)+x");
+		Exp<Object> e2 = Exp.parse("0.+3.^(2+5)+x^2+sqrt(4.+x)+x");
 		System.out.println(e2);
-		Exp<Double> exp = e2.ifMatchTransform("0.+_y", "_y");
+		Exp<Object> exp = e2.ifMatchTransform("0.+_y", "_y");
 		exp.get("x").<Double>asVariable().setValue(4.5);
 		System.out.println(exp.simplify());
 		System.out.println(exp.getValue());

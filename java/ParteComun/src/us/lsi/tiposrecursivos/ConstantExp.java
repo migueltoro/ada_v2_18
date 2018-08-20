@@ -126,7 +126,7 @@ public class ConstantExp<R> extends Exp<R> implements Operator {
 	
 	
 	@Override
-	protected Map<String, Exp<?>> vars() {
+	protected Map<String, Exp<Object>> vars() {
 		return new HashMap<>();
 	}
 	
@@ -135,9 +135,10 @@ public class ConstantExp<R> extends Exp<R> implements Operator {
 		return 12;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public Exp<R> ifMatchTransform(Exp<?> pattern, Map<String,Exp<?>> vars,String result) {
-		return this;
+	public Exp<Object> ifMatchTransform(Exp<Object> pattern, Map<String,Exp<Object>> vars,String result) {
+		return (Exp<Object>) this;
 	}
 	
 	@Override

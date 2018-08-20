@@ -191,8 +191,8 @@ public class BinaryExp<T1,T2,R> extends Exp<R> {
 	}
 	
 	@Override
-	protected Map<String, Exp<?>> vars() {
-		Map<String, Exp<?>> r = Maps2.newHashMap(op1.vars());
+	protected Map<String, Exp<Object>> vars() {
+		Map<String, Exp<Object>> r = Maps2.newHashMap(op1.vars());
 		r.putAll(op2.vars());;
 		return r;
 	}
@@ -203,18 +203,19 @@ public class BinaryExp<T1,T2,R> extends Exp<R> {
 	}
 	
 	@Override
-	public Exp<R> ifMatchTransform(Exp<?> pattern, Map<String,Exp<?>> vars, String patternResult) {
-		Exp<T1> r1 = op1.ifMatchTransform(pattern, vars, patternResult);
-		Exp<T2> r2 = op2.ifMatchTransform(pattern,vars, patternResult);
-		Exp<R> r = Exp.binary(r1,r2, this.operator);
-		Exp<?> copy = pattern.copy();
+	public Exp<Object> ifMatchTransform(Exp<Object> pattern, Map<String,Exp<Object>> vars, String patternResult) {
+		Exp<Object> r1 = (Exp<Object>) op1.ifMatchTransform(pattern, vars, patternResult);
+		Exp<Object> r2 = (Exp<Object>) op2.ifMatchTransform(pattern,vars, patternResult);
+		@SuppressWarnings("unchecked")
+		Exp<Object> r = (Exp<Object>) Exp.binary(r1,r2, (BinaryOperator<Object,Object,Object>)this.operator);
+		Exp<Object> copy = pattern.copy();
 		if(r.match(copy)){
-			Map<String,Exp<?>> m = copy.getVars();
-			Map<String,Exp<?>> m2 = 
-					Maps2.<String,Exp<?>,Exp<?>>newHashMap(m, 
+			Map<String,Exp<Object>> m = copy.getVars();
+			Map<String,Exp<Object>> m2 = 
+					Maps2.<String,Exp<Object>,Exp<Object>>newHashMap(m, 
 							x->x.isFree()?x.asFree().getExp():x);			
 			m2.putAll(vars);
-			r = Exp.string(patternResult,m2);
+			r = Exp.parse(patternResult,m2);
 		}
 		return r;
 	}

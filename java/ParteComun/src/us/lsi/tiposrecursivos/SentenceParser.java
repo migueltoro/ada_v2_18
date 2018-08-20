@@ -16,12 +16,12 @@ public class SentenceParser {
 		System.out.println(Operator.reservedWords);
 		Tokenizer tk = Tokenizer.create(s, Operator.functions,
 				Operator.reservedWords);
-		Map<String, Exp<?>> vars = new HashMap<>();
+		Map<String, Exp<Object>> vars = new HashMap<>();
 		Sentence r = scanSentence(tk, vars);
 		return r;
 	}
 
-	private static Sentence scanSentence(Tokenizer tk, Map<String, Exp<?>> vars) {
+	private static Sentence scanSentence(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Sentence r = null;
 		switch (tk.seeNextTokenType()) {
 		case VariableIdentifier:
@@ -31,7 +31,7 @@ public class SentenceParser {
 					+ " debe ser una variable");
 			var = ExpParser.scanVariable(tk, vars);
 			tk.matchTokens("=");
-			Exp<?> exp = ExpParser.scanExp(tk, vars);
+			Exp<Object> exp = ExpParser.scanExp(tk, vars);
 			tk.matchTokens(";");
 			Preconditions.checkState(var.getType().equals(exp.getType()),
 					"Typos no iguales en la asignación");
@@ -43,8 +43,7 @@ public class SentenceParser {
 			case "if":
 				tk.matchTokens("if");
 				tk.matchTokens("(");
-				@SuppressWarnings("unchecked")
-				Exp<Boolean> condition1 = (Exp<Boolean>) ExpParser.scanExp(tk,
+				Exp<Object> condition1 = ExpParser.scanExp(tk,
 						vars);
 				tk.matchTokens(")");
 				Sentence consequent = scanSentence(tk, vars);
@@ -55,8 +54,7 @@ public class SentenceParser {
 			case "while":
 				tk.matchTokens("while");
 				tk.matchTokens("(");
-				@SuppressWarnings("unchecked")
-				Exp<Boolean> condition2 = (Exp<Boolean>) ExpParser.scanExp(tk,vars);
+				Exp<Object> condition2 = ExpParser.scanExp(tk,vars);
 				tk.matchTokens(")");
 				Sentence block = scanSentence(tk, vars);
 				r = Sentence.whileSentence(condition2, block);
@@ -77,7 +75,7 @@ public class SentenceParser {
 		return r;
 	}
 
-	private static Sentence scanSentences(Tokenizer tk, Map<String, Exp<?>> vars) {
+	private static Sentence scanSentences(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		List<Sentence> r = new ArrayList<>();
 		while (!tk.seeNextToken().equals("}")) {
 			Sentence s = scanSentence(tk, vars);

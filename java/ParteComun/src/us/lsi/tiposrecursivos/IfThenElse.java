@@ -2,14 +2,14 @@ package us.lsi.tiposrecursivos;
 
 public class IfThenElse extends Sentence {
 
-	private Exp<Boolean> condition;
+	private Exp<Object> condition;
 	private Sentence consequent;
 	private Sentence alternative;
 	private int id;
 	private static int lastId = 0;
 	private Boolean flag = false;
 	
-	IfThenElse(Exp<Boolean> condition, Sentence consequent,Sentence alternative) {
+	IfThenElse(Exp<Object> condition, Sentence consequent,Sentence alternative) {
 		super();
 		this.condition = condition;
 		this.consequent = consequent;
@@ -70,7 +70,7 @@ public class IfThenElse extends Sentence {
 
 	@Override
 	public void execute() {
-		if(condition.getValue())
+		if((boolean)condition.getValue())
 			consequent.execute();
 		else 
 			this.alternative.execute();

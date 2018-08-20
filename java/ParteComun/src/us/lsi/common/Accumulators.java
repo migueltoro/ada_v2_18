@@ -10,56 +10,56 @@ import java.util.function.BinaryOperator;
 
 public class Accumulators {
 
-	public static <E, B> Accumulator<E, B, B> createMutable(Supplier<B> initial, Consumer<E> consumer){
+	public static <E, B> AccumulatorSeq<E, B, B> createMutable(Supplier<B> initial, Consumer<E> consumer){
 		return new AccumulatorMutable<>(initial, consumer, x->x, x->false);
 	}
 
-	public static <E, B> Accumulator<E, B, B> createInmutable(B initial, BiFunction<B, E, B> f) {
+	public static <E, B> AccumulatorSeq<E, B, B> createInmutable(B initial, BiFunction<B, E, B> f) {
 		return new AccumulatorInmutable<>(initial, f, x->x, x->false);
 	}
 
-	public static Accumulator<Integer, Integer, Integer> sum() {
+	public static AccumulatorSeq<Integer, Integer, Integer> sum() {
 		return Accumulators.createInmutable(0, (x, y) -> x + y);
 	}
 
-	public static <E> Accumulator<E, Boolean, Boolean> all(Predicate<E> p) {
+	public static <E> AccumulatorSeq<E, Boolean, Boolean> all(Predicate<E> p) {
 		return new AccumulatorInmutable<>(true, (b, x) -> p.test(x), b->b, b -> !b);
 	}
-	public static <E> Accumulator<E, Boolean,Boolean> any(Predicate<E> p) {
+	public static <E> AccumulatorSeq<E, Boolean,Boolean> any(Predicate<E> p) {
 		return new AccumulatorInmutable<>(false, (b, x) -> p.test(x), b->b, b -> b);
 	}
-	public static Accumulator<String, String, String> joining(String separator, String begin, String end) {
+	public static AccumulatorSeq<String, String, String> joining(String separator, String begin, String end) {
 		return new Joining(separator,begin,end);
 	}
-	public static Accumulator<String, String,String> joining(String separator) {
+	public static AccumulatorSeq<String, String,String> joining(String separator) {
 		return new Joining(separator,"","");
 	}
-	public static <E> Accumulator<E, E,E> reduce(E initial, BinaryOperator<E> bo) {
+	public static <E> AccumulatorSeq<E, E,E> reduce(E initial, BinaryOperator<E> bo) {
 		return new Reduce<>(initial, bo);
 	}
 
-	private static class AccumulatorMutable<E, B, R> implements Accumulator<E, B, R> {
+	private static class AccumulatorMutable<E, B, R> implements AccumulatorSeq<E, B, R> {
 		private B base;
-		private Supplier<B> initial;
+		private Supplier<B> initialSupplier;
 		private Consumer<E> consumer;
 		private Function<B,R> result;
-		private Predicate<B> finish;
+		private Predicate<B> isDone;
 
 		public AccumulatorMutable(Supplier<B> initial, 
 				Consumer<E> consumer, 
 				Function<B,R> result,
-				Predicate<B> finish) {
+				Predicate<B> isDone) {
 			super();
 			this.base = null;
 			this.consumer = consumer;
-			this.initial = initial;
+			this.initialSupplier = initial;
 			this.result = result;
-			this.finish = finish;
+			this.isDone = isDone;
 		}
 
 		@Override
-		public void setInitial() {
-			this.base = this.initial.get();
+		public B getInitial() {
+			return this.initialSupplier.get();
 		}
 
 		@Override
@@ -73,14 +73,14 @@ public class Accumulators {
 		}
 
 		@Override
-		public Boolean finish() {
-			return this.finish.test(base);
+		public Boolean isDone() {
+			return this.isDone.test(base);
 		}
 	}
 
-	private static class AccumulatorInmutable<E, B, R> implements Accumulator<E, B, R> {
+	private static class AccumulatorInmutable<E, B, R> implements AccumulatorSeq<E, B, R> {
 		private B base;
-		private B initial;
+		private B initialValue;
 		private BiFunction<B, E, B> f;
 		private Function<B,R> result;
 		private Predicate<B> finish;
@@ -92,14 +92,14 @@ public class Accumulators {
 			super();
 			this.base = null;
 			this.f = f;
-			this.initial = initial;
+			this.initialValue = initial;
 			this.result = result;
 			this.finish = finish;
 		}
 
 		@Override
-		public void setInitial() {
-			this.base = this.initial;
+		public B getInitial() {
+			return this.initialValue;
 		}
 
 		@Override
@@ -113,12 +113,12 @@ public class Accumulators {
 		}
 
 		@Override
-		public Boolean finish() {
+		public Boolean isDone() {
 			return this.finish.test(base);
 		}
 	}
 	
-	private static class Joining implements Accumulator<String, String, String> {
+	private static class Joining implements AccumulatorSeq<String, String, String> {
 		private Integer n = 0;	
 		private String base;
 		private String separator;
@@ -135,8 +135,8 @@ public class Accumulators {
 		}
 
 		@Override
-		public void setInitial() {
-			this.base = begin;
+		public String getInitial() {
+			return begin;
 		}
 
 		@Override
@@ -155,13 +155,13 @@ public class Accumulators {
 		}
 
 		@Override
-		public Boolean finish() {
+		public Boolean isDone() {
 			return false;
 		}
 			
 	}
 	
-	public static class Reduce<E> implements Accumulator<E,E,E> {
+	public static class Reduce<E> implements AccumulatorSeq<E,E,E> {
 
 		private E b;
 		private E initial;
@@ -174,8 +174,8 @@ public class Accumulators {
 		}
 
 		@Override
-		public void setInitial() {
-			this.b=this.initial;
+		public E getInitial() {
+			return this.initial;
 		}
 
 		@Override
@@ -189,7 +189,7 @@ public class Accumulators {
 		}
 
 		@Override
-		public Boolean finish() {
+		public Boolean isDone() {
 			return false;
 		}
 		

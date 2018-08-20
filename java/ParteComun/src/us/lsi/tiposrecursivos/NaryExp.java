@@ -167,8 +167,8 @@ public class NaryExp<T,R> extends Exp<R> {
 	}
 	
 	@Override
-	protected Map<String, Exp<?>> vars() {
-		Map<String, Exp<?>> r = new HashMap<>();
+	protected Map<String, Exp<Object>> vars() {
+		Map<String, Exp<Object>> r = new HashMap<>();
 		ops.stream().forEach(x->r.putAll(x.vars()));
 		return r;
 	}
@@ -179,19 +179,20 @@ public class NaryExp<T,R> extends Exp<R> {
 	}
 	
 	@Override
-	public Exp<R> ifMatchTransform(Exp<?> pattern, Map<String,Exp<?>> vars,String patternResult) {
-		List<Exp<T>> r1 = ops.stream()
+	public Exp<Object> ifMatchTransform(Exp<Object> pattern, Map<String,Exp<Object>> vars,String patternResult) {
+		List<Exp<Object>> r1 = ops.stream()
 				.map(x->x.ifMatchTransform(pattern, vars, patternResult))
 				.collect(Collectors.toList());
-		Exp<R> r = Exp.nary(r1,this.accumulator);
-		Exp<?> copy = pattern.copy();
+		@SuppressWarnings("unchecked")
+		Exp<Object> r = Exp.nary(r1,(NaryOperator<Object,Object>)this.accumulator);
+		Exp<Object> copy = pattern.copy();
 		if(r.match(copy)){
-			Map<String,Exp<?>> m = copy.getVars();
-			Map<String,Exp<?>> m2 = 
-					Maps2.<String,Exp<?>,Exp<?>>newHashMap(m, 
+			Map<String,Exp<Object>> m = copy.getVars();
+			Map<String,Exp<Object>> m2 = 
+					Maps2.<String,Exp<Object>,Exp<Object>>newHashMap(m, 
 							x->x.isFree()?x.asFree().getExp():x);
 			m2.putAll(vars);
-			r = Exp.string(patternResult,m2);
+			r = Exp.parse(patternResult,m2);
 		}
 		return r;
 	}

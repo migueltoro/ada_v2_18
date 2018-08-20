@@ -2,14 +2,14 @@ package us.lsi.tiposrecursivos;
 
 public class While extends Sentence {
 	
-	private Exp<Boolean> condition;
+	private Exp<Object> condition;
 	private Sentence block;
 	private int id;
 	private static int lastId = 0;
 	private Boolean flag = false;
 	
 	
-	While(Exp<Boolean> condition, Sentence block) {
+	While(Exp<Object> condition, Sentence block) {
 		super();
 		this.condition = condition;
 		this.block = block;
@@ -66,7 +66,7 @@ public class While extends Sentence {
 
 	@Override
 	public void execute() {
-		while(condition.getValue())
+		while((boolean)condition.getValue())
 			block.execute();
 	}
 	

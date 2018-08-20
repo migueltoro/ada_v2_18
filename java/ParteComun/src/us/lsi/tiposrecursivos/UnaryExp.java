@@ -152,8 +152,8 @@ public class UnaryExp<T,R> extends Exp<R> {
 	}
 	
 	@Override
-	protected Map<String, Exp<?>> vars() {
-		Map<String, Exp<?>> r = Maps2.newHashMap(op.vars());
+	protected Map<String, Exp<Object>> vars() {
+		Map<String, Exp<Object>> r = Maps2.newHashMap(op.vars());
 		return r;
 	}
 
@@ -164,17 +164,18 @@ public class UnaryExp<T,R> extends Exp<R> {
 	}
 
 	@Override
-	public Exp<R> ifMatchTransform(Exp<?> pattern, Map<String,Exp<?>> vars,String patternResult) {
-		Exp<T> r1 = op.ifMatchTransform(pattern, vars, patternResult);
-		Exp<R> r = Exp.unary(r1, this.operator);
-		Exp<?> copy = pattern.copy();
+	public Exp<Object> ifMatchTransform(Exp<Object> pattern, Map<String,Exp<Object>> vars,String patternResult) {
+		Exp<Object> r1 = op.ifMatchTransform(pattern, vars, patternResult);
+		@SuppressWarnings("unchecked")
+		Exp<Object> r = Exp.unary(r1, (UnaryOperator<Object,Object>)this.operator);
+		Exp<Object> copy = pattern.copy();
 		if(r.match(copy)){
-			Map<String,Exp<?>> m = copy.getVars();
-			Map<String,Exp<?>> m2 = 
-					Maps2.<String,Exp<?>,Exp<?>>newHashMap(m, 
+			Map<String,Exp<Object>> m = copy.getVars();
+			Map<String,Exp<Object>> m2 = 
+					Maps2.<String,Exp<Object>,Exp<Object>>newHashMap(m, 
 							x->x.isFree()?x.asFree().getExp():x);
 			m2.putAll(vars);
-			r = Exp.string(patternResult,m2);
+			r = Exp.parse(patternResult,m2);
 		}
 		return r;
 	}

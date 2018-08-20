@@ -127,9 +127,10 @@ public class Free<R> extends Exp<R> implements Operator {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	protected Map<String, Exp<?>> vars() {
-		return Maps2.newHashMap(name, this);
+	protected Map<String, Exp<Object>> vars() {
+		return Maps2.newHashMap(name, (Exp<Object>)this);
 	}
 	
 	@Override
@@ -137,9 +138,10 @@ public class Free<R> extends Exp<R> implements Operator {
 		return 12;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Exp<R> ifMatchTransform(Exp<?> pattern,Map<String,Exp<?>> vars, String result) {
-		return this;
+	public Exp<Object> ifMatchTransform(Exp<Object> pattern,Map<String,Exp<Object>> vars, String result) {
+		return (Exp<Object>)this;
 	}
 	
 	@Override

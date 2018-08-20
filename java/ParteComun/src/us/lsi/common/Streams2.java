@@ -326,28 +326,28 @@ public class Streams2 {
 		return r;
 	}
 	
-	public static <E,B,R> R accumulateLeft(Stream<E> s, Accumulator<E,B,R> a){
-		a.setInitial();
-		s.takeWhile(x->!a.finish()).forEach(x->a.add(x));
+	public static <E,B,R> R accumulateLeft(Stream<E> s, AccumulatorSeq<E,B,R> a){
+		a.getInitial();
+		s.takeWhile(x->!a.isDone()).forEach(x->a.add(x));
 		return a.result();
 	}
 	
-	public static <E,B,R> R accumulate(Stream<E> s, Accumulator<E,B,R> a){
-		a.setInitial();
-		s.takeWhile(x->!a.finish()).forEach(x->a.add(x));
+	public static <E,B,R> R accumulate(Stream<E> s, AccumulatorSeq<E,B,R> a){
+		a.getInitial();
+		s.takeWhile(x->!a.isDone()).forEach(x->a.add(x));
 		return a.result();
 	}
-	public static <E,B,R> R accumulateRight(Stream<E> s, Accumulator<E,B,R> a){		
+	public static <E,B,R> R accumulateRight(Stream<E> s, AccumulatorSeq<E,B,R> a){		
 		accumulateRight(s.iterator(), a);
 		return a.result();
 	}
-	private static <E,B,R> void accumulateRight(Iterator<E> it, Accumulator<E,B,R> a){		
+	private static <E,B,R> void accumulateRight(Iterator<E> it, AccumulatorSeq<E,B,R> a){		
 		if(it.hasNext()) {
 			E e = it.next();
 			accumulateRight(it,a);
 			a.add(e);
 		} else {
-			a.setInitial();
+			a.getInitial();
 		}
 	}
 	

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.Sets2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
@@ -35,6 +36,7 @@ public interface Operator {
 		Tuple2<String,List<ExpType>> t = Tuple.create(operator.getName(),Arrays.asList(operator.parametersType));
 		operators.put(t, operator);
 		if(operator.isFunction()) functions.add(operator.getName());
+		arities.put(operator.name, operator.getArity());
 	}
 	
 	public static boolean contains(String name, ExpType... parametersType) {
@@ -46,28 +48,36 @@ public interface Operator {
 	public static <T,R> UnaryOperator<T,R> getUnary(String name, ExpType p1) {
 		ExpType[] parametersType = {p1};
 		Tuple2<String,List<ExpType>> t = Tuple.create(name,Arrays.asList(parametersType));
-		return (UnaryOperator<T, R>) operators.get(t);
+		Operator r =  operators.get(t);
+		Preconditions.checkNotNull(r);
+		return (UnaryOperator<T, R>) r;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T,R> NaryOperator<T,R> getNary(String name, ExpType p1) {
 		ExpType[] parametersType = {p1};
 		Tuple2<String,List<ExpType>> t = Tuple.create(name,Arrays.asList(parametersType));
-		return (NaryOperator<T, R>) operators.get(t);
+		Operator r =  operators.get(t);
+		Preconditions.checkNotNull(r);
+		return (NaryOperator<T, R>) r;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T1,T2,R> BinaryOperator<T1,T2,R> getBinary(String name, ExpType p1, ExpType p2) {
 		ExpType[] parametersType = {p1,p2};
 		Tuple2<String,List<ExpType>> t = Tuple.create(name,Arrays.asList(parametersType));
-		return (BinaryOperator<T1, T2, R>) operators.get(t);
+		Operator r =  operators.get(t);
+		Preconditions.checkNotNull(r);
+		return (BinaryOperator<T1, T2, R>) r;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T1,T2,T3,R> TernaryOperator<T1,T2,T3,R> getTernary(String name, ExpType p1, ExpType p2, ExpType p3) {
 		ExpType[] parametersType = {p1,p2,p3};
 		Tuple2<String,List<ExpType>> t = Tuple.create(name,Arrays.asList(parametersType));
-		return (TernaryOperator<T1, T2, T3, R>) operators.get(t);
+		Operator r =  operators.get(t);
+		Preconditions.checkNotNull(r);
+		return (TernaryOperator<T1, T2, T3, R>) r;
 	}
 	
 	

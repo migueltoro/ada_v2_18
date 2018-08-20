@@ -15,7 +15,7 @@ public abstract class Sentence extends Element {
 		return Sentence.assignment(var1, exp1);
 	}
 	
-	public static IfThenElse ifThenElse(Exp<Boolean> condition,
+	public static IfThenElse ifThenElse(Exp<Object> condition,
 			Sentence consequent, Sentence alternative) {
 		return new IfThenElse(condition, consequent, alternative);
 	}
@@ -24,7 +24,7 @@ public abstract class Sentence extends Element {
 		return new Sentences(sentences);
 	}
 
-	public static While whileSentence(Exp<Boolean> condition, Sentence block) {
+	public static While whileSentence(Exp<Object> condition, Sentence block) {
 		return new While(condition, block);
 	}
 

@@ -66,9 +66,9 @@ public class Operators {
 	static void initial() {
 		// Operadores Narios
 		Operators.createNary("+", ExpType.Integer,ExpType.Integer,Collectors.reducing(0,(x,y)->x+y), false);
-		Operators.createNary("+", ExpType.Double,ExpType.Double,Collectors.reducing(0,(x,y)->x+y), false);
+		Operators.createNary("+", ExpType.Double,ExpType.Double,Collectors.reducing(0.,(Double x, Double y)->x+y), false);
 		Operators.createNary("*", ExpType.Integer,ExpType.Integer,Collectors.reducing(0,(x,y)->x*y), false);
-		Operators.createNary("*", ExpType.Double,ExpType.Double,Collectors.reducing(0,(x,y)->x*y), false);
+		Operators.createNary("*", ExpType.Double,ExpType.Double,Collectors.reducing(0.,(Double x, Double y)->x*y), false);
 		Operators.createNary("max", ExpType.Integer,ExpType.Integer,Collectors.reducing(Integer.MIN_VALUE,(x,y)->Integer.min(x,y)), true);
 		Operators.createNary("max", ExpType.Double,ExpType.Double,Collectors.reducing(Double.MIN_VALUE,(x,y)->Double.min(x,y)), true);
 		Operators.createNary("min", ExpType.Integer,ExpType.Integer,Collectors.reducing(Integer.MAX_VALUE,(x,y)->Integer.min(x,y)), true);

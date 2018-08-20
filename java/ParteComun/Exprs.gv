@@ -2,7 +2,7 @@ digraph Expresion {
     size="100,100"; 
     "BE_9" [label="*"];
     "BE_9" -> "BE_8";
-    "BE_9" -> "U_4";
+    "BE_9" -> "U_8";
     "BE_8" [label="+"];
     "BE_8" -> "BE_7";
     "BE_8" -> "V_0";
@@ -15,8 +15,8 @@ digraph Expresion {
     "V_0" [label="x"];
     "C_0" [label="3.2"];
     "V_1" [label="y"];
-    "U_4" [label="sqrt"];
-    "U_4" -> "U_3";
-    "U_3" [label="^3"];
-    "U_3" -> "C_0";
+    "U_8" [label="sqrt"];
+    "U_8" -> "U_7";
+    "U_7" [label="cube"];
+    "U_7" -> "C_0";
 }
