@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
-import us.lsi.common.Accumulators;
+import us.lsi.common.SeqAccumulators;
 import us.lsi.common.Lists2;
 import us.lsi.common.Streams2;
 import us.lsi.math.Math2;
@@ -214,20 +214,21 @@ public class EjemplosIterativos {
 //		var s = List.of(1,0,1,1,0,1,0,1);
 		var xValue = 7;
 //		var enteros = Stream.iterate(0,x->x+1);
-		var ss = Streams2.elementsAndPosition(s.stream())
-						 .map(t->t.v1.toString()+"*Math2.pow(x,"+t.v2.toString()+")")
-						 .collect(Collectors.joining("+"));
-		System.out.println(ss);
+		var ss = Streams2.elementsAndPosition(s.stream());
+		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(","));
+		ss = Streams2.elementsAndPosition(s.stream());
+		var ss2 = Streams2.limit(ss, 4);
+		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
+		System.out.println(r3+"___"+r4);
 		var pot = Stream.iterate(1, x->x*xValue);
-		var value1 = Streams2.zip(s.stream(), pot, (x,y)->x*y)
-				.reduce(0,(x,y)->x+y);
-		var ac = Accumulators.<Integer,Integer>createInmutable(0, (b,e)->b*xValue+e);		
+		var value1 = Streams2.zip(s.stream(), pot, (x,y)->x*y).reduce(0,(x,y)->x+y);
+		var ac = SeqAccumulators.createInmutable(0, (Integer b,Integer e)->b*xValue+e);		
 		var value2 = 1*Math2.pow(xValue,0)+2*Math2.pow(xValue,1)+3*Math2.pow(xValue,2)+41*Math2.pow(xValue,3)+55*Math2.pow(xValue,4)+64*Math2.pow(xValue,5)+71*Math2.pow(xValue,6)+88*Math2.pow(xValue,7);	
 		var value3 = Streams2.accumulateRight(s.stream(), ac);
 		System.out.println(value1+","+value2+","+value3);
 		var n = 8;
 		var sec = Stream.iterate(n, x->x>0,x->x/2);
-		var value4 = Streams2.accumulateRight(sec.map(x->x%2).map(x->x.toString()), Accumulators.joining(""));
+		var value4 = Streams2.accumulateRight(sec.map(x->x%2).map(x->x.toString()), SeqAccumulators.joiningAccumulator(""));
 		System.out.println(value4);
 		Stream.iterate(n, x->x>0,x->x/2).map(x->x%2).forEach(x->System.out.print(x+" "));;
 	}
