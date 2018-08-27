@@ -6,20 +6,27 @@ public class MutableType<T> {
 		return new MutableType<T>(e);
 	}
 	
-	public T e;
+	public T value;
+	
+	public T newValue(T newValue) {
+		T old = value;
+		this.value = newValue;
+		return old;
+	}
+	
 	private MutableType(T e) {
 		super();
-		this.e = e;
+		this.value = e;
 	}
 	@Override
 	public String toString() {
-		return e.toString();
+		return value.toString();
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((e == null) ? 0 : e.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 	@Override
@@ -31,12 +38,13 @@ public class MutableType<T> {
 		if (!(obj instanceof MutableType))
 			return false;
 		MutableType<?> other = (MutableType<?>) obj;
-		if (e == null) {
-			if (other.e != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!e.equals(other.e))
+		} else if (!value.equals(other.value))
 			return false;
 		return true;
 	}
+	
 	
 }

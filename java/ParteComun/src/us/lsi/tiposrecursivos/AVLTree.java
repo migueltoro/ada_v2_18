@@ -222,8 +222,8 @@ public class AVLTree<E> {
 	 */
 	public boolean add(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		elements.forEach(e->r.e = this.add(e) || r.e);
-		return r.e;
+		elements.forEach(e->r.value = this.add(e) || r.value);
+		return r.value;
 	}
 	
 	/**
@@ -233,8 +233,8 @@ public class AVLTree<E> {
 	 */
 	public boolean add(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		elements.stream().forEach(e->r.e = this.add(e) || r.e);
-		return r.e;
+		elements.stream().forEach(e->r.value = this.add(e) || r.value);
+		return r.value;
 	}
 	
 	/**
@@ -244,8 +244,8 @@ public class AVLTree<E> {
 	 */
 	public boolean add(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		Arrays.stream(elements).forEach(e->r.e = this.add(e) || r.e);
-		return r.e;
+		Arrays.stream(elements).forEach(e->r.value = this.add(e) || r.value);
+		return r.value;
 	}
 	
 	/**
@@ -309,8 +309,8 @@ public class AVLTree<E> {
 	 */
 	public boolean remove(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		elements.forEach(e->r.e = this.remove(e) || r.e);
-		return r.e;
+		elements.forEach(e->r.value = this.remove(e) || r.value);
+		return r.value;
 	}
 	
 	/**
@@ -320,8 +320,8 @@ public class AVLTree<E> {
 	 */
 	public boolean remove(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		elements.stream().forEach(e->r.e = this.remove(e) || r.e );
-		return r.e;
+		elements.stream().forEach(e->r.value = this.remove(e) || r.value );
+		return r.value;
 	}
 
 	/**
@@ -331,8 +331,8 @@ public class AVLTree<E> {
 	 */
 	public boolean remove(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
-		Arrays.stream(elements).forEach(e->r.e = this.remove(e) ||  r.e);
-		return r.e;
+		Arrays.stream(elements).forEach(e->r.value = this.remove(e) ||  r.value);
+		return r.value;
 	}
 
 	protected Tuple2<Boolean,BinaryTree<E>> remove(BinaryTree<E> tree, E element, Comparator<E> comparator) {

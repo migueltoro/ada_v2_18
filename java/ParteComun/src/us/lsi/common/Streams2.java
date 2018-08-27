@@ -156,8 +156,7 @@ public class Streams2 {
 	 * @return El resultado de operar los pares posibles de s1 y s2 con la bifunción f
 	 */
 	public static <T, U, R> Stream<R> cartesianProduct(Collection<T> s1, Collection<U> s2, BiFunction<T, U, R> f) {
-		return s1.stream()
-				 .<R>flatMap(x->s2.stream().map(y->f.apply(x,y)));
+		return s1.stream().flatMap(x->s2.stream().map(y->f.apply(x,y)));
 	}
 
 	public static <T> Stream<Tuple2<T,T>> cartesianProduct(Collection<T> s1) {
@@ -219,6 +218,11 @@ public class Streams2 {
 	}
 
 	
+	public static <E> Stream<E> limit(Stream<E> sm, Integer limit){
+		MutableType<Integer> index = MutableType.create(0);
+		return sm.takeWhile(x->index.newValue(index.value+1) < limit);
+	}
+	
 	/**
 	 * @param sm Un String
 	 * @param <E> El tipo de los elementos de la secuencia
@@ -227,8 +231,7 @@ public class Streams2 {
 	public static <E> Stream<Tuple2<E,E>> consecutivePairs(Stream<E> sm) {
 		MutableType<E> rf = MutableType.create(null);
 		Stream<Tuple2<E,E>> r = sm
-					.map(e->Tuple.create(rf.e, e))	
-					.peek(e-> rf.e = e.v2)
+					.map(e->Tuple.create(rf.newValue(e), e))	
 					.filter(p-> p.v1!=null);
 		return r;
 	}
@@ -241,8 +244,7 @@ public class Streams2 {
 	public static <E> Stream<Tuple2<E,Integer>> elementsAndPosition(Stream<E> sm) {
 		MutableType<Integer> rf = MutableType.create(0);
 		Stream<Tuple2<E,Integer>> r = sm
-					.map(e->Tuple.create(e,rf.e))	
-					.peek(e-> rf.e++);
+					.map(e->Tuple.create(e,rf.newValue(rf.value+1)));
 		return r;
 	}
 	/**
@@ -326,38 +328,37 @@ public class Streams2 {
 		return r;
 	}
 	
-	public static <E,B,R> R accumulateLeft(Stream<E> s, AccumulatorSeq<E,B,R> a){
-		a.getInitial();
+	public static <E,B,R> R accumulateLeft(Stream<E> s, SeqAccumulator<E,B,R> a){
 		s.takeWhile(x->!a.isDone()).forEach(x->a.add(x));
 		return a.result();
 	}
 	
-	public static <E,B,R> R accumulate(Stream<E> s, AccumulatorSeq<E,B,R> a){
-		a.getInitial();
+	public static <E,B,R> R accumulate(Stream<E> s, SeqAccumulator<E,B,R> a){
 		s.takeWhile(x->!a.isDone()).forEach(x->a.add(x));
 		return a.result();
 	}
-	public static <E,B,R> R accumulateRight(Stream<E> s, AccumulatorSeq<E,B,R> a){		
+	public static <E,B,R> R accumulateRight(Stream<E> s, SeqAccumulator<E,B,R> a){		
 		accumulateRight(s.iterator(), a);
 		return a.result();
 	}
-	private static <E,B,R> void accumulateRight(Iterator<E> it, AccumulatorSeq<E,B,R> a){		
+	private static <E,B,R> void accumulateRight(Iterator<E> it, SeqAccumulator<E,B,R> a){		
 		if(it.hasNext()) {
 			E e = it.next();
 			accumulateRight(it,a);
 			a.add(e);
-		} else {
-			a.getInitial();
-		}
+		} 
 	}
 	
 	public static void main(String[] args) {
-//		var s1 = Stream.of(1,2,3,4,5,6,7);
-//		var s2 = Stream.of(11,12,13,14,15,16);
+		var s1 = Stream.of(1,2,3,4,5,6,7);
+		var s3 = Stream.of(11,12,13,14,15,16);
 //		var s = "Antonio sa-lio al patio";
 		
 //		Streams2.zip(s1, s2,(x,y)->Tuple.create(x, y))
-//		Streams2.toPairStream(s1)
+		Streams2.consecutivePairs(s1).forEach(x->System.out.print(x));
+		System.out.println("\n_______");
+		Streams2.elementsAndPosition(s3).forEach(x->System.out.print(x));
+		System.out.println("\n_______");
 //		Streams2.fromFile("ficheros/acciones.txt")
 //			.forEach(System.out::println);
 //		joint(s1,s2,x->x,x->x,(x,y)->Tuple.create(x, y))
@@ -374,8 +375,7 @@ public class Streams2 {
 		var n = 14L;
 		var b = 7L;
 		var s = Stream.iterate(n,x->x>0,x->x/2);
-		var a = Accumulators
-				.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
+		var a = SeqAccumulators.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
 		var r = Streams2.accumulateRight(s, a);
 		var s2 = Stream.iterate(Tuple.create(n,b),
 								t->t.v1>0,
@@ -384,6 +384,6 @@ public class Streams2 {
 						.map(t->t.v2)
 						.reduce(1L,(x,y)->x*y);
 					   
-		System.out.println(r+","+Math.pow(b,n)+","+s2);
+		System.out.println(r+","+(long)Math.pow(b,n)+","+s2);
 	}
 }
