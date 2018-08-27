@@ -3,6 +3,7 @@ package us.lsi.common;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -52,7 +53,7 @@ public class SeqAccumulators {
 				(Tuple2<String,Integer> b, String e)->b.v2>0?
 					Tuple.create(b.v1+separator+e,b.v2+1):
 					Tuple.create(b.v1+e,b.v2+1);
-		Function<Tuple2<String,Integer>,String>	result = x->x.v1;	
+		Function<Tuple2<String,Integer>,String>	result = x->x.v1+sufix;	
 		return createInmutable(
 				initial, 
 				accumulate,
@@ -66,6 +67,14 @@ public class SeqAccumulators {
 
 	public static <E> SeqAccumulator<E, E, E> reduce(E initial, BinaryOperator<E> bo) {
 		return createInmutable(initial,bo,x->x,x->false);
+	}
+	
+	public static <E> SeqAccumulator<E,Tuple2<Optional<E>,Boolean>, Optional<E>> first() {
+		return createInmutable(
+				Tuple.<Optional<E>,Boolean>create(Optional.empty(),false),
+				(b,e)->Tuple.create(Optional.of(e),true),
+				x->x.v1,
+				x->x.v2);
 	}
 
 	private static class SeqMutableAccumulator<E, B, R> implements SeqAccumulator<E, B, R> {
