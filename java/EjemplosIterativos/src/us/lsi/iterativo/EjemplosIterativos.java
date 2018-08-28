@@ -141,6 +141,16 @@ public class EjemplosIterativos {
 				.allMatch(i->cmp.compare(ls.get(i),ls.get(i+1))<=0);
 	}
 	
+	public static <E> Boolean estaOrdenada3(List<E> ls,Comparator<E> cmp) {
+		Integer i = 0;
+		Boolean a = true;
+		while(i<=ls.size()-2 && a) {
+			a = cmp.compare(ls.get(i),ls.get(i+1))<=0;
+			i++;
+		}
+		return a;
+	}
+	
 	public static <E> List<E> inversa(List<E> ls) {
 		return inversa(ls, 0);
 	}
@@ -199,38 +209,20 @@ public class EjemplosIterativos {
 	
 	
 	public static void main(String[] args) {
-//		System.out.println(binom(10,5));
-//		System.out.println(fib(10));
-//		System.out.println(pot(8,5));
-//		System.out.println(mcd(10546,3280));
-		var s = List.of(1,2,3,41,55,64,71,88);
-//		Comparator<Integer> cmp = Comparator.naturalOrder();
-//		System.out.println(estaOrdenada(s,cmp));
-//		System.out.println(estaOrdenada2(s,cmp));
-//		System.out.println(inversa(s));
-//		System.out.println(inversa3(s));
-//		var r = cercano(s,60);
-//		System.out.println(r);
-//		var s = List.of(1,0,1,1,0,1,0,1);
-		var xValue = 7;
-//		var enteros = Stream.iterate(0,x->x+1);
-		var ss = Streams2.elementsAndPosition(s.stream());
-		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(","));
-		ss = Streams2.elementsAndPosition(s.stream());
-		var ss2 = Streams2.limit(ss, 4);
-		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
-		System.out.println(r3+"___"+r4);
-		var pot = Stream.iterate(1, x->x*xValue);
-		var value1 = Streams2.zip(s.stream(), pot, (x,y)->x*y).reduce(0,(x,y)->x+y);
-		var ac = SeqAccumulators.createInmutable(0, (Integer b,Integer e)->b*xValue+e);		
-		var value2 = 1*Math2.pow(xValue,0)+2*Math2.pow(xValue,1)+3*Math2.pow(xValue,2)+41*Math2.pow(xValue,3)+55*Math2.pow(xValue,4)+64*Math2.pow(xValue,5)+71*Math2.pow(xValue,6)+88*Math2.pow(xValue,7);	
-		var value3 = Streams2.accumulateRight(s.stream(), ac);
-		System.out.println(value1+","+value2+","+value3);
-		var n = 8;
-		var sec = Stream.iterate(n, x->x>0,x->x/2);
-		var value4 = Streams2.accumulateRight(sec.map(x->x%2).map(x->x.toString()), SeqAccumulators.joiningAccumulator(""));
-		System.out.println(value4);
-		Stream.iterate(n, x->x>0,x->x/2).map(x->x%2).forEach(x->System.out.print(x+" "));;
+		System.out.println(binom(10,5));
+		System.out.println(fib(10));
+		System.out.println(pot(8,5));
+		System.out.println(mcd(10546,3280));
+		var s = List.of(1,2,3,41,30,64,71,88);
+		Comparator<Integer> cmp = Comparator.naturalOrder();
+		System.out.println(estaOrdenada(s,cmp));
+		System.out.println(estaOrdenada2(s,cmp));
+		System.out.println(estaOrdenada3(s,cmp));
+		System.out.println(inversa(s));
+		System.out.println(inversa3(s));
+		var r = cercano(s,60);
+		System.out.println(r);
+		
 	}
 
 }
