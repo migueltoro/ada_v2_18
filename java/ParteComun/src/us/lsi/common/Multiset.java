@@ -81,6 +81,12 @@ public class Multiset<E>  {
 		}
 		return elements.put(e, r);
 	}
+	
+	public static <E> Multiset<E> add(Multiset<E> m1, Multiset<E> m2) {
+		Multiset<E> r = Multiset.create(m1);
+		m2.elements.keySet().forEach(x->r.add(x,m2.count(x)));
+		return r;
+	}
 
 	public Integer remove(Object e) {
 		return elements.remove(e);
