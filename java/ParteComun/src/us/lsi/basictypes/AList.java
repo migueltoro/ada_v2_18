@@ -12,22 +12,22 @@ import us.lsi.common.Preconditions;
  *
  * @param <E> Tipo de los elementos
  */
-public class BasicDynamicArray<E> {
+public class AList<E> {
 	
-	public static <E> BasicDynamicArray<E> create() {
-		return new BasicDynamicArray<E>();
+	public static <E> AList<E> create() {
+		return new AList<E>();
 	}
 
-	public static <E> BasicDynamicArray<E> create(int capacity) {
-		return new BasicDynamicArray<E>(capacity);
+	public static <E> AList<E> create(int capacity) {
+		return new AList<E>(capacity);
 	}
 
-	public static <E> BasicDynamicArray<E> create(BasicDynamicArray<E> a) {
-		return new BasicDynamicArray<E>(a);
+	public static <E> AList<E> create(AList<E> a) {
+		return new AList<E>(a);
 	}
 
-	public static <E> BasicDynamicArray<E> create(E[] a) {
-		return new BasicDynamicArray<E>(a);
+	public static <E> AList<E> create(E[] a) {
+		return new AList<E>(a);
 	}
 
 	private int capacity;
@@ -36,28 +36,28 @@ public class BasicDynamicArray<E> {
 	private final int INITIAL_CAPACITY = 10;
 	private final int GROWING_FACTOR = 2;
 	
-	private BasicDynamicArray() {
+	private AList() {
 		super();
 		this.capacity = INITIAL_CAPACITY;
 		this.size = 0;
 		this.elements = null;
 	}
 	
-	private BasicDynamicArray(int capacity) {
+	private AList(int capacity) {
 		super();
 		this.capacity = capacity;
 		this.size = 0;
 		this.elements = null;
 	}
 	
-	private BasicDynamicArray(BasicDynamicArray<E> a) {
+	private AList(AList<E> a) {
 		super();
 		this.capacity = a.capacity;
 		this.size = a.size();
 		this.elements = Arrays.copyOf(a.elements,a.capacity);
 	}
 	
-	private BasicDynamicArray(E[] a) {
+	private AList(E[] a) {
 		super();
 		this.capacity = a.length;
 		this.size = capacity;

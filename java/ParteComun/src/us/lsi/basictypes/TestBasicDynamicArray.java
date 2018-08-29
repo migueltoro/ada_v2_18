@@ -10,7 +10,7 @@ public class TestBasicDynamicArray {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		BasicDynamicArray<Integer> d = BasicDynamicArray.create();
+		AList<Integer> d = AList.create();
 		for(int i = 0; i < 23; i++){
 			d.add(i);
 		}
@@ -32,7 +32,7 @@ public class TestBasicDynamicArray {
 
 		System.out.println("Array = "+d2+"=="+d2.size());
 		
-		BasicDynamicArray<Integer> d3 = BasicDynamicArray.create();
+		AList<Integer> d3 = AList.create();
 		for(int i = 0; i < 23; i++){
 			d3.set(i,2*i);
 		}

@@ -76,6 +76,14 @@ public class SeqAccumulators {
 				x->x.v1,
 				x->x.v2);
 	}
+	
+	public static <E,R> SeqAccumulator<E,E,R> general(Function<E,R> result, Predicate<E> isDone) {
+		return createInmutable(
+				null,
+				(b,e)->e,
+				result,
+				isDone);
+	}
 
 	private static class SeqMutableAccumulator<E, B, R> implements SeqAccumulator<E, B, R> {
 		private B base;

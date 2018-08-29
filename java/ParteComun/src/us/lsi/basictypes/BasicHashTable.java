@@ -20,7 +20,7 @@ public class BasicHashTable<K, V> {
 	private int initialCapacityOfGroups;
 	private int size;
 	private double loadFactorReference;
-	private BasicDynamicArray<BasicDynamicArray<Entry<K,V>>> elements;
+	private AList<AList<Entry<K,V>>> elements;
 	
 	private BasicHashTable(int capacity, int initialCapacityOfGroups, double loadFactorReference) {
 		super();
@@ -41,9 +41,9 @@ public class BasicHashTable<K, V> {
 	
 	
 	private void initial(){
-		elements = BasicDynamicArray.create(capacity);
+		elements = AList.create(capacity);
 		for(int i = 0; i < capacity; i++){
-			elements.add(BasicDynamicArray.<Entry<K,V>>create(initialCapacityOfGroups));
+			elements.add(AList.<Entry<K,V>>create(initialCapacityOfGroups));
 		}		
 	}
 	
@@ -52,7 +52,7 @@ public class BasicHashTable<K, V> {
 	}
 	
 	private void rehash(int newCapacity){
-		BasicDynamicArray<BasicDynamicArray<Entry<K,V>>> oldElements = elements;
+		AList<AList<Entry<K,V>>> oldElements = elements;
 		int oldCapacity = capacity;
 		capacity = newCapacity;
 		initial();
