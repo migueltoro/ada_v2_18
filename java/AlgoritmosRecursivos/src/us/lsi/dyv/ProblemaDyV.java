@@ -2,7 +2,6 @@ package us.lsi.dyv;
 
 import java.util.List;
 
-
 /**
  * @author Miguel Toro
  *
@@ -29,7 +28,7 @@ public interface ProblemaDyV<S,E> {
 	 * @param ls - Soluciones de los subproblemas alcanzados tras tomar las diferentes alterantivas
 	 * @return La solución del problema
 	 */
-	E combina(List<E> ls);
+	E combina(List<E> soluciones);
 	/**
 	 * @pre 0 &lt; = i &lt; getNumeroSubProblemas(a)
 	 * @param i - Número del subproblema
