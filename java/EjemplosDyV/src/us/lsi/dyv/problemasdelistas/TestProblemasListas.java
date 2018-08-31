@@ -21,7 +21,7 @@ public class TestProblemasListas {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
 		Comparator<Double> ord = Comparator.naturalOrder();
 		Double pivote = lista.get(0);
-		Tuple2<Integer,Integer> p = ProblemasDeListas.reordenaMedianteBanderaHolandesa(lista, pivote, 0,lista.size(), ord);
+		Tuple2<Integer,Integer> p = ProblemasDeListas.banderaHolandesa(lista, pivote, 0,lista.size(), ord);
 		for(int i=0;i<p.getV1();i++){
 			assertTrue(lista.get(i)<pivote);
 		}

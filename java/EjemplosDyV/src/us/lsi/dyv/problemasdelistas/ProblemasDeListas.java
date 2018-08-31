@@ -52,7 +52,7 @@ public class ProblemasDeListas {
 		quickSort(lista,0,lista.size(),cmp);	
 	}
 	
-	public static <T> Tuple2<Integer,Integer> reordenaMedianteBanderaHolandesa(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
+	public static <T> Tuple2<Integer,Integer> banderaHolandesa(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
 		int a, b, c;
 		a = i;	
 		b = i;	
@@ -93,12 +93,12 @@ public class ProblemasDeListas {
 	private static <E> void quickSort(List<E> lista, int i, int j, Comparator<? super E> ord){
 		Preconditions.checkArgument(j>=i);
 		if(j-i <= 4){
-			ProblemasDeListas.ordenaBase(lista, i, j, ord);
+			ordenaBase(lista, i, j, ord);
 		}else{
 			E pivote = escogePivote(lista, i, j);
-			Tuple2<Integer,Integer> p = ProblemasDeListas.reordenaMedianteBanderaHolandesa(lista, pivote, i, j, ord);
-			quickSort(lista,i,p.getV1(),ord);
-			quickSort(lista,p.getV2(),j,ord);			
+			Tuple2<Integer,Integer> p = banderaHolandesa(lista, pivote, i, j, ord);
+			quickSort(lista,i,p.v1,ord);
+			quickSort(lista,p.v2,j,ord);			
 		}
 	}
 
@@ -150,6 +150,8 @@ public class ProblemasDeListas {
 		}
 	}
 	
+	
+	
 	private static <E> void copia(List<E> lista, int i, int j, List<E> ls){
 		for(int k = i; k<j; k++){
 			lista.set(k, ls.get(k));
@@ -174,18 +176,18 @@ public class ProblemasDeListas {
 	
 	private static <E> E escogeKesimo(List<E> lista, int i, int j, int k, Comparator<? super E> ord){
 		Preconditions.checkArgument(j>=i);
-		E r = null;
+		E r;
 		if(j-i == 0){
-			
+			r = null;
 		} else if(j-i == 1){
 			r = lista.get(i);
 		}else{
 			E pivote = escogePivote(lista, i, j);
-			Tuple2<Integer,Integer> p = ProblemasDeListas.reordenaMedianteBanderaHolandesa(lista, pivote, i, j, ord);
-			if(k < p.getV1()){
-				r = escogeKesimo(lista,i,p.getV1(),k,ord);
-			}else if(k >= p.getV2()){
-				r = escogeKesimo(lista,p.getV2(),j,k,ord);
+			Tuple2<Integer,Integer> p = banderaHolandesa(lista, pivote, i, j, ord);
+			if(k < p.v1){
+				r = escogeKesimo(lista,i,p.v1,k,ord);
+			}else if(k >= p.v2){
+				r = escogeKesimo(lista,p.v2,j,k,ord);
 			}else{
 				r = lista.get(k);
 			}					
