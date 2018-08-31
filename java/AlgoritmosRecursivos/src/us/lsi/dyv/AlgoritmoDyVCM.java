@@ -1,9 +1,10 @@
 package us.lsi.dyv;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import us.lsi.common.Lists2;
 import us.lsi.common.Maps2;
 
 /**
@@ -35,7 +36,7 @@ public class AlgoritmoDyVCM<S,E>  {
 	}
 
 	private E dYV(ProblemaDyV<S, E> p) {
-		E s;
+		E s = null;
 		if (solucionesParciales.containsKey(p)) {
 			s = solucionesParciales.get(p);
 		} else if (p.esCasoBase()) {
@@ -43,7 +44,7 @@ public class AlgoritmoDyVCM<S,E>  {
 			solucionesParciales.put(p, s);
 		} else {
 			int numeroDeSubProblemas = p.getNumeroDeSubProblemas();
-			List<E> soluciones = Lists2.newList();
+			List<E> soluciones = new ArrayList<>();	
 			for (int i = 0; i < numeroDeSubProblemas; i++) {
 				ProblemaDyV<S, E> pr = p.getSubProblema(i);
 				s = dYV(pr);

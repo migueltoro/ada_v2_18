@@ -1,6 +1,8 @@
 package us.lsi.dyv;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -37,7 +39,7 @@ public class AlgoritmoDyVSM<S,E> {
 			s = p.getSolucionCasoBase();
 		} else {
 			int numeroDeSubProblemas = p.getNumeroDeSubProblemas();		
-			List<E> soluciones = new ArrayList<>();  			
+			List<E> soluciones = new ArrayList<>();	
 			for(int i = 0; i < numeroDeSubProblemas; i++){
 				ProblemaDyV<S,E> pr = p.getSubProblema(i);
 	    		s = dYV(pr);
