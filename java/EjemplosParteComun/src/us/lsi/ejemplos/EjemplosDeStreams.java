@@ -27,7 +27,7 @@ import us.lsi.math.Math2;
 * @author Miguel Toro
 */
 
-public class Ejemplos {
+public class EjemplosDeStreams {
 
 	/**
 	 * @param <T> El tipo de los elementos
@@ -276,7 +276,7 @@ public class Ejemplos {
 	 */
 	public static String ejemploY(List<String> ls){
 		return ls.stream()
-				 .max(Comparator.comparing(Ejemplos::ejemploX))
+				 .max(Comparator.comparing(EjemplosDeStreams::ejemploX))
 				 .get();
 	}
 	
@@ -389,15 +389,15 @@ public class Ejemplos {
 //		LocalDate f1 = LocalDate.of(1990,1,1);
 //		LocalDate f2 = LocalDate.of(2010,1,1);
 //		Ejemplos.ejemploQ("ficheros/fechas.txt", "ficheros/fechasOut.txt", f1,f2);	
-		System.out.println(Ejemplos.esPrimo1(1031L));
-		System.out.println(Ejemplos.esPrimo2(1031L));
-		System.out.println(Ejemplos.siguientePrimo1(1023L));
-		System.out.println(Ejemplos.siguientePrimo2(1023L));
-		System.out.println(Ejemplos.primosMenoresOIgualesA1(100L));
-		System.out.println(Ejemplos.primosMenoresOIgualesA2(100L));
-		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
-		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
-		Ejemplos.ejemploL("ficheros/primos", 100);
+		System.out.println(EjemplosDeStreams.esPrimo1(1031L));
+		System.out.println(EjemplosDeStreams.esPrimo2(1031L));
+		System.out.println(EjemplosDeStreams.siguientePrimo1(1023L));
+		System.out.println(EjemplosDeStreams.siguientePrimo2(1023L));
+		System.out.println(EjemplosDeStreams.primosMenoresOIgualesA1(100L));
+		System.out.println(EjemplosDeStreams.primosMenoresOIgualesA2(100L));
+		System.out.println(EjemplosDeStreams.sumaPrimosMenoresOIgualesA1(100L));
+		System.out.println(EjemplosDeStreams.sumaPrimosMenoresOIgualesA1(100L));
+		EjemplosDeStreams.ejemploL("ficheros/primos", 100);
 	}
 		
 }

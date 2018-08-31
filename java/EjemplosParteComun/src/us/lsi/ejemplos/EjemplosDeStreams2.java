@@ -15,7 +15,7 @@ import us.lsi.common.Tuple2;
 import us.lsi.math.Math2;
 
 
-public class EjemplosDeStreams {
+public class EjemplosDeStreams2 {
 	
 	public static List<Tuple2<Long,Long>> primosPar(Long m, Long n, Integer k){
 		var r = Stream.iterate(Math2.siguientePrimo(m),x->x < n,x->Math2.siguientePrimo(x));
