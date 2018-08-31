@@ -31,47 +31,47 @@ public class ExpParser {
 	}
 	
 	protected static Exp<Object> scanExp(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanParticleMultiply(tk,vars);
+		Exp<Object> r = scanSumando(tk,vars);
 		String s;
 		while (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 2) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<Object> exp = ExpParser.scanParticleMultiply(tk, vars);
+			Exp<Object> exp = ExpParser.scanSumando(tk, vars);
 			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
 			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<Object> scanParticleMultiply(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanParticlePot(tk,vars);
+	protected static Exp<Object> scanSumando(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = scanFactor(tk,vars);
 		String s;
 		while (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 4) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<Object> exp = ExpParser.scanParticlePot(tk, vars);
+			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
 			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
 			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<Object> scanParticlePot(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanParticleBasic(tk,vars);
+	protected static Exp<Object> scanFactor(Tokenizer tk, Map<String,Exp<Object>> vars){
+		Exp<Object> r = scanBasic(tk,vars);
 		String s;
 		if (tk.hasMoreTokens() && 
 				tk.seeNextTokenType().equals(TokenType.Operator) &&
 				Operator.arities.get(tk.seeNextToken()) == 6) {
 			s = tk.matchTokenTypes(TokenType.Operator);
-			Exp<Object> exp = ExpParser.scanParticleBasic(tk, vars);
+			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
 			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
 			r = Exp.binary(r,exp,bop);
 		}
 		return r;
 	}
-	protected static Exp<Object> scanParticleBasic(Tokenizer tk, Map<String,Exp<Object>> vars){
+	protected static Exp<Object> scanBasic(Tokenizer tk, Map<String,Exp<Object>> vars){
 		Exp<Object> r = null;
 		String s;
 		TokenType tt = tk.seeNextTokenType();
@@ -203,7 +203,7 @@ public class ExpParser {
 		String s2 = "(x+y+sqrt((x*3.2))+(sqrt((x*3.2))^3)+(x+y))";		
 		String s3 = "((((x+3.2)*y)+x)*sqrt((3.2^3)))";
 		String s4 = "((((x+3.2)*y)+x)*5.7243340223994625)";
-		String s5 = "((sqrt((x*3.2))^3)+(v+y+sqrt((_z*3.2))+(sqrt((x*3.2))^3)+(x+y)))";
+		String s5 = "((sqrt((x*3.2))^3^2)+(v+y+sqrt((_z*3.2))+(sqrt((x*3.2))^3)+(x+y)))";
 		String s6 = "iff(x==y,x+3.2*y+x*sqrt(3.2^3),sqrt(x*3.2)^3+x+y+sqrt(x*3.2)+sqrt(x*3.2)^3+x+y)";
 		String s8 = "iff(x==y,x+3.2*y+x*sqrt(3.2^3),sqrt(x*3.2)^3+ +(x,y,sqrt(x*3.2),sqrt(x*3.2)^3,x+y))";
 		String s9 = "iff(x==y,(int)(((x+3.2)*y+x)*sqrt(3.2^3)),(int)(sqrt(x*3.2)^3+ min(x,y,sqrt(x*3.2),sqrt(x*3.2)^3,x+y)))";
@@ -214,7 +214,7 @@ public class ExpParser {
 		Map<String,Exp<Object>> vars = Maps2.newHashMap("_z", ex1);
 		System.out.println(vars);
 		Exp<Object> exp = ExpParser.scan(s5,vars);
-		System.out.println("exp ="+exp+","+exp.getVars());
+		System.out.println("exp ="+exp+"-------"+exp.getVars());
 		
 		exp.get("x").<Double>asVariable().setValue(4.5);
 		exp.get("y").<Double>asVariable().setValue(45.7);

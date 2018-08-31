@@ -10,13 +10,13 @@ import us.lsi.common.Preconditions;
  *
  * @param <E> Tipo de los elementos
  */
-public class BasicLinkedList<E> {
+public class LList<E> {
 	private Entry<E> first;
 	private Entry<E> last;	
 	private int size;
 	//invariant size ==0   <=> first == null && last == null
 	
-	public BasicLinkedList() {
+	public LList() {
 		super();
 		this.first = null;
 		this.last = null;

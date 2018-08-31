@@ -1,95 +1,403 @@
 package us.lsi.ejemplos;
 
-
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-import us.lsi.common.Collectors2;
+import us.lsi.common.Files2;
+import us.lsi.common.Lists2;
 import us.lsi.common.Multiset;
-import us.lsi.common.SeqAccumulators;
+import us.lsi.common.Preconditions;
 import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
+import us.lsi.geometria.Punto2D;
+import us.lsi.geometria.Punto2D.Cuadrante;
 import us.lsi.math.Math2;
 
+/**
+*
+*
+* @author Miguel Toro
+*/
 
-public class EjemplosDeStreams {
-	
-	public static List<Tuple2<Long,Long>> primosPar(Long m, Long n, Integer k){
-		var r = Stream.iterate(Math2.siguientePrimo(m),x->x < n,x->Math2.siguientePrimo(x));
-		var r2 = Streams2.consecutivePairs(r);
-		var rr2 = r2.filter(t->t.v2-t.v1==k).collect(Collectors.toList());
-		return rr2;
+public class Ejemplos {
+
+	/**
+	 * @param <T> El tipo de los elementos
+	 * @param st Un Stream
+	 * @return Crear una lista a partir de un Stream de valores
+	 */
+	public static <T> List<T> ejemploA(Stream<T> st){
+		return st.collect(Collectors.<T>toList());
 	}
 	
-	public static Stream<Long> divisores(Long n){
-		return Stream.iterate(2L, x-> x <= (long) Math.sqrt(n), x -> x+1).filter(x->n%x==0);
+	/**
+	 * @param ls una lista
+	 * @return Dada una lista de objetos de tipo Punto, devolver otra lista con la coordenada X de esos puntos
+	 */
+	public static List<Double> ejemploB(List<Punto2D> ls){
+		return ls.stream().map(x->x.getX()).collect(Collectors.toList());
 	}
 	
-	public static Stream<Tuple2<Long,Long>> primos(Long a){
-		var r = Stream.iterate(Math2.siguientePrimo(a),x->Math2.siguientePrimo(x));
-		var r2 = Streams2.consecutivePairs(r);
+	/**
+	 * @param ls Una lista
+	 * @return Si son impares todos los elementos de la lista.
+	 */
+	public static boolean ejemploC(List<Integer> ls){
+		return ls.stream().allMatch(x->x%2==1);
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Si existe alguno impar y primo
+	 */
+	public static boolean ejemploD(List<Integer> ls){
+		return ls.stream().anyMatch(x->x%2==1 && Math2.esPrimo(x));
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return La suma de todos los elementos de la lista.
+	 */
+	public static Double ejemploE(List<Double> ls){
+		return ls.stream().mapToDouble(x->x).sum();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return La suma de los cuadrados de todos los elementos de la lista
+	 */
+	public static Integer ejemploF(List<Integer> ls){
+		return ls.stream().mapToInt(x->x*x).sum();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @param umbral Un elemento de referencia
+	 * @return El primer real que encuentre que sea mayor que un umbral dado como parámetro
+	 */
+	public static Double ejemploG(List<Double> ls, Double umbral){
+		return ls.stream()
+				 .filter(x-> x > umbral)
+				 .findFirst()
+				 .get();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Una lista de Punto con los puntos simétricos sobre el eje Y
+	 */
+	public static List<Punto2D> ejemploH(List<Punto2D> ls){
+		return ls.stream()
+				 .map(x->Punto2D.create(-x.getX(),x.getY()))
+				 .collect(Collectors.toList());
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return El punto con menor coordenada X.
+	 */
+	public static Punto2D ejemploI(List<Punto2D> ls){
+		return ls.stream()
+				 .min(Comparator.comparing(Punto2D::getX)).get();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Número de puntos de la lista en el primer cuadrante
+	 */
+	public static Long ejemploJ(List<Punto2D> ls){
+		return ls.stream()
+				 .filter(x->x.getX()>=0. && x.getY()>=0.)
+				 .count();	
+	}
+	
+	/**
+	 * @param ls Una array
+	 * @return Una lista con todos los elementos del array
+	 */
+	public static List<Punto2D> ejemploK(Punto2D[] ls){
+		return Arrays.stream(ls).collect(Collectors.toList());
+	}
+	
+	/**
+	 * @pos Guarda en un fichero de texto los números primos hasta un número n dado.
+	 * @param fileOut  Un fichero 
+	 * @param limit Un número de referencia
+	 */
+	public static void ejemploL(String fileOut, Integer limit){
+		String r = Stream.iterate(1, x->x<=limit, x->Math2.siguientePrimo(x))
+			  .map(x->x.toString())
+			  .collect(Collectors.joining("\n"));
+		Strings2.toFile(r, fileOut);
+	}
+	
+	/**
+	 * @param st Un Stream de listas
+	 * @return Stream de con los elementos de todas las listas
+	 */
+	public static Stream<Integer> ejemploM(Stream<List<Integer>> st){
+		return st.flatMap(x->x.stream());
+	}
+	
+	/**
+	 * @pos Guarda en un fichero de texto el cuadrado de los números primos hasta un número n dado.
+	 * @param fileOut Un fichero
+	 * @param limit Un número de referencia
+	 */
+	public String ejemploN(Integer limit){
+		return Stream.iterate(1, x-> x<=limit, x->Math2.siguientePrimo(x))
+			  .map(x->x*x)
+			  .map(x->x.toString())
+			  .collect(Collectors.joining("\n"));
+	}
+	
+	/**
+	 * @param fileIn Un fichero de texto que contiene en cada línea un número entero
+	 * @return Un IntStream
+	 */
+	public static IntStream ejemploO(String fileIn){
+		return Files2.getStream(fileIn)
+				     .mapToInt(x-> Integer.parseInt(x));
+	}
+	
+	/**
+	 * @param limit Una referencia
+	 * @return Un Stream de Punto con los puntos del plano cuya coordenada sea (X,X), 
+	 * siendo X un número primo menor que un número dado
+	 */
+	public static Stream<Punto2D> ejemploP(Integer limit){
+		return Stream.iterate(1L, x-> x<=limit, x->Math2.siguientePrimo(x))
+					 .<Punto2D>map(x->Punto2D.create((double)x, (double)x));
+	}
+	
+	/**
+	 * @pos Genera fileOut a partir de fileIn
+	 * @param fileIn Un fichero de texto con una fecha escrita en cada línea
+	 * @param fileOut Un fichero con las fechas ordenadas y que estén entre dos fechas dadas
+	 * @param c1 Límite inferior de las fechas
+	 * @param c2 Límite superior de las fecha
+	 */
+	public static void ejemploQ(String fileIn, String fileOut, LocalDate c1, LocalDate c2){
+		Preconditions.checkArgument(c2.compareTo(c1) > 0);
+		Stream<String> r = Files2.getStream(fileIn)
+				.map(x-> LocalDate.parse(x))
+				.filter(x->c1.compareTo(x)< 0 && c2.compareTo(x)>0)
+				.sorted()
+				.map(x->x.toString());
+		Files2.toFile(r,fileOut);
+	}
+	
+	/**
+	 * @param fileIn Un fichero de texto que contiene en cada línea una lista de números enteros separados por comas
+	 * @return Un IntStream
+	 */
+	public static IntStream ejemploR(String fileIn){
+		return Files2.getStream(fileIn)
+				     .map(x->x.split(","))
+				     .flatMap(x->Arrays.stream(x))
+				     .mapToInt(x-> Integer.parseInt(x));
+	}
+	
+	
+	/**
+	 * @pos Agrupa los puntos por cuadrantes
+	 * @param st Un Stream
+	 * @return Multimap&lt;Cuadrante,Punto&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
+	 */
+	public static Map<Cuadrante,List<Punto2D>> ejemploS1(Stream<Punto2D> st){
+		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante));
+	}
+	
+	/**
+	 * @pos Agrupa los puntos por cuadrantes
+	 * @param st Un Stream
+	 * @return Map&lt;Cuadrante,List&lt;Punto&gt;&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
+	 */
+	public static Map<Cuadrante,List<Punto2D>> ejemploT1(Stream<Punto2D> st){
+		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante));
+	}
+	
+	/**
+	 * @pos Suma las coordenadas X de los puntos en cada cuadrante
+	 * @param st Un Stream
+	 * @return Map@lt;Cuadrante,Double&gt; en el que se asocia a cada cuadrante, la suma de las coordenadas X de los puntos de ese cuadrante
+	 */
+	public static Map<Cuadrante,Double> ejemploU(Stream<Punto2D> st){
+		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante, 
+							Collectors.<Punto2D,Double>reducing(0.,x->x.getX(),(x,y)->x+y)));
+	}
 		
-		return r2;
+	/**
+	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @param st Un Stream
+	 * @return  Un Multiset&lt;Cuadrante&gt;
+	 */
+	public static Map<Cuadrante, Long> ejemploV(Stream<Punto2D> st){
+		return st.collect(
+				Collectors.groupingBy(Punto2D::getCuadrante, 
+			    Collectors.counting()));	
 	}
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
-		var s1 = List.of(1,2,3,4,5,6,7);
-		var s2 = List.of(11,12,13,14,15,16);
-		var r2 = List.of(11,12,13,14,15,16,34,57);
-		Stream.generate(()->Math2.getEnteroAleatorio(0, 100))
-			.limit(4)
-			.forEach(System.out::println);
-		System.out.println("______");
-		var rr = Stream.generate(()->Math2.getEnteroAleatorio(0, 100)).filter(x->x%7==0);
-		System.out.println(Streams2.accumulateLeft(rr, SeqAccumulators.first()).get());
-		System.out.println("______");
-		var s3 = r2.stream().map(x->x.toString());
-		var a = SeqAccumulators.joiningAccumulator(" ","{","}");
-		var r = Streams2.accumulateLeft(s3, a);
-		System.out.println(r);	
-		System.out.println("______");
-		var s4 = Stream.iterate(0, x->x+1);
-		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Tuple.create(x, y));
-		s5.forEach(System.out::println);
-		System.out.println("______");
-		var n = 14L;
-		var b = 7L;
-		var s6 = Stream.iterate(n,x->x>0,x->x/2);
-		var a6 = SeqAccumulators
-				.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
-		var r1 = Streams2.accumulateRight(s6, a6);
-		var s7 = Stream.iterate(Tuple.create(n,b),
-								t->t.v1>0,
-								t->Tuple.create(t.v1/2,t.v2*t.v2))
-						.filter(t->t.v1%2!=0)
-						.map(t->t.v2)
-						.reduce(1L,(x,y)->x*y);
-					   
-		System.out.println(s7+","+r1+","+Math.pow(b,n));
-		System.out.println("______");
-		var ss = Streams2.elementsAndPosition(r2.stream());
-		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(","));
-		System.out.println(r3);
-		System.out.println("______");
-		var enteros = Stream.iterate(0,x->x+1);
-		var ss2 = Streams2.limit(enteros, 4);
-		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
-		System.out.println(r4);
-		System.out.println("______");
-		var pp = primosPar(1000L,100000L,2);
-		Strings2.toConsole(pp,"Pares de primos");
-		System.out.println("______");
-		Long m1 = 1000L;
-		Long n1 = 2000L;
-		Multiset<Long> rr4 = 
-				Stream.iterate(m1,x->x<n1,x->x+1)
-				.flatMap(x->divisores(x))
-				.collect(Collectors2.toMultiset());
-		System.out.println(rr4);
-		System.out.println("______");
+	
+	public static Multiset<Cuadrante> ejemploV2(Stream<Punto2D> st){
+		return Streams2.toMultiSet(st.map(Punto2D::getCuadrante));	
+	}
+	
+	/**
+	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @param st Un Stream 
+	 * @return Un Map&lt;Cuadrante,Long&gt;
+	 */
+	public static Map<Cuadrante,Long> ejemploW(Stream<Punto2D> st){
+		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante, Collectors.counting()));
 	}
 
+	
+	/**
+	 * @param s Un String
+	 * @return Número de caracteres en minúscula que tiene la cadena
+	 */
+	public static Long ejemploX(String s){
+		return s.chars()
+				.filter(x->Character.isLowerCase(x))
+				.count();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return La cadena que tiene un mayor número de caracteres en minúscula
+	 */
+	public static String ejemploY(List<String> ls){
+		return ls.stream()
+				 .max(Comparator.comparing(Ejemplos::ejemploX))
+				 .get();
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return El máximo, el mínimo, la media y la suma.
+	 */
+	public static IntSummaryStatistics ejemploZ(List<Integer> ls){
+		return ls.stream()
+				 .collect(Collectors.summarizingInt(x->x));
+	}
+	
+	/**
+	 * @param n Un entero
+	 * @return Si es primo
+	 */
+	public static boolean esPrimo1(Long n){
+		Long sqrt = (long)Math.sqrt((double)n);
+		return !LongStream.rangeClosed(2, sqrt)
+				          .anyMatch(x->Math2.esDivisible(n, x));
+	}
+	
+	/**
+	 * @param n Un entero
+	 * @return Si es primo
+	 */
+	public static boolean esPrimo2(Long n){
+		Long sqrt = (long)Math.sqrt((double)n);
+		Long e = 2L;
+		Boolean a = false;
+		while(e <= sqrt){	   
+	      	a = Math2.esDivisible(n, e);
+	      	if(a) break; 
+	   		e = e + 1;		   
+        }
+		return !a;
+	}
+	/**
+	 * @param n Un entero
+	 * @return Primer primo mayor que a
+	 */
+	public static Long siguientePrimo1(Long n){
+		Long e0 = n%2==0?n+1:n+2;
+		return Stream.iterate(e0, e->e+2)
+				     .filter(e->Math2.esPrimo(e))
+				     .findFirst()
+				     .get();
+	}
+	/**
+	 * @param n Un entero
+	 * @return Primer primo mayor que a
+	 */
+	public static Long siguientePrimo2(Long n){
+		Long e = n%2==0?n+1:n+2;
+		Long a = null;
+		while(true){	   
+	      	if(esPrimo2(e))  {
+	      		a = e;
+	      		break;
+	      	}
+	   		e = e +2;		   
+        }
+		return a;
+	}
+	/**
+	 * @param limit Un entero
+	 * @return Los  primos menores o iguales a limit
+	 */
+	public static List<Long> primosMenoresOIgualesA1(Long limit){
+		return Stream.iterate(1L, x->x<=limit, x->siguientePrimo1(x))
+				     .collect(Collectors.toList());
+	}
+	/**
+	 * @param limit Un entero
+	 * @return Los  primos menores o iguales a limit
+	 */
+	public static List<Long> primosMenoresOIgualesA2(Long limit){
+		Long e = 1L;
+		List<Long> a = Lists2.newList();
+		while(e<=limit){	   
+	      	a.add(e);
+	   		e = siguientePrimo2(e);		   
+        }
+		return a;
+	}
+	/**
+	 * @param limit Un entero
+	 * @return Suma de los  primos menores o iguales a limit
+	 */
+	public static Long sumaPrimosMenoresOIgualesA1(Long limit){
+		return Stream.iterate(1L, x->x<=limit, x->siguientePrimo1(x))
+				     .reduce(1L,(x,y)->x+y);
+	}
+	/**
+	 * @param limit Un entero
+	 * @return Suma de los  primos menores o iguales a limit
+	 */
+	public static Long sumaPrimosMenoresOIgualesA2(Long limit){
+		Long e = 1L;
+		Long a = 0L;
+		while(e<=limit){	   
+	      	a = a+e;
+	   		e = siguientePrimo2(e);		   
+        }
+		return a;
+	}
+	
+	public static void main(String[] args) {
+//		OtrosEjemplos.ejemplos8();	
+//		LocalDate f1 = LocalDate.of(1990,1,1);
+//		LocalDate f2 = LocalDate.of(2010,1,1);
+//		Ejemplos.ejemploQ("ficheros/fechas.txt", "ficheros/fechasOut.txt", f1,f2);	
+		System.out.println(Ejemplos.esPrimo1(1031L));
+		System.out.println(Ejemplos.esPrimo2(1031L));
+		System.out.println(Ejemplos.siguientePrimo1(1023L));
+		System.out.println(Ejemplos.siguientePrimo2(1023L));
+		System.out.println(Ejemplos.primosMenoresOIgualesA1(100L));
+		System.out.println(Ejemplos.primosMenoresOIgualesA2(100L));
+		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
+		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
+		Ejemplos.ejemploL("ficheros/primos", 100);
+	}
+		
 }

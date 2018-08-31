@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -227,6 +228,97 @@ public class Lists2 {
 		List<E> r = Lists2.newList(ls1);
 		r.addAll(ls2);
 		return r;
+	}
+	
+	public static <E extends Comparable<? super E>> List<E> mergeOrdered(List<E> l1, List<E> l2){
+		return mergeOrdered(l1,l2,Comparator.naturalOrder());
+	}
+	
+	/**
+	 * @pre Las listas deben estar ordenadas
+	 * @post La lista resultante está ordenada
+	 * @param <E> El tip de los elementos 
+	 * @param r1 Una lista ordenada
+	 * @param r2 Una lista ordenada
+	 * @param cmp U orden
+	 * @return Una ordenada que contiene los elementos de ambas listas
+	 */
+	public static <E> List<E> mergeOrdered(List<E> r1, List<E> r2, Comparator<? super E> cmp){
+//		Preconditions.checkState(isOrdered(r1,cmp));
+//		Preconditions.checkState(isOrdered(r2,cmp));
+		List<E> r3 = Lists2.newList();
+		int k1= 0;
+		int k2= 0;
+		int k3= 0;
+		int j1 = r1.size();
+		int j2 = r2.size();
+		int j3 = j1+j2;
+		while(k3<j3){
+			if(k1<j1 && k2<j2){
+				if(cmp.compare(r1.get(k1), r2.get(k2))<=0){
+					r3.add(r1.get(k1));
+					k1++;
+					k3++;
+				}else{
+					r3.add(r2.get(k2));
+					k2++;
+					k3++;
+				}
+			}else if(k2==j2){
+				r3.add(r1.get(k1));
+				k1++;
+				k3++;
+			}else{
+				r3.add(r2.get(k2));
+				k2++;
+				k3++;
+			}
+		}
+//		Preconditions.checkState(isOrdered(r3,cmp));		
+		return r3;
+	}
+	
+	public static <E extends Comparable<? super E>> void insertOrdered(List<E> ls, E e) {
+		insertOrdered(ls,e,Comparator.naturalOrder());
+	}
+	
+	/**
+	 * @pre La lista está ordenada
+	 * @post La lista resultante está ordenada y contiene e
+	 * @param <E> El tipo de los elementos de la lista
+	 * @param ls Una lista ordenada
+	 * @param e Un elemento
+	 * @param cmp Un  orden
+	 */
+	
+	public static <E> void insertOrdered(List<E> ls, E e, Comparator<? super E> cmp) {
+//		Preconditions.checkState(isOrdered(ls, cmp));
+		int i = 0;
+		while (i < ls.size()) {
+			if(Comparator2.isGT(ls.get(i),e, cmp)) break;
+			i++;
+		}
+		ls.add(i, e);
+//		Preconditions.checkState(isOrdered(ls, cmp));
+	}
+
+	public static <E extends Comparable<? super E>> Boolean isOrdered(List<E> ls) {	
+		return IntStream.range(0,ls.size()-1)
+				.allMatch(i->ls.get(i).compareTo(ls.get(i+1))<=0);
+	}
+	
+	/**
+	 * 
+	 * @param <E> El tipo de los elementos de la lista
+	 * @param ls Una lista ordenada
+	 * @param e Un elemento
+	 * @param cmp Un  orden
+	 * @return Si la lista está ordenada con respecto al orden
+	 */
+
+	public static <E> Boolean isOrdered(List<E> ls, Comparator<? super E> cmp) {
+		return IntStream.range(0,ls.size()-1)
+				.allMatch(i->cmp.compare(ls.get(i),ls.get(i+1))<=0);
 	}
 	
 	/**

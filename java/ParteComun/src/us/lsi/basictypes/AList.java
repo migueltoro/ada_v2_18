@@ -14,7 +14,7 @@ import us.lsi.common.Preconditions;
  */
 public class AList<E> {
 	
-	public static <E> AList<E> create() {
+	public static <E> AList<E> empty() {
 		return new AList<E>();
 	}
 
@@ -34,7 +34,6 @@ public class AList<E> {
 	private int size;
 	private E[] elements;
 	private final int INITIAL_CAPACITY = 10;
-	private final int GROWING_FACTOR = 2;
 	
 	private AList() {
 		super();
@@ -64,10 +63,12 @@ public class AList<E> {
 		this.elements = Arrays.copyOf(a, capacity);
 	}
 
-    private void grow(int newCapacity){
-    	E[] oldElements = elements;
-    	capacity = newCapacity;
-    	elements = Arrays.copyOf(oldElements, capacity);
+    private void grow(){
+    	if(size==capacity){
+    		E[] oldElements = elements;
+    		capacity = capacity*2;
+    		elements = Arrays.copyOf(oldElements, capacity);
+    	}
     }
 	
     public int size() {
@@ -84,18 +85,14 @@ public class AList<E> {
 	}
     
 	@SuppressWarnings("unchecked")
-	public E set(int index, E e){		
-		if(size == 0){
-			if(index >= capacity){
-				capacity = index+1;
-			}
-			elements = (E[]) Array.newInstance(e.getClass(), capacity);
+	public E set(int index, E e){	
+		Preconditions.checkPositionIndex(index,this.size);
+		if(this.elements == null) {
+			this.elements = (E[]) Array.newInstance(e.getClass(), capacity);
 		}
-		if(index >=  capacity){
-			grow(index+1);
-		}	
-		if(index >= size){
-			size = index+1;
+		if(index == this.size) {
+			this.size = this.size +1;
+			grow();
 		}
 		E r = get(index);
 		elements[index]= e;
@@ -104,12 +101,10 @@ public class AList<E> {
 	
 	@SuppressWarnings("unchecked")
 	public boolean add(E e) {
-		if(size == 0){
-			elements = (E[]) Array.newInstance(e.getClass(), capacity);
+		if(this.elements == null) {
+			this.elements = (E[]) Array.newInstance(e.getClass(), capacity);
 		}
-		if(size==capacity){
-			grow(capacity*GROWING_FACTOR);
-		}
+		grow();
 		elements[size] = e;
 		size++;   	
 		return true;
@@ -143,7 +138,7 @@ public class AList<E> {
 	public String toString(){
 		String s = "{";
 		boolean prim = true;
-		for(int i=0; i< size; i++){
+		for(int i=0; i<size; i++){
 			if(prim){
 				prim = false;
 				s = s+elements[i];
