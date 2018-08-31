@@ -5,15 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
-import us.lsi.common.SeqAccumulators;
 import us.lsi.common.Lists2;
-import us.lsi.common.Streams2;
-import us.lsi.math.Math2;
+
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.fraction.BigFractionField;
