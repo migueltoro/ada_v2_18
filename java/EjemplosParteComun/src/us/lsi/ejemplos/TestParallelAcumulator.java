@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import us.lsi.common.Collectors2;
 import us.lsi.common.Strings2;
 
-public class ParallelAcumulator {
+public class TestParallelAcumulator {
 
 	public static void main(String[] args) {
 		Random r = new Random(System.nanoTime());
@@ -16,6 +16,10 @@ public class ParallelAcumulator {
 		List<Integer> rr = s.parallel().collect(Collectors2.mergeSort());
 
 		Strings2.toConsole(rr, "Ordenada");
+		
+		
 	}
+	
+	
 
 }
