@@ -2,6 +2,7 @@ package us.lsi.common;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,6 +72,7 @@ public class SetMultimap<K, V>  {
 	}
 
 	public boolean put(K key, V value) {
+		if(!map.containsKey(key)) map.put(key, new HashSet<>());
 		return map.get(key).add(value);
 	}
 
