@@ -11,12 +11,10 @@ public interface SeqAccumulator<E, B, R> {
 	
 	/**
 	 * @post El elemento queda acumulado en la base
-	 * @param <E> el tipo del elemento
 	 * @param e Un elemento
 	 */
 	void add(E e);
 	/**
-	 * @param <R> El tipo del resultado
 	 * @return Transforma el valor de la base. Es el valor que devolverá el acumulador
 	 */
 	R result();

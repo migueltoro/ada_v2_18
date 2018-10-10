@@ -354,7 +354,7 @@ public class Tree<E> {
 	}
 	
 	/**
-	 * @pos La etiqueta se insertará en al posición min(k,nh). Si k = 0 resulta el recorrido en preorden y si 
+	 * @post La etiqueta se insertará en al posición min(k,nh). Si k = 0 resulta el recorrido en preorden y si 
 	 * k &ge; nh en postorden.
 	 * @param k Posición de inserción de la etiqueta
 	 * @return Una lista con el recorrido en inorden. 

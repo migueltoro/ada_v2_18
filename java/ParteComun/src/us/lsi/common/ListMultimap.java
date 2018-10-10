@@ -1,5 +1,6 @@
 package us.lsi.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class ListMultimap<K, V>  {
 	}
 
 	public boolean put(K key, V value) {
+		if(!map.containsKey(key)) map.put(key, new ArrayList<>());
 		return map.get(key).add(value);
 	}
 

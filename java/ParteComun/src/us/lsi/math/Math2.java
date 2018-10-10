@@ -481,7 +481,7 @@ public class Math2 {
 	
 	/**
 	 * @pre n*nBits = ls.size(), n = maxRanges.size()
-	 * @pos return.size() = n, 0 &le; return[i] &lt; maxRanges(i)
+	 * @post return.size() = n, 0 &le; return[i] &lt; maxRanges(i)
 	 * @param n Numero de enteros a decodificar
 	 * @param nBits Numero de bits por entero.
 	 * @param ls Una lista de bits

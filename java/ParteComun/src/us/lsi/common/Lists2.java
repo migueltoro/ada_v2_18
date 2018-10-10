@@ -25,7 +25,7 @@ public class Lists2 {
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @pos La lista queda con el último elemento eliminado
+	 * @post La lista queda con el último elemento eliminado
 	 * @pre la lista no puede estar vacía
 	 * @return El último elemento eliminado
 	 */
@@ -39,7 +39,7 @@ public class Lists2 {
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @param e Un elemento
-	 * @pos La lista queda con e añadido en primer lugar
+	 * @post La lista queda con e añadido en primer lugar
 	 */
 	public static <E> void addFirst(List<E> ls, E e){
 		ls.add(0,e);
@@ -64,7 +64,7 @@ public class Lists2 {
 	 * @param lista Una lista
 	 * @param i Un índice de la lista
 	 * @param j Un índice de la lista
-	 * @pos Quedan intercambiadas las casillas de índices i y j en la lista
+	 * @post Quedan intercambiadas las casillas de índices i y j en la lista
 	 * @pre Tanto i como j deben ser índices de la lista
 	 */
 	public static <E> void intercambia(List<E> lista, int i, int j){
@@ -82,7 +82,7 @@ public class Lists2 {
 	 * @param ls Un array
 	 * @param i Un índice de la lista
 	 * @param j Un índice de la lista
-	 * @pos Quedan intercambiadas las casillas de índices i y j en el array
+	 * @post Quedan intercambiadas las casillas de índices i y j en el array
 	 * @pre Tanto i como j deben ser índices del array
 	 */
 	public static <T> void intercambia(T[] ls, int i, int j){
@@ -311,7 +311,6 @@ public class Lists2 {
 	 * 
 	 * @param <E> El tipo de los elementos de la lista
 	 * @param ls Una lista ordenada
-	 * @param e Un elemento
 	 * @param cmp Un  orden
 	 * @return Si la lista está ordenada con respecto al orden
 	 */
