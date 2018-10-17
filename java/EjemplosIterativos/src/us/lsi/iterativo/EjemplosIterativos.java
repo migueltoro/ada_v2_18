@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 
 import us.lsi.common.Lists2;
-
+import us.lsi.common.Preconditions;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.fraction.BigFractionField;
@@ -201,7 +201,36 @@ public class EjemplosIterativos {
 		return r;	
 	} 
 	
-	
+	public static Integer cercano2(List<Integer> ls, Integer e){
+		if(ls.isEmpty()) Preconditions.checkArgument(!ls.isEmpty());
+		int n = ls.size();
+		return cercano(ls, e, 0, n, n/2);
+	}
+	public static Integer cercano(List<Integer> ls, Integer e, Integer i,Integer j,Integer k) {	
+		Integer r;
+	 	if(j-i == 1) {
+	 		r = ls.get(i);
+	 	} else if(j-i == 2){
+	 		r = masCercano(e,ls.get(i),ls.get(i+1));
+		} else if(e == ls.get(k)) {
+	 		r = ls.get(k);
+	 	} else if(e < ls.get(k)){
+	 		r = cercano(ls,e,i,k,(i+k)/2);
+	 	} else {
+			r = cercano(ls,e,k,j,(k+j)/2);
+	 	}
+		return r;
+	}
+	public static Integer masCercano(Integer e, Integer e1, Integer e2){
+	 	Integer r;
+		if(Math.abs(e-e1) <= Math.abs(e-e2)){
+	 		r = e1;
+	 	} else {
+	 		r = e2;
+	 	}
+	 	return r;
+	}
+
 	
 	
 	public static void main(String[] args) {
@@ -218,7 +247,9 @@ public class EjemplosIterativos {
 		System.out.println(inversa3(s));
 		var r = cercano(s,60);
 		System.out.println(r);
-		
+		var s2 = List.of(0,1,3,4,5,5,6,10);
+		r = cercano2(s2,2);
+		System.out.println(r);
 	}
 
 }

@@ -24,8 +24,6 @@ import us.lsi.geometria.Punto2D;
 import us.lsi.geometria.Punto2D.Cuadrante;
 import us.lsi.math.Math2;
 
-import java.util.AbstractMap.SimpleEntry;
-
 /**
 *
 *
@@ -133,7 +131,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Guarda en un fichero de texto los números primos hasta un número n dado.
+	 * @post Guarda en un fichero de texto los números primos hasta un número n dado.
 	 * @param fileOut  Un fichero 
 	 * @param limit Un número de referencia
 	 */
@@ -153,8 +151,8 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Guarda en un fichero de texto el cuadrado de los números primos hasta un número n dado.
-	 * @param fileOut Un fichero
+	 * 
+	 * @return Un String con el cuadrado de los números primos hasta un número n dado.
 	 * @param limit Un número de referencia
 	 */
 	public String ejemploN(Integer limit){
@@ -184,7 +182,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Genera fileOut a partir de fileIn
+	 * @post Genera fileOut a partir de fileIn
 	 * @param fileIn Un fichero de texto con una fecha escrita en cada línea
 	 * @param fileOut Un fichero con las fechas ordenadas y que estén entre dos fechas dadas
 	 * @param c1 Límite inferior de las fechas
@@ -212,7 +210,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Agrupa los puntos por cuadrantes
+	 * @post Agrupa los puntos por cuadrantes
 	 * @param st Un Stream
 	 * @return Multimap&lt;Cuadrante,Punto&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
 	 */
@@ -223,7 +221,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Agrupa los puntos por cuadrantes
+	 * @post Agrupa los puntos por cuadrantes
 	 * @param st Un Stream
 	 * @return Map&lt;Cuadrante,List&lt;Punto&gt;&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
 	 */
@@ -232,7 +230,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Suma las coordenadas X de los puntos en cada cuadrante
+	 * @post Suma las coordenadas X de los puntos en cada cuadrante
 	 * @param st Un Stream
 	 * @return Map@lt;Cuadrante,Double&gt; en el que se asocia a cada cuadrante, la suma de las coordenadas X de los puntos de ese cuadrante
 	 */
@@ -242,7 +240,7 @@ public class Ejemplos {
 	}
 		
 	/**
-	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @post Cuenta cuántos puntos hay de cada cuadrante en el Stream
 	 * @param st Un Stream
 	 * @return  Un Multiset&lt;Cuadrante&gt;
 	 */
@@ -253,7 +251,7 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @post Cuenta cuántos puntos hay de cada cuadrante en el Stream
 	 * @param st Un Stream 
 	 * @return Un Map&lt;Cuadrante,Long&gt;
 	 */
