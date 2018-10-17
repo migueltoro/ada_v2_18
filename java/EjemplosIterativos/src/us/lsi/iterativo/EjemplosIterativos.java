@@ -173,35 +173,8 @@ public class EjemplosIterativos {
 		}
 		return b;
 	}
-	public static Integer cercano(List<Integer>ls, Integer m){
-		if(ls.isEmpty()) return null;
-		return cercano(ls,m,0,ls.size());
-	}
-	public static Integer cercano(List<Integer>ls, Integer m,Integer i,Integer j){
-		Integer r;
-		if(j-i==1){
-			r = ls.get(i);
-		} else if(j-i==2) {
-			if(m-ls.get(i) <= ls.get(i+1)-m){
-				r = ls.get(i);
-			} else {
-			 	r = ls.get(i+1);
-			}
-		} else {
-			Integer k = (i+j)/2;
-			Integer em = ls.get(k);
-			if(m==em){
-				r = em;
-			} if (m>em){
-				r = cercano(ls,m,k,j);
-			} else {
-				r = cercano(ls,m,i,k);
-			}
-		}
-		return r;	
-	} 
 	
-	public static Integer cercano2(List<Integer> ls, Integer e){
+	public static Integer cercano(List<Integer> ls, Integer e){
 		if(ls.isEmpty()) Preconditions.checkArgument(!ls.isEmpty());
 		int n = ls.size();
 		return cercano(ls, e, 0, n, n/2);
@@ -215,7 +188,7 @@ public class EjemplosIterativos {
 		} else if(e == ls.get(k)) {
 	 		r = ls.get(k);
 	 	} else if(e < ls.get(k)){
-	 		r = cercano(ls,e,i,k,(i+k)/2);
+	 		r = cercano(ls,e,i,k+1,(i+k+1)/2);
 	 	} else {
 			r = cercano(ls,e,k,j,(k+j)/2);
 	 	}
@@ -247,8 +220,8 @@ public class EjemplosIterativos {
 		System.out.println(inversa3(s));
 		var r = cercano(s,60);
 		System.out.println(r);
-		var s2 = List.of(0,1,3,4,5,5,6,10);
-		r = cercano2(s2,2);
+		var s2 = List.of(0,2,6,10);
+		r = cercano(s2,5);
 		System.out.println(r);
 	}
 
