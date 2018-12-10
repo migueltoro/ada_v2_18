@@ -41,8 +41,7 @@ public class Test {
 		double r = d4.put(3, -15.);
 		double r2 = d4.remove(6);
 		System.out.println("Hash Size = "+d4.size()+", r = "+r+", r2 = "+r2);
-		Strings2.toConsole(d4.entryList(), "Hash Table");
-		
+		Strings2.toConsole(d4.entryList(), "Hash Table 1");
 	}
 
 }
