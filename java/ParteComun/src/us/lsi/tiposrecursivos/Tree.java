@@ -221,9 +221,9 @@ public class Tree<E> {
 	public int getHeight(){
 		Integer r=0;
 		switch(this.getType()) {
-		case Empty: r = 0; break;
+		case Empty: r = -1; break;
 		case Leaf:  r = 0; break;
-		case Nary: r = 1+ elements.stream().mapToInt(x->x.getHeight()).max().orElse(0); break;
+		case Nary: r = 1+ elements.stream().mapToInt(x->x.getHeight()).max().getAsInt(); break;
 		}
 		return r;
 	}

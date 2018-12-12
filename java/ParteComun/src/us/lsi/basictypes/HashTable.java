@@ -95,13 +95,14 @@ public class HashTable<K, V> {
 	public V put(K key, V value){
 		rehash();
 		EntryData<K,V> r = findEntry(key);
-		int g = group(key);
 		if(r==null) {
 			r = data.get(this.firstFreeData);
+			int g = group(key);
+			int oldfirstInGrup= groups.get(g);
 			groups.set(g, this.firstFreeData);
 			this.firstFreeData = r.next;
+			r.next=oldfirstInGrup;
 			r.key = key;
-			r.next = groups.get(g);
 			this.size = this.size +1;
 		}
 		r.value = value;		

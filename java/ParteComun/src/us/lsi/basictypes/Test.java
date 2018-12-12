@@ -42,6 +42,16 @@ public class Test {
 		double r2 = d4.remove(6);
 		System.out.println("Hash Size = "+d4.size()+", r = "+r+", r2 = "+r2);
 		Strings2.toConsole(d4.entryList(), "Hash Table 1");
+		
+		HashTable<Integer, String> ht= HashTable.empty();
+		ht.put(1, "1");
+		ht.put(14, "14");
+		System.out.println(ht.get(14)); //funciona bien
+		System.out.println(ht.get(0));//funciona bien
+		System.out.println("1----");
+		System.out.println(ht.get(1)); //no funciona. Se queda bloqueado ya que entryData <14,"14"> apunta a si mismo y no al <1,"1">
+		System.out.println("2----");
+		Strings2.toConsole(ht.entryList(), "Hash Table 2");
 	}
 
 }
