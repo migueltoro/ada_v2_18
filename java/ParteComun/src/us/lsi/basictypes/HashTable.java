@@ -76,7 +76,7 @@ public class HashTable<K, V> {
 		EntryData<K,V> r = null;
 		int g = group(key);
 		int next = groups.get(g);
-		while(next > 0) {
+		while(next >= 0) {
 			r = data.get(next);
 			if(r.key.equals(key)) break;
 			next = r.next;
