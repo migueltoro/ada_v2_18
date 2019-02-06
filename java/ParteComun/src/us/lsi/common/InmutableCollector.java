@@ -1,31 +1,32 @@
 package us.lsi.common;
 
+
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collector;
 
-public class InmutableCollector<E, B, R> {
-
+public interface InmutableCollector<E, B, R> {
 	
-	public static <E, B, R> InmutableCollector<E, B, R> of(B initialValue, BiFunction<B, E, B> accumulate,
-			BinaryOperator<B> combiner, Function<B, R> finisher) {
-		return new InmutableCollector<E, B, R>(initialValue, accumulate, combiner, finisher);
+	BiFunction<B, E, B> accumulator();
+	BinaryOperator<B> combiner();
+	Function<B, R> finisher();
+	B initial();
+	
+	public static  <E,B,R> Collector<E, MutableType<B>, R> toMutable(
+			B initial, 
+			BiFunction<B, E, B> accumulator, 
+			BinaryOperator<B> combiner, 
+			Function<B, R> finisher,
+			Collector.Characteristics... characteristics) {
+		return new Collectors2.InmutableToMutableCollector<>(initial,accumulator,combiner,finisher,characteristics); 
 	}
-
-	B initialValue;
-	BiFunction<B, E, B> accumulator;
-	BinaryOperator<B> combiner;
-	Function<B, R> finisher;
 	
-	private InmutableCollector(B initialValue, BiFunction<B, E, B> accumulator, BinaryOperator<B> combiner,
+	public static  <E,B,R> InmutableCollector<E, B, R> of(
+			B initial, 
+			BiFunction<B, E, B> accumulator, 
+			BinaryOperator<B> combiner, 
 			Function<B, R> finisher) {
-		super();
-		this.initialValue = initialValue;
-		this.accumulator = accumulator;
-		this.combiner = combiner;
-		this.finisher = finisher;
+		return new Collectors2.InmutableCollectorImpl<E,B,R>(initial,accumulator,combiner,finisher); 
 	}
-
-	
 }
-

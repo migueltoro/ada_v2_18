@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
-import us.lsi.common.Tuple2;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;
 
@@ -16,25 +15,28 @@ public class BinaryTree<E> {
 	public enum BinaryType{Empty,Leaf,Binary}
 	public enum ChildType{Left,Right,Root}
 	
-	static <E> BinaryTree<E> create(Tree<E> tree) {
+	public static <E> BinaryTree<E> create(BinaryTree<E> tree) {
 		Preconditions.checkNotNull(tree);
-		return new BinaryTree<E>(tree);
+		return tree.copy();
 	}
 
+	private static BinaryTree<Object> empty = new BinaryTree<Object>();
+			
+	@SuppressWarnings("unchecked")
 	public static <E> BinaryTree<E> empty() {
-		return new BinaryTree<E>(Tree.empty());
+		return (BinaryTree<E>) empty;
 	}
 	
 	public static <E> BinaryTree<E> leaf(E label) {
-		return new BinaryTree<E>(Tree.leaf(label));
+		return new BinaryTree<E>(label);
 	}
 	
 	public static <E> BinaryTree<E> binary(E label, BinaryTree<E> left, BinaryTree<E> right) {
 		BinaryTree<E> r = null;
 		if (left.isEmpty() && right.isEmpty()) {
-			r = new BinaryTree<E>(Tree.leaf(label));
+			r = new BinaryTree<E>(label);
 		} else {
-			r = new BinaryTree<E>(Tree.nary(label, left.tree, right.tree));
+			r = new BinaryTree<E>(label, left, right);
 		}
 		return r;
 	}
@@ -106,23 +108,44 @@ public class BinaryTree<E> {
 		}
 		return label;	
 	}
+
+	protected E label;
+	protected BinaryTree<E> left;
+	protected BinaryTree<E> right;
+	protected BinaryTree<E> father;
+	private final BinaryType type;
 	
-	protected Tree<E> tree;
-	private BinaryType type;
-	
-	protected BinaryTree(Tree<E> tree) {
+
+	protected BinaryTree() {
 		super();
-		this.tree = tree;
-		switch(tree.getType()) {
-		case Empty: this.type = BinaryType.Empty; break;
-		case Leaf: this.type = BinaryType.Leaf; break;
-		case Nary: this.type = BinaryType.Binary;break;		
-		}
+		this.label = null;
+		this.left = null;
+		this.right = null;
+		this.type = BinaryType.Empty;
+		this.father = null;
 	}
 
-	public Object getIdentity() {
-		return tree;
+	
+	protected BinaryTree(E label) {
+		super();
+		this.label = label;
+		this.left = null;
+		this.right = null;		
+		this.type = BinaryType.Leaf;
+		this.father = null;
 	}
+	
+	protected BinaryTree(E label, BinaryTree<E> left, BinaryTree<E> right) {
+		super();
+		this.label = label;
+		this.left = left;
+		this.right = right;
+		this.type = BinaryType.Binary;	
+		this.father = null;
+		this.left.father = this;
+		this.right.father = this;
+	}
+
 	
 	public boolean isEmpty() {
 		return type.equals(BinaryType.Empty);
@@ -141,11 +164,11 @@ public class BinaryTree<E> {
 	}
 	
 	public BinaryTree<E> getFather() {
-		return create(tree.getFather());
+		return this.father;
 	}
 
 	public boolean isRoot() {
-		return tree.isRoot();
+		return this.father == null;
 	}
 	
 	public Boolean isLeftChild() {
@@ -153,7 +176,7 @@ public class BinaryTree<E> {
 		if(isRoot()) {
 			r = false;
 		} else {
-			r = getFather().getLeft().getIdentity() == this.getIdentity();
+			r = getFather().getLeft() == this;
 		}
 		return r;
 	}
@@ -163,7 +186,7 @@ public class BinaryTree<E> {
 		if(isRoot()) {
 			r = false;
 		} else {
-			r = getFather().getRight().getIdentity() == this.getIdentity();
+			r = getFather().getRight() == this;
 		}
 		return r;
 	}
@@ -172,9 +195,9 @@ public class BinaryTree<E> {
 		ChildType r = null;
 		if(isRoot()) {
 			r = ChildType.Root;
-		} else if(this.getFather().getLeft().getIdentity() == this.getIdentity()) {
+		} else if(this.getFather().getLeft() == this) {
 			r = ChildType.Left;
-		} else if(this.getFather().getRight().getIdentity() == this.getIdentity()) {
+		} else if(this.getFather().getRight() == this) {
 			r = ChildType.Right;
 		} else {
 			Preconditions.checkState(false, "Fallo interno");
@@ -183,32 +206,42 @@ public class BinaryTree<E> {
 	}
 	
 	public E getLabel() {
-		Preconditions.checkState(!isEmpty(), String.format("El árbol %s es vacío", this));
-		return tree.getLabel();
+		Preconditions.checkState(!isEmpty(), String.format("El árbol es vacío"));
+		return this.label;
 	}
 	
 	public BinaryTree<E> getLeft(){
-		Preconditions.checkState(isBinary(), String.format("El árbol %s no es binario", this));
-		return BinaryTree.create(tree.getChild(0));
+		Preconditions.checkState(isBinary(), String.format("El árbol no es binario"));
+		return this.left;
 	}
 
 	public BinaryTree<E> getRight(){
-		Preconditions.checkState(isBinary(), String.format("El árbol %s no es binario", this));
-		return BinaryTree.create(tree.getChild(1));
+		Preconditions.checkState(isBinary(), String.format("El árbol no es binario"));
+		return this.right;
 	}
-	
-	
 	
 	public MutableBinaryTree<E> mutableView(){
 		return MutableBinaryTree.asMutable(this);
 	}
 	
 	public int size() {
-		return tree.size();
+		int r =0;
+		switch(this.getType()) {
+		case Empty: r = 0; break;
+		case Leaf:  r = 1; break;
+		case Binary: r = 1+this.getLeft().size()+ this.getRight().size(); break;
+		}
+		return r;
 	}
 	
 	public int getHeight() {
-		return tree.getHeight();
+		Integer r=0;
+		switch(this.getType()) {
+		case Empty: r = -1; break;
+		case Leaf:  r = 0; break;
+		case Binary: r = 1+ Math.max(this.getLeft().getHeight(),this.getRight().getHeight()); break;
+		}
+		return r;
 	}
 	
 	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls){
@@ -237,44 +270,34 @@ public class BinaryTree<E> {
 	}
 	
 	public BinaryTree<E> copy() {
-		return BinaryTree.create(tree.copy());
+		BinaryTree<E> r= null;
+		switch(this.getType()) {
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf:  r = BinaryTree.leaf(label); break;
+		case Binary: r = BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); break;
+		}
+		return r;
 	}
 
 	public <R> BinaryTree<R> copy(Function<E, R> f) {
-		return BinaryTree.create(tree.copy(f));
+		BinaryTree<R> r= null;
+		switch(this.getType()) {
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf:  r = BinaryTree.leaf(f.apply(label)); break;
+		case Binary: r = BinaryTree.binary(f.apply(label),this.getLeft().copy(f),this.getRight().copy(f)); break;
+		}
+		return r;
 	}
 
 	public BinaryTree<E> getReverse() {
-		return BinaryTree.create(tree.getReverse());
+		BinaryTree<E> r= null;
+		switch(this.getType()) {
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf:  r = BinaryTree.leaf(label); break;
+		case Binary: r = BinaryTree.binary(label,this.getRight().copy(),this.getLeft().copy()); break;
+		}
+		return r;
 	}
-
-	public void toDOT(String file, String titulo) {
-		tree.toDOT(file, titulo);
-	}
-
-	public List<E> getPreOrder() {
-		return tree.getPreOrder();
-	}
-
-	public List<E> getPostOrder() {
-		return tree.getPostOrder();
-	}
-
-	public List<E> getLabelByLevel() {
-		return tree.getLabelByLevel();
-	}
-
-	public List<BinaryTree<E>> getLevel(Integer n) {
-		return tree.getLevel(n)
-				.stream()
-				.map(t->BinaryTree.create(t))
-				.collect(Collectors.toList());
-	}
-
-	public int getDepth(Tree<E> root) {
-		return tree.getDepth(root);
-	}
-	
 	
 	public <R> BinaryTree<R> map(Function<E,R> f){
 		BinaryTree<R> r = null;
@@ -284,18 +307,63 @@ public class BinaryTree<E> {
 		case Binary: r = BinaryTree.binary(f.apply(this.getLabel()), this.getLeft().map(f), this.getRight().map(f)); break;
 		}
 		return r;
-	}
-	
-	public Tuple2<Boolean,BinaryTree<E>> transform(BinaryPattern<E> pattern, BinaryPattern<E> result){
+	}	
+		
+	public BinaryTree<E> transform(BinaryPattern<E> pattern, BinaryPattern<E> result){
 		return BinaryPattern.transform(this, pattern, result);
 	}
 	
-	public Boolean match(BinaryPattern<E> pt) {
+	public BinaryPattern<E> match(BinaryPattern<E> pt) {
 		return BinaryPattern.match(this, pt);
 	}
 
 	public String toString() {
-		return tree.toString();
+		String r = null;
+		switch (this.getType()) {
+		case Empty: r ="_"; break;
+		case Leaf: r = label.toString(); break;
+		case Binary: r = label.toString()+"("+this.getLeft().toString()+","+this.getRight().toString()+")";
+		}
+		return r;
+	}
+	
+	public List<E> getPreOrder() {
+		List<E> r = null;
+		switch (this.getType()) {
+		case Empty: r = Lists2.newList(); break;
+		case Leaf: r = Lists2.newList(this.label); break;
+		case Binary:
+			r = Lists2.newList(this.label);
+			r.addAll(this.getLeft().getPreOrder());
+			r.addAll(this.getRight().getPreOrder());
+		}
+		return r;
+	}
+
+	public List<E> getPostOrder() {
+		List<E> r = null;
+		switch (this.getType()) {
+		case Empty: r = Lists2.newList(); break;
+		case Leaf: r = Lists2.newList(this.label); break;
+		case Binary:
+			r = this.getLeft().getPostOrder();
+			r.addAll(this.getRight().getPostOrder());
+			r.add(this.getLabel());
+		}
+		return r;
+	}
+
+	public List<E> getInOrder() {
+		List<E> r = null;
+		switch (this.getType()) {
+		case Empty: r = Lists2.newList(); break;
+		case Leaf: r = Lists2.newList(this.label); break;
+		case Binary:
+			r = this.getLeft().getInOrder();
+			r.add(this.getLabel());
+			r.addAll(this.getRight().getInOrder());			
+		}
+		return r;
 	}
 	
 	public static void main(String[] args) {
@@ -329,8 +397,7 @@ public class BinaryTree<E> {
 		System.out.println(t8);
 		System.out.println(t10);
 		System.out.println(t8.isRoot());
-		System.out.println(t10.isRoot());
-		
+		System.out.println(t10.isRoot());		
 	}
 
 }

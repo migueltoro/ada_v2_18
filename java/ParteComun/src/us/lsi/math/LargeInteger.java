@@ -12,7 +12,7 @@ import us.lsi.common.Preconditions;
 /**
  * La clase implementa un entero largo. 
  * Los detalles del tipo pueden encontrarse 
- * en <a href="../../../document/LargeInteger.html" target="_blank">LargeInteger</a>
+ * en <a href="/document/LargeInteger.html" target="_blank">LargeInteger</a>
  * 
  */
 public class LargeInteger implements Comparable<LargeInteger> {

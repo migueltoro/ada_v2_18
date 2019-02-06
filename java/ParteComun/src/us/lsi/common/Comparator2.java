@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @param <T> El tipo de los elementos sobre los que se establece el orden
  */
 public interface Comparator2<T> {
+	
 	public enum Type {EQ,LT,GT}
 	
 	public static <T extends Comparable<? super T>> Type compare(T e1, T e2){

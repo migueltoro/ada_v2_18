@@ -10,8 +10,6 @@ import us.lsi.common.Comparator2;
 import us.lsi.common.MutableType;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
 
 
 /**
@@ -27,7 +25,7 @@ public class AVLTree<E> {
 	
 	/**
 	 * @param <E> Tipo de los elementos del &aacute;rbol
-	 * @return Un árbol binario vacío cuyos elementos se ordenarán mediante el orden natural de E
+	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante el orden natural de E
 	 */
 	public static <E extends Comparable<? super E>> AVLTree<E> create() {
 		return new AVLTree<E>(BinaryTree.empty(), Comparator.naturalOrder());
@@ -36,7 +34,7 @@ public class AVLTree<E> {
 	/**
 	 * @param <E> Tipo de los elementos del &aacute;rbol
 	 * @param comparator Un orden
-	 * @return Un árbol binario vacío cuyos elementos se ordenarán mediante comparator
+	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante comparator
 	 */
 	public static <E> AVLTree<E> create(Comparator<E> comparator) {
 		return new AVLTree<E>(BinaryTree.empty(), comparator);
@@ -49,28 +47,20 @@ public class AVLTree<E> {
 	
 	protected Comparator<E> comparator;
 	protected BinaryTree<E> tree;
-	private Integer height; 
-	private Boolean heightOk;
-	private BinaryTree<E> first;
-	private Boolean firstOk;
-	private BinaryTree<E> last;
-	private Boolean lastOk;
-	private Boolean sizeOk;
-	private int size;
+	private Integer height = null; 
+	private BinaryTree<E> first = null;
+	private BinaryTree<E> last = null;
+	private Integer size = null;
 	
 	
 	protected AVLTree(BinaryTree<E> tree, Comparator<E> comparator) {
 		super();
 		this.comparator = comparator;
 		this.tree = tree;
-		this.heightOk = false;
-		this.firstOk = false;
-		this.lastOk = false;
-		this.sizeOk = false;
 	}	
 	
 	/**
-	 * @return Si está vacío el árbol AVL
+	 * @return Si est&aacute; vac&iacute;o el &aacute;rbol AVL
 	 */
 	public boolean isEmpty() {
 		return tree.isEmpty();
@@ -100,22 +90,22 @@ public class AVLTree<E> {
 	 * @param tree Un arbol binario ordenado
 	 * @param element Un elemento
 	 * @param comparator Un orden
-	 * @return Un árbol binario con la etiqueta igual al element o vacío
+	 * @return Un &aacute;rbol binario con la etiqueta igual al element o vac&iacute;o
 	 */
 	protected static <E> BinaryTree<E> find(BinaryTree<E> tree, E element, Comparator<E> comparator) {
-		BinaryTree<E> r = null;
+		BinaryTree<E> r = tree;
 		switch(tree.getType()) {
 		case Empty: r = BinaryTree.empty(); break;
 		case Leaf: 
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = tree; break;			
+			case EQ: break;			
 			case LT: 
 			case GT: r = BinaryTree.empty();		
 			}
 			break;
 		case Binary: 
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = tree; break;			
+			case EQ: break;			
 			case LT: r = find(tree.getLeft(),element,comparator); break;
 			case GT: r = find(tree.getRight(),element,comparator); break;	
 			}
@@ -126,99 +116,78 @@ public class AVLTree<E> {
 	
 
 	/**
-	 * @pre El árbol no puede estar vacío
-	 * @return El elemento más pequeño del árbol
+	 * @pre El &aacute;rbol no puede estar vac&iacute;o
+	 * @return El elemento m&aacute;s pequeño del &aacute;rbol
 	 */
 	public E first() {
-		if (!this.firstOk) {
-			this.first = getFirst(this.tree);
-			this.firstOk = true;
-		}
+		if (this.first == null) this.first = getFirst(this.tree);
 		return first.getLabel();
 	}
 	
 	protected static <E> BinaryTree<E> getFirst(BinaryTree<E> tree) {
-		BinaryTree<E> r = null;
+		BinaryTree<E> r = tree;
 		switch(tree.getType()) {		
 		case Empty: Preconditions.checkArgument(!tree.isEmpty()); break;
-		case Leaf: r = tree; break;
-		case Binary: 
-			if (tree.getLeft().isEmpty()) {
-				r = tree;
-			} else {
-				r = getFirst(tree.getLeft());			
-			}
-			break;		
+		case Leaf: break;
+		case Binary: if (!tree.getLeft().isEmpty()) r = getFirst(tree.getLeft()); break;		
 		}
 		return r;
 	}
 	/**
-	 * @pre El árbol no puede estar vacío
-	 * @return El elemento más grande del árbol
+	 * @pre El &aacute;rbol no puede estar vac&iacute;o
+	 * @return El elemento m&aacute;s grande del &aacute;rbol
 	 */
 	public E last() {
-		if (!this.lastOk) {
-			this.last = getLast(this.tree);
-			this.lastOk = true;
-		}
+		if (this.last == null) this.last = getLast(this.tree);
 		return last.getLabel();
 	}
 	
 	protected static <E> BinaryTree<E> getLast(BinaryTree<E> tree) {
-		BinaryTree<E> r = null;
+		BinaryTree<E> r = tree;
 		switch(tree.getType()) {		
 		case Empty: Preconditions.checkArgument(!tree.isEmpty()); break;
-		case Leaf: r = tree; break;
-		case Binary: 
-			if (tree.getRight().isEmpty()) {
-				r = tree;
-			} else {
-				r = getLast(tree.getRight());			
-			}
-			break;		
+		case Leaf: break;
+		case Binary: if (!tree.getRight().isEmpty()) r = getLast(tree.getRight()); break;		
 		}
 		return r;
 	}
 
 	/**
-	 * @return El número de elementos
+	 * @return El n&uacute;mero de elementos
 	 */
 	public int size() {
-		if(!sizeOk) {
-			this.size = tree.size();
-			this.sizeOk = true;
-		}
+		if(size == null) this.size = tree.size();
 		return size;
 	}
 
 	protected int getHeight() {
-		if(!this.heightOk) {
-			this.height = this.tree.getHeight();
-			this.heightOk = true;
-		}
+		if(this.height == null) this.height = this.tree.getHeight();
 		return this.height;
 	}
 	
 	/**
-	 * @post El elemento está contenido en el árbol
+	 * @post El elemento est&aacute; contenido en el &aacute;rbol
 	 * @param element Un elemento
 	 * @return Verdadero si el elemento no estaba y se ha incluido
 	 */
 	public boolean add(E element) {
-		Tuple2<Boolean,BinaryTree<E>> tree = add(this.tree,element,comparator);
-		Boolean r = tree.v1;
-		this.tree = tree.v2;
-		this.heightOk = false;
-		this.firstOk = false;
-		this.lastOk = false;
-		this.sizeOk = false;
+		BinaryTree<E> t = add(this.tree,element,comparator);
+		Boolean r = false;
+		if(this.tree != t) {
+			this.height = null; 
+			this.first = null;
+			this.last = null;
+			this.size = null;
+			r = true;
+			this.tree = t;
+		}
 		return r;
 	}
 	
 	/**
-	 * @post Todos los elementos están contenidos en el árbol
-	 * @param elements Una colección de elementos
-	 * @return Si el árbol ha cambiado al añadir los elementos
+	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
+	 * @param elements Una colecci&oacute;n de elementos
+	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -227,9 +196,9 @@ public class AVLTree<E> {
 	}
 	
 	/**
-	 * @post Todos los elementos están contenidos en el árbol
-	 * @param elements Una colección de elementos
-	 * @return Si el árbol ha cambiado al añadir los elementos
+	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
+	 * @param elements Una colecci&oacute;n de elementos
+	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -238,9 +207,9 @@ public class AVLTree<E> {
 	}
 	
 	/**
-	 * @post Todos los elementos están contenidos en el árbol
+	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
 	 * @param elements Una serie de elementos
-	 * @return Si el árbol ha cambiado al añadir los elementos
+	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -250,62 +219,68 @@ public class AVLTree<E> {
 	
 	/**
 	 * @pre El arbol es ordenado y equilibrado
-	 * @post El árbol resultante contiene al elemento, está ordenado y es equilibrado. El árbol de entrada no se modifica
-	 * @param tree Un árbol de entrada de entrada
-	 * @param element un elemento par añadir al árbol
+	 * @post El &aacute;rbol resultante contiene al elemento, est&aacute; ordenado y es equilibrado. El &aacute;rbol de entrada no se modifica
+	 * @param tree Un &aacute;rbol de entrada de entrada
+	 * @param element un elemento par añadir al &aacute;rbol
 	 * @param comparator Un orden
-	 * @return El árbol con el elemento añadido
+	 * @return El &aacute;rbol con el elemento añadido y si ha cambiado
 	 */
-	protected Tuple2<Boolean,BinaryTree<E>> add(BinaryTree<E> tree, E element, Comparator<E> comparator) {
-		BinaryTree<E> r = null;		
-		Boolean changed = false;
+	protected BinaryTree<E> add(BinaryTree<E> tree, E element, Comparator<E> comparator) {
+		BinaryTree<E> r = tree;		
 		switch(tree.getType()) {		
-		case Empty: r = BinaryTree.leaf(element); changed = true; break;
+		case Empty: r = BinaryTree.leaf(element); break;
 		case Leaf:
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = tree; changed = false; break;
-			case LT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.leaf(element), BinaryTree.empty()); changed = true; break;
-			case GT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.empty(), BinaryTree.leaf(element)); changed = true; break;
+			case EQ: break;
+			case LT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.leaf(element), BinaryTree.empty()); break;
+			case GT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.empty(), BinaryTree.leaf(element)); break;
 			}
 			break;
 		case Binary:
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = tree; changed = false; break;
+			case EQ: r = tree; break;
 			case LT: 
-				r = BinaryTree.binary(tree.getLabel(), add(tree.getLeft(), element, comparator).v2, tree.getRight());
-				r = equilibrate(r);
-				changed = true;
+				BinaryTree<E> new_left = add(tree.getLeft(), element, comparator);
+				if(tree.getLeft() != new_left) {
+					r = BinaryTree.binary(tree.getLabel(), new_left, tree.getRight());
+					r = equilibrate(r);
+				}
 				break;
 			case GT: 
-				r = BinaryTree.binary(tree.getLabel(), tree.getLeft(), add(tree.getRight(), element, comparator).v2);
-				r = equilibrate(r);
-				changed = true;
+				BinaryTree<E> new_right = add(tree.getRight(), element, comparator);
+				if(tree.getRight() != new_right) {
+					r = BinaryTree.binary(tree.getLabel(), tree.getLeft(), new_right);
+					r = equilibrate(r);
+				}
 				break;
 			}
 			break;	
 		}
-		return Tuple.create(changed,r);
+		return r;
 	}
 	/**
-	 * @post El elemento no está contenidos en el árbol
+	 * @post El elemento no est&aacute; contenidos en el &aacute;rbol
 	 * @param element Un elemento
-	 * @return Si el árbol ha cambiado al eliminar el elemento
+	 * @return Si el &aacute;rbol ha cambiado al eliminar el elemento
 	 */
 	public boolean remove(E element) {
-		Tuple2<Boolean,BinaryTree<E>> tree = remove(this.tree,element,comparator);
-		Boolean r = tree.v1;
-		this.tree = tree.v2;
-		this.heightOk = false;
-		this.firstOk = false;
-		this.lastOk = false;
-		this.sizeOk = false;
+		BinaryTree<E> t = remove(this.tree,element,comparator);
+		Boolean r = false;
+		if(this.tree != t) {
+			this.height = null; 
+			this.first = null;
+			this.last = null;
+			this.size = null;
+			r = true;
+			this.tree = t;
+		}
 		return r;
 	}
 	
 	/**
-	 * @post Los elementos no están  en el árbol
+	 * @post Los elementos no est&aacute;n  en el &aacute;rbol
 	 * @param elements Un stream de elementos
-	 * @return Si el árbol ha cambiado al eliminar los elementos
+	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -314,9 +289,9 @@ public class AVLTree<E> {
 	}
 	
 	/**
-	 * @post Los elementos no están  en el árbol
-	 * @param elements Una colección de elementos
-	 * @return Si el árbol ha cambiado al eliminar los elementos
+	 * @post Los elementos no est&aacute;n  en el &aacute;rbol
+	 * @param elements Una colecci&oacute;n de elementos
+	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -325,9 +300,9 @@ public class AVLTree<E> {
 	}
 
 	/**
-	 * @post Los elementos no están  en el árbol
+	 * @post Los elementos no est&aacute;n  en el &aacute;rbol
 	 * @param elements Una serie de elementos
-	 * @return Si el árbol ha cambiado al eliminar los elementos
+	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.create(false);
@@ -335,50 +310,47 @@ public class AVLTree<E> {
 		return r.value;
 	}
 
-	protected Tuple2<Boolean,BinaryTree<E>> remove(BinaryTree<E> tree, E element, Comparator<E> comparator) {
-		BinaryTree<E> r = null;
-		Boolean changed = false;
-		Tuple2<Boolean, BinaryTree<E>> rt;
+	protected BinaryTree<E> remove(BinaryTree<E> tree, E element, Comparator<E> comparator) {
+		BinaryTree<E> r = tree;
 		switch(tree.getType()) {
-		case Empty: r  = tree; changed = false; break;
+		case Empty:  break;
 		case Leaf:
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = BinaryTree.empty(); changed = true; break;		
+			case EQ: r = BinaryTree.empty(); break;		
 			case LT:
-			case GT: r = tree;	changed = false;
+			case GT: 
 			}
 			break;
 		case Binary:
 			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
 			case EQ: 
 				if(!tree.getLeft().isEmpty()) {
-					AVLTree<E> left = AVLTree.create(tree.getLeft(), comparator);
-					E label = left.last();
-					rt = remove(tree.getLeft(),label,comparator);
-					r = BinaryTree.binary(label, rt.v2, tree.getRight());
+					E label = getLast(tree.getLeft()).getLabel();
+					BinaryTree<E> rl = remove(tree.getLeft(),label,comparator);
+					r = BinaryTree.binary(label,rl, tree.getRight());
 				} else {
-					AVLTree<E> right = AVLTree.create(tree.getRight(), comparator);
-					E label = right.first();
-					rt = remove(tree.getRight(),label,comparator);
-					r = BinaryTree.binary(label, tree.getLeft(),rt.v2);
+					E label = getFirst(tree.getRight()).getLabel();
+					BinaryTree<E> rr = remove(tree.getRight(),label,comparator);
+					r = BinaryTree.binary(label,tree.getLeft(),rr);
 				}
-				changed = true;
 				break;		
 			case LT: 
-				rt = remove(tree.getLeft(),element,comparator);
-				r = BinaryTree.binary(tree.getLabel(), rt.v2, tree.getRight()); 
-				changed = rt.v1;
+				BinaryTree<E> rl = remove(tree.getLeft(),element,comparator);
+				if(rl != tree.getLeft()) {
+					r = BinaryTree.binary(tree.getLabel(), rl, tree.getRight()); 
+				}
 				break;
 			case GT: 
-				rt = remove(tree.getRight(),element,comparator);
-				r = BinaryTree.binary(tree.getLabel(), tree.getLeft(), rt.v2); 
-				changed = rt.v1;
+				BinaryTree<E> rr = remove(tree.getRight(),element,comparator);
+				if(rr != tree.getRight()) {
+					r = BinaryTree.binary(tree.getLabel(), tree.getLeft(), rr); 
+				}
 				break;
 			}
 			r = equilibrate(r);			
 			break;		
 		}		
-		return Tuple.create(changed,r);	 	
+		return r;	 	
 	}
 	
 	protected static <E> Type getType(BinaryTree<E> tree) {
@@ -444,31 +416,22 @@ public class AVLTree<E> {
 		BinaryTree<E> r = null;
 		switch(getType(tree)) {
 		case Equilibrate: r = tree; break;
-		case LeftLeft: r = tree.transform(pt.leftLeft,pt.result).v2;	break;
-		case LeftRight: r = tree.transform(pt.leftRight,pt.result).v2; break;
-		case RightLeft: r = tree.transform(pt.rightLeft,pt.result).v2;	break;
-		case RightRight: r = tree.transform(pt.rightRight,pt.result).v2; break;
+		case LeftLeft: r = tree.transform(pt.leftLeft,pt.result);	break;
+		case LeftRight: r = tree.transform(pt.leftRight,pt.result); break;
+		case RightLeft: r = tree.transform(pt.rightLeft,pt.result);	break;
+		case RightRight: r = tree.transform(pt.rightRight,pt.result); break;
 		}
 		return r;
 	}
 
 
 	/**
-	 * @return Una copia del árbol
+	 * @return Una copia del &aacute;rbol
 	 */
 	public AVLTree<E> copy() {
 		return create(tree.copy(), comparator);
 	}
 
-
-	/**
-	 * @post El fichero file contiene el árbol en formato .dot
-	 * @param file El nombre de un fichero
-	 * @param titulo El título
-	 */
-	public void toDOT(String file, String titulo) {
-		tree.toDOT(file, titulo);
-	}
 
 	public String toString() {
 		return tree.toString();
@@ -484,23 +447,24 @@ public class AVLTree<E> {
 	
 	public static void main(String[] args) {
 		AVLTree<Integer> tree = AVLTree.create();
-		tree.add(100);
-		Strings2.toConsole(String.format("%d,%s",tree.getHeight(), tree.toString()));
+//		Strings2.toConsole(String.format("%d,%s",tree.getHeight(), tree.toString()));
 		for (int i = 0; i < 500 ; i++) {
 			tree.add(i);
-			Strings2.toConsole(String.format("%d,%d,%d === %s",tree.getHeight(),tree.tree.getLeft().getHeight(), tree.tree.getRight().getHeight(), tree.toString()));
-//			Strings2.toConsole(String.format("%s,%s,%d", tree.first(),tree.last(), tree.getHeight()));
+//			Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getHeight()));
+		}
+		
+		for (int i = 0; i < 50 ; i++) {
+			tree.remove(i);
+//			Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getHeight()));
 		}
 		
 		for (int i = 600; i > 450 ; i--) {
 			tree.remove(i);
-//			Strings2.toConsole(String.format("%d,%d,%d === %s",tree.getHeight(),tree.tree.getLeft().getHeight(), tree.tree.getRight().getHeight(), tree.toString()));
-////			Strings2.toConsole(String.format("%s,%s,%d", tree.first(),tree.last(), tree.getHeight()));
+//			Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getHeight()));
 		}
 		
-		Strings2.toConsole(String.format("%s,%s,%d", tree.first(),tree.last(), tree.getHeight()));
-		Strings2.toConsole(String.format("%s", find(tree.tree,tree.last(),Comparator.naturalOrder()).toString()));
-		
+		Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getHeight()));
+		Strings2.toConsole(String.format("%s", tree.tree.toString()));
 	}
 
 }

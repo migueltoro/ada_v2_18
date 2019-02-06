@@ -1,4 +1,4 @@
-package us.lsi.ejemplos;
+package us.lsi.java8ejemplos;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -11,11 +11,14 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+
+
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Multiset;
+import us.lsi.common.Multisets2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
+import us.lsi.common.SetMultimap;
 import us.lsi.common.Strings2;
 import us.lsi.geometria.Punto2D;
 import us.lsi.geometria.Punto2D.Cuadrante;
@@ -27,7 +30,7 @@ import us.lsi.math.Math2;
 * @author Miguel Toro
 */
 
-public class EjemplosDeStreams {
+public class Ejemplos {
 
 	/**
 	 * @param <T> El tipo de los elementos
@@ -128,7 +131,7 @@ public class EjemplosDeStreams {
 	}
 	
 	/**
-	 * @pos Guarda en un fichero de texto los números primos hasta un número n dado.
+	 * @post Guarda en un fichero de texto los números primos hasta un número n dado.
 	 * @param fileOut  Un fichero 
 	 * @param limit Un número de referencia
 	 */
@@ -148,8 +151,8 @@ public class EjemplosDeStreams {
 	}
 	
 	/**
-	 * @pos Guarda en un fichero de texto el cuadrado de los números primos hasta un número n dado.
-	 * @param fileOut Un fichero
+	 * 
+	 * @return Un String con el cuadrado de los números primos hasta un número n dado.
 	 * @param limit Un número de referencia
 	 */
 	public String ejemploN(Integer limit){
@@ -179,7 +182,7 @@ public class EjemplosDeStreams {
 	}
 	
 	/**
-	 * @pos Genera fileOut a partir de fileIn
+	 * @post Genera fileOut a partir de fileIn
 	 * @param fileIn Un fichero de texto con una fecha escrita en cada línea
 	 * @param fileOut Un fichero con las fechas ordenadas y que estén entre dos fechas dadas
 	 * @param c1 Límite inferior de las fechas
@@ -206,18 +209,19 @@ public class EjemplosDeStreams {
 				     .mapToInt(x-> Integer.parseInt(x));
 	}
 	
-	
 	/**
-	 * @pos Agrupa los puntos por cuadrantes
+	 * @post Agrupa los puntos por cuadrantes
 	 * @param st Un Stream
 	 * @return Multimap&lt;Cuadrante,Punto&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
 	 */
-	public static Map<Cuadrante,List<Punto2D>> ejemploS1(Stream<Punto2D> st){
-		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante));
+	public static SetMultimap<Cuadrante,Punto2D> ejemploS1(Stream<Punto2D> st){
+		SetMultimap<Cuadrante,Punto2D> m = SetMultimap.create();
+		st.forEach(x->m.put(x.getCuadrante(),x));
+		return m;
 	}
 	
 	/**
-	 * @pos Agrupa los puntos por cuadrantes
+	 * @post Agrupa los puntos por cuadrantes
 	 * @param st Un Stream
 	 * @return Map&lt;Cuadrante,List&lt;Punto&gt;&gt; en el que se asocia a cada cuadrante, los puntos del Stream que están en ese cuadrante
 	 */
@@ -226,7 +230,7 @@ public class EjemplosDeStreams {
 	}
 	
 	/**
-	 * @pos Suma las coordenadas X de los puntos en cada cuadrante
+	 * @post Suma las coordenadas X de los puntos en cada cuadrante
 	 * @param st Un Stream
 	 * @return Map@lt;Cuadrante,Double&gt; en el que se asocia a cada cuadrante, la suma de las coordenadas X de los puntos de ese cuadrante
 	 */
@@ -236,22 +240,18 @@ public class EjemplosDeStreams {
 	}
 		
 	/**
-	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @post Cuenta cuántos puntos hay de cada cuadrante en el Stream
 	 * @param st Un Stream
 	 * @return  Un Multiset&lt;Cuadrante&gt;
 	 */
-	public static Map<Cuadrante, Long> ejemploV(Stream<Punto2D> st){
-		return st.collect(
-				Collectors.groupingBy(Punto2D::getCuadrante, 
-			    Collectors.counting()));	
-	}
-	
-	public static Multiset<Cuadrante> ejemploV2(Stream<Punto2D> st){
-		return Streams2.toMultiSet(st.map(Punto2D::getCuadrante));	
+	public static Multiset<Cuadrante> ejemploV(Stream<Punto2D> st){
+		Multiset<Cuadrante> m = Multisets2.create();
+		st.forEach(x->m.add(x.getCuadrante()));	
+		return m;
 	}
 	
 	/**
-	 * @pos Cuenta cuántos puntos hay de cada cuadrante en el Stream
+	 * @post Cuenta cuántos puntos hay de cada cuadrante en el Stream
 	 * @param st Un Stream 
 	 * @return Un Map&lt;Cuadrante,Long&gt;
 	 */
@@ -276,7 +276,7 @@ public class EjemplosDeStreams {
 	 */
 	public static String ejemploY(List<String> ls){
 		return ls.stream()
-				 .max(Comparator.comparing(EjemplosDeStreams::ejemploX))
+				 .max(Comparator.comparing(Ejemplos::ejemploX))
 				 .get();
 	}
 	
@@ -389,15 +389,15 @@ public class EjemplosDeStreams {
 //		LocalDate f1 = LocalDate.of(1990,1,1);
 //		LocalDate f2 = LocalDate.of(2010,1,1);
 //		Ejemplos.ejemploQ("ficheros/fechas.txt", "ficheros/fechasOut.txt", f1,f2);	
-		System.out.println(EjemplosDeStreams.esPrimo1(1031L));
-		System.out.println(EjemplosDeStreams.esPrimo2(1031L));
-		System.out.println(EjemplosDeStreams.siguientePrimo1(1023L));
-		System.out.println(EjemplosDeStreams.siguientePrimo2(1023L));
-		System.out.println(EjemplosDeStreams.primosMenoresOIgualesA1(100L));
-		System.out.println(EjemplosDeStreams.primosMenoresOIgualesA2(100L));
-		System.out.println(EjemplosDeStreams.sumaPrimosMenoresOIgualesA1(100L));
-		System.out.println(EjemplosDeStreams.sumaPrimosMenoresOIgualesA1(100L));
-		EjemplosDeStreams.ejemploL("ficheros/primos", 100);
+		System.out.println(Ejemplos.esPrimo1(1031L));
+		System.out.println(Ejemplos.esPrimo2(1031L));
+		System.out.println(Ejemplos.siguientePrimo1(1023L));
+		System.out.println(Ejemplos.siguientePrimo2(1023L));
+		System.out.println(Ejemplos.primosMenoresOIgualesA1(100L));
+		System.out.println(Ejemplos.primosMenoresOIgualesA2(100L));
+		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
+		System.out.println(Ejemplos.sumaPrimosMenoresOIgualesA1(100L));
+		Ejemplos.ejemploL("ficheros/primos", 100);
 	}
 		
 }

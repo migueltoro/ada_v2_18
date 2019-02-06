@@ -6,33 +6,29 @@ public class MutableBinaryTree<E>  {
 		return new MutableBinaryTree<E>(tree);
 	}
 
-	private MutableTree<E> mTree;
 	private BinaryTree<E> tree;
 
 	private MutableBinaryTree(BinaryTree<E> tree) {
 		super();
-		this.mTree = tree.tree.mutableView();
 		this.tree = tree;
 	}
 	
 	public void setLabel(E label) {
-		this.mTree.setLabel(label);
+		this.tree.label = label;
 	}
 
 	public void setLeft(BinaryTree<E> left) {
-		this.mTree.setChild(0,left.tree);
+		this.tree.left = left;
+		left.father = this.tree;
 	}
 	
 	public void setRight(BinaryTree<E> right) {
-		this.mTree.setChild(1,right.tree);
+		this.tree.right = right;
+		right.father = this.tree;
 	}
 	
 	public void setFather(BinaryTree<E> father) {
-		if (father != null) {
-			this.mTree.setFather(father.tree);
-		} else {
-			this.mTree.setFather(null);
-		}
+		this.tree.father = father;
 	}
 	
 	/**

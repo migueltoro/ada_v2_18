@@ -28,8 +28,11 @@ public class Tree<E> {
 	
 	public enum TreeType{Empty,Leaf,Nary}
 	
+	public static Tree<Object> empty = new Tree<Object>();
+	
+	@SuppressWarnings("unchecked")
 	public static <R> Tree<R> empty() {
-		return new Tree<>();
+		return (Tree<R>) empty;
 	}
 	
 	public static <R> Tree<R> leaf(R label) {
@@ -57,6 +60,17 @@ public class Tree<E> {
 	public static Tree<String> tree(String s){
 		Tokenizer t = Tokenizer.create(s);
 		return Tree.tree(t);
+	}
+	
+	
+	public static <R> Tree<R> toTree(BinaryTree<R> t){
+		Tree<R> r = null;
+		switch(t.getType()) {
+		case Empty: r = Tree.empty(); break;
+		case Leaf: r = Tree.leaf(t.getLabel()); break;
+		case Binary: r = Tree.nary(t.getLabel(), List.of(toTree(t.getLeft()),toTree(t.getRight())));
+		}
+		return r;
 	}
 	
 	protected E label;
