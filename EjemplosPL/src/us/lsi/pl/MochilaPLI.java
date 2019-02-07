@@ -53,17 +53,17 @@ public class MochilaPLI{
 			r = r + IntStream.range(0, num)
 					.boxed()
 					.map(i->String.format("%d*x%d",DatosMochila.getPeso(i),i))
-					.collect(Collectors.joining("+", "", " <= "+ DatosMochila.capacidadInicial+";\n\n"));
+					.collect(Collectors.joining("+", "", String.format(" <= %d;\n\n", DatosMochila.capacidadInicial)));
 			
 			r = r + IntStream.range(0, num)
 					.boxed()
-					.map(i->String.format("x%d",i)+"<="+DatosMochila.getNumMaxDeUnidades(i)+";\n")
+					.map(i->String.format("x%d <= %d;\n",i,DatosMochila.getNumMaxDeUnidades(i)))
 					.collect(Collectors.joining("","","\n"));
 			
 			r = r +"int ";
 			r = r + IntStream.range(0, num)
 					.boxed()
-					.map(i->" x"+i)
+					.map(i->String.format("x%d",i))
 					.collect(Collectors.joining(",","",";\n"));		
 			r = r +"\n\n";
 			return r;
@@ -85,7 +85,8 @@ public class MochilaPLI{
 		for(int i=0;i<s.getNumVar();i++){
 			System.out.println(s.getName(i)+" = "+s.getSolution(i));
 		}
-
 	}
 
+	
+	
 }
