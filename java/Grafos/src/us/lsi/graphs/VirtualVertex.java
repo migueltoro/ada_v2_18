@@ -31,10 +31,5 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E extends SimpleEdg
 	default boolean isNeighbor(V v) {
 		return getNeighborListOf().contains(v);
 	}
-	
-//	 * @param v Un vértice vecino
-//   * @return La arista hacia el vértice v
-//	 */
-//	E getEdge(V v);
 
 }

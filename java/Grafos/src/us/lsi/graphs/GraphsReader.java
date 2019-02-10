@@ -59,6 +59,7 @@ public class GraphsReader {
 	 * @return Grafo sin peso con la información del fichero
 	 * @param <V> El tipo de los vértices
 	 * @param <E> El tipo de las aristas
+	 * @param <G> El tipo del Grafo
 	 * @throws IllegalArgumentException Si no encuentra el fichero o si el fichero tiene una estructura no adecuada
 	 */
 	public static <V, E, G extends Graph<V,E>> G newGraph(
@@ -81,6 +82,7 @@ public class GraphsReader {
 	 * @return Grafo con la información del fichero
 	 * @param <V> El tipo de los vértices
 	 * @param <E> El tipo de las aristas
+	 * @param <G> El tipo del grafo
 	 * @throws IllegalArgumentException Si no encuentra el fichero o si el fichero tiene una estructura no adecuada
 	 */
 	public static <V, E, G extends Graph<V,E>> G newGraph(

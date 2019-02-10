@@ -35,16 +35,11 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	implements Graph<V, E> {
 			
 	private Set<V> vertexSet;
-	private Supplier<V> vertexSupplier;
-    private Supplier<E> edgeSupplier;
     @SuppressWarnings("unused")
 	private boolean weighted;
 	
-	public SimpleVirtualGraph(Supplier<V> vertexSupplier,
-            Supplier<E> edgeSupplier) {
+	public SimpleVirtualGraph() {
 		this.vertexSet = Sets2.newHashSet();
-		this.vertexSupplier = vertexSupplier;
-	    this.edgeSupplier = edgeSupplier;
 	    this.weighted = true;
 	
 	}
@@ -251,18 +246,17 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 
 	@Override
 	public Supplier<E> getEdgeSupplier() {
-		return edgeSupplier;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Supplier<V> getVertexSupplier() {
-		return vertexSupplier;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public EdgeFactory<V, E> getEdgeFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 }

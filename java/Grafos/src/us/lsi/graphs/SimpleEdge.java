@@ -22,11 +22,11 @@ public class SimpleEdge<V>  {
 	 * @param <V> El tipo de los vértices que une la arista
 	 * @return Una arista entre ambos vértices
 	 */
-	public static <V> SimpleEdge<V> create(V v1, V v2) {
+	public static <V> SimpleEdge<V> of(V v1, V v2) {
 		return new SimpleEdge<>(v1,v2);
 	}
 	
-	public static <V> SimpleEdge<V> create() {
+	public static <V> SimpleEdge<V> of() {
 		return new SimpleEdge<>();
 	}
 	
@@ -37,7 +37,7 @@ public class SimpleEdge<V>  {
 	 * @param <V> el tipo de los vértices
 	 * @return Una arista entre ambos vértices
 	 */
-	public static <V> SimpleEdge<V> create(V v1, V v2, double weight) {
+	public static <V> SimpleEdge<V> of(V v1, V v2, double weight) {
 		return new SimpleEdge<V>(v1, v2, weight);
 	}
 

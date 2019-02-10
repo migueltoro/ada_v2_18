@@ -9,7 +9,6 @@ import us.lsi.common.Preconditions;
  * Un vértice de una Red de Fujo.
  * Un vértice de este tipo tiene asociado un coste unitario, un flujo máximo, otro mínimo 
  * y el tipo de vértice
- * @see us.lsi.pl.ProblemaPL.TipoDeOptimizacion 
  * 
  * @author Miguel Toro
  *

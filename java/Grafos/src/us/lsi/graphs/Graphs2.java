@@ -11,6 +11,8 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import us.lsi.common.Preconditions;
+
 public class Graphs2 {
 
 	
@@ -91,5 +93,11 @@ public class Graphs2 {
 		return r;
 	}
 	
-	
+	public static <V,E extends SimpleEdge<V>>  V getOppositeVertex(Graph<V,E> graph, E edge, V vertex) {
+		V r = null;
+		if(edge.source.equals(vertex)) r = edge.target;
+		if(edge.target.equals(vertex)) r = edge.source;
+		Preconditions.checkNotNull(r);
+		return r;
+	}
 }

@@ -1,6 +1,7 @@
 package us.lsi.astar;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.jgrapht.Graph;
@@ -9,6 +10,9 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
+
+import us.lsi.common.Metricas;
+
 
 /**
  * <p> Implementación del algoritmo A*. Adaptación de la clase AStarShortestPath en <p> <a href="http://jgrapht.org/javadoc/" target="_blank">JGrapht</a></p> 
@@ -19,9 +23,45 @@ import org.jgrapht.util.FibonacciHeapNode;
  *
  * @author Miguel Toro
  */
-class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
+public class AStarAlgorithm<V, E>  {
+	
+	public static Metricas metricas = new Metricas();
+	public static Boolean metricasOK = false;
+	
+	/**
+	 * Un algoritmo AStar para ir del vértice de inicio hasta el vértice destino
+	 * 
+	 * @param <V> Tipo del vértice
+	 * @param <E> Tipo de la arista
+	 * @param graph Grafo 
+	 * @param startVertex Vértice origen
+	 * @param endVertex Vértice destino
+	 * @param heuristic La heuristica del algoritmo
+	 * @return Algoritmo AStar
+	 * 
+	 */
+	public static <V, E> AStarAlgorithm<V, E> of(
+			AStarGraph<V, E> graph, V startVertex, V endVertex, BiFunction<V,V,Double> heuristic) {
+		return new AStarAlgorithm<V,E>(graph,startVertex,endVertex, heuristic); 
+	}
+	/**
+	 * Un algoritmo AStar para ir del vértice de inicio hasta el  primer vértice que cumple el predicado
+	 * @param <V> Tipo del vértice
+	 * @param <E> Tipo de la arista
+	 * @param graph Grafo
+	 * @param startVertex Vértice origen
+	 * @param goal Predicate que especifica el objetivo alcanzar
+	 * @param predicateHeuristic La heuristica del algoritmo
+	 * @return Algoritmo AStar
+	 */
+	
+	public static <V, E> AStarAlgorithm<V, E> of(
+			AStarGraph<V, E> graph, V startVertex, Predicate<V> goal, PredicateHeuristic<V> predicateHeuristic) {
+		return new AStarAlgorithm<V,E>(graph,startVertex,goal, predicateHeuristic);
+	}
+
    
-	private final AStarGraph<V, E> graph;
+//	private final AStarGraph<V, E> graph;
 
     // List of open nodes
     protected FibonacciHeap<V> openList;
@@ -47,6 +87,9 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
     private V sourceVertex;
     private V targetVertex;
     private GraphPath<V,E> graphPath = null;
+    private AStarGraph<V,E> graph = null;
+    private BiFunction<V,V,Double> heuristic = null;
+    private PredicateHeuristic<V> predicateHeuristic = null;
 
     /**
      * Create a new instance of the A* shortest path algorithm.
@@ -55,7 +98,7 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
      * @param targetVertex Target Vertex
      * @param graph the input graph
      */
-    public AStarAlgorithm2(AStarGraph<V, E> graph, V sourceVertex, V targetVertex)
+    public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, V targetVertex, BiFunction<V,V,Double> heuristic)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Graph cannot be null!");
@@ -68,6 +111,8 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
         this.sourceVertex = sourceVertex;
         this.targetVertex = targetVertex;
         this.goal = null;
+        this.heuristic = heuristic;
+        this.predicateHeuristic = null;
     }
     
     /**
@@ -77,7 +122,7 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
      * @param sourceVertex Source Vertex
      * @param goal Predicado que especifica el objetivo
      */
-    public AStarAlgorithm2(AStarGraph<V, E> graph, V sourceVertex, Predicate<V> goal)
+    public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, Predicate<V> goal, PredicateHeuristic<V> predicateHeuristic)
     {
         if (graph == null) {
             throw new IllegalArgumentException("Graph cannot be null!");
@@ -93,6 +138,9 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
         this.sourceVertex = sourceVertex;
         this.targetVertex = null;
         this.goal = goal;
+        this.heuristic = null;
+        this.predicateHeuristic = predicateHeuristic;
+        
     }
 
     /**
@@ -191,7 +239,7 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
 				cameFrom.put(successor, edge);
 				gScoreMap.put(successor, tentativeGScore);
 
-				double fScore = tentativeGScore + graph.getWeightToEnd(successor, endVertex);
+				double fScore = tentativeGScore + heuristicWeight(successor,endVertex,goal,heuristic,predicateHeuristic);
 				if (!vertexToHeapNodeMap.containsKey(successor)) {
 					FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(successor);
 					openList.insert(heapNode, fScore);
@@ -243,16 +291,33 @@ class AStarAlgorithm2<V, E>  implements AlgoritmoAStar<V, E>{
     
     
     public GraphPath<V, E> getPath(){
-    	AlgoritmoAStar.metricas.setTiempoDeEjecucionInicial();
+    	AStarAlgorithm.metricas.setTiempoDeEjecucionInicial();
     	if(graphPath==null)
     		graphPath = this.getShortestPath();
-    	AlgoritmoAStar.metricas.setTiempoDeEjecucionFinal();
+    	AStarAlgorithm.metricas.setTiempoDeEjecucionFinal();
     	return graphPath;
     }
     
     
 	public List<V> getPathVertexList() {
 		return getPath().getVertexList();
+	}
+	
+	/**
+	 * @param actual El vértice actual
+	 * @param endVertex El vértice destino. Este vértice puede ser null. 
+	 * @param goal 
+	 * @param heuristic
+	 * @param predicateHeuristic
+	 * @return Una cota inferior del peso del camino desde el vértice actual al destino, 
+	 * o desde el vértice actual al conjunto de vértices descrito por un predicado objetivo que se especificará en el AStarAlgorithm.
+	 * Debe cumplirse la distancia es cero si el vértice actual cumple el predicado objetivo
+	 */
+	private double heuristicWeight(V actual, V endVertex, Predicate<V> goal, BiFunction<V,V,Double> heuristic, PredicateHeuristic<V> predicateHeuristic) {
+		Double r = 0.;
+		if(heuristic != null) r = heuristic.apply(actual,endVertex); 
+		if(predicateHeuristic != null) r = predicateHeuristic.apply(actual,goal); 
+		return r;
 	}
 }
 

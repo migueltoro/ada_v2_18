@@ -30,15 +30,14 @@ public class SolveFlowGraph {
 	 * 
 	 * 
 	 * 
-	 * 
+	 * @param tipo Tipo de optimizaci&oacute;n
 	 * @param fileIn Fichero con los datos de entrada de la Red de Flujo
 	 * @param fileGraphFlow Fichero que contiene el grafo asociado a la Red de Flujo 
 	 * @param fileSolutionsGraphFlow Fichero que contiene el grafo con las soluciones de la Red de Flujo
 	 * @param fileConstraints Fichero que contiene las restricciones asociadas a la Red de Flujo
-	 * @param conNombres Si queremos que aparezcan los nombres devueltos por toString()
-	 * @param min Si queremos minimizar la función objetivo
 	 * @return Las propiedades de la solución
 	 */
+	
 	public static FlowGraphSolution solve(
 			TipoDeOptimizacion tipo,
 			String fileIn,		
