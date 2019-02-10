@@ -8,8 +8,8 @@ import us.lsi.lpsolve.solution.SolutionPLI;
 import us.lsi.mochila.datos.DatosMochila;
 
 public class MochilaPLI{
-
-		
+	
+	
 		public static String getConstraints(){
 			DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 			DatosMochila.capacidadInicial = 78;
