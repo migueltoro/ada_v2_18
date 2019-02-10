@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"us.lsi.pl","l":"MochilaPLI"},{"p":"us.lsi.pl","l":"ReinasPLI"}]
