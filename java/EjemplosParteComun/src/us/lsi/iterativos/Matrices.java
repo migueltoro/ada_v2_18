@@ -1,4 +1,4 @@
-package us.lsi.iterativo;
+package us.lsi.iterativos;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;

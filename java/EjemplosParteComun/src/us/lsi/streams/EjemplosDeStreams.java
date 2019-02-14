@@ -1,4 +1,4 @@
-package us.lsi.ejemplos;
+package us.lsi.streams;
 
 import java.time.LocalDate;
 import java.util.Arrays;

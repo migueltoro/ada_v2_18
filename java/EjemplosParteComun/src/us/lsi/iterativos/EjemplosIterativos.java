@@ -1,4 +1,4 @@
-package us.lsi.iterativo;
+package us.lsi.iterativos;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

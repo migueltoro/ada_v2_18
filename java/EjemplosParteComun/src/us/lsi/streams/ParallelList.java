@@ -1,11 +1,12 @@
-package us.lsi.ejemplos;
+package us.lsi.streams;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import us.lsi.common.ParallelFlow;
-
-public class ParallelList<E> implements ParallelFlow<E> {
+public class ParallelList<E> implements Spliterator<E> {
 
 	private Integer i;
 	private Integer j;
@@ -25,49 +26,53 @@ public class ParallelList<E> implements ParallelFlow<E> {
 		this.j = j;
 		this.ls = ls;
 	}
-
-	@Override
+	
 	public int size() {
 		return j - i;
 	}
 
-	@Override
-	public int numberOfParts() {
-		return 2;
-	}
-
-	@Override
 	public int limit() {
 		return 10;
-	}
-
-	@Override
-	public Boolean hasNext() {
-		return j - i > 0;
-	}
-
-	@Override
-	public E next() {
-		E r = this.ls.get(i);
-		this.i = this.i + 1;
-		return r;
-	}
-
-	@Override
-	public List<ParallelFlow<E>> split() {
-		List<ParallelFlow<E>> pf = new ArrayList<>();
-		Integer k = (this.i + this.j) / 2;
-		pf.add(ParallelList.create(i, k, ls));
-		pf.add(ParallelList.create(k, j, ls));
-		return pf;
 	}
 
 	@Override
 	public String toString() {
 		return "[i=" + i + ", j=" + j + "]";
 	}
-	
-	
 
+	@Override
+	public boolean tryAdvance(Consumer<? super E> action) {
+		Boolean r = j - i > 0;
+		if(r) {
+			action.accept(this.ls.get(i));
+			this.i = this.i + 1;
+		}
+		return r;
+	}
+
+	@Override
+	public Spliterator<E> trySplit() {
+		Spliterator<E> r = null;
+		if(j-i > limit()) {
+			Integer k = (i + j) / 2;
+			r = ParallelList.create(i,k,ls);
+			i = k;
+		}
+		return r;
+	}
+
+	@Override
+	public long estimateSize() {
+		return j-i;
+	}
+
+	@Override
+	public int characteristics() {
+		return 0;
+	}
+	
+	Stream<E> stream() {
+		return StreamSupport.stream(this,true);
+	}
 	
 }

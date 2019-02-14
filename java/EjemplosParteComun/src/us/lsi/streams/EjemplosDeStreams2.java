@@ -1,4 +1,4 @@
-package us.lsi.ejemplos;
+package us.lsi.streams;
 
 
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import us.lsi.common.Collectors2;
 import us.lsi.common.Multiset;
-import us.lsi.common.SeqAccumulators;
+import us.lsi.common.SeqCollectors;
 import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
@@ -44,21 +44,21 @@ public class EjemplosDeStreams2 {
 			.forEach(System.out::println);
 		System.out.println("______");
 		var rr = Stream.generate(()->Math2.getEnteroAleatorio(0, 100)).filter(x->x%7==0);
-		System.out.println(Streams2.accumulateLeft(rr, SeqAccumulators.first()).get());
-		System.out.println("______");
+		System.out.println(Streams2.accumulateLeft(rr, SeqCollectors.first()).get());
+		System.out.println("1: ______");
 		var s3 = r2.stream().map(x->x.toString());
-		var a = SeqAccumulators.joiningAccumulator(" ","{","}");
+		var a = SeqCollectors.joiningAccumulator(" ","{","}");
 		var r = Streams2.accumulateLeft(s3, a);
 		System.out.println(r);	
-		System.out.println("______");
+		System.out.println("2: ______");
 		var s4 = Stream.iterate(0, x->x+1);
 		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Tuple.create(x, y));
 		s5.forEach(System.out::println);
-		System.out.println("______");
+		System.out.println("3: ______");
 		var n = 14L;
 		var b = 7L;
 		var s6 = Stream.iterate(n,x->x>0,x->x/2);
-		var a6 = SeqAccumulators
+		var a6 = SeqCollectors
 				.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
 		var r1 = Streams2.accumulateRight(s6, a6);
 		var s7 = Stream.iterate(Tuple.create(n,b),
@@ -68,20 +68,20 @@ public class EjemplosDeStreams2 {
 						.map(t->t.v2)
 						.reduce(1L,(x,y)->x*y);
 					   
-		System.out.println(s7+","+r1+","+Math.pow(b,n));
-		System.out.println("______");
+		System.out.println(s7+","+r1+","+(long)Math.pow(b,n));
+		System.out.println("4: ______");
 		var ss = Streams2.elementsAndPosition(r2.stream());
-		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(","));
+		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(",","{","}"));
 		System.out.println(r3);
-		System.out.println("______");
+		System.out.println("5: ______");
 		var enteros = Stream.iterate(0,x->x+1);
 		var ss2 = Streams2.limit(enteros, 4);
 		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
 		System.out.println(r4);
-		System.out.println("______");
-		var pp = primosPar(1000L,100000L,2);
+		System.out.println("6: ______");
+		var pp = primosPar(1000L,2000L,2);
 		Strings2.toConsole(pp,"Pares de primos");
-		System.out.println("______");
+		System.out.println("7: ______");
 		Long m1 = 1000L;
 		Long n1 = 2000L;
 		Multiset<Long> rr4 = 
@@ -89,7 +89,8 @@ public class EjemplosDeStreams2 {
 				.flatMap(x->divisores(x))
 				.collect(Collectors2.toMultiset());
 		System.out.println(rr4);
-		System.out.println("______");
+		System.out.println("8: ______");
+		
 	}
 
 }

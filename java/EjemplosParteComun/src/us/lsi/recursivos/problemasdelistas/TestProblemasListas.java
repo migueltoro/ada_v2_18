@@ -1,4 +1,4 @@
-package us.lsi.dyv.problemasdelistas;
+package us.lsi.recursivos.problemasdelistas;
 
 import static org.junit.Assert.*;
 

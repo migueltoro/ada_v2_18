@@ -1,4 +1,4 @@
-package us.lsi.dyv.puntos;
+package us.lsi.recursivos.puntos;
 
 import static org.junit.Assert.*;
 

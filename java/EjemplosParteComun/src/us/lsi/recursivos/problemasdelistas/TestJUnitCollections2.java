@@ -1,4 +1,4 @@
-package us.lsi.dyv.problemasdelistas;
+package us.lsi.recursivos.problemasdelistas;
 
 import static org.junit.Assert.*;
 
@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import us.lsi.common.Comparator2;
 import us.lsi.common.Lists2;
-import us.lsi.dyv.problemasdelistas.ProblemasDeListas.SubSecuencia;
 import us.lsi.math.Math2;
+import us.lsi.recursivos.problemasdelistas.ProblemasDeListas.SubSecuencia;
 
 
 

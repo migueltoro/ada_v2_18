@@ -1,4 +1,4 @@
-package us.lsi.ejemplos;
+package us.lsi.streams;
 
 
 import java.util.List;
@@ -12,12 +12,14 @@ public class TestParallelAcumulator {
 
 	public static void main(String[] args) {
 		Random r = new Random(System.nanoTime());
-		Stream<Integer> s = r.ints(5000).boxed();
+		Stream<Integer> s = r.ints(50).boxed();
 		List<Integer> rr = s.parallel().collect(Collectors2.mergeSort());
 
 		Strings2.toConsole(rr, "Ordenada");
 		
-		
+		Integer pp = rr.parallelStream().filter(x->x>1000).collect(Collectors2.first()).get();
+
+		System.out.println(pp + "    First");
 	}
 	
 	
