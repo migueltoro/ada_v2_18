@@ -1,8 +1,6 @@
 package us.lsi.geometria;
 
-
 import us.lsi.math.Math2;
-
 
 public class Recta2D {
 

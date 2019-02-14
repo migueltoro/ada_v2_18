@@ -6,8 +6,8 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Streams2;
-import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
+import us.lsi.common.Tuple;
 
 public class DatosJarras {
 	
@@ -65,7 +65,6 @@ public class DatosJarras {
 		private String descripcionCorta;
 		private String descripcion;
 		private BiPredicate<Integer,Integer> aplicable;
-		@SuppressWarnings("unused")
 		private BiFunction<Integer,Integer,Tuple2<Integer,Integer>> actualiza;
 		
 		private static Operacion create(String s) {

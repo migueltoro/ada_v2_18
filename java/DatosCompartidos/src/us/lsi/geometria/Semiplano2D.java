@@ -1,8 +1,5 @@
 package us.lsi.geometria;
 
-
-
-
 import us.lsi.math.Math2;
 
 public class Semiplano2D extends Recta2D  {

@@ -8,8 +8,6 @@ import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 
 
-
-
 public class Poligono2D  implements ObjetoGeometrico2D {
 
 	public static Poligono2D create() {

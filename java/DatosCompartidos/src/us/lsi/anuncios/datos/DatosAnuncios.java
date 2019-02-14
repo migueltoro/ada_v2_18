@@ -10,6 +10,8 @@ import us.lsi.common.Streams2;
 import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
 
+
+
 public class DatosAnuncios {
 
 	public static List<Anuncio> todosLosAnunciosDisponibles;

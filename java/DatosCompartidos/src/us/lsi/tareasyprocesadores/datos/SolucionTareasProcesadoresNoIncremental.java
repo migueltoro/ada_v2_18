@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 import us.lsi.common.Lists2;
 import us.lsi.common.Streams2;
 
-
 public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasProcesadores  {
 
 

@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Streams2;
 
+
 public class DatosSudoku {
 	
 	/**
@@ -79,7 +80,7 @@ public class DatosSudoku {
 	
 	/**
 	 * @param nf Fichero de datos
-	 * @pos Inicializa las variables del tipo
+	 * @post Inicializa las variables del tipo
 	 */
 	public static void iniDatos(String nf) {
 		Streams2.fromFile(nf)
