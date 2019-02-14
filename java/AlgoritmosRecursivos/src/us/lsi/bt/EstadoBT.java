@@ -7,7 +7,7 @@ import java.util.List;
  * <p> Tipo mutable del estado de un problema que se quiere resolver por la técnica de Bactracking. 
  * Cada estado está asociado un problema, del conjunto de problemas considerado, más el camino, secuencia de alternativas, para llegar a él desde el problema inicial. </p>
  * 
- * <p>La documentación puede encontarse en el: <a href="../../../document/Tema15.pdf" target="_blank">Tema15</a></p>
+ * <p>La documentación puede encontarse en el: <a href="../../../../document/Tema15.pdf" target="_blank">Tema15</a></p>
  *
  * @author Miguel Toro
  *
@@ -79,7 +79,7 @@ public interface EstadoBT<S, A, E extends EstadoBT<S,A,E>> {
 	
 	/**
 	 * @pre El método sólo es relevante si se usa la técnica con filtro
-	 * @pos 
+	 * @post 
 	 * <ul>
 	 * <li> Si el problema es de minimización el valor debe ser 
 	 * una cota inferior del valor de la propiedad objetivo del problema inicial, 

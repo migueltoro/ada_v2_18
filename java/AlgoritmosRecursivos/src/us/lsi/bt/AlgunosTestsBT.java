@@ -13,6 +13,7 @@ public class AlgunosTestsBT<S, A, E extends EstadoBT<S,A,E>> {
 	 * 
 	 * @param <S> Tipo de la solución
 	 * @param <A> Tipo de la alternativa
+	 * @param <E> Tipo del estado
 	 * @param e Un Estado inicial
 	 * @param ls Una lista de acciones
 	 */
@@ -48,6 +49,7 @@ public class AlgunosTestsBT<S, A, E extends EstadoBT<S,A,E>> {
 	 * 
 	 * @param <S> Tipo de la solución
 	 * @param <A> Tipo de la alternativa
+	 * @param <E> Tipo del estado
 	 * @param e Un Estado inicial
 	 */
 	public static <S, A, E extends EstadoBT<S,A,E>> void test2(E e){

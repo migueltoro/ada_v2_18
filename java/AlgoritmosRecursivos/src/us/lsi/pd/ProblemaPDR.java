@@ -45,7 +45,7 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 	 */
 	boolean esCasoBase();
 	/**
-	 * @pos 
+	 * @post 
 	 * <ul>
 	 *	<li> Si el problema no tiene solución se debe devolver null
 	 *	<li> Si el problema tiene solución asociada a una alternativa esta será de la forma (a,p).Siendo a la alternativa y p la propiedad correspondiente.
@@ -57,7 +57,7 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 	/**
 	 * @pre ls!=null, ls no está vacía, ls no contiene null, ls no contiene valores de la forma <code> (a,null) </code>
 	 * 
-	 * @pos 
+	 * @post 
 	 * <ul>
 	 *  <li> Si ls es vacía tras eliminar los valores <code> (a,null) </code> la solución devuelta es null. El problema no tiene solución.
 	 *	<li> Si el problema tiene solución asociada a una alternativa, esta será de la forma <code>(a,p)</code>. Siendo <code> a </code>la alternativa y <code> p </code> la propiedad correspondiente. 
@@ -100,13 +100,13 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 	Sp<A> getSolucionParcialPorAlternativa(A a , Sp<A> s);	
 	
 	/**
-	 * @pos Si un problema no tiene solución el conjunto de alternativas es vacío 
+	 * @post Si un problema no tiene solución el conjunto de alternativas es vacío 
 	 * @return Las alternativas disponibles para el problema
 	 */
 	List<A> getAlternativas();
 	/**
 	 * @pre El problema es un caso base
-	 * @pos 
+	 * @post 
 	 * <ul>
 	 *  <li> Si sp es de la forma <code> (a,p) </code> la solución se reconstruye a partir de esos dos valores. 
 	 *  <li> Si es de la forma <code> (null,p) </code> sólo a partir de <code> p </code>.
@@ -120,7 +120,7 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 	 * <p> El problema no es un caso base, <code> ls !=null </code>, <code> ls.size() &gt; 0 </code> y ls no contiene null.</p>
 	 * <p> Si el tipo es Min o Max entonces sp = (a,p) </p>
 	 * <p> Si tipo es Otro entonces sp es (null,p) y S debe ser Double. </p>
-	 * @pos
+	 * @post
 	 * <ul>
 	 *  <li> Si <code> sp = (a,p) </code> la solución se reconstruye a partir de <code> a, p, ls </code> estando en <code> ls </code> las 
 	 *  soluciones de los subproblemas que se alcanzan siguiendo la alternativa <code> sp.alternativa </code> 
@@ -139,7 +139,7 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 	
 	/**
 	 * @pre El uso del método es relevante si usamos la técnica con filtro. Si no la usamos el método es irrelevante.
-	 * @pos 
+	 * @post 
 	 * <ul>
 	 * <li> Si el problema es de minimización el valor debe ser 
 	 * una cota inferior del valor de la propiedad objetivo del problema inicial, 

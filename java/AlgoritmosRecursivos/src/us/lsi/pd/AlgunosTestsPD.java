@@ -19,11 +19,12 @@ public class AlgunosTestsPD<S, A> {
 	 * 
 	 * @param <S> Tipo de la solución
 	 * @param <A> Tipo de la alternativa
+	 * @param <P> Tipo del problema
 	 * @param p Un Estado inicial
 	 * @param alternativas Un árbol de alternativas
 	 * @return La solución parcial del problema
 	 */
-	public static <S, A,P extends ProblemaPD<S,A,P>> Sp<A> test1(P p, Tree<A> alternativas) {
+	public static <S, A, P extends ProblemaPD<S,A,P>> Sp<A> test1(P p, Tree<A> alternativas) {
 		Sp<A> r = null;
 		System.out.println("Avanza");
 		if (p.esCasoBase()) {
@@ -74,6 +75,7 @@ public class AlgunosTestsPD<S, A> {
 	 * 
 	 * @param <S> Tipo de la solución
 	 * @param <A> Tipo de la alternativa
+	 * @param <P> Tipo del problema
 	 * @param p Un Estado inicial
 	 * @return Un árbol de alternativas escogido aleatoriamente
 	 */

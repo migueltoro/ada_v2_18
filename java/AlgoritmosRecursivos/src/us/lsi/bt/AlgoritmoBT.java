@@ -14,11 +14,6 @@ import us.lsi.common.Metricas;
 import us.lsi.common.Sets2;
 
 
-
-
-
-
-
 /**
  * <p> Algoritmo que implementa la técnica de Bactracking con sus variantes. 
  * Un problema que se quiera resolver con esta técnica debe implementar el interface ProblemaBT &lt; S,A &gt;</p>
@@ -36,6 +31,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 	/**
 	 * @param <S> El tipo de la solución
 	 * @param <A> El tipo de la alternativa
+	 * @param <E> El tipo del estado
 	 * @param e - El estado Inicial del Problema a resolver
 	 * @return Algoritmo de Backtracking para resolver el problema
 	 */
@@ -189,6 +185,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 	}
 	
 	/**
+	 * @param p Predicado para filtrar las soluciones
 	 * @return Conjunto de las mejores soluciones
 	 */
 	public Set<S> getMejoresSoluciones(Predicate<S> p) {

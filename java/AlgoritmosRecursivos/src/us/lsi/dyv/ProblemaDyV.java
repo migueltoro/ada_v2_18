@@ -24,8 +24,8 @@ public interface ProblemaDyV<S,E> {
 	E getSolucionCasoBase();
 	/**
 	 * @constraint Si todos los valores en ls son null la solución devuelta es null
-	 * @pre ls!=null
-	 * @param ls - Soluciones de los subproblemas alcanzados tras tomar las diferentes alterantivas
+	 * @pre soluciones!=null
+	 * @param soluciones - Soluciones de los subproblemas alcanzados tras tomar las diferentes alterantivas
 	 * @return La solución del problema
 	 */
 	E combina(List<E> soluciones);
