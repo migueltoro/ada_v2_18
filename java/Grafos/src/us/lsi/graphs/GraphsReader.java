@@ -44,7 +44,7 @@ import org.jgrapht.Graph;
  */
 public class GraphsReader {
 
-	public static String[] eliminaBlancos(String[] s) {
+	private static String[] eliminaBlancos(String[] s) {
 		String[] r = new String[s.length];
 		for (int i = 0; i < r.length; i++) {
 			r[i] = s[i].trim();
