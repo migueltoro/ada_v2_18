@@ -113,7 +113,7 @@ public class ReinasPLI {
 
 		r += IntStream.range(-n + 1, n).boxed().map(d -> sum_f1(d, n)).collect(Collectors.joining("", "", ""));
 
-		r += IntStream.range(0, 2 * n - 2).boxed().map(d -> sum_f2(d, n)).collect(Collectors.joining("", "", ""));
+		r += IntStream.range(0, 2 * n - 1).boxed().map(d -> sum_f2(d, n)).collect(Collectors.joining("", "", ""));
 
 		r += allPairs(n, n).map(p -> String.format("x_%d_%d", p.i, p.j))
 				.collect(Collectors.joining(",", "bin ", "; \n"));
