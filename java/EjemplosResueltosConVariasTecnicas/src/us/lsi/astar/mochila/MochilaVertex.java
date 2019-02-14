@@ -1,103 +1,46 @@
 package us.lsi.astar.mochila;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.*;
-
-import org.jgrapht.GraphPath;
 import us.lsi.graphs.*;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.ObjetoMochila;
-import us.lsi.pd.mochila.ProblemaMochilaPD;
 
 
-public class MochilaVertex implements VirtualVertex<MochilaVertex, MochilaEdge> {
 
-	public static MochilaVertex create() {
-		return new MochilaVertex(ProblemaMochilaPD.createInitial());
+public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
+
+	public static MochilaVertex of(int capacidadInicial) {
+		return of(0, capacidadInicial);
 	}
 	
-	public static MochilaVertex create(ProblemaMochilaPD problema) {
-		return new MochilaVertex(problema);
+	public static MochilaVertex of(int index, int capacidadRestante) {
+		return new MochilaVertex(index, capacidadRestante);
 	}
 
-	private ProblemaMochilaPD problema;
+	public int index;
+	public Integer capacidadRestante;
 	
-	private MochilaVertex(ProblemaMochilaPD problema) {
+	public MochilaVertex(int index, int capacidadRestante) {
 		super();
-		this.problema = problema;
+		this.index = index;
+		this.capacidadRestante = capacidadRestante;
 	}
-	
-	
-	public static SolucionMochila getSolucion(GraphPath<MochilaVertex, MochilaEdge> path){
+
+	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
 		SolucionMochila s = SolucionMochila.create();		
-		List<MochilaEdge> ls = path.getEdgeList();
-		ls.stream().forEach(e->s.add(
-				e.getSource().getObjeto(), 
-				e.getAlternativa()));
+		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a));
 		return s;
-	}
-
-	@Override
-	public Set<MochilaVertex> getNeighborListOf() {
-		return problema.getAlternativas()
-				.stream()
-				.map(a-> this.problema.getSubProblema(a))
-				.map(p->MochilaVertex.create(p))
-				.collect(Collectors.toSet());
-	}
-
-	@Override
-	public Set<MochilaEdge> edgesOf() {
-		return problema.getAlternativas()
-				.stream()
-				.map(a-> edge(a))
-				.collect(Collectors.toSet());				
-	}
-
-	@Override
-	public boolean isNeighbor(MochilaVertex e) {
-		return this.getNeighborListOf().contains(e);
-	}
-	
-	public MochilaVertex neighbor(Integer a) {
-		ProblemaMochilaPD p = this.problema.getSubProblema(a);
-		return MochilaVertex.create(p);
-	}
-	
-	public MochilaEdge edge(Integer a) {
-		MochilaVertex p = neighbor(a);
-		Double w = -(double)a*DatosMochila.getValor(this.problema.getIndex());
-		return MochilaEdge.create(this, p, w, a);
-	}
-	
-	public ProblemaMochilaPD getProblema() {
-		return problema;
-	}
-
-	public Integer getIndex() {
-		return problema.getIndex();
-	}
-	
-	public ObjetoMochila getObjeto() {
-		return DatosMochila.getObjeto(problema.getIndex());
-	}
-	@Override
-	public String toString() {
-		return problema.toString();
-	}
-
-	@Override
-	public boolean isValid() {
-		return true;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((problema == null) ? 0 : problema.hashCode());
+		result = prime * result + ((capacidadRestante == null) ? 0 : capacidadRestante.hashCode());
+		result = prime * result + index;
 		return result;
 	}
 
@@ -107,15 +50,61 @@ public class MochilaVertex implements VirtualVertex<MochilaVertex, MochilaEdge> 
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof MochilaVertex))
+		if (getClass() != obj.getClass())
 			return false;
 		MochilaVertex other = (MochilaVertex) obj;
-		if (problema == null) {
-			if (other.problema != null)
+		if (capacidadRestante == null) {
+			if (other.capacidadRestante != null)
 				return false;
-		} else if (!problema.equals(other.problema))
+		} else if (!capacidadRestante.equals(other.capacidadRestante))
+			return false;
+		if (index != other.index)
 			return false;
 		return true;
-	}	
+	}
 
+	@Override
+	public boolean isValid() {
+		return index>=0 && index<=DatosMochila.getObjetos().size();
+	}
+
+	@Override
+	protected List<Integer> actions() {
+		Integer nu = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+		List<Integer> alternativas = IntStream.rangeClosed(0,nu).boxed().collect(Collectors.toList());
+		Collections.reverse(alternativas);
+		return alternativas;
+	}
+
+	@Override
+	protected MochilaVertex getThis() {
+		return this;
+	}
+
+	@Override
+	protected MochilaVertex neighbor(Integer a) {
+		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
+		return MochilaVertex.of(index+1,cr);
+	}
+
+	@Override
+	protected MochilaEdge getEdge(Integer a) {
+		return MochilaEdge.of(this, neighbor(a), a);
+	}
+	
+	public Double voraz(Predicate<MochilaVertex> p) {
+		return -voraz(index,(double)capacidadRestante,p);
+	}
+	
+	public static Double voraz(int index, Double capacidadRestante, Predicate<MochilaVertex> p) {
+		Double r = 0.;
+//		while(!p.test(MochilaVertex.of(index, 0))) {
+		while (index < DatosMochila.numeroDeObjetos) {
+			Double a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+			r = r + a*DatosMochila.getValor(index);
+			capacidadRestante = capacidadRestante-a*DatosMochila.getPeso(index);
+			index = index+1;			
+		}
+		return  r;
+	}
 }

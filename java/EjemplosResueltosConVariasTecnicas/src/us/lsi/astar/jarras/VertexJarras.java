@@ -42,9 +42,11 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	public boolean isValid() {
 		return this.cantidadEnJ1>=0 && this.cantidadEnJ2>=0;
 	}
+	
+	
 
 	@Override
-	public List<ActionJarras> acciones() {
+	public List<ActionJarras> actions() {
 		if(acciones == null) acciones = 
 				DatosJarras.getAcciones()
 					.stream()
@@ -59,11 +61,16 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	}
 
 	@Override
-	protected EdgeJarras getEdge(VertexJarras v, ActionJarras a) {		
-		return EdgeJarras.create(this, v, a);
+	protected EdgeJarras getEdge(ActionJarras a) {		
+		return EdgeJarras.create(this, a.neighbor(this), a);
 	}
 
 
+	@Override
+	protected VertexJarras neighbor(ActionJarras a) {
+		return a.neighbor(this);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
