@@ -155,7 +155,7 @@ public class ExpressionChromosome<T> extends BinaryChromosome implements us.lsi.
 	public static List<String> nombresDeConstantes = Arrays.asList("a","b","c"+"d","e","f"+"g");
 	
 	/**
-	 * @pos Inicializa los parámetros de la clase
+	 * @post Inicializa los parámetros de la clase
 	 * @param problema El problema a resolver
 	 * @param <T> El tipo de la expresión que representa el cromosoma
 	 */

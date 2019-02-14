@@ -170,7 +170,7 @@ public class ChromosomeFactory {
 	/**
 	 * @param tipo Tipo de cromosoma
 	 * @param problema El problema a resolver 
-	 * @pos El método inicializa los parámetros relevantes de la clase que implementa el tipo indicado de cromosoma
+	 * @post El método inicializa los parámetros relevantes de la clase que implementa el tipo indicado de cromosoma
 	 */
 	public static void iniValues(ChromosomeType tipo, ProblemAG problema){
 		switch(tipo){
