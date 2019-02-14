@@ -21,7 +21,6 @@ public class TestReinasBT {
 		System.out.println(a.getSoluciones().size());
 		for(SolucionReinas s : a.getSoluciones()){
 			System.out.println(s.getObjetivo()+","+s);
-		}
-		System.out.println(AlgoritmoBT.metricas);
+		}		
 	}
 }

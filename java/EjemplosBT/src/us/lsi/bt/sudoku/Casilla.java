@@ -72,7 +72,7 @@ public class Casilla {
 		return x;
 	}
 	/**
-	 * @retunn La coordenada y de la casilla en 0..CuadroSudoku.numeroDeFilas-1
+	 * @return La coordenada y de la casilla en 0..CuadroSudoku.numeroDeFilas-1
 	 */
 	public Integer getY() {
 		return y;

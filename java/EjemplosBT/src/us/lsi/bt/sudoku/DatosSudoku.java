@@ -79,7 +79,7 @@ public class DatosSudoku {
 	
 	/**
 	 * @param nf Fichero de datos
-	 * @pos Inicializa las variables del tipo
+	 * @post Inicializa las variables del tipo
 	 */
 	public static void iniDatos(String nf) {
 		Streams2.fromFile(nf)

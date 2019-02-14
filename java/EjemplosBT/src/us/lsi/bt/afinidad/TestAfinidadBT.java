@@ -15,7 +15,7 @@ public class TestAfinidadBT {
 		//creaProblema y lanza algoritmo
 		AlgoritmoBT.metricasOK = true;
 		AlgoritmoBT.conFiltro = true;
-		DatosAfinidad.create("ficheros/afinidad_test2.txt");
+		DatosAfinidad.create("ficheros/afinidad_test1.txt");
 		EstadoAfinidadBT p=  EstadoAfinidadBT.create();
 		var a= AlgoritmoBT.create(p);
 		a.ejecuta();
@@ -24,7 +24,6 @@ public class TestAfinidadBT {
 //		System.out.println(AlgoritmoBT.getMejorValor()+" ,"+a.solucion);
 		Predicate<SolucionAfinidad> pp = x->x.getAfinidad().equals(a.getSolucion().getAfinidad());
 		System.out.println(a.getSolucionesFiltradas(pp));
-		System.out.println(AlgoritmoBT.metricas);
 	}
 }
 

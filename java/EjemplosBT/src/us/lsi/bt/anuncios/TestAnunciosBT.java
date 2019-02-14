@@ -13,7 +13,6 @@ public class TestAnunciosBT {
 		AlgoritmoBT.numeroDeSoluciones = 6;
 		AlgoritmoBT.conFiltro = true;
 		System.out.println(DatosAnuncios.todosLosAnunciosDisponibles);
-		System.out.println(DatosAnuncios.restricciones);
 		EstadoAnunciosBT e = EstadoAnunciosBT.create();
 		var a = AlgoritmoBT.create(e);
 		a.ejecuta();

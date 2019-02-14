@@ -17,7 +17,6 @@ public class Test {
 		a.ejecuta();
 		System.out.println("Solucion Final");		
 		System.out.println(a.getSolucion());
-		System.out.println(AlgoritmoBT.metricas);
 	}
 
 }
