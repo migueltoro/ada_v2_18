@@ -1,20 +1,32 @@
 package us.lsi.astar.puzzle;
 
+import us.lsi.graphs.SimpleEdge;
 
 public class TestPuzzle {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		EstadoPuzzle e = EstadoPuzzle.create(0,1,2,3,4,5,6,7,8);
-		EstadoPuzzle e1 = EstadoPuzzle.create(1,2,3,4,0,5,6,7,8);
-		EstadoPuzzle e2 = EstadoPuzzle.create(1,2,3,4,0,5,6,7,8);
-		EstadoPuzzle e3 = EstadoPuzzle.create(1,2,3,4,0,5,6,7,8);
-		System.out.println(e.equals(e2));
-		System.out.println(e.hashCode()+","+e1.hashCode()+","+e2.hashCode()+","+e3.hashCode());
+		
+		VertexPuzzle e = VertexPuzzle.of(0,1,2,3,4,5,6,7,8);
+		VertexPuzzle e1 = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
+		VertexPuzzle e2 = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
 		System.out.println(e);
+		System.out.println("--------------");
+		System.out.println(e1);
+		System.out.println(e1.equals(e2));
+		System.out.println(e.equals(e2));
 		System.out.println("Vecinos");
-		for (EstadoPuzzle v: e.getNeighborListOf()) {
+		for (VertexPuzzle v: e.getNeighborListOf()) {
 			System.out.println(v+"\n");
+		}
+		System.out.println("Vecinos");
+		for (VertexPuzzle v: e1.getNeighborListOf()) {
+			System.out.println(v+"\n");
+		}
+		System.out.println("--------------");
+		System.out.println(e);
+		System.out.println("Aristas");
+		for (SimpleEdge<VertexPuzzle> ed: e.edgesOf()) {
+			System.out.println(ed+"\n");
 		}
 	}
 

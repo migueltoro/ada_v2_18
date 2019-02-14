@@ -1,8 +1,11 @@
 package us.lsi.astar.puzzle;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import us.lsi.graphs.ActionVirtualVertex;
 import us.lsi.graphs.SimpleEdge;
@@ -17,42 +20,42 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 		return new VertexPuzzle(d);
 	}
 	
-	public static VertexPuzzle of(Integer[][] datos, int i0, int j0) {
-		return new VertexPuzzle(datos, i0, j0);
+	public static VertexPuzzle of(Integer[][] datos, int x0, int y0) {
+		return new VertexPuzzle(datos, x0, y0);
 	}
 	
 	Integer[][] datos; 
-	int i0;
-	int j0;
+	int x0;
+	int y0;
 	public static int numFilas = 3;
 	
-	private VertexPuzzle(Integer[][] datos, int i0, int j0) {
+	private VertexPuzzle(Integer[][] datos, int x0, int y0) {
 		super();
 		this.datos = datos;
-		this.i0 = i0;
-		this.j0 = j0;
+		this.x0 = x0;
+		this.y0 = y0;
 	}
 	
 	private VertexPuzzle(Integer... d) {
 		super(); 
 		this.datos = new Integer[VertexPuzzle.numFilas][VertexPuzzle.numFilas];
 		Set<Integer> s = new HashSet<Integer>();	
-		int i=0,j=0;
+		int x=0,y=0;
 		for (int e:d) {							
 					if(e<0 || e> (VertexPuzzle.numFilas*VertexPuzzle.numFilas-1)){
 						throw new IllegalArgumentException();
 					}
 					if(e==0){
-						this.i0 =i;
-						this.j0 =j;
+						this.x0 =x;
+						this.y0 =y;
 					}
 					s.add(e);
-					this.datos[i][j] = e;
-					if(j== VertexPuzzle.numFilas-1){
-						i++;
-						j=0;
+					this.datos[x][y] = e;
+					if(y== VertexPuzzle.numFilas-1){
+						x++;
+						y=0;
 					}else{
-						j++;
+						y++;
 					}
 				
 		}
@@ -64,17 +67,19 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 	@Override
 	public boolean isValid() {
 		Set<Integer> s = new HashSet<Integer>();	
-		for (int j = 0; j < VertexPuzzle.numFilas; j++) {
-			for (int i = 0; i < VertexPuzzle.numFilas; i++) {
-				s.add(datos[i][j]);
+		for (int y = 0; y < VertexPuzzle.numFilas; y++) {
+			for (int x = 0; x < VertexPuzzle.numFilas; x++) {
+				s.add(datos[x][y]);
 			}
 		}
 		return s.size()== VertexPuzzle.numFilas*VertexPuzzle.numFilas;
 	}
 
 	@Override
-	protected List<ActionPuzzle> acciones() {
-		return ActionPuzzle.actions();
+	protected List<ActionPuzzle> actions() {
+		return ActionPuzzle.actions().stream().
+				filter(a->a.isApplicable(this))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -83,21 +88,26 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 	}
 
 	@Override
-	protected SimpleEdge<VertexPuzzle> getEdge(VertexPuzzle v, ActionPuzzle a) {
-		return SimpleEdge.of(v, a.neighbor(v));
+	protected SimpleEdge<VertexPuzzle> getEdge(ActionPuzzle a) {
+		return SimpleEdge.of(this, a.neighbor(this));
 	}
 
-	public Integer getDato(int i, int j) {
-		if(i<0 || i>=VertexPuzzle.numFilas || j<0 || j>=VertexPuzzle.numFilas)
+	@Override
+	protected VertexPuzzle neighbor(ActionPuzzle a) {
+		return a.neighbor(this);
+	}
+	
+	public Integer getDato(int x, int y) {
+		if(x<0 || x>=VertexPuzzle.numFilas || y<0 || y>=VertexPuzzle.numFilas)
 			throw new IllegalArgumentException();
-		return datos[i][j];
+		return datos[x][y];
 	}
 	
 	public Integer getNumDiferentes(VertexPuzzle e){
 		Integer s = 0;
-		for (int i = 0; i < VertexPuzzle.numFilas; i++) {
-			for (int j = 0; j < VertexPuzzle.numFilas; j++) {
-				if (!this.datos[i][j].equals(e.datos[i][j])) {
+		for (int x = 0; x < VertexPuzzle.numFilas; x++) {
+			for (int y = 0; y < VertexPuzzle.numFilas; y++) {
+				if (!this.datos[x][y].equals(e.datos[x][y])) {
 					s++;
 				}
 			}
@@ -105,4 +115,38 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 		return s;
 	}
 
+	@Override
+	public String toString() {
+		String s = IntStream.range(0,VertexPuzzle.numFilas).boxed().map(y->fila(y)).collect(Collectors.joining("\n", "", ""));
+		return s;
+	}
+
+	private String fila(int y) {
+		return IntStream.range(0,VertexPuzzle.numFilas).boxed()
+				.map(j->datos[y][j].toString()).collect(Collectors.joining("|", "|", "|"));
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(datos);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VertexPuzzle other = (VertexPuzzle) obj;
+		if (!Arrays.deepEquals(datos, other.datos))
+			return false;
+		return true;
+	}
+	
+	
 }

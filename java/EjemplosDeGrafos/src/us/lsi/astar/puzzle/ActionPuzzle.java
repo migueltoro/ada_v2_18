@@ -26,9 +26,9 @@ public class ActionPuzzle implements Action<VertexPuzzle> {
 
 	@Override
 	public VertexPuzzle neighbor(VertexPuzzle v) {
-		int f = v.i0+incx;
-		int c = v.j0+incy;
-		if(f<0 || f>=VertexPuzzle.numFilas || c<0 || c>=VertexPuzzle.numFilas)
+		int x = v.x0+incx;
+		int y = v.y0+incy;
+		if(x<0 || x>=VertexPuzzle.numFilas || y<0 || y>=VertexPuzzle.numFilas)
 			throw new IllegalArgumentException();
 		Integer[][] dd = new Integer[VertexPuzzle.numFilas][VertexPuzzle.numFilas];
 		for (int i = 0; i < VertexPuzzle.numFilas; i++) {
@@ -36,14 +36,18 @@ public class ActionPuzzle implements Action<VertexPuzzle> {
 				dd[i][j] = v.datos[i][j];
 			}
 		}
-		dd[f][c] = v.datos[v.i0][v.j0];
-		dd[v.i0][v.j0] = v.datos[f][c];
-		return VertexPuzzle.of(dd, f, c);
+		dd[x][y] = v.datos[v.x0][v.y0];
+		dd[v.x0][v.y0] = v.datos[x][y];
+		return VertexPuzzle.of(dd, x, y);
 	}
 
 	@Override
 	public boolean isApplicable(VertexPuzzle v) {
-		return false;
+		Boolean r = false;
+		int x = v.x0+incx;
+		int y = v.y0+incy;
+		if(x>=0 && x<VertexPuzzle.numFilas && y>=0 && y<VertexPuzzle.numFilas)	r = true;		
+		return r;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.Lists2;
@@ -135,7 +136,7 @@ public class Casilla implements VirtualVertex<Casilla,SimpleEdge<Casilla>> {
 	@Override
 	public Set<SimpleEdge<Casilla>> edgesOf() {
 		return getNeighborListOf().stream()
-				.map(c->SimpleEdge.create(this,c))
+				.map(c->SimpleEdge.of(this,c))
 				.collect(Collectors.toSet());
 	}
 
