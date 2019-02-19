@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"us.lsi.pl"}]
