@@ -10,9 +10,9 @@ public class TestPLI {
 //		System.out.println(p.toStringConstraints());
 		System.out.println("-------------------");	
 		System.out.println("________");
-		System.out.println(a.getGoal());
-		for (int j = 0; j < 5; j++) {
-			System.out.println(a.getSolution()[j]);
+		System.out.println("Goal = "+a.getGoal());
+		for (int j = 0; j < 4; j++) {
+			System.out.println(a.getName(j)+" = "+a.getSolution()[j]);
 		}
 		System.out.println("________");
 //		System.out.println(s);

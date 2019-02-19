@@ -86,7 +86,7 @@ public class FlowVertex {
 	}
 
 	public String getName() {
-		return name;
+		return this.name.equals("")?this.externalId:this.name;
 	}
 
 	public Integer getId() {
