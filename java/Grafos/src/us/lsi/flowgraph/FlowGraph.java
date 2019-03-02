@@ -105,12 +105,36 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 			if (FlowGraph.allInteger) {
 				goal = goal + "int " + Strings2.format(this.vertexSet(), v -> v.getVariable(), ",");
 				goal = goal + ",";
-				goal = goal + Strings2.format(this.edgeSet(), v -> v.getVariable(), ",");
+				goal = goal + Strings2.format(this.edgeSet(), e -> e.getVariable(), ",");
 				goal = goal + ";\n";
 			}
 			this.constraints = goal;
 		}
 		return this.constraints;
+	}
+	
+	private String edgeMinCut(FlowEdge edge) {
+		return String.format("%s-%s+%s >= 0; \n",edge.getSource().getVariable(),edge.getTarget().getVariable(),edge.getVariable());
+	}
+	
+	private String vertexMinCut(FlowVertex vertex) {
+		String r = "";
+		if(vertex.isSource()) {
+			r = String.format("R%s: %s = 0;\n",vertex.getVariable(),vertex.getVariable());
+		} else if(vertex.isSink()) {
+			r = String.format("R%s: %s = 1; \n",vertex.getVariable(),vertex.getVariable());
+		}
+		return r;
+	}
+	
+	public String getMinCutConstraints() {
+		String r = "";
+		r = r+ "min: "+Strings2.format(this.edgeSet(),e->e.getMax()+" "+e.getVariable(), "+")+";\n";
+		r = r+ Strings2.format(this.vertexSet(),v->vertexMinCut(v), "");
+		r = r+ Strings2.format(this.edgeSet(),e->edgeMinCut(e), "");
+		r = r+ "bin "+Strings2.format(this.vertexSet(),v->v.getVariable(), ",")+",";
+		r = r+Strings2.format(this.edgeSet(),e->e.getVariable(), ",")+";\n";
+		return r;
 	}
 	
 	public void exportToDot(String file) {

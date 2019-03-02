@@ -52,6 +52,21 @@ public class FlowVertex {
 		return r;
 	}
 	
+	private TipoDeVertice tipoDeVertice(String text) {
+		TipoDeVertice r = null;
+		text = text.trim();
+		switch(text) {
+		case "1":
+		case "Source": r = TipoDeVertice.Source; break;
+		case "2":
+		case "Sink" : r = TipoDeVertice.Sink;break;
+		case "0":
+		case "Intermediate" : r = TipoDeVertice.Intermediate;break;
+		default: Preconditions.checkArgument(false,String.format("Tipo %s no permitido",text));
+		}
+		return r;
+	}
+	
 	private FlowVertex(String[] formato) {		
 		this.externalId = formato[0];
 		if (formato.length==1) {
@@ -61,19 +76,19 @@ public class FlowVertex {
 			this.cost = 1.;
 			this.name = "";
 		}else if (formato.length==2) {
-			this.tipo = Enum.valueOf(TipoDeVertice.class,formato[1]);
+			this.tipo = tipoDeVertice(formato[1]);
 			this.min = 0.;
 			this.max = Double.MAX_VALUE;
 			this.cost = 1.;
 			this.name = "";				
 		}else if(formato.length==5) {
-			this.tipo = Enum.valueOf(TipoDeVertice.class,formato[1]);
+			this.tipo = tipoDeVertice(formato[1]);
 			this.min = convert(formato[2]);
 			this.max = convert(formato[3]);
 			this.cost = convert(formato[4]);
 			this.name = "";	
 		} else if(formato.length==6){
-			this.tipo = Enum.valueOf(TipoDeVertice.class,formato[1]);
+			this.tipo = tipoDeVertice(formato[1]);
 			this.min = convert(formato[2]);
 			this.max = convert(formato[3]);
 			this.cost = convert(formato[4]);
