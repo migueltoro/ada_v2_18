@@ -38,9 +38,9 @@ public class AlgoritmoPLI implements SolutionPLI {
 									new FileWriter("ficheros/intermedio.txt")));
 			f.println(constraints);
 			f.close();
-		} catch (IOException e) {
+		} catch (Exception e) {		
 			throw new IllegalArgumentException(
-					"No se ha podido crear el fichero " + "ficheros/intermedio.txt");
+					e.toString() + "ficheros/intermedio.txt");
 		}
 		return getSolutionFromFile("ficheros/intermedio.txt");
 	}
@@ -125,7 +125,7 @@ public class AlgoritmoPLI implements SolutionPLI {
 		try {		
 			solver = LpSolve.readLp(this.fichero, 1, "Problema");
 		} catch (LpSolveException e) {
-			throw new IllegalStateException("No se encuentra el fichero "+this.fichero);
+			throw new IllegalStateException("Se ha producido una excepción en LpSolve "+e+" = "+this.fichero);
 		}
 		try {
 			solver.solve();
@@ -138,7 +138,7 @@ public class AlgoritmoPLI implements SolutionPLI {
 			solver.deleteLp();
 			
 		} catch (LpSolveException e) {
-			throw new IllegalStateException("Se ha producido una excepción en LpSolve");
+			throw new IllegalStateException("Se ha producido una excepción en LpSolve = "+e);
 		}
 
 	}
