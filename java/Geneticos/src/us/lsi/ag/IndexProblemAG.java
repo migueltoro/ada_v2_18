@@ -64,10 +64,10 @@ public interface IndexProblemAG<S> extends ProblemAG {
      * con <code> i </code> en el rango <code> 0..n-1 </code>.
      */
     default List<Integer> getNormalSequence() {
-		return IntStream.range(0,getObjectsNumber())
+		List<Integer> r = IntStream.range(0,getObjectsNumber())
 				.boxed()
-				.map(x->Lists2.copy(getMaxMultiplicity(x),x).stream())
-				.flatMap(x->x)
+				.flatMap(x->Lists2.copy(x,getMaxMultiplicity(x)).stream())
 				.collect(Collectors.toList());
+		return r;
 	}
 }
