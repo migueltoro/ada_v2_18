@@ -34,7 +34,7 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 	/**
 	 * Número de bits usado para representar un entero. El rango de enteros que podemos obtener dependerá de este número de bits.
 	 */
-	public static Integer bitsNumber = 5;
+	public static Integer bitsNumber = 10;
 	
 	public static ValuesInRangeProblemAG<Integer,?> problem;
 	
