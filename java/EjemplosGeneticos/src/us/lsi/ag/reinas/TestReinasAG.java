@@ -1,6 +1,7 @@
 package us.lsi.ag.reinas;
 
 import java.util.List;
+import java.util.Set;
 
 import us.lsi.ag.IndexChromosome;
 import us.lsi.ag.IndexProblemAG;
@@ -10,6 +11,7 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
+import us.lsi.common.Sets2;
 import us.lsi.reinas.datos.Reina;
 
 
@@ -23,9 +25,9 @@ public class TestReinasAG {
 		AlgoritmoAG.ELITISM_RATE  = 0.20;
 		AlgoritmoAG.CROSSOVER_RATE = 0.8;
 		AlgoritmoAG.MUTATION_RATE = 0.8;
-		AlgoritmoAG.POPULATION_SIZE = 400;
+		AlgoritmoAG.POPULATION_SIZE = 40;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 2000;
+		StoppingConditionFactory.NUM_GENERATIONS = 3000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 0.;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
@@ -46,7 +48,15 @@ public class TestReinasAG {
 		System.out.println("================================");
 		System.out.println(s.size());
 */		IndexChromosome cr = ap.getBestChromosome();
-		System.out.println(p.getSolucion(cr)+","+cr.fitness());
+		System.out.println(p.getSolucion(cr)+","+cr.fitness()+", ");
+		List<Integer> ls = cr.decode();
+		Set<Integer> dp = Sets2.newHashSet();
+		Set<Integer> ds = Sets2.newHashSet();
+		for (int i = 0; i < ls.size(); i++) {
+			dp.add(ls.get(i)-i);
+			ds.add(ls.get(i)+i);
+		}
+		System.out.println(ProblemaReinasAG.numeroDeReinas+","+dp.size()+","+ds.size());
 	}	
 
 }
