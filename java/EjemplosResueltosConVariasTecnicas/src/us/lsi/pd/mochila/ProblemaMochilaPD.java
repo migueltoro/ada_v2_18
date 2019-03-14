@@ -102,7 +102,9 @@ public class ProblemaMochilaPD implements ProblemaPDR<SolucionMochila, Integer, 
 
 	@Override
 	public Double getObjetivo() {
-		return (double) this.valorAcumulado;
+		Double r = null;
+		if(esCasoBase()) r = (double) this.valorAcumulado;
+		return r;
 	}
 	
 	public int getIndex() {
