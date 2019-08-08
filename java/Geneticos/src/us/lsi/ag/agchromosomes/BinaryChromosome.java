@@ -68,6 +68,24 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 		return problem;
 	}
 
+	@Override
+	public Integer getMin(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getMax(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getObjectsNumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static int getDimension() {
 		return BinaryChromosome.problem.getVariableNumber();
 	}
@@ -76,6 +94,5 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(BinaryChromosome.getDimension());
 		return new BinaryChromosome(ls);
 	}
-	
-	
+
 }

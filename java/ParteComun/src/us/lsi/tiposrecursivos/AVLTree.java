@@ -190,7 +190,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(Stream<E> elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		elements.forEach(e->r.value = this.add(e) || r.value);
 		return r.value;
 	}
@@ -201,7 +201,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(Collection<E> elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		elements.stream().forEach(e->r.value = this.add(e) || r.value);
 		return r.value;
 	}
@@ -212,7 +212,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
 	 */
 	public boolean add(@SuppressWarnings("unchecked") E... elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		Arrays.stream(elements).forEach(e->r.value = this.add(e) || r.value);
 		return r.value;
 	}
@@ -283,7 +283,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(Stream<E> elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		elements.forEach(e->r.value = this.remove(e) || r.value);
 		return r.value;
 	}
@@ -294,7 +294,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(Collection<E> elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		elements.stream().forEach(e->r.value = this.remove(e) || r.value );
 		return r.value;
 	}
@@ -305,7 +305,7 @@ public class AVLTree<E> {
 	 * @return Si el &aacute;rbol ha cambiado al eliminar los elementos
 	 */
 	public boolean remove(@SuppressWarnings("unchecked") E... elements) {
-		final MutableType<Boolean> r = MutableType.create(false);
+		final MutableType<Boolean> r = MutableType.of(false);
 		Arrays.stream(elements).forEach(e->r.value = this.remove(e) ||  r.value);
 		return r.value;
 	}

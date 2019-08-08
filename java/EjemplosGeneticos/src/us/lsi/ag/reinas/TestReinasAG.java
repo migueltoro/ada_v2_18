@@ -3,8 +3,8 @@ package us.lsi.ag.reinas;
 import java.util.List;
 import java.util.Set;
 
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
+import us.lsi.ag.SeqNomalChromosome;
+import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
@@ -35,8 +35,8 @@ public class TestReinasAG {
 		ChromosomeFactory.crossoverType = CrossoverType.OnePoint;
 		
 		ProblemaReinasAG.numeroDeReinas = 20;
-		IndexProblemAG<List<Reina>> p = ProblemaReinasAG.create();
-		AlgoritmoAG<IndexChromosome> ap = AlgoritmoAG.<IndexChromosome>create(ChromosomeType.IndexPermutation,p);
+		SeqNormalProblemAG<List<Reina>> p = ProblemaReinasAG.create();
+		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(ChromosomeType.SqnPermutation,p);
 		ap.ejecuta();
 		System.out.println("================================");
 		
@@ -47,7 +47,7 @@ public class TestReinasAG {
 		}
 		System.out.println("================================");
 		System.out.println(s.size());
-*/		IndexChromosome cr = ap.getBestChromosome();
+*/		SeqNomalChromosome cr = ap.getBestChromosome();
 		System.out.println(p.getSolucion(cr)+","+cr.fitness()+", ");
 		List<Integer> ls = cr.decode();
 		Set<Integer> dp = Sets2.newHashSet();

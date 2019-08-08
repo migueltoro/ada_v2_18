@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import us.lsi.common.Collectors2;
 import us.lsi.common.Multiset;
 import us.lsi.common.SeqCollectors;
 import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
+import us.lsi.iterators.Collectors2;
 import us.lsi.math.Math2;
 
 

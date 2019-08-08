@@ -33,12 +33,13 @@ public class Ciclos {
 						Carretera::getKm);
 		
 		SimpleWeightedGraph<Ciudad, Carretera> gc = 
-				Graphs2.completeGraph(
+				Graphs2.explicitCompleteGraph(
 						graph,
 						200000.,
 						()-> new SimpleWeightedGraph<Ciudad, Carretera>(
 								Ciudad::create,Carretera::create),
-						Carretera::create);
+						Carretera::create,
+						Carretera::getKm);
 		
 		TwoApproxMetricTSP<Ciudad, Carretera> tsp = new  TwoApproxMetricTSP<>();
 		List<Ciudad> r3 = tsp.getTour(gc).getVertexList();

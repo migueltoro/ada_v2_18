@@ -2,8 +2,8 @@ package us.lsi.ag.anuncios;
 
 
 
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
+import us.lsi.ag.SeqNomalChromosome;
+import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
@@ -28,8 +28,8 @@ public class TestAnunciosAG {
 		
 		DatosAnuncios.tiempoTotal = 30;
 		System.out.println("ficheros/anuncios.txt");
-		IndexProblemAG<ListaDeAnunciosAEmitir> p = new ProblemaAnunciosAG("ficheros/anuncios.txt");		
-		AlgoritmoAG<IndexChromosome> ap = AlgoritmoAG.create(ChromosomeType.IndexPermutationSubList,p);
+		SeqNormalProblemAG<ListaDeAnunciosAEmitir> p = new ProblemaAnunciosAG("ficheros/anuncios.txt");		
+		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.create(ChromosomeType.SqnPermutationSubList,p);
 		ap.ejecuta();
 		
 		

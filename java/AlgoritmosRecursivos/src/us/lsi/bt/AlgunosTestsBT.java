@@ -44,7 +44,7 @@ public class AlgunosTestsBT<S, A, E extends EstadoBT<S,A,E>> {
 	}
 	/**
 	 * Dado un estado se ejecuta una lista de acciones, escogidas aleatoriamente 
-	 * entre las posibles, haciendo avences sucesivos 
+	 * entre las posibles, haciendo avances sucesivos 
 	 * y posteriormente los retrocedes correspondientes
 	 * 
 	 * @param <S> Tipo de la solución

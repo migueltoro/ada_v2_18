@@ -97,22 +97,26 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 	
 	private double ft;
 	
-	private double calculateFt(){
+	protected double calculateFt(){
 		return RangeChromosome.problem.fitnessFunction(this);
 	}
 
+	@Override
 	public Integer getObjectsNumber() {
 		return RangeChromosome.problem.getVariableNumber();
 	}
 
+	@Override
 	public Integer getMax(int i) {
 		return RangeChromosome.problem.getMax(i);
 	}
 
+	@Override
 	public Integer getMin(int i) {
 		return RangeChromosome.problem.getMin(i);
 	}
 	
+	@Override
 	public ValuesInRangeProblemAG<Integer,?> getProblem() {
 		return RangeChromosome.problem;
 	}

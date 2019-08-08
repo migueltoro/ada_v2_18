@@ -7,7 +7,7 @@ import org.apache.commons.math3.genetics.ChromosomePair;
 import org.apache.commons.math3.genetics.CrossoverPolicy;
 import org.apache.commons.math3.genetics.RandomKey;
 
-import us.lsi.ag.agchromosomes.IndexPermutationSubListChromosome;
+import us.lsi.ag.agchromosomes.PermutationSubListChromosome;
 
 import us.lsi.common.Preconditions;
 
@@ -36,20 +36,20 @@ public class SubListCrossoverPolicy implements CrossoverPolicy {
 	@Override
 	public ChromosomePair crossover(Chromosome chr0, Chromosome chr1)
 			throws MathIllegalArgumentException {
-		if (!(chr0 instanceof IndexPermutationSubListChromosome))
+		if (!(chr0 instanceof PermutationSubListChromosome))
 			throw new IllegalArgumentException();
-		IndexPermutationSubListChromosome c0 = (IndexPermutationSubListChromosome) chr0;
-		if (!(chr1 instanceof IndexPermutationSubListChromosome))
+		PermutationSubListChromosome c0 = (PermutationSubListChromosome) chr0;
+		if (!(chr1 instanceof PermutationSubListChromosome))
 			throw new IllegalArgumentException();
-		IndexPermutationSubListChromosome c1 = (IndexPermutationSubListChromosome) chr1;
+		PermutationSubListChromosome c1 = (PermutationSubListChromosome) chr1;
 		ChromosomePair binary = operatorBin.crossover(c0.getBinary(),c1.getBinary());
 		Preconditions.checkArgument(binary.getFirst() instanceof BinaryChromosome);
 		Preconditions.checkArgument(binary.getSecond() instanceof BinaryChromosome);
 		ChromosomePair randomKey = operatorKey.crossover(c0.getRandomKey(),c1.getRandomKey());
 		Preconditions.checkArgument(randomKey.getFirst() instanceof RandomKey);
 		Preconditions.checkArgument(randomKey.getSecond() instanceof RandomKey);
-		ChromosomePair r = new ChromosomePair(new IndexPermutationSubListChromosome(binary.getFirst(),
-				randomKey.getFirst()), new IndexPermutationSubListChromosome(binary.getSecond(),
+		ChromosomePair r = new ChromosomePair(new PermutationSubListChromosome(binary.getFirst(),
+				randomKey.getFirst()), new PermutationSubListChromosome(binary.getSecond(),
 				randomKey.getSecond()));
 		return r;
 	}

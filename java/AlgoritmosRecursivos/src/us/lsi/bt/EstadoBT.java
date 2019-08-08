@@ -64,14 +64,13 @@ public interface EstadoBT<S, A, E extends EstadoBT<S,A,E>> {
 	 * 
 	 * @pre esCasoBase()
 	 * @return Una solución del problema inicial y null si no hay solución para el problema inicial tras la secuencia de alternativas tomadas
-	 * @throws IllegalStateException - Si se invoca el método en un estado no final
+	 * @throws IllegalStateException - Si se invoca el método en un estado que es caso base
 	 */
 	S getSolucion();
 	/**
 	 * 
-	 * @pre El uso del método es relevante si usamos la técnica con filtro. Si no la usamos el método es irrelevante.
-	 * @return Valor de la propiedad objetivo del problema inicial si es posible calcularlo asumiendo
-	 * que estamos en el problema actual. Si no es posible null.
+	 * @return Valor de la propiedad objetivo del problema inicial que debe coincidir con una de las propiedades del tipo S solcui&oacute;n 
+	 * del problema inicial calculada en el caso base. Una posible implentaci&oacute;n es return solucion.propiedad. 
 	 */
 	default Double getObjetivo() {
 		return null;

@@ -4,8 +4,8 @@ import java.util.function.Function;
 
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.SimpleVirtualGraph;
-import us.lsi.graphs.VirtualVertex;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> extends SimpleVirtualGraph<V, E> implements AStarGraph<V, E> {
 

@@ -82,7 +82,7 @@ public class ProblemaJarrasPD implements
 
 	@Override
 	public Sp<ActionJarras> getSolucionParcialPorAlternativa(ActionJarras a, Sp<ActionJarras> r) {
-		return Sp.create(a, r.propiedad+1);
+		return Sp.create(a, r.valorDeObjetivo+1);
 	}
 
 	@Override

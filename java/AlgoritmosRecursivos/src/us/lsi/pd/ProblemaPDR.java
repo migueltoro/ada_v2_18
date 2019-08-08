@@ -76,7 +76,7 @@ public interface ProblemaPDR<S, A, P extends ProblemaPDR<S, A, P>>  {
 			r = ls.stream().max(Comparator.naturalOrder()).orElse(null); 
 			break;
 		case Sum: 
-			Double s= ls.stream().mapToDouble(x->x.propiedad).sum();
+			Double s= ls.stream().mapToDouble(x->x.valorDeObjetivo).sum();
 			r = Sp.create(null,s);
 			break;
 		default : 

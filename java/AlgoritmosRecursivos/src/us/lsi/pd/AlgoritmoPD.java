@@ -354,7 +354,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 					}
 					s = pd.getSolucionReconstruidaCasoRecursivo(e, soluciones);
 				} else if (e.alternativa == null) {
-					s = (S) e.propiedad;
+					s = (S) e.valorDeObjetivo;
 				}
 			}
 		}
@@ -472,7 +472,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 		
 
 		public A1 alternativa;
-		public Double propiedad;
+		public Double valorDeObjetivo;
 		private Object problema;
 		private List<Sp<A1>> solucionesDeAlternativas = null; 
 		private boolean estaEnLaSolucion = false;
@@ -485,17 +485,17 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 			super();
 			if(propiedad==null) throw new IllegalArgumentException("Propiedad es null");
 			this.alternativa = alternativa;
-			this.propiedad = propiedad;	
+			this.valorDeObjetivo = propiedad;	
 		}		
 		
 		@Override
 		public String toString(){
-			return "("+alternativa+","+propiedad+")";
+			return "("+alternativa+","+valorDeObjetivo+")";
 		}
 
 		@Override
 		public int compareTo(Sp<A1> ob) {
-			return this.propiedad.compareTo(ob.propiedad);
+			return this.valorDeObjetivo.compareTo(ob.valorDeObjetivo);
 		}
 
 		@SuppressWarnings("unchecked")

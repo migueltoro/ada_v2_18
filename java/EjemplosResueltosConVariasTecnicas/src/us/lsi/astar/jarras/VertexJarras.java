@@ -3,7 +3,7 @@ package us.lsi.astar.jarras;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import us.lsi.graphs.ActionVirtualVertex;
+import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.jarras.datos.DatosJarras;
 
 public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, ActionJarras> {

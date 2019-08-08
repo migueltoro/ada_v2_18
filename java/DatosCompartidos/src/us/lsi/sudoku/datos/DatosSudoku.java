@@ -35,10 +35,12 @@ public class DatosSudoku {
 	private static List<Set<Casilla>> casillasEnColumna;
 	private static List<Set<Casilla>> casillasEnSubCuadro;
 	private static List<Casilla> casillasLibres;
+//	private static Map<Casilla,List<Integer>> valoresLibres = new HashMap<>();
 	private static Comparator<Casilla> orden = 
 		Comparator.comparing(c->getValoresLibresEnCasilla(c).size());
+	private static Set<Integer> todosLosValores;
 	
-	public static Casilla addCasilla(String s){
+	private static Casilla addCasilla(String s){
 		Casilla c = Casilla.create(s);
 		if(!casillas.containsKey(c)) {
 			casillas.put(c, c);
@@ -46,7 +48,7 @@ public class DatosSudoku {
 		return casillas.get(c);
 	}
 	
-	public static Casilla addCasilla(Integer p){
+	private static Casilla addCasilla(Integer p){
 		Casilla c = Casilla.create(p);
 		if(!casillas.containsKey(c)) {
 			casillas.put(c, c);
@@ -92,6 +94,8 @@ public class DatosSudoku {
 		iniSubCuadros();
 		casillasLibres = casillasLibres();
 		check();
+		setValoresUnicos();
+		casillasLibres = casillasLibres();
 	}
 
 	private static void check() {		
@@ -106,10 +110,6 @@ public class DatosSudoku {
 
 	public static Set<Casilla> getCasillas(){
 		return casillas.keySet();
-	}
-	
-	public static List<Casilla> getCasillasLibres(){
-		return casillasLibres;
 	}
 	
 	public static Casilla getCasillaLibre(int index){
@@ -131,14 +131,23 @@ public class DatosSudoku {
 		List<Casilla> sl = casillasLibres.subList(index, casillasLibres.size());
 		sl.sort(orden);
 	}
-	private static Set<Integer> todosLosValores =
+	
+	public static Set<Integer> getTodosLosValores(){
+		if(todosLosValores ==null)
+			todosLosValores =
 			IntStream.rangeClosed(1, numeroDeFilas)
 					 .boxed()
 					 .collect(Collectors.toSet());
+		return todosLosValores;
+	}
 	
-	public static List<Integer> getValoresLibresEnCasilla(Casilla c){
-		List<Integer> r = new ArrayList<>(todosLosValores);
-		r.removeAll(getValoresOcupadosEnCasilla(c));
+	public static List<Integer> getValoresLibresEnCasilla(Casilla d){
+		Set<Integer> vo = DatosSudoku.getCasillasEnConflicto(d).stream()
+				.filter(c->c.getValue()!=null)
+				.map(c->c.getValue())
+				.collect(Collectors.toSet());
+		List<Integer> r = new ArrayList<>(DatosSudoku.getTodosLosValores());
+		r.removeAll(vo);
 		return r;
 	}
 	
@@ -151,33 +160,34 @@ public class DatosSudoku {
 	}
 	
 	public static Set<Integer> getValoresOcupadosEnFila(Integer y){
-		return getCasillas()
+		return getCasillasEnFila(y)
 				.stream()
-				.filter(c->c.getY()==y && !c.isFree())
+				.filter(c->c.getValue()!=null)
 				.map(c->c.getValue())
 				.collect(Collectors.toSet());
 	}
 	
 	public static Set<Integer> getValoresOcupadosEnColumna(Integer x){
-		return getCasillas()
+		return getCasillasEnColumna(x)
 				.stream()
-				.filter(c->c.getX()==x && !c.isFree())
+				.filter(c->c.getValue()!=null)
 				.map(c->c.getValue())
 				.collect(Collectors.toSet());
 	}
 	
 	public static Set<Integer> getValoresOcupadosEnSubCuadro(Integer sc){
-		return getCasillas()
+		return getCasillasEnSubCuadro(sc)
 				.stream()
-				.filter(c->c.getSubCuadro()==sc && !c.isFree())
+				.filter(c->c.getValue()!=null)
 				.map(c->c.getValue())
 				.collect(Collectors.toSet());
 	}
 	
-	private static List<Casilla> casillasLibres(){ 
+	public static List<Casilla> casillasLibres(){ 
 		return DatosSudoku.getCasillas()
 					   .stream()
-					   .filter(c->c.isFree())
+					   .filter(c->c.getValue()==null)
+					   .sorted((c1,c2)->getValoresLibresEnCasilla(c1).size()-getValoresLibresEnCasilla(c2).size())
 					   .collect(Collectors.toList());
 	}
 	/**
@@ -205,6 +215,22 @@ public class DatosSudoku {
 		casillasEnColumna = getListOfEmptySet();
 		getCasillas().stream()
 				.forEach(c->casillasEnColumna.get(c.getX()).add(c));
+	}
+	
+	public static List<Integer> valoresEscogidos(){
+		return getCasillas()
+				.stream()
+				.filter(c->!c.initialFree)
+				.map(c->c.getValue())
+				.sorted()
+				.collect(Collectors.toList());
+	}
+	
+	public static void setValoresUnicos() {
+		casillasLibres()
+		.stream()
+		.filter(c->getValoresLibresEnCasilla(c).size()==1)
+		.forEach(c->c.setValue(getValoresLibresEnCasilla(c).get(0)));
 	}
 		
 }

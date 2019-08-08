@@ -36,7 +36,6 @@ public class Casilla {
 	final Integer initialValue;
 	final Boolean initialFree;
 	private Integer value;
-	private Boolean isFree;
 	
 	private Casilla(Integer x, Integer y, Integer value) {
 		super();
@@ -49,17 +48,15 @@ public class Casilla {
 	    this.p = y*DatosSudoku.numeroDeFilas+x;	
 		this.initialValue = value;
 		this.initialFree = value==null?true:false;
-		this.value = value==null?null:value;
-		this.isFree = value==null?true:false;		
+		this.value = value;	
 	}
 		
-	private Casilla(Integer x, Integer y, Integer value, Boolean isFree, Boolean initialFree, Integer initialValue) {
+	private Casilla(Integer x, Integer y, Integer value, Boolean initialFree, Integer initialValue) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.initialValue = initialValue;
 		this.initialFree = initialFree;
-		this.isFree = isFree;
 		this.value = value;
 		Integer tm = DatosSudoku.tamSubCuadro;
 		this.sc = x/tm+tm*(y/tm);
@@ -94,27 +91,25 @@ public class Casilla {
 	 * @return Si la casilla está libre
 	 */
 	public boolean isFree() {
-		return isFree;
+		return value==null?true:false;
 	}
 	/**
 	 * @return El valor contenido en la casilla
 	 */
 	public Integer getValue() {
-		Preconditions.checkArgument(!this.isFree, this+" Casilla libre");
 		return value;
 	}	
 	public void setValue(Integer value) {
 		Preconditions.checkArgument(this.initialFree, "Casilla de valor fijo");
 		this.value = value;
-		this.isFree = false;
-	}	
+	}
+	
 	public void setFree() {
 		Preconditions.checkArgument(this.initialFree, "Casilla de valor fijo");
-		this.isFree = true;
 		this.value = null;
 	}
 	public Casilla copy() {
-		return new Casilla(x,y,value,isFree,initialFree,initialValue);
+		return new Casilla(x,y,value,initialFree,initialValue);
 	}
 	
 	public static String blank = "_";
@@ -138,7 +133,7 @@ public class Casilla {
 	@Override
 	public String toString() {
 		return "(" + x + "," + y + "," + sc + "," + p
-				+ "," + isFree + ")";
+				+ "," + isFree() + ")";
 	}
 	@Override
 	public int hashCode() {

@@ -1,0 +1,17 @@
+**/*.html
+
+**/*.js
+
+**/*.css
+
+**/*.gif
+/java/EjemplosDyV/bin/us/lsi/dyv/puntos/*.class
+*.class
+/java/AlgoritmosRecursivos/bin
+bin
+bin
+bin
+bin
+bin
+bin
+target

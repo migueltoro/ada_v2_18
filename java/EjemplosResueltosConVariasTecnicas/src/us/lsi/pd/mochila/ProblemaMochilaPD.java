@@ -79,7 +79,7 @@ public class ProblemaMochilaPD implements ProblemaPDR<SolucionMochila, Integer, 
 
 	@Override
 	public Sp<Integer> getSolucionParcialPorAlternativa(Integer a, Sp<Integer> r) {
-		Double valor = a*DatosMochila.getValor(index)+r.propiedad;
+		Double valor = a*DatosMochila.getValor(index)+r.valorDeObjetivo;
 		return Sp.create(a, valor);
 	}
 

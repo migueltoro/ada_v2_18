@@ -125,4 +125,16 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	public  ValuesInRangeProblemAG<Double,?> getProblema() {
 		return DoubleChromosome.problema;
 	}
+
+	@Override
+	public ValuesInRangeProblemAG<Integer,?> getProblem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getObjectsNumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

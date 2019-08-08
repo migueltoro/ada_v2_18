@@ -86,7 +86,7 @@ public class ProblemaFestivalPD implements
 
 	@Override
 	public Sp<Grupo> getSolucionParcialPorAlternativa(Grupo a, Sp<Grupo> sp) {
-		return Sp.create(a, sp.propiedad + a.getVotos());
+		return Sp.create(a, sp.valorDeObjetivo + a.getVotos());
 	}
 
 	@Override

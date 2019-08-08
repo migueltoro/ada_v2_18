@@ -24,7 +24,7 @@ public class Test {
 		a.ejecuta();
 		var sp = a.getSolucionParcial();
 		if (sp != null){
-			System.out.println("Votos: " + sp.propiedad);
+			System.out.println("Votos: " + sp.valorDeObjetivo);
 			System.out.println("Solucion: " + a.getSolucion());
 			a.showAllGraph("./ficheros/solucionFestival.gv", "SolucionFestival");
 		}else{

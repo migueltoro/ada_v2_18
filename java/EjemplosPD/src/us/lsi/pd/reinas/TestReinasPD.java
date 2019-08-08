@@ -11,7 +11,7 @@ public class TestReinasPD {
 		ReinasPDNumSoluciones  p = ReinasPDNumSoluciones.create();
 		var a = AlgoritmoPD.createPDR(p);
 		a.ejecuta();
-		System.out.println("Solucion Parcial= "+a.getSolucionParcial().propiedad+"\n\n");
+		System.out.println("Solucion Parcial= "+a.getSolucionParcial().valorDeObjetivo+"\n\n");
 		
 		
 		/*		int i=0;

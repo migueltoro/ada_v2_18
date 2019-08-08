@@ -5,14 +5,14 @@ import java.util.Set;
 
 
 
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
+import us.lsi.ag.SeqNomalChromosome;
+import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
 import us.lsi.reinas.datos.Reina;
 
 
-public class ProblemaReinasAG implements IndexProblemAG<List<Reina>> {
+public class ProblemaReinasAG implements SeqNormalProblemAG<List<Reina>> {
 
 public static int numeroDeReinas = 8;
 	
@@ -24,7 +24,7 @@ public static int numeroDeReinas = 8;
 	}
 
 	@Override
-	public List<Reina> getSolucion(IndexChromosome chromosome) {
+	public List<Reina> getSolucion(SeqNomalChromosome chromosome) {
 		List<Integer> ls = chromosome.decode();
 		List<Reina> r = Lists2.newList();
 		for (int i = 0; i < ls.size(); i++) {
@@ -34,7 +34,7 @@ public static int numeroDeReinas = 8;
 	}
 
 	@Override
-	public Double fitnessFunction(IndexChromosome chromosome) {
+	public Double fitnessFunction(SeqNomalChromosome chromosome) {
 		List<Integer> ls = chromosome.decode();
 		Set<Integer> dp = Sets2.newHashSet();
 		Set<Integer> ds = Sets2.newHashSet();

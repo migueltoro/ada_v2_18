@@ -15,7 +15,7 @@ import us.lsi.mochila.datos.DatosMochila;
 
 public class MochilaPDManual {
 	
-	public static Double voraz(int index, Double capacidadRestante) {
+	public static Double vorazDouble(int index, Double capacidadRestante) {
 		Double r = 0.;
 		while (index < DatosMochila.numeroDeObjetos) {			
 			Double a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
@@ -26,6 +26,16 @@ public class MochilaPDManual {
 		return  r;
 	}
 	
+	public static Integer vorazInteger(int index, Integer capacidadRestante) {
+		Integer r = 0;
+		while (index < DatosMochila.numeroDeObjetos) {			
+			Integer a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+			r = r + a*DatosMochila.getValor(index);
+			capacidadRestante = capacidadRestante-a*DatosMochila.getPeso(index);
+			index = index+1;			
+		}
+		return  r;
+	}
 	public static Double solve(Integer capacity) {
 		Map<Dat,Double> memory = new HashMap<>();
 		return solve(0,capacity,0.,memory);
@@ -47,7 +57,7 @@ public class MochilaPDManual {
 			Collections.reverse(alternativas);
 			List<Double> soluciones = new ArrayList<>();
 			for(Integer a:alternativas) {	
-				Double cota = value+a*DatosMochila.getValor(index)+voraz(index+1,(double)capacidadRestante-a*DatosMochila.getPeso(index));
+				Double cota = value+a*DatosMochila.getValor(index)+vorazDouble(index+1,(double)capacidadRestante-a*DatosMochila.getPeso(index));
 				if( cota <= maxValue) continue;
 				Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 				Double va = value + a*DatosMochila.getValor(index);
@@ -75,14 +85,17 @@ public class MochilaPDManual {
 			r = memory.get(d);
 		} else if(index == DatosMochila.numeroDeObjetos) {
 			r = Sol.of(DatosMochila.numeroDeObjetos);
-			if(value > maxValue) maxValue = value;
+			if(value > maxValue) {
+				maxValue = value;
+				System.out.println("MaxValue "+maxValue);
+			}
 		} else {
 			Integer nu = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 			List<Integer> alternativas = IntStream.rangeClosed(0,nu).boxed().collect(Collectors.toList());
 			Collections.reverse(alternativas);
 			List<Sol> soluciones = new ArrayList<>();
 			for(Integer a:alternativas) {	
-				Double cota = value+a*DatosMochila.getValor(index)+voraz(index+1,(double)capacidadRestante-a*DatosMochila.getPeso(index));
+				Double cota = value+a*DatosMochila.getValor(index)+vorazDouble(index+1,(double)capacidadRestante-a*DatosMochila.getPeso(index));
 				if( cota <= maxValue) continue;
 				Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 				Double va = value + a*DatosMochila.getValor(index);
@@ -105,7 +118,8 @@ public class MochilaPDManual {
 		Strings2.toConsole(DatosMochila.getObjetos(),"Objetos");
 		Sol s = solve2(DatosMochila.capacidadInicial);
 		System.out.println(s);
-		System.out.println("Voraz "+voraz(0,(double)DatosMochila.capacidadInicial));
+		System.out.println("Voraz "+vorazDouble(0,(double)DatosMochila.capacidadInicial));
+		System.out.println("Voraz "+vorazInteger(0,DatosMochila.capacidadInicial));
 	}
 	
 	static class Sol implements Comparable<Sol> {

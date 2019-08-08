@@ -3,7 +3,8 @@ package us.lsi.pd.secuencias;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import us.lsi.graphs.VirtualVertex;
+
+import us.lsi.graphs.virtual.VirtualVertex;
 
 
 public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {

@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
+
+import us.lsi.common.TriFunction;
 
 /**
  * <p>
@@ -64,8 +67,8 @@ public class GraphsReader {
 	 */
 	public static <V, E, G extends Graph<V,E>> G newGraph(
 			String file,
-			VertexArrayStringFactory<V> vf, 
-			EdgeArrayStringFactory<V, E> ef,
+			Function<String[],V> vf, 
+			TriFunction<V,V,String[],E> ef,
 			Supplier<G> creator) {
 		return newGraph(file,vf,ef,creator,null);	
 	}
@@ -87,10 +90,10 @@ public class GraphsReader {
 	 */
 	public static <V, E, G extends Graph<V,E>> G newGraph(
 			String file,
-			VertexArrayStringFactory<V> vf, 
-			EdgeArrayStringFactory<V, E> ef,
+			Function<String[],V> vf, 
+			TriFunction<V,V,String[],E> ef,
 			Supplier<G> creator,
-			EdgeWeight<E> ew) {
+			Function<E,Double> ew) {
 
 		Map<String, V> idVertices = new HashMap<>();
 		G ret = creator.get();
@@ -121,7 +124,7 @@ public class GraphsReader {
 							"El fichero de entrada de vertices no es correcto. Linea: "
 									+ verticeStr);
 				}
-				V vertex = vf.createVertex(vertice);
+				V vertex = vf.apply(vertice);
 				ret.addVertex(vertex);
 				idVertices.put(vertice[0], vertex);
 			}
@@ -136,12 +139,12 @@ public class GraphsReader {
 					ret.addEdge(idVertices.get(arista[0]),
 							idVertices.get(arista[1]));
 				} else if (arista.length > 2) {
-					E edge = ef.createEdge(idVertices.get(arista[0]),
+					E edge = ef.apply(idVertices.get(arista[0]),
 							idVertices.get(arista[1]), arista);
 					ret.addEdge(idVertices.get(arista[0]),
 							idVertices.get(arista[1]), edge);
 					if(ew!= null) {
-						ret.setEdgeWeight(edge, ew.getWeight(edge));
+						ret.setEdgeWeight(edge, ew.apply(edge));
 					}
 				}
 			}

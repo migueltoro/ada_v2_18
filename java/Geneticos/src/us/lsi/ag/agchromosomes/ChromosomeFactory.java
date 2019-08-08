@@ -13,9 +13,8 @@ import org.apache.commons.math3.genetics.SelectionPolicy;
 import org.apache.commons.math3.genetics.TournamentSelection;
 import org.apache.commons.math3.genetics.UniformCrossover;
 
-import us.lsi.ag.IndexChromosome;
+import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ProblemaAGListInteger;
 import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.agoperators.SubListCrossoverPolicy;
 import us.lsi.ag.agoperators.SubListMutationPolicy;
@@ -34,7 +33,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,ListInteger,IndexSubList,Range,IndexPermutation,IndexPermutationSubList,Real,Expression}
+	public enum ChromosomeType {Binary,Range,Real,InSet,SqnSubList,SqnPermutation,SqnPermutationSubList,Expression}
 	
 	public static ChromosomeType tipo;
 
@@ -46,13 +45,13 @@ public class ChromosomeFactory {
 		org.apache.commons.math3.genetics.Chromosome chromosome = null;
 		switch(tipo){
 		case Binary: chromosome = BinaryChromosome.getInitialChromosome(); break;
-		case IndexSubList: chromosome = IndexSubListChromosome.getInitialChromosome(); break;
-		case ListInteger: chromosome = ListIntegerChromosome.getInitialChromosome(); break;
+		case SqnSubList: chromosome = SubListChromosome.getInitialChromosome(); break;
 		case Range: chromosome = RangeChromosome.getInitialChromosome(); break;
-		case IndexPermutation: chromosome = IndexPermutationChromosome.getInitialChromosome(); break;
-		case IndexPermutationSubList: chromosome = IndexPermutationSubListChromosome.getInitialChromosome(); break;
+		case SqnPermutation: chromosome = PermutationChromosome.getInitialChromosome(); break;
+		case SqnPermutationSubList: chromosome = PermutationSubListChromosome.getInitialChromosome(); break;
 		case Real: chromosome = DoubleChromosome.getInitialChromosome(); break;
 		case Expression: chromosome = ExpressionChromosome.getInitialChromosome(); break;
+		case InSet: chromosome = ValuesInSetChromosome.getInitialChromosome(); break;
 		}
 		return chromosome;
 	}
@@ -111,13 +110,13 @@ public class ChromosomeFactory {
 		CrossoverPolicy crossOverPolicy = null;	
 		switch(tipo){
 		case Binary: crossOverPolicy = crossOverPolicyBin; break;
-		case IndexSubList: crossOverPolicy = crossOverPolicyBin; break;
-		case ListInteger: crossOverPolicy = ((ProblemaAGListInteger<?>)problema).getCrossoverPolicy(); break;
+		case SqnSubList: crossOverPolicy = crossOverPolicyBin; break;
 		case Range: crossOverPolicy = crossOverPolicyBin; break;
-		case IndexPermutation: crossOverPolicy = crossOverPolicyKey; break;
-		case IndexPermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
+		case SqnPermutation: crossOverPolicy = crossOverPolicyKey; break;
+		case SqnPermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
 		case Real: crossOverPolicy = crossOverPolicyBin; break;
 		case Expression: crossOverPolicy = crossOverPolicyBin; break;
+		case InSet: crossOverPolicy = crossOverPolicyBin; break;		
 		}
 		Preconditions.checkState(crossOverPolicy!=null);
 		return crossOverPolicy;
@@ -132,13 +131,13 @@ public class ChromosomeFactory {
 		MutationPolicy mutationPolicy = null;
 		switch(tipo){
 		case Binary:  mutationPolicy = new BinaryMutation()	; break;
-		case IndexSubList: mutationPolicy = new BinaryMutation(); break;
-		case ListInteger: mutationPolicy = ((ProblemaAGListInteger<?>)problema).getMutationPolicy(); break;
+		case SqnSubList: mutationPolicy = new BinaryMutation(); break;
 		case Range: mutationPolicy = new BinaryMutation();	; break;
-		case IndexPermutation: mutationPolicy = new RandomKeyMutation(); break;
-		case IndexPermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
+		case SqnPermutation: mutationPolicy = new RandomKeyMutation(); break;
+		case SqnPermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
 		case Real: mutationPolicy = new BinaryMutation();	; break;
 		case Expression: mutationPolicy = new BinaryMutation();	; break;
+		case InSet: mutationPolicy = new BinaryMutation(); break;
 		}
 		Preconditions.checkState(mutationPolicy!=null);
 		return mutationPolicy;
@@ -175,13 +174,13 @@ public class ChromosomeFactory {
 	public static void iniValues(ChromosomeType tipo, ProblemAG problema){
 		switch(tipo){
 		case Binary: BinaryChromosome.iniValues(problema);break;
-		case IndexSubList: IndexSubListChromosome.iniValues(problema);break;
-		case ListInteger: ListIntegerChromosome.iniValues(problema);break;
+		case SqnSubList: SubListChromosome.iniValues(problema);break;
 		case Range: RangeChromosome.iniValues(problema); break;
-		case IndexPermutation: IndexPermutationChromosome.iniValues(problema);break;
-		case IndexPermutationSubList: IndexPermutationSubListChromosome.iniValues(problema);break;
+		case SqnPermutation: PermutationChromosome.iniValues(problema);break;
+		case SqnPermutationSubList: PermutationSubListChromosome.iniValues(problema);break;
 		case Real: DoubleChromosome.iniValues(problema);break;
 		case Expression: ExpressionChromosome.iniValues(problema);break;
+		case InSet: ValuesInSetChromosome.iniValues(problema); break;
 		}
 	}
 	
@@ -198,23 +197,13 @@ public class ChromosomeFactory {
 	}
 	
 	/**
-	 * @pre Es un ListIntegerChromosome
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo ListIntegerChromosome
-	 */
-	public static ListIntegerChromosome asListInteger(Chromosome cr){
-		Preconditions.checkArgument(cr instanceof ListIntegerChromosome);
-		return (ListIntegerChromosome) cr;
-	}
-	
-	/**
 	 * @pre Es un IndexChromosome
 	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
 	 * @return Un cromosoma de tipo IndexChromosome
 	 */
-	public static IndexChromosome asIndex(Chromosome cr){
-		Preconditions.checkArgument(cr instanceof IndexChromosome);
-		return (IndexChromosome) cr;
+	public static SeqNomalChromosome asIndex(Chromosome cr){
+		Preconditions.checkArgument(cr instanceof SeqNomalChromosome);
+		return (SeqNomalChromosome) cr;
 	}
 
 	

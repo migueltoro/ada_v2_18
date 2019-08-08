@@ -2,7 +2,7 @@ package us.lsi.common;
 
 public class MutableType<T> {
 
-	public static <T> MutableType<T> create(T e) {
+	public static <T> MutableType<T> of(T e) {
 		return new MutableType<T>(e);
 	}
 	

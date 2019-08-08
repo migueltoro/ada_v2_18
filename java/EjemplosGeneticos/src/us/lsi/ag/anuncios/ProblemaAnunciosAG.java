@@ -3,13 +3,13 @@ package us.lsi.ag.anuncios;
 
 import java.util.List;
 
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
+import us.lsi.ag.SeqNomalChromosome;
+import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.anuncios.datos.Anuncio;
 import us.lsi.anuncios.datos.ListaDeAnunciosAEmitir;
 import us.lsi.anuncios.datos.DatosAnuncios;
 
-public class ProblemaAnunciosAG extends DatosAnuncios implements IndexProblemAG<ListaDeAnunciosAEmitir> {
+public class ProblemaAnunciosAG extends DatosAnuncios implements SeqNormalProblemAG<ListaDeAnunciosAEmitir> {
 
 	public ProblemaAnunciosAG(String file) {
 		super();
@@ -17,13 +17,13 @@ public class ProblemaAnunciosAG extends DatosAnuncios implements IndexProblemAG<
 	}	
 	
 	@Override
-	public ListaDeAnunciosAEmitir getSolucion(IndexChromosome c) {		
+	public ListaDeAnunciosAEmitir getSolucion(SeqNomalChromosome c) {		
 		return  ListaDeAnunciosAEmitir.create(c.decode());
 	}
 	
 
 	@Override
-	public Double fitnessFunction(IndexChromosome c) {	
+	public Double fitnessFunction(SeqNomalChromosome c) {	
 		List<Integer> list = c.decode();
 		ListaDeAnunciosAEmitir ls = ListaDeAnunciosAEmitir.create(list);
 		Double valor = ls.getValor();

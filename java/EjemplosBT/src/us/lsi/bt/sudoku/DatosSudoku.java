@@ -130,6 +130,7 @@ public class DatosSudoku {
 		List<Casilla> sl = casillasLibres.subList(index, casillasLibres.size());
 		sl.sort(orden);
 	}
+	
 	private static Set<Integer> todosLosValores =
 			IntStream.rangeClosed(1, numeroDeFilas)
 					 .boxed()

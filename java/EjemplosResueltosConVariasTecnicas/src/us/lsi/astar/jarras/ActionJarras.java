@@ -1,6 +1,6 @@
 package us.lsi.astar.jarras;
 
-import us.lsi.graphs.Action;
+import us.lsi.graphs.virtual.Action;
 import us.lsi.jarras.datos.DatosJarras;
 
 public class ActionJarras implements Action<VertexJarras> {

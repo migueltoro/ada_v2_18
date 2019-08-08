@@ -131,10 +131,10 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 		return alt;
 	}
     
-	private void actualizaSoluciones() {		
-		Double objetivo = estado.getObjetivo();
+	private void actualizaSoluciones() {			
 		S s = estado.getSolucion();
-		if (s != null) {			
+		if (s != null) {	
+			Double objetivo = estado.getObjetivo();
 			if ((this.isTodasLasSoluciones() || 
 					 this.isAlgunasSoluciones() || 
 					(this.isMin() && objetivo!=null && objetivo <= this.mejorValor) || 

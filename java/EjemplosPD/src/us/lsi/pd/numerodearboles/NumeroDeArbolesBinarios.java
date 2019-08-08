@@ -60,7 +60,7 @@ public class NumeroDeArbolesBinarios implements ProblemaPD<Integer, Integer,Nume
 
 	@Override
 	public Sp<Integer> getSolucionParcialPorAlternativa(Integer a, List<Sp<Integer>> ls) {
-		return Sp.create(a, ls.get(0).propiedad*ls.get(1).propiedad);
+		return Sp.create(a, ls.get(0).valorDeObjetivo*ls.get(1).valorDeObjetivo);
 	}
 
 	@Override

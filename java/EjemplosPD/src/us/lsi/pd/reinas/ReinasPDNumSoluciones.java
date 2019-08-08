@@ -76,7 +76,7 @@ public class ReinasPDNumSoluciones implements ProblemaPDR<Integer, Integer,Reina
 
 	@Override
 	public Sp<Integer> getSolucionParcialPorAlternativa(Integer a, Sp<Integer> s) {
-		return Sp.create(a, s.propiedad);
+		return Sp.create(a, s.valorDeObjetivo);
 	}
 	
 	@Override
@@ -93,12 +93,12 @@ public class ReinasPDNumSoluciones implements ProblemaPDR<Integer, Integer,Reina
 
 	@Override
 	public Integer getSolucionReconstruidaCasoBase(Sp<Integer> sp) {
-		return sp.propiedad.intValue();
+		return sp.valorDeObjetivo.intValue();
 	}
 
 	@Override
 	public Integer getSolucionReconstruidaCasoRecursivo(Sp<Integer> sp, Integer s) {
-		return sp.propiedad.intValue();
+		return sp.valorDeObjetivo.intValue();
 	}	
 	
 }

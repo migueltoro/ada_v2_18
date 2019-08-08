@@ -113,7 +113,7 @@ public class ProblemaAfinidadPD  implements
 	@Override
 	public Sp<Integer> getSolucionParcialPorAlternativa(Integer a, Sp<Integer> sp) {	
 		return Sp.create(a, 
-				sp.propiedad +
+				sp.valorDeObjetivo +
 				(this.getTrabajadoresAfinesACliente(indexCliente).contains(a)?1:0));
 	}
 
@@ -143,7 +143,7 @@ public class ProblemaAfinidadPD  implements
 		msol.put(ProblemaAfinidad.clientes.get(indexCliente).nombre,
 				ProblemaAfinidad.trabajadores.get(sp.alternativa));
 
-		return SolucionAfinidad.create(msol, sp.propiedad.intValue());
+		return SolucionAfinidad.create(msol, sp.valorDeObjetivo.intValue());
 	}
 	
 	

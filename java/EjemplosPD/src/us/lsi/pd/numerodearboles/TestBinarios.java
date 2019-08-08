@@ -9,7 +9,7 @@ public class TestBinarios {
 		var a = AlgoritmoPD.createPD(p);
 		a.ejecuta();		
 		a.showAllGraph("ficheros/NumeroDeArboles.gv","NumeroDeArboles");
-		System.out.println("Solucion= "+a.getSolucionParcial().propiedad);
+		System.out.println("Solucion= "+a.getSolucionParcial().valorDeObjetivo);
 	}
 
 }

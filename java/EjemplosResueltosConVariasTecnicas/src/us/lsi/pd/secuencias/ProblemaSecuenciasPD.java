@@ -67,7 +67,7 @@ public class ProblemaSecuenciasPD
 	public Sp<Accion> getSolucionParcialPorAlternativa(Accion a, Sp<Accion> r) {
 		Secuencia s = secuencia.getNeighbor(a);
 		SecuenciaEdge e = SecuenciaEdge.create(secuencia, s, a);
-		Double valor = r.propiedad + e.getValor();
+		Double valor = r.valorDeObjetivo + e.getValor();
 		Sp<Accion> sp = Sp.create(a, valor);
 		return sp;
 	}

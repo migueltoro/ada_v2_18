@@ -24,13 +24,11 @@ import java.util.Spliterators;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 
 import us.lsi.math.Math2;
 
@@ -220,7 +218,7 @@ public class Streams2 {
 
 	
 	public static <E> Stream<E> limit(Stream<E> sm, Integer limit){
-		MutableType<Integer> index = MutableType.create(0);
+		MutableType<Integer> index = MutableType.of(0);
 		return sm.takeWhile(x->index.newValue(index.value+1) < limit);
 	}
 	
@@ -230,7 +228,7 @@ public class Streams2 {
 	 * @return Un stream formado por los pares de elementos formados por un elemento y el siguiente en sm
 	 */
 	public static <E> Stream<Tuple2<E,E>> consecutivePairs(Stream<E> sm) {
-		MutableType<E> rf = MutableType.create(null);
+		MutableType<E> rf = MutableType.of(null);
 		Stream<Tuple2<E,E>> r = sm
 					.map(e->Tuple.create(rf.newValue(e), e))	
 					.filter(p-> p.v1!=null);
@@ -243,7 +241,7 @@ public class Streams2 {
 	 * formados por un elemento y el entero que indica su posición
 	 */
 	public static <E> Stream<Tuple2<E,Integer>> elementsAndPosition(Stream<E> sm) {
-		MutableType<Integer> rf = MutableType.create(0);
+		MutableType<Integer> rf = MutableType.of(0);
 		Stream<Tuple2<E,Integer>> r = sm
 					.map(e->Tuple.create(e,rf.newValue(rf.value+1)));
 		return r;
@@ -424,52 +422,8 @@ public class Streams2 {
 		}
 		return base;
 	}
-	/**
-	 * @param <E> Tipo de los elementos del stream
-	 * @param <B> Tipo de la base
-	 * @param <R> Tipo del resultado del acumulador
-	 * @param s Stream a acumular
-	 * @param a Acumulador secuencial
-	 * @return Resultado de la acumulación paralela
-	 */
-	public static <E,B,R> R accumulate(Stream<E> s, Collector<E,B,R> a){
-		B base = accumulate(s.spliterator(), a);
-		return a.finisher().apply(base);
-	}
 	
-	private static <E,B,R> B accumulate(Spliterator<E> flow1, Collector<E,B,R> a){
-		Spliterator<E> flow2 = flow1.trySplit();
-		B base;
-		if(flow2 != null) {
-			B base1 = accumulate(flow1,a);
-			B base2 = accumulate(flow2,a);	
-			base = a.combiner().apply(base1, base2);
-		} else {
-			base = a.supplier().get();
-			while(flow1.tryAdvance(e->a.accumulator().accept(base,e)));
-		}	
-		return base;
-	}
 	
-	public static <E,B,R> R accumulate(Stream<E> s, InmutableCollector<E,B,R> a){
-		B base = accumulate(s.spliterator(), a);
-		return a.finisher().apply(base);
-	}
-	
-	private static <E,B,R> B accumulate(Spliterator<E> flow1, InmutableCollector<E,B,R> a){
-		Spliterator<E> flow2 = flow1.trySplit();
-		B base;
-		if(flow2 != null) {
-			B base1 = accumulate(flow1,a);
-			B base2 = accumulate(flow2,a);	
-			base = a.combiner().apply(base1, base2);
-		} else {
-			MutableType<B> b = MutableType.create(a.initial());
-			while(flow1.tryAdvance(e->b.newValue(a.accumulator().apply(b.value,e))));
-			base = b.value;
-		}	
-		return base;
-	}
 	
 	
 	public static void main(String[] args) {
@@ -497,7 +451,6 @@ public class Streams2 {
 					   
 		System.out.println(r+","+(long)Math.pow(b,n)+","+s4);
 		var s10 =  Stream.iterate(n,x->x>0,x->x/2);
-	    var s5 = Streams2.accumulate(s10, Collectors2.all(x->x>0));
-	    System.out.println(s5);
+		System.out.println(s10);
 	}
 }
