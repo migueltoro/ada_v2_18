@@ -1,4 +1,4 @@
-package us.lsi.iterators;
+package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
@@ -49,5 +49,4 @@ public class IteratorFilter<E> implements Iterator<E>,Iterable<E> {
 	}
 	
 }
-
 

@@ -1,4 +1,4 @@
-package us.lsi.iterators;
+package us.lsi.flujossecuenciales;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

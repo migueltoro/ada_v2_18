@@ -1,4 +1,4 @@
-package us.lsi.iterators;
+package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 import java.util.List;

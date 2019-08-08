@@ -11,7 +11,7 @@ import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
-import us.lsi.iterators.Collectors2;
+import us.lsi.flujossecuenciales.Collectors2;
 import us.lsi.math.Math2;
 
 

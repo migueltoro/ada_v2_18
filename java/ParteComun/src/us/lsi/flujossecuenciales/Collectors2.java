@@ -1,4 +1,4 @@
-package us.lsi.iterators;
+package us.lsi.flujossecuenciales;
 
 import java.util.ArrayList;
 import java.util.Comparator;

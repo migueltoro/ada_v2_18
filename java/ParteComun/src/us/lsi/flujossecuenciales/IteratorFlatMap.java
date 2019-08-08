@@ -1,4 +1,4 @@
-package us.lsi.iterators;
+package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -37,3 +37,4 @@ public class IteratorFlatMap<E,R> implements Iterator<R>, Iterable<R> {
 	}
 	
 }
+
