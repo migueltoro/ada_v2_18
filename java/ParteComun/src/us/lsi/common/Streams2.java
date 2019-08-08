@@ -327,101 +327,6 @@ public class Streams2 {
 		return r;
 	}
 	
-	/**
-	 * @param <E> Tipo de los elementos del stream
-	 * @param <B> Tipo de la base
-	 * @param <R> Tipo del resultado del acumulador
-	 * @param s Stream a acumular
-	 * @param a Acumulador secuencial
-	 * @return Resultado de la acumulación
-	 */
-	public static <E,B,R> R accumulate(Stream<E> s, SeqCollector<E,B,R> a){
-		return accumulateLeft(s, a);
-	}
-	
-	public static <E,B,R> R accumulate(Stream<E> s, SeqInmutableCollector<E,B,R> a){
-		return accumulateLeft(s, a);
-	}
-	
-	/**
-	 * @param <E> Tipo de los elementos del stream
-	 * @param <B> Tipo de la base
-	 * @param <R> Tipo del resultado del acumulador
-	 * @param s Stream a acumular
-	 * @param a Acumulador secuencial
-	 * @return Resultado de la acumulación por la izquierda
-	 */
-	public static <E,B,R> R accumulateLeft(Stream<E> s, SeqCollector<E,B,R> a){
-		B base = a.supplier().get();
-		accumulateLeft(s.iterator(), a, base);
-		return a.finisher().apply(base);
-	}
-	
-	private static <E,B,R> void accumulateLeft(Iterator<E> it, SeqCollector<E,B,R> a, B base){
-		while(it.hasNext() && !a.isDone().test(base)) {
-			a.accumulator().accept(base,it.next());
-		}
-	}
-	
-	public static <E,B,R> R accumulateLeft(Stream<E> s, SeqInmutableCollector<E,B,R> a){
-		B base = a.initial();
-		base = accumulateLeft(s.iterator(), a, base);
-		return a.finisher().apply(base);
-	}
-	
-	private static <E,B,R> B accumulateLeft(Iterator<E> it, SeqInmutableCollector<E,B,R> a, B base){
-		while(it.hasNext() && !a.isDone().test(base)) {
-			base = a.accumulator().apply(base,it.next());
-		}
-		return base;
-	}
-	
-	/**
-	 * @param <E> Tipo de los elementos del stream
-	 * @param <B> Tipo de la base
-	 * @param <R> Tipo del resultado del acumulador
-	 * @param s Stream a acumular
-	 * @param a Acumulador secuencial
-	 * @return Resultado de la acumulación por la derecha
-	 */
-	public static <E,B,R> R accumulateRight(Stream<E> s, SeqCollector<E,B,R> a){		
-		B base = a.supplier().get();
-		accumulateRight(s.iterator(), a, base);
-		return a.finisher().apply(base);
-	}
-	
-	private static <E,B,R> void accumulateRight(Iterator<E> it, SeqCollector<E,B,R> a, B base){		
-		if(it.hasNext()) {
-			E e = it.next();
-			accumulateRight(it,a,base);
-			a.accumulator().accept(base,e);
-		} 
-	}
-	
-	/**
-	 * @param <E> Tipo de los elementos del stream
-	 * @param <B> Tipo de la base
-	 * @param <R> Tipo del resultado del acumulador
-	 * @param s Stream a acumular
-	 * @param a Acumulador secuencial
-	 * @return Resultado de la acumulación por la derecha
-	 */
-	public static <E,B,R> R accumulateRight(Stream<E> s, SeqInmutableCollector<E,B,R> a){				
-		B base = accumulateRight(s.iterator(), a);
-		return a.finisher().apply(base);
-	}
-	
-	private static <E,B,R> B accumulateRight(Iterator<E> it, SeqInmutableCollector<E,B,R> a){		
-		B base;
-		if(it.hasNext()) {
-			E e = it.next();
-			base = accumulateRight(it,a);
-			base = a.accumulator().apply(base,e);
-		} else {
-			base = a.initial();
-		}
-		return base;
-	}
 	
 	
 	
@@ -437,19 +342,7 @@ public class Streams2 {
 		Streams2.elementsAndPosition(Arrays.asList(s.split("[ -]")).stream()).forEach(x->System.out.println(x));
 		System.out.println("\n_______");
 		Streams2.fromFile("ficheros/acciones.txt").forEach(System.out::println);
-		var n = 14L;
-		var b = 7L;
-		var s3 = Stream.iterate(n,x->x>0,x->x/2);
-		var a = SeqCollectors.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
-		var r = Streams2.accumulateRight(s3, a);
-		var s4 = Stream.iterate(Tuple.create(n,b),
-								t->t.v1>0,
-								t->Tuple.create(t.v1/2,t.v2*t.v2))
-						.filter(t->t.v1%2!=0)
-						.map(t->t.v2)
-						.reduce(1L,(x,y)->x*y);
-					   
-		System.out.println(r+","+(long)Math.pow(b,n)+","+s4);
+		var n = 14L;			   
 		var s10 =  Stream.iterate(n,x->x>0,x->x/2);
 		System.out.println(s10);
 	}
