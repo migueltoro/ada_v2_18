@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import us.lsi.common.Multiset;
-import us.lsi.common.SeqCollectors;
 import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
@@ -46,7 +45,6 @@ public class EjemplosDeStreams2 {
 		var rr = Stream.generate(()->Math2.getEnteroAleatorio(0, 100)).filter(x->x%7==0);
 		System.out.println("1: ______");
 		var s3 = r2.stream().map(x->x.toString());
-		var a = SeqCollectors.joiningAccumulator(" ","{","}");
 		System.out.println("2: ______");
 		var s4 = Stream.iterate(0, x->x+1);
 		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Tuple.create(x, y));
@@ -55,8 +53,6 @@ public class EjemplosDeStreams2 {
 		var n = 14L;
 		var b = 7L;
 		var s6 = Stream.iterate(n,x->x>0,x->x/2);
-		var a6 = SeqCollectors
-				.reduce(1L, (x,y)->y%2==0?x*x:x*x*b);
 		var s7 = Stream.iterate(Tuple.create(n,b),
 								t->t.v1>0,
 								t->Tuple.create(t.v1/2,t.v2*t.v2))
