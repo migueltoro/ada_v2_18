@@ -19,13 +19,13 @@ public class Ejemplos {
 	 * 
 	 * f(n) = d1 si n=1
 	 * f(n) = d0 si n=0
-	 * f(n) = a*f(n-1)+b*f(n-2) si n>1
+	 * f(n) = a*f(n-1)+b*f(n-2) si n &gt; 1
 	 * 
-	 * @param n
-	 * @param a
-	 * @param b
-	 * @param d1
-	 * @param d0
+	 * @param n Parámetro de entrada
+	 * @param a Parámetro de entrada
+	 * @param b Parámetro de entrada
+	 * @param d1 Parámetro de entrada
+	 * @param d0 Parámetro de entrada
 	 * @return El valor de f(n,a,b,d1,d0) calculado de forma recursiva sin memoria
 	 */
 	public static BigInteger fbsm(Integer n,Integer a, Integer b, Integer d1,Integer d0){
@@ -47,13 +47,13 @@ public class Ejemplos {
 	 * 
 	 * f(n) = d1 si n=1
 	 * f(n) = d0 si n=0
-	 * f(n) = a*f(n-1)+b*f(n-2) si n>1
+	 * f(n) = a*f(n-1)+b*f(n-2) si n &gt; 1
 	 * 
-	 * @param n
-	 * @param a
-	 * @param b
-	 * @param d1
-	 * @param d0
+	 * @param n Parámetro de entrada
+	 * @param a Parámetro de entrada
+	 * @param b Parámetro de entrada
+	 * @param d1 Parámetro de entrada
+	 * @param d0 Parámetro de entrada
 	 * @return El valor de f(n,a,b,d1,d0) calculado de forma recursiva con memoria
 	 */
 	public static BigInteger fbm(Integer n,Integer a, Integer b, Integer d1,Integer d0){
@@ -87,13 +87,13 @@ public class Ejemplos {
 	 * 
 	 * f(n) = d1 si n=1
 	 * f(n) = d0 si n=0
-	 * f(n) = a*f(n-1)+b*f(n-2) si n>1
+	 * f(n) = a*f(n-1)+b*f(n-2) si n &gt; 1
 	 * 
-	 * @param n
-	 * @param a
-	 * @param b
-	 * @param d1
-	 * @param d0
+	 * @param n Parámetro de entrada
+	 * @param a Parámetro de entrada
+	 * @param b Parámetro de entrada
+	 * @param d1 Parámetro de entrada
+	 * @param d0 Parámetro de entrada
 	 * @return El valor de f(n,a,b,d1,d0) calculado de forma iterativa obtenida bottom-up de versión 
 	 * recursiva
 	 */
@@ -111,13 +111,13 @@ public class Ejemplos {
 	 * 
 	 * f(n) = d1 si n=1
 	 * f(n) = d0 si n=0
-	 * f(n) = a*f(n-1)+b*f(n-2) si n>1
+	 * f(n) = a*f(n-1)+b*f(n-2) si n &gt; 1
 	 * 
-	 * @param n
-	 * @param a
-	 * @param b
-	 * @param d1
-	 * @param d0
+	 * @param n Parámetro de entrada
+	 * @param a Parámetro de entrada
+	 * @param b Parámetro de entrada
+	 * @param d1 Parámetro de entrada
+	 * @param d0 Parámetro de entrada
 	 * @return El valor de f(n,a,b,d1,d0) calculado de forma iterativa convirtiendo el problema en uno
 	 * de potencias de matrices
 	 */
@@ -138,8 +138,8 @@ public class Ejemplos {
 	
 	/**
 	 * 
-	 * @param base
-	 * @param n
+	 * @param base Base
+	 * @param n Exponente
 	 * @return Valor de base^n de forma iterativa
 	 */
 	public static Long pow(Long base, Integer n){
@@ -157,8 +157,8 @@ public class Ejemplos {
 
 	
 	/**
-	 * @param ls
-	 * @param v
+	 * @param ls Coeficientes
+	 * @param v Valor de la variable
 	 * @return Valor de polinomio cuyos coficientes, de menor a mayor grado, 
 	 * están en ls y el valor de la variable en v. 
 	 * Calculado de izquierda a derecha
@@ -178,8 +178,8 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @param ls
-	 * @param v
+	 * @param ls Coeficientes
+	 * @param v Valor de la variable
 	 * @return Valor de polinomio cuyos coficientes, de menor a mayor grado, 
 	 * están en ls y el valor de la variable en v. 
 	 * Calculado de izquierda a derecha y usando un acumulador y secuencia adecuados
@@ -194,8 +194,8 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @param ls
-	 * @param v
+	 * @param ls Coeficientes 
+	 * @param v Valor de la variable
 	 * @return Valor de polinomio cuyos coficientes, de menor a mayor grado,
 	 * están en ls y el valor de la variable en v. 
 	 * Calculado de derecha a izquierda
@@ -217,8 +217,8 @@ public class Ejemplos {
 	}
 	
 	/**
-	 * @param ls
-	 * @param v
+	 * @param ls Coefincientes 
+	 * @param v Valor de la variable
 	 * @return Valor de polinomio cuyos coficientes, de menor a mayor grado,
 	 * están en ls y el valor de la variable en v. 
 	 * Calculado de derecha a izquierda y suando un acumulador y secuencia adecuados
@@ -232,8 +232,8 @@ public class Ejemplos {
 	
 	
 	/**
-	 * @param n
-	 * @param bs
+	 * @param n Entero
+	 * @param bs Base
 	 * @return Devuelve el número n en la base bs
 	 */
 	public static String toBase(Integer n, Integer bs) {
@@ -247,8 +247,8 @@ public class Ejemplos {
 	
 	
 	/**
-	 * @param n
-	 * @param bs
+	 * @param n Entero
+	 * @param bs Base
 	 * @return Evalua a la cadena de dígitos en base bs
 	 */
 	public static Double eval(String n, Integer bs) {

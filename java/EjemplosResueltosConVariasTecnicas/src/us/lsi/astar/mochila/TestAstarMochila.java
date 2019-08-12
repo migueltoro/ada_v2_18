@@ -14,8 +14,6 @@ import us.lsi.mochila.datos.SolucionMochila;
 
 public class TestAstarMochila {
 	
-	
-	
 	public static void main(String[] args) {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;		
@@ -23,9 +21,9 @@ public class TestAstarMochila {
 		Integer n = DatosMochila.getObjetos().size();
 		Predicate<MochilaVertex> goal = (MochilaVertex v)->v.index==n;
 		PredicateHeuristic<MochilaVertex> predicateHeuristic = (x,p)->x.voraz(p);
-		AStarGraph<MochilaVertex,MochilaEdge> graph = AStarSimpleVirtualGraph.of(x->x.getEdgeWeight());
+		AStarGraph<MochilaVertex,MochilaEdge> graph = AStarSimpleVirtualGraph.<MochilaVertex,MochilaEdge>of(x->x.getEdgeWeight());
 		AStarAlgorithm<MochilaVertex,MochilaEdge> a = AStarAlgorithm.of(graph,e1,goal,predicateHeuristic);
-		List<MochilaEdge> vertices = a.getPath().getEdgeList();
+		List<MochilaEdge> vertices = a.getPathEdgeList();
 		SolucionMochila s = MochilaVertex.getSolucion(vertices);
 		System.out.println(s);
 	}

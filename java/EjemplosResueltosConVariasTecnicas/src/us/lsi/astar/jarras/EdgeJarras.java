@@ -1,13 +1,18 @@
 package us.lsi.astar.jarras;
 
-import us.lsi.graphs.SimpleEdge;
 
-public class EdgeJarras extends SimpleEdge<VertexJarras> {
+public class EdgeJarras extends us.lsi.graphs.SimpleEdge<VertexJarras> {
 
 	/**
 	 * 
 	 */
 
+	/**
+	 * @param c1 Un vértice
+	 * @param c2 Un segundo vértice
+	 * @param a Una acción
+	 * @return Una arista del problema
+	 */
 	public static EdgeJarras create(VertexJarras c1, VertexJarras c2, ActionJarras a) {
 		return new EdgeJarras(c1, c2, a);
 	}

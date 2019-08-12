@@ -97,6 +97,7 @@ public class AStarAlgorithm<V, E>  {
      * @param sourceVertex Source Vertex
      * @param targetVertex Target Vertex
      * @param graph the input graph
+     * @param heuristic La heurística desde el vértice actual al target
      */
     public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, V targetVertex, BiFunction<V,V,Double> heuristic)
     {
@@ -121,6 +122,7 @@ public class AStarAlgorithm<V, E>  {
      * @param graph the input graph
      * @param sourceVertex Source Vertex
      * @param goal Predicado que especifica el objetivo
+     * @param predicateHeuristic La heurística desde el vértice actual al vértice que cumple goal
      */
     public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, Predicate<V> goal, PredicateHeuristic<V> predicateHeuristic)
     {
@@ -301,6 +303,10 @@ public class AStarAlgorithm<V, E>  {
     
 	public List<V> getPathVertexList() {
 		return getPath().getVertexList();
+	}
+	
+	public List<E> getPathEdgeList() {
+		return getPath().getEdgeList();
 	}
 	
 	/**

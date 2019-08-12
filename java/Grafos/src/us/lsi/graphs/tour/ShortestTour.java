@@ -20,6 +20,9 @@ import us.lsi.common.TriFunction;
 public class ShortestTour<V, E, G extends Graph<V, E>> {
 	
 	/**
+	 * @param <V> Tipo del vértice
+	 * @param <E> Tipo de la arista
+	 * @param <G> Tipo del grafo
 	 * @param graph Grafo de entrada
 	 * @param creator Un creador de grafos
 	 * @param edgeCreator Un creador de aristas

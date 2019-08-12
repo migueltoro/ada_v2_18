@@ -41,21 +41,21 @@ public class SimpleEdge<V>  {
 		return new SimpleEdge<V>(v1, v2, weight);
 	}
 
-	protected SimpleEdge() {
+	public SimpleEdge() {
 		super();
 		this.source = null;
 		this.target = null;
 		this.weight = 1.;
 	}
 
-	protected SimpleEdge(V c1, V c2) {
+	public SimpleEdge(V c1, V c2) {
 		super();
 		this.source = c1;
 		this.target = c2;
 		this.weight = 1.;
 	}
 
-	protected SimpleEdge(V c1, V c2, double weight) {
+	public SimpleEdge(V c1, V c2, double weight) {
 		super();
 		this.source = c1;
 		this.target = c2;

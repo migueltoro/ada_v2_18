@@ -1,9 +1,9 @@
 package us.lsi.astar.mochila;
 
-import us.lsi.graphs.SimpleEdge;
+
 import us.lsi.mochila.datos.DatosMochila;
 
-public class MochilaEdge extends SimpleEdge<MochilaVertex> {
+public class MochilaEdge extends us.lsi.graphs.SimpleEdge<MochilaVertex> {
 	
 	public static MochilaEdge of(MochilaVertex v1, MochilaVertex v2, Integer a) {
 		Double weight = -(double) a*DatosMochila.getValor(v1.index);

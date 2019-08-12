@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import us.lsi.graphs.virtual.VirtualVertex;
 
 
-public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
+public class Secuencia implements VirtualVertex<SecuenciaEdge,Secuencia> {
 
 	public static Secuencia create(String cadena, int index) {
 		return new Secuencia(cadena, index);

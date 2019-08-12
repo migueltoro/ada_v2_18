@@ -7,8 +7,7 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.jarras.datos.DatosJarras;
 
 
-
-public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, ActionJarras> {
+public class VertexJarras extends ActionVirtualVertex<EdgeJarras,VertexJarras, ActionJarras> {
 	
 	public static VertexJarras create(Integer cantidadEnJ1, Integer cantidadEnJ2) {
 		return new VertexJarras(cantidadEnJ1, cantidadEnJ2);

@@ -1,9 +1,6 @@
 package us.lsi.graphs.virtual;
 
 import java.util.Set;
-
-import us.lsi.graphs.SimpleEdge;
-
 /**
  * <a> El tipo representa un vértice de un grafo virtual no dirigido </a>
  * 
@@ -12,7 +9,7 @@ import us.lsi.graphs.SimpleEdge;
  * @param <V> Tipo de los vértices
  * @param <E> Tipo de las aristas
  */
-public interface VirtualVertex<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> {	
+public interface VirtualVertex<E, V extends VirtualVertex<E,V>> {	
 	/**
 	 * @return Si es un valor válido del tipo
 	 */
