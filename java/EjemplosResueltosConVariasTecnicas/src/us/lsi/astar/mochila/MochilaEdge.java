@@ -22,5 +22,6 @@ public class MochilaEdge extends us.lsi.graphs.SimpleEdge<MochilaVertex> {
 		super(c1, c2);
 		
 	}
+	
 
 }

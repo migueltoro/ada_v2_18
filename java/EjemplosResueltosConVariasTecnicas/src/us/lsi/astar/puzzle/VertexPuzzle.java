@@ -11,7 +11,7 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
-public class VertexPuzzle extends ActionVirtualVertex<SimpleEdge<VertexPuzzle>, VertexPuzzle, ActionPuzzle> {
+public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<VertexPuzzle>, ActionPuzzle> {
 
 	/**
 	 * @param d Lista de valores del puzzle dados por filas de abajo arriba

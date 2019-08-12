@@ -16,7 +16,7 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.VirtualVertex;
 
 
-public class Casilla implements VirtualVertex<SimpleEdge<Casilla>,Casilla> {
+public class Casilla implements VirtualVertex<Casilla,SimpleEdge<Casilla>> {
 	private Integer x;
 	private Integer y;
 	private Integer info;

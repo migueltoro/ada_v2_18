@@ -1,10 +1,20 @@
+
 /**
+ * <h2>
  * 
- */
-/**
- * @author migueltoro
+ * <p> <em> Author:</em>  Miguel Toro </p>
+ * <p> <em> Módulos Requeridos:</em> 
+ * <ul>
+ * <li> lpsolve </li>
+ * <li> org.jgrapht.core </li>
+ * <li> org.jgrapht.io </li>
+ * <li> partecomun </li>
+ * </ul>
+ * 
+ * </h2>
  *
  */
+
 module grafos {
 	exports us.lsi.graphs;
 	exports us.lsi.graphs.views;

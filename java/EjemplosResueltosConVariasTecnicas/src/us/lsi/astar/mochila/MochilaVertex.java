@@ -10,7 +10,7 @@ import us.lsi.mochila.datos.DatosMochila;
 
 
 
-public class MochilaVertex extends ActionVirtualVertex<MochilaEdge, MochilaVertex, Integer> {
+public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
 
 	public static MochilaVertex of(int capacidadInicial) {
 		return of(0, capacidadInicial);

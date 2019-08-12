@@ -13,7 +13,7 @@ import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.math.Math2;
 
 
-public class VertexReinas implements VirtualVertex<EdgeReinas,VertexReinas> {
+public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
 	
 	public static Integer numeroDeReinas = 200;
 	public static Integer resto = 10;

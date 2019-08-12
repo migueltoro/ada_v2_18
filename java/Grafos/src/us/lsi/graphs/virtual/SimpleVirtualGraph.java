@@ -32,7 +32,7 @@ import us.lsi.graphs.SimpleEdge;
  * 
  */
 @SuppressWarnings("deprecation")
-public class SimpleVirtualGraph<V extends VirtualVertex<E,V>, E extends SimpleEdge<V>>
+public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>>
 	implements Graph<V, E> {
 			
 	private Set<V> vertexSet;

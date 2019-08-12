@@ -7,17 +7,17 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.VirtualVertex;
 
-public class AStarSimpleVirtualGraph<V extends VirtualVertex<E,V>, E extends SimpleEdge<V>> extends SimpleVirtualGraph<V, E> implements AStarGraph<V, E> {
+public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> extends SimpleVirtualGraph<V, E> implements AStarGraph<V, E> {
 
-	public static <V extends VirtualVertex<E, V>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
 			Function<E, Double> edgeWeight) {
-		return new AStarSimpleVirtualGraph<V, E>(edgeWeight, null, null);
+		return new AStarSimpleVirtualGraph<V,E>(edgeWeight, null, null);
 	}
 	
-	public static <V extends VirtualVertex<E,V>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
 			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
-		return new AStarSimpleVirtualGraph<V, E>(edgeWeight, vertexWeight, vertexPassWeight);
+		return new AStarSimpleVirtualGraph<V,E>(edgeWeight, vertexWeight, vertexPassWeight);
 	}
 
 	private Function<E,Double> edgeWeight = null;

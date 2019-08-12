@@ -1,10 +1,18 @@
+
 /**
+ * <h2>
  * 
- */
-/**
- * @author migueltoro
+ * <p> <em> Author:</em>  Miguel Toro </p>
+ * <p> <em> Módulos Requeridos:</em> 
+ * <ul>
+ * <li> commons.math3 </li>
+ * <li> partecomun </li>
+ * </ul>
+ * 
+ * </h2>
  *
  */
+
 module geneticos {
 	exports us.lsi.ag.agchromosomes;
 	exports us.lsi.ag.agstopping;

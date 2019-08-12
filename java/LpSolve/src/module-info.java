@@ -1,8 +1,10 @@
 /**
+ * <h2>
  * 
- */
-/**
- * @author migueltoro
+ * <p> <em> Author:</em>  Miguel Toro </p>
+ * <p> <em> Módulos Requeridos:</em> 
+ * 
+ * </h2>
  *
  */
 module lpsolve {

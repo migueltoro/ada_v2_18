@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
  * Cada acción válida identifica de forma única uno de los vecinos del vértice. 
  * Cada vértice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones válidas disponibles </a>
  */
-public abstract class ActionVirtualVertex<E, V extends VirtualVertex<E,V>, A> 
-			implements VirtualVertex<E,V> {
+public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E, A> 
+			implements VirtualVertex<V,E> {
 
 	public ActionVirtualVertex() {
 	}

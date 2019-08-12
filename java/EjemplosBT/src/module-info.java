@@ -1,10 +1,19 @@
 /**
+ * <h2>
  * 
- */
-/**
- * @author migueltoro
+ * <p> <em> Author:</em>  Miguel Toro </p>
+ * <p> <em> Módulos Requeridos:</em> 
+ * <ul>
+ * <li> algoritmos_recursivos </li>
+ * <li> datos_compartidos </li>
+ * <li> partecomun </li>
+ * </ul>
+ * 
+ * </h2>
  *
  */
+
+
 module ejemplos_bt {
 	exports us.lsi.bt.reinas;
 	exports us.lsi.bt.tareasyprocesadores;

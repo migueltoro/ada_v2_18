@@ -1,10 +1,24 @@
+
 /**
+ * <h2>
  * 
- */
-/**
- * @author migueltoro
+ * <p> <em> Author:</em>  Miguel Toro </p>
+ * <p> <em> Módulos Requeridos:</em> 
+ * <ul>
+ * <li> algoritmos_recursivos </li>
+ * <li> commons.math3 </li>
+ * <li> datos_compartidos </li>
+ * <li> geneticos </li>
+ * <li> grafos </li>
+ * <li> org.jgrapht.core </li>
+ * <li> partecomun </li>
+ * </ul>
+ * 
+ * </h2>
  *
  */
+
+
 module ejemplos_de_varias_tecnicas {
 	exports us.lsi.geneticosbt.sudoku;
 	exports us.lsi.astar.mochila;
