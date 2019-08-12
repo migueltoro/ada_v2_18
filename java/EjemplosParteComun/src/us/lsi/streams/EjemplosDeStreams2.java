@@ -10,7 +10,7 @@ import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
-import us.lsi.flujossecuenciales.Collectors2;
+import us.lsi.flujosparalelos.CollectorsP;
 import us.lsi.math.Math2;
 
 
@@ -33,6 +33,7 @@ public class EjemplosDeStreams2 {
 		
 		return r2;
 	}
+	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		var s1 = List.of(1,2,3,4,5,6,7);
@@ -77,7 +78,7 @@ public class EjemplosDeStreams2 {
 		Multiset<Long> rr4 = 
 				Stream.iterate(m1,x->x<n1,x->x+1)
 				.flatMap(x->divisores(x))
-				.collect(Collectors2.toMultiset());
+				.collect(CollectorsP.toMultiset());
 		System.out.println(rr4);
 		System.out.println("8: ______");
 		

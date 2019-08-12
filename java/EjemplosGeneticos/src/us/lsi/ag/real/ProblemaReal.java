@@ -39,14 +39,14 @@ public class ProblemaReal implements ValuesInRangeProblemAG<Double,List<Double>>
 		Double a = ls.get(0);
 		Double b = ls.get(1);
 		Double k = 10000000.;
-		return (a*a+b*b)- k*r1(a,b);
+		return (a * a + b * b) - k * r1(a, b);
 	}
-	    
-	    private double r1(Double a, Double b){
-	    	// (-a + b) >=0;
-	    	Double r = -a + b -1;	    	
-	    	return r*r;
-	    }
+
+	private double r1(Double a, Double b) {
+		// (-a + b) >=0;
+		Double r = -a + b - 1;
+		return r * r;
+	}
 
 		
 		

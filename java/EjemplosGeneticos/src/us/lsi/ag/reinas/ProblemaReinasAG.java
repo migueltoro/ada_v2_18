@@ -7,6 +7,7 @@ import java.util.Set;
 
 import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
+import us.lsi.ag.HelpAg;
 import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
 import us.lsi.reinas.datos.Reina;
@@ -42,8 +43,7 @@ public static int numeroDeReinas = 8;
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);
 		}
-		Double r = 2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size();
-		return -2000*r*r;
+		return -HelpAg.igualACero(2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size());
 	}
 
 	@Override

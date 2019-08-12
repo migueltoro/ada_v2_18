@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.jarras.datos.DatosJarras;
 
+
+
 public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, ActionJarras> {
 	
 	public static VertexJarras create(Integer cantidadEnJ1, Integer cantidadEnJ2) {

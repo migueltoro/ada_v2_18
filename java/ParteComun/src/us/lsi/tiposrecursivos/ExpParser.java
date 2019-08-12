@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import us.lsi.common.Maps2;
-import us.lsi.common.Preconditions;
+import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;
 import us.lsi.tiposrecursivos.Exp.ExpType;
@@ -30,60 +30,58 @@ public class ExpParser {
 		return r;
 	}
 	
-	protected static Exp<Object> scanExp(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanSumando(tk,vars);
+	protected static Exp<Object> scanExp(Tokenizer tk, Map<String, Exp<Object>> vars) {
+		Exp<Object> r = scanSumando(tk, vars);
 		String s;
-		while (tk.hasMoreTokens() && 
-				tk.seeNextTokenType().equals(TokenType.Operator) &&
-				Operator.arities.get(tk.seeNextToken()) == 2) {
-			s = tk.matchTokenTypes(TokenType.Operator);
+		while (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+				&& Operator.arities.get(tk.seeNextToken().text) == 2) {
+			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanSumando(tk, vars);
-			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
-			r = Exp.binary(r,exp,bop);
+			BinaryOperator<Object, Object, Object> bop = Operator.getBinary(s, r.getType(), exp.getType());
+			r = Exp.binary(r, exp, bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<Object> scanSumando(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanFactor(tk,vars);
+	protected static Exp<Object> scanSumando(Tokenizer tk, Map<String, Exp<Object>> vars) {
+		Exp<Object> r = scanFactor(tk, vars);
 		String s;
-		while (tk.hasMoreTokens() && 
-				tk.seeNextTokenType().equals(TokenType.Operator) &&
-				Operator.arities.get(tk.seeNextToken()) == 4) {
-			s = tk.matchTokenTypes(TokenType.Operator);
+		while (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+				&& Operator.arities.get(tk.seeNextToken().text) == 4) {
+			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
-			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
-			r = Exp.binary(r,exp,bop);
+			BinaryOperator<Object, Object, Object> bop = Operator.getBinary(s, r.getType(), exp.getType());
+			r = Exp.binary(r, exp, bop);
 		}
 		return r;
 	}
 	
-	protected static Exp<Object> scanFactor(Tokenizer tk, Map<String,Exp<Object>> vars){
-		Exp<Object> r = scanBasic(tk,vars);
+	protected static Exp<Object> scanFactor(Tokenizer tk, Map<String, Exp<Object>> vars) {
+		Exp<Object> r = scanBasic(tk, vars);
 		String s;
-		if (tk.hasMoreTokens() && 
-				tk.seeNextTokenType().equals(TokenType.Operator) &&
-				Operator.arities.get(tk.seeNextToken()) == 6) {
-			s = tk.matchTokenTypes(TokenType.Operator);
+		if (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+				&& Operator.arities.get(tk.seeNextToken().text) == 6) {
+			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
-			BinaryOperator<Object,Object,Object> bop = Operator.getBinary(s,r.getType(),exp.getType());
-			r = Exp.binary(r,exp,bop);
+			BinaryOperator<Object, Object, Object> bop = Operator.getBinary(s, r.getType(), exp.getType());
+			r = Exp.binary(r, exp, bop);
 		}
 		return r;
 	}
-	protected static Exp<Object> scanBasic(Tokenizer tk, Map<String,Exp<Object>> vars){
+	
+	protected static Exp<Object> scanBasic(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Exp<Object> r = null;
 		String s;
-		TokenType tt = tk.seeNextTokenType();
-		switch (tt) {	
+		Token tt = tk.seeNextToken();
+		switch (tt.type) {
 		case Integer:
 			r = ExpParser.scanConstantInteger(tk);
 			break;
 		case Double:
 			r = ExpParser.scanConstantDouble(tk);
-			break; 
+			break;
 		case VariableIdentifier:
-			if (tk.seeNextToken().charAt(0) == ('_')) {
+			if (tk.seeNextToken().text.charAt(0) == ('_')) {
 				r = ExpParser.scanFree(tk, vars);
 			} else {
 				r = ExpParser.scanVariable(tk, vars);
@@ -91,30 +89,27 @@ public class ExpParser {
 			break;
 		case Operator:
 		case FunctionIdentifier:
-			s = tk.matchTokenTypes(TokenType.Operator,TokenType.FunctionIdentifier);			
-			tk.matchTokens("(");	
-			r = scanParameters(s,tk,vars);
+			s = tk.matchTokens(TokenType.Operator, TokenType.FunctionIdentifier).text;
+			tk.matchTokens("(");
+			r = scanParameters(s, tk, vars);
 			tk.matchTokens(")");
 			break;
-		case Separator:	
-			tk.matchTokens("(");				
+		case Separator:
+			tk.matchTokens("(");
 			r = scanExp(tk, vars);
-			tk.matchTokens(")");			
+			tk.matchTokens(")");
 			break;
 		default:
-			Preconditions.checkState(false, 
-					String.format("No se esperaba %s en la posición \n   %s",
-							tk.getToken(),tk.getSufix()));			
-		}			
+			tk.error();
+		}
 		return r;
 	}
-
 	
 	private static Exp<Object> scanParameters(String name, Tokenizer tk, Map<String, Exp<Object>> vars) {
 		List<Exp<Object>> exps = new ArrayList<>();
 		Exp<Object> exp = ExpParser.scanExp(tk, vars);
 		exps.add(exp);
-		while (tk.seeNextToken().equals(",")) {
+		while (tk.okNextTokens(",")) {
 			tk.matchTokens(",");
 			exp = ExpParser.scanExp(tk, vars);
 			exps.add(exp);
@@ -153,47 +148,57 @@ public class ExpParser {
 
 	}
 	
-	public static VariableExp<Object> scanVariable(Tokenizer tk, Map<String,Exp<Object>> vars){		
-		String s = tk.matchTokenTypes(TokenType.VariableIdentifier);
-		VariableExp<Object> r=null;	
-		if(vars.containsKey(s)){
-	        r = (VariableExp<Object>) vars.get(s);
+	public static VariableExp<Object> scanVariable(Tokenizer tk, Map<String, Exp<Object>> vars) {
+		String s = tk.matchTokens(TokenType.VariableIdentifier).text;
+		VariableExp<Object> r = null;
+		if (vars.containsKey(s)) {
+			r = (VariableExp<Object>) vars.get(s);
 		} else {
 			ExpType expType = VariableExp.getVariableType(s);
-			switch(expType){
-			case Boolean: r = Exp.variable(s, ExpType.Boolean);break;
-			case Integer: r = Exp.variable(s, ExpType.Integer);break;
-			case Double:  r = Exp.variable(s, ExpType.Double);				
+			switch (expType) {
+			case Boolean:
+				r = Exp.variable(s, ExpType.Boolean);
+				break;
+			case Integer:
+				r = Exp.variable(s, ExpType.Integer);
+				break;
+			case Double:
+				r = Exp.variable(s, ExpType.Double);
 			}
 			vars.put(s, r);
 		}
 		return r;
 	}
 
-	public static Exp<Object> scanFree(Tokenizer tk, Map<String,Exp<Object>> vars){						
-		String s = tk.matchTokenTypes(TokenType.VariableIdentifier);
-		Exp<Object> r=null;	
-		if(vars.containsKey(s)){
-	        r = vars.get(s);
+	public static Exp<Object> scanFree(Tokenizer tk, Map<String, Exp<Object>> vars) {
+		String s = tk.matchTokens(TokenType.VariableIdentifier).text;
+		Exp<Object> r = null;
+		if (vars.containsKey(s)) {
+			r = vars.get(s);
 		} else {
 			ExpType expType = VariableExp.getVariableType(s.substring(1));
-			switch(expType){
-			case Boolean: r = Exp.free(s, ExpType.Boolean);break;
-			case Integer: r = Exp.free(s, ExpType.Integer);break;
-			case Double:  r = Exp.free(s, ExpType.Double);				
+			switch (expType) {
+			case Boolean:
+				r = Exp.free(s, ExpType.Boolean);
+				break;
+			case Integer:
+				r = Exp.free(s, ExpType.Integer);
+				break;
+			case Double:
+				r = Exp.free(s, ExpType.Double);
 			}
 			vars.put(s, r);
 		}
 		return r;
 	}
 
-	public static ConstantExp<Object> scanConstantDouble(Tokenizer tk){		
-		String s = tk.matchTokenTypes(TokenType.Double);
-		return Exp.constant(Double.parseDouble(s),ExpType.Double);
+	public static ConstantExp<Object> scanConstantDouble(Tokenizer tk) {
+		String s = tk.matchTokens(TokenType.Double).text;
+		return Exp.constant(Double.parseDouble(s), ExpType.Double);
 	}
 
 	public static ConstantExp<Object> scanConstantInteger(Tokenizer tk){		
-		String s = tk.matchTokenTypes(TokenType.Integer);
+		String s = tk.matchTokens(TokenType.Integer).text;
 		return Exp.constant(Integer.parseInt(s),ExpType.Integer);  
 	}
 

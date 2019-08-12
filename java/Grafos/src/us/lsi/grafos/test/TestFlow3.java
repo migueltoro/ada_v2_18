@@ -6,8 +6,8 @@ import us.lsi.common.Strings2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraphSolution;
 import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
-import us.lsi.lpsolve.solution.AlgoritmoPLI;
-import us.lsi.lpsolve.solution.SolutionPLI;
+import us.lsi.pli.AlgoritmoPLI;
+import us.lsi.pli.SolutionPLI;
 
 public class TestFlow3 {
 

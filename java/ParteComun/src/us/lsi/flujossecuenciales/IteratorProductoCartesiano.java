@@ -2,6 +2,8 @@ package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 
+import us.lsi.common.Pair;
+
 
 public class IteratorProductoCartesiano<A, B> implements Iterator<Pair<A,B>>,Iterable<Pair<A,B>>{
 	

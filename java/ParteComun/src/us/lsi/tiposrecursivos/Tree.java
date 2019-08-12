@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
+import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
-import us.lsi.regularexpressions.Tokenizer.TokenType;
 
 import java.io.PrintWriter;
 
@@ -110,35 +110,33 @@ public class Tree<E> {
 	
 	private static Tree<String> tree(Tokenizer tk) {
 		Tree<String> r = null;
-		;
-		switch (tk.seeNextTokenType()) {
+		Token token = tk.nextToken();
+		switch (token.type) {
 		case Integer:
 		case Double:
 		case VariableIdentifier:
-			String label = tk.matchTokenTypes(TokenType.VariableIdentifier, TokenType.Integer, TokenType.Double);
+			String label = token.text;
 			if (label.equals("_")) {
 				r = Tree.empty();
-				break;
-			} else if (!tk.seeNextToken().equals("(")) {
+			} else if (!tk.okNextTokens("(")) {
 				r = Tree.leaf(label);
-				break;
-			}
-			List<Tree<String>> elements = new ArrayList<>();
-			Tree<String> t;
-			tk.matchTokens("(");
-			t = tree(tk);
-			elements.add(0, t);
-			while (tk.seeNextToken().equals(",")) {
-				tk.matchTokens(",");
+			} else {
+				List<Tree<String>> elements = new ArrayList<>();
+				Tree<String> t;
+				tk.matchTokens("(");
 				t = tree(tk);
 				elements.add(0, t);
+				while (tk.okNextTokens(",")) {
+					tk.matchTokens(",");
+					t = tree(tk);
+					elements.add(0, t);
+				}
+				tk.matchTokens(")");
+				r = Tree.nary(label, elements);
 			}
-			tk.matchTokens(")");
-			r = Tree.nary(label, elements);
 			break;
 		default:
-			Preconditions.checkState(false, String.format("Token %s no reconocido en la posición %d",
-					tk.seeNextTokenType().toString(), tk.getPosition()));
+			tk.error();
 		}
 		return r;
 	}
@@ -515,50 +513,7 @@ public class Tree<E> {
 		return true;
 	}
 	
-	public static Tree<String> parseTree(String s){
-		Tokenizer t = Tokenizer.create(s);
-		return parseTree(t);
-	}
 	
-	
-	public static Tree<String> parseTree(Tokenizer tk) {
-		Tree<String> r = null;
-		switch (tk.seeNextTokenType()) {
-		case VariableIdentifier:
-			String token = tk.matchTokenTypes(TokenType.VariableIdentifier);
-			if (token.equals("_")) {
-				r = Tree.empty();
-			} else {
-				Preconditions.checkState(false, String.format("Se espera _ y ha aparecido %s en la posición %d",
-						tk.seeNextTokenType().toString(), tk.getPosition()));
-			}
-			break;
-		case Integer:
-		case Double:
-			token = tk.matchTokenTypes(TokenType.Integer, TokenType.Double);
-			if (tk.seeNextToken().equals("(")) {				
-				tk.matchTokens("(");
-				r = parseTree(tk);
-				List<Tree<String>> elements = Lists2.newList(r);
-				while (tk.seeNextToken().equals(",")) {
-					tk.matchTokens(",");
-					r = parseTree(tk);
-					elements.add(r);
-				}
-				tk.matchTokens(")");
-				r = Tree.nary(token, elements);
-			} else {
-				r = Tree.leaf(token);
-			}
-			break;
-		default:
-			Preconditions.checkState(false,
-					String.format("Se esperaba _, Integer o Double y ha aparecido %s en la posición %d, sufijo %s",
-							tk.seeNextToken(), tk.getPosition(), tk.getSufix()));
-			break;
-		}
-		return r;
-	}
 
 	public static void main(String[] args) {
 		Tree<Integer> t1 = Tree.empty();
@@ -577,7 +532,7 @@ public class Tree<E> {
 		Tree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		System.out.println(t8.getChild(0).getFather());
-		System.out.println(parseTree("39(2.,27(_,2,3,4),9(8.,_))"));
+		System.out.println(Tree.tree("39(2.,27(_,2,3,4),9(8.,_))"));
 	}
 	
 }

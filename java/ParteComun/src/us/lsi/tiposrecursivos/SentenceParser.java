@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import us.lsi.common.Preconditions;
+import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;
 
@@ -23,12 +24,12 @@ public class SentenceParser {
 
 	private static Sentence scanSentence(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Sentence r = null;
-		switch (tk.seeNextTokenType()) {
+		Token token = tk.seeNextToken();
+		switch (token.type) {
 		case VariableIdentifier:
 			VariableExp<?> var;
-			String s1 = tk.seeNextToken();
-			Preconditions.checkState(s1.charAt(0) != ('@'), s1
-					+ " debe ser una variable");
+			String s1 = tk.seeNextToken().text;
+			Preconditions.checkState(s1.charAt(0) != ('@'), s1 + " debe ser una variable");
 			var = ExpParser.scanVariable(tk, vars);
 			tk.matchTokens("=");
 			Exp<Object> exp = ExpParser.scanExp(tk, vars);
@@ -38,7 +39,7 @@ public class SentenceParser {
 			r = Sentence.assign(var, exp);
 			break;
 		case ReservedWord:
-			String s2 = tk.seeNextToken();
+			String s2 = tk.seeNextToken().text;
 			switch (s2) {
 			case "if":
 				tk.matchTokens("if");
@@ -69,7 +70,7 @@ public class SentenceParser {
 			tk.matchTokens("}");
 			break;
 		default:
-			tk.matchTokenTypes(TokenType.VariableIdentifier,
+			tk.error(TokenType.VariableIdentifier,
 					TokenType.Separator, TokenType.VariableIdentifier);
 		}
 		return r;
@@ -77,7 +78,7 @@ public class SentenceParser {
 
 	private static Sentence scanSentences(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		List<Sentence> r = new ArrayList<>();
-		while (!tk.seeNextToken().equals("}")) {
+		while (!tk.seeNextToken().text.equals("}")) {
 			Sentence s = scanSentence(tk, vars);
 			r.add(s);
 		}

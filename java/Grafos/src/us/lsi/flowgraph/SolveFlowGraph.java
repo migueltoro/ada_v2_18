@@ -2,8 +2,8 @@ package us.lsi.flowgraph;
 
 import us.lsi.common.Strings2;
 import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
-import us.lsi.lpsolve.solution.AlgoritmoPLI;
-import us.lsi.lpsolve.solution.SolutionPLI;
+import us.lsi.pli.AlgoritmoPLI;
+import us.lsi.pli.SolutionPLI;
 
 public class SolveFlowGraph {
 

@@ -27,14 +27,14 @@ public class TestReinasAG {
 		AlgoritmoAG.MUTATION_RATE = 0.8;
 		AlgoritmoAG.POPULATION_SIZE = 40;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 3000;
+		StoppingConditionFactory.NUM_GENERATIONS = 6000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 0.;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
 		
 		ChromosomeFactory.crossoverType = CrossoverType.OnePoint;
 		
-		ProblemaReinasAG.numeroDeReinas = 20;
+		ProblemaReinasAG.numeroDeReinas = 40;
 		SeqNormalProblemAG<List<Reina>> p = ProblemaReinasAG.create();
 		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(ChromosomeType.SqnPermutation,p);
 		ap.ejecuta();

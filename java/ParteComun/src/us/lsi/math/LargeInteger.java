@@ -365,7 +365,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		LargeInteger[] zr1 = {ZERO,a};
 		LargeInteger[] zr2 = {a,ZERO};
 		if(a.equals(ZERO)) return zr1;
-		if(b.equals(ONE)) return zr2;	
+		if(b.equals(1)) return zr2;	
 		Boolean aPositive = true;
 		Boolean bPositive = true;
 		if(a.isNegative()){

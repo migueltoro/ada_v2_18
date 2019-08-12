@@ -9,6 +9,7 @@ import us.lsi.astar.AStarGraph;
 import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.math.Math2;
 
+
 public class Test {
 
 	public static void main(String[] args) {

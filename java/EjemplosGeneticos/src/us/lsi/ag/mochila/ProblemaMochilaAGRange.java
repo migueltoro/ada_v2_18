@@ -2,7 +2,7 @@ package us.lsi.ag.mochila;
 
 import java.util.List;
 
-
+import us.lsi.ag.HelpAg;
 import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.mochila.datos.DatosMochila;
@@ -28,23 +28,24 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 	}
 	
 	private Double valor;
-	private Double dif;
+	private Double peso;
 	private Double fitness = null;
 	
 	private void calcula(List<Integer> ls) {
-		Double peso = 0.;
-		valor = 0.;
+		this.peso = 0.;
+		this.valor = 0.;
 		for (int i = 0; i < ls.size(); i++) {
 			peso = peso + ls.get(i) * DatosMochila.getPeso(i);
 			valor = valor + ls.get(i) * DatosMochila.getValor(i);
 		}
-		dif = DatosMochila.capacidadInicial - peso;
 	}
+	
 	@Override
 	public Double fitnessFunction(ValuesInRangeChromosome<Integer> c) {
 		List<Integer> ls = c.decode();
 		calcula(ls);
-		fitness = dif >= 0.? valor:valor-10000*(dif*dif);	
+//		fitness = dif >= 0.? valor:valor-10000*(dif*dif);	
+		fitness = valor - 10000*HelpAg.mayorQueCero(DatosMochila.capacidadInicial - peso);
 		return fitness;
 	}
 

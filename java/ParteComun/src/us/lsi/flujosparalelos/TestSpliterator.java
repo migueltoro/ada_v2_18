@@ -13,7 +13,12 @@ public class TestSpliterator {
 		Spliterator<String> spliterator3 = spliterator2.trySplit();
 		Spliterator<String> spliterator4 = spliterator3.trySplit();
 		Spliterator<String> spliterator5 = spliterator4.trySplit();
-//		Spliterator<String> spliterator6 = spliterator4.trySplit();
+		
+		Spliterator<String> spliterator11 = ListSpliterator.of(list).stream().spliterator();
+		Spliterator<String> spliterator21 = spliterator11.trySplit();
+		Spliterator<String> spliterator31 = spliterator21.trySplit();
+		Spliterator<String> spliterator41 = spliterator31.trySplit();
+		Spliterator<String> spliterator51 = spliterator41.trySplit();
 		 
 		spliterator1.forEachRemaining(System.out::println);
 		 
@@ -22,7 +27,7 @@ public class TestSpliterator {
 		spliterator2.forEachRemaining(System.out::println);
 		
 		System.out.println("========");
-		 
+		
 		spliterator3.forEachRemaining(System.out::println);
 		
 		System.out.println("========");
@@ -32,9 +37,31 @@ public class TestSpliterator {
 		System.out.println("========");
 		 
 		spliterator5.forEachRemaining(System.out::println);
-
+		
+		System.out.println("AAA========AAA");
+//		 
+//		spliterator6.forEachRemaining(System.out::println);
+		
+		spliterator11.forEachRemaining(System.out::println);
+		 
 		System.out.println("========");
 		 
+		spliterator21.forEachRemaining(System.out::println);
+		
+		System.out.println("========");
+		 
+		spliterator31.forEachRemaining(System.out::println);
+		
+		System.out.println("========");
+		 
+		spliterator41.forEachRemaining(System.out::println);
+		
+		System.out.println("========");
+		 
+		spliterator51.forEachRemaining(System.out::println);
+
+//		System.out.println("========");
+//		 
 //		spliterator6.forEachRemaining(System.out::println);
 	}
 

@@ -11,7 +11,7 @@ import us.lsi.common.Files2;
 import us.lsi.common.Maps2;
 import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.Graphs2;
-import us.lsi.lpsolve.solution.SolutionPLI;
+import us.lsi.pli.SolutionPLI;
 
 public class FlowGraphSolution {
 	

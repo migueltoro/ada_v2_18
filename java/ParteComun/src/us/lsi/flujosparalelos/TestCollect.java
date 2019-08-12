@@ -11,7 +11,7 @@ public class TestCollect {
 
 	
 	public static Collector<Double,MutableType<Double>,Double> suma(){
-		return Collect.ofBaseInmutable(()->0.,
+		return CollectorsP.of(()->0.,
 				(b,e)->b+e,
 				(x,y)->x+y,
 				x->x);
@@ -19,11 +19,11 @@ public class TestCollect {
 	
 	public static void main(String[] args) {
 		List<Double> ls = List.of(1.,2.,56.,123.,-45.,567.,-2.,-89.,55.,67.,1.,2.,56.,123.,-45.,567.,-2.,-89.,55.,67.);
-		Double r1 = Collect.collect(ls.stream(), TestCollect.suma());
+		Double r1 = CollectP.collect(ls.stream(), TestCollect.suma());
 		Double r2 = ls.stream().reduce((x,y)->x+y).get();
 		System.out.println("Sol = "+r1+","+r2);
 		Stream<Double> s = new Random().doubles().limit(1000).boxed();
-		Double r3 = Collect.collect(s, TestCollect.suma());
+		Double r3 = CollectP.collect(s, TestCollect.suma());
 		System.out.println("Sol = "+r3);
 	}
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
+import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;
 
@@ -45,7 +46,7 @@ public class BinaryTree<E> {
 		Tokenizer tk = Tokenizer.create(s);
 		BinaryTree<String> tree = BinaryTree.tree(tk);
 		if (tk.hasMoreTokens()) {
-			Preconditions.checkState(false,String.format("Cadena no consumida. Error en posición %d Sufijo %s", tk.getPosition(),tk.getSufix()));
+			Preconditions.checkState(false,String.format("Cadena no consumida. Error en posición %d Sufijo %s", tk.index(),tk.suffix()));
 		}
 		return tree;
 	}
@@ -57,54 +58,50 @@ public class BinaryTree<E> {
 	}
 	
 	private static BinaryTree<String> tree(Tokenizer tk) {
-		BinaryTree<String> r= null;
+		BinaryTree<String> r = null;
 		String label;
-		switch (tk.seeNextTokenType()) {			
+		Token token = tk.nextToken();
+		switch (token.type) {
 		case Operator:
 		case Integer:
-		case Double:	
+		case Double:
 		case VariableIdentifier:
 			label = label(tk);
-				if (label.equals("_")) {
-					r = BinaryTree.empty();
-				} else if (!tk.seeNextToken().equals("(")) {
-					r = BinaryTree.leaf(label);
-				} else {
-					tk.matchTokens("(");
-					BinaryTree<String> left = tree(tk);
-					tk.matchTokens(",");
-					BinaryTree<String> right = tree(tk);
-					tk.matchTokens(")");
-					r = BinaryTree.binary(label, left, right);
-				} 
-			
-			break;	
+			if (label.equals("_")) {
+				r = BinaryTree.empty();
+			} else if (!tk.okNextTokens("(")) {
+				r = BinaryTree.leaf(label);
+			} else {
+				tk.matchTokens("(");
+				BinaryTree<String> left = tree(tk);
+				tk.matchTokens(",");
+				BinaryTree<String> right = tree(tk);
+				tk.matchTokens(")");
+				r = BinaryTree.binary(label, left, right);
+			}
+			break;
 		default:
-			Preconditions.checkState(false, String.format("Token %s 99 no reconocido en la posición %d",tk.getToken(),tk.getPosition()));
+			tk.error();
 		}
 		return r;
 	}
 	
-	private static String label(Tokenizer tk) {
-		String token = "";
-		String label = null;
-		switch (tk.seeNextTokenType()) {			
+	private static String label(Tokenizer tk) {	
+		Token token = tk.currentToken();
+		String label = token.text;
+		switch (token.type) {			
 		case Operator:
-			token = tk.getToken();
-			if(!token.equals("+") && !token.equals("-")) {
-				Preconditions.checkState(false, String.format("Token %s 11 no reconocido en la posición %d",token,tk.getPosition()));
-			}
-			tk.matchTokenTypes(TokenType.Operator);
-			label = tk.matchTokenTypes(TokenType.Integer,TokenType.Double); 
-			label = token+label;
+			String opText = "";
+			if(tk.okCurrentTokens("+","-")) opText = token.text;
+			else tk.error("+","-");
+			label = tk.matchTokens(TokenType.Integer,TokenType.Double).text; 
+			label = opText+label;
 			break;
 		case Integer:
 		case Double:	
 		case VariableIdentifier:
-			label = tk.matchTokenTypes(TokenType.VariableIdentifier, TokenType.Integer,TokenType.Double); 
 			break;
-		default:
-			Preconditions.checkState(false, String.format("Token %s no reconocido en la posición %d",token,tk.getPosition()));
+		default: tk.error();
 		}
 		return label;	
 	}

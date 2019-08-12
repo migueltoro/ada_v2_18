@@ -2,6 +2,8 @@ package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 
+import us.lsi.common.Pair;
+
 public class IteratorConsecutivePairs<E> implements Iterator<Pair<E,E>>,Iterable<Pair<E,E>>{
 
 	public static <E> Iterator<Pair<E,E>> of(Iterator<E> iterator) {

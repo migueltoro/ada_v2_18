@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
+
 public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<VertexPuzzle>, ActionPuzzle> {
 
 	/**

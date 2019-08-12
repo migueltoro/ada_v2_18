@@ -2,6 +2,8 @@ package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 
+import us.lsi.common.Pair;
+
 
 public class IteratorEnumerate<E> implements Iterator<Pair<E,Integer>>,Iterable<Pair<E,Integer>>{
 	

@@ -122,7 +122,7 @@ public class MochilaPDManual {
 		System.out.println("Voraz "+vorazInteger(0,DatosMochila.capacidadInicial));
 	}
 	
-	static class Sol implements Comparable<Sol> {
+	public static class Sol implements Comparable<Sol> {
 		public static Sol of(Integer n) {
 			return new Sol(0.,Lists2.copy(0, n));
 		}
@@ -154,7 +154,7 @@ public class MochilaPDManual {
 		
 	}
 	
-	static class Dat {
+	public static class Dat {
 		public static Dat of(int index, Integer capacidadRestante) {
 			return new Dat(index,capacidadRestante);
 		}

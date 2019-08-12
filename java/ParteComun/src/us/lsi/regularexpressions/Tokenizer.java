@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.Preconditions;
 import us.lsi.common.Sets2;
-import us.lsi.common.Tuple3;
-import us.lsi.common.Tuple;
+
 
 public class Tokenizer {
 
@@ -30,10 +29,12 @@ public class Tokenizer {
 	private static Pattern pSymbol = Pattern.compile(symbol);
 	
 	private String text;	
-	private List<Tuple3<String,TokenType,Integer>> tokens;
-	private int index;
+	private List<Token> tokens;
 	private Set<String> functions;
 	private Set<String> reservedWords;
+	
+	
+	private int index;
 	private int end;
 	private int start;
 	
@@ -52,6 +53,8 @@ public class Tokenizer {
 		else this.functions = Sets2.newSet();
 		if (reservedWords != null) this.reservedWords = reservedWords;
 		else this.reservedWords = Sets2.newSet();
+		
+		
 		this.index=0;
 		this.start = 0;
 		this.end = this.text.length();
@@ -62,20 +65,13 @@ public class Tokenizer {
 		return text;
 	}
 	
-	public String getSufix(){
-		return text.substring(tokens.get(index).v3);
+	public String suffix(){
+		Integer in = Math.max(0,index-1);
+		return text.substring(tokens.get(in).start);
 	}
 	
-	public String getToken() {
-		return tokens.get(index).v1;
-	}
-
-	public TokenType getTokenType() {
-		return tokens.get(index).v2;
-	}
-	
-	public Integer getPosition(){
-		return tokens.get(index).v3;
+	public Integer index(){
+		return index;
 	}
 
 	public Set<String> getFunctions() {
@@ -86,35 +82,52 @@ public class Tokenizer {
 		return reservedWords;
 	}
 	
-	public List<Tuple3<String, TokenType, Integer>> getTokens() {
+	public List<Token> getTokens() {
 		return tokens;
 	}
+	
+	public Token currentToken() {
+		Preconditions.checkState(index>0, String.format("No hay token actual todavía %d",index));
+		return 	tokens.get(index-1);	
+	}
 
-	public String nextToken(){	
-		String r = getToken();
+	public Token nextToken(){
+		Preconditions.checkState(hasMoreTokens(), 
+			String.format("Cadena acabada inesperadamente en la posición %d,%s",index(),suffix()));
+		Integer oldIndex = index;
 		index = index+1;
-		return 	r;	
+		return 	tokens.get(oldIndex);	
 	}
 	
 	public boolean hasMoreTokens() {
 		return index < tokens.size();
 	}
 	
-	public String previousToken(){
-		Preconditions.checkState(index>0, "No existe estado previo");
-		index = index-1;
-		return getToken();	
+	public Token seeNextToken() {
+		Preconditions.checkState(hasMoreTokens(), 
+			String.format("Cadena acabada inesperadamente en la posición %d,%s",index(),suffix()));
+	    return tokens.get(index);
 	}
 	
-	private List<Tuple3<String,TokenType,Integer>> tokens(){
-		List<Tuple3<String,TokenType,Integer>> r = new ArrayList<>();
+	public Token previousToken(){
+		Preconditions.checkState(index>0, "No existe estado previo");
+		index = index-1;
+		return tokens.get(index);	
+	}
+	
+	private List<Token> tokens(){
+		List<Token> r = new ArrayList<>();
 		while(hasMore()){
 			r.add(next());
 		}
 		return r;
 	}
 	
-	private Tuple3<String,TokenType,Integer> next() {
+	private boolean hasMore() {
+		return start < end;
+	}
+	
+	private Token next() {
 		Matcher matcher = null;		
 		String token = null;
 		TokenType tokenType = null;
@@ -167,7 +180,8 @@ public class Tokenizer {
 					tokenType = TokenType.Operator;
 				}
 			} else {
-				Preconditions.checkState(false, String.format("Caracter %c no reconocido en la posición %d",c,start));
+				Preconditions.checkState(false, 
+						String.format("Caracter %c no reconocido en la posición %d",c,start));
 			}			
 		}		
 		int oldStart = start;
@@ -175,72 +189,78 @@ public class Tokenizer {
 		if(space && hasMore()){
 			return next();
 		} else {
-			return Tuple.create(token,tokenType,oldStart);
+			return Token.of(token,tokenType,oldStart);
 		}
-	}
-
-	private boolean hasMore() {
-		return start < end;
-	}
-
-	public TokenType seeNextTokenType() {
-		TokenType tp = null;
-		if (hasMoreTokens()) {
-			tp = tokens.get(index).v2;
-		} else {
-			Preconditions.checkState(false, "Cadena acabada inesperadamente");
-		}
-		return tp;
 	}
 	
-	public String seeNextToken() {
-		String s = null;
-		if (hasMoreTokens()) {
-			s = tokens.get(index).v1;
-		} else {
-			Preconditions.checkState(false, "Cadena acabada inesperadamente");
-		}
-		return s;
-	}
-	
-	public String matchTokenTypes(TokenType... s){
+	public Boolean okCurrentTokens(TokenType... s) {
 		List<TokenType> sl = Arrays.asList(s);
-		String r = null;
-		if(hasMoreTokens()){
-			r = getToken();
-			Preconditions.checkState(sl.contains(getTokenType()), 
-					String.format("Se esperaba %s y se ha encontrado %s en la posición \n   %s",
-							sl.toString(),getToken(),text.substring(tokens.get(index).v3)));
-			nextToken();
-		}else {
-			Preconditions.checkState(false, "Cadena acabada inesperadamente");
-		}
-		return r;
+		Token r = currentToken();
+		return sl.contains(r.type);
+	}
+	
+	public Boolean okCurrentTokens(String... s) {
+		List<String> sl = Arrays.asList(s);
+		Token r = currentToken();
+		return sl.contains(r.text);
+	}
+	
+	public Boolean okNextTokens(TokenType... s) {
+		List<TokenType> sl = Arrays.asList(s);
+		Token r = seeNextToken();
+		return sl.contains(r.type);
+	}
+	
+	public Boolean okNextTokens(String... s) {
+		List<String> sl = Arrays.asList(s);
+		Token r = seeNextToken();
+		return sl.contains(r.text);
+	}
+	
+	public Token matchTokens(TokenType... s) {
+		Token tk = nextToken();
+		error(s);
+		return tk;
 	}
 
-	public String matchTokens(String... s){
+	public void error(TokenType... s) {
+		List<TokenType> sl = Arrays.asList(s);
+		Token r = currentToken();
+		Preconditions.checkState(sl.contains(r.type),
+				String.format("\nSe esperaba %s \ny se ha encontrado %s en la posición \n%s", 
+						sl.toString(), 
+						currentToken(),
+						suffix()));
+	}
+
+	public Token matchTokens(String... s) {
+		Token tk = nextToken();
+		error(s);
+		return tk;
+	}
+	
+	public void error(String... s) {
 		List<String> sl = Arrays.asList(s);
-		String r = null;
-		if(hasMoreTokens()){
-			r = getToken();
-			Preconditions.checkState(sl.contains(getToken()), 
-					String.format("Se esperaba %s y se ha encontrado %s en la posición \n  %s",
-							sl.toString(),getToken(),text.substring(tokens.get(index).v3)));
-			nextToken();
-		}else {
-			Preconditions.checkState(false, "Cadena acabada inesperadamente");
-		}
-		return r;
+		Token r = currentToken();
+		Preconditions.checkState(sl.contains(r.text),
+				String.format("\nSe esperaba %s \ny se ha encontrado %s en la posición \n%s", 
+						sl.toString(),r,suffix()));
+	}
+	
+	public void error() {
+		Preconditions.checkState(false, 
+				String.format("Token %s no reconocido en la posición %d, %s",
+						currentToken(),index(),suffix()));
 	}
 
 	public boolean isTokenType(TokenType... s){
 		List<TokenType> r = Arrays.asList(s);
-		return r.contains(getTokenType());
+		return r.contains(currentToken().type);
 	}
 	
 	public boolean isToken(String... s){
 		List<String> r = Arrays.asList(s);
-		return r.contains(getToken());
+		return r.contains(currentToken().text);
 	}
 	
 	public static void main(String[] args) {
@@ -253,7 +273,6 @@ public class Tokenizer {
 		System.out.println(s);
 		System.out.println(t.tokens.size());
 	}
-
 	
 	
 }
