@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import us.lsi.common.Comparator2;
+import us.lsi.common.Comparators;
 import us.lsi.common.MutableType;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
@@ -78,7 +78,7 @@ public class AVLTree<E> {
 		Boolean r = null;
 		switch(tree.getType()) {
 		case Empty: r = false; break;
-		case Leaf: r = Comparator2.isEQ(e, tree.getLabel(), comparator); break;
+		case Leaf: r = Comparators.isEQ(e, tree.getLabel(), comparator); break;
 		case Binary: r = contains(tree.getLeft(),e) || contains(tree.getRight(),e); break;
 		}
 		return r;
@@ -97,14 +97,14 @@ public class AVLTree<E> {
 		switch(tree.getType()) {
 		case Empty: r = BinaryTree.empty(); break;
 		case Leaf: 
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: break;			
 			case LT: 
 			case GT: r = BinaryTree.empty();		
 			}
 			break;
 		case Binary: 
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: break;			
 			case LT: r = find(tree.getLeft(),element,comparator); break;
 			case GT: r = find(tree.getRight(),element,comparator); break;	
@@ -230,14 +230,14 @@ public class AVLTree<E> {
 		switch(tree.getType()) {		
 		case Empty: r = BinaryTree.leaf(element); break;
 		case Leaf:
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: break;
 			case LT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.leaf(element), BinaryTree.empty()); break;
 			case GT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.empty(), BinaryTree.leaf(element)); break;
 			}
 			break;
 		case Binary:
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: r = tree; break;
 			case LT: 
 				BinaryTree<E> new_left = add(tree.getLeft(), element, comparator);
@@ -315,14 +315,14 @@ public class AVLTree<E> {
 		switch(tree.getType()) {
 		case Empty:  break;
 		case Leaf:
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: r = BinaryTree.empty(); break;		
 			case LT:
 			case GT: 
 			}
 			break;
 		case Binary:
-			switch(Comparator2.compare(element, tree.getLabel(), comparator)) {
+			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: 
 				if(!tree.getLeft().isEmpty()) {
 					E label = getLast(tree.getLeft()).getLabel();

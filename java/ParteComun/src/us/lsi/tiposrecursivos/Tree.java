@@ -118,7 +118,7 @@ public class Tree<E> {
 			String label = token.text;
 			if (label.equals("_")) {
 				r = Tree.empty();
-			} else if (!tk.okNextTokens("(")) {
+			} else if (!tk.isNextInTokens("(")) {
 				r = Tree.leaf(label);
 			} else {
 				List<Tree<String>> elements = new ArrayList<>();
@@ -126,7 +126,7 @@ public class Tree<E> {
 				tk.matchTokens("(");
 				t = tree(tk);
 				elements.add(0, t);
-				while (tk.okNextTokens(",")) {
+				while (tk.isNextInTokens(",")) {
 					tk.matchTokens(",");
 					t = tree(tk);
 					elements.add(0, t);

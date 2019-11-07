@@ -69,7 +69,7 @@ public class BinaryTree<E> {
 			label = label(tk);
 			if (label.equals("_")) {
 				r = BinaryTree.empty();
-			} else if (!tk.okNextTokens("(")) {
+			} else if (!tk.isNextInTokens("(")) {
 				r = BinaryTree.leaf(label);
 			} else {
 				tk.matchTokens("(");
@@ -92,7 +92,7 @@ public class BinaryTree<E> {
 		switch (token.type) {			
 		case Operator:
 			String opText = "";
-			if(tk.okCurrentTokens("+","-")) opText = token.text;
+			if(tk.isCurrentInTokens("+","-")) opText = token.text;
 			else tk.error("+","-");
 			label = tk.matchTokens(TokenType.Integer,TokenType.Double).text; 
 			label = opText+label;

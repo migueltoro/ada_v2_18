@@ -10,6 +10,7 @@ import us.lsi.astar.AStarAlgorithm;
 import us.lsi.graphs.SimpleEdge;
 
 
+
 public class TestMainPuzzle {
 
 	public static void main(String[] args) {

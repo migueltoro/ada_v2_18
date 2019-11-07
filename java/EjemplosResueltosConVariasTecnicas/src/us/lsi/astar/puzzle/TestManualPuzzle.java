@@ -9,6 +9,7 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.manual.RecorridoAStarManual;
 
 
+
 public class TestManualPuzzle {
 	
 	public static void test2() {

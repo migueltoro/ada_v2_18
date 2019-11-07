@@ -1,22 +1,4 @@
 
-/**
- * <h2>
- * 
- * <p> <em> Author:</em>  Miguel Toro </p>
- * <p> <em> Módulos Requeridos:</em> 
- * <ul>
- * <li> algoritmos_recursivos </li>
- * <li> commons.math3 </li>
- * <li> datos_compartidos </li>
- * <li> geneticos </li>
- * <li> grafos </li>
- * <li> org.jgrapht.core </li>
- * <li> partecomun </li>
- * </ul>
- * 
- * </h2>
- *
- */
 
 
 module ejemplos_de_varias_tecnicas {
@@ -36,7 +18,7 @@ module ejemplos_de_varias_tecnicas {
 	exports us.lsi.astar.jarras;
 
 	requires transitive algoritmos_recursivos;
-	requires transitive commons.math3;
+	requires commons.math3;
 	requires transitive datos_compartidos;
 	requires transitive geneticos;
 	requires transitive grafos;

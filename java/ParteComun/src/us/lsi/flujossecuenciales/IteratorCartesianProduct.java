@@ -5,12 +5,12 @@ import java.util.Iterator;
 import us.lsi.common.Pair;
 
 
-public class IteratorProductoCartesiano<A, B> implements Iterator<Pair<A,B>>,Iterable<Pair<A,B>>{
+public class IteratorCartesianProduct<A, B> implements Iterator<Pair<A,B>>,Iterable<Pair<A,B>>{
 	
 	public static <A> Iterator<Pair<A,A>> of(Iterable<A> iterableA) {
 		Iterator<Pair<A,A>> r = IteratorEmpty.of();
 		if(iterableA.iterator().hasNext()) {
-			r = new IteratorProductoCartesiano<A, A>(iterableA.iterator(), iterableA);
+			r = new IteratorCartesianProduct<A, A>(iterableA.iterator(), iterableA);
 		}
 		return r;
 	}
@@ -19,7 +19,7 @@ public class IteratorProductoCartesiano<A, B> implements Iterator<Pair<A,B>>,Ite
 	public static <A, B> Iterator<Pair<A,B>> of(Iterable<A> iterableA, Iterable<B> iterableB) {
 		Iterator<Pair<A,B>> r = IteratorEmpty.of();
 		if(iterableA.iterator().hasNext() && iterableB.iterator().hasNext()) {
-			r = new IteratorProductoCartesiano<A, B>(iterableA.iterator(), iterableB);
+			r = new IteratorCartesianProduct<A, B>(iterableA.iterator(), iterableB);
 		}
 		return r;
 	}
@@ -27,7 +27,7 @@ public class IteratorProductoCartesiano<A, B> implements Iterator<Pair<A,B>>,Ite
 	public static <A, B> Iterator<Pair<A,B>> of(Iterator<A> iteratorA, Iterable<B> iterableB) {
 		Iterator<Pair<A,B>> r = IteratorEmpty.of();
 		if(iteratorA.hasNext() && iterableB.iterator().hasNext()) {
-			r = new IteratorProductoCartesiano<A, B>(iteratorA, iterableB);
+			r = new IteratorCartesianProduct<A, B>(iteratorA, iterableB);
 		}
 		return r;
 	}
@@ -37,7 +37,7 @@ public class IteratorProductoCartesiano<A, B> implements Iterator<Pair<A,B>>,Ite
 	private Iterable<B> iterableB;
 	private Iterator<B> iteratorB;
 	
-	private IteratorProductoCartesiano(Iterator<A> iteratorA, Iterable<B> iterableB) {
+	private IteratorCartesianProduct(Iterator<A> iteratorA, Iterable<B> iterableB) {
 		super();
 		this.iteratorA = iteratorA;
 		this.actualA = this.iteratorA.next();

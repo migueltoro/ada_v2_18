@@ -33,7 +33,7 @@ public class ExpParser {
 	protected static Exp<Object> scanExp(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Exp<Object> r = scanSumando(tk, vars);
 		String s;
-		while (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+		while (tk.hasMoreTokens() && tk.isNextInTokens(TokenType.Operator)
 				&& Operator.arities.get(tk.seeNextToken().text) == 2) {
 			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanSumando(tk, vars);
@@ -46,7 +46,7 @@ public class ExpParser {
 	protected static Exp<Object> scanSumando(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Exp<Object> r = scanFactor(tk, vars);
 		String s;
-		while (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+		while (tk.hasMoreTokens() && tk.isNextInTokens(TokenType.Operator)
 				&& Operator.arities.get(tk.seeNextToken().text) == 4) {
 			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
@@ -59,7 +59,7 @@ public class ExpParser {
 	protected static Exp<Object> scanFactor(Tokenizer tk, Map<String, Exp<Object>> vars) {
 		Exp<Object> r = scanBasic(tk, vars);
 		String s;
-		if (tk.hasMoreTokens() && tk.okNextTokens(TokenType.Operator)
+		if (tk.hasMoreTokens() && tk.isNextInTokens(TokenType.Operator)
 				&& Operator.arities.get(tk.seeNextToken().text) == 6) {
 			s = tk.matchTokens(TokenType.Operator).text;
 			Exp<Object> exp = ExpParser.scanFactor(tk, vars);
@@ -109,7 +109,7 @@ public class ExpParser {
 		List<Exp<Object>> exps = new ArrayList<>();
 		Exp<Object> exp = ExpParser.scanExp(tk, vars);
 		exps.add(exp);
-		while (tk.okNextTokens(",")) {
+		while (tk.isNextInTokens(",")) {
 			tk.matchTokens(",");
 			exp = ExpParser.scanExp(tk, vars);
 			exps.add(exp);

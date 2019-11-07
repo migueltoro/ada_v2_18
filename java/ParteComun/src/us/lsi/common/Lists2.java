@@ -295,7 +295,7 @@ public class Lists2 {
 //		Preconditions.checkState(isOrdered(ls, cmp));
 		int i = 0;
 		while (i < ls.size()) {
-			if(Comparator2.isGT(ls.get(i),e, cmp)) break;
+			if(Comparators.isGT(ls.get(i),e, cmp)) break;
 			i++;
 		}
 		ls.add(i, e);

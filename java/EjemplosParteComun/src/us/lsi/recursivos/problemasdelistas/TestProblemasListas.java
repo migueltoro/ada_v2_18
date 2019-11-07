@@ -51,7 +51,7 @@ public class TestProblemasListas {
 	public void testOrdenaBase() {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
 		ProblemasDeListas.ordenaBase(lista,0,lista.size(),Comparator.naturalOrder());
-		assertTrue(Comparator2.isOrdered(lista));
+		assertTrue(Comparators.isOrdered(lista));
 	}
 	
 	@Test

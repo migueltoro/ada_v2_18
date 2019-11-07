@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import us.lsi.common.Streams2;
 import us.lsi.common.Tuple;
-import us.lsi.common.Comparator2;
+import us.lsi.common.Comparators;
 
 public class Ejemplos {
 
@@ -78,12 +78,12 @@ public class Ejemplos {
 	
 	public static <T> Boolean estaOrdenada1(List<T> ls, Comparator<T> cm){
 		return IntStream.range(0, ls.size()-1)
-				        .allMatch(i->Comparator2.isLE(ls.get(i),ls.get(i+1),cm));
+				        .allMatch(i->Comparators.isLE(ls.get(i),ls.get(i+1),cm));
 	}
 	
 	public static <T> Boolean estaOrdenada2(List<T> ls, Comparator<T> cm){
 		return Streams2.consecutivePairs(ls.stream())
-				       .allMatch(t->Comparator2.isLE(t.v1,t.v2,cm));
+				       .allMatch(t->Comparators.isLE(t.v1,t.v2,cm));
 	}
 	
 	public static void main(String[] args) {

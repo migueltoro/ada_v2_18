@@ -7,7 +7,7 @@ import us.lsi.common.Pair;
 
 public class IteratorZip<A, B> implements Iterator<Pair<A,B>>,Iterable<Pair<A,B>> {
 	
-	public static <A, B> IteratorZip<A, B> of(Iterator<A> iteratorA, Iterator<B> iteratorB) {
+	public static <A, B> Iterator<Pair<A, B>> of(Iterator<A> iteratorA, Iterator<B> iteratorB) {
 		return new IteratorZip<A, B>(iteratorA, iteratorB);
 	}
 	

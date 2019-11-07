@@ -193,25 +193,25 @@ public class Tokenizer {
 		}
 	}
 	
-	public Boolean okCurrentTokens(TokenType... s) {
+	public Boolean isCurrentInTokens(TokenType... s) {
 		List<TokenType> sl = Arrays.asList(s);
 		Token r = currentToken();
 		return sl.contains(r.type);
 	}
 	
-	public Boolean okCurrentTokens(String... s) {
+	public Boolean isCurrentInTokens(String... s) {
 		List<String> sl = Arrays.asList(s);
 		Token r = currentToken();
 		return sl.contains(r.text);
 	}
 	
-	public Boolean okNextTokens(TokenType... s) {
+	public Boolean isNextInTokens(TokenType... s) {
 		List<TokenType> sl = Arrays.asList(s);
 		Token r = seeNextToken();
 		return sl.contains(r.type);
 	}
 	
-	public Boolean okNextTokens(String... s) {
+	public Boolean isNextInTokens(String... s) {
 		List<String> sl = Arrays.asList(s);
 		Token r = seeNextToken();
 		return sl.contains(r.text);

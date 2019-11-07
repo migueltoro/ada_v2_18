@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 import org.junit.Test;
 
-import us.lsi.common.Comparator2;
+import us.lsi.common.Comparators;
 import us.lsi.common.Lists2;
 import us.lsi.math.Math2;
 import us.lsi.recursivos.problemasdelistas.ProblemasDeListas.SubSecuencia;
@@ -33,7 +33,7 @@ public class Collections2Test {
 	public void testSortList() {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
 		ProblemasDeListas.sort(lista);
-		assertTrue(Comparator2.isOrdered(lista));
+		assertTrue(Comparators.isOrdered(lista));
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class Collections2Test {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
 		Comparator<Double> ord = Comparator.<Double>reverseOrder();
 		ProblemasDeListas.sort(lista,ord);
-		assertTrue(Comparator2.isOrdered(lista,ord));
+		assertTrue(Comparators.isOrdered(lista,ord));
 	}
 	
 	@Test

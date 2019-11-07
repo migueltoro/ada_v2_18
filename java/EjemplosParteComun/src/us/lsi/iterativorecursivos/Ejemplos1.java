@@ -12,7 +12,7 @@ import us.lsi.flujossecuenciales.CollectS;
 import us.lsi.flujossecuenciales.IteratorZip;
 import us.lsi.flujossecuenciales.SeqCollector;
 
-public class Ejemplos {
+public class Ejemplos1 {
 	
 	/**
 	 * Cálculo de la función f definida por:

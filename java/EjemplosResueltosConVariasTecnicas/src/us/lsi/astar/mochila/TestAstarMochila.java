@@ -12,6 +12,7 @@ import us.lsi.mochila.datos.SolucionMochila;
 
 
 
+
 public class TestAstarMochila {
 
 	

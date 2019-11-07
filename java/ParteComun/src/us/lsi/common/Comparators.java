@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> El tipo de los elementos sobre los que se establece el orden
  */
-public interface Comparator2<T> {
+public interface Comparators<T> {
 	
 	public enum Type {EQ,LT,GT}
 	
@@ -111,7 +111,7 @@ public interface Comparator2<T> {
 	public static <T> boolean isOrdered(List<T> ls, Comparator<? super T> cmp){
 		boolean r = true;
 		 for (int j = 0; j < ls.size()-1; j++) {
-			r = Comparator2.isLE(ls.get(j), ls.get(j + 1), cmp);
+			r = Comparators.isLE(ls.get(j), ls.get(j + 1), cmp);
 			if(!r) break;
 		}
 		return r;

@@ -1,16 +1,8 @@
 /**
- * <h2>
  * 
- * <p> <em> Author:</em>  Miguel Toro </p>
- * <p> <em> Módulos Requeridos:</em> 
- * <ul>
- * <li> commons.math3 </li>
- * <li> datos_compartidos </li>
- * <li> junit </li>
- * <li> partecomun </li>
- * </ul>
- * 
- * </h2>
+ */
+/**
+ * @author migueltoro
  *
  */
 module ejemplos_parte_comun {
@@ -24,6 +16,6 @@ module ejemplos_parte_comun {
 
 	requires transitive commons.math3;
 	requires transitive datos_compartidos;
-	requires transitive junit;
-	requires transitive partecomun;
+	requires junit;
+	requires partecomun;
 }
