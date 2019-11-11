@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
+import us.lsi.common.Streams2;
 import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 
@@ -118,21 +119,22 @@ public class Tree<E> {
 			String label = token.text;
 			if (label.equals("_")) {
 				r = Tree.empty();
-			} else if (!tk.isNextInTokens("(")) {
-				r = Tree.leaf(label);
 			} else {
-				List<Tree<String>> elements = new ArrayList<>();
-				Tree<String> t;
-				tk.matchTokens("(");
-				t = tree(tk);
-				elements.add(0, t);
-				while (tk.isNextInTokens(",")) {
-					tk.matchTokens(",");
+				r = Tree.leaf(label);
+				if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
+					List<Tree<String>> elements = new ArrayList<>();
+					Tree<String> t;
+					tk.matchTokens("(");
 					t = tree(tk);
 					elements.add(0, t);
+					while (tk.isNextInTokens(",")) {
+						tk.matchTokens(",");
+						t = tree(tk);
+						elements.add(0, t);
+					}
+					tk.matchTokens(")");
+					r = Tree.nary(label, elements);
 				}
-				tk.matchTokens(")");
-				r = Tree.nary(label, elements);
 			}
 			break;
 		default:
@@ -513,26 +515,34 @@ public class Tree<E> {
 		return true;
 	}
 	
-	
+	public static void test1() {
+		List<String> filas = Streams2.fromFile("ficheros/test.txt").collect(Collectors.toList());
+		Tree<String> nary = null;
+		for (String fila : filas) {
+			nary = Tree.tree(fila);
+			System.out.println(nary);
+		}
+	}
 
 	public static void main(String[] args) {
-		Tree<Integer> t1 = Tree.empty();
-		Tree<Integer> t2 = Tree.leaf(2);
-		Tree<Integer> t3 = Tree.leaf(3);
-		Tree<Integer> t4 = Tree.leaf(4);
-		Tree<Integer> t5 = Tree.nary(27,t1,t2,t3,t4);
-		Tree<Integer> t6 = Tree.nary(39, t2,t5);
-		System.out.println(t1);
-		System.out.println(t2);
-		System.out.println(t6);
-		String ex = "39(2,27(_,2,3,4))";
-		Tree<String> t7 = Tree.tree(ex);
-		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.newList(1,2,3,4,5,6,7,8,9)));
-		Tree<String> t8 = t7.getReverse();
-		System.out.println(t8);
-		System.out.println(t8.getChild(0).getFather());
-		System.out.println(Tree.tree("39(2.,27(_,2,3,4),9(8.,_))"));
+//		Tree<Integer> t1 = Tree.empty();
+//		Tree<Integer> t2 = Tree.leaf(2);
+//		Tree<Integer> t3 = Tree.leaf(3);
+//		Tree<Integer> t4 = Tree.leaf(4);
+//		Tree<Integer> t5 = Tree.nary(27,t1,t2,t3,t4);
+//		Tree<Integer> t6 = Tree.nary(39, t2,t5);
+//		System.out.println(t1);
+//		System.out.println(t2);
+//		System.out.println(t6);
+//		String ex = "39(2,27(_,2,3,4))";
+//		Tree<String> t7 = Tree.tree(ex);
+//		System.out.println(t7);
+//		System.out.println(Lists2.reverse(Lists2.newList(1,2,3,4,5,6,7,8,9)));
+//		Tree<String> t8 = t7.getReverse();
+//		System.out.println(t8);
+//		System.out.println(t8.getChild(0).getFather());
+//		System.out.println(Tree.tree("39(2.,27(_,2,3,4),9(8.,_))"));
+		test1();
 	}
 	
 }

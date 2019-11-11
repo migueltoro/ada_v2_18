@@ -200,8 +200,7 @@ public class EjemplosDeStreams {
 	 */
 	public static IntStream ejemploR(String fileIn){
 		return Files2.getStream(fileIn)
-				     .map(x->x.split(","))
-				     .flatMap(x->Arrays.stream(x))
+				     .flatMap(x->Arrays.stream(x.split(",")))
 				     .mapToInt(x-> Integer.parseInt(x));
 	}
 	

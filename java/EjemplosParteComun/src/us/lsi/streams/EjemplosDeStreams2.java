@@ -16,10 +16,11 @@ import us.lsi.math.Math2;
 
 public class EjemplosDeStreams2 {
 	
-	public static List<Tuple2<Long,Long>> primosPar(Long m, Long n, Integer k){
-		var r = Stream.iterate(Math2.siguientePrimo(m),x->x < n,x->Math2.siguientePrimo(x));
+	public static List<Tuple2<Long,Long>> primosPar(Long m, Long k, Integer d){
+		var r = Stream.iterate(Math2.siguientePrimo(m),x->true,x->Math2.siguientePrimo(x));
 		var r2 = Streams2.consecutivePairs(r);
-		var rr2 = r2.filter(t->t.v2-t.v1==k).collect(Collectors.toList());
+		var rr2 = r2.filter(t->t.v2-t.v1==d).limit(k).
+				collect(Collectors.toList());
 		return rr2;
 	}
 	
@@ -30,7 +31,6 @@ public class EjemplosDeStreams2 {
 	public static Stream<Tuple2<Long,Long>> primos(Long a){
 		var r = Stream.iterate(Math2.siguientePrimo(a),x->Math2.siguientePrimo(x));
 		var r2 = Streams2.consecutivePairs(r);
-		
 		return r2;
 	}
 	
@@ -70,7 +70,7 @@ public class EjemplosDeStreams2 {
 		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
 		System.out.println(r4);
 		System.out.println("6: ______");
-		var pp = primosPar(1000L,2000L,2);
+		var pp = primosPar(1000L,10L,2);
 		Strings2.toConsole(pp,"Pares de primos");
 		System.out.println("7: ______");
 		Long m1 = 1000L;
@@ -81,7 +81,7 @@ public class EjemplosDeStreams2 {
 				.collect(CollectorsP.toMultiset());
 		System.out.println(rr4);
 		System.out.println("8: ______");
-		
+		System.out.println(Math2.esDivisible(0, 15));
 	}
 
 }
