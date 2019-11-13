@@ -58,7 +58,7 @@ public class Tree<E> {
 		return nary(label, nElements);
 	}
 	
-	public static Tree<String> tree(String s){
+	public static Tree<String> parse(String s){
 		Tokenizer t = Tokenizer.create(s);
 		return Tree.tree(t);
 	}
@@ -519,7 +519,7 @@ public class Tree<E> {
 		List<String> filas = Streams2.fromFile("ficheros/test.txt").collect(Collectors.toList());
 		Tree<String> nary = null;
 		for (String fila : filas) {
-			nary = Tree.tree(fila);
+			nary = Tree.parse(fila);
 			System.out.println(nary);
 		}
 	}
