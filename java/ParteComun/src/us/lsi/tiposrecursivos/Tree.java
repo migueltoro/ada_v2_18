@@ -13,6 +13,7 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.Streams2;
 import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
+import us.lsi.regularexpressions.Tokenizer.TokenType;
 
 import java.io.PrintWriter;
 
@@ -112,11 +113,13 @@ public class Tree<E> {
 	private static Tree<String> tree(Tokenizer tk) {
 		Tree<String> r = null;
 		Token token = tk.nextToken();
+		String label;
 		switch (token.type) {
+		case Operator:
 		case Integer:
 		case Double:
 		case VariableIdentifier:
-			String label = token.text;
+			label = label(tk);
 			if (label.equals("_")) {
 				r = Tree.empty();
 			} else {
@@ -141,6 +144,26 @@ public class Tree<E> {
 			tk.error();
 		}
 		return r;
+	}
+	
+	private static String label(Tokenizer tk) {	
+		Token token = tk.currentToken();
+		String label = token.text;
+		switch (token.type) {			
+		case Operator:
+			String opText = "";
+			if(tk.isCurrentInTokens("+","-")) opText = token.text;
+			else tk.error("+","-");
+			label = tk.matchTokens(TokenType.Integer,TokenType.Double).text; 
+			label = opText+label;
+			break;
+		case Integer:
+		case Double:	
+		case VariableIdentifier:
+			break;
+		default: tk.error();
+		}
+		return label;	
 	}
 	
 	
