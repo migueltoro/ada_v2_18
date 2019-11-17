@@ -59,11 +59,6 @@ public class Tree<E> {
 		return nary(label, nElements);
 	}
 	
-	public static Tree<String> parse(String s){
-		Tokenizer t = Tokenizer.create(s);
-		return Tree.tree(t);
-	}
-	
 	
 	public static <R> Tree<R> toTree(BinaryTree<R> t){
 		Tree<R> r = null;
@@ -110,52 +105,46 @@ public class Tree<E> {
 		this.type = TreeType.Nary;
 	}
 	
-	private static Tree<String> tree(Tokenizer tk) {
-		Tree<String> r = null;
-		Token token = tk.nextToken();
-		String label;
-		switch (token.type) {
-		case Operator:
-		case Integer:
-		case Double:
-		case VariableIdentifier:
-			label = label(tk);
-			if (label.equals("_")) {
-				r = Tree.empty();
-			} else {
-				r = Tree.leaf(label);
-				if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
-					List<Tree<String>> elements = new ArrayList<>();
-					Tree<String> t;
-					tk.matchTokens("(");
-					t = tree(tk);
+	public static Tree<String> parse(String s){
+		Tokenizer t = Tokenizer.create(s);
+		return Tree.parse(t);
+	}
+	
+	private static Tree<String> parse(Tokenizer tk) {
+		Tree<String> r;
+		Token token = label_parse(tk);
+		if (token.text.equals("_")) {
+			r = Tree.empty();
+		} else {
+			r = Tree.leaf(token.text);
+			if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
+				List<Tree<String>> elements = new ArrayList<>();
+				Tree<String> t;
+				tk.matchTokens("(");
+				t = parse(tk);
+				elements.add(0, t);
+				while (tk.isNextInTokens(",")) {
+					tk.matchTokens(",");
+					t = parse(tk);
 					elements.add(0, t);
-					while (tk.isNextInTokens(",")) {
-						tk.matchTokens(",");
-						t = tree(tk);
-						elements.add(0, t);
-					}
-					tk.matchTokens(")");
-					r = Tree.nary(label, elements);
 				}
+				tk.matchTokens(")");
+				r = Tree.nary(token.text, elements);
 			}
-			break;
-		default:
-			tk.error();
 		}
 		return r;
 	}
 	
-	private static String label(Tokenizer tk) {	
-		Token token = tk.currentToken();
-		String label = token.text;
+	private static Token label_parse(Tokenizer tk) {	
+		Token token = tk.nextToken();
 		switch (token.type) {			
 		case Operator:
-			String opText = "";
-			if(tk.isCurrentInTokens("+","-")) opText = token.text;
-			else tk.error("+","-");
-			label = tk.matchTokens(TokenType.Integer,TokenType.Double).text; 
-			label = opText+label;
+			if(tk.isCurrentInTokens("+","-")) {
+				String op = token.text;
+				token = tk.matchTokens(TokenType.Integer,TokenType.Double); 
+				String nb = token.text;
+				token.text = op+nb;
+			} else tk.error("+","-");
 			break;
 		case Integer:
 		case Double:	
@@ -163,12 +152,11 @@ public class Tree<E> {
 			break;
 		default: tk.error();
 		}
-		return label;	
+		return token;	
 	}
 	
-	
 	/**
-	 * @return El tupo del árbol
+	 * @return El tipo del árbol
 	 */
 	public TreeType getType() {
 		return type;

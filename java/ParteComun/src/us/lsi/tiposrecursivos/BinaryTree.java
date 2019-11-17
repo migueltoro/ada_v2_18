@@ -45,7 +45,7 @@ public class BinaryTree<E> {
 	
 	public static BinaryTree<String> parse(String s){
 		Tokenizer tk = Tokenizer.create(s);
-		BinaryTree<String> tree = BinaryTree.tree(tk);
+		BinaryTree<String> tree = BinaryTree.parse(tk);
 		if (tk.hasMoreTokens()) {
 			Preconditions.checkState(false,
 					String.format("Cadena no consumida. \nError en cadena %s\n == posición %d Sufijo %s", s, tk.index(),tk.suffix()));
@@ -60,46 +60,35 @@ public class BinaryTree<E> {
 	}
 	
 	
-	private static BinaryTree<String> tree(Tokenizer tk) {
+	private static BinaryTree<String> parse(Tokenizer tk) {
 		BinaryTree<String> r = null;
-		String label;
-		Token token = tk.nextToken();
-		switch (token.type) {
-		case Operator:
-		case Integer:
-		case Double:
-		case VariableIdentifier:
-			label = label(tk);
-			if (label.equals("_")) {
-				r = BinaryTree.empty();
-			} else {
-				r = BinaryTree.leaf(label);
-				if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
-					tk.matchTokens("(");
-					BinaryTree<String> left = tree(tk);
-					tk.matchTokens(",");
-					BinaryTree<String> right = tree(tk);
-					tk.matchTokens(")");
-					r = BinaryTree.binary(label, left, right);
-				}
+		Token token = label_parse(tk);
+		if (token.text.equals("_")) {
+			r = BinaryTree.empty();
+		} else {
+			r = BinaryTree.leaf(token.text);
+			if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
+				tk.matchTokens("(");
+				BinaryTree<String> left = parse(tk);
+				tk.matchTokens(",");
+				BinaryTree<String> right = parse(tk);
+				tk.matchTokens(")");
+				r = BinaryTree.binary(token.text, left, right);
 			}
-			break;
-		default:
-			tk.error();
 		}
 		return r;
 	}
 
-	private static String label(Tokenizer tk) {	
-		Token token = tk.currentToken();
-		String label = token.text;
+	private static Token label_parse(Tokenizer tk) {	
+		Token token = tk.nextToken();
 		switch (token.type) {			
 		case Operator:
-			String opText = "";
-			if(tk.isCurrentInTokens("+","-")) opText = token.text;
-			else tk.error("+","-");
-			label = tk.matchTokens(TokenType.Integer,TokenType.Double).text; 
-			label = opText+label;
+			if(tk.isCurrentInTokens("+","-")) {
+				String op = token.text;
+				token = tk.matchTokens(TokenType.Integer,TokenType.Double); 
+				String nb = token.text;
+				token.text = op+nb;
+			} else tk.error("+","-");
 			break;
 		case Integer:
 		case Double:	
@@ -107,7 +96,7 @@ public class BinaryTree<E> {
 			break;
 		default: tk.error();
 		}
-		return label;	
+		return token;	
 	}
 
 	protected E label;
