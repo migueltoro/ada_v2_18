@@ -1,147 +1,119 @@
 package us.lsi.trees;
 
+
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import us.lsi.tiposrecursivos.Tree;
+import us.lsi.tiposrecursivos.Tree.TreeType;
 
 
 public class Trees {
 	
-	public static <E> Integer contarEtiquetas(Tree<E> arbol) {
-		Integer res = null;
-		if(arbol.isEmpty()) {
-			res = 0;
-		} else if(arbol.isLeaf()) {
-			res = 1;
-		} else {
-			res = 1 + contarEtiquetas(arbol.getChildren().iterator()); 
-		}			
-		return res;
-	}
-	
-	private static<E> Integer contarEtiquetas(Iterator<Tree<E>> itArboles ) {
-		Integer res = 0;
-		if(itArboles.hasNext()) {
-			res = contarEtiquetas(itArboles.next()) + contarEtiquetas(itArboles);
+	public static <E> Integer size(Tree<E> tree) {
+		TreeType type = tree.getType();
+		Integer r = null;
+		switch(type) {
+		case Empty: r = 0 ; break;
+		case Leaf: r = 1; break;
+		case Nary: r = 1 + tree.getChildren().stream().mapToInt(x->size(x)).sum(); break;
 		}
-		return res;
+		return r;		
 	}
 
-	public static <E> E etiquetaMenor(Tree<E> arbol, Comparator<E> cmp) {
-		E res = null;
-		if(arbol.isLeaf()) {
-			res = arbol.getLabel();
-		} else if(arbol.isNary()){
-			E min = etiquetaMenor(arbol.getChildren().iterator(), cmp);
-			res = menor(cmp, arbol.getLabel(), min); 
-		}			
-		return res;
+	public static <E> E minLabel(Tree<E> tree, Comparator<E> cmp) {
+		TreeType type = tree.getType();
+		E r = null;
+		switch(type) {
+		case Empty: r = null ; break;
+		case Leaf: r = tree.getLabel(); break;
+		case Nary: 
+			E rl = tree.getLabel();
+			r = tree.getChildren().stream().map(x->minLabel(x,cmp)).filter(x->x!=null).min(cmp).get();
+			r = r==null?rl:Stream.of(rl,r).min(cmp).get();
+		}
+		return r;		
 	}
 	
-	private static <E> E etiquetaMenor(Iterator<Tree<E>> itArboles, Comparator<E> cmp) {
-		E res = null;
-		if(itArboles.hasNext()) {
-			res = menor(cmp, etiquetaMenor(itArboles.next(), cmp), etiquetaMenor(itArboles, cmp));
+	
+	public static <E> Boolean containsLabel(Tree<E> tree, E label) {
+		TreeType type = tree.getType();
+		Boolean r = null;
+		switch(type) {
+		case Empty: r = false; break;
+		case Leaf: r = tree.getLabel().equals(label); break;
+		case Nary: 
+			r = tree.getLabel().equals(label) || tree.getChildren().stream().anyMatch(x->containsLabel(x,label));	
+			break;
 		}
-		return res;
-	}
-
-	private static <E> E menor(Comparator<E> cmp, E e1, E e2) {
-		if(e1==null) {
-			return e2;
-		} else if(e2==null) {
-			return e1;
-		} else {			
-			return cmp.compare(e1, e2)<=0? e1: e2;
-		}
+		return r;		
 	}
 	
-	public static <E> Boolean contieneEtiqueta(Tree<E> arbol, E etq) {
-		Boolean res = null;
-		if(arbol.isEmpty()) {
-			res = false;
-		} else if(arbol.isLeaf()) {
-			res = arbol.getLabel().equals(etq);
-		} else {			
-			res = arbol.getLabel().equals(etq) || existeEtiqueta(arbol.getChildren().iterator() , etq);
+	public static <E> Boolean equals(Tree<E> t1, Tree<E> t2) {
+		TreeType t1Type = t1.getType();
+		TreeType t2Type = t2.getType();
+		Boolean r = t1Type == t2Type;
+		if(!r) return r;
+		switch(t1Type) {
+		case Empty: r = true; break;
+		case Leaf: r = t1.getLabel().equals(t2.getLabel()); break;
+		case Nary: 
+			Integer n = t1.getNumOfChildren();
+			r = t1.getLabel().equals(t2.getLabel()) && n == t2.getNumOfChildren() &&
+			IntStream.range(0,n).allMatch(i->equals(t1.getChild(i),t2.getChild(i)));
+			break;
 		}
-		return res;
+		return r;		
 	}
 	
-	private static <E> Boolean existeEtiqueta(Iterator<Tree<E>> itArboles, E etq) {
-		Boolean res = false;
-		if(itArboles.hasNext()) {
-			res = contieneEtiqueta(itArboles.next(), etq) || existeEtiqueta(itArboles, etq);
+	public static <E> Tree<E> copy(Tree<E> t1) {
+		TreeType type = t1.getType();
+		Tree<E> r = null;
+		switch(type) {
+		case Empty: r = Tree.empty(); break;
+		case Leaf: r = Tree.leaf(t1.getLabel()); break;
+		case Nary: 
+			List<Tree<E>> ch = t1.getChildren().stream().map(x->copy(x)).collect(Collectors.toList());
+			r = Tree.nary(t1.getLabel(),ch);	
+			break;
 		}
-		return res;
+		return r;		
 	}
 	
-	public static <E> Boolean sonIguales(Tree<E> a1, Tree<E> a2) {
-		Boolean res = false;
-		if (a1.isEmpty()) {
-			res = a2.isEmpty();
-		} else if (a1.isLeaf()) {
-			res =  a2.isLeaf() && a1.getLabel().equals(a2.getLabel());
-		} else {
-			res = a1.getLabel().equals(a2.getLabel())
-					&& sonIguales(a1.getChildren().iterator(), a2.getChildren().iterator());
-		} 
-		return res;
-	}
-
-	private static <E> Boolean sonIguales(Iterator<Tree<E>> it1, Iterator<Tree<E>> it2) {
-		Boolean res = it1.hasNext() && it2.hasNext();
-		if (res) {
-			res = sonIguales(it1.next(), it2.next()) && sonIguales(it1, it2);
+	public static <E> List<E> toListPostOrden(Tree<E> tree) {
+		TreeType type = tree.getType();
+		List<E> r = null;
+		switch(type) {
+		case Empty: r = new ArrayList<>(); break;
+		case Leaf: 
+			r = new ArrayList<>();
+			r.add(tree.getLabel());
+			break;
+		case Nary: 
+			r = tree.getChildren().stream().flatMap(x->toListPostOrden(x).stream()).collect(Collectors.toList());
+			r.add(tree.getLabel());	
+			break;
 		}
-		return res;
+		return r;
 	}
 	
-	public static <E> Tree<E> copiaSimetrica(Tree<E> arbol) {
-		Tree<E> res = null;
-		if(arbol.isEmpty()) {
-			res = Tree.empty();					
-		} else if(arbol.isLeaf()) {
-			res = Tree.leaf(arbol.getLabel());
-		} else {
-			res = Tree.nary(arbol.getLabel(), copiasSimetricas(arbol.getChildren().iterator(), new ArrayList<>()));
+	public static Integer sumIfPredicate(Tree<Integer> tree, Predicate<Integer> predicate) {
+		TreeType type = tree.getType();
+		Integer r = null;
+		switch(type) {
+		case Empty: r = 0; break;
+		case Leaf: r = predicate.test(tree.getLabel())?tree.getLabel():0; break;
+		case Nary: 
+			r = predicate.test(tree.getLabel())?tree.getLabel():0 +
+			tree.getChildren().stream().mapToInt(x->sumIfPredicate(x,predicate)).sum();
+			break;
 		}
-		return res;
-	}
-	
-	private static <E> List<Tree<E>> copiasSimetricas(Iterator<Tree<E>> itArboles, List<Tree<E>> res) {
-		if(itArboles.hasNext()) {
-			res.add(0, copiaSimetrica(itArboles.next()));
-			copiasSimetricas(itArboles, res);
-		}
-		return res;
-	}
-
-	public static <E> List<E> recorridoPostOrden(Tree<E> arbol) {
-		if(arbol.isEmpty()) {			
-			return new ArrayList<>();
-		} else if(arbol.isLeaf()) {
-			List<E> res = new ArrayList<>();
-			res.add(arbol.getLabel());
-			return res;
-		} else {
-			List<E> res = recorridoPostOrden(arbol.getChildren().iterator());
-			res.add(arbol.getLabel());
-
-			return res;
-		}
-	}
-	
-	private static <E> List<E> recorridoPostOrden(Iterator<Tree<E>> itArboles) {
-		List<E> res = new ArrayList<>();
-		if(itArboles.hasNext()) {
-			res.addAll(recorridoPostOrden(itArboles.next()));
-			res.addAll(recorridoPostOrden(itArboles));
-		}
-		return res;
+		return r;		
 	}
 
 }

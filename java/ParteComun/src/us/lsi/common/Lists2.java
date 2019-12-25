@@ -347,5 +347,28 @@ public class Lists2 {
 				.collect(Collectors.toList());
 	}
 	
+	/**
+	 * @param ls Una lista
+	 * @return Dos vistas de la lista: la mitad primera y la segunda.
+	 */
+	public static <E> ListViews<E> views(List<E> ls){
+		return ListViews.of(ls);
+	}
+	
+	public static class ListViews<E> {
+		public List<E> l0;
+		public List<E> l1;
+		public static <E> ListViews<E> of(List<E> ls){
+			int k = ls.size()/2;
+			return new ListViews<>(ls.subList(0, k), ls.subList(k,ls.size()));
+		}	
+		private ListViews(List<E> l0, List<E> l1) {
+			super();
+			this.l0 = l0;
+			this.l1 = l1;
+		}
+		
+	}
+	
 }
 

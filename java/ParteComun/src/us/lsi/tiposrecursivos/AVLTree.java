@@ -28,7 +28,7 @@ public class AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante el orden natural de E
 	 */
 	public static <E extends Comparable<? super E>> AVLTree<E> create() {
-		return new AVLTree<E>(BinaryTree.empty(), Comparator.naturalOrder());
+		return new AVLTree<E>(BinaryTreeImpl.empty(), Comparator.naturalOrder());
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante comparator
 	 */
 	public static <E> AVLTree<E> create(Comparator<E> comparator) {
-		return new AVLTree<E>(BinaryTree.empty(), comparator);
+		return new AVLTree<E>(BinaryTreeImpl.empty(), comparator);
 	}
 	
 	private static <E> AVLTree<E> create(BinaryTree<E> tree, Comparator<E> comparator) {
@@ -228,12 +228,12 @@ public class AVLTree<E> {
 	protected BinaryTree<E> add(BinaryTree<E> tree, E element, Comparator<E> comparator) {
 		BinaryTree<E> r = tree;		
 		switch(tree.getType()) {		
-		case Empty: r = BinaryTree.leaf(element); break;
+		case Empty: r = BinaryTreeImpl.leaf(element); break;
 		case Leaf:
 			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
 			case EQ: break;
-			case LT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.leaf(element), BinaryTree.empty()); break;
-			case GT: r = BinaryTree.binary(tree.getLabel(), BinaryTree.empty(), BinaryTree.leaf(element)); break;
+			case LT: r = BinaryTreeImpl.binary(tree.getLabel(), BinaryTreeImpl.leaf(element), BinaryTreeImpl.empty()); break;
+			case GT: r = BinaryTreeImpl.binary(tree.getLabel(), BinaryTreeImpl.empty(), BinaryTreeImpl.leaf(element)); break;
 			}
 			break;
 		case Binary:
@@ -316,7 +316,7 @@ public class AVLTree<E> {
 		case Empty:  break;
 		case Leaf:
 			switch(Comparators.compare(element, tree.getLabel(), comparator)) {
-			case EQ: r = BinaryTree.empty(); break;		
+			case EQ: r = BinaryTreeImpl.empty(); break;		
 			case LT:
 			case GT: 
 			}

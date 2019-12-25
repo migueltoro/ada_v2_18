@@ -5,6 +5,7 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.views.IntegerMappingGraphView;
 import us.lsi.pd.AlgunosTestsPD;
+import us.lsi.pd.floyd.FloydPD.Alternativa;
 import us.lsi.tiposrecursivos.Tree;
 
 public class Test2 {
@@ -22,7 +23,7 @@ public class Test2 {
 		FloydPD<Ciudad,Carretera> p = FloydPD.create(origen,destino,gv);
 		
 		
-		Tree<FloydPD.Alternativa> t = AlgunosTestsPD.test2(p);
+		Tree<Alternativa> t = AlgunosTestsPD.test2(p);
 		AlgunosTestsPD.test1(p,t);
 
 	}

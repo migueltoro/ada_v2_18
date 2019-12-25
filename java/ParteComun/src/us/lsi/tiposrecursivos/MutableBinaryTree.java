@@ -1,35 +1,14 @@
 package us.lsi.tiposrecursivos;
 
-public class MutableBinaryTree<E>  {
+public interface MutableBinaryTree<E> extends BinaryTree<E> {
 	
-	public static <E> MutableBinaryTree<E> asMutable(BinaryTree<E> tree) {
-		return new MutableBinaryTree<E>(tree);
-	}
+	void setLabel(E label);
 
-	private BinaryTree<E> tree;
-
-	private MutableBinaryTree(BinaryTree<E> tree) {
-		super();
-		this.tree = tree;
-	}
+	void setLeft(BinaryTree<E> left);
 	
-	public void setLabel(E label) {
-		this.tree.label = label;
-	}
-
-	public void setLeft(BinaryTree<E> left) {
-		this.tree.left = left;
-		left.father = this.tree;
-	}
+	void setRight(BinaryTree<E> right);
 	
-	public void setRight(BinaryTree<E> right) {
-		this.tree.right = right;
-		right.father = this.tree;
-	}
-	
-	public void setFather(BinaryTree<E> father) {
-		this.tree.father = father;
-	}
+	void setFather(BinaryTree<E> father); 
 	
 	/**
 	 * @post this pasa a ser un arbol raiz si no lo era antes. nTree pasa a ocupar el lugar de this. El padre de nTree
@@ -37,18 +16,6 @@ public class MutableBinaryTree<E>  {
 	 * @param nTree Un árbol binario
 	 * @return  Devuelve nTree
 	 */
-	public BinaryTree<E> changeFor(BinaryTree<E> nTree) {
-		switch(this.tree.getChildType()) {
-		case Root: break;
-		case Left: this.tree.getFather().mutableView().setLeft(nTree); break;
-		case Right: this.tree.getFather().mutableView().setRight(nTree); break;
-		}
-		return nTree;
-	}
+	BinaryTree<E> changeFor(BinaryTree<E> nTree); 
 	
-	public String toString() {
-		return tree.toString();
-	}
 }
-
-
