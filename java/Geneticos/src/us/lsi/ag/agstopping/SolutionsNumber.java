@@ -39,14 +39,14 @@ public class SolutionsNumber implements StoppingCondition {
 	public SolutionsNumber(Integer numBestChromosomes, Integer NUM_GENERATIONS) {
 		super();
 		this.ns = numBestChromosomes;
-		AlgoritmoAG.bestChromosomes = Lists2.newList();
+		AlgoritmoAG.bestChromosomes = Lists2.empty();
 		this.fixed = new FixedGenerationCount(NUM_GENERATIONS);
 		predicate = (Chromosome x) -> x.fitness() >= StoppingConditionFactory.FITNESS_MIN; 
 	}
 
 	@Override
 	public boolean isSatisfied(Population population) {
-		List<Chromosome> r = Lists2.newList();
+		List<Chromosome> r = Lists2.empty();
 		for(Chromosome cr:population) {
 			r.add(cr);
 		}

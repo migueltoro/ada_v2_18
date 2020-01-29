@@ -57,7 +57,7 @@ public class AlgunosTestsBT<S, A, E extends EstadoBT<S,A,E>> {
 		System.out.println("Avanza");
 		int i=0;
 		List<A> alternativas;
-		List<A> alternativasEscogidas = Lists2.newList();
+		List<A> alternativasEscogidas = Lists2.empty();
 		A a;
 		while(true){
 			if(e.esCasoBase() || e.estaFueraDeRango()) break;

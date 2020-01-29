@@ -21,11 +21,11 @@ public class Soluciones<S> {
     	soluciones = Sets2.<S>newTreeSet(cmp);
     }
 
-    public static <S extends Comparable<? super S>> Soluciones<S> create() {
+    public static <S extends Comparable<? super S>> Soluciones<S> empty() {
 		return new Soluciones<S>(Comparator.<S>naturalOrder());
 	}
     
-    public static <S> Soluciones<S> create(Comparator<S> cmp) {
+    public static <S> Soluciones<S> empty(Comparator<S> cmp) {
 		return new Soluciones<S>(cmp);
 	}
     

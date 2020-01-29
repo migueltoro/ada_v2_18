@@ -475,7 +475,7 @@ public class Ejemplos1 {
 
 
 	public static void main(String[] args) throws IOException {
-		List<Integer> ls1 = Lists2.newList(-1,3,5,5,7,9,13,15,15,17,19);
+		List<Integer> ls1 = Lists2.ofElements(-1,3,5,5,7,9,13,15,15,17,19);
 		Integer e = 13;
 		System.out.println(String.format("0: %d, %d, %d, %d, %d, %d, %d",
 				index0(ls1,e),index1(ls1,e),index3(ls1,e),
@@ -486,7 +486,7 @@ public class Ejemplos1 {
 		Iterator<Integer> it1 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		Iterator<Integer> it2 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		System.out.println(String.format("1: %d, %d",index2(it1,e), index8(it2,e)));
-		List<Double> coeficientes = Lists2.newList(0.,0.,0.,0.,1.);		
+		List<Double> coeficientes = Lists2.ofElements(0.,0.,0.,0.,1.);		
 		Double v1 = valorDePolinomio(coeficientes,2.);
 		Double v3 = valorDePolinomioHornerD(coeficientes,2.);
 		Collections.reverse(coeficientes);
@@ -511,8 +511,8 @@ public class Ejemplos1 {
 				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text)));
 		System.out.println(String.format("4: %b, %b, %b, %b",
 				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2)));
-		List<Integer> l1 = Lists2.newList(1,3,5,7,9,11);
-		List<Integer> l2 = Lists2.newList(0,2,4,10,19,21,23,45);
+		List<Integer> l1 = Lists2.ofElements(1,3,5,7,9,11);
+		List<Integer> l2 = Lists2.ofElements(0,2,4,10,19,21,23,45);
 		List<Integer> l3 = mezclaOrdenada(l2,l1, Comparator.naturalOrder());
 		System.out.println(String.format("5: %s",l3));
 		Iterator<String> f1 = Iterators.file("ficheros/numeros3.txt");

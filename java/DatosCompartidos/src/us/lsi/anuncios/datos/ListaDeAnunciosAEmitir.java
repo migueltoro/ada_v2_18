@@ -49,11 +49,11 @@ public class ListaDeAnunciosAEmitir  {
 	}
 	
 	private  ListaDeAnunciosAEmitir(){	
-		this(Lists2.newList());
+		this(Lists2.empty());
 	}
 	
 	private  ListaDeAnunciosAEmitir(List<Integer> anunciosDecididosParaEmitir){
-		this.anunciosDecididosParaEmitir = Lists2.newList(anunciosDecididosParaEmitir);
+		this.anunciosDecididosParaEmitir = Lists2.ofCollection(anunciosDecididosParaEmitir);
 		this.anunciosDecididosParaEmitirSet = Sets2.newSet(anunciosDecididosParaEmitir);
 		calculaPropiedadesDerivadas();		
 		calculaAnunciosDisponibles();
@@ -109,7 +109,7 @@ public class ListaDeAnunciosAEmitir  {
 	public ListaDeAnunciosAEmitir insertar(int pos, Integer e){
 		Preconditions.checkPositionIndex(pos, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkArgument(!this.anunciosDecididosParaEmitirSet.contains(e));
-		List<Integer> ls = Lists2.newList(this.anunciosDecididosParaEmitir);
+		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
 		ls.add(pos, e);
 		return create(ls);
 	}
@@ -120,7 +120,7 @@ public class ListaDeAnunciosAEmitir  {
 	
 	public ListaDeAnunciosAEmitir eliminar(int pos){
 		Preconditions.checkElementIndex(pos, this.anunciosDecididosParaEmitir.size());
-		List<Integer> ls = Lists2.newList(this.anunciosDecididosParaEmitir);
+		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
 		ls.remove(pos);
 		return create(ls);
 	}
@@ -134,13 +134,13 @@ public class ListaDeAnunciosAEmitir  {
 		Preconditions.checkElementIndex(i, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkElementIndex(j, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkArgument(i!=j);
-		List<Integer> ls = Lists2.newList(this.anunciosDecididosParaEmitir);
+		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
 		Lists2.intercambia(ls, i, j);
 		return create(ls);
 	}
 	
 	public List<Anuncio> getAnunciosDecididosParaEmitir() {
-		List<Anuncio> ls = Lists2.newList();
+		List<Anuncio> ls = Lists2.empty();
 		for(Integer e: this.anunciosDecididosParaEmitir){
 			ls.add(DatosAnuncios.getAnuncio(e));
 		}
@@ -189,7 +189,7 @@ public class ListaDeAnunciosAEmitir  {
 	public Tuple2<Integer,Integer> getAlternativaInsertar() {
 		Preconditions.checkState(!this.anunciosDisponibles.isEmpty());
 		Integer pos = Math2.getEnteroAleatorio(0,this.anunciosDecididosParaEmitir.size() + 1);
-		List<Integer> ls = Lists2.newList(this.anunciosDisponibles);
+		List<Integer> ls = Lists2.ofCollection(this.anunciosDisponibles);
 		Integer r = Math2.getEnteroAleatorio(0,ls.size());
 		return Tuple.create(pos, ls.get(r));		
 	}
@@ -199,7 +199,7 @@ public class ListaDeAnunciosAEmitir  {
 	}
 
 	public List<Opcion> getTiposDeOpcionesAlternativasPosibles(){
-		List<Opcion> ls = Lists2.newList();
+		List<Opcion> ls = Lists2.empty();
 		for(Opcion op : Opcion.values()){
 			switch(op){
 			case Insertar :

@@ -16,6 +16,7 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.VirtualVertex;
 
 
+
 public class Casilla implements VirtualVertex<Casilla,SimpleEdge<Casilla>> {
 	private Integer x;
 	private Integer y;
@@ -122,7 +123,7 @@ public class Casilla implements VirtualVertex<Casilla,SimpleEdge<Casilla>> {
 
 	@Override
 	public Set<Casilla> getNeighborListOf() {
-		var ls = Lists2.newList(Tuple.create(1,0),
+		var ls = Lists2.ofElements(Tuple.create(1,0),
 				Tuple.create(0,1),Tuple.create(-1,0),Tuple.create(0,-1));
 		return ls.stream()
 				 .map(x-> Tuple.create(x.v1+this.x, x.v2+this.y))

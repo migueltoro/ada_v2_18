@@ -1,5 +1,12 @@
 package us.lsi.common;
 
+/**
+ * @author migueltoro
+ *
+ * @param <T> Un tipo inmutable
+ * 
+ * Un versión mutable del tipo inmutable
+ */
 public class MutableType<T> {
 
 	public static <T> MutableType<T> of(T e) {
@@ -8,6 +15,10 @@ public class MutableType<T> {
 	
 	public T value;
 	
+	/**
+	 * @param newValue El nuevo valor del objeto
+	 * @return El antiguo valor del objeto
+	 */
 	public T newValue(T newValue) {
 		T old = value;
 		this.value = newValue;
@@ -18,10 +29,12 @@ public class MutableType<T> {
 		super();
 		this.value = e;
 	}
+	
 	@Override
 	public String toString() {
 		return value.toString();
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -15,6 +15,27 @@ import us.lsi.math.Math2;
 public class Lists2 {
 	
 	/**
+	 * @pre La lista no está vacía
+	 * @param ls Una lista
+	 * @return Su primer elemento
+	 */
+	public static <E> E first(List<E> ls){
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		return ls.get(0);
+	}
+	
+	/**
+	 * @pre La lista no está vacía
+	 * @param ls Una lista
+	 * @return Su último elemento
+	 */
+	public static <E> E last(List<E> ls){
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		int n = ls.size();
+		return ls.get(n-1);
+	}
+	
+	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @return Un conjunto formado por los elementos de la lista
@@ -98,7 +119,7 @@ public class Lists2 {
 	 * @param <T> Tipo de los elementos
 	 * @return Devuelve una lista vacía
 	 */
-	public static <T> List<T> newList(){
+	public static <T> List<T> empty(){
 	    return new ArrayList<T>();
 	}
 	
@@ -150,8 +171,8 @@ public class Lists2 {
 	 * @param b Limite superior
 	 * @return Devuelve la lista formada por los enteros de a hasta b en pasos de 1
 	 */
-	public static List<Integer> newList(Integer a, Integer b){
-		return Lists2.newList(a, b, 1);
+	public static List<Integer> rangeList(Integer a, Integer b){
+		return Lists2.rangeList(a, b, 1);
 	}
 
 	/**
@@ -160,7 +181,7 @@ public class Lists2 {
 	 * @param c Paso
 	 * @return Devuelve la lista formada por los enteros de a hasta b en pasos de c
 	 */
-	public static List<Integer> newList(Integer a, Integer b, Integer c){
+	public static List<Integer> rangeList(Integer a, Integer b, Integer c){
 		return Streams2.range(a, b, c)
 				      .boxed()
 				      .collect(Collectors.toList());
@@ -170,9 +191,9 @@ public class Lists2 {
 	 * @param b Limite superior
 	 * @return Devuelve la lista formada por los reales de a hasta b en pasos de 1
 	 */
-	public static List<Double> newList(Double a, Double b){
+	public static List<Double> rangeList(Double a, Double b){
 		Preconditions.checkArgument(a<=b);
-		List<Double> s = Lists2.newList();
+		List<Double> s = Lists2.empty();
 		for(double i = a; i<b; i++){
 			s.add(i);
 		}
@@ -184,9 +205,9 @@ public class Lists2 {
 	 * @param c Paso
 	 * @return Devuelve la lista formada por los reales de a hasta b en pasos de c
 	 */
-	public static List<Double> newList(Double a, Double b, Double c){
+	public static List<Double> rangeList(Double a, Double b, Double c){
 		Preconditions.checkArgument(a<=b  && c>0);
-		List<Double> s = Lists2.newList();
+		List<Double> s = Lists2.empty();
 		for(double i = a; i<b; i=i+c){
 			s.add(i);
 		}
@@ -201,7 +222,7 @@ public class Lists2 {
 	 * @return Una lista construida de first más los que están en elements
 	 */
 	@SafeVarargs
-	public static <E> List<E> newList(E first, E... elements){
+	public static <E> List<E> ofElements(E first, E... elements){
 		List<E> r = new ArrayList<E>();
 		r.add(first);
 		r.addAll(Arrays.stream(elements).collect(Collectors.toList()));
@@ -214,7 +235,7 @@ public class Lists2 {
 	 * @param collection Una colección
 	 * @return La colección convertida en lista
 	 */
-	public static <E,U extends Collection<E>> List<E> newList(U collection){
+	public static <E,U extends Collection<E>> List<E> ofCollection(U collection){
 		return collection.stream().collect(Collectors.toList());
 	}
 	
@@ -225,7 +246,7 @@ public class Lists2 {
 	 * @return La concatenación d elas dos listas
 	 */
 	public static <E> List<E> concat(List<E> ls1, List<E> ls2){
-		List<E> r = Lists2.newList(ls1);
+		List<E> r = Lists2.ofCollection(ls1);
 		r.addAll(ls2);
 		return r;
 	}
@@ -246,7 +267,7 @@ public class Lists2 {
 	public static <E> List<E> mergeOrdered(List<E> r1, List<E> r2, Comparator<? super E> cmp){
 //		Preconditions.checkState(isOrdered(r1,cmp));
 //		Preconditions.checkState(isOrdered(r2,cmp));
-		List<E> r3 = Lists2.newList();
+		List<E> r3 = Lists2.empty();
 		int k1= 0;
 		int k2= 0;
 		int k3= 0;
@@ -326,7 +347,7 @@ public class Lists2 {
 	 * @return Una lista unitaria escogida aleatoriamente o vacía si lo es la de entrada
 	 */
 	public static <T> List<T> randomUnitary(List<T> ls){
-		List<T> r = Lists2.newList();
+		List<T> r = Lists2.empty();
 		if(!ls.isEmpty()){
 			int e = Math2.getEnteroAleatorio(0, ls.size());
 			r.add(ls.get(e));	
@@ -349,25 +370,65 @@ public class Lists2 {
 	
 	/**
 	 * @param ls Una lista
-	 * @return Dos vistas de la lista: la mitad primera y la segunda.
+	 * @return Una vista de tipo 1
 	 */
-	public static <E> ListViews<E> views(List<E> ls){
-		return ListViews.of(ls);
+	public static <E> View1<List<E>,E> view1(List<E> ls){
+		return ListView1.of(ls);
 	}
 	
-	public static class ListViews<E> {
-		public List<E> l0;
-		public List<E> l1;
-		public static <E> ListViews<E> of(List<E> ls){
-			int k = ls.size()/2;
-			return new ListViews<>(ls.subList(0, k), ls.subList(k,ls.size()));
-		}	
-		private ListViews(List<E> l0, List<E> l1) {
-			super();
-			this.l0 = l0;
-			this.l1 = l1;
+	static class ListView1<E> implements View1<List<E>,E>{
+		private E element;
+		private List<E> rest;
+		public static <E> View1<List<E>,E> of(List<E> ls){
+			Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+			return new ListView1<>(ls.get(0), ls.subList(1,ls.size()));
 		}
-		
+		private ListView1(E element, List<E> rest) {
+			super();
+			this.element = element;
+			this.rest = rest;
+		}
+		public E element() {
+			return element;
+		}
+		public List<E> rest() {
+			return rest;
+		}		
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Una vista de tipo 2 sin solape
+	 */
+	public static <E> View2<List<E>,E> view2(List<E> ls){
+		return ListView2.of(ls);
+	}
+	
+	
+	static class ListView2<E> implements View2<List<E>,E>{
+		private E centralElement;
+		private List<E> left;
+		private List<E> right;
+		public static <E> View2<List<E>,E> of(List<E> ls){	
+			int n = ls.size();
+			int k = n/2;
+			return new ListView2<E>(ls.get(k),ls.subList(0, k), ls.subList(k,n));
+		}	
+		private ListView2(E element, List<E> left, List<E> right) {
+			super();
+			this.centralElement = element;
+			this.left = left;
+			this.right = right;
+		}
+		public E centralElement() {
+			return centralElement;
+		}
+		public List<E> left() {
+			return left;
+		}
+		public List<E> right() {
+			return right;
+		}	
 	}
 	
 }

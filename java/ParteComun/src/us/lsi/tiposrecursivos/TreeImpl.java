@@ -31,16 +31,16 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public static Tree<Object> empty = new TreeImpl<Object>();
 	
 	@SuppressWarnings("unchecked")
-	public static <R> Tree<R> empty() {
-		return (Tree<R>) empty;
+	public static <R> TreeImpl<R> empty() {
+		return (TreeImpl<R>) empty;
 	}
 	
-	public static <R> Tree<R> leaf(R label) {
+	public static <R> TreeImpl<R> leaf(R label) {
 		Preconditions.checkNotNull(label);
 		return new TreeImpl<R>(label);
 	}
 
-	public static <R> Tree<R> nary(R label, List<Tree<R>> elements) {
+	public static <R> TreeImpl<R> nary(R label, List<TreeImpl<R>> elements) {
 		Preconditions.checkNotNull(label);
 		Preconditions.checkNotNull(elements);
 		Preconditions.checkArgument(elements.stream().allMatch(x->x!=null));		
@@ -52,8 +52,8 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 
 	@SafeVarargs
-	public static <R> Tree<R> nary(R label, Tree<R>... elements) {
-		List<Tree<R>> nElements = Arrays.asList(elements);
+	public static <R> TreeImpl<R> nary(R label, TreeImpl<R>... elements) {
+		List<TreeImpl<R>> nElements = Arrays.asList(elements);
 		return nary(label, nElements);
 	}
 	
@@ -70,7 +70,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	protected E label;
 	private Integer id;
-	protected final List<Tree<E>> elements;
+	protected final List<TreeImpl<E>> elements;
 	protected Tree<E> father;
 	private final TreeType type;
 
@@ -92,7 +92,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		this.type = TreeType.Leaf;
 	}
 		
-	protected TreeImpl(E label, List<Tree<E>> elements) {
+	protected TreeImpl(E label, List<TreeImpl<E>> elements) {
 		super();
 		Preconditions.checkArgument(!elements.isEmpty(), "La lista no puede estar vacía");
 		this.id = null;
@@ -127,7 +127,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 					elements.add(t); //cambio aqui
 				}
 				tk.matchTokens(")");
-				r = TreeImpl.nary(token.text, elements);
+				r = Tree.nary(token.text, elements);
 			}
 		}
 		return r;
@@ -146,7 +146,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 			break;
 		case Integer:
 		case Double:	
-		case VariableIdentifier:
+		case Variable:
 			break;
 		default: tk.error();
 		}
@@ -212,7 +212,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public List<Tree<E>> getChildren() {
-		return elements;
+		return elements.stream().map(x->x).collect(Collectors.toList());
 	}
 
 	/* (non-Javadoc)
@@ -356,11 +356,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public Tree<E> copy(){
 		Tree<E> r= null;
 		switch(this.getType()) {
-		case Empty: r = TreeImpl.empty(); break;
-		case Leaf:  r = TreeImpl.leaf(label); break;
+		case Empty: r = Tree.empty(); break;
+		case Leaf:  r = Tree.leaf(label); break;
 		case Nary:
 			List<Tree<E>> nElements = elements.stream().map(x->x.copy()).collect(Collectors.toList());	
-			r = TreeImpl.nary(label, nElements);
+			r = Tree.nary(label, nElements);
 			break;
 		}
 		return r;
@@ -374,11 +374,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public <R> Tree<R> copy(Function<E,R> f){
 		Tree<R> r = null;
 		switch(this.getType()) {
-		case Empty: r = TreeImpl.empty(); break;
-		case Leaf:  r = TreeImpl.leaf(f.apply(label)); break;
+		case Empty: r = Tree.empty(); break;
+		case Leaf:  r = Tree.leaf(f.apply(label)); break;
 		case Nary:
 			List<Tree<R>> nElements = elements.stream().map(x->x.copy(f)).collect(Collectors.toList());	
-			return TreeImpl.nary(f.apply(label), nElements);
+			return Tree.nary(f.apply(label), nElements);
 		}
 		return r;
 	}
@@ -389,12 +389,12 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public Tree<E> getReverse() {
 		Tree<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = TreeImpl.empty(); break;
-		case Leaf: r = TreeImpl.leaf(label); break;
+		case Empty: r = Tree.empty(); break;
+		case Leaf: r = Tree.leaf(label); break;
 		case Nary:
 			List<Tree<E>> nElements = Lists2.reverse(elements).stream().map(x -> x.getReverse())
 					.collect(Collectors.toList());
-			r = TreeImpl.nary(label, nElements);
+			r = Tree.nary(label, nElements);
 		}
 		return r;
 	}
@@ -463,11 +463,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getPreOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Nary:
-			r = Lists2.newList(this.label);
-			r.addAll(elements.stream().map(x -> x.getPreOrder()).reduce(Lists2.newList(), Lists2::concat));
+			r = Lists2.ofElements(this.label);
+			r.addAll(elements.stream().map(x -> x.getPreOrder()).reduce(Lists2.empty(), Lists2::concat));
 		}
 		return r;
 	}
@@ -481,10 +481,10 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getPostOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Nary:
-			r = elements.stream().map(x -> x.getPostOrder()).reduce(Lists2.newList(), Lists2::concat);
+			r = elements.stream().map(x -> x.getPostOrder()).reduce(Lists2.empty(), Lists2::concat);
 			r.add(label);
 		}
 		return r;
@@ -497,15 +497,15 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getInOrder(int k){
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Nary:
-			List<Tree<E>> nElements = Lists2.newList(elements);
+			List<TreeImpl<E>> nElements = Lists2.ofCollection(elements);
 			int nk = Math.min(k, elements.size());
-			nElements.add(nk,Tree.leaf(label));
+			nElements.add(nk,TreeImpl.leaf(label));
 			r = nElements.stream()
 					.map(x->x.getInOrder(k))
-					.reduce(Lists2.newList(),Lists2::concat);
+					.reduce(Lists2.empty(),Lists2::concat);
 		}
 		return r;
 	}
@@ -514,8 +514,8 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public List<Tree<E>> getByLevel(){
-		List<Tree<E>> r = Lists2.newList(this);
-		List<Tree<E>> level = Lists2.newList(this);		
+		List<Tree<E>> r = Lists2.ofElements(this);
+		List<Tree<E>> level = Lists2.ofElements(this);		
 		while(!level.isEmpty()){
 			level = getNextLevel(level);
 			r.addAll(level);
@@ -571,7 +571,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getDepth(Tree<E> root){
-		List<Tree<E>> level = Lists2.newList(this);
+		List<Tree<E>> level = Lists2.ofElements(this);
 		int n = 0;		
 		while(!level.isEmpty()){
 			if(level.stream().anyMatch(x->x==this)){
@@ -671,7 +671,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		String ex = "39(2,27(_,2,3,4))";
 		Tree<String> t7 = Tree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.newList(1,2,3,4,5,6,7,8,9)));
+		System.out.println(Lists2.reverse(Lists2.ofElements(1,2,3,4,5,6,7,8,9)));
 		Tree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		System.out.println(t8.getChild(0).getFather());

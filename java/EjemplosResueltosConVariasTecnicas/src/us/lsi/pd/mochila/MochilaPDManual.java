@@ -134,7 +134,7 @@ public class MochilaPDManual {
 		public Sol(Double val, List<Integer> unidades) {
 			super();
 			this.val = val;
-			this.unidades = Lists2.newList(unidades);
+			this.unidades = Lists2.ofCollection(unidades);
 		}
 		
 		Sol add(Integer a, Integer index) {

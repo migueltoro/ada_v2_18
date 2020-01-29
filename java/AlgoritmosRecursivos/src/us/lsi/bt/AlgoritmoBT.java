@@ -123,7 +123,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
     private List<A> filtraRandomize(E p, List<A> alternativas){
     	List<A> alt;
 		if(isRandomize && p.size()>sizeRef){
-			List<A> ls = Lists2.newList(alternativas);
+			List<A> ls = Lists2.ofCollection(alternativas);
 			alt = Lists2.randomUnitary(ls);
 		}else{
 			alt = alternativas;

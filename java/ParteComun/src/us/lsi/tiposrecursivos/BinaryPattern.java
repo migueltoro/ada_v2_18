@@ -1,17 +1,23 @@
 package us.lsi.tiposrecursivos;
 
-import java.util.Map;
+
 import java.util.function.Function;
-import us.lsi.tiposrecursivos.BinaryPatternImpl.Label;
-import us.lsi.tiposrecursivos.BinaryPatternImpl.PatternType;
+
+import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
 
 public interface BinaryPattern<E> {
 	
-	public static <E> BinaryPattern<E> binary(Label<E> label, BinaryPattern<E> left, BinaryPattern<E> right) {
+	public enum PatternType{Empty, Leaf, Binary, Binary_Variable, Variable}
+	
+	public static <E> BinaryPattern<E> binary(E label, BinaryPattern<E> left, BinaryPattern<E> right) {
 		return BinaryPatternImpl.binary(label, left, right);
 	}
 	
-	public static <E> BinaryPattern<E> leaf(Label<E> label) {
+	public static <E> BinaryPattern<E> binary_variable(String variable_name, BinaryPattern<E> left, BinaryPattern<E> right) {
+		return BinaryPatternImpl.binary_variable(variable_name, left, right);
+	}
+	
+	public static <E> BinaryPattern<E> leaf(E label) {
 		return BinaryPatternImpl.leaf(label);
 	}
 	
@@ -27,12 +33,16 @@ public interface BinaryPattern<E> {
 		return BinaryPatternImpl.parse(s,f);
 	}
 	
-	public static <E> BinaryTree<E> transform(BinaryTree<E> tree, BinaryPattern<E> pattern, BinaryPattern<E> result){
-		return BinaryPatternImpl.transform(tree, pattern, result);
+	public static <E> BinaryPattern<E> parse(String s) {
+		return BinaryPattern.parse(s,x->null);
 	}
 	
-	public static <E> BinaryPattern<E> parse(String s){
-		return BinaryPatternImpl.parse(s);
+	public static <E> Matches<E> match(BinaryTree<E> tree, BinaryPattern<E> pt){
+		return BinaryPatternImpl.match(tree,pt);
+	}
+	
+	public static <E> BinaryTree<E> transform(BinaryTree<E> tree, BinaryPattern<E> pattern, BinaryPattern<E> result){
+		return BinaryPatternImpl.transform(tree, pattern, result);
 	}
 	
 	boolean isEmpty();
@@ -40,31 +50,25 @@ public interface BinaryPattern<E> {
 	boolean isLeaf();
 
 	boolean isBinary();
+	
+	boolean isBinary_Variable();
 
 	boolean isVariable();
 
-	Label<E> getLabel();
+	E getLabel();
 
 	BinaryPattern<E> getLeft();
 
 	BinaryPattern<E> getRight();
 
-	Variable<BinaryTree<E>> asVariable();
-
 	PatternType getType();
-
-	Map<String, E> varLabels();
-
-	Map<String, BinaryTree<E>> varTrees();
+	
+	String getVariable_Name();
 
 	String toString();
 
 	<R> BinaryPattern<R> map(Function<E, R> f);
-
-	BinaryTree<E> valuesToVariables();
-
-	BinaryTree<E> valuesToVariables(Map<String, E> labels, Map<String, BinaryTree<E>> trees);
 	
-	
+	BinaryTree<E> toBinaryTree(Matches<E> matches);
 
 }

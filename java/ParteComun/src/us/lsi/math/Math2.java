@@ -300,7 +300,7 @@ public class Math2 {
 	 * entre 0 y ls.size(), no incluido, con las probababilidades proporcionadas en la lista
 	 */
 	public static Integer escogeEntre(Double first, Double...rest){
-		return escogeEntre(Lists2.newList(first, rest));
+		return escogeEntre(Lists2.ofElements(first, rest));
 	}
 	 
 	/**
@@ -398,7 +398,7 @@ public class Math2 {
 	 * @return Un lista de tamaño n con números reales en el intervalo a &lt; = r &lt; b 
 	 */
 	public static List<Double> getListDoubleAleatoria(int n, double a, double b){
-		List<Double> lista = Lists2.newList();
+		List<Double> lista = Lists2.empty();
 		for(int i =0; i<n;i++){
 			lista.add(getDoubleAleatorio(a,b));
 		}

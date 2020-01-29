@@ -100,7 +100,7 @@ public class RecorridoAStarManual<V,E> {
 	
 	public GraphPath<V,E> minPathToOrigin(V v) {
 		if(tree == null) aStarWalks();
-		List<V> vertexList = Lists2.newList(v);
+		List<V> vertexList = Lists2.ofElements(v);
 		FibonacciHeapNode<Data<V,E>> data = tree.get(v);
 		while(data.getData().edge != null) {
 			v = Graphs.getOppositeVertex(graph,data.getData().edge, v);

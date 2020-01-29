@@ -19,7 +19,7 @@ public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
 	public static Integer resto = 10;
 	
 	public static VertexReinas of() {
-		List<Integer> yO = Lists2.newList();
+		List<Integer> yO = Lists2.empty();
 		SetRangeInteger dpO = SetRangeInteger.of(-numeroDeReinas, 10);
 		SetRangeInteger dsO = SetRangeInteger.of();
 		return new VertexReinas(0, yO, dpO, dsO);

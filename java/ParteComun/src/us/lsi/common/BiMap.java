@@ -4,12 +4,12 @@ import java.util.Map;
 
 public class BiMap<K, V> {
 	
-	public static <K, V> BiMap<K, V> create() {
+	public static <K, V> BiMap<K, V> empty() {
 		return new BiMap<K, V>();
 	}
 
 
-	private static <K, V> BiMap<K, V> create(Map<K, V> map, Map<V, K> inverseMap) {
+	private static <K, V> BiMap<K, V> of(Map<K, V> map, Map<V, K> inverseMap) {
 		return new BiMap<K, V>(map, inverseMap);
 	}
 
@@ -51,7 +51,7 @@ public class BiMap<K, V> {
 	}
 	
 	public BiMap<V,K> inverse(){
-		return create(inverseMap,map);
+		return of(inverseMap,map);
 	}
 	
 	public V get(K key) {

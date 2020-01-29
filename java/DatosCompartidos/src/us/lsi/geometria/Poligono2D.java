@@ -42,11 +42,11 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 	private List<Punto2D> vertices;
 	
 	private Poligono2D() {
-		vertices = Lists2.newList();
+		vertices = Lists2.empty();
 	}
 	
 	private Poligono2D(Punto2D p1, Punto2D p2, Punto2D p3) {
-		vertices = Lists2.newList();
+		vertices = Lists2.empty();
 		vertices.add(p1);
 		vertices.add(p2);
 		vertices.add(p3);
@@ -54,7 +54,7 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 	
 	
 	private Poligono2D(Punto2D... lp) {
-		vertices = Lists2.newList();
+		vertices = Lists2.empty();
 		Preconditions.checkArgument(lp.length>=3);
 		for(Punto2D p : lp){
 			vertices.add(p);
@@ -75,7 +75,7 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 	
 	public Double getArea(){
 		Double area = 0.;
-		List<Vector2D> vectores = Lists2.newList();
+		List<Vector2D> vectores = Lists2.empty();
 		for(int i = 1;  i < vertices.size(); i++){
 			vectores.add(vertices.get(i).minus(vertices.get(0)));
 		}
@@ -87,7 +87,7 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 
 	
 	public Poligono2D rota(Punto2D p, Double angulo) {
-		List<Punto2D> nVertices = Lists2.newList();
+		List<Punto2D> nVertices = Lists2.empty();
 		for(Punto2D v: this.vertices){
 			nVertices.add(v.rota(p, angulo));
 		}
@@ -96,7 +96,7 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 
 	
 	public Poligono2D traslada(Vector2D v) {
-		List<Punto2D> nVertices = Lists2.newList();
+		List<Punto2D> nVertices = Lists2.empty();
 		for(Punto2D vt: this.vertices){
 			nVertices.add(vt.traslada(v));
 		}

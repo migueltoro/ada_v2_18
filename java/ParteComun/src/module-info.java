@@ -1,18 +1,12 @@
-
-
 /**
- * <h2>
  * 
- * <p> <em> Author:</em>  Miguel Toro </p>
- * <p> <em> Módulos Requeridos:</em> 
- * 
- * 
- * </h2>
+ */
+/**
+ * @author migueltoro
  *
  */
-
-
 module partecomun {
+	
 	exports us.lsi.regularexpressions;
 	exports us.lsi.basictypes;
 	exports us.lsi.tiposrecursivos;
@@ -20,4 +14,6 @@ module partecomun {
 	exports us.lsi.flujosparalelos;
 	exports us.lsi.math;
 	exports us.lsi.common;
+	
+	requires transitive commons.math3;
 }

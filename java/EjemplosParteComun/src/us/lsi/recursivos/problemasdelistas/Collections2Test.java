@@ -66,7 +66,7 @@ public class Collections2Test {
 	@Test
 	public void testSubSecuencia() {
 		Double[] r = {1., -2., 11., -4., 13., -5., 2., 3.};
-		List<Double> lista = Lists2.newList();
+		List<Double> lista = Lists2.empty();
 		for(Double e:r){
 			lista.add(e);
 		}

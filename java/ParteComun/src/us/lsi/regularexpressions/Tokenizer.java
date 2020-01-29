@@ -14,7 +14,7 @@ import us.lsi.common.Sets2;
 
 public class Tokenizer {
 
-	public enum TokenType{Integer,Double,VariableIdentifier,FunctionIdentifier,ReservedWord,Operator,Separator,Symbol};
+	public enum TokenType{Integer,Double,Variable,Function,ReservedWord,Operator,Separator,Symbol};
 	public static Set<String> separators = Sets2.newSet("{", "}", ",", ";", "(", ")");
 	private static String space = "\\s+";
 	private static String number = "[0-9]+(\\.[0-9]*)?";
@@ -158,9 +158,9 @@ public class Tokenizer {
 			if (reservedWords.contains(token)) {
 				tokenType = TokenType.ReservedWord;
 			}else if(functions.contains(token)){
-				tokenType = TokenType.FunctionIdentifier;
+				tokenType = TokenType.Function;
 			}else {
-				tokenType = TokenType.VariableIdentifier;
+				tokenType = TokenType.Variable;
 			}
 		} else if(c.equals('$') || c.equals('&') || c.equals('@')) {		
 			matcher = pSymbol.matcher(text.subSequence(start, end));

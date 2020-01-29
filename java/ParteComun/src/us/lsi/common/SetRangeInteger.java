@@ -7,6 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * @author migueltoro
+ *
+ * Un conjunto de un rango de enteros
+ */
 public class SetRangeInteger implements Set<Integer>{
 	
 	

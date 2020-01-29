@@ -145,7 +145,7 @@ public class HashTable<K, V> {
 	}
 	
 	public List<EntryTable<K,V>> entryList(){
-		List<EntryTable<K,V>> r = Lists2.newList();
+		List<EntryTable<K,V>> r = Lists2.empty();
 		for(int i =0;i<this.capacityData;i++) {
 			EntryData<K,V> e = data.get(i);
 			if(e.key == null) continue;

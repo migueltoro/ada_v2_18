@@ -36,7 +36,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 	 * @return Algoritmo de Programación Dinámica para resolver le problema
 	 */
 	public static <S, A, P extends ProblemaPD<S, A, P>> AlgoritmoPD<S,A,P> createPD(P p) {
-		List<P> lis = Lists2.newList();
+		List<P> lis = Lists2.empty();
 		lis.add(p);
 		return new AlgoritmoPD<S, A,P>(lis);
 	}
@@ -49,7 +49,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 	 * @return Algoritmo de Programación Dinámica para resolver le problema
 	 */
 	public static <S, A,P extends ProblemaPDR<S,A,P>> AlgoritmoPD<S,A,ProblemaPDRAdapt<S,A,P>> createPDR(P p) {
-		List<ProblemaPDRAdapt<S, A, P>> lis = Lists2.newList();
+		List<ProblemaPDRAdapt<S, A, P>> lis = Lists2.empty();
 		lis.add(p.asPD());
 		return new AlgoritmoPD<S, A,ProblemaPDRAdapt<S,A,P>>(lis);
 	}
@@ -198,7 +198,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 		Tree<A> r = null;
 		if (!p.esCasoBase()) {
 			Sp<A> sp = this.getSolucionParcial(p);
-			List<Tree<A>> la = Lists2.newList();
+			List<Tree<A>> la = Lists2.empty();
 			Integer np = p.getNumeroSubProblemas(sp.alternativa);
 			for (Integer i = 0; i < np; i++) {
 				Tree<A> rh = this.getAlternativasDeSolucion(p.getSubProblema(sp.alternativa, i));
@@ -216,7 +216,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 	    problemas = ps;
 	    tipo = problema.getTipo();
 	    this.numeroDeProblemas = 0;
-	    this.idsDeProblemas = BiMap.create();
+	    this.idsDeProblemas = BiMap.empty();
 	    this.problemasDesdeId = this.idsDeProblemas.inverse();
 	    mejorValor = isMin()? Double.MAX_VALUE: Double.MIN_VALUE;  
 	}
@@ -242,7 +242,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 	private List<A> randomize(P p, List<A> alternativas){
 		List<A> alt;
 		if(isRandomize && p.size()>sizeRef){
-			List<A> ls = Lists2.newList(alternativas);			
+			List<A> ls = Lists2.ofCollection(alternativas);			
 			alt = Lists2.randomUnitary(ls);
 		}else{
 			alt = alternativas;
@@ -288,7 +288,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 		} else if(p.estaFueraDeRango()){
 			if(AlgoritmoPD.metricasOK) AlgoritmoPD.metricas.addFueraDeRango();
 		} else {
-			List<Sp<A>> solucionesDeAlternativas = Lists2.newList(); 
+			List<Sp<A>> solucionesDeAlternativas = Lists2.empty(); 
 			for(A a: randomize(p,p.getAlternativas())){
 				if(conFiltro && isMin() && p.getObjetivoEstimado(a) >= mejorValor) {
 					if(AlgoritmoPD.metricasOK) AlgoritmoPD.metricas.addUnFiltro();
@@ -299,7 +299,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 					continue;
 				}
 				int numeroDeSubProblemas = p.getNumeroSubProblemas(a);
-				List<Sp<A>> solucionesDeSubProblemas = Lists2.newList();  
+				List<Sp<A>> solucionesDeSubProblemas = Lists2.empty();  
 				boolean haySolucion = true;
 				for(int i = 0; i < numeroDeSubProblemas; i++){
 					P pr = p.getSubProblema(a,i); 
@@ -348,7 +348,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 				if (pd.esCasoBase()) {					
 					s = pd.getSolucionReconstruidaCasoBase(e);
 				} else if (e.alternativa != null) {
-					List<S> soluciones = Lists2.<S> newList();
+					List<S> soluciones = Lists2.<S> empty();
 					for (int i = 0; i < pd.getNumeroSubProblemas(e.alternativa); i++) {
 						soluciones.add(getSolucion(pd.getSubProblema(e.alternativa, i)));
 					}

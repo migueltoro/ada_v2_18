@@ -17,7 +17,7 @@ public class SolucionJarras {
 
 	private SolucionJarras() {
 		super();
-		this.listaAcciones = Lists2.newList();
+		this.listaAcciones = Lists2.empty();
 	}
 
 	public void add(ActionJarras op) {

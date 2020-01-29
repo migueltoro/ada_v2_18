@@ -55,10 +55,10 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		return new LargeInteger(m.digits, m.isPositive);
 	}
 	
-	public static LargeInteger ZERO = LargeInteger.create(Lists2.newList(0));
-	public static LargeInteger ONE = LargeInteger.create(Lists2.newList(1));
-	public static LargeInteger TWO = LargeInteger.create(Lists2.newList(2));
-	public static LargeInteger TEN = LargeInteger.create(Lists2.newList(10));
+	public static LargeInteger ZERO = LargeInteger.create(Lists2.ofElements(0));
+	public static LargeInteger ONE = LargeInteger.create(Lists2.ofElements(1));
+	public static LargeInteger TWO = LargeInteger.create(Lists2.ofElements(2));
+	public static LargeInteger TEN = LargeInteger.create(Lists2.ofElements(10));
 	
 	/**
 	 * Los dígitos están ordenados de más significativo a menos significativos
@@ -75,11 +75,11 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	private Boolean isPositive = true;
 	
 	private LargeInteger(List<Integer> digits) {
-		this(Lists2.newList(digits),true);
+		this(Lists2.ofCollection(digits),true);
 	}
 
 	private LargeInteger(Integer number) {
-		this(Lists2.newList(number),true);
+		this(Lists2.ofElements(number),true);
 	}
 	
 	private LargeInteger(List<Integer> digits, Boolean isPositive) {
@@ -87,7 +87,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		Preconditions.checkArgument(digits.size()>=1, "Debe haber un dígito al menos");
 		Preconditions.checkArgument(digits.stream().allMatch(x->x>=0), "Los digitos deben se positivos o cero");
 		if(digits.size() == 1 && digits.get(0).equals(0)) isPositive = true;
-		this.digits = Lists2.newList(digits);
+		this.digits = Lists2.ofCollection(digits);
 		this.isPositive = isPositive;
 	}
 
@@ -111,7 +111,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	}
 	
 	public List<Integer> getDigits(){
-		return Lists2.newList(this.digits);
+		return Lists2.ofCollection(this.digits);
 	}
 	
 	public boolean isNegative(){
@@ -122,7 +122,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	 * @return Multiplica por la base añadiendo un cero a la derecha
 	 */
 	public LargeInteger multiplyRadix(){
-		List<Integer> r = Lists2.newList(this.digits);
+		List<Integer> r = Lists2.ofCollection(this.digits);
 		r.add(0);
 		return LargeInteger.create(r,this.isPositive);
 	}
@@ -149,7 +149,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	 * @return Multiplica por la base elevada a m añadiendo m ceros a las derecha
 	 */
 	public LargeInteger multiplyRadixToM(int m){
-		List<Integer> r = Lists2.newList(this.digits);
+		List<Integer> r = Lists2.ofCollection(this.digits);
 		List<Integer> nDigits = Lists2.copy(m, 0);
 		r.addAll(nDigits);
 		return LargeInteger.create(r,this.isPositive);	
@@ -264,7 +264,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		b = completeWithLeftZeros(b,mx);
 		int i =  a.size()-1;
 		int q = 0;
-		List<Integer> digits = Lists2.newList();
+		List<Integer> digits = Lists2.empty();
 		while(i >=0){
 			Integer[] sd = addDigit(a.getDigit(i),q);
 			q = sd[0];
@@ -298,7 +298,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		}
 		int i = a.size() - 1;
 		int q = 0;
-		List<Integer> digits = Lists2.newList();
+		List<Integer> digits = Lists2.empty();
 		while (i >= 0) {
 			Integer[] sd = addDigit(a.getDigit(i),q);
 			sd = minusDigit(sd[1],b.getDigit(i));
@@ -380,7 +380,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		if((aPositive && !bPositive) || (!aPositive && bPositive))
 			sigr=false;
 		int k = a.size();
-		List<Integer> digits = Lists2.newList();	
+		List<Integer> digits = Lists2.empty();	
 		Integer[] cp = {a.getDigit(0),0};
 		for(int i=0;i<k;i++){
 			Integer[] s = {cp[1],a.getDigit(i)};

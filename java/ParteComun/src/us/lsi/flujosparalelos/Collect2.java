@@ -4,7 +4,7 @@ import java.util.Spliterator;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-public class CollectP {
+public class Collect2 {
 	
 	public static <E,B,R> R collect(Stream<E> flow, Collector<E,B,R> c) {
 		B b = collect(flow.spliterator(),c);

@@ -71,7 +71,7 @@ public class SubListChromosome extends BinaryChromosome implements SeqNomalChrom
 	 */
 	@Override
 	public List<Integer> decode() {	
-		List<Integer> r = Lists2.newList();
+		List<Integer> r = Lists2.empty();
 		List<Integer> bn = this.getRepresentation();
 		Preconditions.checkArgument(normalSequence.size() == bn.size(),normalSequence.size()+","+bn.size());
 		for (int i = 0; i < normalSequence.size(); i++) {

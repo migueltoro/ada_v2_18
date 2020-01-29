@@ -206,7 +206,7 @@ public class ExpressionChromosome<T> extends BinaryChromosome implements us.lsi.
 	}	
 	
 	private static <R> List<VariableExp<R>> getVariables(int num){
-		List<VariableExp<R>> ls = Lists2.newList();
+		List<VariableExp<R>> ls = Lists2.empty();
 		for(int i=0; i<num;i++){
 			ls.add(Exp.<R>variable(nombresDeVariables.get(i)));
 		}
@@ -214,7 +214,7 @@ public class ExpressionChromosome<T> extends BinaryChromosome implements us.lsi.
 	}
 	
 	private static <R> List<ConstantExp<R>> getConstants(int num){
-		List<ConstantExp<R>> ls = Lists2.newList();
+		List<ConstantExp<R>> ls = Lists2.empty();
 		for(int i=0; i<num;i++){
 			ls.add(Exp.<R>constant(nombresDeConstantes.get(i)));
 		}

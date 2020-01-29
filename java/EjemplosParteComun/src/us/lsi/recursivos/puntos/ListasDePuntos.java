@@ -112,8 +112,8 @@ public class ListasDePuntos {
 		if(j-i <= umbral){
 			r = parMasCercanoBase(i,j,puntosX);
 		}else{
-			List<Punto2D> puntosYIzq = Lists2.newList();
-			List<Punto2D> puntosYDer = Lists2.newList();
+			List<Punto2D> puntosYIzq = Lists2.empty();
+			List<Punto2D> puntosYDer = Lists2.empty();
 			Double xk = puntosX.get(k).getX();
 			for(Punto2D p:puntosY){
 				if(p.getX() < xk){
@@ -125,7 +125,7 @@ public class ListasDePuntos {
 			ParDePuntos s1 = masCercano(i,k,puntosX, puntosYIzq,umbral,ordNatural);
 			ParDePuntos s2 = masCercano(k,j,puntosX, puntosYDer,umbral,ordNatural);
 			r = Comparators.min(s1, s2,ordNatural);
-			List<Punto2D> yCentral = Lists2.newList();
+			List<Punto2D> yCentral = Lists2.empty();
 			for(Punto2D p: puntosY){
 				if(Math.abs(p.getX()- xk) < r.getDistancia()){
 						yCentral.add(p);
@@ -190,7 +190,7 @@ public class ListasDePuntos {
 	}
 	
 	public static List<Punto2D> getListaPuntosAleatoria(int n){
-		List<Punto2D> r = Lists2.newList();
+		List<Punto2D> r = Lists2.empty();
 		for(int i=0; i < n; i++){
 			r.add(Punto2D.create(Math2.getDoubleAleatorio(-1000., 1000.),Math2.getDoubleAleatorio(-1000., 1000.)));
 		}

@@ -14,7 +14,7 @@ import us.lsi.common.Lists2;
 import us.lsi.common.Multiset;
 import us.lsi.common.MutableType;
 
-public class CollectorsP {
+public class Collectors2 {
 	
 	public static <E,B,R> Collector<E,MutableType<B>,R> of(
 			Supplier<B> supplier,
@@ -30,7 +30,7 @@ public class CollectorsP {
 	
 	public static <E> Collector<E,Multiset<E>,Multiset<E>> toMultiset() {
 		return Collector.of(
-				()->Multiset.create(), 
+				()->Multiset.empty(), 
 				(x,e)->x.add(e), 
 				(x,y)->Multiset.add(x, y), 
 				x->x);

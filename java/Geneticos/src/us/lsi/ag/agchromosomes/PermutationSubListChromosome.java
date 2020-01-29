@@ -151,7 +151,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	 */
 	public List<Integer> decode() {	
 		List<Integer> rk = randomKey.decode(normalSequence);
-		List<Integer> r = Lists2.newList();
+		List<Integer> r = Lists2.empty();
 		List<Integer> bn = binary.getRepresentation();
 		Preconditions.checkArgument(rk.size()==bn.size());
 		for(int i=0; i< rk.size();i++){

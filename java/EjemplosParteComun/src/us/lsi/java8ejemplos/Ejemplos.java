@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Multiset;
-import us.lsi.common.Multisets2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.SetMultimap;
 import us.lsi.common.Strings2;
@@ -245,7 +244,7 @@ public class Ejemplos {
 	 * @return  Un Multiset&lt;Cuadrante&gt;
 	 */
 	public static Multiset<Cuadrante> ejemploV(Stream<Punto2D> st){
-		Multiset<Cuadrante> m = Multisets2.create();
+		Multiset<Cuadrante> m = Multiset.empty();
 		st.forEach(x->m.add(x.getCuadrante()));	
 		return m;
 	}
@@ -355,7 +354,7 @@ public class Ejemplos {
 	 */
 	public static List<Long> primosMenoresOIgualesA2(Long limit){
 		Long e = 1L;
-		List<Long> a = Lists2.newList();
+		List<Long> a = Lists2.empty();
 		while(e<=limit){	   
 	      	a.add(e);
 	   		e = siguientePrimo2(e);		   

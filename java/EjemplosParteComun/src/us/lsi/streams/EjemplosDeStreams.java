@@ -353,7 +353,7 @@ public class EjemplosDeStreams {
 	 */
 	public static List<Long> primosMenoresOIgualesA2(Long limit){
 		Long e = 1L;
-		List<Long> a = Lists2.newList();
+		List<Long> a = Lists2.empty();
 		while(e<=limit){	   
 	      	a.add(e);
 	   		e = siguientePrimo2(e);		   

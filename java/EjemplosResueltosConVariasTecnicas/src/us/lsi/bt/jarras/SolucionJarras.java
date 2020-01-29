@@ -18,14 +18,14 @@ public class SolucionJarras  {
 
 	SolucionJarras(List<ActionJarras> ls1, List<VertexJarras> ls2) {
 		super();
-		this.listaAcciones = Lists2.newList(ls1);
-		this.listaVertices = Lists2.newList(ls2);
+		this.listaAcciones = Lists2.ofCollection(ls1);
+		this.listaVertices = Lists2.ofCollection(ls2);
 	}
 
 	private SolucionJarras() {
 		super();
-		this.listaAcciones = Lists2.newList();
-		this.listaVertices = Lists2.newList();
+		this.listaAcciones = Lists2.empty();
+		this.listaVertices = Lists2.empty();
 	}
 
 	public void add(ActionJarras a,VertexJarras v) {

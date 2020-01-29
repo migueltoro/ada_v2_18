@@ -35,13 +35,13 @@ public class EstadoAnunciosBT implements
 
 	private EstadoAnunciosBT() {
 		super();
-		this.listaDeEnteros = Lists2.newList();
+		this.listaDeEnteros = Lists2.empty();
 		this.lista = ListaDeAnunciosAEmitir.create(listaDeEnteros);
 	}
 	
 	private EstadoAnunciosBT(List<Integer> lista) {
 		super();
-		this.listaDeEnteros = Lists2.newList(lista);
+		this.listaDeEnteros = Lists2.ofCollection(lista);
 		this.lista = ListaDeAnunciosAEmitir.create(lista);
 	}
 

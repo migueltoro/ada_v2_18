@@ -105,7 +105,7 @@ public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasPr
 	@Override
 	public SolucionTareasProcesadores copy() {
 		return new SolucionTareasProcesadoresNoIncremental(this.tareasEnProcesador.stream()
-				   .map(x->Lists2.newList(x))
+				   .map(x->Lists2.ofCollection(x))
 				   .collect(Collectors.toList()));
 	}
 	

@@ -124,7 +124,7 @@ public class Streams2 {
 	}
 	
 	public static <T> Multiset<T> toMultiSet(Stream<T> s){
-		Multiset<T> m = Multiset.create();
+		Multiset<T> m = Multiset.empty();
 		s.forEach(x->m.add(x));
 		return m;
 	}

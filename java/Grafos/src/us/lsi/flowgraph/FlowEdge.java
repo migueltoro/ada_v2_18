@@ -14,7 +14,7 @@ import us.lsi.common.Preconditions;
  */
 public class FlowEdge {
 	
-	public static List<FlowEdge> edges = Lists2.newList();
+	public static List<FlowEdge> edges = Lists2.empty();
 	
 	private final FlowVertex source;
 	private final FlowVertex target;

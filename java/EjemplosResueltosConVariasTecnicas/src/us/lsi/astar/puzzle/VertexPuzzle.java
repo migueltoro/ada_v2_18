@@ -12,7 +12,6 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
 
-
 public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<VertexPuzzle>, ActionPuzzle> {
 
 	/**
@@ -90,6 +89,7 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 		return this;
 	}
 
+	
 	@Override
 	protected SimpleEdge<VertexPuzzle> getEdge(ActionPuzzle a) {
 		return SimpleEdge.of(this, a.neighbor(this));

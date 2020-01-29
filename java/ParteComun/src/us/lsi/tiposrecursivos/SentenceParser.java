@@ -26,7 +26,7 @@ public class SentenceParser {
 		Sentence r = null;
 		Token token = tk.seeNextToken();
 		switch (token.type) {
-		case VariableIdentifier:
+		case Variable:
 			VariableExp<?> var;
 			String s1 = tk.seeNextToken().text;
 			Preconditions.checkState(s1.charAt(0) != ('@'), s1 + " debe ser una variable");
@@ -70,8 +70,8 @@ public class SentenceParser {
 			tk.matchTokens("}");
 			break;
 		default:
-			tk.error(TokenType.VariableIdentifier,
-					TokenType.Separator, TokenType.VariableIdentifier);
+			tk.error(TokenType.Variable,
+					TokenType.Separator, TokenType.Variable);
 		}
 		return r;
 	}

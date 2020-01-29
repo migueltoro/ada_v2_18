@@ -10,7 +10,6 @@ import us.lsi.tiposrecursivos.BinaryTree;
 import us.lsi.tiposrecursivos.BinaryTree.BinaryType;
 
 
-
 public class BinaryTrees {
 	
 	
@@ -102,8 +101,7 @@ public class BinaryTrees {
 		}
 		return r;		
 	}
-	
-	
+		
 	public static <E> BinaryTree<E> copy(BinaryTree<E> t1) {
 		BinaryType type = t1.getType();
 		BinaryTree<E> r = null;
@@ -115,16 +113,14 @@ public class BinaryTrees {
 		}
 		return r;		
 	}
-	
-	
+		
 	public static <E> BinaryTree<E> reverseCopy(BinaryTree<E> t1) {
 		BinaryType type = t1.getType();
 		BinaryTree<E> r = null;
 		switch(type) {
 		case Empty: r = BinaryTree.empty(); break;
 		case Leaf: r = BinaryTree.leaf(t1.getLabel()); break;
-		case Binary: r = BinaryTree.binary(t1.getLabel(), reverseCopy(t1.getRight()), reverseCopy(t1.getLeft()));	
-			break;
+		case Binary: r = BinaryTree.binary(t1.getLabel(), reverseCopy(t1.getRight()), reverseCopy(t1.getLeft()));break;
 		}
 		return r;		
 	}

@@ -60,7 +60,7 @@ public class ListSpliterator<E> implements Spliterator<E> {
 	}
 	
 	public Stream<E> stream(){
-		return ConvertP.asStream(this);
+		return Spliterators2.asStream(this);
 	}
 
 }

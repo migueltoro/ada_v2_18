@@ -104,12 +104,12 @@ public class ProblemasDeListas {
 
 	public static <E extends Comparable<? super E>> void mergeSort(List<E> lista){
 		Comparator<? super E> ord = Comparator.naturalOrder();
-		List<E> ls = Lists2.newList(lista);
+		List<E> ls = Lists2.ofCollection(lista);
 		mgSort(lista,0,lista.size(),ord,ls);	
 	}
 	
 	public static <E> void mergeSort(List<E> lista, Comparator<? super E> ord){
-		List<E> ls = Lists2.newList(lista);
+		List<E> ls = Lists2.ofCollection(lista);
 		mgSort(lista,0,lista.size(),ord,ls);	
 	}
 	

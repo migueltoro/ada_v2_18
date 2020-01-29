@@ -12,6 +12,8 @@ import us.lsi.common.Strings2;
 import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;
+import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
+
 
 public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
@@ -27,12 +29,14 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return new BinaryTreeImpl<E>(label);
 	}
 	
-	public static <E> BinaryTreeImpl<E> binary(E label, BinaryTreeImpl<E> left, BinaryTreeImpl<E> right) {
+	public static <E> BinaryTreeImpl<E> binary(E label, BinaryTree<E> left, BinaryTree<E> right) {
 		BinaryTreeImpl<E> r = null;
+		Preconditions.checkNotNull(left);
+		Preconditions.checkNotNull(right);
 		if (left.isEmpty() && right.isEmpty()) {
 			r = new BinaryTreeImpl<E>(label);
 		} else {
-			r = new BinaryTreeImpl<E>(label, left, right);
+			r = new BinaryTreeImpl<E>(label, (BinaryTreeImpl<E>)left, (BinaryTreeImpl<E>)right);
 		}
 		return r;
 	}
@@ -49,7 +53,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	public static <E> BinaryTree<E> parse(String s, Function<String,E> f) {
 		Preconditions.checkNotNull(s);
-		BinaryTreeImpl<String> tree = BinaryTreeImpl.parse(s);
+		BinaryTree<String> tree = BinaryTreeImpl.parse(s);
 		return tree.map(f);
 	}
 	
@@ -86,7 +90,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 			break;
 		case Integer:
 		case Double:	
-		case VariableIdentifier:
+		case Variable:
 			break;
 		default: tk.error();
 		}
@@ -247,11 +251,10 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 * @see us.lsi.tiposrecursivos.BinaryTree#getRight()
 	 */
 	@Override
-	public BinaryTree<E> getRight(){
+	public BinaryTreeImpl<E> getRight(){
 		Preconditions.checkState(isBinary(), String.format("El árbol no es binario"));
 		return this.right;
 	}
-	
 	
 	public void setLabel(E label) {
 		this.label = label;
@@ -287,7 +290,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		case Left: this.father.left = tt; break;
 		case Right: this.father.right = tt ; break;
 		}
-		return nTree;
+		return tt;
 	}
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.BinaryTree#mutableView()
@@ -326,7 +329,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	}
 	
 	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls){
-		List<BinaryTree<E>> r = Lists2.newList();
+		List<BinaryTree<E>> r = Lists2.empty();
 		for(BinaryTree<E> tree: ls) {
 			switch(tree.getType()) {			
 			case Empty:
@@ -340,7 +343,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public List<BinaryTree<E>> getLevel(int n){
-		List<BinaryTree<E>> r = Lists2.newList(this);
+		List<BinaryTree<E>> r = Lists2.ofElements(this);
 		for(int i=0; i < n ; i++) {
 			r = nextLevel(r);
 		}
@@ -369,19 +372,6 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#copy(java.util.function.Function)
-	 */
-	@Override
-	public <R> BinaryTree<R> copy(Function<E, R> f) {
-		BinaryTree<R> r= null;
-		switch(this.getType()) {
-		case Empty: r = BinaryTree.empty(); break;
-		case Leaf:  r = BinaryTree.leaf(f.apply(label)); break;
-		case Binary: r = BinaryTree.binary(f.apply(label),this.getLeft().copy(f),this.getRight().copy(f)); break;
-		}
-		return r;
-	}
 
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.BinaryTree#getReverse()
@@ -423,8 +413,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 * @see us.lsi.tiposrecursivos.BinaryTree#match(us.lsi.tiposrecursivos.BinaryPattern)
 	 */
 	@Override
-	public BinaryPattern<E> match(BinaryPattern<E> pt) {
-		return BinaryPatternImpl.match(this, pt);
+	public Matches<E> match(BinaryPattern<E> pt) {
+		return BinaryPattern.match(this, pt);
 	}
 
 	/* (non-Javadoc)
@@ -448,10 +438,10 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getPreOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Binary:
-			r = Lists2.newList(this.label);
+			r = Lists2.ofElements(this.label);
 			r.addAll(this.getLeft().getPreOrder());
 			r.addAll(this.getRight().getPreOrder());
 		}
@@ -465,8 +455,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getPostOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Binary:
 			r = this.getLeft().getPostOrder();
 			r.addAll(this.getRight().getPostOrder());
@@ -482,8 +472,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getInOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.newList(); break;
-		case Leaf: r = Lists2.newList(this.label); break;
+		case Empty: r = Lists2.empty(); break;
+		case Leaf: r = Lists2.ofElements(this.label); break;
 		case Binary:
 			r = this.getLeft().getInOrder();
 			r.add(this.getLabel());
@@ -491,6 +481,80 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		return r;
 	}
+	
+	public BinaryTree<E> equilibrate() {
+		return equilibrate(this);
+	}
+	
+	public static <E> BinaryTree<E> equilibrate(BinaryTree<E> tree) {
+		Patterns<E> pt = Patterns.of();
+		BinaryTree<E> r = null;
+		switch(getTypeEquilibrate(tree)) {
+		case Equilibrate: r = tree; break;
+		case LeftLeft: r = tree.transform(pt.leftLeft,pt.result);	break;
+		case LeftRight: r = tree.transform(pt.leftRight,pt.result); break;
+		case RightLeft: r = tree.transform(pt.rightLeft,pt.result);	break;
+		case RightRight: r = tree.transform(pt.rightRight,pt.result); break;
+		}
+		return r;
+	}   
+	
+	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
+	
+	public static <E> TypeEquilibrate getTypeEquilibrate(BinaryTree<E> tree) {
+		TypeEquilibrate r = null;
+		List<Integer> n1 = tree.getHeights(1);
+		List<Integer> n2 = tree.getHeights(2);
+		int left = n1.get(0);
+		int right = n1.get(1);
+		int leftleft = n2.get(0);
+		int leftright = n2.get(1);
+		int rightleft = n2.get(2);
+		int rightright = n2.get(3);
+		if (Math.abs(left - right) < 2) {
+			r = TypeEquilibrate.Equilibrate;
+		} else if (left - right >= 2) {
+			if (leftleft >= leftright) {
+				r = TypeEquilibrate.LeftLeft;
+			} else {
+				r = TypeEquilibrate.LeftRight;
+			}
+		} else if (left - right < 2) {
+			if (rightleft >= rightright) {
+				r = TypeEquilibrate.RightLeft;
+			} else {
+				r = TypeEquilibrate.RightRight;
+			}
+		}
+		Preconditions.checkArgument(r != null, String.format("%d,%d,%d,%d,%d,%d,%s", left, right, leftleft, leftright,
+				rightleft, rightright, tree.toString()));
+		return r;
+	}
+	
+	
+	static class Patterns<R> {
+		BinaryPattern<R> leftRight; 
+	    BinaryPattern<R> rightLeft;
+	    BinaryPattern<R> leftLeft;
+	    BinaryPattern<R> rightRight;
+	    BinaryPattern<R> result;
+	    private static Patterns<?> patterns = null;
+	    @SuppressWarnings("unchecked")
+		public static <R> Patterns<R> of(){
+	    	if(patterns==null) patterns = new Patterns<R>();
+	    	return (Patterns<R>)patterns;
+	    }
+	    public Patterns() {
+			super();
+			this.leftRight = BinaryPattern.parse("_e5(_e3(_A,_e4(_B,_C)),_D)");
+			this.rightLeft = BinaryPattern.parse("_e3(_A,_e5(_e4(_B,_C),_D))");
+			this.leftLeft = BinaryPattern.parse("_e5(_e4(_e3(_A,_B),_C),_D)");
+			this.rightRight = BinaryPattern.parse("_e3(_A,_e4(_B,_e5(_C,_D)))");
+			this.result = BinaryPattern.parse("_e4(_e3(_A,_B),_e5(_C,_D))");
+		}
+	    
+	}
+
 	
 	public static void test1() {
 		List<String> filas = Streams2.fromFile("ficheros/test2.txt").collect(Collectors.toList());
@@ -514,7 +578,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
 		BinaryTree<String> t7 = BinaryTree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.newList(1,2,3,4,5,6,7,8,9)));
+		System.out.println(Lists2.reverse(Lists2.ofElements(1,2,3,4,5,6,7,8,9)));
 		BinaryTree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		MutableBinaryTree<String> t = t8.mutableView();
@@ -534,6 +598,18 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		System.out.println(t8.isRoot());
 		System.out.println(t10.isRoot());
 		test1();
+		BinaryTree<Double> tree1 = BinaryTree.parse("54.5(39.2(20.1,50.5(40.2,51.0)),78.9)",x->Double.parseDouble(x));
+		BinaryTree<Double> tree2 = BinaryTree.parse("54.5(39.2,20.1(50.5(40.2,51.0),78.9))",x->Double.parseDouble(x));
+        BinaryTree<Double> tree3 = BinaryTree.parse("54.5(39.2(20.1(50.5,40.2),51.0),78.9)",x->Double.parseDouble(x));
+        BinaryTree<Double> tree4 = BinaryTree.parse("54.5(39.2,20.1(50.5,40.2(51.0,78.9)))",x->Double.parseDouble(x));
+        var tree1r = tree1.equilibrate();
+		System.out.println("Aqui 1 = "+tree1r);
+		var tree2r = tree2.equilibrate();
+		System.out.println("Aqui 2 = "+tree2r);
+		var tree3r = tree3.equilibrate();
+		System.out.println("Aqui 3 = "+tree3r);
+		var tree4r = tree4.equilibrate();
+		System.out.println("Aqui 4 = "+tree4r);
 	}
 
 }

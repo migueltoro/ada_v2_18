@@ -42,7 +42,7 @@ public class AlgunosTestsPD<S, A> {
 				System.out.println("Contiene la alternativa = "
 						+ la.contains(a));
 				Integer np = p.getNumeroSubProblemas(a);
-				List<Sp<A>> lsp = Lists2.newList();
+				List<Sp<A>> lsp = Lists2.empty();
 				Sp<A> solp = null;
 				boolean haySolucion= true;
 				for (int i = 0; i < np; i++) {
@@ -91,7 +91,7 @@ public class AlgunosTestsPD<S, A> {
 				a = alternativas.get(n);
 				int np = p.getNumeroSubProblemas(a);
 //				r = Tree.leaf(a);
-				List<Tree<A>> la = Lists2.newList();
+				List<Tree<A>> la = Lists2.empty();
 				for (int i = 0; i < np; i++) {
 					P sp = p.getSubProblema(a, i);
 					Tree<A> th = test2(sp);

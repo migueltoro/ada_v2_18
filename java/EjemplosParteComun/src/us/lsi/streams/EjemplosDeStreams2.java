@@ -10,7 +10,7 @@ import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
 import us.lsi.common.Tuple;
 import us.lsi.common.Tuple2;
-import us.lsi.flujosparalelos.CollectorsP;
+import us.lsi.flujosparalelos.Collectors2;
 import us.lsi.math.Math2;
 
 
@@ -78,7 +78,7 @@ public class EjemplosDeStreams2 {
 		Multiset<Long> rr4 = 
 				Stream.iterate(m1,x->x<n1,x->x+1)
 				.flatMap(x->divisores(x))
-				.collect(CollectorsP.toMultiset());
+				.collect(Collectors2.toMultiset());
 		System.out.println(rr4);
 		System.out.println("8: ______");
 		System.out.println(Math2.esDivisible(0, 15));

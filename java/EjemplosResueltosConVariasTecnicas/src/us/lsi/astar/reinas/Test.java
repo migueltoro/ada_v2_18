@@ -12,7 +12,6 @@ import us.lsi.math.Math2;
 
 
 
-
 public class Test {
 
 	public static void main(String[] args) {
@@ -21,7 +20,7 @@ public class Test {
 		VertexReinas.resto = 10;
 		VertexReinas e1 = VertexReinas.of();
 		Predicate<VertexReinas> p = v->v.x==VertexReinas.numeroDeReinas;
-		AStarGraph<VertexReinas,EdgeReinas> graph = AStarSimpleVirtualGraph.<VertexReinas,EdgeReinas>of(x->1.);
+		AStarGraph<VertexReinas,EdgeReinas> graph = AStarSimpleVirtualGraph.of(x->1.);
 		AStarAlgorithm<VertexReinas,EdgeReinas> a = AStarAlgorithm.of(graph,e1,p,(x,y)->(double) (VertexReinas.numeroDeReinas-x.x));
 		while(true) {
 			Math2.initRandom();

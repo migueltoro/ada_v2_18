@@ -17,7 +17,7 @@ public class FlowVertex {
 	
 	public enum TipoDeVertice{Source,Sink,Intermediate};
 	
-	public static List<FlowVertex> vertices = Lists2.newList();
+	public static List<FlowVertex> vertices = Lists2.empty();
 	
 	private final String externalId;	
 	private final TipoDeVertice tipo;

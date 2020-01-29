@@ -27,7 +27,7 @@ public static int numeroDeReinas = 8;
 	@Override
 	public List<Reina> getSolucion(SeqNomalChromosome chromosome) {
 		List<Integer> ls = chromosome.decode();
-		List<Reina> r = Lists2.newList();
+		List<Reina> r = Lists2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			r.add(Reina.create(i, ls.get(i)));
 		}

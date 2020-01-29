@@ -80,7 +80,7 @@ public class ExpParser {
 		case Double:
 			r = ExpParser.scanConstantDouble(tk);
 			break;
-		case VariableIdentifier:
+		case Variable:
 			if (tk.seeNextToken().text.charAt(0) == ('_')) {
 				r = ExpParser.scanFree(tk, vars);
 			} else {
@@ -88,8 +88,8 @@ public class ExpParser {
 			}
 			break;
 		case Operator:
-		case FunctionIdentifier:
-			s = tk.matchTokens(TokenType.Operator, TokenType.FunctionIdentifier).text;
+		case Function:
+			s = tk.matchTokens(TokenType.Operator, TokenType.Function).text;
 			tk.matchTokens("(");
 			r = scanParameters(s, tk, vars);
 			tk.matchTokens(")");
@@ -149,7 +149,7 @@ public class ExpParser {
 	}
 	
 	public static VariableExp<Object> scanVariable(Tokenizer tk, Map<String, Exp<Object>> vars) {
-		String s = tk.matchTokens(TokenType.VariableIdentifier).text;
+		String s = tk.matchTokens(TokenType.Variable).text;
 		VariableExp<Object> r = null;
 		if (vars.containsKey(s)) {
 			r = (VariableExp<Object>) vars.get(s);
@@ -171,7 +171,7 @@ public class ExpParser {
 	}
 
 	public static Exp<Object> scanFree(Tokenizer tk, Map<String, Exp<Object>> vars) {
-		String s = tk.matchTokens(TokenType.VariableIdentifier).text;
+		String s = tk.matchTokens(TokenType.Variable).text;
 		Exp<Object> r = null;
 		if (vars.containsKey(s)) {
 			r = vars.get(s);

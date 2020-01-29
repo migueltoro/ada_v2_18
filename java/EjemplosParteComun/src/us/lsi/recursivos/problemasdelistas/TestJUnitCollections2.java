@@ -17,7 +17,7 @@ public class TestJUnitCollections2 {
 
 	@Test
 	public void testBinarySearchListOfEE() {
-		List<Double> ls = Lists2.newList();
+		List<Double> ls = Lists2.empty();
 		for(int i = 0; i<200; i++){
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
@@ -27,7 +27,7 @@ public class TestJUnitCollections2 {
 
 	@Test
 	public void testSortListOfE() {
-		List<Double> ls = Lists2.newList();
+		List<Double> ls = Lists2.empty();
 		for(int i = 0; i<1000; i++){
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
@@ -37,7 +37,7 @@ public class TestJUnitCollections2 {
 
 	@Test
 	public void testMergeSortListOfE() {
-		List<Double> ls = Lists2.newList();
+		List<Double> ls = Lists2.empty();
 		for(int i = 0; i<1000; i++){
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
@@ -47,7 +47,7 @@ public class TestJUnitCollections2 {
 	
 	@Test
 	public void testGetKesimoListOfEInt() {
-		List<Double> ls = Lists2.newList();	
+		List<Double> ls = Lists2.empty();	
 		for(int i = 0; i<200; i++){
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
@@ -59,7 +59,7 @@ public class TestJUnitCollections2 {
 
 	@Test
 	public void testGetSubSecuenciaMaxima() {
-		List<Double> ls = Lists2.newList();
+		List<Double> ls = Lists2.empty();
 		int a = Math2.getEnteroAleatorio(0, 198);
 		int b = Math2.getEnteroAleatorio(a, 200);
 		for(int i = 0; i<a; i++){

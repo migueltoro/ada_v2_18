@@ -29,7 +29,7 @@ public class DatosAnuncios {
 		int index = ls.indexOf("#");
 		List<String> ls1 = ls.subList(0, index);
 		List<String> ls2 = ls.subList(index+1, ls.size());
-		todosLosAnunciosDisponibles = Lists2.newList();
+		todosLosAnunciosDisponibles = Lists2.empty();
 		Anuncio a;
 		for(String s : ls1){
 			String[] at = Streams2.fromString(s, ",").<String>toArray((int x)->new String[x]);

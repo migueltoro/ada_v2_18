@@ -1,8 +1,10 @@
 package us.lsi.tiposrecursivos;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface Tree<E> {
 	
@@ -19,12 +21,14 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	}
 
 	public static <R> Tree<R> nary(R label, List<Tree<R>> elements) {
-		return TreeImpl.nary(label,elements);
+		List<TreeImpl<R>> ls = elements.stream().map(x->(TreeImpl<R>)x).collect(Collectors.toList());
+		return TreeImpl.nary(label,ls);
 	}
 
 	@SafeVarargs
 	public static <R> Tree<R> nary(R label, Tree<R>... elements) {
-		return TreeImpl.nary(label,elements);
+		List<TreeImpl<R>> ls = Arrays.stream(elements).map(x->(TreeImpl<R>)x).collect(Collectors.toList());
+		return TreeImpl.nary(label,ls);
 	}
 	
 	

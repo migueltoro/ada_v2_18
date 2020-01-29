@@ -24,7 +24,7 @@ public class ObjetoGeometricoAgregado2D implements ObjetoGeometrico2D {
 	private List<ObjetoGeometrico2D> objetosGeometricos;
 		
 	private ObjetoGeometricoAgregado2D() {
-		this.objetosGeometricos = Lists2.newList();
+		this.objetosGeometricos = Lists2.empty();
 	}
 	
 	private ObjetoGeometricoAgregado2D(List<ObjetoGeometrico2D> objetosGeometricos) {

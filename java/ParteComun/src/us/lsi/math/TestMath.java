@@ -22,7 +22,7 @@ public class TestMath {
 		System.out.println(Math2.decodes(Arrays.asList(1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1),4,3));
 		System.out.println(Math2.pow(2,10));
 		Long m = Math2.pow(2,7);
-		Multiset<Long> m1 = Multiset.create();
+		Multiset<Long> m1 = Multiset.empty();
 		for(int i=0;i<m;i++){
 			m1.add((i*12/m));
 		}
