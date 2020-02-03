@@ -6,10 +6,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import us.lsi.lpsolve.LpSolve;
-import us.lsi.lpsolve.LpSolveException;
-
-
+import lpsolve.LpSolve;
+import lpsolve.LpSolveException;
 
 
 /**

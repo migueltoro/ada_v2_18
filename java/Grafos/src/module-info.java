@@ -12,7 +12,7 @@ module grafos {
 	exports us.lsi.graphcolors;
 	exports us.lsi.graphs.tour;
 
-	requires transitive lpsolve;
+	requires transitive solve;
 	requires transitive org.jgrapht.core;
 	requires transitive org.jgrapht.io;
 	requires transitive partecomun;

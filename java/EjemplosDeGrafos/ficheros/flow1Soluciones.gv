@@ -1,9 +1,9 @@
 strict digraph G {
-  1 [ label="=12.0" color="red" ];
-  2 [ label="=8.0" ];
-  3 [ label="=3.9999999999999996" ];
-  4 [ label="=8.0" color="red" ];
-  5 [ label="=12.0" ];
+  1 [ label="A=12.0" color="red" ];
+  2 [ label="B=8.0" ];
+  3 [ label="C=3.9999999999999996" ];
+  4 [ label="D=8.0" color="red" ];
+  5 [ label="E=12.0" ];
   1 -> 3 [ label="=4.0" ];
   1 -> 2 [ label="=8.0" ];
   2 -> 4 [ label="=8.0" ];

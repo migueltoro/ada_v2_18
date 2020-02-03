@@ -75,8 +75,5 @@ public class RecorridoEnAnchuraManual<V,E> {
 		return level(v,tree,graph);
 	}
 	
-	
-	
-
 
 }

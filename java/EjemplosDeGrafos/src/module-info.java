@@ -8,4 +8,5 @@ module ejemplos_de_grafos {
 	requires transitive org.jgrapht.core;
 	requires transitive org.jgrapht.io;
 	requires transitive partecomun;
+	requires transitive solve;
 }
