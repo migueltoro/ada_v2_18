@@ -21,12 +21,16 @@ import us.lsi.graphs.GraphsReader;
 public class Tsp {
 
 	public static void main(String[] args) {
-		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", Ciudad::create,
-				Carretera::create, () -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create),
+		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
+				Ciudad::ofFormat,
+				Carretera::ofFormat, 
+				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of),
 				Carretera::getKm);
-		SimpleWeightedGraph<Ciudad, Carretera> graph2 = Graphs2.explicitCompleteGraph(graph, 1000.,
-				() -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create), 
-				Carretera::create,
+		SimpleWeightedGraph<Ciudad, Carretera> graph2 = Graphs2.explicitCompleteGraph(
+				graph, 
+				1000.,
+				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of), 
+				Carretera::ofWeight,
 				Carretera::getKm);
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();
 		GraphPath<Ciudad, Carretera> r = a.getTour(graph2);
@@ -36,8 +40,8 @@ public class Tsp {
 		System.out.println(r.getEdgeList().stream().mapToDouble(x->x.getKm()).sum());
 		System.out.println(r.getEdgeList().stream().mapToDouble(x->graph2.getEdgeWeight(x)).sum());
 		ShortestPathAlgorithm<Ciudad, Carretera> dj = new DijkstraShortestPath<Ciudad, Carretera>(graph2);
-		Ciudad from = Ciudad.create("Huelva");
-		Ciudad to = Ciudad.create("Almeria");
+		Ciudad from = Ciudad.ofName("Huelva");
+		Ciudad to = Ciudad.ofName("Almeria");
 		GraphPath<Ciudad, Carretera> gp = dj.getPath(from, to);
 		System.out.println(gp);
 		System.out.println(gp.getVertexList());

@@ -17,8 +17,8 @@ public class Test2 {
 		
 		IntegerMappingGraphView<Ciudad,Carretera> gv = IntegerMappingGraphView.of(g.getGraph());
 		
-		Integer origen = gv.getIndex(Ciudad.create("Cadiz"));
-		Integer destino = gv.getIndex(Ciudad.create("Almeria"));
+		Integer origen = gv.getIndex(Ciudad.ofName("Cadiz"));
+		Integer destino = gv.getIndex(Ciudad.ofName("Almeria"));
 		
 		FloydPD<Ciudad,Carretera> p = FloydPD.create(origen,destino,gv);
 		

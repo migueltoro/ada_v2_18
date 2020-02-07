@@ -29,10 +29,9 @@ public class ColoreadoDeGrafos {
 		
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
 		VertexColoringAlgorithm<Ciudad> vca = new GreedyColoring<>(graph);

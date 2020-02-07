@@ -27,13 +27,12 @@ public class Recorridos {
 
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
-		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,Ciudad.create("Sevilla"));
+		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
 		Map<Ciudad,Integer> m = Maps2.newHashMap();
 		Integer n = 0;
 		while(rp.hasNext()){
@@ -49,7 +48,7 @@ public class Recorridos {
 		PrintWriter f1 = Files2.getWriter("ficheros/recorridoEnProfundidadAndalucia.gv");
 		de1.exportGraph(graph, f1);
 		
-		BreadthFirstIterator<Ciudad, Carretera> ra = new BreadthFirstIterator<>(graph,Ciudad.create("Sevilla"));
+		BreadthFirstIterator<Ciudad, Carretera> ra = new BreadthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
 		m.clear();
 		n = 0;
 		while(ra.hasNext()){

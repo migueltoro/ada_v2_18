@@ -21,13 +21,12 @@ public class RecorridoProfundidadTest {
 	public static void main(String[] args) {
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
-		RecorridoEnProfundidadManual<Ciudad,Carretera> ra = RecorridoEnProfundidadManual.of(graph,Ciudad.create("Sevilla"));
+		RecorridoEnProfundidadManual<Ciudad,Carretera> ra = RecorridoEnProfundidadManual.of(graph,Ciudad.ofName("Sevilla"));
 		Set<Ciudad> ciudades = ra.graph.vertexSet();
 		Set<Carretera> setProfundidad= ciudades.stream().map(v->ra.tree(v)).filter(x->x!=null)
 				.collect(Collectors.toSet());

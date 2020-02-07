@@ -1,21 +1,20 @@
 package us.lsi.grafos.datos;
 
 public class Carretera {
-
 	
-	public static Carretera create() {
+	public static Carretera of() {
 		return new Carretera();
 	}
 
-	public static Carretera create(Ciudad c1, Ciudad c2) {
+	public static Carretera ofVertex(Ciudad c1, Ciudad c2) {
 		return new Carretera(c1,c2);
 	}
 
-	public static Carretera create(Ciudad c1, Ciudad c2, String[] formato) {
+	public static Carretera ofFormat(Ciudad c1, Ciudad c2, String[] formato) {
 		return new Carretera(c1,c2,formato);
 	}
 
-	public static Carretera create(Ciudad c1, Ciudad c2, Double km) {
+	public static Carretera ofWeight(Ciudad c1, Ciudad c2, Double km) {
 		return new Carretera(c1, c2, km);
 	}
 
@@ -79,7 +78,8 @@ public class Carretera {
 
 	@Override
 	public String toString() {
-		return "("+getSource()+","+getTarget()+","+this.nombre+","+this.km+")";
+		String nn = this.nombre==null?"":this.nombre+",";
+		return "("+getSource()+","+getTarget()+","+nn+this.km+")";
 	}
 
 	@Override
@@ -104,7 +104,4 @@ public class Carretera {
 		return true;
 	}
 
-	
-
-	
 }

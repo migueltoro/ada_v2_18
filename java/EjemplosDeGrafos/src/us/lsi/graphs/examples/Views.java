@@ -24,9 +24,9 @@ public class Views {
 
 	public static void main(String[] args) {
 		Graph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
-				Ciudad::create,
-				Carretera::create, 
-				() -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create),
+				Ciudad::ofFormat,
+				Carretera::ofFormat, 
+				() -> new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 				Carretera::getKm);
 		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
 				x -> x.getNombre(), 
@@ -35,7 +35,7 @@ public class Views {
 		PrintWriter f1 = Files2.getWriter("ficheros/andalucia1.gv");
 		de.exportGraph(graph, f1);
 		Graph<Ciudad, Carretera> graph2 = CompleteGraphView.of(graph,
-				Carretera::create,
+				Carretera::ofWeight,
 				Double.valueOf(1000.),
 				c->c.getSource(),
 				c->c.getTarget(),
@@ -50,7 +50,7 @@ public class Views {
 		de2.exportGraph(graph2, f2);
 		Strings2.toConsole(r.getEdgeList(), "Camino");
 		Graph<Ciudad, Carretera> graph3 = SubGraphView.of(graph,
-				Sets2.newSet(Ciudad.create("Sevilla"),Ciudad.create("Cadiz"),Ciudad.create("Huelva"),Ciudad.create("Almeria")),
+				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")),
 				c->c.getSource(), 
 				c->c.getTarget());
 		PrintWriter f3 = Files2.getWriter("ficheros/subGrafoAndalucia.gv");

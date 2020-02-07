@@ -21,15 +21,14 @@ public class DijkstraManualTest {
 	public static void main(String[] args) {
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
 		RecorridoDijkstraManual<Ciudad,Carretera> ra = 
-				RecorridoDijkstraManual.of(graph,Ciudad.create("Sevilla"),Ciudad.create("Cordoba"));
-		List<Carretera> carreteras = ra.minPathToOrigin(Ciudad.create("Cordoba")).getEdgeList();
+				RecorridoDijkstraManual.of(graph,Ciudad.ofName("Sevilla"),Ciudad.ofName("Cordoba"));
+		List<Carretera> carreteras = ra.minPathToOrigin(Ciudad.ofName("Cordoba")).getEdgeList();
 		
 		DOTExporter<Ciudad,Carretera> de1 = new DOTExporter<Ciudad,Carretera>(
 				new IntegerComponentNameProvider<>(),
@@ -49,7 +48,7 @@ public class DijkstraManualTest {
 		PrintWriter f2 = Files2.getWriter("ficheros/andaluciaDijkstra.gv");
 		de2.exportGraph(graph, f2);
 		
-		System.out.println(ra.minPathToOrigin(Ciudad.create("Antequera")));
+		System.out.println(ra.minPathToOrigin(Ciudad.ofName("Antequera")));
 		
 	}
 }

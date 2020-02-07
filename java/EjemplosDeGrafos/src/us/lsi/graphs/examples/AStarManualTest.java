@@ -15,20 +15,19 @@ import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.manual.RecorridoAStarManual;
 
+
 public class AStarManualTest {
 	
 	public static void main(String[] args) {
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
-						Carretera::getKm);
-		
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+						Carretera::getKm);		
 		RecorridoAStarManual<Ciudad,Carretera> ra = 
-				RecorridoAStarManual.of(graph,Ciudad.create("Sevilla"),Ciudad.create("Almeria"), null);
-		List<Carretera> carreteras = ra.minPathToOrigin(Ciudad.create("Almeria")).getEdgeList();
+				RecorridoAStarManual.of(graph,Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"), null);
+		List<Carretera> carreteras = ra.minPathToOrigin(Ciudad.ofName("Almeria")).getEdgeList();
 		
 		DOTExporter<Ciudad,Carretera> de1 = new DOTExporter<Ciudad,Carretera>(
 				new IntegerComponentNameProvider<>(),
@@ -48,7 +47,7 @@ public class AStarManualTest {
 		PrintWriter f2 = Files2.getWriter("ficheros/andaluciaAStar.gv");
 		de2.exportGraph(graph, f2);
 		
-		System.out.println(ra.minPathToOrigin(Ciudad.create("Almeria")));
+		System.out.println(ra.minPathToOrigin(Ciudad.ofName("Almeria")));
 	}
 
 }

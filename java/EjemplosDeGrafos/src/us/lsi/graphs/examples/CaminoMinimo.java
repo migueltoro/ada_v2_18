@@ -28,14 +28,13 @@ public class CaminoMinimo {
 	public static void main(String[] args) {
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<Ciudad,Carretera>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		ShortestPathAlgorithm<Ciudad,Carretera> a = new DijkstraShortestPath<Ciudad,Carretera>(graph);
-		Ciudad from = Ciudad.create("Huelva");
-		Ciudad to = Ciudad.create("Almeria");
+		Ciudad from = Ciudad.ofName("Huelva");
+		Ciudad to = Ciudad.ofName("Almeria");
 		GraphPath<Ciudad,Carretera> gp =  a.getPath(from,to);
 		System.out.println(gp);
 		System.out.println(gp.getVertexList());	
@@ -44,8 +43,7 @@ public class CaminoMinimo {
 				Graphs2.subGraph(graph, 
 						null, 
 						e->gp.getEdgeList().contains(e),
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create));
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));
 		
 		DOTExporter<Ciudad,Carretera> de1 = new DOTExporter<Ciudad,Carretera>(
 				new IntegerComponentNameProvider<>(),

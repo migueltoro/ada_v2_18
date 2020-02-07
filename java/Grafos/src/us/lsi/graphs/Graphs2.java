@@ -19,7 +19,7 @@ import us.lsi.common.TriFunction;
 public class Graphs2 {
 
 	
-	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedGraph(SimpleWeightedGraph<V,E> graph){
+	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, TriFunction<V,V,Double,E> edgeNew){
 		SimpleDirectedWeightedGraph<V,E> gs = 
 				new SimpleDirectedWeightedGraph<V,E>(
 						graph.getVertexSupplier(), 
@@ -28,8 +28,15 @@ public class Graphs2 {
 			gs.addVertex(v);
 		}
 		for(E e:graph.edgeSet()){
-			gs.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
-			gs.addEdge(graph.getEdgeTarget(e), graph.getEdgeSource(e));
+			V s = graph.getEdgeSource(e);
+			V t = graph.getEdgeTarget(e);
+			Double w = graph.getEdgeWeight(e);
+			E e1 = edgeNew.apply(s, t, w);
+			gs.addEdge(s, t, e1);
+			gs.setEdgeWeight(e1, w);
+			E e2 = edgeNew.apply(t, s, w);
+			gs.addEdge(t, s, e2);
+			gs.setEdgeWeight(e2, w);
 		}
 		return gs;
 	}
@@ -43,7 +50,7 @@ public class Graphs2 {
 		for(V v:graph.vertexSet()){
 			gs.addVertex(v);
 		}
-		for(E e:graph.edgeSet()){
+		for(E e:graph.edgeSet()){			
 			gs.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
 			gs.addEdge(graph.getEdgeTarget(e), graph.getEdgeSource(e));
 		}

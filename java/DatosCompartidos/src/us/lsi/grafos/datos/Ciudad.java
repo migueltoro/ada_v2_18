@@ -1,17 +1,17 @@
 package us.lsi.grafos.datos;
 
 public class Ciudad  {
+	
+	public static Ciudad of() {
+		return new Ciudad("");
+	}
 
-	public static Ciudad create(String[] formato) {
+	public static Ciudad ofFormat(String[] formato) {
 		return new Ciudad(formato);
 	}
 
-	public static Ciudad create(String nombre) {
+	public static Ciudad ofName(String nombre) {
 		return new Ciudad(nombre);
-	}
-
-	public static Ciudad create() {
-		return new Ciudad("");
 	}
 	
 	private String nombre;

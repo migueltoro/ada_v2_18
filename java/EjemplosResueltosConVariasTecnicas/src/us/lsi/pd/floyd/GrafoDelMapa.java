@@ -23,16 +23,15 @@ public class GrafoDelMapa {
 		leeDatos(fichero);		
 	}
 
-	public void leeDatos(String fichero){
-		graph = 
-				GraphsReader.newGraph("ficheros/andalucia.txt", 
-						Ciudad::create,
-				Carretera::create, 
-				() -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create),
-				Carretera::getKm);			
-		for(Carretera c: graph.edgeSet()){
+	public void leeDatos(String fichero) {
+		graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
+				Ciudad::ofFormat, 
+				Carretera::ofFormat,
+				() -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::of, Carretera::of), 
+				Carretera::getKm);
+		for (Carretera c : graph.edgeSet()) {
 			graph.setEdgeWeight(c, c.getKm());
-		}		
+		}
 	}
 
 	public Graph<Ciudad, Carretera> getGraph() {

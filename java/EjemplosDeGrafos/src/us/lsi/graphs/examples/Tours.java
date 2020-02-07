@@ -19,8 +19,10 @@ import us.lsi.graphs.tour.ShortestTour;
 public class Tours {
 
 	public static void main(String[] args) {
-		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", Ciudad::create,
-				Carretera::create, () -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create),
+		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
+				Ciudad::ofFormat,
+				Carretera::ofFormat, 
+				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of),
 				Carretera::getKm);
 		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
 				x -> x.getNombre(), 
@@ -30,9 +32,12 @@ public class Tours {
 		de.exportGraph(graph, f1);
 		
 		ShortestTour<Ciudad, Carretera, SimpleWeightedGraph<Ciudad, Carretera>> a = 
-				ShortestTour.of(graph, () -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::create, Carretera::create), Carretera::create);
-		Set<Ciudad> vertices = Sets2.newSet(Ciudad.create("Jaen"));
-		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.create("Sevilla"),Ciudad.create("Almeria"),vertices);
+				ShortestTour.of(
+						graph, 
+						() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of), 
+						Carretera::ofWeight);
+		Set<Ciudad> vertices = Sets2.newSet(Ciudad.ofName("Jaen"));
+		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"),vertices);
 		System.out.println(r.getVertexList());
 		System.out.println(r.getEdgeList());
 		DOTExporter<Ciudad, Carretera> de2 = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),

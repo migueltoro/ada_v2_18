@@ -26,19 +26,17 @@ public class Ciclos {
 		
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
 		SimpleWeightedGraph<Ciudad, Carretera> gc = 
 				Graphs2.explicitCompleteGraph(
 						graph,
 						200000.,
-						()-> new SimpleWeightedGraph<Ciudad, Carretera>(
-								Ciudad::create,Carretera::create),
-						Carretera::create,
+						()-> new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+						Carretera::ofWeight,
 						Carretera::getKm);
 		
 		TwoApproxMetricTSP<Ciudad, Carretera> tsp = new  TwoApproxMetricTSP<>();

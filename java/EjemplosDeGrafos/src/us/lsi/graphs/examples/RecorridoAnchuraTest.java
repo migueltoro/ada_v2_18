@@ -21,13 +21,12 @@ public class RecorridoAnchuraTest {
 	public static void main(String[] args) {
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
-		RecorridoEnAnchuraManual<Ciudad,Carretera> ra = RecorridoEnAnchuraManual.of(graph,Ciudad.create("Sevilla"));
+		RecorridoEnAnchuraManual<Ciudad,Carretera> ra = RecorridoEnAnchuraManual.of(graph,Ciudad.ofName("Sevilla"));
 		Set<Ciudad> ciudades = ra.graph.vertexSet();
 		Set<Carretera> setAnchura = ciudades.stream().map(v->ra.tree(v)).filter(x->x!=null)
 				.collect(Collectors.toSet());

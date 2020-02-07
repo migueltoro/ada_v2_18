@@ -22,8 +22,8 @@ public class TestFloyd {
 		
 		IntegerMappingGraphView<Ciudad,Carretera> gv = IntegerMappingGraphView.of(g.getGraph());
 		
-		int origen = gv.getIndex(Ciudad.create("Cadiz"));
-		int destino = gv.getIndex(Ciudad.create("Almeria"));
+		int origen = gv.getIndex(Ciudad.ofName("Cadiz"));
+		int destino = gv.getIndex(Ciudad.ofName("Almeria"));
 		FloydPD<Ciudad,Carretera> p = FloydPD.create(origen,destino,gv);
 		var a = AlgoritmoPD.createPD(p);
 				

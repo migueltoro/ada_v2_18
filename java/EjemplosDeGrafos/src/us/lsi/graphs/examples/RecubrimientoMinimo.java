@@ -36,10 +36,9 @@ public class RecubrimientoMinimo {
 		
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
-						Ciudad::create, 
-						Carretera::create,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(
-								Ciudad::create,Carretera::create),
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						()->new SimpleWeightedGraph<Ciudad,Carretera>(Ciudad::of,Carretera::of),
 						Carretera::getKm);
 		
 		SpanningTreeAlgorithm<Carretera> ast = new KruskalMinimumSpanningTree<>(graph);
@@ -50,9 +49,7 @@ public class RecubrimientoMinimo {
 		SimpleWeightedGraph<Ciudad, Carretera> subGraphEdges = Graphs2.subGraph(graph, 
 				null,
 				x->r.getEdges().contains(x), 
-				()->new SimpleWeightedGraph<Ciudad, Carretera>(
-						Ciudad::create,
-						Carretera::create));	
+				()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));	
 		
 		
 		Map<Ciudad,Double> habitantes = Maps2.newHashMap(x->1/x.getHabitantes());

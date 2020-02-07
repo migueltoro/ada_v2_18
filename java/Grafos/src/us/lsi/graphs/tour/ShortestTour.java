@@ -28,7 +28,9 @@ public class ShortestTour<V, E, G extends Graph<V, E>> {
 	 * @param edgeCreator Un creador de aristas
 	 * @return Un algoritmo para calcular rutas minimas
 	 */
-	public static <V, E, G extends Graph<V, E>> ShortestTour<V, E, G> of(G graph, Supplier<G> creator,
+	public static <V, E, G extends Graph<V, E>> ShortestTour<V, E, G> of(
+			G graph, 
+			Supplier<G> creator,
 			TriFunction<V, V, Double, E> edgeCreator) {
 		return new ShortestTour<V, E, G>(graph, creator, edgeCreator);
 	}
