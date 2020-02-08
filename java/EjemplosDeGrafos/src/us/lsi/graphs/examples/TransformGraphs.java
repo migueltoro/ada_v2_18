@@ -18,7 +18,7 @@ public class TransformGraphs {
 				Carretera::getKm);
 		System.out.println(graph.vertexSet());
 		System.out.println(graph.edgeSet());
-		Graph<Ciudad, Carretera> graph2 = Graphs2.toDirectedWeightedGraph(graph,Carretera::ofWeight);
+		Graph<Ciudad, Carretera> graph2 = Graphs2.toDirectedWeightedGraph(graph,Carretera::reverse);
 		System.out.println("_______________");
 		System.out.println(graph2.vertexSet());
 		System.out.println(graph2.edgeSet());

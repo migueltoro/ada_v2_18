@@ -17,6 +17,10 @@ public class Carretera {
 	public static Carretera ofWeight(Ciudad c1, Ciudad c2, Double km) {
 		return new Carretera(c1, c2, km);
 	}
+	
+	public static Carretera reverse(Carretera c) {
+		return new Carretera(c.target, c.source, c.km, c.nombre);
+	}
 
 	private static int num =0;
 	private Ciudad source;
@@ -40,11 +44,22 @@ public class Carretera {
 		this.id = num;
 		num++;
 	} 
+	
+	private Carretera(Ciudad source, Ciudad target, Double km, String nombre) {
+		super();
+		this.source = source;
+		this.target = target;
+		this.km = km;
+		this.nombre = nombre;
+		this.id = num;
+		num++;
+	}
+
 	private Carretera(Ciudad c1, Ciudad c2, String[] nombre) {
 		this.source = c1;
 		this.target = c2;
-		this.nombre = nombre[2];
 		this.km = Double.parseDouble(nombre[3]);
+		this.nombre = nombre[2];		
 		this.id = num;
 		num++;
 	}

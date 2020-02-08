@@ -19,7 +19,7 @@ import us.lsi.common.TriFunction;
 public class Graphs2 {
 
 	
-	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, TriFunction<V,V,Double,E> edgeNew){
+	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, Function<E,E> edgeNew){
 		SimpleDirectedWeightedGraph<V,E> gs = 
 				new SimpleDirectedWeightedGraph<V,E>(
 						graph.getVertexSupplier(), 
@@ -31,12 +31,11 @@ public class Graphs2 {
 			V s = graph.getEdgeSource(e);
 			V t = graph.getEdgeTarget(e);
 			Double w = graph.getEdgeWeight(e);
-			E e1 = edgeNew.apply(s, t, w);
-			gs.addEdge(s, t, e1);
+			gs.addEdge(s, t, e);
+			gs.setEdgeWeight(e, w);
+			E e1 = edgeNew.apply(e);
+			gs.addEdge(t, s, e1);
 			gs.setEdgeWeight(e1, w);
-			E e2 = edgeNew.apply(t, s, w);
-			gs.addEdge(t, s, e2);
-			gs.setEdgeWeight(e2, w);
 		}
 		return gs;
 	}
