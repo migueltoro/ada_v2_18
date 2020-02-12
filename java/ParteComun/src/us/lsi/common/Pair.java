@@ -9,7 +9,7 @@ public class Pair<A, B> {
 		return new Pair<>(a,b);
 	}
 	
-	private Pair(A a, B b) {
+	protected Pair(A a, B b) {
 		super();
 		this.a = a;
 		this.b = b;
