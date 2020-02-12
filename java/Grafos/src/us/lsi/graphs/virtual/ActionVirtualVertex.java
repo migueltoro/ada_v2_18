@@ -34,8 +34,10 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E, A>
 	 */
 	protected abstract List<A> actions();
 	
-	protected abstract V getThis();
-	
+	/**
+	 * @param a Una acci&oacute;n
+	 * @return El vecino del v&eacute;rtice siguiendo esa acci&oacute;n
+	 */
 	protected abstract V neighbor(A a);
 	
 	/**

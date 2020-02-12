@@ -77,11 +77,6 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	@Override
-	protected MochilaVertex getThis() {
-		return this;
-	}
-
-	@Override
 	protected MochilaVertex neighbor(Integer a) {
 		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 		return MochilaVertex.of(index+1,cr);

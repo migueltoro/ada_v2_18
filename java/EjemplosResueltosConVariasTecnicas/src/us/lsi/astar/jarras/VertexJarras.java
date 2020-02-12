@@ -55,11 +55,6 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 					.collect(Collectors.toList());
 		return acciones;
 	}
-	
-	@Override
-	public VertexJarras getThis() {
-		return this;
-	}
 
 	@Override
 	protected EdgeJarras getEdge(ActionJarras a) {		

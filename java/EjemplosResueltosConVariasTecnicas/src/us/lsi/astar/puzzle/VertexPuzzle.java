@@ -84,11 +84,6 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 				.collect(Collectors.toList());
 	}
 
-	@Override
-	protected VertexPuzzle getThis() {
-		return this;
-	}
-
 	
 	@Override
 	protected SimpleEdge<VertexPuzzle> getEdge(ActionPuzzle a) {
