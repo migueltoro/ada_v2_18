@@ -92,7 +92,8 @@ public class SimpleEdge<V>  {
 	 * @param v Un vértice de la arista
 	 * @return El otro vértice
 	 */
-	public V otherVertex(V v){
+
+	public  V otherVertex(V v){
 		V r = null;
 		if(v.equals(this.source)){
 			r = this.target;

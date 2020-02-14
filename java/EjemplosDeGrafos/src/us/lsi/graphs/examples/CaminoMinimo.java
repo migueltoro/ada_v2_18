@@ -30,7 +30,7 @@ public class CaminoMinimo {
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(Ciudad::of,Carretera::of),
+						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		ShortestPathAlgorithm<Ciudad,Carretera> a = new DijkstraShortestPath<Ciudad,Carretera>(graph);
 		Ciudad from = Ciudad.ofName("Huelva");

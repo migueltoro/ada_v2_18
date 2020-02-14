@@ -42,9 +42,7 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	@Override
 	public boolean isValid() {
 		return this.cantidadEnJ1>=0 && this.cantidadEnJ2>=0;
-	}
-	
-	
+	}	
 
 	@Override
 	public List<ActionJarras> actions() {
@@ -55,12 +53,6 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 					.collect(Collectors.toList());
 		return acciones;
 	}
-
-	@Override
-	protected EdgeJarras getEdge(ActionJarras a) {		
-		return EdgeJarras.create(this, a.neighbor(this), a);
-	}
-
 
 	@Override
 	protected VertexJarras neighbor(ActionJarras a) {

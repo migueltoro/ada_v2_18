@@ -6,7 +6,6 @@ import java.util.Map;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.color.GreedyColoring;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
-import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.ComponentNameProvider;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
@@ -15,6 +14,7 @@ import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphcolors.GraphColors;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 
 /**
@@ -31,7 +31,7 @@ public class ColoreadoDeGrafos {
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
-						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		
 		VertexColoringAlgorithm<Ciudad> vca = new GreedyColoring<>(graph);

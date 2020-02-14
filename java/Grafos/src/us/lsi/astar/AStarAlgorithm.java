@@ -40,10 +40,12 @@ public class AStarAlgorithm<V, E>  {
 	 * @return Algoritmo AStar
 	 * 
 	 */
+	
 	public static <V, E> AStarAlgorithm<V, E> of(
 			AStarGraph<V, E> graph, V startVertex, V endVertex, BiFunction<V,V,Double> heuristic) {
 		return new AStarAlgorithm<V,E>(graph,startVertex,endVertex, heuristic); 
 	}
+	
 	/**
 	 * Un algoritmo AStar para ir del vértice de inicio hasta el  primer vértice que cumple el predicado
 	 * @param <V> Tipo del vértice

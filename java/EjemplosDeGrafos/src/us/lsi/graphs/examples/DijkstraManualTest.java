@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
@@ -12,6 +11,7 @@ import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphcolors.GraphColors;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.manual.RecorridoDijkstraManual;
 
@@ -23,7 +23,7 @@ public class DijkstraManualTest {
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
-						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		
 		RecorridoDijkstraManual<Ciudad,Carretera> ra = 

@@ -1,80 +1,72 @@
 package us.lsi.astar.puzzle;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import us.lsi.graphs.SimpleEdge;
+import us.lsi.common.Arrays2;
+import us.lsi.common.IntPair;
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 
 
 
-public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<VertexPuzzle>, ActionPuzzle> {
+public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdgeAction<VertexPuzzle,ActionPuzzle>, ActionPuzzle> {
 
 	/**
 	 * @param d Lista de valores del puzzle dados por filas de abajo arriba
 	 * @return Un EstadoPuzzle
 	 */
-	public static VertexPuzzle of(Integer... d) {
+	public static VertexPuzzle of(Integer... d) {				
 		return new VertexPuzzle(d);
 	}
 	
-	public static VertexPuzzle of(Integer[][] datos, int x0, int y0) {
-		return new VertexPuzzle(datos, x0, y0);
+	public static VertexPuzzle of(Integer[][] datos, IntPair blackPosition) {
+		return new VertexPuzzle(datos, blackPosition);
 	}
 	
-	Integer[][] datos; 
-	int x0;
-	int y0;
+	private final Integer[][] datos; 
+	private final IntPair blackPosition;
 	public static int numFilas = 3;
 	
-	private VertexPuzzle(Integer[][] datos, int x0, int y0) {
-		super();
-		this.datos = datos;
-		this.x0 = x0;
-		this.y0 = y0;
+	private static boolean validDato(Integer d) {
+		return 0<=d && d < VertexPuzzle.numFilas*VertexPuzzle.numFilas;
 	}
 	
-	private VertexPuzzle(Integer... d) {
-		super(); 
-		this.datos = new Integer[VertexPuzzle.numFilas][VertexPuzzle.numFilas];
-		Set<Integer> s = new HashSet<Integer>();	
-		int x=0,y=0;
-		for (int e:d) {							
-					if(e<0 || e> (VertexPuzzle.numFilas*VertexPuzzle.numFilas-1)){
-						throw new IllegalArgumentException();
-					}
-					if(e==0){
-						this.x0 =x;
-						this.y0 =y;
-					}
-					s.add(e);
-					this.datos[x][y] = e;
-					if(y== VertexPuzzle.numFilas-1){
-						x++;
-						y=0;
-					}else{
-						y++;
-					}
-				
-		}
-		if(d.length!= VertexPuzzle.numFilas*VertexPuzzle.numFilas || 
-				s.size()!= VertexPuzzle.numFilas*VertexPuzzle.numFilas)
-			throw new IllegalArgumentException();
+	public boolean validPosition(IntPair p) {
+		return p.a>=0 && p.a< VertexPuzzle.numFilas && p.b>=0 && p.b<VertexPuzzle.numFilas;
+	}
+	
+	private VertexPuzzle(Integer...datos) {
+		Integer n = VertexPuzzle.numFilas;
+		Integer dt[][] = Arrays2.toMultiArray(datos, n, n);	
+		IntPair bp = Arrays2.findPosition(dt, e->e==0);
+		this.datos = dt;
+		this.blackPosition = bp;
+		this.isValid();
+	}
+	
+	private VertexPuzzle(Integer[][] datos, IntPair blackPosition) {
+		super();
+		this.datos = Arrays2.copyArray(datos);
+		this.blackPosition = blackPosition;
+//		Preconditions.checkState(isValid(),"Datos no validos");
 	}
 	
 	@Override
 	public boolean isValid() {
-		Set<Integer> s = new HashSet<Integer>();	
-		for (int y = 0; y < VertexPuzzle.numFilas; y++) {
-			for (int x = 0; x < VertexPuzzle.numFilas; x++) {
-				s.add(datos[x][y]);
-			}
-		}
-		return s.size()== VertexPuzzle.numFilas*VertexPuzzle.numFilas;
+		Integer n = VertexPuzzle.numFilas;
+		Set<Integer> s = Arrays.stream(this.datos)
+				.flatMap(f->Arrays.stream(f))
+				.filter(e->VertexPuzzle.validDato(e))
+				.collect(Collectors.toSet());
+		return s.size()== n*n;
+	}	
+
+	public IntPair getBlackPosition() {
+		return blackPosition;
 	}
 
 	@Override
@@ -83,44 +75,50 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 				filter(a->a.isApplicable(this))
 				.collect(Collectors.toList());
 	}
-
 	
 	@Override
-	protected SimpleEdge<VertexPuzzle> getEdge(ActionPuzzle a) {
-		return SimpleEdge.of(this, a.neighbor(this));
-	}
-
-	@Override
 	protected VertexPuzzle neighbor(ActionPuzzle a) {
-		return a.neighbor(this);
+		Preconditions.checkArgument(a.isApplicable(this), String.format("La acción %s no es aplicable",a.toString()));
+		IntPair np = this.blackPosition.add(a.direction());
+		IntPair op = this.blackPosition;
+		Integer dd[][] = Arrays2.copyArray(this.datos);
+		Integer value = dd[np.a][np.b];
+		dd[op.a][op.b] = value;
+		dd[np.a][np.b] = 0;
+		VertexPuzzle v  = VertexPuzzle.of(dd,np);
+		Preconditions.checkState(!this.equals(v),String.format("No deben ser iguales %s \n %s \n %s",a.toString(),this.toString(),v.toString()));
+		return v;
 	}
 	
 	public Integer getDato(int x, int y) {
-		if(x<0 || x>=VertexPuzzle.numFilas || y<0 || y>=VertexPuzzle.numFilas)
-			throw new IllegalArgumentException();
-		return datos[x][y];
+		return getDato(IntPair.of(x, y));
+	}
+	
+	public Integer getDato(IntPair p) {
+		Preconditions.checkArgument(validPosition(p),"No se cumple la precondición");
+		return datos[p.a][p.b];
 	}
 	
 	public Integer getNumDiferentes(VertexPuzzle e){
-		Integer s = 0;
-		for (int x = 0; x < VertexPuzzle.numFilas; x++) {
-			for (int y = 0; y < VertexPuzzle.numFilas; y++) {
-				if (!this.datos[x][y].equals(e.datos[x][y])) {
-					s++;
-				}
-			}
-		}
-		return s;
+		Integer n = VertexPuzzle.numFilas;
+		Long s = IntStream.range(0,n).boxed()
+				.flatMap(f->IntStream.range(0,n).boxed().map(c->IntPair.of(f, c)))
+				.filter(p->this.getDato(p) != e.getDato(p))
+				.count();
+		return s.intValue();
 	}
 
 	@Override
 	public String toString() {
-		String s = IntStream.range(0,VertexPuzzle.numFilas).boxed().map(y->fila(y)).collect(Collectors.joining("\n", "", ""));
+		String s = IntStream.range(0,VertexPuzzle.numFilas).boxed()
+				.map(y->fila(y))
+				.collect(Collectors.joining("\n", "", ""));
 		return s;
 	}
 
 	private String fila(int y) {
-		return IntStream.range(0,VertexPuzzle.numFilas).boxed()
+		Integer n = VertexPuzzle.numFilas;
+		return IntStream.range(0,n).boxed()
 				.map(j->datos[y][j].toString()).collect(Collectors.joining("|", "|", "|"));
 	}
 
@@ -145,6 +143,5 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdge<V
 			return false;
 		return true;
 	}
-	
 	
 }

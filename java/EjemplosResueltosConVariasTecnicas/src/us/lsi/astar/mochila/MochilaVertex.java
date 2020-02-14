@@ -81,11 +81,6 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 		return MochilaVertex.of(index+1,cr);
 	}
-
-	@Override
-	protected MochilaEdge getEdge(Integer a) {
-		return MochilaEdge.of(this, neighbor(a), a);
-	}
 	
 	public Double voraz(Predicate<MochilaVertex> p) {
 		return -voraz(index,(double)capacidadRestante,p);

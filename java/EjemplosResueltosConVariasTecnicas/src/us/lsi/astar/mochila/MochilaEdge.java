@@ -1,9 +1,10 @@
 package us.lsi.astar.mochila;
 
 
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 import us.lsi.mochila.datos.DatosMochila;
 
-public class MochilaEdge extends us.lsi.graphs.SimpleEdge<MochilaVertex> {
+public class MochilaEdge extends SimpleEdgeAction<MochilaVertex,Integer> {
 	
 	public static MochilaEdge of(MochilaVertex v1, MochilaVertex v2, Integer a) {
 		Double weight = -(double) a*DatosMochila.getValor(v1.index);
@@ -12,8 +13,7 @@ public class MochilaEdge extends us.lsi.graphs.SimpleEdge<MochilaVertex> {
 
 	public Integer a;
 	
-	private MochilaEdge(MochilaVertex c1, 
-			MochilaVertex c2, double weight, Integer a) {
+	private MochilaEdge(MochilaVertex c1, MochilaVertex c2, double weight, Integer a) {
 		super(c1, c2, weight);
 		this.a = a;
 	}
@@ -22,6 +22,8 @@ public class MochilaEdge extends us.lsi.graphs.SimpleEdge<MochilaVertex> {
 		super(c1, c2);
 		
 	}
+	
+	
 	
 
 }

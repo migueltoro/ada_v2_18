@@ -27,8 +27,16 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	 * @param v Vértice que se pregunta si es vecino
 	 * @return Si el vértice es vecino
 	 */
-	default boolean isNeighbor(V v) {
-		return getNeighborListOf().contains(v);
+	default Boolean isNeighbor(V v) {
+		return null;
+	}
+	
+	/**
+	 * @param v2 Otro vértice
+	 * @return La arista desde this a v2
+	 */
+	default E getEdge(V v2) {
+		return null;
 	}
 
 }

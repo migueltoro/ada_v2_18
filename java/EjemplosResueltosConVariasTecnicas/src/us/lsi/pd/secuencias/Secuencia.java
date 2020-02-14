@@ -56,7 +56,7 @@ public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
 	}
 
 	@Override
-	public boolean isNeighbor(Secuencia e) {
+	public Boolean isNeighbor(Secuencia e) {
 		return this.getNeighborListOf().contains(e);
 	}
 
@@ -125,6 +125,12 @@ public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
 	@Override
 	public boolean isValid() {
 		return true;
+	}
+
+	@Override
+	public SecuenciaEdge getEdge(Secuencia v2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

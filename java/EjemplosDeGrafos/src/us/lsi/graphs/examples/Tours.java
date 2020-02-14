@@ -13,6 +13,7 @@ import us.lsi.common.Sets2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphcolors.GraphColors;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.tour.ShortestTour;
 
@@ -22,7 +23,7 @@ public class Tours {
 		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
-				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of),
+				Graphs2::simpleWeightedGraph,
 				Carretera::getKm);
 		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
 				x -> x.getNombre(), 
@@ -34,7 +35,7 @@ public class Tours {
 		ShortestTour<Ciudad, Carretera, SimpleWeightedGraph<Ciudad, Carretera>> a = 
 				ShortestTour.of(
 						graph, 
-						() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of), 
+						Graphs2::simpleWeightedGraph, 
 						Carretera::ofWeight);
 		Set<Ciudad> vertices = Sets2.newSet(Ciudad.ofName("Jaen"));
 		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"),vertices);

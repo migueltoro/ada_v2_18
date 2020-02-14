@@ -14,7 +14,7 @@ public class TransformGraphs {
 		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
-				() -> new SimpleWeightedGraph<Ciudad, Carretera>(Ciudad::of, Carretera::of),
+				Graphs2::simpleWeightedGraph,
 				Carretera::getKm);
 		System.out.println(graph.vertexSet());
 		System.out.println(graph.edgeSet());

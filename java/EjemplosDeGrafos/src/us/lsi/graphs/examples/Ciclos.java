@@ -28,7 +28,7 @@ public class Ciclos {
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
-						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		
 		SimpleWeightedGraph<Ciudad, Carretera> gc = 

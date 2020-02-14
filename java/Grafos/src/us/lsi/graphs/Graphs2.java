@@ -13,11 +13,37 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 public class Graphs2 {
+	
+	
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(V v) {
+		return new SimpleVirtualGraph<V, E>(v);
+	}
+		
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+			Function<E, Double> edgeWeight) {
+		return AStarSimpleVirtualGraph.of(edgeWeight);
+	}
+	
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
+			TriFunction<V, E, E, Double> vertexPassWeight) {
+		return AStarSimpleVirtualGraph.of(edgeWeight, vertexWeight, vertexPassWeight);
+	}
 
+	public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph() {
+		return new SimpleWeightedGraph<>(null,null);
+	}
+	
+	public static <V,E> SimpleGraph<V, E> simpleGraph() {
+		return new SimpleGraph<V,E>(null,null,false);
+	}
 	
 	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, Function<E,E> edgeNew){
 		SimpleDirectedWeightedGraph<V,E> gs = 

@@ -38,7 +38,7 @@ public class RecubrimientoMinimo {
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
-						()->new SimpleWeightedGraph<Ciudad,Carretera>(Ciudad::of,Carretera::of),
+						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		
 		SpanningTreeAlgorithm<Carretera> ast = new KruskalMinimumSpanningTree<>(graph);

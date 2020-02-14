@@ -24,12 +24,12 @@ public class Tsp {
 		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
-				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of),
+				Graphs2::simpleWeightedGraph,
 				Carretera::getKm);
 		SimpleWeightedGraph<Ciudad, Carretera> graph2 = Graphs2.explicitCompleteGraph(
 				graph, 
 				1000.,
-				() -> new SimpleWeightedGraph<>(Ciudad::of, Carretera::of), 
+				Graphs2::simpleWeightedGraph, 
 				Carretera::ofWeight,
 				Carretera::getKm);
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();

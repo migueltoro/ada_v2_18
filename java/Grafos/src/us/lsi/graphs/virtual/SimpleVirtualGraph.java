@@ -51,10 +51,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	@SafeVarargs
 	public SimpleVirtualGraph(V... vertexSet){
 		super();
-		this.vertexSet = new HashSet<>();
-		for(V v:vertexSet){
-			this.vertexSet.add(v);
-		}
+		this.vertexSet = Set.of(vertexSet);
 	}
 
 	@Override
@@ -83,30 +80,17 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	@Override
 	public double getEdgeWeight(E e) {
 		return e.getEdgeWeight();
-	}
-	
+	}	
 	@Override
 	public E getEdge(V v1, V v2) {
-		E a = null;
-		if (v1.isNeighbor(v2)) {
-			a = v1.edgesOf()
-					.stream()
-					.filter(e->e.otherVertex(v1).equals(v2))
-					.findFirst()
-					.get();
-		}
-		return a;
-	}
-	
+		return v1.getEdge(v2);
+	}	
 	@Override
 	public Set<E> getAllEdges(V v1, V v2) {
 		Set<E> s = new HashSet<>();
-		if (v1.isNeighbor(v2))
-			s.add(getEdge(v1, v2));
+		if (v1.isNeighbor(v2)) s = Set.of(this.getEdge(v1, v2));
 		return s;
-	}
-	
-	
+	}	
 	
 	/** 
 	 * @return Conjunto de vértices del grafo que se han hecho explícitos en el constructor.
@@ -126,14 +110,20 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 		return v.edgesOf().size();
 	}
 
+	/**
+	 * @throw UnsupportedOperationException
+	 */
 	@Override
 	public int inDegreeOf(V v) {
-		return v.edgesOf().size();
+		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * @throw UnsupportedOperationException
+	 */
 	@Override
 	public Set<E> incomingEdgesOf(V v) {
-		return edgesOf(v);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -145,16 +135,17 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	public Set<E> outgoingEdgesOf(V v) {
 		return edgesOf(v);
 	}
-
 	
+	@Override
+	public void setEdgeWeight(E edge, double weight) {
+		edge.setWeight(weight);		
+	}	
+	/**
+	 * @throw UnsupportedOperationException
+	 */
 	@Override
 	public GraphType getType() {
 		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public void setEdgeWeight(E arg0, double arg1) {
-		throw new UnsupportedOperationException();		
 	}	
 	
 	/**

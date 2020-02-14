@@ -6,7 +6,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.alg.tour.HeldKarpTSP;
-import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
@@ -16,6 +15,7 @@ import us.lsi.common.Strings2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphcolors.GraphColors;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
@@ -26,7 +26,7 @@ public class Views {
 		Graph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
-				() -> new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
+				Graphs2::simpleWeightedGraph,
 				Carretera::getKm);
 		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
 				x -> x.getNombre(), 

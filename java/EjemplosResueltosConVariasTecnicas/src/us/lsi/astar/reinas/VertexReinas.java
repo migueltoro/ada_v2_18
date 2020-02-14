@@ -132,7 +132,5 @@ public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
 			return false;
 		return true;
 	}
-	
-	
 
 }
