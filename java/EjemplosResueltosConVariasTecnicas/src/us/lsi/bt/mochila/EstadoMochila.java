@@ -14,7 +14,7 @@ public class EstadoMochila implements
 	EstadoBT<SolucionMochila, Integer, EstadoMochila> {
 
 	public static EstadoMochila createInitial() {
-		return new EstadoMochila(0,SolucionMochila.create(), 
+		return new EstadoMochila(0,SolucionMochila.empty(), 
 				0,DatosMochila.capacidadInicial, 0);
 	}
 

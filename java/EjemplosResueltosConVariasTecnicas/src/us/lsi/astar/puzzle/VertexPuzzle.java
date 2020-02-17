@@ -9,11 +9,11 @@ import us.lsi.common.Arrays2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
-import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.ActionSimpleEdge;
 
 
 
-public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdgeAction<VertexPuzzle,ActionPuzzle>, ActionPuzzle> {
+public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, ActionSimpleEdge<VertexPuzzle,ActionPuzzle>, ActionPuzzle> {
 
 	/**
 	 * @param d Lista de valores del puzzle dados por filas de abajo arriba
@@ -52,11 +52,10 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, SimpleEdgeAc
 		super();
 		this.datos = Arrays2.copyArray(datos);
 		this.blackPosition = blackPosition;
-//		Preconditions.checkState(isValid(),"Datos no validos");
 	}
 	
 	@Override
-	public boolean isValid() {
+	public Boolean isValid() {
 		Integer n = VertexPuzzle.numFilas;
 		Set<Integer> s = Arrays.stream(this.datos)
 				.flatMap(f->Arrays.stream(f))

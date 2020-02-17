@@ -10,6 +10,7 @@ public interface Action<V> {
 	/**
 	 * @param v Un vértice
 	 * @return Si la acción es aplicable en este vértice
+	 * @post El vértice retornada debe ser distinto a v y válido
 	 */
 	public boolean isApplicable(V v);
 }

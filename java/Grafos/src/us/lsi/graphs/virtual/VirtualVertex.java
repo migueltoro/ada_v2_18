@@ -1,6 +1,7 @@
 package us.lsi.graphs.virtual;
 
 import java.util.Set;
+
 /**
  * <a> El tipo representa un vértice de un grafo virtual no dirigido </a>
  * 
@@ -13,7 +14,7 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	/**
 	 * @return Si es un valor válido del tipo
 	 */
-	boolean isValid();
+	Boolean isValid();
 	/**
 	 * @return Conjunto de los vértices vecinos
 	 */
@@ -26,17 +27,14 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	/**
 	 * @param v Vértice que se pregunta si es vecino
 	 * @return Si el vértice es vecino
-	 */
-	default Boolean isNeighbor(V v) {
-		return null;
-	}
-	
+	 */	
+	Boolean isNeighbor(V v);	
+
 	/**
+	 * 
 	 * @param v2 Otro vértice
 	 * @return La arista desde this a v2
-	 */
-	default E getEdge(V v2) {
-		return null;
-	}
+	 */	
+	E getEdge(V v2);
 
 }

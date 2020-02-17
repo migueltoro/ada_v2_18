@@ -22,16 +22,16 @@ import us.lsi.graphs.virtual.VirtualVertex;
 public class Graphs2 {
 	
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(V v) {
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
 		return new SimpleVirtualGraph<V, E>(v);
 	}
 		
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(
 			Function<E, Double> edgeWeight) {
 		return AStarSimpleVirtualGraph.of(edgeWeight);
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(
 			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
 		return AStarSimpleVirtualGraph.of(edgeWeight, vertexWeight, vertexPassWeight);

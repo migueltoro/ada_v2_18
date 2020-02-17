@@ -2,18 +2,15 @@ package us.lsi.astar.reinas;
 
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.Lists2;
 import us.lsi.common.SetRangeInteger;
-import us.lsi.common.Sets2;
-import us.lsi.graphs.virtual.VirtualVertex;
-import us.lsi.math.Math2;
+import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
-public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
+public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, ActionReinas> {
 	
 	public static Integer numeroDeReinas = 200;
 	public static Integer resto = 10;
@@ -30,10 +27,9 @@ public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
 	}
 
 	Integer x;
-	private List<Integer> yO;
-	private SetRangeInteger dpO;
-	private SetRangeInteger dsO;
-//	private Set<VertexReinas> neighbors = null;
+	List<Integer> yO;
+	SetRangeInteger dpO;
+	SetRangeInteger dsO;
 	
 	private VertexReinas(Integer x,List<Integer> yO, SetRangeInteger dpO, SetRangeInteger dsO) {
 		super();
@@ -45,50 +41,30 @@ public class VertexReinas implements VirtualVertex<VertexReinas, EdgeReinas> {
 	
 
 	@Override
-	public boolean isValid() {
+	public Boolean isValid() {
 		return true;
 	}
 	
 	@Override
-	public Set<VertexReinas> getNeighborListOf() {
-		Set<VertexReinas> neighbors;
-//		if (neighbors == null) {
-			List<Integer> ys = IntStream.range(0, numeroDeReinas).boxed().filter(y -> isApplicable(y))
-					.collect(Collectors.toList());
-			if (this.x < numeroDeReinas - resto && ys.size() > 1) {
-				Integer index = Math2.getEnteroAleatorio(0, ys.size());
-				neighbors = Sets2.newSet(neighbor(ys.get(index)));
-			} else {
-				neighbors = ys.stream().map(y -> neighbor(y)).collect(Collectors.toSet());
-			}
-//		}
-		return neighbors;
+	protected List<ActionReinas> actions() {
+		return IntStream.range(0,VertexReinas.numeroDeReinas)
+				.boxed()
+				.map(e->ActionReinas.of(e))
+				.filter(a->a.isApplicable(this))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	protected VertexReinas neighbor(ActionReinas a) {
+		return a.neighbor(this);
 	}
 	
 	@Override
-	public Set<EdgeReinas> edgesOf() {
-		return getNeighborListOf().stream()
-				.map(v->EdgeReinas.of(this,v,v.yO.get(v.x-1)))
-				.collect(Collectors.toSet());
+	public EdgeReinas getEdgeFromAction(ActionReinas a) {
+		VertexReinas v = this.neighbor(a);
+		return EdgeReinas.of(this,v,a);
 	}
 	
-	public VertexReinas neighbor(Integer y) {
-		Integer dp = y - this.x;
-		Integer ds = y + this.x;
-		List<Integer> yO = Lists2.copy(this.yO);
-		yO.add(y);
-		SetRangeInteger dpO = this.dpO.copy();
-		dpO.add(dp);
-		SetRangeInteger dsO = this.dsO.copy();
-		dsO.add(ds);
-		return VertexReinas.of(x+1, yO, dpO, dsO);
-	}
-	
-	public boolean isApplicable(Integer y) {
-		Integer dp = y - this.x;
-		Integer ds = y + this.x;
-		return !(this.yO.contains(y) || this.dpO.contains(dp) || this.dsO.contains(ds));
-	}
 
 	@Override
 	public int hashCode() {

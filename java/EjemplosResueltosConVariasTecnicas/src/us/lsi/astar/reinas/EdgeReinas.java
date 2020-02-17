@@ -1,16 +1,16 @@
 package us.lsi.astar.reinas;
 
+import us.lsi.graphs.virtual.ActionSimpleEdge;
 
-import us.lsi.graphs.SimpleEdge;
-
-public class EdgeReinas extends SimpleEdge<VertexReinas> {
-	public static EdgeReinas of(VertexReinas c1, VertexReinas c2, Integer y) {
+public class EdgeReinas extends ActionSimpleEdge<VertexReinas,ActionReinas> {
+	
+	public static EdgeReinas of(VertexReinas c1, VertexReinas c2, ActionReinas y) {
 		return new EdgeReinas(c1,c2,y);
 	}
 	
-	Integer y;
+	ActionReinas y;
 
-	public EdgeReinas(VertexReinas c1, VertexReinas c2, Integer y) {
+	public EdgeReinas(VertexReinas c1, VertexReinas c2, ActionReinas y) {
 		super(c1, c2);
 		this.y = y;
 	}

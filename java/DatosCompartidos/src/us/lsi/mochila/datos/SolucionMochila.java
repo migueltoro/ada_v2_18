@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class SolucionMochila {
 	
-	public static SolucionMochila create() {
+	public static SolucionMochila empty() {
 		return new SolucionMochila();
 	}
 

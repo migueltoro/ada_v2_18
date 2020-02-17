@@ -123,7 +123,7 @@ public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
 	}
 
 	@Override
-	public boolean isValid() {
+	public Boolean isValid() {
 		return true;
 	}
 

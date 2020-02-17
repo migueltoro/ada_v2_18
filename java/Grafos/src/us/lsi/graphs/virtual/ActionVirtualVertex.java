@@ -27,7 +27,7 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	/**
 	 * @return Si es un valor válido del tipo
 	 */
-	public abstract boolean isValid();
+	public abstract Boolean isValid();
 	
 	/**
 	 * Para ser implementado por el subtipo
@@ -43,9 +43,37 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	 */
 	protected abstract V neighbor(A a);
 	
+	/**
+	 * Este método debe ser sobrescrito en la clase que refine el tipo
+	 * @param a Acci&oacute;n
+	 * @return La arista que lleva al vecino siguiendo esta acci&oacute;n
+	 */
+	@SuppressWarnings("unchecked")
+	public E getEdgeFromAction(A a) {
+		V v = this.neighbor(a);
+		return (E) ActionSimpleEdge.of(this,v,a);
+	}
+	
 	private Set<V> neighbors = null;
 	private Set<E> edges = null;
 	
+	/**
+	 * Este método podría ser sobrescrito en la clase que refine al tipo
+	 * @param v2 Otro vértice
+	 * @return La arista desde this a v2
+	 */
+	@Override
+	public E getEdge(V v) {
+		E edge = null;
+		if (this.isNeighbor(v)) {
+			edge = this.edgesOf()
+					.stream()
+					.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
+					.findFirst()
+					.get();
+		}
+		return edge;
+	}
 
 	@Override
 	public Set<V> getNeighborListOf() {
@@ -72,29 +100,6 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	@Override
 	public Boolean isNeighbor(V e) {
 		return this.getNeighborListOf().contains(e);
-	}
-
-	@Override
-	public E getEdge(V v) {
-		E edge = null;
-		if (this.isNeighbor(v)) {
-			edge = this.edgesOf()
-					.stream()
-					.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
-					.findFirst()
-					.get();
-		}
-		return edge;
-	}
-	
-	/**
-	 * @param a Acci&oacute;n
-	 * @return La arista que lleva al vecino siguiendo esta acci&oacute;n
-	 */
-	@SuppressWarnings("unchecked")
-	public E getEdgeFromAction(A a) {
-		V v = this.neighbor(a);
-		return (E) SimpleEdgeAction.of(this,v,a);
 	}
 	
 }

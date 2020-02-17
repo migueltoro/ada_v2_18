@@ -23,4 +23,15 @@ public class IntPair extends Pair<Integer, Integer> {
 		return IntPair.of(e*super.a, e*super.b);
 	}
 	
+	public Integer sumAbs() {
+		return Math.abs(this.a)+Math.abs(this.b);
+	}
+	
+	public Double module() {
+		return Math.sqrt(this.a*this.a+this.b*this.b);
+	}
+	
+	public Integer manhattan(IntPair p) {
+		return this.minus(p).sumAbs();
+	}
 }

@@ -19,7 +19,7 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 
 	@Override
 	public SolucionMochila getSolucion(ValuesInRangeChromosome<Integer> chromosome) {
-		SolucionMochila s = SolucionMochila.create();
+		SolucionMochila s = SolucionMochila.empty();
 		List<Integer> ls = chromosome.decode();
 		for (int i=0; i< this.getVariableNumber();i++) {
 			s.add(DatosMochila.getObjeto(i),ls.get(i));

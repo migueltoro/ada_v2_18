@@ -40,7 +40,7 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	}
 
 	@Override
-	public boolean isValid() {
+	public Boolean isValid() {
 		return this.cantidadEnJ1>=0 && this.cantidadEnJ2>=0;
 	}	
 

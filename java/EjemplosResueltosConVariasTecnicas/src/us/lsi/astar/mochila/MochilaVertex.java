@@ -30,7 +30,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
-		SolucionMochila s = SolucionMochila.create();		
+		SolucionMochila s = SolucionMochila.empty();		
 		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a));
 		return s;
 	}
@@ -64,7 +64,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	@Override
-	public boolean isValid() {
+	public Boolean isValid() {
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
 
@@ -80,6 +80,12 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	protected MochilaVertex neighbor(Integer a) {
 		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 		return MochilaVertex.of(index+1,cr);
+	}
+	
+	@Override
+	public MochilaEdge getEdgeFromAction(Integer a) {
+		MochilaVertex v = this.neighbor(a);
+		return MochilaEdge.of(this,v,a);
 	}
 	
 	public Double voraz(Predicate<MochilaVertex> p) {

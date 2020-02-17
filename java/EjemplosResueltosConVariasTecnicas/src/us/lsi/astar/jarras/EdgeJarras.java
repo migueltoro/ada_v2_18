@@ -1,8 +1,8 @@
 package us.lsi.astar.jarras;
 
-import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.ActionSimpleEdge;
 
-public class EdgeJarras extends SimpleEdgeAction<VertexJarras,ActionJarras> {
+public class EdgeJarras extends ActionSimpleEdge<VertexJarras,ActionJarras> {
 
 	/**
 	 * 

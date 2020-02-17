@@ -1,7 +1,6 @@
 package us.lsi.astar.puzzle;
 
-import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.ActionSimpleEdge;
 
 public class TestPuzzle {
 
@@ -30,13 +29,13 @@ public class TestPuzzle {
 		System.out.println("--------------");
 		System.out.println(e);
 		System.out.println("Aristas");
-		for (SimpleEdge<VertexPuzzle> ed: e.edgesOf()) {
+		for (ActionSimpleEdge<VertexPuzzle, ActionPuzzle> ed: e.edgesOf()) {
 			System.out.println(ed+"\n");
 		}
 		System.out.println("--------------");
 		System.out.println(e);
 		System.out.println("Acciones");
-		for (SimpleEdgeAction<VertexPuzzle, ActionPuzzle> ed: e.edgesOf()) {
+		for (ActionSimpleEdge<VertexPuzzle, ActionPuzzle> ed: e.edgesOf()) {
 			System.out.println(ActionPuzzle.actions().get(ed.action.getIndex()));
 		}
 	}

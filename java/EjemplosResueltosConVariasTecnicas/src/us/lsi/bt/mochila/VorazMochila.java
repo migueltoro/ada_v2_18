@@ -10,7 +10,7 @@ import us.lsi.mochila.datos.SolucionMochila;
 public class VorazMochila {
 
 	public static SolucionMochila getSolucionVoraz(EstadoMochila e) {
-		SolucionMochila r = SolucionMochila.create();
+		SolucionMochila r = SolucionMochila.empty();
 		while (!e.esCasoBase()) {
 			List<Integer> alternativas = e.getAlternativas();
 			Integer a = alternativas.stream().max(Comparator.naturalOrder()).get();

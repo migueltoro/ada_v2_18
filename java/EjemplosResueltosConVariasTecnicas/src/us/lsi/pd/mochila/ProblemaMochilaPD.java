@@ -85,7 +85,7 @@ public class ProblemaMochilaPD implements ProblemaPDR<SolucionMochila, Integer, 
 
 	@Override
 	public SolucionMochila getSolucionReconstruidaCasoBase(Sp<Integer> sp) {
-		return SolucionMochila.create();
+		return SolucionMochila.empty();
 	}
 
 	@Override
