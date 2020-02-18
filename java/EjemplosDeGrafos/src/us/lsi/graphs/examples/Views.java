@@ -37,9 +37,9 @@ public class Views {
 		Graph<Ciudad, Carretera> graph2 = CompleteGraphView.of(graph,
 				Carretera::ofWeight,
 				Double.valueOf(1000.),
-				c->c.getSource(),
-				c->c.getTarget(),
-				c->c.getKm());
+				Carretera::getKm,
+				Carretera::getSource,
+				Carretera::getTarget);
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();
 		GraphPath<Ciudad, Carretera> r = a.getTour(graph2);
 		DOTExporter<Ciudad, Carretera> de2 = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
@@ -50,9 +50,7 @@ public class Views {
 		de2.exportGraph(graph2, f2);
 		Strings2.toConsole(r.getEdgeList(), "Camino");
 		Graph<Ciudad, Carretera> graph3 = SubGraphView.of(graph,
-				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")),
-				c->c.getSource(), 
-				c->c.getTarget());
+				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")));
 		PrintWriter f3 = Files2.getWriter("ficheros/subGrafoAndalucia.gv");
 		de.exportGraph(graph3, f3);
 	}
