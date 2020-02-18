@@ -1,6 +1,6 @@
 package us.lsi.ag;
 
-public class HelpAg {
+public class HelpFitnessAg {
 	
 	/**
 	 * @param in Valor que tiene que cumplir la condic&oacute;n in &lt; 0.
