@@ -2,7 +2,6 @@ package us.lsi.graphs.views;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -15,42 +14,31 @@ import org.jgrapht.GraphType;
 public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
 	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V,E>> G of(G graph, 
-			Predicate<V> vertices, Predicate<E> edges,
-			Function<E, V> source, Function<E, V> target) {
-		return (G) new SubGraphView<V, E, G>(graph, vertices, edges, source, target);
+	public static <V, E, G extends Graph<V,E>> G of(G graph, Predicate<V> vertices, Predicate<E> edges) {
+		return (G) new SubGraphView<V, E, G>(graph, vertices, edges);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V,E>> G of(G graph, Set<V> vertices, Function<E, V> source,
-			Function<E, V> target) {
-		return (G) new SubGraphView<V, E, G>(graph, vertices, source, target);
+	public static <V, E, G extends Graph<V,E>> G of(G graph, Set<V> vertices) {
+		return (G) new SubGraphView<V, E, G>(graph, vertices);
 	}
 
 	private G graph;
 	private Predicate<V> vertices;
 	private Predicate<E> edges;
-	private Function<E,V> source;
-	private Function<E,V> target;
 	
-	private SubGraphView(G graph, Set<V> vertices, Function<E, V> source,
-			Function<E, V> target) {
+	private SubGraphView(G graph, Set<V> vertices) {
 		super();
 		this.graph = graph;
 		this.vertices = v->vertices.contains(v);
 		this.edges = null;
-		this.source = source;
-		this.target = target;
 	}
 
-	private SubGraphView(G graph, Predicate<V> vertices, Predicate<E> edges, Function<E, V> source,
-			Function<E, V> target) {
+	private SubGraphView(G graph, Predicate<V> vertices, Predicate<E> edges) {
 		super();
 		this.graph = graph;
 		this.vertices = vertices;
 		this.edges = edges;
-		this.source = source;
-		this.target = target;
 	}
 
 	public boolean addEdge(V v0, V v1, E e) {
@@ -72,8 +60,8 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 	public boolean containsEdge(E e) {
 		return graph.containsEdge(e) && 
 				edges!=null?edges.test(e):true && 
-				vertices.test(source.apply(e)) && 
-				vertices.test(target.apply(e));
+				vertices.test(this.getEdgeSource(e)) && 
+				vertices.test(this.getEdgeTarget(e));
 	}
 
 	public boolean containsEdge(V v0, V v1) {

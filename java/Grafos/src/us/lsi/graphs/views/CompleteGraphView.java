@@ -17,35 +17,33 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 
 	@SuppressWarnings("unchecked")
 	public static <V, E, G extends Graph<V,E>> G of(G graph, TriFunction<V, V, Double, E> edgeWeightFactory,
-			Double weightDefault, Function<E, V> source, Function<E, V> target, Function<E, Double> weight) {
-		return (G) new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault, source, target, weight);
+			Double weightDefault, Function<E, Double> weight, Function<E,V> source, Function<E,V> target) {
+		return (G) new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault, weight, source, target);
 	}
 
-
-	private CompleteGraphView(G graph, TriFunction<V, V, Double, E> edgeWeightFactory, Double weightValue,
-			Function<E, V> source, Function<E, V> target, Function<E, Double> weight) {
+	private CompleteGraphView(G graph, TriFunction<V, V, Double, E> edgeWeightFactory, Double weightValue, Function<E, Double> weight,
+			Function<E,V> source, Function<E,V> target) {
 		super();
 		this.graph = graph;
 		this.edgeWeightFactory = edgeWeightFactory;
 		this.weightDefault = weightValue;
+		this.weight = weight;
 		this.source = source;
 		this.target = target;
-		this.weight = weight;
 		this.n= graph.vertexSet().size();
 	}
 
 	private G graph;
 	private TriFunction<V, V, Double, E> edgeWeightFactory;
 	private Double weightDefault;
+	private Function<E,Double> weight;
 	private Function<E,V> source;
 	private Function<E,V> target;
-	private Function<E,Double> weight;
 	private final Integer n;
 
 	public Graph<V, E> getGraph() {
 		return graph;
 	}
-
 
 	public Double getWeightValue() {
 		return weightDefault;
@@ -72,7 +70,7 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 	}
 
 	public boolean containsEdge(E e) {
-		return graph.containsVertex(source.apply(e)) && graph.containsVertex(target.apply(e));
+		return graph.containsVertex(this.getEdgeSource(e)) && graph.containsVertex(this.getEdgeSource(e));
 	}
 
 	public boolean containsEdge(V v0, V v1) {
@@ -113,7 +111,12 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 	}
 
 	public V getEdgeSource(E e) {
-		return source.apply(e);
+		V v = null;
+		if(graph.containsEdge(e))
+			v = graph.getEdgeSource(e);
+		else 
+			v = this.source.apply(e);
+		return v;
 	}
 
 	public Supplier<E> getEdgeSupplier() {
@@ -121,7 +124,12 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 	}
 
 	public V getEdgeTarget(E e) {
-		return target.apply(e);
+		V v = null;
+		if(graph.containsEdge(e))
+			v = graph.getEdgeTarget(e);
+		else 
+			v = this.target.apply(e);
+		return v;
 	}
 
 	public double getEdgeWeight(E e) {
