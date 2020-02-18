@@ -1,5 +1,7 @@
 package us.lsi.flowgraph;
 
+import java.util.Locale;
+
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
@@ -94,6 +96,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 	}
 	
 	public String getConstraints() {
+		Locale.setDefault(new Locale("en", "US"));
 		if (this.constraints == null) {
 			String goal = tipo.equals(TipoDeOptimizacion.Min) ? "min: " : "max: ";
 			goal = goal + Strings2.format(this.vertexSet(), v -> v.toObjective(), "");

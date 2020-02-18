@@ -5,8 +5,6 @@ import us.lsi.flowgraph.FlowGraphSolution;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
 
-import java.util.Locale;
-
 import us.lsi.common.Files2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
@@ -25,8 +23,6 @@ public class Flow1 {
 	 * @param args Argumentos
 	 */
 	public static void main(String[] args) {
-		
-		Locale.setDefault(new Locale("en", "US"));
 		
 		FlowGraph fg = FlowGraph.newGraph("ficheros/flow1.txt",TipoDeOptimizacion.Max);
 		String constraints = fg.getConstraints();
