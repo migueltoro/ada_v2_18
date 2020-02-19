@@ -42,10 +42,12 @@ public class Views {
 				Carretera::getTarget);
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();
 		GraphPath<Ciudad, Carretera> r = a.getTour(graph2);
-		DOTExporter<Ciudad, Carretera> de2 = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
+		DOTExporter<Ciudad, Carretera> de2 = new DOTExporter<Ciudad, Carretera>(
+				new IntegerComponentNameProvider<>(),
 				x -> x.getNombre(), 
-				x -> String.format("%.2f",x.getKm()), null,
-				e -> GraphColors.getStyleIf("bold", e, x -> r.getEdgeList().contains(x)));
+				x -> String.format("%.2f",x.getKm()), 
+				null,
+				e -> GraphColors.getStyleIf("bold", e, x -> r.getEdgeList().contains(x)));		
 		PrintWriter f2 = Files2.getWriter("ficheros/tspCompleteAndalucia.gv");
 		de2.exportGraph(graph2, f2);
 		Strings2.toConsole(r.getEdgeList(), "Camino");
@@ -53,6 +55,10 @@ public class Views {
 				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")));
 		PrintWriter f3 = Files2.getWriter("ficheros/subGrafoAndalucia.gv");
 		de.exportGraph(graph3, f3);
+		Graph<Ciudad, Carretera> graph4 = SubGraphView.of(graph,v->v.getNombre().contains("e"),c->c.getKm()<100);
+		Strings2.toConsole(graph4.edgeSet(), "Carreteras ===");
+		System.out.println("Sevilla".contains("e"));
+		System.out.println("Granada".contains("e"));
 	}
 
 }

@@ -10,6 +10,8 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
+import us.lsi.common.Preconditions;
+
 @SuppressWarnings("deprecation")
 public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
@@ -31,7 +33,7 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 		super();
 		this.graph = graph;
 		this.vertices = v->vertices.contains(v);
-		this.edges = null;
+		this.edges = e->true;
 	}
 
 	private SubGraphView(G graph, Predicate<V> vertices, Predicate<E> edges) {
@@ -59,7 +61,7 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
 	public boolean containsEdge(E e) {
 		return graph.containsEdge(e) && 
-				edges!=null?edges.test(e):true && 
+				edges.test(e) &&
 				vertices.test(this.getEdgeSource(e)) && 
 				vertices.test(this.getEdgeTarget(e));
 	}
