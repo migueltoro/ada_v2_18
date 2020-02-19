@@ -55,8 +55,8 @@ public class Views {
 				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")));
 		PrintWriter f3 = Files2.getWriter("ficheros/subGrafoAndalucia.gv");
 		de.exportGraph(graph3, f3);
-		Graph<Ciudad, Carretera> graph4 = SubGraphView.of(graph,v->v.getNombre().contains("e"),c->c.getKm()<100);
-		Strings2.toConsole(graph4.edgeSet(), "Carreteras ===");
+		Graph<Ciudad, Carretera> graph4 = SubGraphView.of(graph,v->v.getNombre().contains("e"),e->e.getKm()<100);
+		Strings2.toConsole(graph4.edgeSet(), "Carreteras");
 		System.out.println("Sevilla".contains("e"));
 		System.out.println("Granada".contains("e"));
 	}
