@@ -12,13 +12,13 @@ import org.jgrapht.GraphType;
 
 import us.lsi.common.TriFunction;
 
-@SuppressWarnings("deprecation")
+
 public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E> {
 
-	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V,E>> G of(G graph, TriFunction<V, V, Double, E> edgeWeightFactory,
+	
+	public static <V, E, G extends Graph<V,E>> CompleteGraphView<V, E, G> of(G graph, TriFunction<V, V, Double, E> edgeWeightFactory,
 			Double weightDefault, Function<E, Double> weight, Function<E,V> source, Function<E,V> target) {
-		return (G) new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault, weight, source, target);
+		return new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault, weight, source, target);
 	}
 
 	private CompleteGraphView(G graph, TriFunction<V, V, Double, E> edgeWeightFactory, Double weightValue, Function<E, Double> weight,
@@ -99,10 +99,10 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 
 	public E getEdge(V v0, V v1) {
 		E edge = null;
-		if(graph.containsEdge(v0, v1))
+		if (graph.containsEdge(v0, v1))
 			edge = graph.getEdge(v0, v1);
-		else 
-			edge = this.edgeWeightFactory.apply(v0,v1,this.weightDefault);
+		else
+			edge = this.edgeWeightFactory.apply(v0, v1, this.weightDefault);
 		return edge;
 	}
 	

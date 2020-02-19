@@ -20,7 +20,7 @@ import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
 
-public class Views {
+public class SubGraphsAndViews {
 
 	public static void main(String[] args) {
 		Graph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
@@ -57,8 +57,15 @@ public class Views {
 		de.exportGraph(graph3, f3);
 		Graph<Ciudad, Carretera> graph4 = SubGraphView.of(graph,v->v.getNombre().contains("e"),e->e.getKm()<100);
 		Strings2.toConsole(graph4.edgeSet(), "Carreteras");
-		System.out.println("Sevilla".contains("e"));
-		System.out.println("Granada".contains("e"));
+		Graph<Ciudad, Carretera> graph5 = 
+				Graphs2.subGraph(graph,v->v.getNombre().contains("e"),e->e.getKm()<100,Graphs2::simpleWeightedGraph);
+		Strings2.toConsole(graph5.edgeSet(), "Carreteras");
+		Graph<Ciudad, Carretera> graph6 = 
+				Graphs2.subGraphOfEdges(graph,e->e.getKm()<100,Graphs2::simpleWeightedGraph);
+		Strings2.toConsole(graph6.edgeSet(), "Carreteras");
+		Graph<Ciudad, Carretera> graph7 = 
+				Graphs2.subGraphOfVertices(graph,v->v.getNombre().contains("e"),Graphs2::simpleWeightedGraph);
+		Strings2.toConsole(graph7.edgeSet(), "Carreteras");
 	}
 
 }

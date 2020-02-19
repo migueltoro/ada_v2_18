@@ -2,7 +2,6 @@ package us.lsi.pd.floyd;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.graphs.views.IntegerMappingGraphView;
@@ -19,7 +18,7 @@ public class FloydPD<V, E> implements ProblemaPD<GraphWalk<Integer, E>, FloydPD.
 	
 	public static enum Alternativa{Yes, No};
 	
-	public static <V, E> FloydPD<V, E> create(Integer i, Integer j, IntegerMappingGraphView<V, E> graph) {
+	public static <V, E> FloydPD<V, E> create(int i, int j, IntegerMappingGraphView<V, E> graph) {
 		return new FloydPD<V, E>(i, j, 0, graph);
 	}
 	public static <V, E> FloydPD<V, E> create(int i, int j, int k, IntegerMappingGraphView<V, E> graph) {

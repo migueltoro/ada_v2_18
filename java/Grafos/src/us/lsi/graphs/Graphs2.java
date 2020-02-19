@@ -45,6 +45,10 @@ public class Graphs2 {
 		return new SimpleGraph<V,E>(null,null,false);
 	}
 	
+	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
+		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
+	}
+	
 	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, Function<E,E> edgeNew){
 		SimpleDirectedWeightedGraph<V,E> gs = 
 				new SimpleDirectedWeightedGraph<V,E>(
@@ -82,18 +86,31 @@ public class Graphs2 {
 		return gs;
 	}
 	
+	public static <V,E,G extends Graph<V,E>> G subGraphOfVertices(G graph, 
+			Predicate<V> pv,
+			Supplier<G> creator) {
+		return subGraph(graph,pv,null,creator);
+	}
+	
+	public static <V,E,G extends Graph<V,E>> G subGraphOfEdges(G graph, 
+			Predicate<E> pe,
+			Supplier<G> creator) {
+		return subGraph(graph,null,pe,creator);
+	}
+	
 	public static <V,E,G extends Graph<V,E>> G subGraph(G graph, 
 			Predicate<V> pv, Predicate<E> pe,
 			Supplier<G> creator){
+	    
+	    Predicate<V> npv = pv==null? v-> true: pv; 
+	    
+	    Set<V> vertices = graph.vertexSet().stream().filter(npv).collect(Collectors.toSet());
+	    
+	    Predicate<E> npe = e->vertices.contains(graph.getEdgeSource(e)) && vertices.contains(graph.getEdgeTarget(e));
 		
-		Set<V> vertices = null;
-	    Set<E> edges = null;
-		
-	    if (pv!=null) vertices = graph.vertexSet().stream().filter(pv).collect(Collectors.toSet());
-		else vertices = graph.vertexSet();
-		
-		if (pe!=null) edges = graph.edgeSet().stream().filter(pe).collect(Collectors.toSet());
-		else edges = graph.edgeSet();
+	    Predicate<E> npe2 =  pe==null? npe: e-> npe.test(e) && pe.test(e);    
+	   
+	    Set<E> edges = graph.edgeSet().stream().filter(npe2).collect(Collectors.toSet());
 		
 		G r = creator.get();
 				

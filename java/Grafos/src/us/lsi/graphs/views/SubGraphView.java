@@ -39,12 +39,12 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 		this.edges = edges==null?e->true:edges;
 	}
 
-	public boolean addEdge(V v0, V v1, E e) {
-		return graph.addEdge(v0, v1,e);
+	public boolean addEdge(V v1, V v2, E e) {
+		return graph.addEdge(v1, v2,e);
 	}
 
-	public E addEdge(V v0, V v1) {
-		return graph.addEdge(v0, v1);
+	public E addEdge(V v1, V v2) {
+		return graph.addEdge(v1, v2);
 	}
 
 	public V addVertex() {
@@ -62,11 +62,11 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 				vertices.test(this.getEdgeTarget(e));
 	}
 
-	public boolean containsEdge(V v0, V v1) {
-		return graph.containsEdge(v0,v1) && 
-				edges.test(graph.getEdge(v0,v1)) &&
-				vertices.test(v0) && 
-				vertices.test(v1);
+	public boolean containsEdge(V v1, V v2) {
+		return graph.containsEdge(v1,v2) && 
+				edges.test(graph.getEdge(v1,v2)) &&
+				vertices.test(v1) && 
+				vertices.test(v2);
 	}
 
 	public boolean containsVertex(V v) {
@@ -79,21 +79,21 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 	}
 
 	public Set<E> edgeSet() {
-		return graph.edgeSet().stream().filter(e->containsEdge(e)).collect(Collectors.toSet());
+		return graph.edgeSet().stream().filter(e->this.containsEdge(e)).collect(Collectors.toSet());
 	}
 
 	public Set<E> edgesOf(V v) {
 		return graph.edgesOf(v).stream()
-				.filter(e->containsEdge(e))
+				.filter(e->this.containsEdge(e))
 				.collect(Collectors.toSet());
 	}
 
-	public Set<E> getAllEdges(V v0, V v1) {
-		return graph.getAllEdges(v1, v1).stream().filter(e->edges!=null?edges.test(e):true).collect(Collectors.toSet());
+	public Set<E> getAllEdges(V v1, V v2) {
+		return graph.getAllEdges(v1, v2).stream().filter(e->this.containsEdge(e)).collect(Collectors.toSet());
 	}
 
-	public E getEdge(V v0, V v1) {
-		return graph.getEdge(v0, v1);
+	public E getEdge(V v1, V v2) {
+		return graph.getEdge(v1, v2);
 	}
 
 	public EdgeFactory<V, E> getEdgeFactory() {
@@ -144,8 +144,8 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 		return graph.removeAllEdges(c);
 	}
 
-	public Set<E> removeAllEdges(V v0, V v1) {
-		return graph.removeAllEdges(v0, v1);
+	public Set<E> removeAllEdges(V v1, V v2) {
+		return graph.removeAllEdges(v1, v2);
 	}
 
 	public boolean removeAllVertices(Collection<? extends V> c) {
@@ -156,8 +156,8 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 		return graph.removeEdge(e);
 	}
 
-	public E removeEdge(V v0, V v1) {
-		return graph.removeEdge(v0, v1);
+	public E removeEdge(V v1, V v2) {
+		return graph.removeEdge(v1, v2);
 	}
 
 	public boolean removeVertex(V v) {
