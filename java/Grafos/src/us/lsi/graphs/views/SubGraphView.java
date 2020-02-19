@@ -10,17 +10,15 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
-@SuppressWarnings("deprecation")
+
 public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
-	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V,E>> G of(G graph, Predicate<V> vertices, Predicate<E> edges) {
-		return (G) new SubGraphView<V, E, G>(graph, vertices, edges);
+	public static <V, E, G extends Graph<V,E>> SubGraphView<V, E, G> of(G graph, Predicate<V> vertices, Predicate<E> edges) {
+		return  new SubGraphView<V, E, G>(graph, vertices, edges);
 	}
-
-	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V,E>> G of(G graph, Set<V> vertices) {
-		return (G) new SubGraphView<V, E, G>(graph, vertices);
+	
+	public static <V, E, G extends Graph<V,E>> SubGraphView<V, E, G> of(G graph, Set<V> vertices) {
+		return new SubGraphView<V, E, G>(graph, vertices);
 	}
 	
 	private G graph;
