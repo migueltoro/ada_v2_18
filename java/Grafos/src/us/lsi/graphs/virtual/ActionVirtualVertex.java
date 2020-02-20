@@ -59,7 +59,7 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	
 	/**
 	 * Este método podría ser sobrescrito en la clase que refine al tipo
-	 * @param v2 Otro vértice
+	 * @param v Otro vértice
 	 * @return La arista desde this a v2
 	 */
 	@Override

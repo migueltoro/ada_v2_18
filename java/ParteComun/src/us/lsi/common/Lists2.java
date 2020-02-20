@@ -16,6 +16,7 @@ public class Lists2 {
 	
 	/**
 	 * @pre La lista no está vacía
+	 * @param <E> Tipo de los elementos
 	 * @param ls Una lista
 	 * @return Su primer elemento
 	 */
@@ -26,6 +27,7 @@ public class Lists2 {
 	
 	/**
 	 * @pre La lista no está vacía
+	 * @param <E> Tipo de los elementos
 	 * @param ls Una lista
 	 * @return Su último elemento
 	 */

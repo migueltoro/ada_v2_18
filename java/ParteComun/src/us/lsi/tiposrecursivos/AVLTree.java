@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 /**
  * @author migueltoro
  *
- * @param <E>
+ * @param <E> Tipo de los elementos del árbol
  * 
  */
 public interface AVLTree<E> {
