@@ -1,7 +1,6 @@
 package us.lsi.problemas.asignacion;
 
 import java.util.List;
-import java.util.Set;
 
 import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
@@ -11,8 +10,6 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.common.Sets2;
-import us.lsi.reinas.datos.Reina;
 
 
 

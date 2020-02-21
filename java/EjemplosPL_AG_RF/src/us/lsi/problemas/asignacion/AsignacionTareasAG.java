@@ -9,10 +9,10 @@ import us.lsi.ag.SeqNormalProblemAG;
 
 public class AsignacionTareasAG implements SeqNormalProblemAG<List<Integer>> {
 
-public static AsignaciondeTareasRF a = null;
-	
+	public static AsignaciondeTareasRF a = null;
+
 	public static AsignacionTareasAG create(String file) {
-	    a = AsignaciondeTareasRF.create(file);
+		a = AsignaciondeTareasRF.create(file);
 		return new AsignacionTareasAG();
 	}
 
@@ -29,7 +29,7 @@ public static AsignaciondeTareasRF a = null;
 		List<Integer> ls = chromosome.decode();
 		Double coste = 0.;
 		for (int i = 0; i < ls.size(); i++) {
-			coste = coste + a.getCoste(i,ls.get(i));
+			coste = coste + a.getCoste(i, ls.get(i));
 		}
 		return -coste;
 	}
@@ -37,7 +37,6 @@ public static AsignaciondeTareasRF a = null;
 	@Override
 	public Integer getObjectsNumber() {
 		return a.getN();
-	}	
-	
+	}
 
 }

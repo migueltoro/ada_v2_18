@@ -3,10 +3,8 @@ package us.lsi.problemas.asignacion;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Strings2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
 import us.lsi.pli.AlgoritmoPLI;
