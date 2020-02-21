@@ -46,7 +46,7 @@ public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, 
 	}
 	
 	@Override
-	protected List<ActionReinas> actions() {
+	public List<ActionReinas> actions() {
 		return IntStream.range(0,VertexReinas.numeroDeReinas)
 				.boxed()
 				.map(e->ActionReinas.of(e))
@@ -55,7 +55,7 @@ public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, 
 	}
 
 	@Override
-	protected VertexReinas neighbor(ActionReinas a) {
+	public VertexReinas neighbor(ActionReinas a) {
 		return a.neighbor(this);
 	}
 	

@@ -69,14 +69,14 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, ActionSimple
 	}
 
 	@Override
-	protected List<ActionPuzzle> actions() {
+	public List<ActionPuzzle> actions() {
 		return ActionPuzzle.actions().stream().
 				filter(a->a.isApplicable(this))
 				.collect(Collectors.toList());
 	}
 	
 	@Override
-	protected VertexPuzzle neighbor(ActionPuzzle a) {
+	public VertexPuzzle neighbor(ActionPuzzle a) {
 		Preconditions.checkArgument(a.isApplicable(this), String.format("La acción %s no es aplicable",a.toString()));
 		IntPair np = this.blackPosition.add(a.direction());
 		IntPair op = this.blackPosition;

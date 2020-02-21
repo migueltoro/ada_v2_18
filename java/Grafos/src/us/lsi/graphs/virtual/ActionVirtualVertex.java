@@ -10,14 +10,14 @@ import us.lsi.graphs.SimpleEdge;
 /**
  * @author Miguel Toro
  *
- * @param <A> Tipo de la acción
- * @param <V> Tipo del vértice
+ * @param <A> Tipo de la acci&oacute;n
+ * @param <V> Tipo del v&eacute;rtice
  * 
  * 
- * <a> Tipo adecuado para modelar un vértice de un grafo virtual simple cuyas aristas están 
+ * <a> Tipo adecuado para modelar un v&eacute;rtice de un grafo virtual simple cuyas aristas est&aacute;n 
  * definidas por un conjunto de acciones o alternativas. 
- * Cada acción válida identifica de forma única uno de los vecinos del vértice. 
- * Cada vértice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones válidas disponibles </a>
+ * Cada acci&oacute;n v&aacute;lida identifica de forma única uno de los vecinos del v&eacute;rtice. 
+ * Cada v&eacute;rtice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones v&aacute;lidas disponibles </a>
  */
 public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>, A> implements VirtualVertex<V,E> {
 
@@ -25,26 +25,26 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	}
 	
 	/**
-	 * @return Si es un valor válido del tipo
+	 * @return Si es un valor v&aacute;lido del tipo
 	 */
 	public abstract Boolean isValid();
 	
 	/**
 	 * Para ser implementado por el subtipo
-	 * @return Lista de acciones disponibles y adecuadas para alcanzar un vértice válido
+	 * @return Lista de acciones disponibles y adecuadas para alcanzar un v&eacute;rtice v&aacute;lido
 	 */
-	protected abstract List<A> actions();
+	public abstract List<A> actions();
 	
 	/**
 	 * @param a Una acci&oacute;n
 	 * @return El vecino del v&eacute;rtice siguiendo esa acci&oacute;n
-	 * @pre La acción a debe ser aplicable
-	 * @post El vértice retornada debe ser distinto al original y válido
+	 * @pre La acci&oacute;n a debe ser aplicable
+	 * @post El v&eacute;rtice retornada debe ser distinto al original y v&aacute;lido
 	 */
-	protected abstract V neighbor(A a);
+	public abstract V neighbor(A a);
 	
 	/**
-	 * Este método debe ser sobrescrito en la clase que refine el tipo
+	 * Este m&eacute;todo debe ser sobrescrito en la clase que refine el tipo
 	 * @param a Acci&oacute;n
 	 * @return La arista que lleva al vecino siguiendo esta acci&oacute;n
 	 */
@@ -58,8 +58,8 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	private Set<E> edges = null;
 	
 	/**
-	 * Este método podría ser sobrescrito en la clase que refine al tipo
-	 * @param v Otro vértice
+	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
+	 * @param v Otro v&eacute;rtice
 	 * @return La arista desde this a v2
 	 */
 	@Override
@@ -74,7 +74,11 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 		}
 		return edge;
 	}
-
+	
+	/**
+	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
+	 * @return El conjunto de los vecinos
+	 */
 	@Override
 	public Set<V> getNeighborListOf() {
 		if (this.neighbors==null) {
@@ -85,7 +89,10 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 		}
 		return this.neighbors;
 	}
-
+	/**
+	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
+	 * @return El conjunto de las aristas hacia los vecinos
+	 */
 	@Override
 	public Set<E> edgesOf() {
 		if (this.edges==null) {
@@ -96,10 +103,14 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 		}
 		return edges;
 	}
-
+	/**
+	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
+	 * @param v Otro v&eacute;rtice
+	 * @return Si v es vecino
+	 */
 	@Override
-	public Boolean isNeighbor(V e) {
-		return this.getNeighborListOf().contains(e);
+	public Boolean isNeighbor(V v) {
+		return this.getNeighborListOf().contains(v);
 	}
 	
 }

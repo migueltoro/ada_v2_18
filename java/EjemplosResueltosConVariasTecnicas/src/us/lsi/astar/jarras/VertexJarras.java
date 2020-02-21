@@ -55,7 +55,7 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	}
 
 	@Override
-	protected VertexJarras neighbor(ActionJarras a) {
+	public VertexJarras neighbor(ActionJarras a) {
 		return a.neighbor(this);
 	}
 	

@@ -62,7 +62,7 @@ public class Casilla extends ActionVirtualVertex<Casilla,CasillaEdge,IntPair> im
 	}
 	
 	@Override
-	protected List<IntPair> actions() {
+	public List<IntPair> actions() {
 		return Laberinto.actions.stream()
 				.filter(a->Laberinto.casillas.keySet().contains(this.position.add(a)))
 				.filter(a->Laberinto.get(this.position.add(a)).isValid())
@@ -70,7 +70,7 @@ public class Casilla extends ActionVirtualVertex<Casilla,CasillaEdge,IntPair> im
 	}
 
 	@Override
-	protected Casilla neighbor(IntPair a) {
+	public Casilla neighbor(IntPair a) {
 		return Laberinto.get(this.position.add(a));
 	}
 	

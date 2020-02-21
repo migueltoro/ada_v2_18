@@ -69,7 +69,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	@Override
-	protected List<Integer> actions() {
+	public List<Integer> actions() {
 		Integer nu = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 		List<Integer> alternativas = IntStream.rangeClosed(0,nu).boxed().collect(Collectors.toList());
 		Collections.reverse(alternativas);
@@ -77,7 +77,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	@Override
-	protected MochilaVertex neighbor(Integer a) {
+	public MochilaVertex neighbor(Integer a) {
 		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 		return MochilaVertex.of(index+1,cr);
 	}
