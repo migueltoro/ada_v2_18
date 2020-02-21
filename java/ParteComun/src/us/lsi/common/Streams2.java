@@ -240,12 +240,23 @@ public class Streams2 {
 	 * @return Un stream formado por los pares de elementos 
 	 * formados por un elemento y el entero que indica su posición
 	 */
-	public static <E> Stream<Tuple2<E,Integer>> elementsAndPosition(Stream<E> sm) {
+	public static <E> Stream<Tuple2<E,Integer>> enumerate(Stream<E> sm) {
 		MutableType<Integer> rf = MutableType.of(0);
 		Stream<Tuple2<E,Integer>> r = sm
 					.map(e->Tuple.create(e,rf.newValue(rf.value+1)));
 		return r;
+	}	
+	/**
+	 * @param n
+	 * @param m
+	 * @return Un stream con todos los pares de enteros (i,j) con i en 0 a n-1 y j en 0 a m-1
+	 */
+	public static Stream<IntPair> allPairs(Integer n, Integer m) {
+		return IntStream.range(0, n).boxed()
+				.flatMap(i -> IntStream.range(0, m)
+				.mapToObj(j -> IntPair.of(i, j)));
 	}
+	
 	/**
 	 * @param s Un stream 
 	 * @param s1 Una secuencia adicional de stream
@@ -339,7 +350,7 @@ public class Streams2 {
 		s1 = Stream.of(1,2,3,4,5,6,7);
 		Streams2.consecutivePairs(s1).forEach(x->System.out.print(x));
 		System.out.println("\n_______");
-		Streams2.elementsAndPosition(Arrays.asList(s.split("[ -]")).stream()).forEach(x->System.out.println(x));
+		Streams2.enumerate(Arrays.asList(s.split("[ -]")).stream()).forEach(x->System.out.println(x));
 		System.out.println("\n_______");
 		Streams2.fromFile("ficheros/acciones.txt").forEach(System.out::println);
 		var n = 14L;			   

@@ -2,10 +2,10 @@ package us.lsi.problemas.asignacion;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
+import us.lsi.pli.HelpPLI;
+import us.lsi.common.Streams2;
 
 
 
@@ -92,14 +92,15 @@ public class AsignacionTareasPLI {
 		Integer n = a.getN();
 		// r += allPairs(n, n).map(p -> String.format("%.2f *
 		// x_%d_%d",a.getCoste(p.i,p.j), p.i, p.j).replaceAll(",", "."))
-		r += allPairs(n, n).map(p -> String.format("%s * x_%d_%d", String.valueOf(a.getCoste(p.i, p.j)), p.i, p.j))
+		r += Streams2.allPairs(n, n)
+				.map(p -> String.format("%s * x_%d_%d", String.valueOf(a.getCoste(p.a, p.b)), p.a, p.b))
 				.collect(Collectors.joining("+", "min: ", "; \n\n"));
 
-		r += IntStream.range(0, n).boxed().map(j -> sum_i(j, n)).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_i(j, n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
 
-		r += IntStream.range(0, n).boxed().map(i -> sum_j(i, n)).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
 
-		r += allPairs(n, n).map(p -> String.format("x_%d_%d", p.i, p.j))
+		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.a, p.b))
 				.collect(Collectors.joining(",", "bin ", "; \n"));
 
 		return r;
@@ -126,36 +127,6 @@ public class AsignacionTareasPLI {
 				System.out.println(s.getName(i));
 		}
 
-	}
-
-	static class Pair {
-		Integer i;
-		Integer j;
-
-		public static Pair of(Integer i, Integer j) {
-			return new Pair(i, j);
-		}
-
-		public Pair(Integer i, Integer j) {
-			super();
-			this.i = i;
-			this.j = j;
-		}
-
-	}
-
-	static String sum_i(int j, int n) {
-		return IntStream.range(0, n).boxed().map(i -> String.format("x_%d_%d", i, j))
-				.collect(Collectors.joining("+", "", " = 1; \n"));
-	}
-
-	static String sum_j(int i, int n) {
-		return IntStream.range(0, n).boxed().map(j -> String.format("x_%d_%d", i, j))
-				.collect(Collectors.joining("+", "", " = 1; \n"));
-	}
-
-	static Stream<Pair> allPairs(Integer n, Integer m) {
-		return IntStream.range(0, n).boxed().flatMap(i -> IntStream.range(0, m).mapToObj(j -> Pair.of(i, j)));
 	}
 
 }

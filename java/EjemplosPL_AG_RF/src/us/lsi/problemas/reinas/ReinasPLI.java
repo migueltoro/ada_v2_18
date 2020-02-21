@@ -2,11 +2,11 @@ package us.lsi.problemas.reinas;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
-
+import us.lsi.pli.HelpPLI;
+import us.lsi.common.Streams2;
 
 
 public class ReinasPLI {
@@ -107,15 +107,15 @@ public class ReinasPLI {
 		String r = "min: ;\n\n";
 		Integer n = numeroDeReinas;
 
-		r += IntStream.range(0, n).boxed().map(j -> sum_i(j, n)).collect(Collectors.joining("", "", ""));
+		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_i(j, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
 
-		r += IntStream.range(0, n).boxed().map(i -> sum_j(i, n)).collect(Collectors.joining("", "", ""));
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
 
 		r += IntStream.range(-n + 1, n).boxed().map(d -> sum_f1(d, n)).collect(Collectors.joining("", "", ""));
 
 		r += IntStream.range(0, 2 * n - 1).boxed().map(d -> sum_f2(d, n)).collect(Collectors.joining("", "", ""));
 
-		r += allPairs(n, n).map(p -> String.format("x_%d_%d", p.i, p.j))
+		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.a, p.b))
 				.collect(Collectors.joining(",", "bin ", "; \n"));
 
 		return r;
@@ -137,42 +137,16 @@ public class ReinasPLI {
 
 	}
 	
-	static class Pair {
-		Integer i;
-		Integer j;
-		public static  Pair of(Integer i, Integer j){
-			return new Pair(i,j);
-		}				
-		public Pair(Integer i, Integer j) {
-			super();
-			this.i = i;
-			this.j = j;
-		}
-		
-	} 
 	
-	static String sum_i(int j, int n) {
-		return IntStream.range(0,n).boxed().map(i->String.format("x_%d_%d",i,j))
-				   .collect(Collectors.joining("+",""," = 1; \n"));
-	}
-	
-	static String sum_j(int i, int n) {
-		return IntStream.range(0,n).boxed().map(j->String.format("x_%d_%d",i,j))
-				   .collect(Collectors.joining("+",""," = 1; \n"));
-	}
 	
 	static String sum_f1(int d, int n) {
-		return allPairs(n, n).filter(p -> p.j - p.i == d).map(p -> String.format("x_%d_%d", p.i, p.j))
+		return Streams2.allPairs(n, n).filter(p -> p.b - p.a == d).map(p -> String.format("x_%d_%d", p.a, p.b))
 				.collect(Collectors.joining("+", "", " <= 1; \n"));
 	}
 	
 	static String sum_f2(int d, int n) {
-		return allPairs(n, n).filter(p -> p.j + p.i == d).map(p -> String.format("x_%d_%d", p.i, p.j))
+		return Streams2.allPairs(n, n).filter(p -> p.b + p.a == d).map(p -> String.format("x_%d_%d", p.a, p.b))
 				.collect(Collectors.joining("+", "", " <= 1; \n"));
-	}
-	
-	static Stream<Pair> allPairs(Integer n, Integer m){
-		return IntStream.range(0,n).boxed().flatMap(i->IntStream.range(0,m).mapToObj(j->Pair.of(i, j)));
 	}
 
 }

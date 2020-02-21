@@ -16,6 +16,8 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
+import us.lsi.pli.HelpPLI;
+import us.lsi.common.Streams2;
 
 public class ProblemaColorPLI {
 
@@ -112,15 +114,16 @@ public class ProblemaColorPLI {
 		lc.stream().forEach(c -> indexOf.put(c, lc.indexOf(c)));
 
 		String r = "";
-		Integer n = lc.size(); // Numero cololes = numero de nodos
+		Integer n = lc.size(); // Numero colores = numero de nodos
 		r += IntStream.range(0, n).boxed().map(k -> String.format("y_%d", k))
 				.collect(Collectors.joining("+", "min: ", "; \n\n"));
 
-		// Para cada nodo debe haber un color asignado.
-		r += IntStream.range(0, n).boxed().map(i -> sum_j(i, n)).collect(Collectors.joining("", "", "\n\n"));
+		// Para cada nodo i debe haber un solo color asignado.
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n,"x"," = 1 ; \n"))
+				.collect(Collectors.joining("", "", "\n\n"));
 
 		// Si se asigna el color k al nodo i , el color k no puede esta deasctivado.
-		r += allPairs(n, n).map(p -> String.format("x_%d_%d - y_%d<=0;\n", p.i, p.j, p.j))
+		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d - y_%d<=0;\n", p.a, p.b, p.b))
 				.collect(Collectors.joining("", "", "\n"));
 
 		// Dos vecinos no pueden tener el mismo color
@@ -130,7 +133,7 @@ public class ProblemaColorPLI {
 
 		// Definicion de las variables
 		r += Stream
-				.concat(allPairs(n, n).map(p -> String.format("x_%d_%d", p.i, p.j)),
+				.concat(Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.a, p.b)),
 						IntStream.range(0, n).boxed().map(k -> String.format("y_%d", k)))
 				.collect(Collectors.joining(",", "bin ", ";\n"));
 
@@ -156,36 +159,6 @@ public class ProblemaColorPLI {
 				System.out.println(s.getName(i));
 		}
 
-	}
-
-	static class Pair {
-		Integer i;
-		Integer j;
-
-		public static Pair of(Integer i, Integer j) {
-			return new Pair(i, j);
-		}
-
-		public Pair(Integer i, Integer j) {
-			super();
-			this.i = i;
-			this.j = j;
-		}
-
-	}
-
-	static String sum_i(int j, int n) {
-		return IntStream.range(0, n).boxed().map(i -> String.format("x_%d_%d", i, j))
-				.collect(Collectors.joining("+", "", " = 1; \n"));
-	}
-
-	static String sum_j(int i, int n) {
-		return IntStream.range(0, n).boxed().map(j -> String.format("x_%d_%d", i, j))
-				.collect(Collectors.joining("+", "", " = 1; \n"));
-	}
-
-	static Stream<Pair> allPairs(Integer n, Integer m) {
-		return IntStream.range(0, n).boxed().flatMap(i -> IntStream.range(0, m).mapToObj(j -> Pair.of(i, j)));
 	}
 
 	static String vecinosConColoresDistintos(Integer ids, Integer idt, int n) {
