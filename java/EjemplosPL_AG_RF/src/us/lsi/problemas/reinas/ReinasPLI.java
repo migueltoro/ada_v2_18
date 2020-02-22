@@ -107,9 +107,9 @@ public class ReinasPLI {
 		String r = "min: ;\n\n";
 		Integer n = numeroDeReinas;
 
-		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_i(j, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
+		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_2_i(j, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
 
-		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_2_j(i, n, "x", " = 1 ; \n")).collect(Collectors.joining("", "", ""));
 
 		r += IntStream.range(-n + 1, n).boxed().map(d -> sum_f1(d, n)).collect(Collectors.joining("", "", ""));
 

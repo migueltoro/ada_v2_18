@@ -8,4 +8,5 @@ module solve {
 	exports us.lsi.pli.test;
 
 	requires lpsolve;
+	requires transitive partecomun;
 }

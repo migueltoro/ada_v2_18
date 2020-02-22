@@ -119,7 +119,7 @@ public class ProblemaColorPLI {
 				.collect(Collectors.joining("+", "min: ", "; \n\n"));
 
 		// Para cada nodo i debe haber un solo color asignado.
-		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n,"x"," = 1 ; \n"))
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_2_j(i, n,"x"," = 1 ; \n"))
 				.collect(Collectors.joining("", "", "\n\n"));
 
 		// Si se asigna el color k al nodo i , el color k no puede esta deasctivado.

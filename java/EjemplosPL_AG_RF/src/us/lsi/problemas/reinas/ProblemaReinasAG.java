@@ -51,5 +51,4 @@ public static int numeroDeReinas = 8;
 		return numeroDeReinas;
 	}	
 	
-
 }

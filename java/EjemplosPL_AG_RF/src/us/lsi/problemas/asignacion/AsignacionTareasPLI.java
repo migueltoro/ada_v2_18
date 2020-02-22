@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
 import us.lsi.pli.HelpPLI;
-import us.lsi.common.Streams2;
 
 
 
@@ -92,16 +91,13 @@ public class AsignacionTareasPLI {
 		Integer n = a.getN();
 		// r += allPairs(n, n).map(p -> String.format("%.2f *
 		// x_%d_%d",a.getCoste(p.i,p.j), p.i, p.j).replaceAll(",", "."))
-		r += Streams2.allPairs(n, n)
-				.map(p -> String.format("%s * x_%d_%d", String.valueOf(a.getCoste(p.a, p.b)), p.a, p.b))
-				.collect(Collectors.joining("+", "min: ", "; \n\n"));
+		r+= "min: "+HelpPLI.sum_2(n,n,p->true,p->a.getCoste(p.a, p.b),"id","; \n\n");
 
-		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_i(j, n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_2_i(j,n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
 
-		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_j(i, n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_2_j(i,n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
 
-		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.a, p.b))
-				.collect(Collectors.joining(",", "bin ", "; \n"));
+		r += HelpPLI.tipoVariables_2(n,n,"x","bin ");
 
 		return r;
 	}

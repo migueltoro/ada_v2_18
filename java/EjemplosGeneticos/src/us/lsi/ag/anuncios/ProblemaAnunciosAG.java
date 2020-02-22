@@ -29,7 +29,7 @@ public class ProblemaAnunciosAG extends DatosAnuncios implements SeqNormalProble
 		ListaDeAnunciosAEmitir ls = ListaDeAnunciosAEmitir.create(list);
 		Double valor = ls.getValor();
 		Double nIn = HelpFitnessAg.igualACero((double)ls.getNumAnunciosIncompatibles());
-		Double tr = HelpFitnessAg.mayorQueCero((double)ls.getTiempoRestante());
+		Double tr = HelpFitnessAg.mayorOIgualACero((double)ls.getTiempoRestante());
 		Double nRep = HelpFitnessAg.igualACero((double)ls.getNumAnunciosRepetidos());
 		Double f = valor/1000000.  -1000000000.*nIn -1000000000000.*tr -1000000000.*nRep;
 		return f;
