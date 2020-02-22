@@ -54,7 +54,7 @@ public class RecorridoAnchuraTest {
 		de2.exportGraph(graph, f2);
 
 		BreadthSearch<Ciudad,Carretera> ba = BreadthSearch.of(graph,List.of(Ciudad.ofName("Sevilla"),Ciudad.ofName("Londres")));		
-		ba.stream().forEach(c->System.out.println(c));	
+		ba.stream().filter(c->ba.getDepth(c)==0 || ba.getDepth(c)==3).forEach(c->System.out.println(c));	
 		System.out.println(ba.getDepth(Ciudad.ofName("Londres")));
 	}
 
