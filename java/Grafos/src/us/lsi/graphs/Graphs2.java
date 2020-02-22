@@ -21,7 +21,6 @@ import us.lsi.graphs.virtual.VirtualVertex;
 
 public class Graphs2 {
 	
-	
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
 		return new SimpleVirtualGraph<V, E>(v);
 	}
