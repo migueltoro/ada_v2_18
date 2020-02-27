@@ -10,7 +10,6 @@ import org.jgrapht.Graph;
 
 public class GreedySearchOnGraph<V,E> implements Search<V,E> {
 
-
 	private Graph<V,E> graph;
 	private V actualVertex;
 	public Map<V,E> edgeToOrigin;
