@@ -11,6 +11,7 @@ module grafos {
 	exports us.lsi.grafos.test;
 	exports us.lsi.graphcolors;
 	exports us.lsi.graphs.tour;
+	exports us.lsi.graphs.search;
 
 	requires transitive solve;
 	requires transitive org.jgrapht.core;

@@ -1,5 +1,7 @@
 package us.lsi.graphs;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -8,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
@@ -20,6 +23,34 @@ import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.VirtualVertex;
 
 public class Graphs2 {
+	
+	public static <V, E> Double weightToVertex(Graph<V,E> graph, V v1, V v2) {
+		E e = graph.getEdge(v1,v2); 
+		Double w = graph.getEdgeWeight(e); 
+		return w;
+	}
+	
+	public static <V, E> V closestVertex(Graph<V,E> graph, V vertex) {
+		return closestVertex(graph,vertex,v->true);
+	}
+	
+	public static <V, E> V closestVertex(Graph<V,E> graph, V vertex, Predicate<V> p) {
+		return (Graphs.neighborSetOf(graph,vertex)).stream()
+				.filter(p)
+				.min(Comparator.comparingDouble(v->weightToVertex(graph,vertex,v)))
+				.get();
+	}
+	
+	public static <V, E> V furthestVertex(Graph<V,E> graph, V vertex) {
+		return furthestVertex(graph,vertex,v->true);
+	}
+	
+	public static <V, E> V furthestVertex(Graph<V,E> graph, V vertex, Predicate<V> p) {
+		return (Graphs.neighborSetOf(graph,vertex)).stream()
+				.filter(p)
+				.max(Comparator.comparingDouble(v->weightToVertex(graph,vertex,v)))
+				.get();
+	}
 	
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
 		return new SimpleVirtualGraph<V, E>(v);
@@ -164,6 +195,41 @@ public class Graphs2 {
 			.forEach(e->graph.addEdge(origin.getEdgeSource(e), origin.getEdgeTarget(e), e));
 		return graph;
 	}
+	
+	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraphFlow(
+			SimpleWeightedGraph<V,E> graph, 
+			Function<E,E> edgeReverse, 
+			Set<V> sources, 
+			Set<V> targets){
+		//Source no puede tener aristas de entrada y Target no puede tener aristas de salida
+		Set<V> ns = new HashSet<V>(sources);
+		ns.retainAll(targets);
+		Preconditions.checkArgument(ns.isEmpty(),"Los vértices fuentes y los sumideros no pueden tener elementos compartidos");
+		SimpleDirectedWeightedGraph<V,E> gs = 
+				new SimpleDirectedWeightedGraph<V,E>(
+						graph.getVertexSupplier(), 
+						graph.getEdgeSupplier());
+		
+		for(V v:graph.vertexSet()){
+			gs.addVertex(v);
+		}
+		for(E e:graph.edgeSet()){			
+			V s = graph.getEdgeSource(e);
+			V t = graph.getEdgeTarget(e);
+			Double w = graph.getEdgeWeight(e);
+			if (!sources.contains(s) && !targets.contains(t)) {				
+				gs.addEdge(s, t, e);
+				gs.setEdgeWeight(e, w);
+			}
+			E e1 = edgeReverse.apply(e);//reverse
+			if (!sources.contains(t) && !targets.contains(s)) {								
+				gs.addEdge(t, s, e1);
+				gs.setEdgeWeight(e1, w);
+			}
+		}
+		return gs;
+	}
+
 	
 	
 }
