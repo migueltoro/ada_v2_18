@@ -56,7 +56,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 				FlowVertex::create, 
 				FlowEdge::create, 
 				FlowGraph::create);
-		Preconditions.checkArgument(check(r),"Grafo de flujo mal formado");
+		Preconditions.checkArgument(check(r),checkMessage(r));
 		r.tipo = tipo;
 		return r;		
 	}
@@ -72,6 +72,28 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 				r = fg.outgoingEdgesOf(v).isEmpty();
 			}
 			if(!r) break;
+			if(v.isIntermediate()) {
+				r = !fg.incomingEdgesOf(v).isEmpty() && !fg.outgoingEdgesOf(v).isEmpty();
+			}
+		}
+		return r;
+	}
+	
+	private static String checkMessage(FlowGraph fg){
+		String r = "";
+		for(FlowVertex v: fg.vertexSet()){
+			if(v.isSource() && !fg.incomingEdgesOf(v).isEmpty()) {
+				r = String.format("El vértice %s es source pero tiene aristas de entrada", v);
+				break;
+			}
+			if(v.isSink() && !fg.outgoingEdgesOf(v).isEmpty()){
+				r = String.format("El vértice %s es sumidero pero tiene aristas de salida", v);
+				break;
+			} 
+			if(v.isIntermediate() && (fg.incomingEdgesOf(v).isEmpty() || fg.outgoingEdgesOf(v).isEmpty())){
+				r = String.format("El vértice %s es intermedio pero o no tiene aristas de entrada o de salida", v);
+				break;
+			}
 		}
 		return r;
 	}

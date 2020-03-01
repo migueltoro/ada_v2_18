@@ -10,28 +10,37 @@ import us.lsi.mochila.datos.DatosMochila;
 
 
 
-public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
+public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Double> {
 
-	public static MochilaVertex of(int capacidadInicial) {
+	public static MochilaVertex of(Double capacidadInicial) {
 		return of(0, capacidadInicial);
 	}
 	
-	public static MochilaVertex of(int index, int capacidadRestante) {
+	public static MochilaVertex of(int index, Double capacidadRestante) {
 		return new MochilaVertex(index, capacidadRestante);
+	}
+	
+	public static MochilaVertex lastVertex() {
+		return new MochilaVertex(n, 0.);
 	}
 
 	public int index;
-	public Integer capacidadRestante;
+	public Double capacidadRestante;
+	public static Integer n = DatosMochila.numeroDeObjetos;
 	
-	public MochilaVertex(int index, int capacidadRestante) {
+	public MochilaVertex(int index, Double capacidadRestante) {
 		super();
 		this.index = index;
-		this.capacidadRestante = capacidadRestante;
+		if (index < n) {
+			this.capacidadRestante = capacidadRestante;
+		} else {
+			this.capacidadRestante = 0.;
+		}
 	}
 
 	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
 		SolucionMochila s = SolucionMochila.empty();		
-		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a));
+		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a.intValue()));
 		return s;
 	}
 
@@ -67,29 +76,36 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public Boolean isValid() {
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
-
-	@Override
-	public List<Integer> actions() {
-		Integer nu = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
-		List<Integer> alternativas = IntStream.rangeClosed(0,nu).boxed().collect(Collectors.toList());
-		Collections.reverse(alternativas);
-		return alternativas;
+	
+	public Double greedyAction() {
+		return Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 	}
 
 	@Override
-	public MochilaVertex neighbor(Integer a) {
-		Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
+	public List<Double> actions() {
+		Integer nu = greedyAction().intValue();
+		List<Double> alternativas = IntStream.rangeClosed(0,nu)
+				.boxed()
+				.map(x->x.doubleValue())
+				.collect(Collectors.toList());
+		Collections.reverse(alternativas);
+		return alternativas;
+	}
+	
+	@Override
+	public MochilaVertex neighbor(Double a) {
+		Double cr = capacidadRestante-a*DatosMochila.getPeso(index);
 		return MochilaVertex.of(index+1,cr);
 	}
 	
 	@Override
-	public MochilaEdge getEdgeFromAction(Integer a) {
+	public MochilaEdge getEdgeFromAction(Double a) {
 		MochilaVertex v = this.neighbor(a);
 		return MochilaEdge.of(this,v,a);
 	}
 	
 	public Double voraz(Predicate<MochilaVertex> p) {
-		return -voraz(index,(double)capacidadRestante,p);
+		return -voraz(index,capacidadRestante,p);
 	}
 	
 	public static Double voraz(int index, Double capacidadRestante, Predicate<MochilaVertex> p) {

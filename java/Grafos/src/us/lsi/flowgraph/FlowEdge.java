@@ -42,7 +42,7 @@ public class FlowEdge {
 	private Double convert(String s) {
 		Double r;
 		if(s.equals("inf")) {
-			r = Double.MAX_VALUE;
+			r = FlowVertex.maxDouble;
 		}else {
 			r = Double.parseDouble(s);
 		}
@@ -55,7 +55,7 @@ public class FlowEdge {
 			this.source=from;
 			this.target =to;
 			this.min = 0.;
-			this.max = Double.MAX_VALUE;
+			this.max = FlowVertex.maxDouble;
 			this.cost = 0.;
 			this.name = "";
 		} else if(formato.length == 5) {
@@ -149,6 +149,10 @@ public class FlowEdge {
 	public String toString() {
 		return source.toString() + "--" + target.toString()
 		+(name.equals("")?"":" = "+name);
+	}
+	
+	public String toStringLong() {
+		return String.format("(%s,%d,%.2f,%.2f,%2.f)",this.getVariable(),this.getId(),this.getMin(),this.getMax(),this.getCost());
 	}
 
 	@Override

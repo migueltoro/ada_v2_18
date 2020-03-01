@@ -19,6 +19,8 @@ public class FlowVertex {
 	
 	public static List<FlowVertex> vertices = Lists2.empty();
 	
+	public static Double maxDouble = Double.MAX_VALUE;
+	
 	private final String externalId;	
 	private final TipoDeVertice tipo;
 	private final Double min;
@@ -45,9 +47,19 @@ public class FlowVertex {
 	private Double convert(String s) {
 		Double r;
 		if(s.equals("inf")) {
-			r = Double.MAX_VALUE;
+			r = maxDouble;
 		}else {
 			r = Double.parseDouble(s);
+		}
+		return r;
+	}
+	
+	private String convert(Double s) {
+		String r;
+		if(s > 1000000000.0) {
+			r = "inf";
+		}else {
+			r = String.format("%.2f",s);
 		}
 		return r;
 	}
@@ -72,14 +84,14 @@ public class FlowVertex {
 		if (formato.length==1) {
 			this.tipo = TipoDeVertice.Intermediate;
 			this.min = 0.;
-			this.max = Double.MAX_VALUE;
-			this.cost = 1.;
+			this.max = maxDouble;
+			this.cost = 0.;
 			this.name = "";
 		}else if (formato.length==2) {
 			this.tipo = tipoDeVertice(formato[1]);
 			this.min = 0.;
-			this.max = Double.MAX_VALUE;
-			this.cost = 1.;
+			this.max = maxDouble;
+			this.cost = 0.;
 			this.name = "";				
 		}else if(formato.length==5) {
 			this.tipo = tipoDeVertice(formato[1]);
@@ -208,6 +220,11 @@ public class FlowVertex {
 	@Override
 	public String toString() {
 		return name.equals("")?externalId:name;
+	}
+	
+	public String toStringLong() {
+		return String.format("(%s,%d,%s,%s,%s)",
+				this.getVariable(),this.getId(),convert(this.getMin()),convert(this.getMax()),convert(this.getCost()));
 	}
 
 }
