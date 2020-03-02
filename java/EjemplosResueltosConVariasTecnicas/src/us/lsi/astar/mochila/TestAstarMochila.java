@@ -22,7 +22,7 @@ public class TestAstarMochila {
 		DatosMochila.capacidadInicial = 78;		
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		BiFunction<MochilaVertex,MochilaVertex,Double> heuristic = (x,v)->-x.voraz(v);
+		BiFunction<MochilaVertex,MochilaVertex,Double> heuristic = (v1,v2)->-MochilaVertex.heuristic(v1,v2);	
 		AStarGraph<MochilaVertex,MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->-x.getEdgeWeight());
 		AStarAlgorithm<MochilaVertex,MochilaEdge> a = AStarAlgorithm.of(graph,e1,e2,heuristic);
 		List<MochilaEdge> edges = a.getPathEdgeList();

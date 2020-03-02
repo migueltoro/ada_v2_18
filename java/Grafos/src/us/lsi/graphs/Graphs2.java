@@ -79,27 +79,26 @@ public class Graphs2 {
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
 	
-	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraph(SimpleWeightedGraph<V,E> graph, Function<E,E> edgeNew){
-		SimpleDirectedWeightedGraph<V,E> gs = 
-				new SimpleDirectedWeightedGraph<V,E>(
-						graph.getVertexSupplier(), 
-						graph.getEdgeSupplier());
-		for(V v:graph.vertexSet()){
+	public static <V, E> SimpleDirectedWeightedGraph<V, E> toDirectedWeightedGraph(SimpleWeightedGraph<V, E> graph,
+			Function<E, E> edgeReverse) {
+		SimpleDirectedWeightedGraph<V, E> gs = new SimpleDirectedWeightedGraph<V, E>(graph.getVertexSupplier(),
+				graph.getEdgeSupplier());
+		for (V v : graph.vertexSet()) {
 			gs.addVertex(v);
 		}
-		for(E e:graph.edgeSet()){
+		for (E e : graph.edgeSet()) {
 			V s = graph.getEdgeSource(e);
 			V t = graph.getEdgeTarget(e);
 			Double w = graph.getEdgeWeight(e);
 			gs.addEdge(s, t, e);
 			gs.setEdgeWeight(e, w);
-			E e1 = edgeNew.apply(e);
+			E e1 = edgeReverse.apply(e);
 			gs.addEdge(t, s, e1);
 			gs.setEdgeWeight(e1, w);
 		}
 		return gs;
 	}
-	
+
 	public static <V,E> SimpleDirectedGraph<V,E> toDirectedGraph(SimpleGraph<V,E> graph){
 		SimpleDirectedGraph<V,E> gs = 
 				new SimpleDirectedGraph<V,E>(
@@ -122,31 +121,28 @@ public class Graphs2 {
 		return subGraph(graph,pv,null,creator);
 	}
 	
-	public static <V,E,G extends Graph<V,E>> G subGraphOfEdges(G graph, 
-			Predicate<E> pe,
-			Supplier<G> creator) {
-		return subGraph(graph,null,pe,creator);
+	public static <V, E, G extends Graph<V, E>> G subGraphOfEdges(G graph, Predicate<E> pe, Supplier<G> creator) {
+		return subGraph(graph, null, pe, creator);
 	}
 	
-	public static <V,E,G extends Graph<V,E>> G subGraph(G graph, 
-			Predicate<V> pv, Predicate<E> pe,
-			Supplier<G> creator){
-	    
-	    Predicate<V> npv = pv==null? v-> true: pv; 
-	    
-	    Set<V> vertices = graph.vertexSet().stream().filter(npv).collect(Collectors.toSet());
-	    
-	    Predicate<E> npe = e->vertices.contains(graph.getEdgeSource(e)) && vertices.contains(graph.getEdgeTarget(e));
-		
-	    Predicate<E> npe2 =  pe==null? npe: e-> npe.test(e) && pe.test(e);    
-	   
-	    Set<E> edges = graph.edgeSet().stream().filter(npe2).collect(Collectors.toSet());
-		
+	public static <V, E, G extends Graph<V, E>> G subGraph(G graph, Predicate<V> pv, Predicate<E> pe,
+			Supplier<G> creator) {
+
+		Predicate<V> npv = pv == null ? v -> true : pv;
+
+		Set<V> vertices = graph.vertexSet().stream().filter(npv).collect(Collectors.toSet());
+
+		Predicate<E> npe = e -> vertices.contains(graph.getEdgeSource(e)) && vertices.contains(graph.getEdgeTarget(e));
+
+		Predicate<E> npe2 = pe == null ? npe : e -> npe.test(e) && pe.test(e);
+
+		Set<E> edges = graph.edgeSet().stream().filter(npe2).collect(Collectors.toSet());
+
 		G r = creator.get();
-				
-		vertices.stream().forEach(x->r.addVertex(x));
-		edges.stream().forEach(x->r.addEdge(graph.getEdgeSource(x),graph.getEdgeTarget(x), x));
-		
+
+		vertices.stream().forEach(x -> r.addVertex(x));
+		edges.stream().forEach(x -> r.addEdge(graph.getEdgeSource(x), graph.getEdgeTarget(x), x));
+
 		return r;
 	}
 
@@ -175,14 +171,11 @@ public class Graphs2 {
 		r.edgeSet().forEach(e->r.setEdgeWeight(e, edgeWeight.apply(e)));
 		return r;
 	}
-	
-	
-	
-	public static <V,E extends SimpleEdge<V>>  V getOppositeVertex(Graph<V,E> graph, E edge, V vertex) {
-		V r 
-		= null;
-		if(edge.source.equals(vertex)) r = edge.target;
-		if(edge.target.equals(vertex)) r = edge.source;
+
+	public static <V, E extends SimpleEdge<V>> V getOppositeVertex(Graph<V, E> graph, E edge, V vertex) {
+		V r = null;
+		if (edge.source.equals(vertex)) r = edge.target;
+		if (edge.target.equals(vertex)) r = edge.source;
 		Preconditions.checkNotNull(r);
 		return r;
 	}
@@ -196,37 +189,27 @@ public class Graphs2 {
 		return graph;
 	}
 	
+	/**
+	 * @param graph Un grafo no dirigido
+	 * @param edgeReverse Una función que produce una arista inversa con el mismo peso
+	 * @param sources Los vértices que serán fuentes
+	 * @param targets Los vértices que serán sumideros
+	 * @return Un grafo dirigido donde los vértices fuente no tienen aristas de entrada y 
+	 * los sumideros no tienen aristas de salida
+	 */
 	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraphFlow(
 			SimpleWeightedGraph<V,E> graph, 
 			Function<E,E> edgeReverse, 
 			Set<V> sources, 
 			Set<V> targets){
-		//Source no puede tener aristas de entrada y Target no puede tener aristas de salida
-		Set<V> ns = new HashSet<V>(sources);
-		ns.retainAll(targets);
-		Preconditions.checkArgument(ns.isEmpty(),"Los vértices fuentes y los sumideros no pueden tener elementos compartidos");
-		SimpleDirectedWeightedGraph<V,E> gs = 
-				new SimpleDirectedWeightedGraph<V,E>(
-						graph.getVertexSupplier(), 
-						graph.getEdgeSupplier());
-		
-		for(V v:graph.vertexSet()){
-			gs.addVertex(v);
+		SimpleDirectedWeightedGraph<V,E> gs = Graphs2.toDirectedWeightedGraph(graph, edgeReverse);
+		Set<E> remove = new HashSet<>();
+		for(E e:gs.edgeSet()) {
+			V s = gs.getEdgeSource(e);
+			V t = gs.getEdgeTarget(e);
+			if(sources.contains(t) || targets.contains(s)) remove.add(e);
 		}
-		for(E e:graph.edgeSet()){			
-			V s = graph.getEdgeSource(e);
-			V t = graph.getEdgeTarget(e);
-			Double w = graph.getEdgeWeight(e);
-			if (!sources.contains(s) && !targets.contains(t)) {				
-				gs.addEdge(s, t, e);
-				gs.setEdgeWeight(e, w);
-			}
-			E e1 = edgeReverse.apply(e);//reverse
-			if (!sources.contains(t) && !targets.contains(s)) {								
-				gs.addEdge(t, s, e1);
-				gs.setEdgeWeight(e1, w);
-			}
-		}
+		gs.removeAllEdges(remove);
 		return gs;
 	}
 

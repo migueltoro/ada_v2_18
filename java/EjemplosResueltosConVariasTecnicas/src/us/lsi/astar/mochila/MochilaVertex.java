@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.*;
 
 import us.lsi.common.Preconditions;
+import us.lsi.graphs.search.Search;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
@@ -108,13 +109,18 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return MochilaEdge.of(this,v,a);
 	}
 	
-	public Double voraz(MochilaVertex v) {
-		return voraz(index,capacidadRestante,v);
+	public static Double heuristic(MochilaVertex v1, MochilaVertex v2) {
+		return Search.<MochilaVertex, MochilaEdge, Double>greedy(v1, v -> v.greedyAction(), (v, a) -> v.neighbor(a),
+				MochilaEdge::of).findWeight(v2);
 	}
 	
+	public static Double voraz(MochilaVertex v1, MochilaVertex v2) {
+				return MochilaVertex.voraz(v1.index,v1.capacidadRestante,v2);
+	}		
+			
 	public static Double voraz(int index, Double capacidadRestante, MochilaVertex v) {
 		Double r = 0.;
-		while (index < DatosMochila.numeroDeObjetos) {
+		while (index != v.index) {
 			Double a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 			r = r + a*DatosMochila.getValor(index);
 			capacidadRestante = capacidadRestante-a*DatosMochila.getPeso(index);
@@ -122,4 +128,11 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		}
 		return  r;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("(%d,%.2f)",index,capacidadRestante);
+	}
+	
+	
 }

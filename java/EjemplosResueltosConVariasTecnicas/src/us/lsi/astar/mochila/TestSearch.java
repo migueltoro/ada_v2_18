@@ -6,6 +6,8 @@ import us.lsi.graphs.search.Search;
 import us.lsi.mochila.datos.DatosMochila;
 
 public class TestSearch {
+	
+	
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));

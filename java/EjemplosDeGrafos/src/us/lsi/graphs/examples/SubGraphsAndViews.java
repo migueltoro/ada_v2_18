@@ -1,11 +1,13 @@
 package us.lsi.graphs.examples;
 
 import java.io.PrintWriter;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.alg.tour.HeldKarpTSP;
+import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
@@ -23,7 +25,7 @@ import us.lsi.graphs.views.SubGraphView;
 public class SubGraphsAndViews {
 
 	public static void main(String[] args) {
-		Graph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
+		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
@@ -66,6 +68,12 @@ public class SubGraphsAndViews {
 		Graph<Ciudad, Carretera> graph7 = 
 				Graphs2.subGraphOfVertices(graph,v->v.getNombre().contains("e"),Graphs2::simpleWeightedGraph);
 		Strings2.toConsole(graph7.edgeSet(), "Carreteras");
+		Graph<Ciudad, Carretera> graph8 = 
+				Graphs2.toDirectedWeightedGraphFlow(graph,
+						Carretera::reverse,
+						Set.of(Ciudad.ofName("Sevilla")), 
+						Set.of(Ciudad.ofName("Almeria")));
+		Strings2.toConsole(graph8.edgeSet(), "Carreteras");
 	}
 
 }

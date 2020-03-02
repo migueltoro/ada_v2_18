@@ -14,8 +14,6 @@ import us.lsi.graphs.manual.Data;
 
 public class AStarSearch<V, E> implements Search<V,E> {
 
-	
-
 	public Graph<V,E> graph; 
 	private V initial;
 	private V end;
@@ -93,5 +91,10 @@ public class AStarSearch<V, E> implements Search<V,E> {
 	public Graph<V, E> getGraph() {
 		return this.graph;
 	}
+
+	@Override
+	public V initialVertex() {
+		return this.initial;
+	}	
 
 }

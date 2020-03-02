@@ -72,5 +72,10 @@ public class GreedySearchOnGraph<V,E> implements Search<V,E> {
 		}
 		return this.actualVertex;
 	}
+	
+	@Override
+	public V initialVertex() {
+		return this.startVertex;
+	}	
 
 }

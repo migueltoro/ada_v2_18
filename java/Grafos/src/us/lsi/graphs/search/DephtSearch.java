@@ -14,11 +14,11 @@ public class DephtSearch<V, E> implements Search<V,E> {
 	private Map<V,E> edgeToOrigin;
 	public Graph<V,E> graph;
 	private Stack<V> stack;
-//	private V startVertex; 
+	private V startVertex; 
 
 	DephtSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
-//		this.startVertex = startVertex;
+		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
 		this.edgeToOrigin.put(startVertex, null);
 		this.stack = new Stack<>();
@@ -60,5 +60,10 @@ public class DephtSearch<V, E> implements Search<V,E> {
 	public Graph<V, E> getGraph() {
 		return this.graph;
 	}
+	
+	@Override
+	public V initialVertex() {
+		return this.startVertex;
+	}	
 	
 }

@@ -13,13 +13,13 @@ import org.jgrapht.Graphs;
 public class BreadthSearch<V,E> implements Search<V,E> {
 	
 	private Graph<V,E> graph;
-//	private V startVertex;
+	private V startVertex;
 	private Map<V,E> edgeToOrigin;
 	private Queue<V> queue; 
 
 	BreadthSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
-//		this.startVertex = startVertex;
+		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
 		this.edgeToOrigin.put(startVertex, null);
 		this.queue = new LinkedList<>();
@@ -61,4 +61,9 @@ public class BreadthSearch<V,E> implements Search<V,E> {
 	public Graph<V, E> getGraph() {
 		return this.graph;
 	}
+	
+	@Override
+	public V initialVertex() {
+		return this.startVertex;
+	}	
 }

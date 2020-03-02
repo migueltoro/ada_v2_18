@@ -77,5 +77,10 @@ public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements Sear
 		}
 		return this.actualVertex;
 	}
+	
+	@Override
+	public V initialVertex() {
+		return this.startVertex;
+	}	
 
 }

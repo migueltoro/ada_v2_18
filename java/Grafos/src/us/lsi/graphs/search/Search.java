@@ -56,6 +56,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	boolean isSeenVertex(V v);
 	Graph<V, E> getGraph();
 	Iterator<V> iterator();
+	V initialVertex();
 	
 	
 	/**
@@ -78,6 +79,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return Encuentra el priemr v&eacute;rtice que cumple el predicado seg&uacute;n la b&uacute;squeda seguida
 	 */
 	default public V find(Predicate<V> p) {
+		if(p.test(initialVertex())) return initialVertex();
 		Optional<V> r = this.stream().filter(p).findFirst();
 		Preconditions.checkArgument(r.isPresent(), "No se ha encontrado un vértice que cumpla el predicado");
 		return r.get();
@@ -95,6 +97,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return Encuentra el peso del camino hasta el primer v&eacute;rtice que es igual a v seg&uacute;n la b&uacute;squeda seguida
 	 */
 	default public Double findWeight(V v) {
+		if(v.equals(initialVertex())) return 0.;
 		V vf = find(v);
 		return this.pathFromOrigin(vf).getWeight();
 	}
@@ -105,6 +108,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return El camino hacia el origen 
 	 */
 	default public GraphPath<V,E> pathToOrigin(V v){
+		if(v.equals(initialVertex())) return new GraphWalk<V,E>(this.getGraph(),List.of(initialVertex()),0.);
 		Preconditions.checkArgument(this.getEdgeToOrigin(v)!=null,String.format("El vértice %s no ha sido visitado",v));
 		E edge = this.getEdgeToOrigin(v);
 		List<V> path = new ArrayList<>();
@@ -125,6 +129,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return El camino hacia el origen 
 	 */
 	default public GraphPath<V,E> pathFromOrigin(V v){
+		if(v.equals(initialVertex())) return new GraphWalk<V,E>(this.getGraph(),List.of(initialVertex()),0.);
 		GraphPath<V,E> gp = pathToOrigin(v);
 		List<V> vertices = gp.getVertexList();
 		Collections.reverse(vertices);
