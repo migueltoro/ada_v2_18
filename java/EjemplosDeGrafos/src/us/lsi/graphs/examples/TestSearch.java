@@ -41,8 +41,8 @@ public class TestSearch {
 		System.out.println("Greedy --------------");	
 		GreedySearchOnGraph<Ciudad, Carretera> bg = (GreedySearchOnGraph<Ciudad, Carretera>)
 				Search.greedy(graph,Ciudad.ofName("Sevilla"),Comparator.comparing(Carretera::getKm).reversed());
-		bg.find(c->c.equals(Ciudad.ofName("Almeria")));
-//		System.out.println(bg.edgeToOrigin);
+		bg.find(Ciudad.ofName("Almeria"));
+		System.out.println(bg.edgeToOrigin);
 		var gpg = bg.pathFromOrigin(Ciudad.ofName("Almeria"));
 		System.out.println(gpg);
 		System.out.println(gpg.getWeight());

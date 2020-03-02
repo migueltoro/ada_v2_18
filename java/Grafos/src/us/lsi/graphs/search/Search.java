@@ -16,6 +16,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.GraphWalk;
 
+
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
@@ -23,30 +24,30 @@ import us.lsi.graphs.virtual.ActionSimpleEdge;
 
 public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	
-	public static <V, E> Search<V, E> greedy(Graph<V, E> graph,
+	public static <V, E> GreedySearchOnGraph<V, E> greedy(Graph<V, E> graph,
 			V initialVertex, Comparator<E> nextEdge) {
 		return new GreedySearchOnGraph<V, E>(graph, initialVertex, nextEdge);
 	}
 
-	public static <V, E extends ActionSimpleEdge<V, A>, A> Search<V, E> greedy(V initialVertex,
+	public static <V, E extends ActionSimpleEdge<V, A>, A> GreedySearch<V, E, A> greedy(V initialVertex,
 			Function<V, A> nextAction, BiFunction<V, A, V> nextVertex,
 			TriFunction<V, V, A, E> nextEdge) {
 		return new GreedySearch<V, E, A>(initialVertex, nextAction, nextVertex, nextEdge);
 	}
 	
-	public static <V, E> Search<V, E> depth(Graph<V, E> g, V startVertex) {
+	public static <V, E> DephtSearch<V, E> depth(Graph<V, E> g, V startVertex) {
 		return new DephtSearch<V, E>(g, startVertex);
 	}
 	
-	public static <V, E> Search<V, E> breadth(Graph<V, E> g, V startVertex) {
+	public static <V, E> BreadthSearch<V, E> breadth(Graph<V, E> g, V startVertex) {
 		return new BreadthSearch<V, E>(g, startVertex);
 	}
 	
-	public static <V, E> Search<V, E> dijsktra(Graph<V, E> graph, V initial) {
+	public static <V, E> AStarSearch<V, E> dijsktra(Graph<V, E> graph, V initial) {
 		return new AStarSearch<V, E>(graph, initial, null, (v1,v2)->0.);
 	}
 	
-	public static <V, E> Search<V, E> aStar(Graph<V, E> graph, V initial, V end,
+	public static <V, E> AStarSearch<V, E> aStar(Graph<V, E> graph, V initial, V end,
 			BiFunction<V, V, Double> heuristic) {
 		return new AStarSearch<V, E>(graph, initial, end, heuristic);
 	}
@@ -94,8 +95,8 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return Encuentra el peso del camino hasta el primer v&eacute;rtice que es igual a v seg&uacute;n la b&uacute;squeda seguida
 	 */
 	default public Double findWeight(V v) {
-		V vf = find(x->x.equals(v));
-		return this.pathToOrigin(vf).getWeight();
+		V vf = find(v);
+		return this.pathFromOrigin(vf).getWeight();
 	}
 	
 	/**
@@ -115,7 +116,7 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 			path.add(v);
 			edge = this.getEdgeToOrigin(v);			
 		}
-		return new GraphWalk<V,E>(this.getGraph(),path,w);
+		return  new GraphWalk<V,E>(this.getGraph(),path,w);
 	}
 	
 	/**

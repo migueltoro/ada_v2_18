@@ -1,9 +1,11 @@
 package us.lsi.astar.mochila;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.*;
+
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
@@ -78,11 +80,13 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 	
 	public Double greedyAction() {
+		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
 		return Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 	}
 
 	@Override
 	public List<Double> actions() {
+		if(this.index == n) return new ArrayList<>();
 		Integer nu = greedyAction().intValue();
 		List<Double> alternativas = IntStream.rangeClosed(0,nu)
 				.boxed()
@@ -104,13 +108,12 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return MochilaEdge.of(this,v,a);
 	}
 	
-	public Double voraz(Predicate<MochilaVertex> p) {
-		return -voraz(index,capacidadRestante,p);
+	public Double voraz(MochilaVertex v) {
+		return voraz(index,capacidadRestante,v);
 	}
 	
-	public static Double voraz(int index, Double capacidadRestante, Predicate<MochilaVertex> p) {
+	public static Double voraz(int index, Double capacidadRestante, MochilaVertex v) {
 		Double r = 0.;
-//		while(!p.test(MochilaVertex.of(index, 0))) {
 		while (index < DatosMochila.numeroDeObjetos) {
 			Double a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 			r = r + a*DatosMochila.getValor(index);

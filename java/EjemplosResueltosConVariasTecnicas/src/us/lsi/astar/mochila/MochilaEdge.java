@@ -15,7 +15,7 @@ public class MochilaEdge extends ActionSimpleEdge<MochilaVertex,Double> {
 	private MochilaEdge(MochilaVertex v1, MochilaVertex v2, Double a) {
 		super(v1, v2);
 		this.a = a;
-		super.weight = -a*DatosMochila.getValor(v1.index);
+		super.weight = a*DatosMochila.getValor(v1.index);
 	}
 
 	@Override

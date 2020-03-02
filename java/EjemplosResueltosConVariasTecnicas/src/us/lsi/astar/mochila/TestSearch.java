@@ -17,6 +17,8 @@ public class TestSearch {
 				v->v.greedyAction(),
 				(v,a)->v.neighbor(a),
 				MochilaEdge::of);
+//		MochilaVertex lv = ms.find(MochilaVertex.lastVertex());
+//		System.out.println(ms.pathFromOrigin(lv).getEdgeList().stream().mapToDouble(e->e.getEdgeWeight()).sum());
 		System.out.println(ms.findWeight(MochilaVertex.lastVertex()));
 	}
 

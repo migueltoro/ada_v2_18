@@ -73,6 +73,7 @@ public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements Sear
 			this.edgeToOrigin.put(this.actualVertex,edge);
 			this.graph.addVertex(this.actualVertex);
 			this.graph.addEdge(old, this.actualVertex, edge);
+			this.graph.setEdgeWeight(edge,edge.getEdgeWeight());
 		}
 		return this.actualVertex;
 	}

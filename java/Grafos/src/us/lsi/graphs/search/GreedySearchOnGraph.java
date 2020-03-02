@@ -14,14 +14,15 @@ public class GreedySearchOnGraph<V,E> implements Search<V,E> {
 
 	private Graph<V,E> graph;
 	private V actualVertex;
+	private V startVertex;
 	public Map<V,E> edgeToOrigin;
 	private Comparator<E> nextEdge;
 	
 	GreedySearchOnGraph(Graph<V, E> graph, V startVertex, Comparator<E> nextEdge) {
 		this.graph = graph;
-		this.actualVertex = startVertex;
+		this.actualVertex = null;
+		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
-		this.edgeToOrigin.put(this.actualVertex, null);
 		this.nextEdge = nextEdge; 
 	}
 	
@@ -55,16 +56,21 @@ public class GreedySearchOnGraph<V,E> implements Search<V,E> {
 	
 	@Override
 	public boolean hasNext() {
-		return this.actualVertex !=null;
+		return true;
 	}
 
 	@Override
 	public V next() {
-		V old = this.actualVertex;
-		this.actualVertex = this.nextVertex();
-		E edge = this.graph.getEdge(old, this.actualVertex);
-		this.edgeToOrigin.put(this.actualVertex,edge);
-		return old;
+		if(this.actualVertex == null) {
+			this.edgeToOrigin.put(this.startVertex,null);
+			this.actualVertex = this.startVertex;
+		} else {
+			V old = this.actualVertex;
+			this.actualVertex = this.nextVertex();
+			E edge = this.graph.getEdge(old, this.actualVertex);
+			this.edgeToOrigin.put(this.actualVertex,edge);
+		}
+		return this.actualVertex;
 	}
 
 }
