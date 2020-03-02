@@ -30,6 +30,4 @@ public interface AStarGraph<V, E> extends Graph<V,E> {
 	}
 	
 	
-	
-	
 }
