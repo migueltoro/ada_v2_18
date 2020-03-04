@@ -135,10 +135,7 @@ public class GraphsReader {
 				if (arista.length < 2)
 					throw new IllegalArgumentException("El número de vértices de la arista no es correcto");
 
-				if (arista.length == 2) {
-					ret.addEdge(idVertices.get(arista[0]),
-							idVertices.get(arista[1]));
-				} else if (arista.length > 2) {
+				if (arista.length >= 2) {
 					E edge = ef.apply(idVertices.get(arista[0]),
 							idVertices.get(arista[1]), arista);
 					ret.addEdge(idVertices.get(arista[0]),

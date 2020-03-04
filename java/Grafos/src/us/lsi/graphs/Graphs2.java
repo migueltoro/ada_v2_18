@@ -75,6 +75,14 @@ public class Graphs2 {
 		return new SimpleGraph<V,E>(null,null,false);
 	}
 	
+    public static <V,E> Graph<V, E> simpleGraph(Supplier<V> vs, Supplier<E> es, boolean weighted) {
+        return new SimpleGraph<V,E>(vs, es, weighted);
+    }
+
+    public static <V,E> Graph<V, E> simpleWeightedGraph(Supplier<V> vs, Supplier<E> es) {
+        return new SimpleWeightedGraph<>(vs, es);
+    }
+
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
