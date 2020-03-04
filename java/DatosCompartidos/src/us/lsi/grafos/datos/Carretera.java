@@ -1,5 +1,7 @@
 package us.lsi.grafos.datos;
 
+
+
 public class Carretera {
 	
 	public static Carretera of() {

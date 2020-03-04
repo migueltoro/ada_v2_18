@@ -65,21 +65,21 @@ public class Graphs2 {
 			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
 		return AStarSimpleVirtualGraph.of(edgeWeight, vertexWeight, vertexPassWeight);
-	}
-
-	public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph() {
-		return new SimpleWeightedGraph<>(null,null);
-	}
+	}	
 	
 	public static <V,E> SimpleGraph<V, E> simpleGraph() {
 		return new SimpleGraph<V,E>(null,null,false);
 	}
 	
-    public static <V,E> Graph<V, E> simpleGraph(Supplier<V> vs, Supplier<E> es, boolean weighted) {
+    public static <V,E> SimpleGraph<V, E> simpleGraph(Supplier<V> vs, Supplier<E> es, boolean weighted) {
         return new SimpleGraph<V,E>(vs, es, weighted);
     }
+    
+    public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph() {
+		return new SimpleWeightedGraph<>(null,null);
+	}
 
-    public static <V,E> Graph<V, E> simpleWeightedGraph(Supplier<V> vs, Supplier<E> es) {
+    public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph(Supplier<V> vs, Supplier<E> es) {
         return new SimpleWeightedGraph<>(vs, es);
     }
 
