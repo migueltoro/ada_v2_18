@@ -43,7 +43,7 @@ public static int numeroDeReinas = 8;
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);
 		}
-		return -HelpFitnessAg.igualACero(2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size());
+		return -HelpFitnessAg.distanceToEqZero(2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size());
 	}
 
 	@Override

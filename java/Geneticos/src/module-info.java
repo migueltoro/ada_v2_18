@@ -8,5 +8,6 @@ module geneticos {
 	exports us.lsi.ag;
 
 	requires transitive commons.math3;
+	requires transitive org.jgrapht.core;
 	requires transitive partecomun;
 }

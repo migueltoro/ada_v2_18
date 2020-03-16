@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Miguel Toro
  *
  */
-public class SolucionMochila {
+public class SolucionMochila implements Comparable<SolucionMochila>{
 	
 	public static SolucionMochila empty() {
 		return new SolucionMochila();
@@ -85,5 +85,9 @@ public class SolucionMochila {
 		return String.format("valor = %d, peso = %d\n%s", 
 				getValor(),getPeso(),getObjetos()); 
 	}
-	
+
+	@Override
+	public int compareTo(SolucionMochila sm) {
+		return this.getValor().compareTo(sm.getValor());
+	}	
 }

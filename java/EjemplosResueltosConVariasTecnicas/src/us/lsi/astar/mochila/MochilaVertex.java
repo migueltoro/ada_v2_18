@@ -19,6 +19,10 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return of(0, capacidadInicial);
 	}
 	
+	public static MochilaVertex copy(MochilaVertex m) {
+		return of(m.index, m.capacidadRestante);
+	}
+	
 	public static MochilaVertex of(int index, Double capacidadRestante) {
 		return new MochilaVertex(index, capacidadRestante);
 	}
@@ -42,10 +46,11 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 
 	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
-		SolucionMochila s = SolucionMochila.empty();		
+		SolucionMochila s = SolucionMochila.empty();
 		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a.intValue()));
 		return s;
 	}
+	
 
 	@Override
 	public int hashCode() {

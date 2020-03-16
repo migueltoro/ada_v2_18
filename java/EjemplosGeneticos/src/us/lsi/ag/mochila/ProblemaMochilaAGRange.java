@@ -45,7 +45,7 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 		List<Integer> ls = c.decode();
 		calcula(ls);
 //		fitness = dif >= 0.? valor:valor-10000*(dif*dif);	
-		fitness = valor - 10000*HelpFitnessAg.mayorOIgualACero(DatosMochila.capacidadInicial - peso);
+		fitness = valor - 10000*HelpFitnessAg.distanceToGeZero(DatosMochila.capacidadInicial - peso);
 		return fitness;
 	}
 

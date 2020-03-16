@@ -21,16 +21,21 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.search.BackTrackingSearch.BDType;
+import us.lsi.graphs.search.DynamicProgrammingSearch.PDType;
 
 public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 	
-	public static <V, E> GreedySearchOnGraph<V, E> greedy(Graph<V, E> graph,
+	public static <V, E> GreedySearchOnGraph<V, E> greedy(
+			Graph<V, E> graph,
 			V initialVertex, Comparator<E> nextEdge) {
 		return new GreedySearchOnGraph<V, E>(graph, initialVertex, nextEdge);
 	}
 
-	public static <V, E extends ActionSimpleEdge<V, A>, A> GreedySearch<V, E, A> greedy(V initialVertex,
-			Function<V, A> nextAction, BiFunction<V, A, V> nextVertex,
+	public static <V, E extends ActionSimpleEdge<V, A>, A> GreedySearch<V, E, A> greedy(
+			V initialVertex,
+			Function<V, A> nextAction, 
+			BiFunction<V, A, V> nextVertex,
 			TriFunction<V, V, A, E> nextEdge) {
 		return new GreedySearch<V, E, A>(initialVertex, nextAction, nextVertex, nextEdge);
 	}
@@ -43,13 +48,32 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 		return new BreadthSearch<V, E>(g, startVertex);
 	}
 	
-	public static <V, E> AStarSearch<V, E> dijsktra(Graph<V, E> graph, V initial) {
+	public static <V, E> AStarSearch<V, E> dijsktra(
+			Graph<V, E> graph, V initial) {
 		return new AStarSearch<V, E>(graph, initial, null, (v1,v2)->0.);
 	}
 	
-	public static <V, E> AStarSearch<V, E> aStar(Graph<V, E> graph, V initial, V end,
+	public static <V, E> AStarSearch<V, E> aStar(
+			Graph<V, E> graph, V initial, V end,
 			BiFunction<V, V, Double> heuristic) {
 		return new AStarSearch<V, E>(graph, initial, end, heuristic);
+	}
+	
+	public static <V, E, S extends Comparable<S>> BackTrackingSearch<V, E, S> backTracking(
+			Graph<V, E> graph, V initial, V end,
+			BiFunction<V, V, Double> heuristic, 
+			Function<List<E>,S> solution, 
+			Function<V,V> copy, 
+			BDType type)  {
+		return new BackTrackingSearch<V, E, S>(graph, initial, end, heuristic, solution, copy, type);
+	}
+	
+	public static <V, E, S> DynamicProgrammingSearch<V, E, S> dynamicProgramming(
+			Graph<V, E> g, V startVertex,V end, 
+			BiFunction<V, V, Double> heuristic, 
+			Function<List<E>, S> solution,
+			PDType type) {
+		return new DynamicProgrammingSearch<V, E, S>(g, startVertex, end, heuristic, solution, type);
 	}
 	
 	E getEdgeToOrigin(V v);
