@@ -10,7 +10,7 @@ import java.util.Queue;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-public class BreadthSearch<V,E> implements GraphSearch<V,E> {
+public class BreadthSearch<V,E> implements GSearch<V,E> {
 	
 	private Graph<V,E> graph;
 	private V startVertex;

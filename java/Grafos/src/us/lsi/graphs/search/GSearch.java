@@ -22,14 +22,40 @@ import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 
-public interface GraphSearch<V,E> extends Iterator<V>, Iterable<V> {
+/**
+ * @author migueltoro
+ *
+ * @param <V> El tipo de los v&eacute;rtices
+ * @param <E> El tipo de las aristas
+ * 
+ * Distintos tipos de b&uacute;squedas sobre grafos
+ * 
+ */
+public interface GSearch<V,E> extends Iterator<V>, Iterable<V> {
 	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param graph Un grafo 
+	 * @param initialVertex El v&eacute;rtice inicial
+	 * @param nextEdge
+	 * @return Un algoritmo de b&uacute;squeda voraz siguiendo las aristas del grafo
+	 */
 	public static <V, E> GreedySearchOnGraph<V, E> greedy(
 			Graph<V, E> graph,
 			V initialVertex, Comparator<E> nextEdge) {
 		return new GreedySearchOnGraph<V, E>(graph, initialVertex, nextEdge);
 	}
 
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param initialVertex El v&eacute;rtice inicial
+	 * @param nextAction La acci&oacute;n a tomar desde el v&eacute;rtice actual
+	 * @param nextVertex El v&eacute;rtice obtenido siguiendo un acci&oacute;n
+	 * @param nextEdge La arista siguiendo una acci&oacute;n de un v&eacute;rtice al siguiente
+	 * @return Un algoritmo voraz 
+	 */
 	public static <V, E extends ActionSimpleEdge<V, A>, A> GreedySearch<V, E, A> greedy(
 			V initialVertex,
 			Function<V, A> nextAction, 
@@ -38,19 +64,50 @@ public interface GraphSearch<V,E> extends Iterator<V>, Iterable<V> {
 		return new GreedySearch<V, E, A>(initialVertex, nextAction, nextVertex, nextEdge);
 	}
 	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en profundidad
+	 */
 	public static <V, E> DephtSearch<V, E> depth(Graph<V, E> g, V startVertex) {
 		return new DephtSearch<V, E>(g, startVertex);
 	}
 	
+	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en anchura
+	 */
 	public static <V, E> BreadthSearch<V, E> breadth(Graph<V, E> g, V startVertex) {
 		return new BreadthSearch<V, E>(g, startVertex);
 	}
 	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param graph Un grafo 
+	 * @param initial El v&eacute;rtice inicial
+	 * @return Una algoritmo de b&uacute;squeda de Dijsktra
+	 */
 	public static <V, E> AStarSearch<V, E> dijsktra(
 			Graph<V, E> graph, V initial) {
 		return new AStarSearch<V, E>(graph, initial, null, (v1,v2)->0.);
 	}
 	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas 
+	 * @param graph Un grafo
+	 * @param initial El v&eacute;rtice inicial
+	 * @param end El v&eacute;rtice final
+	 * @param heuristic La heur&iacute;stica 
+	 * @return Una algoritmo de b&uacute;squeda de AStar
+	 */
 	public static <V, E> AStarSearch<V, E> aStar(
 			Graph<V, E> graph, V initial, V end,
 			BiFunction<V, V, Double> heuristic) {

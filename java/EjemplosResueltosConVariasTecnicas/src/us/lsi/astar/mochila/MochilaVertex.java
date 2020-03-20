@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.*;
 
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.search.GraphSearch;
+import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
@@ -115,7 +115,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	}
 	
 	public static Double heuristic(MochilaVertex v1, MochilaVertex v2) {
-		return GraphSearch.<MochilaVertex, MochilaEdge, Double>greedy(v1, v -> v.greedyAction(), (v, a) -> v.neighbor(a),
+		return GSearch.<MochilaVertex, MochilaEdge, Double>greedy(v1, v -> v.greedyAction(), (v, a) -> v.neighbor(a),
 				MochilaEdge::of).findWeight(v2);
 	}
 	

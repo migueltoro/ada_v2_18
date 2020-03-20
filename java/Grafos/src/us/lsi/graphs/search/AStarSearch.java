@@ -12,7 +12,7 @@ import org.jgrapht.util.FibonacciHeapNode;
 
 import us.lsi.graphs.manual.Data;
 
-public class AStarSearch<V, E> implements GraphSearch<V,E> {
+public class AStarSearch<V, E> implements GSearch<V,E> {
 
 	public Graph<V,E> graph; 
 	private V initial;
