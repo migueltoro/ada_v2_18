@@ -5,90 +5,116 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-
-import us.lsi.common.Preconditions;
+import java.util.stream.Collectors;
 
 
-public class DynamicProgrammingSearch<V, E, S> {
+import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
+import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.graphs.hypergraphs.VirtualHyperVertex;
+
+
+
+public class DynamicProgrammingSearch<V extends VirtualHyperVertex<V,E,A>,
+			E extends SimpleHyperEdge<V,A>,A> implements DPSearch<V, E, A> {
 	
+
 	public enum PDType{Min,Max}
-	
 
-	public Graph<V,E> graph;
-	private V startVertex; 
-	private V end;
-	public Double bestValue;
-	private BiFunction<V, V, Double> heuristic;
-	private Comparator<List<E>> comparatorEdges;
-	private Function<List<E>,S> solution;
-	public Map<V,List<E>> solutions;
+	public SimpleVirtualHyperGraph<V,E, A> graph;
+	private Comparator<Sp<E>> comparatorSp;
+	private Function<List<Double>,Double> addSolution;
+	public Map<V,Sp<E>> solutionsTree;
 	private PDType type;
 	
-	DynamicProgrammingSearch(Graph<V, E> g, V startVertex, V end, 
-			BiFunction<V,V,Double> heuristic,
-			Function<List<E>,S> solution,
+	DynamicProgrammingSearch(
+			SimpleVirtualHyperGraph<V,E, A> graph, 
+			Function<List<Double>,Double> addSolution,
 			PDType type) {
-		this.graph = g;
-		this.startVertex = startVertex;
-		this.end = end;
-		this.heuristic = heuristic;
-		this.solution = solution;
+		this.graph = graph;
+		this.addSolution = addSolution;
 		this.type = type;
-		if(this.type == PDType.Min) this.comparatorEdges = Comparator.comparing(ls->this.listWeight(ls));
-		if(this.type == PDType.Max) this.comparatorEdges = Comparator.<List<E>,Double>comparing(ls->this.listWeight(ls)).reversed();
-		this.solutions = new HashMap<>();
-		if(this.type == PDType.Max) this.bestValue = -Double.MAX_VALUE;
-		if(this.type == PDType.Min) this.bestValue = Double.MAX_VALUE;
+		if(this.type == PDType.Min) this.comparatorSp = Comparator.naturalOrder();
+		if(this.type == PDType.Max) this.comparatorSp = Comparator.<Sp<E>>naturalOrder().reversed();
+		this.solutionsTree = new HashMap<>();
 	}
 	
-	private Boolean forget(V actual, Double accumulateValue, E edge, V v) {
-		Double w2 = this.graph.getEdgeWeight(edge);
-		Double w3 = this.heuristic.apply(v,this.end);
-		return accumulateValue+w2+w3 < this.bestValue;
-	}
-	
-	private Double listWeight(List<E> ls) {
-		return ls.stream().mapToDouble(e->this.graph.getEdgeWeight(e)).sum();
-	}
-	
-	public S search() {
-		this.solutions = new HashMap<>();
-		List<E> edges = search(this.startVertex,0.);
-		return this.solution.apply(edges);
-	}
-	
-	private List<E> search(V actual, Double accumulateValue) {
-		List<E> r = null;
-		if(this.solutions.containsKey(actual)) {
-			r = this.solutions.get(actual);
-		} else if (actual.equals(this.end)) {
-			return new ArrayList<>();
+	@Override
+	public Sp<E> search(V actual) {
+		Sp<E> r = null;
+		if (this.solutionsTree.containsKey(actual)) {
+			r = this.solutionsTree.get(actual);
+		} else if (actual.isBaseCase()) {
+			Double w = actual.baseCaseSolution();
+			if(w!=null) r = Sp.of(w,null);
+			else r = null;
+			this.solutionsTree.put(actual, r);
 		} else {
-			List<List<E>> rs = new ArrayList<>();
-			for (V v : Graphs.neighborListOf(graph,actual)) {				
-				E edge = graph.getEdge(actual, v);
-				Double w = graph.getEdgeWeight(edge);
-				Preconditions.checkState(edge != null,String.format("No hay arista entre %s y %s",actual,v));
-				if (this.forget(actual,accumulateValue,edge,v)) continue;
-				List<E> s = search(v,accumulateValue+w);
-				if (s!=null) {
-					s.add(0, edge);
-					rs.add(s);
+			List<Sp<E>> sps = new ArrayList<>();
+			for (E edge : graph.edgesOf(actual)) {
+				List<Sp<E>> spNeighbors = new ArrayList<>();
+				Boolean isNull = false;
+				for (V neighbor : edge.targets) {
+					Sp<E> nb = search(neighbor);
+					if (nb == null) {
+						isNull = true;
+						break;
+					}
+					spNeighbors.add(nb);
 				}
+				Sp<E> spa = null;
+				if(!isNull) {
+					List<Double> weights = spNeighbors.stream().map(sp->sp.weight).collect(Collectors.toList());
+					Double weight = this.addSolution.apply(weights);
+					spa = Sp.of(weight, edge);
+				}
+				sps.add(spa);
 			}
-			r = rs.stream().filter(s->s!=null).min(this.comparatorEdges).get();
-			this.solutions.put(actual, r);
+			r = sps.stream().filter(s -> s != null).min(this.comparatorSp).orElse(null);
+			this.solutionsTree.put(actual, r);
 		}
-		return new ArrayList<>(r);
+		return r;
+	}
+	@Override
+	public SimpleVirtualHyperGraph<V, E, A> getGraph() {
+		return graph;
+	}
+	@Override
+	public Map<V, Sp<E>> getSolutionsTree() {
+		return solutionsTree;
+	}
+	@Override
+	public PDType getType() {
+		return type;
+	}
+	@Override
+	public TreeGraph<V,E,A> tree(V vertex){
+		return TreeGraph.of(this.solutionsTree);
 	}
 	
-	public S getSolution(V v){
-		return this.solution.apply(solutions.get(v));
+	public static class Sp<E> implements Comparable<Sp<E>>{
+		public Double weight;
+		public E edge;
+		public static <E> Sp<E> of(Double weight, E edge){
+			return new Sp<>(weight,edge);
+		}
+		public static <E> Sp<E> empty(){
+			return new Sp<>(0.,null);
+		}
+		public Sp(Double weight, E edge) {
+			super();
+			this.weight = weight;
+			this.edge = edge;
+		}
+		@Override
+		public int compareTo(Sp<E> sp) {
+			return this.weight.compareTo(sp.weight);
+		}
+		@Override
+		public String toString() {
+			return String.format("(%.2f,%s)",weight,edge!=null?edge.toString():"_");
+		}
+		
 	}
 
 }

@@ -1,11 +1,7 @@
-package us.lsi.graphs.virtual;
+package us.lsi.graphs.hypergraphs;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import us.lsi.graphs.SimpleEdge;
-
 
 /**
  * @author Miguel Toro
@@ -19,9 +15,9 @@ import us.lsi.graphs.SimpleEdge;
  * Cada acci&oacute;n v&aacute;lida identifica de forma única uno de los vecinos del v&eacute;rtice. 
  * Cada v&eacute;rtice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones v&aacute;lidas disponibles </a>
  */
-public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>, A> implements VirtualVertex<V,E> {
+public abstract class VirtualHyperVertex<V extends VirtualHyperVertex<V,E,A>,E extends SimpleHyperEdge<V,A>, A> {
 
-	public ActionVirtualVertex() {
+	public VirtualHyperVertex() {
 	}
 	
 	/**
@@ -35,13 +31,19 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	 */
 	public abstract List<A> actions();
 	
+	public abstract V getThis();
+	
+	public abstract Boolean isBaseCase();
+	
+	public abstract Double baseCaseSolution();
+	
 	/**
 	 * @param a Una acci&oacute;n
 	 * @return El vecino del v&eacute;rtice siguiendo esa acci&oacute;n
 	 * @pre La acci&oacute;n a debe ser aplicable
 	 * @post El v&eacute;rtice retornada debe ser distinto al original y v&aacute;lido
 	 */
-	public abstract V neighbor(A a);
+	public abstract List<V> neighbors(A a);
 	
 	/**
 	 * Este m&eacute;todo debe ser sobrescrito en la clase que refine el tipo
@@ -50,43 +52,41 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	 */
 	@SuppressWarnings("unchecked")
 	public E getEdgeFromAction(A a) {
-		V v = this.neighbor(a);
-		return (E) ActionSimpleEdge.of(this,v,a);
+		List<V> v = this.neighbors(a);
+		return (E) SimpleHyperEdge.ofAction(this.getThis(),v,a);
 	}
 	
-	private Set<V> neighbors = null;
-	private Set<E> edges = null;
-	private List<E> edgesList = null;
+	private List<List<V>> neighbors = null;
+	private List<E> edges = null;
 	
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @param v Otro v&eacute;rtice
 	 * @return La arista desde this a v2
 	 */
-	@Override
-	public E getEdge(V v) {
-		E edge = null;
-		if (this.isNeighbor(v)) {
-			edge = this.edgesOf()
-					.stream()
-					.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
-					.findFirst()
-					.get();
-		}
-		return edge;
-	}
-	
+//	@Override
+//	public E getEdge(V v) {
+//		E edge = null;
+//		if (this.isNeighbor(v)) {
+//			edge = this.edgesOf()
+//					.stream()
+//					.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
+//					.findFirst()
+//					.get();
+//		}
+//		return edge;
+//	}
+//	
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @return El conjunto de los vecinos
 	 */
-	@Override
-	public Set<V> getNeighborListOf() {
+	public List<List<V>> getNeighborListOf() {
 		if (this.neighbors==null) {
 			this.neighbors=actions()
 					.stream()
-					.map(a->this.neighbor(a))
-					.collect(Collectors.toSet());
+					.map(a->this.neighbors(a))
+					.collect(Collectors.toList());
 		}
 		return this.neighbors;
 	}
@@ -94,38 +94,23 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @return El conjunto de las aristas hacia los vecinos
 	 */
-	@Override
-	public Set<E> edgesOf() {
+	public List<E> edgesOf() {
 		if (this.edges==null) {
 			this.edges= actions()
 					.stream()
 					.map(a->this.getEdgeFromAction(a))
-					.collect(Collectors.toSet());				
-		}
-		return edges;
-	}
-	/**
-	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
-	 * @return El conjunto de las aristas hacia los vecinos
-	 */
-	@Override
-	public List<E> edgesListOf() {
-		if (this.edgesList==null) {
-			this.edgesList= actions()
-					.stream()
-					.map(a->this.getEdgeFromAction(a))
 					.collect(Collectors.toList());				
 		}
-		return edgesList;
+		return edges;
 	}
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @param v Otro v&eacute;rtice
 	 * @return Si v es vecino
 	 */
-	@Override
-	public Boolean isNeighbor(V v) {
-		return this.getNeighborListOf().contains(v);
-	}
+//	@Override
+//	public Boolean isNeighbor(V v) {
+//		return this.getNeighborListOf().contains(v);
+//	}
 	
 }

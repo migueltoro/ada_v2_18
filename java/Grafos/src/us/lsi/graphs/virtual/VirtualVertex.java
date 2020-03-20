@@ -1,5 +1,6 @@
 package us.lsi.graphs.virtual;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,7 +24,10 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	 * @return Conjunto de las aristas hacia los v&eacute;rtices vecinos
 	 */
 	Set<E> edgesOf(); 
-	
+	/**
+	 * @return Lista de las aristas hacia los v&eacute;rtices vecinos
+	 */
+	List<E> edgesListOf();	
 	/**
 	 * @param v V&eacute;rtice que se pregunta si es vecino
 	 * @return Si el v&eacute;rtice es vecino
@@ -36,5 +40,4 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	 * @return La arista desde this a v2
 	 */	
 	E getEdge(V v2);
-
 }

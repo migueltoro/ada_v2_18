@@ -1,4 +1,4 @@
-package us.lsi.astar.mochila;
+package us.lsi.search.test;
 
 import java.util.Locale;
 
@@ -6,6 +6,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.astar.mochila.MochilaEdge;
+import us.lsi.astar.mochila.MochilaVertex;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.BackTrackingSearch.State;
 

@@ -19,6 +19,9 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
+import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
+import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.graphs.hypergraphs.VirtualHyperVertex;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.VirtualVertex;
 
@@ -54,6 +57,10 @@ public class Graphs2 {
 	
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
 		return new SimpleVirtualGraph<V, E>(v);
+	}
+	
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
+		return new SimpleVirtualHyperGraph<V, E, A>();
 	}
 		
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(

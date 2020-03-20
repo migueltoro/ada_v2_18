@@ -8,6 +8,7 @@ import java.util.List;
 
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
+import us.lsi.common.Preconditions;
 
 
 /**
@@ -128,12 +129,14 @@ public class AlgoritmoPLI implements SolutionPLI {
 			solver.solve();
 			solutionPoint = solver.getPtrVariables();
 			solutionValue = solver.getObjective();
+			Preconditions.checkState(!solver.isFeasible(solutionPoint,solutionValue));
 			names = new ArrayList<>();
 			for (int j = 1; j <= solutionPoint.length; j++) {
 				names.add(solver.getOrigcolName(j));
 			}
 			solver.deleteLp();
-			
+		} catch (IllegalArgumentException e) {
+			throw new IllegalStateException("El modelo no tiene solución = "+e);
 		} catch (LpSolveException e) {
 			throw new IllegalStateException("Se ha producido una excepción en LpSolve = "+e);
 		}

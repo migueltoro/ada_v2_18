@@ -105,7 +105,7 @@ public class SimpleEdge<V>  {
 	
 	@Override
 	public String toString() {
-		return "("+this.source+","+this.target+")";
+		return String.format("(%s,%s)=%.2f",this.source,this.target,this.weight);
 	}
 
 	@Override

@@ -1,9 +1,12 @@
-package us.lsi.astar.mochila;
+package us.lsi.search.test;
 
 
 import java.util.Locale;
 import us.lsi.graphs.search.Search;
 import us.lsi.mochila.datos.DatosMochila;
+
+import us.lsi.astar.mochila.MochilaEdge;
+import us.lsi.astar.mochila.MochilaVertex;
 
 public class TestSearch {
 	

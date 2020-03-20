@@ -1,4 +1,4 @@
-package us.lsi.astar.mochila;
+package us.lsi.search.test;
 
 import java.util.List;
 import java.util.Stack;

@@ -21,7 +21,12 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
+import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.graphs.hypergraphs.VirtualHyperVertex;
 import us.lsi.graphs.search.BackTrackingSearch.BDType;
+import us.lsi.graphs.search.DynamicProgrammingReductionSearch.PDRType;
 import us.lsi.graphs.search.DynamicProgrammingSearch.PDType;
 
 public interface Search<V,E> extends Iterator<V>, Iterable<V> {
@@ -68,12 +73,21 @@ public interface Search<V,E> extends Iterator<V>, Iterable<V> {
 		return new BackTrackingSearch<V, E, S>(graph, initial, end, heuristic, solution, copy, type);
 	}
 	
-	public static <V, E, S> DynamicProgrammingSearch<V, E, S> dynamicProgramming(
-			Graph<V, E> g, V startVertex,V end, 
+	public static <V, E, S> DPRSearch<V, E, S> dynamicProgrammingReduction(
+			EGraph<V, E> g, V startVertex,V end, 
 			BiFunction<V, V, Double> heuristic, 
 			Function<List<E>, S> solution,
+			PDRType type) {
+		return new DynamicProgrammingReductionSearch<V, E, S>(g, startVertex, end, heuristic, solution, type);
+	}
+	
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> 
+		DPSearch<V, E, A> dynamicProgrammingSearch(
+			SimpleVirtualHyperGraph<V, E, A> graph, 
+			Function<List<Double>, 
+			Double> addSolution, 
 			PDType type) {
-		return new DynamicProgrammingSearch<V, E, S>(g, startVertex, end, heuristic, solution, type);
+		return new DynamicProgrammingSearch<V, E, A>(graph, addSolution, type);
 	}
 	
 	E getEdgeToOrigin(V v);

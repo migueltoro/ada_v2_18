@@ -1,6 +1,7 @@
 package us.lsi.pd.secuencias;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,12 +56,32 @@ public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
 				.collect(Collectors.toSet());
 	}
 
+
+	@Override
+	public List<SecuenciaEdge> edgesListOf() {
+		return Arrays.stream(Secuencia.Accion.values())
+				.filter(x->testAccion(x))
+				.map(x->SecuenciaEdge.create(this,getNeighbor(x), x))
+				.collect(Collectors.toList());
+	}
+
 	@Override
 	public Boolean isNeighbor(Secuencia e) {
 		return this.getNeighborListOf().contains(e);
 	}
 
-	
+	@Override
+	public SecuenciaEdge getEdge(Secuencia v2) {
+		SecuenciaEdge edge = null;
+		if (this.isNeighbor(v2)) {
+			edge = this.edgesOf()
+					.stream()
+					.filter(e->e.getSource().equals(this) || e.getTarget().equals(v2))
+					.findFirst()
+					.get();
+		}
+		return edge;
+	}
 	
 	public Secuencia getNeighbor(Accion a){
 		StringBuilder s = new StringBuilder(cadena);
@@ -126,12 +147,5 @@ public class Secuencia implements VirtualVertex<Secuencia, SecuenciaEdge> {
 	public Boolean isValid() {
 		return true;
 	}
-
-	@Override
-	public SecuenciaEdge getEdge(Secuencia v2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 }

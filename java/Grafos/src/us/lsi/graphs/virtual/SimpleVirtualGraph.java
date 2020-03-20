@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 import us.lsi.common.Sets2;
@@ -33,7 +32,7 @@ import us.lsi.graphs.SimpleEdge;
  */
 @SuppressWarnings("deprecation")
 public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>>
-	implements Graph<V, E> {
+	implements EGraph<V, E> {
 			
 	private Set<V> vertexSet;
     @SuppressWarnings("unused")
@@ -103,6 +102,10 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	@Override
 	public Set<E> edgesOf(V v) {
 		return v.edgesOf();
+	}
+	@Override
+	public List<E> edgesListOf(V v) {
+		return v.edgesListOf();
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ import us.lsi.pli.SolutionPLI;
 public class Test {
 
 	public static void main(String[] args) {
-				SolutionPLI a = AlgoritmoPLI.getSolutionFromFile("ficheros/ejemplo.txt");
+				SolutionPLI a = AlgoritmoPLI.getSolutionFromFile("ficheros/infeasible.txt");
 				System.out.println("-------------------");	
 				System.out.println("________");
 				System.out.println(a.getGoal());
