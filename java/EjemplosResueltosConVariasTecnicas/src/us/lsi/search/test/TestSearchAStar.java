@@ -7,7 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.Search;
+import us.lsi.graphs.search.GraphSearch;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
@@ -23,7 +23,7 @@ public class TestSearchAStar {
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		Graph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->-x.getEdgeWeight());		
-		Search<MochilaVertex,MochilaEdge> ms = Search.aStar(graph,e1,e2,MochilaVertex::heuristic);
+		GraphSearch<MochilaVertex,MochilaEdge> ms = GraphSearch.aStar(graph,e1,e2,MochilaVertex::heuristic);
 		MochilaVertex vf = ms.find(e2);
 		GraphPath<MochilaVertex,MochilaEdge> path = ms.pathFromOrigin(vf);
 		List<MochilaEdge> edges = path.getEdgeList();

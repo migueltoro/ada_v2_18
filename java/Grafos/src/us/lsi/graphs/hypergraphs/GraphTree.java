@@ -1,20 +1,19 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.hypergraphs;
 
 import java.util.List;
 import java.util.Map;
 
-import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
 import us.lsi.graphs.search.DynamicProgrammingSearch.Sp;
 
-public class TreeGraph<V, E extends SimpleHyperEdge<V,A>, A> {
+public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	
-	public static <V, E extends SimpleHyperEdge<V, A>, A> TreeGraph<V, E, A> of(Map<V, Sp<E>> tree) {
-		return new TreeGraph<V, E, A>(tree);
+	public static <V, E extends SimpleHyperEdge<V, A>, A> GraphTree<V, E, A> of(Map<V, Sp<E>> tree) {
+		return new GraphTree<V, E, A>(tree);
 	}
 
 	private Map<V, Sp<E>> tree;
 
-	private TreeGraph(Map<V, Sp<E>> tree) {
+	private GraphTree(Map<V, Sp<E>> tree) {
 		super();
 		this.tree = tree;
 	}

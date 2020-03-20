@@ -12,7 +12,7 @@ import us.lsi.common.TriFunction;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 
-public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements Search<V,E> {
+public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements GraphSearch<V,E> {
 	
 	private Graph<V,E> graph;
 	private V actualVertex;

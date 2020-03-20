@@ -6,8 +6,8 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.BackTrackingSearch;
-import us.lsi.graphs.search.Search;
+import us.lsi.graphs.search.BTSearch;
+import us.lsi.graphs.search.BackTrackingSearch.BTType;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
@@ -28,8 +28,8 @@ public class TestSearchBackTracking {
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		Graph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->x.getEdgeWeight());		
-		BackTrackingSearch<MochilaVertex, MochilaEdge,SolucionMochila> ms = Search.backTracking(graph,e1,e2,
-				MochilaVertex::heuristic,TestSearchBackTracking::getSolucion,MochilaVertex::copy,BackTrackingSearch.BDType.Max);
+		BTSearch<MochilaVertex, MochilaEdge, SolucionMochila> ms = BTSearch.backTracking(graph,e1,e2,
+				MochilaVertex::heuristic,TestSearchBackTracking::getSolucion,MochilaVertex::copy,BTType.Max);
 		ms.search();
 //		GraphPath<MochilaVertex,MochilaEdge> path = ms.getSolution();
 //		List<MochilaEdge> edges = path.getEdgeList();

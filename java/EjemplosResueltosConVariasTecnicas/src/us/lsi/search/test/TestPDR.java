@@ -6,7 +6,6 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.DPRSearch;
 import us.lsi.graphs.search.DynamicProgrammingReductionSearch.PDRType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.search.Search;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
@@ -24,7 +23,7 @@ public class TestPDR {
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->x.getEdgeWeight());		
 		DPRSearch<MochilaVertex, MochilaEdge, SolucionMochila> ms = 
-				Search.dynamicProgrammingReduction(graph,e1,e2,
+				DPRSearch.dynamicProgrammingReduction(graph,e1,e2,
 				MochilaVertex::heuristic,
 				TestSearchBackTracking::getSolucion,
 				PDRType.Max);

@@ -14,9 +14,9 @@ import org.jgrapht.Graphs;
 
 import us.lsi.common.Preconditions;
 
-public class BackTrackingSearch<V,E,S extends Comparable<S>> {
+public class BackTrackingSearch<V,E,S extends Comparable<S>> implements BTSearch<V, E, S> {
 	
-	public enum BDType{Min,Max,All}
+	public enum BTType {Min,Max,All}
 	
 	public Graph<V,E> graph;
 	private V startVertex; 
@@ -27,36 +27,40 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> {
 	private Function<List<E>,S> solution;
 	private Comparator<S> comparator;
 	private Function<V,V> copy;
-	private BDType type;
+	private BTType type;
 	
 	BackTrackingSearch(Graph<V, E> g, V startVertex, V end, 
 			BiFunction<V,V,Double> heuristic,
 			Function<List<E>,S> solution,
 			Function<V,V> copy,
-			BDType type) {
+			BTType type) {
 		this.graph = g;
 		this.startVertex = startVertex;
 		this.end = end;
 		this.heuristic = heuristic;
 		this.copy = copy;
 		this.type = type;
-		if(this.type == BDType.Min || this.type == BDType.All) this.comparator = Comparator.<S>naturalOrder();
-		if(this.type == BDType.Max) this.comparator = Comparator.<S>naturalOrder().reversed();
+		if(this.type == BTType.Min || this.type == BTType.All) this.comparator = Comparator.<S>naturalOrder();
+		if(this.type == BTType.Max) this.comparator = Comparator.<S>naturalOrder().reversed();
 		this.solutions = new TreeSet<>(this.comparator);
 		this.solution = solution;
-		if(this.type == BDType.Max) this.bestValue = -Double.MAX_VALUE;
-		if(this.type == BDType.Min) this.bestValue = Double.MAX_VALUE;
+		if(this.type == BTType.Max) this.bestValue = -Double.MAX_VALUE;
+		if(this.type == BTType.Min) this.bestValue = Double.MAX_VALUE;
 	}
 	
 	private Boolean forget(State<V,E> state, E edge, V v) {
 		Boolean r = false;
 		Double w2 = this.graph.getEdgeWeight(edge);
 		Double w3 = this.heuristic.apply(v,this.end);
-		if(this.type == BDType.Max) r = state.accumulateValue+w2+w3 < this.bestValue;
-		if(this.type == BDType.Min) r = state.accumulateValue+w2+w3 > this.bestValue;
+		if(this.type == BTType.Max) r = state.accumulateValue+w2+w3 < this.bestValue;
+		if(this.type == BTType.Min) r = state.accumulateValue+w2+w3 > this.bestValue;
 		return r;
 	}
 	
+	/* (non-Javadoc)
+	 * @see us.lsi.graphs.search.BTSearch#search()
+	 */
+	@Override
 	public void search() {
 		State<V,E> state = State.of(this.graph,this.startVertex);
 		search(state);
@@ -65,9 +69,9 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> {
 	private void search(State<V, E> state) {
 		V actual = this.copy.apply(state.actualVertex);
 		if (actual.equals(this.end) && 
-				(this.type == BDType.All ||
-				this.type == BDType.Max && state.accumulateValue > this.bestValue ||
-				this.type == BDType.Min && state.accumulateValue < this.bestValue)) {
+				(this.type == BTType.All ||
+				this.type == BTType.Max && state.accumulateValue > this.bestValue ||
+				this.type == BTType.Min && state.accumulateValue < this.bestValue)) {
 			S s = solution.apply(state.getEdges());
 			this.solutions.add(s);
 			this.bestValue = state.accumulateValue;
@@ -83,10 +87,18 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see us.lsi.graphs.search.BTSearch#getSolution()
+	 */
+	@Override
 	public S getSolution(){
 		return this.solutions.first();
 	}
 	
+	/* (non-Javadoc)
+	 * @see us.lsi.graphs.search.BTSearch#getSolutions()
+	 */
+	@Override
 	public SortedSet<S> getSolutions(){
 		return this.solutions;
 	}

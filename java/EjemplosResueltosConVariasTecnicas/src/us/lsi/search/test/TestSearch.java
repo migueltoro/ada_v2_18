@@ -2,7 +2,7 @@ package us.lsi.search.test;
 
 
 import java.util.Locale;
-import us.lsi.graphs.search.Search;
+import us.lsi.graphs.search.GraphSearch;
 import us.lsi.mochila.datos.DatosMochila;
 
 import us.lsi.astar.mochila.MochilaEdge;
@@ -17,8 +17,8 @@ public class TestSearch {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;		
 		MochilaVertex e1 = MochilaVertex.of(78.);
-		Search<MochilaVertex,MochilaEdge> ms = 
-				Search.<MochilaVertex,MochilaEdge,Double>greedy(e1,
+		GraphSearch<MochilaVertex,MochilaEdge> ms = 
+				GraphSearch.<MochilaVertex,MochilaEdge,Double>greedy(e1,
 				v->v.greedyAction(),
 				(v,a)->v.neighbor(a),
 				MochilaEdge::of);

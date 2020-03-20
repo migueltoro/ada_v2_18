@@ -8,7 +8,7 @@ import java.util.Stack;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-public class DephtSearch<V, E> implements Search<V,E> {
+public class DephtSearch<V, E> implements GraphSearch<V,E> {
 
 
 	private Map<V,E> edgeToOrigin;

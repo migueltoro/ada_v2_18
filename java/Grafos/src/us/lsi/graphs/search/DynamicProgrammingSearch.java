@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
 import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.graphs.hypergraphs.GraphTree;
 import us.lsi.graphs.hypergraphs.VirtualHyperVertex;
 
 
@@ -88,8 +89,8 @@ public class DynamicProgrammingSearch<V extends VirtualHyperVertex<V,E,A>,
 		return type;
 	}
 	@Override
-	public TreeGraph<V,E,A> tree(V vertex){
-		return TreeGraph.of(this.solutionsTree);
+	public GraphTree<V,E,A> tree(V vertex){
+		return GraphTree.of(this.solutionsTree);
 	}
 	
 	public static class Sp<E> implements Comparable<Sp<E>>{

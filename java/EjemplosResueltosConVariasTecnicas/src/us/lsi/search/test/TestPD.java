@@ -8,10 +8,9 @@ import java.util.List;
 
 import us.lsi.graphs.search.DPSearch;
 import us.lsi.graphs.search.DynamicProgrammingSearch.PDType;
-import us.lsi.graphs.search.Search;
-import us.lsi.graphs.search.TreeGraph;
 import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
 import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.graphs.hypergraphs.GraphTree;
 
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -41,7 +40,7 @@ public class TestPD {
 	}
 	
 	public static GraphWalk<Integer,SimpleEdge<Integer>> solucionTree(
-			TreeGraph<FloydPDSearch,SimpleHyperEdge<FloydPDSearch,Alternativa>,Alternativa> tree, FloydPDSearch vertex){
+			GraphTree<FloydPDSearch,SimpleHyperEdge<FloydPDSearch,Alternativa>,Alternativa> tree, FloydPDSearch vertex){
 		GraphWalk<Integer,SimpleEdge<Integer>> gp = null;
 		if(tree.isBaseCase(vertex)) {
 			List<Integer> ls = Arrays.asList(vertex.i,vertex.j);
@@ -75,7 +74,7 @@ public class TestPD {
 				Graphs2.simpleVirtualHyperGraph();
 		
 		DPSearch<FloydPDSearch,SimpleHyperEdge<FloydPDSearch,Alternativa>,Alternativa> a = 
-				Search.dynamicProgrammingSearch(graph2,addSolution,PDType.Min);
+				DPSearch.dynamicProgrammingSearch(graph2,addSolution,PDType.Min);
 		a.search(p);
 		System.out.println(a.getSolutionsTree());
 		System.out.println(TestPD.solucionTree(a.tree(p),p).getVertexList().stream().map(v->gv.getVertex(v)).collect(Collectors.toList()));

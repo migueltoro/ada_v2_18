@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-public class GreedySearchOnGraph<V,E> implements Search<V,E> {
+public class GreedySearchOnGraph<V,E> implements GraphSearch<V,E> {
 
 	private Graph<V,E> graph;
 	private V actualVertex;
