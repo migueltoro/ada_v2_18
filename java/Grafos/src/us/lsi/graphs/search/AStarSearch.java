@@ -6,15 +6,15 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 import us.lsi.graphs.manual.Data;
+import us.lsi.graphs.virtual.EGraph;
 
 public class AStarSearch<V, E> implements GSearch<V,E> {
 
-	public Graph<V,E> graph; 
+	public EGraph<V,E> graph; 
 	private V initial;
 	private V end;
 	private BiFunction<V,V,Double> heuristic;
@@ -22,7 +22,7 @@ public class AStarSearch<V, E> implements GSearch<V,E> {
 	private FibonacciHeap<Data<V,E>> heap = new FibonacciHeap<>();
 	private FibonacciHeapNode<Data<V,E>> data = Data.node(initial,null);
 	
-	AStarSearch(Graph<V, E> graph, V initial, V end, BiFunction<V, V, Double> heuristic) {
+	AStarSearch(EGraph<V, E> graph, V initial, V end, BiFunction<V, V, Double> heuristic) {
 		super();
 		this.graph = graph;
 		this.initial = initial;
@@ -59,8 +59,8 @@ public class AStarSearch<V, E> implements GSearch<V,E> {
 	public V next() {
 		FibonacciHeapNode<Data<V,E>> dataActual = heap.removeMin();
 		V vertexActual = dataActual.getData().vertex;
-		for(V v:Graphs.neighborListOf(graph, vertexActual)) {
-			E backEdge = graph.getEdge(vertexActual, v);
+		for(E backEdge:graph.edgesListOf(vertexActual)) {
+			V v = graph.getEdgeTarget(backEdge);
 			Double weightEdge = graph.getEdgeWeight(backEdge);
 			Double newDistance = dataActual.getData().distance+weightEdge;
 			Double toEnd = toEnd(vertexActual);

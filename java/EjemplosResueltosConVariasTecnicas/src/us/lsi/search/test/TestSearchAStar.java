@@ -3,11 +3,11 @@ package us.lsi.search.test;
 import java.util.List;
 import java.util.Locale;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
@@ -22,7 +22,7 @@ public class TestSearchAStar {
 		DatosMochila.capacidadInicial = 78;	
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		Graph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->-x.getEdgeWeight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->-x.getEdgeWeight());		
 		GSearch<MochilaVertex,MochilaEdge> ms = GSearch.aStar(graph,e1,e2,MochilaVertex::heuristic);
 		MochilaVertex vf = ms.find(e2);
 		GraphPath<MochilaVertex,MochilaEdge> path = ms.pathFromOrigin(vf);

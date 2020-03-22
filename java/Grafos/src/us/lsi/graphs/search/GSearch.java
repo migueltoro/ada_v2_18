@@ -21,6 +21,7 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.EGraph;
 
 /**
  * @author migueltoro
@@ -95,7 +96,7 @@ public interface GSearch<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return Una algoritmo de b&uacute;squeda de Dijsktra
 	 */
 	public static <V, E> AStarSearch<V, E> dijsktra(
-			Graph<V, E> graph, V initial) {
+			EGraph<V, E> graph, V initial) {
 		return new AStarSearch<V, E>(graph, initial, null, (v1,v2)->0.);
 	}
 	
@@ -109,7 +110,7 @@ public interface GSearch<V,E> extends Iterator<V>, Iterable<V> {
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
 	public static <V, E> AStarSearch<V, E> aStar(
-			Graph<V, E> graph, V initial, V end,
+			EGraph<V, E> graph, V initial, V end,
 			BiFunction<V, V, Double> heuristic) {
 		return new AStarSearch<V, E>(graph, initial, end, heuristic);
 	}

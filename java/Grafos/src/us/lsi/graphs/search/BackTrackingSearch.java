@@ -12,13 +12,14 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-import us.lsi.common.Preconditions;
+
+import us.lsi.graphs.virtual.EGraph;
 
 public class BackTrackingSearch<V,E,S extends Comparable<S>> implements BTSearch<V, E, S> {
 	
 	public enum BTType {Min,Max,All}
 	
-	public Graph<V,E> graph;
+	public EGraph<V,E> graph;
 	private V startVertex; 
 	private V end;
 	public Double bestValue;
@@ -29,7 +30,7 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> implements BTSearch
 	private Function<V,V> copy;
 	private BTType type;
 	
-	BackTrackingSearch(Graph<V, E> g, V startVertex, V end, 
+	BackTrackingSearch(EGraph<V, E> g, V startVertex, V end, 
 			BiFunction<V,V,Double> heuristic,
 			Function<List<E>,S> solution,
 			Function<V,V> copy,
@@ -48,13 +49,23 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> implements BTSearch
 		if(this.type == BTType.Min) this.bestValue = Double.MAX_VALUE;
 	}
 	
-	private Boolean forget(State<V,E> state, E edge, V v) {
+	private Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
 		Double w2 = this.graph.getEdgeWeight(edge);
-		Double w3 = this.heuristic.apply(v,this.end);
+		Double w3 = this.heuristic.apply(this.graph.getEdgeTarget(edge),this.end);
 		if(this.type == BTType.Max) r = state.accumulateValue+w2+w3 < this.bestValue;
 		if(this.type == BTType.Min) r = state.accumulateValue+w2+w3 > this.bestValue;
 		return r;
+	}
+	
+	private void update(State<V, E> state) {
+		if(this.type == BTType.All ||
+		   this.type == BTType.Max && state.accumulateValue > this.bestValue ||
+		   this.type == BTType.Min && state.accumulateValue < this.bestValue) {
+			S s = solution.apply(state.getEdges());
+			this.solutions.add(s);
+			this.bestValue = state.accumulateValue;
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -68,18 +79,11 @@ public class BackTrackingSearch<V,E,S extends Comparable<S>> implements BTSearch
 	
 	private void search(State<V, E> state) {
 		V actual = this.copy.apply(state.actualVertex);
-		if (actual.equals(this.end) && 
-				(this.type == BTType.All ||
-				this.type == BTType.Max && state.accumulateValue > this.bestValue ||
-				this.type == BTType.Min && state.accumulateValue < this.bestValue)) {
-			S s = solution.apply(state.getEdges());
-			this.solutions.add(s);
-			this.bestValue = state.accumulateValue;
-		} else {
-			for (V v : Graphs.neighborListOf(graph,actual)) {				
-				E edge = graph.getEdge(actual, v);
-				Preconditions.checkState(edge != null,String.format("No hay arista entre %s y %s",actual,v));
-				if (this.forget(state,edge,v)) continue;
+		if (actual.equals(this.end))
+				update(state);
+		else {
+			for (E edge : graph.edgesListOf(actual)) {				
+				if (this.forget(state,edge)) continue;
 				state.forward(edge);
 				search(state);
 				state.back();

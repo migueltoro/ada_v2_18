@@ -3,11 +3,10 @@ package us.lsi.search.test;
 import java.util.List;
 import java.util.Locale;
 
-import org.jgrapht.Graph;
-
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.BTSearch;
 import us.lsi.graphs.search.BackTrackingSearch.BTType;
+import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
@@ -27,7 +26,7 @@ public class TestSearchBackTracking {
 		DatosMochila.capacidadInicial = 78;	
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		Graph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->x.getEdgeWeight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.astarSimpleVirtualGraph(x->x.getEdgeWeight());		
 		BTSearch<MochilaVertex, MochilaEdge, SolucionMochila> ms = BTSearch.backTracking(graph,e1,e2,
 				MochilaVertex::heuristic,TestSearchBackTracking::getSolucion,MochilaVertex::copy,BTType.Max);
 		ms.search();

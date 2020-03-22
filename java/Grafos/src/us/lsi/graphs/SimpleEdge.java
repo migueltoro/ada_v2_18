@@ -12,7 +12,7 @@ public class SimpleEdge<V>  {
 	/**
 	 * 
 	 */
-	public double weight;
+	public Double weight;
 	public V source;
 	public V target;
 		

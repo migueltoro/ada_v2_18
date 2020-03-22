@@ -5,9 +5,8 @@ import java.util.SortedSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.jgrapht.Graph;
-
 import us.lsi.graphs.search.BackTrackingSearch.BTType;
+import us.lsi.graphs.virtual.EGraph;
 
 public interface BTSearch<V, E, S extends Comparable<S>> {
 
@@ -18,7 +17,7 @@ public interface BTSearch<V, E, S extends Comparable<S>> {
 	SortedSet<S> getSolutions();
 
 	public static <V, E, S extends Comparable<S>> BTSearch<V, E, S> backTracking(
-			Graph<V, E> graph, V initial, V end,
+			EGraph<V, E> graph, V initial, V end,
 			BiFunction<V, V, Double> heuristic, 
 			Function<List<E>,S> solution, 
 			Function<V,V> copy, 

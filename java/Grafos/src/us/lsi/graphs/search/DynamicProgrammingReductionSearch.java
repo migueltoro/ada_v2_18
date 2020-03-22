@@ -57,6 +57,11 @@ public class DynamicProgrammingReductionSearch<V, E, S> implements DPRSearch<V, 
 		return search(this.startVertex,0.);
 	}
 	
+	public SpR<E> search(V initial) {
+		this.solutionsTree = new HashMap<>();
+		return search(initial,0.);
+	}
+	
 	private SpR<E> search(V actual, Double accumulateValue) {
 		SpR<E> r = null;
 		if(this.solutionsTree.containsKey(actual)) {
