@@ -9,6 +9,10 @@ import us.lsi.graphs.virtual.VirtualVertex;
 
 public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> extends SimpleVirtualGraph<V, E> implements AStarGraph<V, E> {
 
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of() {
+		return new AStarSimpleVirtualGraph<V,E>(null, null, null);
+	}
+	
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
 			Function<E, Double> edgeWeight) {
 		return new AStarSimpleVirtualGraph<V,E>(edgeWeight, null, null);

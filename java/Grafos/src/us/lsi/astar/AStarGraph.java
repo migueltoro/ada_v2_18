@@ -1,6 +1,5 @@
 package us.lsi.astar;
 
-
 import org.jgrapht.Graph;
 
 public interface AStarGraph<V, E> extends Graph<V,E> {

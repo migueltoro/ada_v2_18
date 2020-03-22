@@ -62,6 +62,10 @@ public class Graphs2 {
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
 		return new SimpleVirtualHyperGraph<V, E, A>();
 	}
+	
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph() {
+		return AStarSimpleVirtualGraph.of();
+	}
 		
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(
 			Function<E, Double> edgeWeight) {
