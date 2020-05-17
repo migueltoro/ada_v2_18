@@ -2,6 +2,7 @@ package us.lsi.search.typ;
 
 import java.util.Locale;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.DPRSearch;
 import us.lsi.graphs.search.DynamicProgrammingReduction;
 import us.lsi.graphs.search.GSearch;
@@ -9,7 +10,6 @@ import us.lsi.graphs.search.GreedySearch;
 import us.lsi.graphs.search.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.path.EGraphPath;
 
 public class TestPDRTyP {
@@ -20,8 +20,7 @@ public class TestPDRTyP {
 		TyPVertex e1 = TyPVertex.first();
 		TyPVertex e2 = TyPVertex.last();
 		
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = SimpleVirtualGraph.last(
-				e1,v->v.getMaxCarga());	
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.last(e1,v->v.getMaxCarga());	
 		
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> rr = 
 				GSearch.greedy(graph,

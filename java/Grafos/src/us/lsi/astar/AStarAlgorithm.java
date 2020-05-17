@@ -1,7 +1,6 @@
 package us.lsi.astar;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.jgrapht.Graph;
@@ -12,6 +11,8 @@ import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 import us.lsi.common.Metricas;
+import us.lsi.common.TriFunction;
+import us.lsi.graphs.virtual.EGraph;
 
 
 /**
@@ -40,26 +41,9 @@ public class AStarAlgorithm<V, E>  {
 	 * @return Algoritmo AStar
 	 * 
 	 */
-	
-	public static <V, E> AStarAlgorithm<V, E> of(
-			AStarGraph<V, E> graph, V startVertex, V endVertex, BiFunction<V,V,Double> heuristic) {
-		return new AStarAlgorithm<V,E>(graph,startVertex,endVertex, heuristic); 
-	}
-	
-	/**
-	 * Un algoritmo AStar para ir del vértice de inicio hasta el  primer vértice que cumple el predicado
-	 * @param <V> Tipo del vértice
-	 * @param <E> Tipo de la arista
-	 * @param graph Grafo
-	 * @param startVertex Vértice origen
-	 * @param goal Predicate que especifica el objetivo alcanzar
-	 * @param predicateHeuristic La heuristica del algoritmo
-	 * @return Algoritmo AStar
-	 */
-	
-	public static <V, E> AStarAlgorithm<V, E> of(
-			AStarGraph<V, E> graph, V startVertex, Predicate<V> goal, PredicateHeuristic<V> predicateHeuristic) {
-		return new AStarAlgorithm<V,E>(graph,startVertex,goal, predicateHeuristic);
+	public static <V, E> AStarAlgorithm<V, E> of(EGraph<V, E> graph, V sourceVertex, Predicate<V> goal, V targetVertex,
+			TriFunction<V, Predicate<V>, V, Double> heuristic) {
+		return new AStarAlgorithm<V, E>(graph, sourceVertex, goal, targetVertex, heuristic);
 	}
 
    
@@ -89,9 +73,8 @@ public class AStarAlgorithm<V, E>  {
     private V sourceVertex;
     private V targetVertex;
     private GraphPath<V,E> graphPath = null;
-    private AStarGraph<V,E> graph = null;
-    private BiFunction<V,V,Double> heuristic = null;
-    private PredicateHeuristic<V> predicateHeuristic = null;
+    private EGraph<V, E> graph = null;
+    private TriFunction<V,Predicate<V>,V,Double> heuristic = null;
 
     /**
      * Create a new instance of the A* shortest path algorithm.
@@ -101,8 +84,8 @@ public class AStarAlgorithm<V, E>  {
      * @param graph the input graph
      * @param heuristic La heurística desde el vértice actual al target
      */
-    public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, V targetVertex, BiFunction<V,V,Double> heuristic)
-    {
+    private AStarAlgorithm(EGraph<V, E> graph, V sourceVertex, 
+    		Predicate<V> goal, V targetVertex, TriFunction<V,Predicate<V>,V,Double> heuristic) {
         if (graph == null) {
             throw new IllegalArgumentException("Graph cannot be null!");
         }
@@ -115,38 +98,8 @@ public class AStarAlgorithm<V, E>  {
         this.targetVertex = targetVertex;
         this.goal = null;
         this.heuristic = heuristic;
-        this.predicateHeuristic = null;
     }
-    
-    /**
-     * Create a new instance of the A* shortest path algorithm.
-     * 
-     * @param graph the input graph
-     * @param sourceVertex Source Vertex
-     * @param goal Predicado que especifica el objetivo
-     * @param predicateHeuristic La heurística desde el vértice actual al vértice que cumple goal
-     */
-    public AStarAlgorithm(AStarGraph<V, E> graph, V sourceVertex, Predicate<V> goal, PredicateHeuristic<V> predicateHeuristic)
-    {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null!");
-        }
-        if (!graph.containsVertex(sourceVertex)) {
-            throw new IllegalArgumentException(
-              "Source vertex not contained in the graph!");
-        }
-        if (goal == null) {
-            throw new IllegalArgumentException("Goal cannot be null!");
-        }
-        this.graph = graph;
-        this.sourceVertex = sourceVertex;
-        this.targetVertex = null;
-        this.goal = goal;
-        this.heuristic = null;
-        this.predicateHeuristic = predicateHeuristic;
-        
-    }
-
+     
     /**
      * Initializes the data structures
      *
@@ -243,7 +196,7 @@ public class AStarAlgorithm<V, E>  {
 				cameFrom.put(successor, edge);
 				gScoreMap.put(successor, tentativeGScore);
 
-				double fScore = tentativeGScore + heuristicWeight(successor,endVertex,goal,heuristic,predicateHeuristic);
+				double fScore = tentativeGScore + heuristicWeight(successor,goal,endVertex,heuristic);
 				if (!vertexToHeapNodeMap.containsKey(successor)) {
 					FibonacciHeapNode<V> heapNode = new FibonacciHeapNode<>(successor);
 					openList.insert(heapNode, fScore);
@@ -321,10 +274,10 @@ public class AStarAlgorithm<V, E>  {
 	 * o desde el vértice actual al conjunto de vértices descrito por un predicado objetivo que se especificará en el AStarAlgorithm.
 	 * Debe cumplirse la distancia es cero si el vértice actual cumple el predicado objetivo
 	 */
-	private double heuristicWeight(V actual, V endVertex, Predicate<V> goal, BiFunction<V,V,Double> heuristic, PredicateHeuristic<V> predicateHeuristic) {
+	private double heuristicWeight(V actual, Predicate<V> goal, V endVertex, 
+			TriFunction<V, Predicate<V>, V, Double> heuristic) {
 		Double r = 0.;
-		if(heuristic != null) r = heuristic.apply(actual,endVertex); 
-		if(predicateHeuristic != null) r = predicateHeuristic.apply(actual,goal); 
+		if(heuristic != null) r = heuristic.apply(actual,goal,endVertex); 
 		return r;
 	}
 }

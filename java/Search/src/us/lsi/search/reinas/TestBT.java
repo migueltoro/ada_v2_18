@@ -1,10 +1,10 @@
 package us.lsi.search.reinas;
 
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.BTSearch;
 import us.lsi.graphs.search.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -12,7 +12,7 @@ public class TestBT {
 	public static void main(String[] args) {
 		ReinasVertex.n = 8;	
 		ReinasVertex e1 = ReinasVertex.first();
-		EGraph<ReinasVertex, ReinasEdge> graph = SimpleVirtualGraph.of(e1);	
+		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.last(e1,v->v.errores.doubleValue());	
 		
 		BTSearch<ReinasVertex, ReinasEdge, SolucionReinas> ms = BTSearch.backTrackingGoal(
 				graph, 

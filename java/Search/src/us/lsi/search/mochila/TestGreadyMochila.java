@@ -5,10 +5,10 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.search.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.mochila.datos.DatosMochila;
 
 
@@ -32,7 +32,7 @@ public class TestGreadyMochila {
 //		GraphPath<MochilaVertex, MochilaEdge> r4 = MochilaHeuristic.greadyPath(e1,e->e.equals(e2));
 //		System.out.println(r4);
 //		System.out.println(r4.getWeight());
-		EGraph<MochilaVertex,MochilaEdge> graph = SimpleVirtualGraph.of(e1);
+		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.sum(e1);
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GSearch.greedy(graph,MochilaVertex::greadyEdgeHeuristic,e->e.equals(e2));
 		System.out.println(rr.weightToEnd());
 

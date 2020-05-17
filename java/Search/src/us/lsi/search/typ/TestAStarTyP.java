@@ -5,11 +5,11 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.AStarSearch;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAStarTyP {
 
@@ -19,8 +19,7 @@ public class TestAStarTyP {
 		TyPVertex e1 = TyPVertex.first();
 //		TyPVertex e2 = TyPVertex.last();
 		
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = SimpleVirtualGraph.last(
-				e1,v->v.getMaxCarga());		
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.last(e1,v->v.getMaxCarga());		
 		
 		
 		AStarSearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GSearch.aStarGoal(

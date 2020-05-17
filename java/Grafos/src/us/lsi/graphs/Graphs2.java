@@ -15,9 +15,6 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
-
-import us.lsi.astar.AStarGraph;
-import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -25,6 +22,7 @@ import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 import us.lsi.hypergraphs.VirtualHyperVertex;
+import us.lsi.path.EGraphPath.PathType;
 
 public class Graphs2 {
 	
@@ -56,30 +54,35 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
-		return SimpleVirtualGraph.of(v);
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(V startVertex) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
 	}
+	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(
+			V startVertex,
+			Function<E, Double> edgeWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> last(
+			V startVertex,
+			Function<V, Double> vertexWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
+			V startVertex,
+			Function<E, Double> edgeWeight, 
+			Function<V, Double> vertexWeight,
+			TriFunction<V, E, E, Double> vertexPassWeight,
+			PathType type) {
+		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
+	}
+
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
 		return new SimpleVirtualHyperGraph<V, E, A>();
 	}
-	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(V startVertex) {
-		return AStarSimpleVirtualGraph.create(startVertex);
-	}
-		
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(
-			V startVertex,
-			Function<E, Double> edgeWeight) {
-		return AStarSimpleVirtualGraph.create(startVertex,edgeWeight);
-	}
-	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(
-			V startVertex,
-			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight) {
-		return AStarSimpleVirtualGraph.create(startVertex,edgeWeight, vertexWeight, vertexPassWeight);
-	}	
 	
 	public static <V,E> SimpleGraph<V, E> simpleGraph() {
 		return new SimpleGraph<V,E>(null,null,false);

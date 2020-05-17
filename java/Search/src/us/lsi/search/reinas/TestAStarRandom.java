@@ -2,10 +2,10 @@ package us.lsi.search.reinas;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.AStarSearchRandom;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAStarRandom {
 	
@@ -13,8 +13,7 @@ public class TestAStarRandom {
 		ReinasVertex.n = 120;	
 		AStarSearchRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
-		EGraph<ReinasVertex, ReinasEdge> graph = 
-				SimpleVirtualGraph.last(v1,v->v.errores.doubleValue());			
+		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.last(v1,v->v.errores.doubleValue());			
 		
 		AStarSearchRandom<ReinasVertex, ReinasEdge> ms = GSearch.aStarRandomGoal(
 				graph, 

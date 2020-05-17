@@ -35,41 +35,9 @@ import us.lsi.path.EGraphPath.PathType;
  * 
  */
 @SuppressWarnings("deprecation")
-public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>>
-	implements EGraph<V, E> {
+public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> implements EGraph<V, E> {
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(V startVertex) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
-	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(
-			V startVertex,
-			Function<E, Double> edgeWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
-	}
-	
-//	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
-//			V startVertex,
-//			PathType type,
-//			Function<E, Double> edgeWeight) {
-//		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,null,null);
-//	}
-	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> last(
-			V startVertex,
-			Function<V, Double> vertexWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
-			V startVertex,
-			Function<E, Double> edgeWeight, 
-			Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight,
-			PathType type) {
-		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
-	}
-
 	private Set<V> vertexSet;
 	private Function<E,Double> edgeWeight = null;
 	private Function<V,Double> vertexWeight = null;
@@ -79,7 +47,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	private PathType type;
 	
 	
-	protected SimpleVirtualGraph(V startVertex, 
+	public SimpleVirtualGraph(V startVertex, 
 			PathType type,			
 			Function<E, Double> edgeWeight, 
 			Function<V, Double> vertexWeight,

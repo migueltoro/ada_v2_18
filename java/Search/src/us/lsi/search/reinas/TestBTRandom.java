@@ -1,9 +1,9 @@
 package us.lsi.search.reinas;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.BTSearch;
 import us.lsi.graphs.search.BackTrackingRandom;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 
 public class TestBTRandom {
@@ -13,7 +13,8 @@ public class TestBTRandom {
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
-			EGraph<ReinasVertex, ReinasEdge> graph = SimpleVirtualGraph.of(e1);		
+			EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.last(e1,v->v.errores.doubleValue());		
+			
 			BackTrackingRandom<ReinasVertex, ReinasEdge, SolucionReinas> ms = BTSearch.<ReinasVertex,ReinasEdge,SolucionReinas>random(
 					graph, 
 					v->v.index == ReinasVertex.n, 

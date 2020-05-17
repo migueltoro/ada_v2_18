@@ -1,9 +1,9 @@
 package us.lsi.search.tsp;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.path.GraphPaths;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class TestLocalSearchInteger {
 		TravelVertexInteger e1 = TravelVertexInteger.of(graph, camino);
 		System.out.println(e1);
 		
-		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = SimpleVirtualGraph.last(e1,v->v.getWeight());
+		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = Graphs2.last(e1,v->v.getWeight());
 		
 		GSearch<TravelVertexInteger,TravelEdgeInteger> ml = GSearch.local(graph2,e->e.getEdgeWeight()== 0.);
 //		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph,v.camino).getWeight());

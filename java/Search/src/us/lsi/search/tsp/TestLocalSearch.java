@@ -9,11 +9,11 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
 
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.DephtSearch;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.views.SubGraphView;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.path.GraphPaths;
 
 public class TestLocalSearch {
@@ -38,7 +38,7 @@ public class TestLocalSearch {
 		
 		TravelVertex e1 = TravelVertex.of(graph2, camino);
 		System.out.println(e1);
-		EGraph<TravelVertex,TravelEdge> graph = SimpleVirtualGraph.last(e1,v->v.weight);
+		EGraph<TravelVertex,TravelEdge> graph = Graphs2.last(e1,v->v.weight);
 		
 		GSearch<TravelVertex,TravelEdge> ml = GSearch.local(graph,e->e.getEdgeWeight()== 0.);
 		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph2,v.camino).getEdgeList());

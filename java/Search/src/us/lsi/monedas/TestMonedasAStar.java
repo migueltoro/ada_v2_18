@@ -1,10 +1,12 @@
 package us.lsi.monedas;
 
 import java.util.List;
-import java.util.function.BiFunction;
-
-import us.lsi.astar.AStarAlgorithm;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import java.util.function.Predicate;
+import us.lsi.common.TriFunction;
+import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.search.AStarSearch;
+import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.virtual.EGraph;
 
 
 public class TestMonedasAStar {
@@ -16,13 +18,14 @@ public class TestMonedasAStar {
 		MonedasVertex e1 = MonedasVertex.first();
 		MonedasVertex e2 = MonedasVertex.last();
 
-		BiFunction<MonedasVertex, MonedasVertex, Double> heuristic = (v1, v2) -> -Heuristica.heuristic(v1, v2);
+		TriFunction<MonedasVertex, Predicate<MonedasVertex>,MonedasVertex, Double> heuristic = 
+				(v1, p, v2) -> - Heuristica.heuristic(v1,p,v2);
 
-		AStarGraph<MonedasVertex, MonedasEdge> graph = SimpleVirtualGraph.of(e1, e -> -e.getEdgeWeight());
+		EGraph<MonedasVertex, MonedasEdge> graph = Graphs2.sum(e1, e ->-e.getEdgeWeight());
 
-		AStarAlgorithm<MonedasVertex, MonedasEdge> a = AStarAlgorithm.of(graph, e1, e2, heuristic);
+		AStarSearch<MonedasVertex, MonedasEdge> a = GSearch.aStarEnd(graph, e2, heuristic);
 
-		List<MonedasEdge> edges = a.getPathEdgeList();
+		List<MonedasEdge> edges = a.pathToEnd().getEdgeList();
 
 		System.out.println(edges);
 

@@ -4,11 +4,11 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.search.GreedySearch;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestGreadyTyP {
 	
@@ -19,9 +19,7 @@ public class TestGreadyTyP {
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
 //		TyPVertex e2 = TyPVertex.last();
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,
-						v->v.getMaxCarga());
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.last(e1,v->v.getMaxCarga());
 		
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = 
 				GSearch.greedy(graph,

@@ -2,13 +2,13 @@ package us.lsi.search.mochila;
 
 import java.util.Locale;
 
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.search.DPRSearch;
 import us.lsi.graphs.search.DynamicProgramming.PDType;
 import us.lsi.graphs.search.DynamicProgrammingReduction;
 import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.search.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.path.EGraphPath;
@@ -23,7 +23,7 @@ public class TestPDRMochila {
 		DatosMochila.capacidadInicial = 78;	
 		MochilaVertex e1 = MochilaVertex.of(78.);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = SimpleVirtualGraph.sum(e1,x->x.getEdgeWeight());	
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.sum(e1,x->x.getEdgeWeight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GSearch.greedy(graph,MochilaVertex::greadyEdge,e->e.equals(e2));
 		Double bv = rr.weightToEnd();	
