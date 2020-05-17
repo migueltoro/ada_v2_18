@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import us.lsi.astar.AStarAlgorithm;
-import us.lsi.astar.AStarGraph;
-import us.lsi.astar.AStarSimpleVirtualGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
+
 
 public class TestMonedasAStar {
 	
@@ -18,7 +18,7 @@ public class TestMonedasAStar {
 
 		BiFunction<MonedasVertex, MonedasVertex, Double> heuristic = (v1, v2) -> -Heuristica.heuristic(v1, v2);
 
-		AStarGraph<MonedasVertex, MonedasEdge> graph = AStarSimpleVirtualGraph.create(e1, e -> -e.getEdgeWeight());
+		AStarGraph<MonedasVertex, MonedasEdge> graph = SimpleVirtualGraph.of(e1, e -> -e.getEdgeWeight());
 
 		AStarAlgorithm<MonedasVertex, MonedasEdge> a = AStarAlgorithm.of(graph, e1, e2, heuristic);
 
