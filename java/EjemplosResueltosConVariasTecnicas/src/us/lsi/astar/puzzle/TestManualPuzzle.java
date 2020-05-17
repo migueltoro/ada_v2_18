@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import us.lsi.astar.AStarGraph;
 import us.lsi.astar.AStarSimpleVirtualGraph;
-import us.lsi.graphs.manual.RecorridoAStarManual;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.walks.manual.RecorridoAStarManual;
 
 
 public class TestManualPuzzle {
@@ -14,7 +14,7 @@ public class TestManualPuzzle {
 	public static void test2() {
 		VertexPuzzle e1 = VertexPuzzle.of(0,1,2,3,4,5,6,7,8);
 		VertexPuzzle e2 = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
-		AStarGraph<VertexPuzzle,ActionSimpleEdge<VertexPuzzle,ActionPuzzle>> graph =  AStarSimpleVirtualGraph.of(x->1.);
+		AStarGraph<VertexPuzzle,ActionSimpleEdge<VertexPuzzle,ActionPuzzle>> graph =  AStarSimpleVirtualGraph.create(e1,x->1.);
 		RecorridoAStarManual<VertexPuzzle,ActionSimpleEdge<VertexPuzzle,ActionPuzzle>> a = RecorridoAStarManual.of(graph,e1,e2,(x,y)->(double)x.getNumDiferentes(y));
 		List<VertexPuzzle> vertices = a.minPathToOrigin(e2).getVertexList();
 		String s = vertices.stream().map(x->x.toString()).collect(Collectors.joining("\n________\n","\nSolucion\n\n","\n_________"));

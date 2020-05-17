@@ -16,14 +16,15 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import us.lsi.astar.AStarGraph;
 import us.lsi.astar.AStarSimpleVirtualGraph;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.hypergraphs.SimpleHyperEdge;
-import us.lsi.graphs.hypergraphs.SimpleVirtualHyperGraph;
-import us.lsi.graphs.hypergraphs.VirtualHyperVertex;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.VirtualVertex;
+import us.lsi.hypergraphs.SimpleHyperEdge;
+import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
+import us.lsi.hypergraphs.VirtualHyperVertex;
 
 public class Graphs2 {
 	
@@ -56,26 +57,28 @@ public class Graphs2 {
 	}
 	
 	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V v) {
-		return new SimpleVirtualGraph<V, E>(v);
+		return SimpleVirtualGraph.of(v);
 	}
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
 		return new SimpleVirtualHyperGraph<V, E, A>();
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph() {
-		return AStarSimpleVirtualGraph.of();
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(V startVertex) {
+		return AStarSimpleVirtualGraph.create(startVertex);
 	}
 		
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(
+			V startVertex,
 			Function<E, Double> edgeWeight) {
-		return AStarSimpleVirtualGraph.of(edgeWeight);
+		return AStarSimpleVirtualGraph.create(startVertex,edgeWeight);
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> astarSimpleVirtualGraph(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarGraph<V, E> astarSimpleVirtualGraph(
+			V startVertex,
 			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
-		return AStarSimpleVirtualGraph.of(edgeWeight, vertexWeight, vertexPassWeight);
+		return AStarSimpleVirtualGraph.create(startVertex,edgeWeight, vertexWeight, vertexPassWeight);
 	}	
 	
 	public static <V,E> SimpleGraph<V, E> simpleGraph() {

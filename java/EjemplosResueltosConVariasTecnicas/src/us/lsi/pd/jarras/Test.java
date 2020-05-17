@@ -3,6 +3,7 @@ package us.lsi.pd.jarras;
 import us.lsi.astar.jarras.ActionJarras;
 import us.lsi.jarras.datos.DatosJarras;
 import us.lsi.pd.AlgoritmoPD;
+import us.lsi.pd.ProblemaPDRAdapt;
 import us.lsi.tiposrecursivos.Tree;
 
 public class Test {
@@ -22,7 +23,7 @@ public class Test {
 		System.out.println("------");
 		ProblemaJarrasPD p = ProblemaJarrasPD.create();
 		AlgoritmoPD.conFiltro = true;
-		var a = AlgoritmoPD.createPDR(p);
+		AlgoritmoPD<SolucionJarras, ActionJarras, ProblemaPDRAdapt<SolucionJarras, ActionJarras, ProblemaJarrasPD>> a = AlgoritmoPD.createPDR(p);
 		a.ejecuta();
 			
 		System.out.println(a.getSolucion());

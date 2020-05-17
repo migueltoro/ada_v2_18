@@ -1,62 +1,71 @@
 package us.lsi.graphs.search;
 
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import org.jgrapht.Graph;
+import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.path.EGraphPath;
 
-import us.lsi.common.TriFunction;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+public class GreedySearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
 
-public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements GSearch<V,E> {
-	
-	private Graph<V,E> graph;
+	private EGraph<V,E> graph;
 	private V actualVertex;
 	private V startVertex;
-	private Map<V,E> edgeToOrigin;
-	private TriFunction<V,V,A,E> nextEdge;
-	private Function<V,A> nextAction;	
-	private BiFunction<V,A,V> nextVertex;
+	public Map<V,E> edgeToOrigin;
+	private Double weight;
+	private EGraphPath<V,E> path;
+	private Function<V,E> nextEdge;
+	private Predicate<V> goal;
+	private Boolean hashNext;
 	
-	GreedySearch(V startVertex, Function<V,A> nextAction,BiFunction<V,A,V> nextVertex,TriFunction<V,V,A,E> nextEdge) {
-		this.graph = Graphs2.simpleWeightedGraph();
-		this.graph.addVertex(startVertex);
+	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal) {
+		this.graph = graph;
 		this.actualVertex = null;
-		this.startVertex = startVertex;
+		this.startVertex = graph.startVertex();
 		this.edgeToOrigin = new HashMap<>();
-//		this.edgeToOrigin.put(startVertex, null);
-		this.nextEdge = nextEdge;
-		this.nextAction = nextAction;	
-		this.nextVertex = nextVertex; 
+		this.nextEdge = nextEdge; 
+		this.goal = goal;
+		this.hashNext = true;
 	}
 	
 	@Override
+	public Stream<V> stream() {
+		return Iterators.asStream(this.iterator());
+	}
+	
+	@Override
+	public GreedySearch<V,E> copy() {
+		return GSearch.greedy(this.graph,this.nextEdge,this.goal);
+	}
+	
 	public Iterator<V> iterator() {
 		return this;
 	}
 
-	@Override
+
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
 	}
 
-	@Override
+	
 	public boolean isSeenVertex(V v) {
 		return this.edgeToOrigin.containsKey(v);
 	}
 
 	@Override
-	public Graph<V, E> getGraph() {
-		return this.graph;
+	public EGraph<V, E> getGraph() {
+		return graph;
 	}
 	
 	@Override
 	public boolean hasNext() {
-		return true;
+		return this.hashNext;
 	}
 
 	@Override
@@ -64,23 +73,28 @@ public class GreedySearch<V, E extends ActionSimpleEdge<V,A>, A> implements GSea
 		if(this.actualVertex == null) {
 			this.edgeToOrigin.put(this.startVertex,null);
 			this.actualVertex = this.startVertex;
-			this.graph.addVertex(this.actualVertex);
+			this.edgeToOrigin.put(this.actualVertex,null);
+			this.path = this.graph.initialPath();
+			this.weight = path.getWeight();
 		} else {
-			V old = this.actualVertex;
-			A a = this.nextAction.apply(old);
-			this.actualVertex = this.nextVertex.apply(old,a);
-			E edge = this.nextEdge.apply(old,this.actualVertex,a);
+			E edge = this.nextEdge.apply(this.actualVertex);
+			this.actualVertex = this.graph.getEdgeTarget(edge);		
 			this.edgeToOrigin.put(this.actualVertex,edge);
-			this.graph.addVertex(this.actualVertex);
-			this.graph.addEdge(old, this.actualVertex, edge);
-			this.graph.setEdgeWeight(edge,edge.getEdgeWeight());
+			this.weight = this.path.add(this.weight,edge);
 		}
+		this.hashNext = !this.goal.test(this.actualVertex);
 		return this.actualVertex;
 	}
 	
 	@Override
-	public V initialVertex() {
+	public V startVertex() {
 		return this.startVertex;
-	}	
+	}
+	
+	@Override	
+	public Double weightToEnd() {
+		this.findEnd();
+		return this.weight;
+	}
 
 }

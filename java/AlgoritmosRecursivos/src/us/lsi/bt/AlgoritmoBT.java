@@ -46,7 +46,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
     /**
 	 * Conjunto de soluciones encontradas
 	 */
-	private Set<S> soluciones; 
+	public Set<S> soluciones; 
 	/**
 	 * Número de soluciones que se buscan si no se buscan todas y el problema es de tipo Otro
 	 */
@@ -111,7 +111,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 		if(AlgoritmoBT.metricasOK) AlgoritmoBT.metricas.setTiempoDeEjecucionInicial();
 		tipo = estado.getTipo();
 	    mejorValor = isMin()? Double.MAX_VALUE: Double.MIN_VALUE;  
-    	soluciones =  Sets2.newHashSet(); 	
+    	soluciones =  Sets2.empty(); 	
 		do {
 			estado = estado.getEstadoInicial();
 			exito = false;
@@ -132,7 +132,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 	}
     
 	private void actualizaSoluciones() {			
-		S s = estado.getSolucion();
+		S s = estado.getSolucion();		
 		if (s != null) {	
 			Double objetivo = estado.getObjetivo();
 			if ((this.isTodasLasSoluciones() || 
@@ -144,6 +144,7 @@ public class AlgoritmoBT<S, A, E extends EstadoBT<S,A,E>> {
 				this.mejorValor = objetivo;
 			}
 		}
+//		System.out.println("En actualiza == "+this.soluciones);
 	}
     
     private void bt() {	

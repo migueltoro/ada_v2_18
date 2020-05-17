@@ -3,11 +3,13 @@ package us.lsi.pd.floyd;
 import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.views.IntegerMappingGraphView;
 import us.lsi.pd.AlgoritmoPD;
+import us.lsi.pd.floyd.FloydPD.Alternativa;
 
 
 
@@ -25,7 +27,7 @@ public class TestFloyd {
 		int origen = gv.getIndex(Ciudad.ofName("Cadiz"));
 		int destino = gv.getIndex(Ciudad.ofName("Almeria"));
 		FloydPD<Ciudad,Carretera> p = FloydPD.create(origen,destino,gv);
-		var a = AlgoritmoPD.createPD(p);
+		AlgoritmoPD<GraphWalk<Integer, Carretera>, Alternativa, FloydPD<Ciudad, Carretera>> a = AlgoritmoPD.createPD(p);
 				
 		a.ejecuta();
 		

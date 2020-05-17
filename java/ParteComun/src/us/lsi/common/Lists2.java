@@ -174,7 +174,7 @@ public class Lists2 {
 	 * @return Devuelve la lista formada por los enteros de a hasta b en pasos de 1
 	 */
 	public static List<Integer> rangeList(Integer a, Integer b){
-		return Lists2.rangeList(a, b, 1);
+		return IntStream.range(a,b).boxed().collect(Collectors.toList());
 	}
 
 	/**
@@ -184,9 +184,8 @@ public class Lists2 {
 	 * @return Devuelve la lista formada por los enteros de a hasta b en pasos de c
 	 */
 	public static List<Integer> rangeList(Integer a, Integer b, Integer c){
-		return Streams2.range(a, b, c)
-				      .boxed()
-				      .collect(Collectors.toList());
+		Integer np = 1+(b-a)/c;
+		return IntStream.range(0,np).map(e->a+e*c).filter(e->e<b).boxed().collect(Collectors.toList());
 	}
 	/**
 	 * @param a Limite inferior
@@ -219,14 +218,12 @@ public class Lists2 {
 	
 	/**
 	 * @param <E> tipo de los elementos
-	 * @param first Un elemento
 	 * @param elements Una serie de elementos
 	 * @return Una lista construida de first más los que están en elements
 	 */
 	@SafeVarargs
-	public static <E> List<E> ofElements(E first, E... elements){
+	public static <E> List<E> of(E... elements){
 		List<E> r = new ArrayList<E>();
-		r.add(first);
 		r.addAll(Arrays.stream(elements).collect(Collectors.toList()));
 		return r;
 	}
@@ -249,6 +246,12 @@ public class Lists2 {
 	 */
 	public static <E> List<E> concat(List<E> ls1, List<E> ls2){
 		List<E> r = Lists2.ofCollection(ls1);
+		r.addAll(ls2);
+		return r;
+	}
+	
+	public static <E> List<E> concatPath(List<E> ls1, List<E> ls2){
+		List<E> r = Lists2.ofCollection(ls1.subList(0,ls1.size()-1));
 		r.addAll(ls2);
 		return r;
 	}
@@ -368,6 +371,24 @@ public class Lists2 {
 		return IntStream.range(0,n)
 				.mapToObj(i->ls.get(n-1-i))
 				.collect(Collectors.toList());
+	}
+	
+	public static <E> List<E> difference(Collection<E> s1,  Collection<E> s2){
+		List<E> s = new ArrayList<>(s1);
+		s.removeAll(s2);
+		return s;
+	}
+	
+	public static <E> List<E> union(Collection<E> s1,  Collection<E> s2){
+		List<E> s = new ArrayList<>(s1);
+		s.addAll(s2);
+		return s;
+	}
+	
+	public static <E> List<E> intersection(Collection<E> s1,  Collection<E> s2){
+		List<E> s = new ArrayList<>(s1);
+		s.retainAll(s2);
+		return s;
 	}
 	
 	/**

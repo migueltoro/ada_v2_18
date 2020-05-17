@@ -13,11 +13,11 @@ import us.lsi.sudoku.datos.DatosSudoku;
 public class TestSudokuAG {
 	
 	
-	public static <IndexChromosome> void main(String[] args) {
+	public static void main(String[] args) {
 		AlgoritmoAG.ELITISM_RATE  = 0.1;
 		AlgoritmoAG.CROSSOVER_RATE = 0.8;
 		AlgoritmoAG.MUTATION_RATE = 0.8;
-		AlgoritmoAG.POPULATION_SIZE = 50;
+		AlgoritmoAG.POPULATION_SIZE = 70;
 		
 		StoppingConditionFactory.NUM_GENERATIONS = 500;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
@@ -28,7 +28,7 @@ public class TestSudokuAG {
 		
 		DatosSudoku.tamSubCuadro = 3;
 		DatosSudoku.iniDatos("ficheros/sudoku.txt");
-
+		
 		var p = new ProblemaSudokuAG();
 		
 		AlgoritmoAG<ValuesInSetChromosome> a = AlgoritmoAG.create(ChromosomeFactory.ChromosomeType.InSet ,p);		
@@ -37,6 +37,8 @@ public class TestSudokuAG {
 		System.out.println(p.getSolucion(a.getBestChromosome()));
 		System.out.println(IntStream.range(0,p.n)
 				.allMatch(i->p.values(i).contains(a.getBestChromosome().decode().get(i))));
+		System.out.println(a.getBestChromosome().fitness());
+		System.out.println(p.values);
 		
 	}
 

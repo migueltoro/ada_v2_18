@@ -121,9 +121,10 @@ public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasPr
 	
 	@Override
 	public String toString() {
-		var s  = Streams2.enumerate(this.getTareasEnProcesador().stream());
-		return s.map(x->"    ("+x.v2+"="+x.v1.toString()+","+this.getCargaProcesador(x.v2)+")")
-				.collect(Collectors.joining("\n","Solucion, Objetivo = "+getObjetivo()+" {\n", "\n}\n"));
+		var s = Streams2.enumerate(this.getTareasEnProcesador().stream());
+		return s.map(
+				x -> "    (" + x.counter + "=" + x.value.toString() + "," + this.getCargaProcesador(x.counter) + ")")
+				.collect(Collectors.joining("\n", "Solucion, Objetivo = " + getObjetivo() + " {\n", "\n}\n"));
 	}
-	
+
 }

@@ -9,10 +9,10 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
+import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
-import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 
@@ -27,13 +27,13 @@ public class CaminoMinimo {
 
 	public static void main(String[] args) {
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
-				GraphsReader.newGraph("ficheros/andalucia.txt",
+				GraphsReader.newGraph("ficheros/PI3Ej10DatosEntrada_andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		ShortestPathAlgorithm<Ciudad,Carretera> a = new DijkstraShortestPath<Ciudad,Carretera>(graph);
-		Ciudad from = Ciudad.ofName("Huelva");
+		Ciudad from = Ciudad.ofName("Sevilla");
 		Ciudad to = Ciudad.ofName("Almeria");
 		GraphPath<Ciudad,Carretera> gp =  a.getPath(from,to);
 		System.out.println(gp);

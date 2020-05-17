@@ -25,11 +25,11 @@ public class Casilla extends ActionVirtualVertex<Casilla,CasillaEdge,IntPair> im
 	}
 	
 	public Integer getFila() {
-		return this.position.a;
+		return this.position.first;
 	}
 	
 	public Integer getColumna() {
-		return this.position.b;
+		return this.position.second;
 	}
 	
 	public IntPair getPosition() {
@@ -56,7 +56,7 @@ public class Casilla extends ActionVirtualVertex<Casilla,CasillaEdge,IntPair> im
 	}
 	
 	@Override
-	public CasillaEdge getEdgeFromAction(IntPair a) {
+	public CasillaEdge edge(IntPair a) {
 		Casilla v = this.neighbor(a);
 		return CasillaEdge.of(this,v,a);
 	}

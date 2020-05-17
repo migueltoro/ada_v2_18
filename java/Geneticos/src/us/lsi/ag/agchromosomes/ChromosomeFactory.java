@@ -219,4 +219,17 @@ public class ChromosomeFactory {
 		Preconditions.checkArgument(cr instanceof ExpressionChromosome);
 		return (ExpressionChromosome<T>) cr;
 	}
+	
+	
+	/**
+	 * @pre Es un ValuesInSetChromosome
+	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
+	 * @return Un cromosoma de tipo ValuesInSetChromosome
+	 */
+	
+	
+	public static  ValuesInSetChromosome asValuesInSetChromosome(Chromosome cr) {
+		Preconditions.checkArgument(cr instanceof ValuesInSetChromosome);
+		return (ValuesInSetChromosome) cr;
+	}
 }

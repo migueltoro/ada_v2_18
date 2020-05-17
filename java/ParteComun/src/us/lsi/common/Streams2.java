@@ -13,14 +13,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -30,6 +27,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import us.lsi.flujosparalelos.Spliterators2;
 import us.lsi.math.Math2;
 
 
@@ -215,12 +213,6 @@ public class Streams2 {
 		return Arrays.stream(r).<String> map(x -> x.trim())
 				.filter(x-> x.length() > 0);
 	}
-
-	
-	public static <E> Stream<E> limit(Stream<E> sm, Integer limit){
-		MutableType<Integer> index = MutableType.of(0);
-		return sm.takeWhile(x->index.newValue(index.value+1) < limit);
-	}
 	
 	/**
 	 * @param sm Un String
@@ -234,18 +226,8 @@ public class Streams2 {
 					.filter(p-> p.v1!=null);
 		return r;
 	}
-	/**
-	 * @param sm Un String
-	 * @param <E> El tipo de los elementos de la secuencia
-	 * @return Un stream formado por los pares de elementos 
-	 * formados por un elemento y el entero que indica su posición
-	 */
-	public static <E> Stream<Tuple2<E,Integer>> enumerate(Stream<E> sm) {
-		MutableType<Integer> rf = MutableType.of(0);
-		Stream<Tuple2<E,Integer>> r = sm
-					.map(e->Tuple.create(e,rf.newValue(rf.value+1)));
-		return r;
-	}	
+	
+		
 	/**
 	 * @param n
 	 * @param m
@@ -253,8 +235,12 @@ public class Streams2 {
 	 */
 	public static Stream<IntPair> allPairs(Integer n, Integer m) {
 		return IntStream.range(0, n).boxed()
-				.flatMap(i -> IntStream.range(0, m)
-				.mapToObj(j -> IntPair.of(i, j)));
+				.flatMap(i -> IntStream.range(0, m).boxed().map(j -> IntPair.of(i, j)));
+	}
+	
+	public static Stream<IntPair> allPairs(Integer n1, Integer n2, Integer m1, Integer m2){
+		return IntStream.range(n1, n2).boxed()
+				.flatMap(x->IntStream.range(m1, m2).boxed().map(y->IntPair.of(x,y)));
 	}
 	
 	/**
@@ -268,9 +254,11 @@ public class Streams2 {
 		return Stream.<T>concat(s, Arrays.stream(s1).flatMap(Function.<Stream<T>>identity()));
 	}
 	
+	
+	
 	/**
-	 * @param a Un stream 
-	 * @param b Una secuencia adicional de stream
+	 * @param first Un stream 
+	 * @param second Una secuencia adicional de stream
 	 * @param <A> El tipo de los elementos de la secuencia
 	 * @param <B> El tipo de los elementos de la secuencia
 	 * @param <C> El tipo de los elementos de la secuencia resultante
@@ -278,37 +266,39 @@ public class Streams2 {
 	 * @return Un stream formado por los elementos obtenidos combinando 
 	 * uno a uno los elementos de las secuencias de entrada
 	 */	
-	public static <A, B, C> Stream<C> zip(Stream<A> a, Stream<B> b, BiFunction<A, B, C> zipper) {
-		Objects.requireNonNull(zipper);
-		Spliterator<? extends A> aSpliterator = Objects.requireNonNull(a).spliterator();
-		Spliterator<? extends B> bSpliterator = Objects.requireNonNull(b).spliterator();
-
-		// Zipping looses DISTINCT and SORTED characteristics
-		int characteristics = aSpliterator.characteristics() & bSpliterator.characteristics()
-				& ~(Spliterator.DISTINCT | Spliterator.SORTED);
-
-		long zipSize = ((characteristics & Spliterator.SIZED) != 0)
-				? Math.min(aSpliterator.getExactSizeIfKnown(), bSpliterator.getExactSizeIfKnown())
-				: -1;
-
-		Iterator<A> aIterator = Spliterators.iterator(aSpliterator);
-		Iterator<B> bIterator = Spliterators.iterator(bSpliterator);
-		Iterator<C> cIterator = new Iterator<C>() {
-			@Override
-			public boolean hasNext() {
-				return aIterator.hasNext() && bIterator.hasNext();
-			}
-
-			@Override
-			public C next() {
-				return zipper.apply(aIterator.next(), bIterator.next());
-			}
-		};
-
-		Spliterator<C> split = Spliterators.spliterator(cIterator, zipSize, characteristics);
-		return (a.isParallel() || b.isParallel()) ? StreamSupport.stream(split, true)
-				: StreamSupport.stream(split, false);
+	public static <L, R, T> Stream<T> zip(Stream<L> leftStream, Stream<R> rightStream, BiFunction<L, R, T> combiner) {
+		Spliterator<L> lefts = leftStream.spliterator();
+		Spliterator<R> rights = rightStream.spliterator();
+		return StreamSupport.stream(Spliterators2.zip(lefts, rights, combiner), leftStream.isParallel() || rightStream.isParallel());
 	}
+	
+	/**
+	 * @param sm Un String
+	 * @param start Primer indice de la enumrracion
+	 * @param <E> El tipo de los elementos de la secuencia
+	 * @return Un stream formado por los pares de elementos 
+	 * formados por un elemento y el entero que indica su posición
+	 */
+
+
+	public static <E> Stream<Enumerate<E>> enumerate(Stream<E> stream, Integer start) {
+		Stream<Integer> st = Stream.iterate(start, e -> e + 1);
+		return zip(st, stream, (n, e) -> Enumerate.of(n, e));
+	}
+	
+	/**
+	 * @param sm Un String
+	 * @param <E> El tipo de los elementos de la secuencia
+	 * @return Un stream formado por los pares de elementos 
+	 * formados por un elemento y el entero que indica su posición
+	 */
+
+	public static <E> Stream<Enumerate<E>> enumerate(Stream<E> stream) {
+		return enumerate(stream, 0);
+	}
+	
+	
+
 	/**
 	 * @param stream1 Un stream
 	 * @param stream2 Un segundo stream

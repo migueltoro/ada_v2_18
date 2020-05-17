@@ -21,8 +21,12 @@ public class Sets2 {
 		return IntStream.range(a,b).boxed().collect(Collectors.toSet());
 	}
 	
-	public static <T> Set<T> newHashSet(){
+	public static <T> Set<T> empty(){
 		return new HashSet<>();
+	}
+	
+	public static <T> Set<T> copy(Collection<T> c){
+		return new HashSet<>(c);
 	}
 	
 	public static <T extends Comparable<? super T>> SortedSet<T> newTreeSet(){
@@ -39,5 +43,23 @@ public class Sets2 {
 
 	public static <E,U extends Collection<E>> Set<E> newSet(U elements){
 		return elements.stream().collect(Collectors.toSet());
+	}
+	
+	public static <E> Set<E> difference(Collection<E> s1,  Collection<E> s2){
+		Set<E> s = new HashSet<>(s1);
+		s.removeAll(s2);
+		return s;
+	}
+	
+	public static <E> Set<E> union(Collection<E> s1,  Collection<E> s2){
+		Set<E> s = new HashSet<>(s1);
+		s.addAll(s2);
+		return s;
+	}
+	
+	public static <E> Set<E> intersection(Collection<E> s1,  Collection<E> s2){
+		Set<E> s = new HashSet<>(s1);
+		s.retainAll(s2);
+		return s;
 	}
 }

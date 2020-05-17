@@ -1,13 +1,17 @@
 package us.lsi.graphs.virtual;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.GraphType;
 
 import us.lsi.common.Sets2;
+import us.lsi.common.TriFunction;
 import us.lsi.graphs.SimpleEdge;
+import us.lsi.path.EGraphPath;
+import us.lsi.path.EGraphPath.PathType;
 
 /**
  * <p> Implementación de un grafo virtual simple 
@@ -33,24 +37,64 @@ import us.lsi.graphs.SimpleEdge;
 @SuppressWarnings("deprecation")
 public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>>
 	implements EGraph<V, E> {
-			
-	private Set<V> vertexSet;
-    @SuppressWarnings("unused")
-	private boolean weighted;
 	
-	public SimpleVirtualGraph() {
-		this.vertexSet = Sets2.newHashSet();
-	    this.weighted = true;
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(V startVertex) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
+	}
 	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(
+			V startVertex,
+			Function<E, Double> edgeWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
+	}
+	
+//	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
+//			V startVertex,
+//			PathType type,
+//			Function<E, Double> edgeWeight) {
+//		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,null,null);
+//	}
+	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> last(
+			V startVertex,
+			Function<V, Double> vertexWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
+			V startVertex,
+			Function<E, Double> edgeWeight, 
+			Function<V, Double> vertexWeight,
+			TriFunction<V, E, E, Double> vertexPassWeight,
+			PathType type) {
+		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
 
-	/**
-	 * @param vertexSet Conjunto de vértices del grafo que queremos hacer explícitos.
-	 */
-	@SafeVarargs
-	public SimpleVirtualGraph(V... vertexSet){
+	private Set<V> vertexSet;
+	private Function<E,Double> edgeWeight = null;
+	private Function<V,Double> vertexWeight = null;
+	private TriFunction<V,E,E,Double> vertexPassWeight= null;
+	private EGraphPath<V,E> path;
+	private V startVertex;
+	private PathType type;
+	
+	
+	protected SimpleVirtualGraph(V startVertex, 
+			PathType type,			
+			Function<E, Double> edgeWeight, 
+			Function<V, Double> vertexWeight,
+			TriFunction<V, E, E, Double> vertexPassWeight) {
 		super();
-		this.vertexSet = Set.of(vertexSet);
+		this.vertexSet = Sets2.empty();;
+		this.edgeWeight = edgeWeight;
+		this.vertexWeight = vertexWeight;
+		this.vertexPassWeight = vertexPassWeight;
+		this.type = PathType.Sum;
+		this.startVertex = startVertex;
+		this.vertexSet = new HashSet<V>();
+		this.vertexSet.add(this.startVertex);
+		this.type = type;
+		this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
 	}
 
 	@Override
@@ -75,11 +119,41 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	public V getEdgeTarget(E e) {
 		return e.getTarget();
 	}
-
+	
+	/**
+	 * @param edge es una arista
+	 * @return El peso de edge
+	 */
 	@Override
-	public double getEdgeWeight(E e) {
-		return e.getEdgeWeight();
-	}	
+	public double getEdgeWeight(E edge) {
+		Double r;
+		if(edgeWeight != null) r = edgeWeight.apply(edge);
+		else r = edge.getEdgeWeight();
+		return r;
+	}
+	
+	/**
+	 * @param vertex es el vértice actual
+	 * @return El peso de vertex
+	 */
+	public double getVertexWeight(V vertex) {
+		Double r = 0.;
+		if(vertexWeight != null) r = vertexWeight.apply(vertex);
+		return r;
+	}
+	/**
+	 * @param vertex El vértice actual
+	 * @param edgeIn Una arista entrante o incidente en el vértice actual. Es null en el vértice inicial.
+	 * @param edgeOut Una arista saliente o incidente en el vértice actual. Es null en el vértice final.
+	 * @return El peso asociado al vértice suponiendo las dos aristas dadas. 
+	 */
+	public double getVertexPassWeight(V vertex, E edgeIn, E edgeOut) {
+		Double r = 0.;
+		if(vertexPassWeight != null) r = vertexPassWeight.apply(vertex,edgeIn,edgeOut);
+		return r;
+	}
+	
+	
 	@Override
 	public E getEdge(V v1, V v2) {
 		return v1.getEdge(v2);
@@ -112,6 +186,21 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 	public int degreeOf(V v) {
 		return v.edgesOf().size();
 	}
+	
+	@Override
+	public int outDegreeOf(V v) {
+		return v.edgesOf().size();
+	}
+
+	@Override
+	public Set<E> outgoingEdgesOf(V v) {
+		return edgesOf(v);
+	}
+	
+	@Override
+	public void setEdgeWeight(E edge, double weight) {
+		edge.setWeight(weight);		
+	}	
 
 	/**
 	 * @throw UnsupportedOperationException
@@ -129,20 +218,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public int outDegreeOf(V v) {
-		return v.edgesOf().size();
-	}
-
-	@Override
-	public Set<E> outgoingEdgesOf(V v) {
-		return edgesOf(v);
-	}
 	
-	@Override
-	public void setEdgeWeight(E edge, double weight) {
-		edge.setWeight(weight);		
-	}	
 	/**
 	 * @throw UnsupportedOperationException
 	 */
@@ -254,4 +330,19 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public EGraphPath<V, E> initialPath() {
+		return this.path.copy();
+	}
+	
+	@Override
+	public V startVertex() {
+		return startVertex;
+	}
+	
+	@Override
+	public PathType pathType() {
+		return type;
+	}
+	
 }

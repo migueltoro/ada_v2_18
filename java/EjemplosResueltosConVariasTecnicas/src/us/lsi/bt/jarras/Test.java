@@ -2,6 +2,7 @@ package us.lsi.bt.jarras;
 
 
 
+import us.lsi.astar.jarras.ActionJarras;
 import us.lsi.bt.AlgoritmoBT;
 import us.lsi.jarras.datos.DatosJarras;
 
@@ -26,7 +27,7 @@ public class Test {
 		AlgoritmoBT.conFiltro = true;
 		System.out.println("------");
 		EstadoJarras e = EstadoJarras.create();
-		var a = AlgoritmoBT.create(e);
+		AlgoritmoBT<SolucionJarras, ActionJarras, EstadoJarras> a = AlgoritmoBT.create(e);
 		a.ejecuta();
 
 		if (a.getSoluciones().isEmpty()) 

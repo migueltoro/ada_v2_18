@@ -11,12 +11,12 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
+import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.common.Sets2;
 import us.lsi.common.Strings2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
-import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.views.CompleteGraphView;
@@ -24,6 +24,7 @@ import us.lsi.graphs.views.SubGraphView;
 
 public class SubGraphsAndViews {
 
+	
 	public static void main(String[] args) {
 		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph("ficheros/andalucia.txt", 
 				Ciudad::ofFormat,
@@ -39,7 +40,6 @@ public class SubGraphsAndViews {
 		Graph<Ciudad, Carretera> graph2 = CompleteGraphView.of(graph,
 				Carretera::ofWeight,
 				Double.valueOf(1000.),
-				Carretera::getKm,
 				Carretera::getSource,
 				Carretera::getTarget);
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();

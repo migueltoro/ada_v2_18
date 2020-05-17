@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
+import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.common.Maps2;
-import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.Graphs2;
 import us.lsi.pli.SolutionPLI;
 

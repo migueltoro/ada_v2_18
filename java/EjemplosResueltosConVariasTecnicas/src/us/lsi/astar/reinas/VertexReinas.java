@@ -60,7 +60,7 @@ public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, 
 	}
 	
 	@Override
-	public EdgeReinas getEdgeFromAction(ActionReinas a) {
+	public EdgeReinas edge(ActionReinas a) {
 		VertexReinas v = this.neighbor(a);
 		return EdgeReinas.of(this,v,a);
 	}

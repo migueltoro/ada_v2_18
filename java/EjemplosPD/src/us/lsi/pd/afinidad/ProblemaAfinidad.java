@@ -23,7 +23,7 @@ public class ProblemaAfinidad {
 	 * @return Un problema de ejemplo
 	 */
 	public static ProblemaAfinidad createEjemplo(){
-		clientes= Lists2.ofElements(
+		clientes= Lists2.of(
 				Cliente.create("Juan", 10, Sets2.newSet("Amparo", "Rosa")),
 				Cliente.create("Maria", 10, Sets2.newSet("Rosa")),
 				Cliente.create("Sara", 11, Sets2.newSet("Amparo", "Rosa")),

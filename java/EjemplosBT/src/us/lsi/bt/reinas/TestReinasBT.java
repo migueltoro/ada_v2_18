@@ -14,8 +14,8 @@ public class TestReinasBT {
 		AlgoritmoBT.numeroDeSoluciones = 1;
 		AlgoritmoBT.isRandomize = true;
 		AlgoritmoBT.sizeRef = 10;
-		Reina.numeroDeReinas = 200;
-		EstadoReinasBT2 p = EstadoReinasBT2.create();
+		Reina.numeroDeReinas = 1000;
+		EstadoReinasBT1 p = EstadoReinasBT1.create();
 		var a = AlgoritmoBT.create(p);
 		a.ejecuta();
 		System.out.println(a.getSoluciones().size());

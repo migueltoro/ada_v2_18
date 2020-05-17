@@ -3,12 +3,12 @@ package us.lsi.flowgraph.examples;
 import java.util.stream.Collectors;
 
 import us.lsi.flowgraph.FlowGraph;
-import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
+import us.lsi.flowgraph.FlowGraph.FGType;
 
 public class FlowExample {
 
 	public static void main(String[] args) {
-		FlowGraph fg = FlowGraph.newGraph("ficheros/flowExample.txt",TipoDeOptimizacion.Max);
+		FlowGraph fg = FlowGraph.newGraph("ficheros/PI3Ej10DatosEntrada_andalucia.txt",FGType.Max);
 		String constraints = fg.getConstraints();
 		System.out.println(constraints);	
 		System.out.println(fg.vertexSet().stream()				

@@ -60,6 +60,11 @@ public class VertexJarras extends ActionVirtualVertex<VertexJarras, EdgeJarras, 
 	}
 	
 	@Override
+	public EdgeJarras edge(ActionJarras a) {
+		return EdgeJarras.create(this,this.neighbor(a),a);
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

@@ -117,7 +117,7 @@ public class SetRangeInteger implements Set<Integer>{
 	@Override
 	public boolean addAll(Collection<? extends Integer> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->change.newValue(this.add(x)));
+		c.stream().forEach(x->change.value = this.add(x));
 		return change.value;
 	}
 
@@ -126,14 +126,16 @@ public class SetRangeInteger implements Set<Integer>{
 	@Override
 	public boolean retainAll(Collection<?> c) {
 		MutableType<Boolean> change = MutableType.of(false);		
-		IntStream.range(0,bits.length()).map(x->x+a).boxed().filter(x->!this.contains(x)).forEach(x->change.newValue(this.remove(x)));
+		IntStream.range(0,bits.length()).map(x->x+a).boxed()
+			.filter(x->!this.contains(x))
+			.forEach(x->change.value = this.remove(x));
 		return change.value;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->change.newValue(this.remove(x)));
+		c.stream().forEach(x->change.value = this.remove(x));
 		return change.value;
 	}
 

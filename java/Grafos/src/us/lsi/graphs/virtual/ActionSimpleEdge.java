@@ -12,10 +12,6 @@ public class ActionSimpleEdge<V, A> extends SimpleEdge<V> {
 		return new ActionSimpleEdge<V, A>(c1, c2);
 	}
 
-	public static <V, A> ActionSimpleEdge<V, A> ofWeight(V c1, V c2, double weight) {
-		return new ActionSimpleEdge<V, A>(c1, c2, weight);
-	}
-
 	public static <V, A> ActionSimpleEdge<V, A> empty() {
 		return new ActionSimpleEdge<V, A>();
 	}
@@ -28,10 +24,6 @@ public class ActionSimpleEdge<V, A> extends SimpleEdge<V> {
 
 	private ActionSimpleEdge() {
 		super();
-	}
-
-	protected ActionSimpleEdge(V c1, V c2, double weight) {
-		super(c1, c2, weight);
 	}
 
 	protected ActionSimpleEdge(V c1, V c2) {
@@ -47,5 +39,12 @@ public class ActionSimpleEdge<V, A> extends SimpleEdge<V> {
 		super(c1, c2, w);
 		this.action = action;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("(%s,%.2f,%s,%s)",action,weight,source,target);
+	}
+	
+	
 
 }

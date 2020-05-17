@@ -343,7 +343,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public List<BinaryTree<E>> getLevel(int n){
-		List<BinaryTree<E>> r = Lists2.ofElements(this);
+		List<BinaryTree<E>> r = Lists2.of(this);
 		for(int i=0; i < n ; i++) {
 			r = nextLevel(r);
 		}
@@ -439,9 +439,9 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Binary:
-			r = Lists2.ofElements(this.label);
+			r = Lists2.of(this.label);
 			r.addAll(this.getLeft().getPreOrder());
 			r.addAll(this.getRight().getPreOrder());
 		}
@@ -456,7 +456,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Binary:
 			r = this.getLeft().getPostOrder();
 			r.addAll(this.getRight().getPostOrder());
@@ -473,7 +473,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Binary:
 			r = this.getLeft().getInOrder();
 			r.add(this.getLabel());
@@ -578,7 +578,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
 		BinaryTree<String> t7 = BinaryTree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.ofElements(1,2,3,4,5,6,7,8,9)));
+		System.out.println(Lists2.reverse(Lists2.of(1,2,3,4,5,6,7,8,9)));
 		BinaryTree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		MutableBinaryTree<String> t = t8.mutableView();

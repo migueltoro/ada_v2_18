@@ -96,6 +96,8 @@ public class DatosSudoku {
 		check();
 		setValoresUnicos();
 		casillasLibres = casillasLibres();
+		setValoresUnicos();
+		casillasLibres = casillasLibres();
 	}
 
 	private static void check() {		

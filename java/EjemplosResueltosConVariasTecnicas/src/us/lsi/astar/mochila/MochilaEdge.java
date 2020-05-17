@@ -16,11 +16,12 @@ public class MochilaEdge extends ActionSimpleEdge<MochilaVertex,Double> {
 		super(v1, v2);
 		this.a = a;
 		super.weight = a*DatosMochila.getValor(v1.index);
+//		System.out.println(this);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("(%d,%d,%.2f)",this.source.index,this.target.index,a);
+		return String.format("(%d,%d,%.2f,%.2f)",this.source.index,this.target.index,a,this.getEdgeWeight());
 	}
 	
 }

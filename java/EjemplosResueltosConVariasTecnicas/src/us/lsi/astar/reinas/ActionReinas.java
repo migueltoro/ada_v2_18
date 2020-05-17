@@ -43,7 +43,10 @@ public class ActionReinas implements Action<VertexReinas> {
 	public String toString() {
 		return this.y.toString();
 	}
-	
-	
+
+	@Override
+	public Double weight(VertexReinas v) {
+		return 1.;
+	}
 
 }

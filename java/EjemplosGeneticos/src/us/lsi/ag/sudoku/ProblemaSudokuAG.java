@@ -17,9 +17,9 @@ public class ProblemaSudokuAG implements ValuesInSetProblemAG<SolucionSudoku> {
 	Integer n; 
 	Map<Integer,List<Integer>> values = new HashMap<>();
 	
-	public ProblemaSudokuAG() {
+	public ProblemaSudokuAG() {	
 		super();
-		this.casillasLibres = DatosSudoku.casillasLibres();
+		this.casillasLibres = DatosSudoku.casillasLibres();		  
 		this.n = casillasLibres.size();
 	}
 	

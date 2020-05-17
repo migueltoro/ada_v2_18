@@ -11,6 +11,7 @@ import us.lsi.common.Streams2;
 public class Tarea {
 
 	public static List<Tarea> tareas;
+	public static Integer n;
 	
 	public static void leeTareas(String fichero){
 		nId =0;
@@ -18,6 +19,7 @@ public class Tarea {
 				.map(s ->Tarea.create(s))
 				.sorted(Comparator.<Tarea,Double>comparing(Tarea::getDuracion).reversed())
 				.collect(Collectors.toList());
+		n = tareas.size();
 	}
 	
 	public static Tarea create(String s) {
@@ -47,6 +49,7 @@ public class Tarea {
 	}
 	
 	public static Double getDuracion(int i) {
+//		if(i >= Tarea.n) return 0.;
 		return Tarea.tareas.get(i).getDuracion();
 	}
 	

@@ -40,4 +40,5 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	 * @return La arista desde this a v2
 	 */	
 	E getEdge(V v2);
+	
 }

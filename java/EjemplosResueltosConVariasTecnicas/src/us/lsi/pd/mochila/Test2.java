@@ -2,7 +2,9 @@ package us.lsi.pd.mochila;
 
 
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.pd.AlgoritmoPD;
+import us.lsi.pd.ProblemaPDRAdapt;
 
 public class Test2 {
 
@@ -17,7 +19,7 @@ public class Test2 {
 		ProblemaMochilaPD  p = ProblemaMochilaPD.createInitial();	
 		System.out.println("Problema Inicial ="+p);
 		System.out.println("Cota Superior ="+DatosMochila.getCotaSuperior(0,78));	
-		var a = AlgoritmoPD.createPDR(p);
+		AlgoritmoPD<SolucionMochila, Integer, ProblemaPDRAdapt<SolucionMochila, Integer, ProblemaMochilaPD>> a = AlgoritmoPD.createPDR(p);
 		a.ejecuta();
 		System.out.println(AlgoritmoPD.metricas.toString());	
 		a.showAllGraph("ficheros/pruebaMochilaSinFiltro.gv","Mochila");

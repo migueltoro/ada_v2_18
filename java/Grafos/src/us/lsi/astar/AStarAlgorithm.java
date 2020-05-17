@@ -197,7 +197,7 @@ public class AStarAlgorithm<V, E>  {
 				// currentNode.getKey());
 				E edgeBeforeCurrent = cameFrom.get(currentNode.getData());
 				return this.buildGraphPath(sourceVertex, currentNode.getData(),		
-						currentNode.getKey()+graph.getVertexWeight(currentNode.getData(), edgeBeforeCurrent, null));
+						currentNode.getKey()+graph.getVertexPassWeight(currentNode.getData(), edgeBeforeCurrent, null));
 			}
 
             // We haven't reached the target vertex yet; expand the node
@@ -237,7 +237,7 @@ public class AStarAlgorithm<V, E>  {
 			E edgeBeforeCurrent = cameFrom.get(currentNode.getData());
 			double gScore_current = gScoreMap.get(currentNode.getData());
 			double tentativeGScore = gScore_current + graph.getEdgeWeight(edge) + graph.getVertexWeight(successor)
-					+ graph.getVertexWeight(currentNode.getData(), edgeBeforeCurrent, edge);
+					+ graph.getVertexPassWeight(currentNode.getData(), edgeBeforeCurrent, edge);
 
 			if (!vertexToHeapNodeMap.containsKey(successor) || (tentativeGScore < gScoreMap.get(successor))) {
 				cameFrom.put(successor, edge);

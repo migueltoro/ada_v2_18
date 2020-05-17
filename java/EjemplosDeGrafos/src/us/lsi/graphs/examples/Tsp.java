@@ -11,10 +11,10 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
 
+import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
-import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 

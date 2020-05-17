@@ -4,17 +4,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-public class DephtSearch<V, E> implements GSearch<V,E> {
+import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.ToEGraph;
+import us.lsi.path.EGraphPath.PathType;
+
+public class DephtSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
 
 
-	private Map<V,E> edgeToOrigin;
+	protected Map<V,E> edgeToOrigin;
 	public Graph<V,E> graph;
-	private Stack<V> stack;
-	private V startVertex; 
+	protected Stack<V> stack;
+	protected V startVertex; 
 
 	DephtSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
@@ -26,11 +32,19 @@ public class DephtSearch<V, E> implements GSearch<V,E> {
 	}
 	
 	@Override
+	public Stream<V> stream() {
+		return Iterators.asStream(this.iterator());
+	}
+	
+	@Override
+	public DephtSearch<V, E> copy() {
+		return GSearch.depth(this.graph, this.startVertex);
+	}
+	
 	public Iterator<V> iterator() {
 		return this;
 	}
 	
-	@Override
 	public boolean isSeenVertex(V v) {
 		return this.edgeToOrigin.containsKey(v);
 	}
@@ -51,19 +65,18 @@ public class DephtSearch<V, E> implements GSearch<V,E> {
 		return actual;
 	}
 
-	@Override
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
 	}
 
 	@Override
-	public Graph<V, E> getGraph() {
-		return this.graph;
+	public EGraph<V, E> getGraph() {
+		return ToEGraph.of(this.graph,startVertex(),PathType.Sum);
 	}
 	
 	@Override
-	public V initialVertex() {
+	public V startVertex() {
 		return this.startVertex;
 	}	
-	
+
 }

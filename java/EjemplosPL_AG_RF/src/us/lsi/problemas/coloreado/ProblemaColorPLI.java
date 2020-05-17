@@ -16,7 +16,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
-import us.lsi.pli.HelpPLI;
+import static us.lsi.pli.AuxiliaryPLI.*;
 import us.lsi.common.Streams2;
 
 public class ProblemaColorPLI {
@@ -30,6 +30,7 @@ public class ProblemaColorPLI {
 		ciudades = new ArrayList<>(grafo.vertexSet());
 	}
 
+	@SuppressWarnings("unused")
 	private static String getConstraints(Graph<Ciudad, Carretera> g, List<Ciudad> lc) {
 
 		Map<Ciudad, Integer> indexOf = new HashMap<>();
@@ -51,7 +52,7 @@ public class ProblemaColorPLI {
 
 		r = r + ";\n\n";
 
-		// X_ciudad_color= 1 se usa el color k con la ciudad i.
+		// X_ciudad_color = 1 se usa el color k con la ciudad i.
 		for (int i = 0; i < n; i++) {
 			first = true;
 			for (int k = 0; k < n; k++) {
@@ -119,11 +120,11 @@ public class ProblemaColorPLI {
 				.collect(Collectors.joining("+", "min: ", "; \n\n"));
 
 		// Para cada nodo i debe haber un solo color asignado.
-		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_2_j(i, n,"x"," = 1 ; \n"))
+		r += IntStream.range(0, n).boxed().map(i -> constraintEq(sum_2_1(n,i,"x"),"1"))
 				.collect(Collectors.joining("", "", "\n\n"));
 
 		// Si se asigna el color k al nodo i , el color k no puede esta deasctivado.
-		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d - y_%d<=0;\n", p.a, p.b, p.b))
+		r += Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d - y_%d<=0;\n", p.first, p.second, p.second))
 				.collect(Collectors.joining("", "", "\n"));
 
 		// Dos vecinos no pueden tener el mismo color
@@ -133,7 +134,7 @@ public class ProblemaColorPLI {
 
 		// Definicion de las variables
 		r += Stream
-				.concat(Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.a, p.b)),
+				.concat(Streams2.allPairs(n, n).map(p -> String.format("x_%d_%d", p.first, p.second)),
 						IntStream.range(0, n).boxed().map(k -> String.format("y_%d", k)))
 				.collect(Collectors.joining(",", "bin ", ";\n"));
 

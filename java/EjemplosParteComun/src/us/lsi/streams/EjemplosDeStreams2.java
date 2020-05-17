@@ -66,7 +66,7 @@ public class EjemplosDeStreams2 {
 		System.out.println(r3);
 		System.out.println("5: ______");
 		var enteros = Stream.iterate(0,x->x+1);
-		var ss2 = Streams2.limit(enteros, 4);
+		var ss2 = enteros.limit(4);
 		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
 		System.out.println(r4);
 		System.out.println("6: ______");

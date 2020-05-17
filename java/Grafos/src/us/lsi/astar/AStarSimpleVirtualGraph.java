@@ -6,22 +6,25 @@ import us.lsi.common.TriFunction;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.VirtualVertex;
+import us.lsi.path.EGraphPath.PathType;
 
 public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> extends SimpleVirtualGraph<V, E> implements AStarGraph<V, E> {
 
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of() {
-		return new AStarSimpleVirtualGraph<V,E>(null, null, null);
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> create(V startVertex) {
+		return new AStarSimpleVirtualGraph<V,E>(startVertex,PathType.Sum,null, null, null);
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> create(
+			V startVertex,
 			Function<E, Double> edgeWeight) {
-		return new AStarSimpleVirtualGraph<V,E>(edgeWeight, null, null);
+		return new AStarSimpleVirtualGraph<V,E>(startVertex, PathType.Sum,edgeWeight, null, null);
 	}
 	
-	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> AStarSimpleVirtualGraph<V, E> create(
+			V startVertex,
 			Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
-		return new AStarSimpleVirtualGraph<V,E>(edgeWeight, vertexWeight, vertexPassWeight);
+		return new AStarSimpleVirtualGraph<V,E>(startVertex, PathType.Sum, edgeWeight, vertexWeight, vertexPassWeight);
 	}
 
 	private Function<E,Double> edgeWeight = null;
@@ -30,9 +33,9 @@ public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends Sim
 	
 	
 	
-	private AStarSimpleVirtualGraph(Function<E, Double> edgeWeight,
+	private AStarSimpleVirtualGraph(V startVertex, PathType type, Function<E, Double> edgeWeight,
 			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight) {
-		super();
+		super(startVertex,type, edgeWeight, vertexWeight, vertexPassWeight);
 		this.edgeWeight = edgeWeight;
 		this.vertexWeight = vertexWeight;
 		this.vertexPassWeight = vertexPassWeight;
@@ -42,8 +45,9 @@ public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends Sim
 	 * @return El peso de edge
 	 */
 	public double getEdgeWeight(E edge) {
-		Double r = 1.;
+		Double r;
 		if(edgeWeight != null) r = edgeWeight.apply(edge);
+		else r = super.getEdgeWeight(edge);
 		return r;
 	}
 	/**
@@ -61,7 +65,7 @@ public class AStarSimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends Sim
 	 * @param edgeOut Una arista saliente o incidente en el vértice actual. Es null en el vértice final.
 	 * @return El peso asociado al vértice suponiendo las dos aristas dadas. 
 	 */
-	public double getVertexWeight(V vertex, E edgeIn, E edgeOut) {
+	public double getVertexPassWeight(V vertex, E edgeIn, E edgeOut) {
 		Double r = 0.;
 		if(vertexPassWeight != null) r = vertexPassWeight.apply(vertex,edgeIn,edgeOut);
 		return r;

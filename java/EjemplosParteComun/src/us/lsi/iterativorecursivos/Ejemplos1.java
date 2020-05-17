@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import us.lsi.common.Comparators;
+import us.lsi.common.Enumerate;
 import us.lsi.common.Lists2;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
@@ -26,14 +27,14 @@ import us.lsi.flujossecuenciales.IteratorMap;
 import us.lsi.flujossecuenciales.IteratorOrdered;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.flujossecuenciales.Printers;
-import us.lsi.flujossecuenciales.Streams;
+import us.lsi.flujossecuenciales.StreamsS;
 import us.lsi.math.Math2;
 
 public class Ejemplos1 {
 	
 	public static Integer sumaPrimos1(String file) {
-		return Streams.file(file)
-				.flatMap(e->Streams.split(e,"[ ,]"))
+		return StreamsS.file(file)
+				.flatMap(e->StreamsS.split(e,"[ ,]"))
 				.mapToInt(e->Integer.parseInt(e))
 				.filter(e->Math2.esPrimo(e))
 				.sum();
@@ -57,8 +58,8 @@ public class Ejemplos1 {
 	}
 
 	public static Map<Integer,List<Integer>> agrupaPorResto1(String file,Integer n) {
-		return Streams.file(file)
-				.flatMap(e->Streams.split(e,"[ ,]"))
+		return StreamsS.file(file)
+				.flatMap(e->StreamsS.split(e,"[ ,]"))
 				.map(e->Integer.parseInt(e))
 				.collect(Collectors.groupingBy(e->e%n));
 	}
@@ -170,9 +171,9 @@ public class Ejemplos1 {
 	}
 	
 	public static <E> Integer index2(Iterator<E> it, E e) {
-		Stream<Pair<E, Integer>> s = Streams.enumerate(it);
-		Optional<Pair<E, Integer>> entry = s.filter(p->p.a.equals(e)).findFirst();
-		return entry.isPresent()?entry.get().b:-1;
+		Stream<Enumerate<E>> s = StreamsS.enumerate(it);
+		Optional<Enumerate<E>> entry = s.filter(p->p.counter.equals(e)).findFirst();
+		return entry.isPresent()?entry.get().counter:-1;
 	}
 	
 	public static <T> Integer index8(Iterator<T> it, T e) {
@@ -284,8 +285,8 @@ public class Ejemplos1 {
 		if(it.hasNext()) a1 = it.next(); else return false;
 		if(it.hasNext()) a2 = it.next(); else return false;
 		Integer rz = a2-a1;
-		Stream<Pair<Integer,Integer>> it2 = Streams.consecutivePairs(it);
-		return it2.allMatch(p->(p.b-p.a) == rz);
+		Stream<Pair<Integer,Integer>> it2 = StreamsS.consecutivePairs(it);
+		return it2.allMatch(p->(p.second-p.first) == rz);
 	}
 
 	public static Boolean esAritmetica4(Iterator<Integer> it) {
@@ -475,7 +476,7 @@ public class Ejemplos1 {
 
 
 	public static void main(String[] args) throws IOException {
-		List<Integer> ls1 = Lists2.ofElements(-1,3,5,5,7,9,13,15,15,17,19);
+		List<Integer> ls1 = Lists2.of(-1,3,5,5,7,9,13,15,15,17,19);
 		Integer e = 13;
 		System.out.println(String.format("0: %d, %d, %d, %d, %d, %d, %d",
 				index0(ls1,e),index1(ls1,e),index3(ls1,e),
@@ -486,7 +487,7 @@ public class Ejemplos1 {
 		Iterator<Integer> it1 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		Iterator<Integer> it2 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		System.out.println(String.format("1: %d, %d",index2(it1,e), index8(it2,e)));
-		List<Double> coeficientes = Lists2.ofElements(0.,0.,0.,0.,1.);		
+		List<Double> coeficientes = Lists2.of(0.,0.,0.,0.,1.);		
 		Double v1 = valorDePolinomio(coeficientes,2.);
 		Double v3 = valorDePolinomioHornerD(coeficientes,2.);
 		Collections.reverse(coeficientes);
@@ -511,8 +512,8 @@ public class Ejemplos1 {
 				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text)));
 		System.out.println(String.format("4: %b, %b, %b, %b",
 				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2)));
-		List<Integer> l1 = Lists2.ofElements(1,3,5,7,9,11);
-		List<Integer> l2 = Lists2.ofElements(0,2,4,10,19,21,23,45);
+		List<Integer> l1 = Lists2.of(1,3,5,7,9,11);
+		List<Integer> l2 = Lists2.of(0,2,4,10,19,21,23,45);
 		List<Integer> l3 = mezclaOrdenada(l2,l1, Comparator.naturalOrder());
 		System.out.println(String.format("5: %s",l3));
 		Iterator<String> f1 = Iterators.file("ficheros/numeros3.txt");

@@ -197,5 +197,10 @@ public class IntegerMappingGraphView<V,E> implements Graph<Integer,E>{
 	public Set<Integer> vertexSet() {
 		return graph.vertexSet().stream().map(x->map.get(x)).collect(Collectors.toSet());
 	}	
+	
+	@Override
+	public String toString() {
+		return String.format("%s === %s",this.vertexSet(),this.edgeSet());
+	}
 
 }

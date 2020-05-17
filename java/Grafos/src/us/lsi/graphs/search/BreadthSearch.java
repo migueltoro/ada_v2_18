@@ -6,16 +6,22 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-public class BreadthSearch<V,E> implements GSearch<V,E> {
+import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.ToEGraph;
+import us.lsi.path.EGraphPath.PathType;
+
+public class BreadthSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
 	
 	private Graph<V,E> graph;
 	private V startVertex;
 	private Map<V,E> edgeToOrigin;
-	private Queue<V> queue; 
+	public Queue<V> queue; 
 
 	BreadthSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
@@ -25,13 +31,22 @@ public class BreadthSearch<V,E> implements GSearch<V,E> {
 		this.queue = new LinkedList<>();
 		this.queue.add(startVertex);
 	}
-	
+
 	@Override
-	public Iterator<V> iterator() {
-		return this;
+	public Stream<V> stream() {
+		return Iterators.asStream(this.iterator());
 	}
 	
 	@Override
+	public BreadthSearch<V,E> copy() {
+		return GSearch.breadth(this.graph, this.startVertex);
+	}
+	
+	public Iterator<V> iterator() {
+		return this.copy();
+	}
+
+
 	public boolean isSeenVertex(V v) {
 		return this.edgeToOrigin.containsKey(v);
 	}
@@ -52,18 +67,19 @@ public class BreadthSearch<V,E> implements GSearch<V,E> {
 		return actual;
 	}
 
-	@Override
+	
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
 	}
 
 	@Override
-	public Graph<V, E> getGraph() {
-		return this.graph;
+	public EGraph<V, E> getGraph() {
+		return ToEGraph.of(this.graph,startVertex(),PathType.Sum);
 	}
 	
 	@Override
-	public V initialVertex() {
+	public V startVertex() {
 		return this.startVertex;
 	}	
+	
 }

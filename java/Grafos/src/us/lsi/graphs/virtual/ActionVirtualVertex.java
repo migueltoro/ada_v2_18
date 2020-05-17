@@ -44,22 +44,17 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 	public abstract V neighbor(A a);
 	
 	/**
-	 * Este m&eacute;todo debe ser sobrescrito en la clase que refine el tipo
 	 * @param a Acci&oacute;n
 	 * @return La arista que lleva al vecino siguiendo esta acci&oacute;n
 	 */
-	@SuppressWarnings("unchecked")
-	public E getEdgeFromAction(A a) {
-		V v = this.neighbor(a);
-		return (E) ActionSimpleEdge.of(this,v,a);
-	}
+	
+	public abstract E edge(A a); 
 	
 	private Set<V> neighbors = null;
 	private Set<E> edges = null;
 	private List<E> edgesList = null;
 	
 	/**
-	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @param v Otro v&eacute;rtice
 	 * @return La arista desde this a v2
 	 */
@@ -99,7 +94,7 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 		if (this.edges==null) {
 			this.edges= actions()
 					.stream()
-					.map(a->this.getEdgeFromAction(a))
+					.map(a->this.edge(a))
 					.collect(Collectors.toSet());				
 		}
 		return edges;
@@ -113,7 +108,7 @@ public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extend
 		if (this.edgesList==null) {
 			this.edgesList= actions()
 					.stream()
-					.map(a->this.getEdgeFromAction(a))
+					.map(a->this.edge(a))
 					.collect(Collectors.toList());				
 		}
 		return edgesList;

@@ -15,19 +15,14 @@ public class MutableType<T> {
 	
 	public T value;
 	
-	/**
-	 * @param newValue El nuevo valor del objeto
-	 * @return El antiguo valor del objeto
-	 */
-	public T newValue(T newValue) {
-		T old = value;
-		this.value = newValue;
-		return old;
-	}
-	
 	private MutableType(T e) {
 		super();
 		this.value = e;
+	}
+	
+	public T newValue(T e) {
+		T old = this.value;
+		return old;
 	}
 	
 	@Override

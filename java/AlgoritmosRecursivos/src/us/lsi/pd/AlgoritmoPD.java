@@ -381,7 +381,7 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 			Files2.setFile(nombre);
 			Files2.getFile().println("digraph "+titulo+" {  \n size=\"100,100\"; ");	
 			marcarEnSolucion(pd);
-			Set<P> visitados = Sets2.newHashSet();
+			Set<P> visitados = Sets2.empty();
 			showAll(pd,visitados);
 			Files2.getFile().println("}");
 		}

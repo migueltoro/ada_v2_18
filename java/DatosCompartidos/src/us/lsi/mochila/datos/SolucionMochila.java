@@ -74,15 +74,14 @@ public class SolucionMochila implements Comparable<SolucionMochila>{
 	}
 	
 	public String getObjetos() {
-		return DatosMochila
-				.getObjetos()
+		return DatosMochila.getObjetos()
 				.stream()
-			    .map(x->String.format("%s=%d",x,m.get(x)))
+			    .map(x->String.format("%s=%d",x,m.get(x)==null?0:m.get(x)))
 			    .collect(Collectors.joining(", ","{","}"));
 	}
 	
 	public String toString() {
-		return String.format("valor = %d, peso = %d\n%s", 
+		return String.format("valor = %d, peso = %d,\n%s", 
 				getValor(),getPeso(),getObjetos()); 
 	}
 

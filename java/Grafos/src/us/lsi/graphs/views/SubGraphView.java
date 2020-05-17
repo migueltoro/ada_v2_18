@@ -11,6 +11,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 
+@SuppressWarnings("deprecation")
 public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
 	public static <V, E, G extends Graph<V,E>> SubGraphView<V, E, G> of(G graph, Predicate<V> vertices, Predicate<E> edges) {
@@ -171,5 +172,12 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 	public Set<V> vertexSet() {
 		return graph.vertexSet().stream().filter(v->vertices.test(v)).collect(Collectors.toSet());
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s === %s",this.vertexSet(),this.edgeSet());
+	}
+	
+	
 	
 }

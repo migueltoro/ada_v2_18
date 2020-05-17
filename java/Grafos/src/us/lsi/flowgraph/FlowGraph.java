@@ -5,10 +5,11 @@ import java.util.Locale;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.IntegerComponentNameProvider;
+
+import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
-import us.lsi.graphcolors.GraphColors;
 import us.lsi.graphs.GraphsReader;
 
 
@@ -35,7 +36,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 	 * un vértice intermedio
 	 *
 	 */
-	public enum TipoDeOptimizacion{Max,Min}	
+	public enum FGType{Max,Min}	
 	
 	public static Boolean allInteger = false;
 
@@ -47,10 +48,10 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		super(arg0);
 	}
 	
-	private TipoDeOptimizacion tipo = TipoDeOptimizacion.Max;
+	private FGType tipo = FGType.Max;
 	private String constraints = null;
 
-	public static FlowGraph newGraph(String file, TipoDeOptimizacion tipo) {
+	public static FlowGraph newGraph(String file, FGType tipo) {
 		FlowGraph r = GraphsReader.<FlowVertex,FlowEdge,FlowGraph>
 		    newGraph(file, 
 				FlowVertex::create, 
@@ -98,7 +99,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		return r;
 	}
 
-	public TipoDeOptimizacion getTipo() {
+	public FGType getTipo() {
 		return tipo;
 	}
 
@@ -120,7 +121,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 	public String getConstraints() {
 		Locale.setDefault(new Locale("en", "US"));
 		if (this.constraints == null) {
-			String goal = tipo.equals(TipoDeOptimizacion.Min) ? "min: " : "max: ";
+			String goal = tipo.equals(FGType.Min) ? "min: " : "max: ";
 			goal = goal + Strings2.format(this.vertexSet(), v -> v.toObjective(), "");
 			goal = goal + Strings2.format(this.edgeSet(), e -> e.toObjective(), "");
 			goal = goal + ";\n";

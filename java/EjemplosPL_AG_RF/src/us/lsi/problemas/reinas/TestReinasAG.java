@@ -50,8 +50,8 @@ public class TestReinasAG {
 */		SeqNomalChromosome cr = ap.getBestChromosome();
 		System.out.println(p.getSolucion(cr)+","+cr.fitness()+", ");
 		List<Integer> ls = cr.decode();
-		Set<Integer> dp = Sets2.newHashSet();
-		Set<Integer> ds = Sets2.newHashSet();
+		Set<Integer> dp = Sets2.empty();
+		Set<Integer> ds = Sets2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);

@@ -23,7 +23,7 @@ public class ActionPuzzle implements Action<VertexPuzzle> {
 	private Integer index;
 	
 	private ActionPuzzle(IntPair direction) {
-		super();
+		
 		this.direction = direction;
 		this.index = null;
 	}
@@ -50,6 +50,11 @@ public class ActionPuzzle implements Action<VertexPuzzle> {
 	@Override
 	public String toString() {
 		return String.format("%s,%d,%s",nombreAcciones.get(this.getIndex()),this.index,this.direction.toString());
+	}
+
+	@Override
+	public Double weight(VertexPuzzle v) {
+		return 1.;
 	}
 
 }

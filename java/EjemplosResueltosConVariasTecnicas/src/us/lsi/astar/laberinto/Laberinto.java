@@ -19,11 +19,11 @@ public class Laberinto {
 	}
 	
 	public static boolean isValidPosition(IntPair p) {
-		return  p.a >=0 && p.a< Laberinto.nf &&
-				p.b >=0 && p.b < Laberinto.nc;
+		return  p.first >=0 && p.first< Laberinto.nf &&
+				p.second >=0 && p.second < Laberinto.nc;
 	}
 
-	public static List<IntPair> actions  = Lists2.ofElements(IntPair.of(1,0),
+	public static List<IntPair> actions  = Lists2.of(IntPair.of(1,0),
 			IntPair.of(0,1),IntPair.of(-1,0),IntPair.of(0,-1));
 	public static List<String> nombreAcciones = List.of("Down","Right","Up","Left");
 	public static int nf;

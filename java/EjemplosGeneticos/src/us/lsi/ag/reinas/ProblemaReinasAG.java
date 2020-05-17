@@ -7,7 +7,7 @@ import java.util.Set;
 
 import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
-import us.lsi.ag.HelpFitnessAg;
+import us.lsi.ag.AuxiliaryAg;
 import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
 import us.lsi.reinas.datos.Reina;
@@ -37,13 +37,13 @@ public static int numeroDeReinas = 8;
 	@Override
 	public Double fitnessFunction(SeqNomalChromosome chromosome) {
 		List<Integer> ls = chromosome.decode();
-		Set<Integer> dp = Sets2.newHashSet();
-		Set<Integer> ds = Sets2.newHashSet();
+		Set<Integer> dp = Sets2.empty();
+		Set<Integer> ds = Sets2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);
 		}
-		return -HelpFitnessAg.distanceToEqZero(2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size());
+		return -AuxiliaryAg.distanceToEqZero(2.*ProblemaReinasAG.numeroDeReinas-dp.size()-ds.size());
 	}
 
 	@Override

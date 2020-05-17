@@ -464,9 +464,9 @@ public class TreeImpl<E> implements MutableTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Nary:
-			r = Lists2.ofElements(this.label);
+			r = Lists2.of(this.label);
 			r.addAll(elements.stream().map(x -> x.getPreOrder()).reduce(Lists2.empty(), Lists2::concat));
 		}
 		return r;
@@ -482,7 +482,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Nary:
 			r = elements.stream().map(x -> x.getPostOrder()).reduce(Lists2.empty(), Lists2::concat);
 			r.add(label);
@@ -498,7 +498,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		List<E> r = null;
 		switch (this.getType()) {
 		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.ofElements(this.label); break;
+		case Leaf: r = Lists2.of(this.label); break;
 		case Nary:
 			List<TreeImpl<E>> nElements = Lists2.ofCollection(elements);
 			int nk = Math.min(k, elements.size());
@@ -514,8 +514,8 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public List<Tree<E>> getByLevel(){
-		List<Tree<E>> r = Lists2.ofElements(this);
-		List<Tree<E>> level = Lists2.ofElements(this);		
+		List<Tree<E>> r = Lists2.of(this);
+		List<Tree<E>> level = Lists2.of(this);		
 		while(!level.isEmpty()){
 			level = getNextLevel(level);
 			r.addAll(level);
@@ -571,7 +571,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getDepth(Tree<E> root){
-		List<Tree<E>> level = Lists2.ofElements(this);
+		List<Tree<E>> level = Lists2.of(this);
 		int n = 0;		
 		while(!level.isEmpty()){
 			if(level.stream().anyMatch(x->x==this)){
@@ -671,7 +671,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		String ex = "39(2,27(_,2,3,4))";
 		Tree<String> t7 = Tree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.ofElements(1,2,3,4,5,6,7,8,9)));
+		System.out.println(Lists2.reverse(Lists2.of(1,2,3,4,5,6,7,8,9)));
 		Tree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		System.out.println(t8.getChild(0).getFather());

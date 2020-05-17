@@ -1,9 +1,11 @@
 package us.lsi.pli.examples;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import us.lsi.common.Files2;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
 
@@ -11,7 +13,7 @@ import us.lsi.pli.SolutionPLI;
 
 public class ReinasPLI {
 
-		public static Integer numeroDeReinas = 10;
+		public static Integer numeroDeReinas = 15;
 		
 		public static String getConstraints(){
 			String r = "min: ;\n\n";
@@ -123,16 +125,24 @@ public class ReinasPLI {
 		
 	
 	public static void main(String[] args) {
-//			System.out.println(getConstraints());
-			SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2());
-			System.out.println("-------------------");	
-			System.out.println("________");
-			System.out.println(s.getGoal());
-			System.out.println("________");
-			System.out.println("________");
-			for(int i=0;i<s.getNumVar();i++){
-				if(s.getSolution(i) == 1.0)
-					System.out.println(s.getName(i));
+//			Files2.toFile(getConstraints2(),"ficheros/pp1.txt");
+			List<Integer> nr = Files2.getLines("ficheros/numReinas.txt")
+					.stream().map(e->Integer.parseInt(e))
+					.collect(Collectors.toList());
+			for (Integer e:nr) {
+				ReinasPLI.numeroDeReinas = e;				
+				SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2());
+				System.out.println("-------------------");
+				System.out.println("________");
+				System.out.println(s.getGoal());
+				System.out.println("________");
+				System.out.println(e);
+				System.out.println("________");
+				System.out.println("________");
+				for (int i = 0; i < s.getNumVar(); i++) {
+					if (s.getSolution(i) == 1.0)
+						System.out.println(s.getName(i));
+				} 
 			}
 
 	}

@@ -37,7 +37,7 @@ public class Arrays2 {
 			Integer[][] r = new Integer[n][m];
 			IntStream.range(0,n).boxed()
 			  .flatMap(f->IntStream.range(0,m).boxed().map(c->IntPair.of(f, c)))
-			  .forEach(p->{r[p.a][p.b]=d[p.a*n+p.b];});
+			  .forEach(p->{r[p.first][p.second]=d[p.first*n+p.second];});
 			return r;
 		}
 		
@@ -46,7 +46,7 @@ public class Arrays2 {
 			Integer m = d[0].length;
 			return IntStream.range(0,n).boxed()
 			  .flatMap(f->IntStream.range(0,m).boxed().map(c->IntPair.of(f, c)))
-			  .filter(p->pd.test(d[p.a][p.b]))
+			  .filter(p->pd.test(d[p.first][p.second]))
 			  .findFirst()
 			  .orElse(null);
 		}
@@ -57,7 +57,7 @@ public class Arrays2 {
 			Integer[][] r = new Integer[n][m];
 			IntStream.range(0,n).boxed()
 			  .flatMap(f->IntStream.range(0,m).boxed().map(c->IntPair.of(f, c)))
-			  .forEach(p->{r[p.a][p.b]=d[p.a][p.b];});
+			  .forEach(p->{r[p.first][p.second]=d[p.first][p.second];});
 			return r;
 		}
 		
@@ -67,7 +67,7 @@ public class Arrays2 {
 			Double[][] r = new Double[n][m];
 			IntStream.range(0,n).boxed()
 			  .flatMap(f->IntStream.range(0,m).boxed().map(c->IntPair.of(f, c)))
-			  .forEach(p->{r[p.a][p.b]=d[p.a][p.b];});
+			  .forEach(p->{r[p.first][p.second]=d[p.first][p.second];});
 			return r;
 		}
 		

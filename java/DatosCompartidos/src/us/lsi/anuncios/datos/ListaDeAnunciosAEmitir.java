@@ -94,7 +94,7 @@ public class ListaDeAnunciosAEmitir  {
 				disponibles.remove(p.v2);
 			}
 		}
-		Set<Integer> quitar = Sets2.newHashSet();
+		Set<Integer> quitar = Sets2.empty();
 		for(Integer e : disponibles){
 			if(DatosAnuncios.getAnuncio(e).getDuracion()>this.tiempoRestante){
 				quitar.add(e);

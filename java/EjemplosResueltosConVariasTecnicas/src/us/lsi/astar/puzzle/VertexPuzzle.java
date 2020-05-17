@@ -36,7 +36,7 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, ActionSimple
 	}
 	
 	public boolean validPosition(IntPair p) {
-		return p.a>=0 && p.a< VertexPuzzle.numFilas && p.b>=0 && p.b<VertexPuzzle.numFilas;
+		return p.first>=0 && p.first< VertexPuzzle.numFilas && p.second>=0 && p.second<VertexPuzzle.numFilas;
 	}
 	
 	private VertexPuzzle(Integer...datos) {
@@ -81,12 +81,17 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, ActionSimple
 		IntPair np = this.blackPosition.add(a.direction());
 		IntPair op = this.blackPosition;
 		Integer dd[][] = Arrays2.copyArray(this.datos);
-		Integer value = dd[np.a][np.b];
-		dd[op.a][op.b] = value;
-		dd[np.a][np.b] = 0;
+		Integer value = dd[np.first][np.second];
+		dd[op.first][op.second] = value;
+		dd[np.first][np.second] = 0;
 		VertexPuzzle v  = VertexPuzzle.of(dd,np);
 		Preconditions.checkState(!this.equals(v),String.format("No deben ser iguales %s \n %s \n %s",a.toString(),this.toString(),v.toString()));
 		return v;
+	}
+	
+	@Override
+	public ActionSimpleEdge<VertexPuzzle, ActionPuzzle> edge(ActionPuzzle a) {
+		return ActionSimpleEdge.of(this, this.neighbor(a), a);
 	}
 	
 	public Integer getDato(int x, int y) {
@@ -95,7 +100,7 @@ public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, ActionSimple
 	
 	public Integer getDato(IntPair p) {
 		Preconditions.checkArgument(validPosition(p),"No se cumple la precondición");
-		return datos[p.a][p.b];
+		return datos[p.first][p.second];
 	}
 	
 	public Integer getNumDiferentes(VertexPuzzle e){

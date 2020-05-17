@@ -10,6 +10,7 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import us.lsi.common.Enumerate;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.View1;
@@ -45,7 +46,7 @@ public class Iterators {
 	 * @param iterator Un iterador
 	 * @return Un iterador con todos los pares los elementos del iterador de entrada y su ppsición empezando por cero
 	 */
-	public static <E> Iterator<Pair<E,Integer>> enumerate(Iterator<E> iterator) {
+	public static <E> Iterator<Enumerate<E>> enumerate(Iterator<E> iterator) {
 		return IteratorEnumerate.of(iterator);
 	}
 	

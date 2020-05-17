@@ -2,12 +2,12 @@ package us.lsi.flujossecuenciales;
 
 import java.util.Iterator;
 
-import us.lsi.common.Pair;
+import us.lsi.common.Enumerate;
 
 
-public class IteratorEnumerate<E> implements Iterator<Pair<E,Integer>>,Iterable<Pair<E,Integer>>{
+public class IteratorEnumerate<E> implements Iterator<Enumerate<E>>,Iterable<Enumerate<E>>{
 	
-	public static <E> Iterator<Pair<E,Integer>> of(Iterator<E> iterator) {
+	public static <E> Iterator<Enumerate<E>> of(Iterator<E> iterator) {
 		return new IteratorEnumerate<E>(iterator);
 	}
 
@@ -21,7 +21,7 @@ public class IteratorEnumerate<E> implements Iterator<Pair<E,Integer>>,Iterable<
 	}
 	
 	@Override
-	public Iterator<Pair<E,Integer>> iterator() {
+	public Iterator<Enumerate<E>> iterator() {
 		return this;
 	}
 
@@ -31,10 +31,10 @@ public class IteratorEnumerate<E> implements Iterator<Pair<E,Integer>>,Iterable<
 	}
 
 	@Override
-	public Pair<E,Integer> next() {
+	public Enumerate<E> next() {
 		Integer oldIndex = this.index;
 		this.index = this.index +1;
-		return Pair.of(this.iterator.next(), oldIndex);
+		return Enumerate.of(oldIndex,this.iterator.next());
 	}
 	
 }

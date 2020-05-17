@@ -123,7 +123,7 @@ public class AlgoritmoAG<C> {
 	/**
 	 * Inicializa aleatoriamente la población.
 	 */
-	private ElitisticListPopulation randomPopulation() {
+	public ElitisticListPopulation randomPopulation() {
 		List<Chromosome> popList = new LinkedList<>();
 
 		for (int i = 0; i < POPULATION_SIZE; i++) {

@@ -3,6 +3,7 @@ package us.lsi.bt.mochila;
 
 import us.lsi.bt.AlgoritmoBT;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 
 public class Test {
 
@@ -14,7 +15,7 @@ public class Test {
 		AlgoritmoBT.conFiltro = true;
 		System.out.println("------");
 		EstadoMochila e = EstadoMochila.createInitial();
-		var a = AlgoritmoBT.create(e);
+		AlgoritmoBT<SolucionMochila, Integer, EstadoMochila> a = AlgoritmoBT.create(e);
 		a.ejecuta();
 		System.out.println(a.getSolucion());
 		System.out.println(AlgoritmoBT.metricas);

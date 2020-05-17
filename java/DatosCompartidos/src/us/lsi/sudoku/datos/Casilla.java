@@ -98,7 +98,8 @@ public class Casilla {
 	 */
 	public Integer getValue() {
 		return value;
-	}	
+	}
+	
 	public void setValue(Integer value) {
 		Preconditions.checkArgument(this.initialFree, "Casilla de valor fijo");
 		this.value = value;

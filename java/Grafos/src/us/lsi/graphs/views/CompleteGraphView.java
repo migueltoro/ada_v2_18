@@ -13,32 +13,38 @@ import org.jgrapht.GraphType;
 import us.lsi.common.TriFunction;
 
 
+@SuppressWarnings("deprecation")
 public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E> {
 
 	
-	public static <V, E, G extends Graph<V,E>> CompleteGraphView<V, E, G> of(G graph, TriFunction<V, V, Double, E> edgeWeightFactory,
-			Double weightDefault, Function<E, Double> weight, Function<E,V> source, Function<E,V> target) {
-		return new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault, weight, source, target);
+	public static <V, E, G extends Graph<V,E>> CompleteGraphView<V, E, G> of(
+			G graph, 
+			TriFunction<V,V,Double,E> edgeWeightFactory,
+			Double weightDefault,
+			Function<E,V> edgeSource,
+			Function<E,V> edgeTarget) {
+		return new CompleteGraphView<V, E, G>(graph, edgeWeightFactory, weightDefault,edgeSource,edgeTarget);
 	}
 
-	private CompleteGraphView(G graph, TriFunction<V, V, Double, E> edgeWeightFactory, Double weightValue, Function<E, Double> weight,
-			Function<E,V> source, Function<E,V> target) {
+	private CompleteGraphView(G graph, 
+			TriFunction<V, V, Double,E> edgeWeightFactory, 
+			Double weightDefault,
+			Function<E,V> edgeSource,
+			Function<E,V> edgeTarget) {
 		super();
 		this.graph = graph;
 		this.edgeWeightFactory = edgeWeightFactory;
-		this.weightDefault = weightValue;
-		this.weight = weight;
-		this.source = source;
-		this.target = target;
+		this.weightDefault = weightDefault;
+		this.edgeSource = edgeSource;
+		this.edgeTarget = edgeTarget;
 		this.n= graph.vertexSet().size();
 	}
 
 	private G graph;
-	private TriFunction<V, V, Double, E> edgeWeightFactory;
+	private TriFunction<V, V, Double,E> edgeWeightFactory;
+	private Function<E,V> edgeSource;
+	private Function<E,V> edgeTarget;
 	private Double weightDefault;
-	private Function<E,Double> weight;
-	private Function<E,V> source;
-	private Function<E,V> target;
 	private final Integer n;
 
 	public Graph<V, E> getGraph() {
@@ -49,7 +55,7 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 		return weightDefault;
 	}
 
-	public TriFunction<V, V, Double, E> getEdgeWeightFactory() {
+	public TriFunction<V, V, Double,E> getEdgeWeightFactory() {
 		return this.edgeWeightFactory;
 	}
 
@@ -115,7 +121,7 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 		if(graph.containsEdge(e))
 			v = graph.getEdgeSource(e);
 		else 
-			v = this.source.apply(e);
+			v = this.edgeSource.apply(e);
 		return v;
 	}
 
@@ -128,12 +134,15 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 		if(graph.containsEdge(e))
 			v = graph.getEdgeTarget(e);
 		else 
-			v = this.target.apply(e);
+			v = this.edgeTarget.apply(e);
 		return v;
 	}
 
 	public double getEdgeWeight(E e) {
-		return weight.apply(e);
+		Double w = this.weightDefault;
+		if(graph.containsEdge(e))
+			w = graph.getEdgeWeight(e);
+		return w;
 	}
 
 	public GraphType getType() {
@@ -191,5 +200,10 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 	public Set<V> vertexSet() {
 		return graph.vertexSet();
 	}	
+	
+	@Override
+	public String toString() {
+		return String.format("%s === %s",this.vertexSet(),this.edgeSet());
+	}
 
 }

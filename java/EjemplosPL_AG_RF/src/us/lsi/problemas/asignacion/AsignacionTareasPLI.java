@@ -1,20 +1,21 @@
 package us.lsi.problemas.asignacion;
 
+
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
-import us.lsi.pli.HelpPLI;
-
+import static us.lsi.pli.AuxiliaryPLI.*;
 
 
 public class AsignacionTareasPLI {
 
-	public static Integer numeroDeReinas = 10;
+	public static AsignaciondeTareasRF a;
+	public static Integer n;
 
-	public static String getConstraints(AsignaciondeTareasRF a) {
+	public static String getConstraints() {
 
-		Integer n = a.getN();
 		String r = "min: ";
 
 		boolean first = true;
@@ -85,34 +86,42 @@ public class AsignacionTareasPLI {
 		return r;
 	}
 
-	public static String getConstraints2(AsignaciondeTareasRF a) {
+	public static String getConstraints2() {
 
 		String r = "";
-		Integer n = a.getN();
 		// r += allPairs(n, n).map(p -> String.format("%.2f *
 		// x_%d_%d",a.getCoste(p.i,p.j), p.i, p.j).replaceAll(",", "."))
-		r+= "min: "+HelpPLI.sum_2(n,n,p->true,p->a.getCoste(p.a, p.b),"id","; \n\n");
+		r+= "min: "+sum_2(n,n,"x",(i,j)->a.getCoste(i,j).toString())+"; \n\n";
 
-		r += IntStream.range(0, n).boxed().map(j -> HelpPLI.sum_2_i(j,n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(j -> constraintEq(sum_2_1(n,j,"x"),"1")).collect(Collectors.joining("", "", "\n"));
 
-		r += IntStream.range(0, n).boxed().map(i -> HelpPLI.sum_2_j(i,n,"x"," = 1; \n")).collect(Collectors.joining("", "", "\n"));
+		r += IntStream.range(0, n).boxed().map(i -> constraintEq(sum_2_2(n,i,"x"),"1")).collect(Collectors.joining("", "", "\n"));
 
-		r += HelpPLI.tipoVariables_2(n,n,"x","bin ");
+		r += varBin(n,n,"x");
 
 		return r;
+	}
+	
+	public static String getConstraints3() {	
+		StringBuilder r = new StringBuilder();
+		r.append(goalMin(sum_2(n,n,"x",(i,j)->a.getCoste(i,j).toString())));
+		r.append(forAll_1(n,i->constraintEq(sum_2_2(n,i,"x")," 1")));
+		r.append(forAll_1(n,j->constraintEq(sum_2_1(n,j,"x")," 1")));
+		r.append(varBin(n,n,"x"));
+		return r.toString();		
 	}
 
 	public static void main(String[] args) {
 //			System.out.println(getConstraints());
 
-		AsignaciondeTareasRF a = AsignaciondeTareasRF.create("ficheros/asignacionDeTareas.txt");
+		a = AsignaciondeTareasRF.create("ficheros/asignacionDeTareas.txt");
+		n = a.getN();
+//		System.out.println(getConstraints());
+//		System.out.println("________");
+//		System.out.println(getConstraints3());
+//		System.out.println("________");
 
-		System.out.println(getConstraints(a));
-		System.out.println("________");
-		System.out.println(getConstraints2(a));
-		System.out.println("________");
-
-		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2(a));
+		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints3());
 		System.out.println("-------------------");
 		System.out.println("________");
 		System.out.println(s.getGoal());

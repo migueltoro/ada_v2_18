@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.*;
 
+import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.search.GSearch;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
@@ -85,6 +85,19 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
 	
+	public MochilaEdge greadyEdgeHeuristic() {
+		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
+		Double a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+		return MochilaEdge.of(this,this.neighbor(a), a);
+	}
+	
+	public MochilaEdge greadyEdge() {
+		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
+		Double a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+		a = Math.floor(a);
+		return MochilaEdge.of(this,this.neighbor(a), a);
+	}
+	
 	public Double greedyAction() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
 		return Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
@@ -94,6 +107,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public List<Double> actions() {
 		if(this.index == n) return new ArrayList<>();
 		Integer nu = greedyAction().intValue();
+		if(this.index == n-1) return Lists2.of(nu.doubleValue());
 		List<Double> alternativas = IntStream.rangeClosed(0,nu)
 				.boxed()
 				.map(x->x.doubleValue())
@@ -104,19 +118,20 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	
 	@Override
 	public MochilaVertex neighbor(Double a) {
-		Double cr = capacidadRestante-a*DatosMochila.getPeso(index);
-		return MochilaVertex.of(index+1,cr);
+		 MochilaVertex r;
+		if(this.capacidadRestante == 0.) r =  MochilaVertex.of(n,0.);
+		if(this.index == n-1) r =  MochilaVertex.of(n,0.);
+		else {
+			Double cr = capacidadRestante-a*DatosMochila.getPeso(index);
+			r = MochilaVertex.of(index+1,cr);
+		}
+		return r;
 	}
 	
 	@Override
-	public MochilaEdge getEdgeFromAction(Double a) {
+	public MochilaEdge edge(Double a) {
 		MochilaVertex v = this.neighbor(a);
 		return MochilaEdge.of(this,v,a);
-	}
-	
-	public static Double heuristic(MochilaVertex v1, MochilaVertex v2) {
-		return GSearch.<MochilaVertex, MochilaEdge, Double>greedy(v1, v -> v.greedyAction(), (v, a) -> v.neighbor(a),
-				MochilaEdge::of).findWeight(v2);
 	}
 	
 	public static Double voraz(MochilaVertex v1, MochilaVertex v2) {
@@ -125,14 +140,18 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 			
 	public static Double voraz(int index, Double capacidadRestante, MochilaVertex v) {
 		Double r = 0.;
+//		Integer ind = index;
 		while (index != v.index) {
 			Double a = Math.min(capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 			r = r + a*DatosMochila.getValor(index);
 			capacidadRestante = capacidadRestante-a*DatosMochila.getPeso(index);
 			index = index+1;			
 		}
+//	  System.out.println(String.format("Index %d, Heurística %.2f",ind,r));
 		return  r;
 	}
+	
+	
 
 	@Override
 	public String toString() {

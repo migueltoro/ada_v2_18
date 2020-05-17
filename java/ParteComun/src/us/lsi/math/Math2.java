@@ -294,13 +294,12 @@ public class Math2 {
 	}
 	
 	/**
-	 * @param first Primera probabilidad
 	 * @param rest Resto de la probabilidades
 	 * @return Si se forma una lista ls con todos los parámetros el método devuelve un entero 
 	 * entre 0 y ls.size(), no incluido, con las probababilidades proporcionadas en la lista
 	 */
-	public static Integer escogeEntre(Double first, Double...rest){
-		return escogeEntre(Lists2.ofElements(first, rest));
+	public static Integer escogeEntre(Double...rest){
+		return escogeEntre(Lists2.of(rest));
 	}
 	 
 	/**

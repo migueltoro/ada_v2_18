@@ -55,10 +55,10 @@ public class LargeInteger implements Comparable<LargeInteger> {
 		return new LargeInteger(m.digits, m.isPositive);
 	}
 	
-	public static LargeInteger ZERO = LargeInteger.create(Lists2.ofElements(0));
-	public static LargeInteger ONE = LargeInteger.create(Lists2.ofElements(1));
-	public static LargeInteger TWO = LargeInteger.create(Lists2.ofElements(2));
-	public static LargeInteger TEN = LargeInteger.create(Lists2.ofElements(10));
+	public static LargeInteger ZERO = LargeInteger.create(Lists2.of(0));
+	public static LargeInteger ONE = LargeInteger.create(Lists2.of(1));
+	public static LargeInteger TWO = LargeInteger.create(Lists2.of(2));
+	public static LargeInteger TEN = LargeInteger.create(Lists2.of(10));
 	
 	/**
 	 * Los dígitos están ordenados de más significativo a menos significativos
@@ -79,7 +79,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	}
 
 	private LargeInteger(Integer number) {
-		this(Lists2.ofElements(number),true);
+		this(Lists2.of(number),true);
 	}
 	
 	private LargeInteger(List<Integer> digits, Boolean isPositive) {

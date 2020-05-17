@@ -6,7 +6,7 @@ import java.util.List;
 
 import us.lsi.common.Files2;
 import us.lsi.flowgraph.FlowGraph;
-import us.lsi.flowgraph.FlowGraph.TipoDeOptimizacion;
+import us.lsi.flowgraph.FlowGraph.FGType;
 import us.lsi.pli.AlgoritmoPLI;
 import us.lsi.pli.SolutionPLI;
 import us.lsi.flowgraph.FlowGraphSolution;
@@ -85,7 +85,7 @@ public class AsignaciondeTareasRF {
 		AsignaciondeTareasRF a = AsignaciondeTareasRF.create("ficheros/asignacionDeTareas.txt");
 		a.creaFichero("ficheros/redFlujoTareas.txt");
 
-		FlowGraph fg = FlowGraph.newGraph("ficheros/redFlujoTareas2.txt", TipoDeOptimizacion.Max);
+		FlowGraph fg = FlowGraph.newGraph("ficheros/redFlujoTareas2.txt", FGType.Max);
 		// Se ha modificado la funcion number() de los Vertices y Aristas para que el
 		// separador de ',' sea '.' segun formato LpSolve.
 		String constraints = fg.getConstraints();

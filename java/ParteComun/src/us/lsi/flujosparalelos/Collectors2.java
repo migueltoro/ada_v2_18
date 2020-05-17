@@ -2,7 +2,9 @@ package us.lsi.flujosparalelos;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -54,6 +56,14 @@ public class Collectors2 {
 				(b,e)->p.test(e), 
 				(b1,b2)->b1&&b2, 
 				b->b);
+	}
+	
+	public static <E> Collector<E,Set<E>,Integer> countDistinct() {
+		return Collector.of(
+				()->new HashSet<E>(), 
+				(x,e)->x.add(e), 
+				(s1,s2)->{Set<E> c = new HashSet<>(s1); c.addAll(s2); return c;}, 
+				s->s.size());
 	}
 
 }

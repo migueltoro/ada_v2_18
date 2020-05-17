@@ -3,7 +3,7 @@ package us.lsi.ag.anuncios;
 
 import java.util.List;
 
-import us.lsi.ag.HelpFitnessAg;
+import us.lsi.ag.AuxiliaryAg;
 import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.anuncios.datos.Anuncio;
@@ -28,9 +28,9 @@ public class ProblemaAnunciosAG extends DatosAnuncios implements SeqNormalProble
 		List<Integer> list = c.decode();
 		ListaDeAnunciosAEmitir ls = ListaDeAnunciosAEmitir.create(list);
 		Double valor = ls.getValor();
-		Double nIn = HelpFitnessAg.distanceToEqZero((double)ls.getNumAnunciosIncompatibles());
-		Double tr = HelpFitnessAg.distanceToGeZero((double)ls.getTiempoRestante());
-		Double nRep = HelpFitnessAg.distanceToEqZero((double)ls.getNumAnunciosRepetidos());
+		Double nIn = AuxiliaryAg.distanceToEqZero((double)ls.getNumAnunciosIncompatibles());
+		Double tr = AuxiliaryAg.distanceToGeZero((double)ls.getTiempoRestante());
+		Double nRep = AuxiliaryAg.distanceToEqZero((double)ls.getNumAnunciosRepetidos());
 		Double f = valor/1000000.  -1000000000.*nIn -1000000000000.*tr -1000000000.*nRep;
 		return f;
 	}

@@ -3,50 +3,58 @@ package us.lsi.graphs.search;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import org.jgrapht.Graph;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
-import us.lsi.graphs.manual.Data;
+import us.lsi.common.TriFunction;
+import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.path.EGraphPath;
+import us.lsi.walks.manual.Data;
 
-public class AStarSearch<V, E> implements GSearch<V,E> {
+public class AStarSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
 
 	public EGraph<V,E> graph; 
-	private V initial;
-	private V end;
-	private BiFunction<V,V,Double> heuristic;
-	private Map<V,FibonacciHeapNode<Data<V,E>>> tree;
-	private FibonacciHeap<Data<V,E>> heap = new FibonacciHeap<>();
-	private FibonacciHeapNode<Data<V,E>> data = Data.node(initial,null);
+	protected V startVertex;
+	public Predicate<V> goal;
+	protected V end;
+	protected TriFunction<V,Predicate<V>,V,Double> heuristic;
+	public Map<V,FibonacciHeapNode<Data<V,E>>> tree;
+	protected FibonacciHeap<Data<V,E>> heap = new FibonacciHeap<>();
+	protected FibonacciHeapNode<Data<V,E>> data = Data.node(startVertex,null);
+	protected EGraphPath<V,E> ePath;
 	
-	AStarSearch(EGraph<V, E> graph, V initial, V end, BiFunction<V, V, Double> heuristic) {
+	AStarSearch(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		super();
 		this.graph = graph;
-		this.initial = initial;
+		this.startVertex = graph.startVertex();
+		this.goal = goal;
 		this.end = end;
 		this.heuristic = heuristic;
 		this.tree = new HashMap<>();
+		this.ePath = graph.initialPath();
 		heap = new FibonacciHeap<>();
-		data = Data.node(initial,null);
-		this.heap.insert(data,toEnd(initial));
-		this.tree.put(initial,data);
+		data = Data.node(startVertex,null);		
+		this.heap.insert(data,ePath.estimatedWeightToEnd(0.,goal,end,heuristic));
+		this.tree.put(startVertex,data);
 	}
 
 	@Override
+	public Stream<V> stream() {
+		return Iterators.asStream(this.iterator());
+	}
+	@Override
+	public AStarSearch<V, E> copy(){
+		return GSearch.aStar(this.graph, this.goal, this.end, this.heuristic);
+	}
+	
 	public Iterator<V> iterator() {
 		return this;
 	}
 	
-	private Double toEnd(V actual) {
-		Double r = 0.;
-		if(heuristic!=null) r = heuristic.apply(actual, end);
-		return r;
-	}
-	
-	@Override
 	public boolean isSeenVertex(V v) {
 		return this.tree.containsKey(v);
 	}
@@ -61,20 +69,22 @@ public class AStarSearch<V, E> implements GSearch<V,E> {
 		V vertexActual = dataActual.getData().vertex;
 		for(E backEdge:graph.edgesListOf(vertexActual)) {
 			V v = graph.getEdgeTarget(backEdge);
-			Double weightEdge = graph.getEdgeWeight(backEdge);
-			Double newDistance = dataActual.getData().distance+weightEdge;
-			Double toEnd = toEnd(vertexActual);
+			Double newDistance = ePath.add(dataActual.getData().distance,backEdge);
+			double newDistanceToEnd = ePath.estimatedWeightToEnd(newDistance,goal,end,heuristic);
 			if(!tree.containsKey(v)) {				
 				Data<V,E> nd = Data.of(v,backEdge,newDistance);
 				FibonacciHeapNode<Data<V, E>> nf = Data.node(nd);
-				heap.insert(nf,newDistance+toEnd);
+//				newDistanceToEnd = ePath.estimatedWeightToEnd(newDistance,goal,end,heuristic);
+				heap.insert(nf,newDistanceToEnd);
 				tree.put(v,nf);
 			} else if(!tree.get(v).getData().closed){
 				Double oldDistance = tree.get(v).getData().distance;
 				if(newDistance < oldDistance) {
+//					newDistanceToEnd = ePath.estimatedWeightToEnd(newDistance,goal,end,heuristic);
+//					System.out.println(String.format("1--- %.2f,%.2f",newDistance,newDistanceToEnd));
 					tree.get(v).getData().distance = newDistance;
 					tree.get(v).getData().edge = backEdge;
-					heap.decreaseKey(tree.get(v), newDistance+toEnd);
+					heap.decreaseKey(tree.get(v), newDistanceToEnd);
 				}				
 			}
 		}
@@ -82,19 +92,18 @@ public class AStarSearch<V, E> implements GSearch<V,E> {
 		return vertexActual;
 	}
 
-	@Override
 	public E getEdgeToOrigin(V v) {
 		return tree.get(v).getData().edge;
 	}
 
 	@Override
-	public Graph<V, E> getGraph() {
+	public EGraph<V, E> getGraph() {
 		return this.graph;
 	}
 
 	@Override
-	public V initialVertex() {
-		return this.initial;
-	}	
-
+	public V startVertex() {
+		return this.startVertex;
+	}
+	
 }

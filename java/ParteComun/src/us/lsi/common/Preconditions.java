@@ -56,6 +56,13 @@ public class Preconditions {
 		}
 		return reference;
 	}
+	
+	public static <T> T checkNotNull(T reference, String mensaje){
+		if(reference == null){
+			throw new NullPointerException(mensaje);
+		}
+		return reference;
+	}
 		
 	/**
 	 * Checks that index is a valid element index into a list, string, or array with the specified size. 
