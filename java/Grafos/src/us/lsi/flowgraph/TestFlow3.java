@@ -4,8 +4,8 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.Strings2;
 import us.lsi.flowgraph.FlowGraph.FGType;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 
 public class TestFlow3 {
 

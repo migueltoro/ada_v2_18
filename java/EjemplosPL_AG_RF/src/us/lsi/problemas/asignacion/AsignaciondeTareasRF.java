@@ -7,8 +7,8 @@ import java.util.List;
 import us.lsi.common.Files2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraph.FGType;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 import us.lsi.flowgraph.FlowGraphSolution;
 
 /**

@@ -1,4 +1,4 @@
-package us.lsi.pli;
+package us.lsi.lpsolve;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

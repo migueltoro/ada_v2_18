@@ -1,7 +1,7 @@
 package us.lsi.pli.examples.test;
 
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 
 public class TestPLI {
 

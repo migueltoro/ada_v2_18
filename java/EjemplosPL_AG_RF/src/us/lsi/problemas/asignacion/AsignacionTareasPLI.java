@@ -1,12 +1,14 @@
 package us.lsi.problemas.asignacion;
 
 
+import static us.lsi.lpsolve.AuxiliaryPLI.*;
+
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
-import static us.lsi.pli.AuxiliaryPLI.*;
+
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 
 
 public class AsignacionTareasPLI {

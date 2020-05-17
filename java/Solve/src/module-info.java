@@ -4,8 +4,8 @@
  *
  */
 module solve {
-	exports us.lsi.pli;
-	exports us.lsi.pli.test;
+	exports us.lsi.lpsolve;
+	exports us.lsi.lpsolve.test;
 
 	requires lpsolve;
 	requires transitive partecomun;

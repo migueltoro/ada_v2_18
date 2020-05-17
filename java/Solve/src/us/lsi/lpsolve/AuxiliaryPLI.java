@@ -1,4 +1,4 @@
-package us.lsi.pli;
+package us.lsi.lpsolve;
 
 import java.util.Locale;
 import java.util.function.BiFunction;

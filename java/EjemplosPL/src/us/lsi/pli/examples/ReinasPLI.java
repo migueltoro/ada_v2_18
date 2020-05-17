@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import us.lsi.common.Files2;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 
 
 

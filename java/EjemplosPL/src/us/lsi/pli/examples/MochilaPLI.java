@@ -3,9 +3,9 @@ package us.lsi.pli.examples;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
 
 public class MochilaPLI{
 	

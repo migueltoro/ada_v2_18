@@ -1,4 +1,4 @@
-package us.lsi.pli;
+package us.lsi.lpsolve;
 
 import java.util.List;
 

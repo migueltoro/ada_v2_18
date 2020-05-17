@@ -1,5 +1,7 @@
 package us.lsi.problemas.coloreado;
 
+import static us.lsi.lpsolve.AuxiliaryPLI.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +16,8 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.pli.AlgoritmoPLI;
-import us.lsi.pli.SolutionPLI;
-import static us.lsi.pli.AuxiliaryPLI.*;
+import us.lsi.lpsolve.AlgoritmoPLI;
+import us.lsi.lpsolve.SolutionPLI;
 import us.lsi.common.Streams2;
 
 public class ProblemaColorPLI {
