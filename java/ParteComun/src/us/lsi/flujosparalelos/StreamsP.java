@@ -13,8 +13,6 @@ import us.lsi.common.Enumerate;
 import us.lsi.common.IntPair;
 import us.lsi.common.MutableType;
 import us.lsi.common.Pair;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
 
 public class StreamsP {
 	

@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import us.lsi.common.Files2;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 
 
@@ -131,7 +131,7 @@ public class ReinasPLI {
 					.collect(Collectors.toList());
 			for (Integer e:nr) {
 				ReinasPLI.numeroDeReinas = e;				
-				SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2());
+				SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints2());
 				System.out.println("-------------------");
 				System.out.println("________");
 				System.out.println(s.getGoal());

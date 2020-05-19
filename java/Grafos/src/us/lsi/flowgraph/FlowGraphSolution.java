@@ -11,7 +11,7 @@ import us.lsi.colors.GraphColors;
 import us.lsi.common.Files2;
 import us.lsi.common.Maps2;
 import us.lsi.graphs.Graphs2;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 public class FlowGraphSolution {
 	
@@ -26,7 +26,7 @@ public class FlowGraphSolution {
 		return FlowGraphSolution.create(graph,flowVertices,flowEdges,goal);	
 	}
 	
-	public static FlowGraphSolution create(FlowGraph graph,SolutionPLI s) {
+	public static FlowGraphSolution create(FlowGraph graph,SolutionLpSolve s) {
 		Map<FlowVertex, Double> flowVertices = Maps2.newHashMap();
 		Map<FlowEdge, Double> flowEdges = Maps2.newHashMap(); 
 		for(int i=0;i<s.getNumVar();i++) {

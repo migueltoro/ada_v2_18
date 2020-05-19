@@ -1,13 +1,13 @@
 package us.lsi.problemas.reinas;
 
-import static us.lsi.lpsolve.AuxiliaryPLI.*;
+import static us.lsi.lpsolve.AuxiliaryLpSolve.*;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.Streams2;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 
 public class ReinasPLI {
@@ -125,7 +125,7 @@ public class ReinasPLI {
 	
 	public static void main(String[] args) {
 //			System.out.println(getConstraints());
-			SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2());
+			SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints2());
 			System.out.println("-------------------");	
 			System.out.println("________");
 			System.out.println(s.getGoal());

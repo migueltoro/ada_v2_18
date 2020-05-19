@@ -7,8 +7,8 @@ import java.util.List;
 import us.lsi.common.Files2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraph.FGType;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 import us.lsi.flowgraph.FlowGraphSolution;
 
 /**
@@ -98,7 +98,7 @@ public class AsignaciondeTareasRF {
 
 		// SolutionPLI s =
 		// AlgoritmoPLI.getSolutionFromFile("ficheros/redFlujoTareasConstraints.txt");
-		SolutionPLI s = AlgoritmoPLI.getSolution(fg.getConstraints());
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(fg.getConstraints());
 		FlowGraphSolution fs = FlowGraphSolution.create(fg, s);
 		fs.exportToDot("ficheros/redFlujoTareasConstraints.gv");
 

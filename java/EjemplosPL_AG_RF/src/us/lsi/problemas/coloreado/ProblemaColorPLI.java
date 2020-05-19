@@ -1,6 +1,6 @@
 package us.lsi.problemas.coloreado;
 
-import static us.lsi.lpsolve.AuxiliaryPLI.*;
+import static us.lsi.lpsolve.AuxiliaryLpSolve.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +16,8 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 import us.lsi.common.Streams2;
 
 public class ProblemaColorPLI {
@@ -150,7 +150,7 @@ public class ProblemaColorPLI {
 		System.out.println(getConstraints2(grafo, ciudades));
 		System.out.println("________");
 
-		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2(grafo, ciudades));
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints2(grafo, ciudades));
 		System.out.println("-------------------");
 		System.out.println("________");
 		System.out.println(s.getGoal());

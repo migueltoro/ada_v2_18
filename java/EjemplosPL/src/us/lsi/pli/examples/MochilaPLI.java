@@ -3,8 +3,8 @@ package us.lsi.pli.examples;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 import us.lsi.mochila.datos.DatosMochila;
 
 public class MochilaPLI{
@@ -76,7 +76,7 @@ public class MochilaPLI{
 		System.out.println(DatosMochila.getObjetos());
 		System.out.println(getConstraints());
 		System.out.println(getConstraints2());
-		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints2());
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints2());
 		System.out.println("-------------------");	
 		System.out.println("________");
 		System.out.println(s.getGoal());

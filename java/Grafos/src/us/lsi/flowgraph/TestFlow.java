@@ -2,8 +2,8 @@ package us.lsi.flowgraph;
 
 import us.lsi.common.Strings2;
 import us.lsi.flowgraph.FlowGraph.FGType;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 public class TestFlow {
 
@@ -15,7 +15,7 @@ public class TestFlow {
 		g.exportToDot("ficheros/flow2Export.gv");
 		String constraints = g.getConstraints();
 		Strings2.toFile(constraints, "ficheros/constraints2.txt");
-		SolutionPLI s = AlgoritmoPLI.getSolution(constraints);	
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(constraints);	
 		FlowGraphSolution fs = FlowGraphSolution.create(g, s);
 		fs.exportToDot("ficheros/flow2SolutionExport.gv");
 		System.out.println(fs.getGoal());

@@ -5,8 +5,8 @@ import us.lsi.flowgraph.FlowGraphSolution;
 import us.lsi.common.Files2;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowGraph.FGType;
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 
 
@@ -26,7 +26,7 @@ public class Flow1 {
 		FlowGraph fg = FlowGraph.newGraph("ficheros/flow1.txt",FGType.Max);
 		String constraints = fg.getConstraints();
 		Files2.toFile(constraints,"ficheros/flow1Constraints.txt");		
-		SolutionPLI s = AlgoritmoPLI.getSolutionFromFile("ficheros/flow1Constraints.txt");	
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolutionFromFile("ficheros/flow1Constraints.txt");	
 		FlowGraphSolution fs = FlowGraphSolution.create(fg,s);
 		fs.exportToDot("ficheros/flow1Soluciones.gv");
 	}

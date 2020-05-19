@@ -1,14 +1,13 @@
 package us.lsi.problemas.asignacion;
 
 
-import static us.lsi.lpsolve.AuxiliaryPLI.*;
+import static us.lsi.lpsolve.AuxiliaryLpSolve.*;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.lpsolve.AlgoritmoPLI;
-import us.lsi.lpsolve.SolutionPLI;
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
 
 
 public class AsignacionTareasPLI {
@@ -123,7 +122,7 @@ public class AsignacionTareasPLI {
 //		System.out.println(getConstraints3());
 //		System.out.println("________");
 
-		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints3());
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints3());
 		System.out.println("-------------------");
 		System.out.println("________");
 		System.out.println(s.getGoal());
