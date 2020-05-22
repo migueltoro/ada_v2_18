@@ -166,7 +166,7 @@ public class Ejemplos {
 	 * @return Un IntStream
 	 */
 	public static IntStream ejemploO(String fileIn){
-		return Files2.getStream(fileIn)
+		return Files2.streamFromFile(fileIn)
 				     .mapToInt(x-> Integer.parseInt(x));
 	}
 	
@@ -189,7 +189,7 @@ public class Ejemplos {
 	 */
 	public static void ejemploQ(String fileIn, String fileOut, LocalDate c1, LocalDate c2){
 		Preconditions.checkArgument(c2.compareTo(c1) > 0);
-		Stream<String> r = Files2.getStream(fileIn)
+		Stream<String> r = Files2.streamFromFile(fileIn)
 				.map(x-> LocalDate.parse(x))
 				.filter(x->c1.compareTo(x)< 0 && c2.compareTo(x)>0)
 				.sorted()
@@ -202,7 +202,7 @@ public class Ejemplos {
 	 * @return Un IntStream
 	 */
 	public static IntStream ejemploR(String fileIn){
-		return Files2.getStream(fileIn)
+		return Files2.streamFromFile(fileIn)
 				     .map(x->x.split(","))
 				     .flatMap(x->Arrays.stream(x))
 				     .mapToInt(x-> Integer.parseInt(x));

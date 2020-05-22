@@ -6,29 +6,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import us.lsi.common.Multiset;
-import us.lsi.common.Streams2;
 import us.lsi.common.Strings2;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
+import us.lsi.common.Pair;
 import us.lsi.flujosparalelos.Collectors2;
+import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujossecuenciales.StreamsS;
 import us.lsi.math.Math2;
 
 
 public class EjemplosDeStreams2 {
 	
-	public static List<Tuple2<Long,Long>> primosPar(Long m, Long k, Integer d){
-		var r = Stream.iterate(Math2.siguientePrimo(m),x->true,x->Math2.siguientePrimo(x));
-		var r2 = Streams2.consecutivePairs(r);
-		var rr2 = r2.filter(t->t.v2-t.v1==d).limit(k).
-				collect(Collectors.toList());
-		return rr2;
+	public static List<Pair<Long,Long>> primosPar(Long start, Integer diff, Integer limit){
+		var r10 = Stream.iterate(Math2.siguientePrimo(start),x->true,x->Math2.siguientePrimo(x));
+		var r11 = Streams2.consecutivePairs(r10).filter(t->t.second-t.first==diff).limit(limit).collect(Collectors.toList());;
+		return r11;
 	}
 	
 	public static Stream<Long> divisores(Long n){
 		return Stream.iterate(2L, x-> x <= (long) Math.sqrt(n), x -> x+1).filter(x->n%x==0);
 	}
 	
-	public static Stream<Tuple2<Long,Long>> primos(Long a){
+	public static Stream<Pair<Long,Long>> primos(Long a){
 		var r = Stream.iterate(Math2.siguientePrimo(a),x->Math2.siguientePrimo(x));
 		var r2 = Streams2.consecutivePairs(r);
 		return r2;
@@ -48,20 +46,20 @@ public class EjemplosDeStreams2 {
 		var s3 = r2.stream().map(x->x.toString());
 		System.out.println("2: ______");
 		var s4 = Stream.iterate(0, x->x+1);
-		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Tuple.create(x, y));
+		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Pair.of(x, y));
 		s5.forEach(System.out::println);
 		System.out.println("3: ______");
 		var n = 14L;
 		var b = 7L;
 		var s6 = Stream.iterate(n,x->x>0,x->x/2);
-		var s7 = Stream.iterate(Tuple.create(n,b),
-								t->t.v1>0,
-								t->Tuple.create(t.v1/2,t.v2*t.v2))
-						.filter(t->t.v1%2!=0)
-						.map(t->t.v2)
+		var s7 = Stream.iterate(Pair.of(n,b),
+								t->t.first>0,
+								t->Pair.of(t.first/2,t.second*t.second))
+						.filter(t->t.first%2!=0)
+						.map(t->t.second)
 						.reduce(1L,(x,y)->x*y);
 		System.out.println("4: ______");
-		var ss = Streams2.enumerate(r2.stream());
+		var ss = StreamsS.enumerate(r2.stream().iterator());
 		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(",","{","}"));
 		System.out.println(r3);
 		System.out.println("5: ______");
@@ -70,7 +68,7 @@ public class EjemplosDeStreams2 {
 		var r4 = ss2.map(t->t.toString()).collect(Collectors.joining(","));
 		System.out.println(r4);
 		System.out.println("6: ______");
-		var pp = primosPar(1000L,10L,2);
+		var pp = primosPar(100L,2,3);
 		Strings2.toConsole(pp,"Pares de primos");
 		System.out.println("7: ______");
 		Long m1 = 1000L;
@@ -82,6 +80,14 @@ public class EjemplosDeStreams2 {
 		System.out.println(rr4);
 		System.out.println("8: ______");
 		System.out.println(Math2.esDivisible(0, 15));
+		System.out.println("9: ______");
+		var s10 = Stream.iterate(0,x->x<100,x->x+1);
+		var s11 = Streams2.cartesianProduct(s10).collect(Collectors.toList());
+		System.out.println(s11);
+		System.out.println("10: ______");
+		var s12 = Stream.iterate(0,x->x<100,x->x+1);
+		var s13 = Streams2.consecutivePairs(s12).collect(Collectors.toList());
+		System.out.println(s13);
 	}
 
 }

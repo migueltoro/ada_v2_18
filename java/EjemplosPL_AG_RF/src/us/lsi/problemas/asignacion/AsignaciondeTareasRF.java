@@ -46,7 +46,7 @@ public class AsignaciondeTareasRF {
 	}
 
 	private void leeFichero(String f) {
-		List<String> lineas = Files2.getLines(f);
+		List<String> lineas = Files2.linesFromFile(f);
 		this.n = Integer.parseInt(lineas.get(0));
 		this.m = Integer.parseInt(lineas.get(1));
 		this.costes = new Double[n][m];

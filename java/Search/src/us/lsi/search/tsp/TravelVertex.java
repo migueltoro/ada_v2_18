@@ -6,7 +6,7 @@ import org.jgrapht.Graph;
 
 import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
-import us.lsi.flujosparalelos.StreamsP;
+import us.lsi.flujosparalelos.Streams2;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
@@ -38,7 +38,7 @@ public class TravelVertex extends ActionVirtualVertex<TravelVertex, TravelEdge, 
 
 	@Override
 	public List<IntPair> actions() {
-		return StreamsP.allPairs(0,n,0,n)
+		return Streams2.allPairs(0,n,0,n)
 				.filter(p->p.second > p.first)
 				.collect(Collectors.toList());
 	}

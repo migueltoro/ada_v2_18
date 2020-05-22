@@ -6,14 +6,14 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import us.lsi.common.Enumerate;
 import us.lsi.common.Pair;
 
 public class StreamsS {
-	
-	
 	
 	public static <T> Iterator<T> asIterator(Stream<T> stream) { 
         return stream.iterator(); 
@@ -37,6 +37,11 @@ public class StreamsS {
 	
 	public static <E> Stream<E> sorted(Iterator<E> iteratorA, Iterator<E> iteratorB, Comparator<E> cmp) {
 		return Iterators.asStream(IteratorOrdered.of(iteratorA,iteratorB,cmp));
+	}
+	
+	public static <E> Stream<Pair<E,E>> cartesianProduct(Stream<E> stream) {
+		List<E> ls = stream.collect(Collectors.toList());
+		return Iterators.asStream(IteratorCartesianProduct.of(ls));
 	}
 	
 	public static <E> Stream<Pair<E,E>> consecutivePairs(Stream<E> st) {

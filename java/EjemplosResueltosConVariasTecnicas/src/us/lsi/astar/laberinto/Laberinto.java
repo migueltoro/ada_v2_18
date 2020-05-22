@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.common.Files2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
 import us.lsi.common.Maps2;
@@ -33,7 +34,7 @@ public class Laberinto {
 	public static void leeDatos(String file, int nf, int nc){
 		Laberinto.nf = nf;
 		Laberinto.nc = nc;
-		List<Integer> ls = Streams2.fromFile(file)
+		List<Integer> ls = Files2.streamFromFile(file)
 				.flatMap(x->Streams2.fromString(x, ","))
 				.map(x->Integer.parseInt(x))
 				.collect(Collectors.toList());

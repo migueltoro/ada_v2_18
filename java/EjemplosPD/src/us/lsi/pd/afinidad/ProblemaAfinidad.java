@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
-import us.lsi.common.Streams2;
 
 public class ProblemaAfinidad {
 	
@@ -55,7 +55,7 @@ public class ProblemaAfinidad {
 		Set<String> trab= new HashSet<>();			
 		clientes=new ArrayList<>();
 		
-		Streams2.fromFile(file)
+		Files2.streamFromFile(file)
 			.map(x-> x.replace(" ","")) //quitar espacios en blanco
 			.peek(x -> clientes.add(Cliente.create(x))) //crear clientes
 			.forEach(x-> trab.addAll(Arrays.asList(x.split(",")[2].split(";")))); //crear trabajadores

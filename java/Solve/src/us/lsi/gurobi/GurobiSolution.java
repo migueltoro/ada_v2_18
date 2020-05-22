@@ -1,6 +1,8 @@
 package us.lsi.gurobi;
 
 import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 public class GurobiSolution {
 
@@ -16,10 +18,27 @@ public class GurobiSolution {
 		this.objVal = objVal;
 		this.values = values;
 	}
+	
+	public String toString(BiPredicate<String,Double> pd) {
+		return String.format("\n\n\nEl valor objetivo es %.2f\nLos valores de la variables\n%s",this.objVal,
+				this.values.entrySet()
+				.stream()
+				.filter(e->pd.test(e.getKey(),e.getValue()))
+				.map(e->String.format("%s == %.1f",e.getKey(),e.getValue()))
+				.collect(Collectors.joining("\n")));
+	}
+	
+	private String allValues() {
+		return this.values.entrySet()
+				.stream()
+				.map(e->String.format("%s == %.1f",e.getKey(),e.getValue()))
+				.collect(Collectors.joining("\n"));
+	}
 
 	@Override
 	public String toString() {
-		return String.format("El valor objetivo es %.2f \nLos valores de la variables %s",objVal,values);
+		return String.format("\n\n\nEl valor objetivo es %.2f\nLos valores de la variables\n%s",
+				this.objVal,this.allValues());
 	}
 	
 }

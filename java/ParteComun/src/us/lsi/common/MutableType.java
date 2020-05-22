@@ -22,6 +22,7 @@ public class MutableType<T> {
 	
 	public T newValue(T e) {
 		T old = this.value;
+		this.value = e;
 		return old;
 	}
 	

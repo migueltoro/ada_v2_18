@@ -18,7 +18,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.lpsolve.AlgoritmoLpSolve;
 import us.lsi.lpsolve.SolutionLpSolve;
-import us.lsi.common.Streams2;
+import us.lsi.flujosparalelos.Streams2;
 
 public class ProblemaColorPLI {
 

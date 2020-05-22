@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
+import us.lsi.common.Files2;
 import us.lsi.common.Strings2;
 import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
@@ -557,7 +557,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 
 	
 	public static void test1() {
-		List<String> filas = Streams2.fromFile("ficheros/test2.txt").collect(Collectors.toList());
+		List<String> filas = Files2.streamFromFile("ficheros/test2.txt").collect(Collectors.toList());
 		BinaryTree<String> tree = null;
 		for (String fila : filas) {
 			tree = BinaryTreeImpl.parse(fila);

@@ -1,0 +1,92 @@
+package us.lsi.pli.examples;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import us.lsi.lpsolve.AlgoritmoLpSolve;
+import us.lsi.lpsolve.SolutionLpSolve;
+import us.lsi.mochila.datos.DatosMochila;
+
+public class MochilaLpSolvePLI{
+	
+	
+		public static String getConstraints(){
+			DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+			DatosMochila.capacidadInicial = 78;
+			int num = DatosMochila.getObjetos().size();
+			String r = "";
+			r = r+"max: ";
+			for(int i =0;i<num;i++){
+				if (i!=0) r = r+"+";
+				r = r +String.format("%d*x%d",DatosMochila.getValor(i),i);
+			}		
+			r = r+";\n\n";
+			for(int i =0;i<num;i++){
+				if (i!=0) r = r+"+";
+				r = r +String.format("%d*x%d",DatosMochila.getPeso(i),i);
+			}
+			r = r +"<=";
+			r = r +DatosMochila.capacidadInicial;
+			r = r+";\n\n";
+			for(int i =0;i<num;i++){
+				r = r + String.format("x%d",i) + "<="+DatosMochila.getNumMaxDeUnidades(i)+";\n";
+			}
+			r = r +"int ";
+			for(int i =0;i<num;i++){
+				if (i!=0) r = r+",";
+				r = r + String.format("x%d",i);
+			}
+			r = r+";\n\n\n";		
+			return r;
+		}
+
+		public static String getConstraints2(){
+			DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+			DatosMochila.capacidadInicial = 78;
+			int num = DatosMochila.getObjetos().size();
+			String r = "max: ";
+			r = r + IntStream.range(0, num)
+					.boxed()
+					.map(i->String.format("%d*x%d",DatosMochila.getValor(i),i))
+					.collect(Collectors.joining("+", "", ";\n\n"));
+			
+			r = r + IntStream.range(0, num)
+					.boxed()
+					.map(i->String.format("%d*x%d",DatosMochila.getPeso(i),i))
+					.collect(Collectors.joining("+", "", String.format(" <= %d;\n\n", DatosMochila.capacidadInicial)));
+			
+			r = r + IntStream.range(0, num)
+					.boxed()
+					.map(i->String.format("x%d <= %d;\n",i,DatosMochila.getNumMaxDeUnidades(i)))
+					.collect(Collectors.joining("","","\n"));
+			
+			r = r +"int ";
+			r = r + IntStream.range(0, num)
+					.boxed()
+					.map(i->String.format("x%d",i))
+					.collect(Collectors.joining(",","",";\n"));		
+			r = r +"\n\n";
+			return r;
+		}
+
+	
+	public static void main(String[] args) {	
+		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.capacidadInicial = 78;		
+		System.out.println(DatosMochila.getObjetos());
+		System.out.println(getConstraints());
+		System.out.println(getConstraints2());
+		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(getConstraints2());
+		System.out.println("-------------------");	
+		System.out.println("________");
+		System.out.println(s.getGoal());
+		System.out.println("________");
+		System.out.println("________");
+		for(int i=0;i<s.getNumVar();i++){
+			System.out.println(s.getName(i)+" = "+s.getSolution(i));
+		}
+	}
+
+	
+	
+}

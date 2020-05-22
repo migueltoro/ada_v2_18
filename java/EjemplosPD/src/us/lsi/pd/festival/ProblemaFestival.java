@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import us.lsi.common.Files2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Streams2;
 
@@ -28,7 +29,7 @@ public class ProblemaFestival {
 	}
 	
 	public static void leeGrupos(String file){	
-		List<String> ls = Streams2.fromFile(file)
+		List<String> ls = Files2.streamFromFile(file)
 				.collect(Collectors.toList());
 		ProblemaFestival.gruposPorDiaYHora = new LinkedHashMap<String, Map<String, List<Grupo>>>();
 		ProblemaFestival.actuaciones = 0;

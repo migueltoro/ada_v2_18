@@ -8,4 +8,6 @@ module ejemplos_pl {
 
 	requires transitive datos_compartidos;
 	requires transitive solve;
+	requires transitive grafos;
+	requires partecomun;
 }

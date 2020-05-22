@@ -5,7 +5,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="LpSolve/lib/win64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/ParteComun">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ParteComun">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -15,12 +15,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/lpsolve-5.5.2.0.jar">
+	<classpathentry exported="true" kind="lib" path="lib/lpsolve-5.5.2.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/gurobi.jar">
+	<classpathentry exported="true" kind="lib" path="lib/gurobi.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

@@ -378,12 +378,12 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 	public void showAllGraph(String nombre,String titulo,P pd){
 			
 		if (solucionesParciales.get(pd).alternativa!=null) {
-			Files2.setFile(nombre);
-			Files2.getFile().println("digraph "+titulo+" {  \n size=\"100,100\"; ");	
+			Files2.setPrintWriter(nombre);
+			Files2.getWriter().println("digraph "+titulo+" {  \n size=\"100,100\"; ");	
 			marcarEnSolucion(pd);
 			Set<P> visitados = Sets2.empty();
 			showAll(pd,visitados);
-			Files2.getFile().println("}");
+			Files2.getWriter().println("}");
 		}
 	}
 		
@@ -444,14 +444,14 @@ public class AlgoritmoPD<S,A,P extends ProblemaPD<S,A,P>> {
 		if(visitados.contains(p)) return;
 		visitados.add(p);
 		Sp<A> e = solucionesParciales.get(p);
-		Files2.getFile().println(problema(p, e));
+		Files2.getWriter().println(problema(p, e));
 		if (!p.esCasoBase()) {
 				for (Sp<A> solParAlt : e.solucionesDeAlternativas) {
-					Files2.getFile().println(alternativa(p, solParAlt.alternativa));
-					Files2.getFile().println(aristaProblemaToAlternativa(p,solParAlt.alternativa, e));
+					Files2.getWriter().println(alternativa(p, solParAlt.alternativa));
+					Files2.getWriter().println(aristaProblemaToAlternativa(p,solParAlt.alternativa, e));
 					for (int i = 0; i < p.getNumeroSubProblemas(solParAlt.alternativa); i++) {
 						var pds = p.getSubProblema(solParAlt.alternativa, i);
-						Files2.getFile().println(aristaAlternativaToProblema(p,solParAlt.alternativa, pds, e));
+						Files2.getWriter().println(aristaAlternativaToProblema(p,solParAlt.alternativa, pds, e));
 						showAll(pds,visitados);
 					}
 				}

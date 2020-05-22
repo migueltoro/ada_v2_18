@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import us.lsi.flujosparalelos.StreamsP;
+import us.lsi.flujosparalelos.Streams2;
 
 
 public class AuxiliaryLpSolve {
@@ -63,20 +63,20 @@ public class AuxiliaryLpSolve {
 	}
 	
 	public static String sum_2(Integer n, Integer m, String id) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.map(p -> varId(id,p.first,p.second))
 				.collect(Collectors.joining("+"));
 	}
 	
 	public static String sum_2(Integer n, Integer m, String id, BiFunction<Integer,Integer,String> factor) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.map(p -> String.format("%s*%s", factor.apply(p.first,p.second),varId(id,p.first,p.second)))
 				.collect(Collectors.joining("+"));
 	}
 	
 	public static String sum_2(Integer n, Integer m, String id, BiPredicate<Integer,Integer> pd, 
 			BiFunction<Integer,Integer,String> factor) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.filter(p->pd.test(p.first,p.second))
 				.map(p -> String.format("%s*%s",factor.apply(p.first,p.second),varId(id,p.first,p.second)))
 				.collect(Collectors.joining("+"));
@@ -97,14 +97,14 @@ public class AuxiliaryLpSolve {
 	}
 	
 	public static String forAll_2(Integer n, Integer m, BiFunction<Integer,Integer,String> constraint) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.map(p -> String.format("%s",constraint.apply(p.first,p.second)))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
 	
 	public static String forAll_2(Integer n, Integer m, BiPredicate<Integer,Integer> pd, 
 			BiFunction<Integer,Integer,String> constraint) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.filter(p->pd.test(p.first,p.second))
 				.map(p -> String.format("%s",constraint.apply(p.first,p.second)))
 				.collect(Collectors.joining("\n","\n","\n"));
@@ -123,13 +123,13 @@ public class AuxiliaryLpSolve {
 	}
 	
 	public static String varInt(int n, int m, String id) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.map(p -> varId(id, p.first, p.second))
 			    .collect(Collectors.joining(", ","\nint ", "; \n"));
 	}
 	
 	public static String varBin(int n, int m, String id) {
-		return StreamsP.allPairs(n, m)
+		return Streams2.allPairs(n, m)
 				.map(p -> varId(id, p.first, p.second))
 			    .collect(Collectors.joining(", ","\nbin ", "; \n"));
 	}	

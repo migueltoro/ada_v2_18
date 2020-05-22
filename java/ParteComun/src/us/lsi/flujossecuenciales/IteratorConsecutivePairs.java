@@ -41,7 +41,7 @@ public class IteratorConsecutivePairs<E> implements Iterator<Pair<E,E>>,Iterable
 	public Pair<E,E> next() {
 		E oldLast = this.last;
 		this.last = this.iterator.next();
-		return Pair.of(this.last, oldLast);
+		return Pair.of(oldLast,this.last);
 	}
 	
 }

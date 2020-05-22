@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import us.lsi.common.Files2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
 
 
 public class DatosSudoku {
@@ -85,7 +85,7 @@ public class DatosSudoku {
 	 * @post Inicializa las variables del tipo
 	 */
 	public static void iniDatos(String nf) {
-		Streams2.fromFile(nf)
+		Files2.streamFromFile(nf)
 				.forEach(s -> DatosSudoku.addCasilla(s));
 		IntStream.range(0,numeroDeCasillas)				
 				.forEach(p -> DatosSudoku.addCasilla(p));		

@@ -7,11 +7,9 @@ import java.util.stream.Stream;
 import java.util.stream.IntStream;
 import java.util.stream.DoubleStream;
 
+import us.lsi.common.Pair;
 import us.lsi.common.Sets2;
-import us.lsi.common.Streams2;
-import us.lsi.common.Tuple;
-
-
+import us.lsi.flujosparalelos.Streams2;
 
 
 /**
@@ -79,9 +77,7 @@ public class OtrosEjemplos {
 	public static void ejemplo6() {
 		Set<Integer> s1 = Sets2.newSet(1, 3, 5);
 		Set<Integer> s2 = Sets2.newSet(16, 13, 15);
-		Streams2.cartesianProduct(s1.stream(),s2.stream(),
-						(x, y) -> Tuple.create(x, y))
-				.forEach(imprimeEnConsola());
+		Streams2.cartesianProduct(s1.stream(),s2.stream(),(x, y) -> Pair.of(x, y)).forEach(imprimeEnConsola());
 	}
 
 	public static void ejemplo7() {

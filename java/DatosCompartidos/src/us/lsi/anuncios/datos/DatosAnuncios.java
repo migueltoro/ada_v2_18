@@ -3,6 +3,7 @@ package us.lsi.anuncios.datos;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Sets2;
@@ -24,7 +25,7 @@ public class DatosAnuncios {
 	}
 	
 	public static void leeYOrdenaAnuncios(String file){	
-		List<String> ls = Streams2.fromFile(file)
+		List<String> ls = Files2.streamFromFile(file)
 				.collect(Collectors.toList());
 		int index = ls.indexOf("#");
 		List<String> ls1 = ls.subList(0, index);

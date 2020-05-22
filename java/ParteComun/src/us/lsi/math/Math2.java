@@ -264,12 +264,12 @@ public class Math2 {
 	/**
 	 * @param increment El incremento &delta;
 	 * @param t Temperatura 
-	 * @return Verdadero si e &#94; (- &delta;/t) &gt; r. Donde r es un real aleatorio 0 &lt; = r &lt; = 1
+	 * @return Verdadero si r &lt; e &#94; (- &delta;/t). Donde r es un real aleatorio 0 &lt; = r &lt; = 1
 	 */
 	public static boolean aceptaBoltzmann(double increment, double t) {
 			double rd = Math2.getDoubleAleatorio(0., 1.);
 			double rd2 =  Math2.boltzmann(increment,t);
-			return rd2 > rd;
+			return rd < rd2;
 	}
 	
 	

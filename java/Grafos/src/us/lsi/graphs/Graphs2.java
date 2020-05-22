@@ -99,6 +99,10 @@ public class Graphs2 {
     public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph(Supplier<V> vs, Supplier<E> es) {
         return new SimpleWeightedGraph<>(vs, es);
     }
+    
+    public static <V,E> SimpleDirectedWeightedGraph<V, E> simpleDirectedWeightedGraph() {
+		return new SimpleDirectedWeightedGraph<>(null,null);
+	}
 
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));

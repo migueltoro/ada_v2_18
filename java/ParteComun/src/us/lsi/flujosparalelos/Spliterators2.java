@@ -27,5 +27,7 @@ public class Spliterators2 {
 			}
 		};
 	}
+	
+	
 
 }

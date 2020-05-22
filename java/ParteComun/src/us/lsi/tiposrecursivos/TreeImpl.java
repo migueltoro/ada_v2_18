@@ -650,7 +650,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	public static void test1() {
 		System.out.println("--------------------");
-		List<String> filas = Streams2.fromFile("ficheros/test.txt").collect(Collectors.toList());
+		List<String> filas = Files2.linesFromFile("ficheros/test.txt");
 		Tree<String> nary = null;
 		for (String fila : filas) {
 			nary = TreeImpl.parse(fila);

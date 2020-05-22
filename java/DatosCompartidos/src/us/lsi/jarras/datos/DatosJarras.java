@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
-import us.lsi.common.Streams2;
+import us.lsi.common.Files2;
 import us.lsi.common.Tuple2;
 import us.lsi.common.Tuple;
 
@@ -31,7 +31,7 @@ public class DatosJarras {
 	
 	public static void iniDatos(String file){
 		if(acciones==null) {
-			acciones = Streams2.fromFile(file)
+			acciones = Files2.streamFromFile(file)
 				.map((String s) -> Operacion.create(s))
 				.collect(Collectors.toList());
 			

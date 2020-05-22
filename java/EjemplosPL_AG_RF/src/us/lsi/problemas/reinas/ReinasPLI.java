@@ -5,7 +5,7 @@ import static us.lsi.lpsolve.AuxiliaryLpSolve.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Streams2;
+import us.lsi.flujosparalelos.Streams2;
 import us.lsi.lpsolve.AlgoritmoLpSolve;
 import us.lsi.lpsolve.SolutionLpSolve;
 

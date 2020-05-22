@@ -8,7 +8,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-import us.lsi.common.Streams2;
+import us.lsi.common.Files2;
 
 
 /**
@@ -40,7 +40,7 @@ public class DatosMochila {
 	 */
 	public static void iniDatos(String fichero) {
 		ordenObjetos = Comparator.reverseOrder();
-		objetosDisponibles = Streams2.fromFile(fichero)
+		objetosDisponibles = Files2.streamFromFile(fichero)
 				.<ObjetoMochila> map((String s) -> ObjetoMochila.create(s))
 				.sorted(ordenObjetos)
 				.collect(Collectors.<ObjetoMochila> toList());

@@ -3,8 +3,8 @@ package us.lsi.recursivos.puntos;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import us.lsi.common.Files2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
 import us.lsi.geometria.ParDePuntos;
 import us.lsi.geometria.Punto2D;
 
@@ -15,7 +15,7 @@ public class TestPuntosMasCercanos {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		List<Punto2D> lista = Streams2.fromFile("puntos.txt")
+		List<Punto2D> lista = Files2.streamFromFile("puntos.txt")
 				.<Punto2D> map(
 						s -> {
 							String[] ps = s.split(",");

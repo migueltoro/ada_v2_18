@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import us.lsi.common.Streams2;
+import us.lsi.common.Files2;
 
 
 
@@ -15,7 +15,7 @@ public class Tarea {
 	
 	public static void leeTareas(String fichero){
 		nId =0;
-		tareas = Streams2.fromFile(fichero)
+		tareas = Files2.streamFromFile(fichero)
 				.map(s ->Tarea.create(s))
 				.sorted(Comparator.<Tarea,Double>comparing(Tarea::getDuracion).reversed())
 				.collect(Collectors.toList());
