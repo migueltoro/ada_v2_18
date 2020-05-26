@@ -54,7 +54,7 @@ public class OtrosEjemplos {
 
 		System.out.println("========");
 
-		Streams2.joint(IntStream.range(0, 5).boxed(),
+		Streams2.join(IntStream.range(0, 5).boxed(),
 				      IntStream.range(10, 15).boxed(),
 					  x -> x % 2 == 0, 
 					  x -> x % 3 == 0, 
@@ -70,7 +70,7 @@ public class OtrosEjemplos {
 		
 		
 		var r = Streams2.concat(s0,s1);
-		var r2 = Streams2.joint(r,s2, x -> x % 2, x -> x % 3, (x, y) -> x + y);			
+		var r2 = Streams2.join(r,s2, x -> x % 2, x -> x % 3, (x, y) -> x + y);			
 		r2.forEach(imprimeEnConsola());
 	}
 
@@ -86,7 +86,7 @@ public class OtrosEjemplos {
 	}
 
 	public static void ejemplos8() {
-		Streams2.joint(
+		Streams2.join(
 				Stream.of(1L, 2L, 3L, 4L, 5L),
 				Stream.of(4L, 10L, 9L, 29L), 
 				x -> x % 5, 

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
 import us.lsi.regularexpressions.Token;
 import us.lsi.regularexpressions.Tokenizer;
 import us.lsi.regularexpressions.Tokenizer.TokenType;

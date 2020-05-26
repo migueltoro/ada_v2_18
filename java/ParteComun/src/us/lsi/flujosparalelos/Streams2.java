@@ -2,10 +2,7 @@ package us.lsi.flujosparalelos;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -147,8 +144,8 @@ public class Streams2 {
 	}
 
 	/**
-	 * @param stream1 Un stream
-	 * @param stream2 Un segundo stream
+	 * @param s1 Un stream
+	 * @param s2 Un segundo stream
 	 * @param f1 Una función que calcula una clave para los elementos de stream1
 	 * @param f2 Una función que calcula una clave para los elementos de stream2
 	 * @param fr Una función que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
@@ -158,20 +155,15 @@ public class Streams2 {
 	 * @param <R> El tipo de los elementos de la secuencia resultante
 	 * @return Un stream resultado del joint de stream1 y stream2
 	 */
-	public static <T, U, K, R> Stream<R> joint(
-			Stream<T> stream1,
-			Stream<U> stream2,
+	public static <T, U, K, R> Stream<R> join(
+			Stream<T> s1,
+			Stream<U> s2,
 			Function<? super T, ? extends K> f1,
 			Function<? super U, ? extends K> f2, 
 			BiFunction<T, U, R> fr) {
-
-		final Map<K, List<T>> map1 = stream1.collect(Collectors.groupingBy(f1));
-		final Map<K, List<U>> map2 = stream2.collect(Collectors.groupingBy(f2));
-
-		Set<K> sk = new HashSet<K>(map1.keySet());
-		sk.retainAll(map2.keySet());
-		Stream<R> r = sk.stream().flatMap(x -> Streams2.cartesianProduct(map1.get(x), map2.get(x), fr));
-		return r;
+		
+		return s1.flatMap(e1->s2.filter(e2->f1.apply(e1).equals(f2.apply(e2)))
+								.map(e2->fr.apply(e1, e2)));
 	}
 	
 	
