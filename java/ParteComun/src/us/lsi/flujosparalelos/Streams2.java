@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -156,15 +157,34 @@ public class Streams2 {
 	 * @return Un stream resultado del joint de stream1 y stream2
 	 */
 	public static <T, U, K, R> Stream<R> join(
-			Stream<T> s1,
-			Stream<U> s2,
+			Supplier<Stream<T>> s1,
+			Supplier<Stream<U>> s2,
 			Function<? super T, ? extends K> f1,
 			Function<? super U, ? extends K> f2, 
 			BiFunction<T, U, R> fr) {
-		
-		return s1.flatMap(e1->s2.filter(e2->f1.apply(e1).equals(f2.apply(e2)))
-								.map(e2->fr.apply(e1, e2)));
+		return s1.get().flatMap(e1->s2.get().filter(e2->f1.apply(e1).equals(f2.apply(e2)))
+					   .map(e2->fr.apply(e1, e2)));
 	}
 	
-	
+	/**
+	 * @param s1 Una collection
+	 * @param s2 Un segundo collection
+	 * @param f1 Una función que calcula una clave para los elementos de stream1
+	 * @param f2 Una función que calcula una clave para los elementos de stream2
+	 * @param fr Una función que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
+	 * @param <T> El tipo de los elementos de la primera secuencia
+	 * @param <U> El tipo de los elementos de la segunda secuencia
+	 * @param <K> El tipo de los elementos de la clave
+	 * @param <R> El tipo de los elementos de la secuencia resultante
+	 * @return Un stream resultado del joint de stream1 y stream2
+	 */
+	public static <T, U, K, R> Stream<R> join(
+			Collection<T> s1,
+			Collection<U> s2,
+			Function<? super T, ? extends K> f1,
+			Function<? super U, ? extends K> f2, 
+			BiFunction<T, U, R> fr) {
+		return s1.stream().flatMap(e1->s2.stream().filter(e2->f1.apply(e1).equals(f2.apply(e2)))
+								.map(e2->fr.apply(e1, e2)));
+	}
 }

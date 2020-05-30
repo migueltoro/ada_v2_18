@@ -48,7 +48,7 @@ public class DatosAnuncios {
 			restricciones.add(Tuple.create(n2, n1));
 		}
 		Collections.sort(DatosAnuncios.todosLosAnunciosDisponibles, Comparator.<Anuncio>naturalOrder().reversed());
-		todosLosAnuncios = Sets2.newSet(0, DatosAnuncios.todosLosAnunciosDisponibles.size());
+		todosLosAnuncios = Sets2.range(0, DatosAnuncios.todosLosAnunciosDisponibles.size());
 	}
 
 	public static DatosAnuncios create() {		

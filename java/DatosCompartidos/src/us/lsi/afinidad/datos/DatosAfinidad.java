@@ -26,14 +26,14 @@ public class DatosAfinidad {
 	 */
 	public static DatosAfinidad createEjemplo(){
 		clientes= Lists2.of(
-				Cliente.create("Juan", 10, Sets2.newSet("Amparo", "Rosa")),
-				Cliente.create("Maria", 10, Sets2.newSet("Rosa")),
-				Cliente.create("Sara", 11, Sets2.newSet("Amparo", "Rosa")),
-				Cliente.create("Andres", 11, Sets2.newSet("Marco", "Rosa")),
-				Cliente.create("Antonio", 11,Sets2.newSet("Marco")),
-				Cliente.create("Sonia", 12, Sets2.newSet("Marco")),
-				Cliente.create("Marta", 12, Sets2.newSet("Marco")),
-				Cliente.create("Ivan", 12, Sets2.newSet("Amparo"))			
+				Cliente.create("Juan", 10, Sets2.of("Amparo", "Rosa")),
+				Cliente.create("Maria", 10, Sets2.of("Rosa")),
+				Cliente.create("Sara", 11, Sets2.of("Amparo", "Rosa")),
+				Cliente.create("Andres", 11, Sets2.of("Marco", "Rosa")),
+				Cliente.create("Antonio", 11,Sets2.of("Marco")),
+				Cliente.create("Sonia", 12, Sets2.of("Marco")),
+				Cliente.create("Marta", 12, Sets2.of("Marco")),
+				Cliente.create("Ivan", 12, Sets2.of("Amparo"))			
 				);
 		Set<String> trab= new HashSet<>();	
 		clientes.stream().forEach(x-> trab.addAll(x.nombresDeTrabajadoresAfines));

@@ -9,7 +9,7 @@ import us.lsi.graphs.virtual.EGraph;
 public class TestBTRandom {
 
 	public static void main(String[] args) {
-			ReinasVertex.n = 200;
+			ReinasVertex.n = 100;
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();

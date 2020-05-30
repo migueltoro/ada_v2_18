@@ -49,6 +49,7 @@ public class ColorGraphGurobi {
 									" 1")));
 		r.append(binaryVars);
 		r.append(vars_2(n,m,"x"));
+		r.append(binaryVars);
 		r.append(vars_1(m,"y"));
 		r.append(lastEnd);
 		return r.toString();

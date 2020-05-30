@@ -30,10 +30,10 @@ public class MochilaGurobiPLI {
 	public static String getConstraints() {
 		StringBuilder r = new StringBuilder();
 		r.append(max);
-		r.append(sum_1_f(n,"x",i->getValor(i)));
+		r.append(goal(sum_1_f(n,"x",i->getValor(i))));
 		r.append(constraintsSection);
-		r.append("a:  "+constraintLe(sum_1_f(n,"x",i->getPeso(i)),CI));
-		r.append("\n\nBounds\n\n  ");
+		r.append(constraint("a",constraintLe(sum_1_f(n,"x",i->getPeso(i)),CI)));
+		r.append(boundsSection);
 		r.append(forAll_1_bound(n,i->boundLe(var_1("x",i),getNMU(i))));
 		r.append(intVars);
 		r.append(vars_1(n,"x"));

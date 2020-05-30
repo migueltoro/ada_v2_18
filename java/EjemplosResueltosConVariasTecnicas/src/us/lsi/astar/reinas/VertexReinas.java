@@ -6,37 +6,37 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.Lists2;
-import us.lsi.common.SetRangeInteger;
+import us.lsi.common.RangeIntegerSet;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
-public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, ActionReinas> {
+public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, Integer> {
 	
 	public static Integer numeroDeReinas = 200;
 	public static Integer resto = 10;
 	
 	public static VertexReinas of() {
 		List<Integer> yO = Lists2.empty();
-		SetRangeInteger dpO = SetRangeInteger.of(-numeroDeReinas, 10);
-		SetRangeInteger dsO = SetRangeInteger.of();
+		RangeIntegerSet dpO = RangeIntegerSet.of(-numeroDeReinas, 10);
+		RangeIntegerSet dsO = RangeIntegerSet.of();
 		return new VertexReinas(0, yO, dpO, dsO);
 	}
 	
-	public static VertexReinas of(Integer x, List<Integer> yO, SetRangeInteger dpO, SetRangeInteger dsO) {
+	public static VertexReinas of(Integer x, List<Integer> yO, RangeIntegerSet dpO, RangeIntegerSet dsO) {
 		return new VertexReinas(x, yO, dpO, dsO);
 	}
 
 	Integer x;
 	List<Integer> yO;
-	SetRangeInteger dpO;
-	SetRangeInteger dsO;
+	RangeIntegerSet dpO;
+	RangeIntegerSet dsO;
 	
-	private VertexReinas(Integer x,List<Integer> yO, SetRangeInteger dpO, SetRangeInteger dsO) {
+	private VertexReinas(Integer x,List<Integer> yO, RangeIntegerSet dpO, RangeIntegerSet dsO) {
 		super();
 		this.x = x;
-		this.yO = Lists2.copy(yO);
-		this.dpO = dpO.copy();
-		this.dsO = dsO.copy();
+		this.yO = yO;
+		this.dpO = dpO;
+		this.dsO = dsO;
 	}
 	
 
@@ -46,21 +46,26 @@ public class VertexReinas extends ActionVirtualVertex<VertexReinas, EdgeReinas, 
 	}
 	
 	@Override
-	public List<ActionReinas> actions() {
+	public List<Integer> actions() {
 		return IntStream.range(0,VertexReinas.numeroDeReinas)
 				.boxed()
-				.map(e->ActionReinas.of(e))
-				.filter(a->a.isApplicable(this))
+				.filter(y-> !this.yO.contains(y) && !this.dpO.contains(y-this.x) && !this.dsO.contains(y+this.x))
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public VertexReinas neighbor(ActionReinas a) {
-		return a.neighbor(this);
+	public VertexReinas neighbor(Integer y) {
+		List<Integer> yO = Lists2.copy(this.yO);
+		yO.add(y);
+		RangeIntegerSet dpO = this.dpO.copy();
+		dpO.add(y+this.x);
+		RangeIntegerSet dsO = this.dsO.copy();
+		dpO.add(y-this.x);
+		return VertexReinas.of(this.x+1,yO,dpO,dsO);
 	}
 	
 	@Override
-	public EdgeReinas edge(ActionReinas a) {
+	public EdgeReinas edge(Integer a) {
 		VertexReinas v = this.neighbor(a);
 		return EdgeReinas.of(this,v,a);
 	}

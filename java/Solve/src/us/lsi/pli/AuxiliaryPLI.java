@@ -1,6 +1,8 @@
 package us.lsi.pli;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -9,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.common.TriPredicate;
 import us.lsi.flujosparalelos.Streams2;
@@ -18,6 +21,14 @@ import us.lsi.flujosparalelos.Streams2;
  * 
  * 
  * 
+ * @author migueltoro
+ *
+ */
+/**
+ * @author migueltoro
+ *
+ */
+/**
  * @author migueltoro
  *
  */
@@ -42,6 +53,11 @@ public class AuxiliaryPLI {
 	 * Una funci&oacute;n que devuelve la cadena vac&iacute;a 
 	 */
 	public static Function<Integer,String> nf1 = i -> "";
+	
+	/**
+	 * Un contador de las varaibles binarias que se van creando implicitamente
+	 */
+	public static Integer nBinary = 0;
 	
 	public static String end = "";
 	public static String sep = "";
@@ -105,6 +121,31 @@ public class AuxiliaryPLI {
 				.collect(Collectors.joining(" + "));
 	}
 	
+	/**
+	 * @param n1 El limite inferior de i en el sumatorio
+	 * @param n2 El limite superior sin incluir de i en el sumatorio
+	 * @param x El identificador de la variable
+	 * @return \( \sum_{i=0}^{n-1} x_i\)
+	 */
+	public static String sum_1_v_r(Integer n1, Integer n2, String x) {
+		return IntStream.range(n1, n2).boxed()
+				.map(i -> var_1(x,i))
+				.collect(Collectors.joining(" + "));
+	}
+	
+	/** 
+	 * @param n El rango de i en el sumatorio
+	 * @param x El identificador de la variable
+	 * @param pd Un predicado
+	 * @return \( \sum_{i=0|p(i)}^{n-1} f(i)*x_i\)
+	 */
+	public static String sum_1_p(Integer n, String x, 
+			Predicate<Integer> pd) {
+		return IntStream.range(0, n).boxed()
+				.filter(pd)
+				.map(i -> var_1(x,i))
+				.collect(Collectors.joining(" + "));
+	}
 	
 	/** 
 	 * @param n El rango de i en el sumatorio
@@ -115,6 +156,20 @@ public class AuxiliaryPLI {
 	public static String sum_1_f(Integer n, String x, 
 			Function<Integer,String> fc) {
 		return IntStream.range(0, n).boxed()
+				.map(i -> String.format("%s %s",fc.apply(i),var_1(x,i)))
+				.collect(Collectors.joining(" + "));
+	}
+	
+	/** 
+	 * @param n1 El limite inferior i en el sumatorio
+	 * @param n2 El limite superior sin incluir de i en el sumatorio
+	 * @param x El identificador de la variable
+	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
+	 * @return \( \sum_{i=0}^{n-1} f(i)*x_i\)
+	 */
+	public static String sum_1_f_r(Integer n1, Integer n2, String x, 
+			Function<Integer,String> fc) {
+		return IntStream.range(n1, n2).boxed()
 				.map(i -> String.format("%s %s",fc.apply(i),var_1(x,i)))
 				.collect(Collectors.joining(" + "));
 	}
@@ -346,7 +401,7 @@ public class AuxiliaryPLI {
 	public static String forAll_1_r(Integer n1, Integer n2, String name,
 			Function<Integer,String> fr) {
 		return IntStream.range(n1, n2).boxed()
-				.map(i -> String.format("   %s%d: %s%s",name,i,fr.apply(i),end))
+				.map(i -> String.format("   %s%d: %s%s",name,i-n1,fr.apply(i),end))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
 	
@@ -380,7 +435,7 @@ public class AuxiliaryPLI {
 			Function<Integer,String> fr) {
 		return IntStream.range(n1, n2).boxed()
 				.filter(p)
-				.map(i -> String.format("   %s%d: %s%s",name, i, fr.apply(i),end))
+				.map(i -> String.format("   %s%d: %s%s",name, i-n1, fr.apply(i),end))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
 	/**
@@ -430,7 +485,7 @@ public class AuxiliaryPLI {
 			BiFunction<Integer,Integer,String> fr) {
 		return Streams2.allPairs(n1, n2, m1, m2)
 				.filter(p->pd.test(p.first,p.second))
-				.map(p -> String.format("   %s%d: %s%s",name,p.first+(m2-m1)*p.second,fr.apply(p.first,p.second),end))
+				.map(p -> String.format("   %s%d: %s%s",name,p.first-n1+(m2-m1)*(p.second-m1),fr.apply(p.first,p.second),end))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
 	
@@ -451,6 +506,14 @@ public class AuxiliaryPLI {
 				.map(p -> String.format("   %s%d: %s%s",name,p.first+m*p.second+m*r*p.third,fr.apply(p.first,p.second,p.third),end))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
+	
+	public static String forAll_List(String name, List<String> constraints) {
+		return IntStream.range(0,constraints.size())
+				.boxed()
+				.map(i->String.format("   %s%d: %s",name,i,constraints.get(i)))
+				.collect(Collectors.joining("\n","\n","\n"));
+	}
+			
 	
 	/**
 	 * @param n El n&uacute;mero de variables
@@ -555,10 +618,114 @@ public class AuxiliaryPLI {
 		return String.format("%s = %s",e,n);
 	}
 	
-//	public static String constraintImply(String leftConstraint, String rightConstraint, Integer n, String constraintName) {
-//		String s = String.format("   %s%d: %s = %s",constraintName,n,leftConstraint,rightConstraint);
-//		String s = 
-//	}
+	/**
+	 * @param bv Una variable binaria
+	 * @param constraint
+	 * @return \( bv = 1 \imply constrainst \)
+	 */
+	public static String constraintImplyBinary(String bv, String constraint) {
+		return String.format("%s = 1 -> %s",bv,constraint);
+	}
+	
+	/**
+	 * @post Declara implicitamente variables binarias
+	 * @param lc Una restriccion
+	 * @param rc Una restriccion
+	 * @return \( lc \imply rc\)
+	 */
+	public static List<String> constraintImply(String lc, String rc) {
+		String s1 = String.format("%_x%d = 1 -> %s",AuxiliaryPLI.nBinary,lc); 
+		AuxiliaryPLI.nBinary++;
+		String s2 = String.format("%_x%d = 1 -> %s",AuxiliaryPLI.nBinary,rc);
+		AuxiliaryPLI.nBinary++;
+		String s3 = String.format("%_x%d - %_x%d <= 0",AuxiliaryPLI.nBinary-2,AuxiliaryPLI.nBinary-1);
+		return List.of(s1,s2,s3);
+	}
+	
+	public static enum OrType{Eq,Le,Ge};
+	
+	/**
+	 * @post Declara implicitamente variables binarias
+	 * @pre \( n <= c.length \)
+	 * @param n El numero de restricciones que se deben cumplir
+	 * @param type El tipo de la restrccion or: segu  que sea Eq, Le, Ge el numero de restrcciones que se deben cumplir 
+	 * sera igual a n, menor o igual o mayor o igual
+	 * @param c las restricciones
+	 * @return \( c_0 \or c_ 1 \or ... \)
+	 */
+	public static List<String> constraintOR(OrType type, Integer n, String... c) {
+		String op = null;;
+		switch(type) {
+		case Eq: op = " = ";break;
+		case Ge: op = " >= ";break;
+		case Le: op = " <= ";break;
+		}
+		Preconditions.checkArgument(n>0 && n<c.length,String.format("El parametro n no cumple las restrcciones y es % d",n));
+		Integer r = AuxiliaryPLI.nBinary;
+		List<String> lc = new ArrayList<>();
+		String s;
+		for (int i = 0; i < c.length; i++) {
+			s = String.format("%s = 1 -> %s",var_1("_x",r+i), c[i]);
+			lc.add(s);
+		}
+		AuxiliaryPLI.nBinary += c.length;
+		s = IntStream.range(0,c.length).boxed().map(i->var_1("_x",r+i))
+				.collect(Collectors.joining(" + ", "", String.format(" %s %d",op,n)));
+		lc.add(s);
+		return lc;
+	}
+	
+	
+	
+	/**
+	 * @param x Identificador de una variable
+	 * @param numbers Numero de valores
+	 * @return \( x = number[0] | x = number[1] | ... \)
+	 */
+	public static List<String> valueOf(String x, Integer... numbers) {
+		Integer n = numbers.length;
+		Integer r = AuxiliaryPLI.nBinary;
+		String s1 = constraintEq(String.format("%s - %s",sum_1_f_r(r,r+n,"_x",i->numbers[i-r].toString()),x)," 0 ");
+		AuxiliaryPLI.nBinary += n;
+		String s2 = constraintEq(sum_1_v_r(r,r+n,"_x")," 1 ");
+		return List.of(s1,s2);
+	}
+	
+	public static List<String> differentValue(String x1, String x2){
+		return constraintOR(OrType.Eq,1,
+				constraintGe(String.format("%s - %s",x1,x2)," 1 "),
+				constraintGe(String.format("%s - %s",x2,x1)," 1 "));
+	}
+	
+	public static List<String> allDifferents(String... x){
+		Integer n = x.length;
+		List<String> ls = new ArrayList<>();
+		Streams2.allPairs(n, n).filter(p->p.second > p.first)
+			.map(p->differentValue(x[p.first],x[p.second]))
+			.forEach(e->ls.addAll(e));
+		return ls;
+	}
+	
+	/**
+	 * @param v1 Una variable
+	 * @param v2 Una variable
+	 * @param v3 Una variable
+	 * @return \( v1 = v2 * v3 \)
+	 */
+	public static List<String> constraintProduct(String v1, String v2, String v3) {
+		String s1 = String.format("%s - 0.5*%s - 0.5*%s <= 0",v1,v2,v3);
+		String s2 = String.format("%s - %s - %s >= -1",v1,v2,v3);
+		return List.of(s1,s2);
+	}
+	
+	/**
+	 * @param name El nombre de la restricci&oacute;n
+	 * @param ct Una restricci&oacute;n
+	 * @return La restricci&oacute;n en el formato adecuado
+	 */
+	public static String constraint(String name, String ct) {
+		return String.format("   %s:  %s%s",name,ct,end+"\n");
+	}
 	/**
 	 * @param x Una variable
 	 * @param ln Un n&uacute;mero
@@ -583,15 +750,6 @@ public class AuxiliaryPLI {
 	 */
 	public static String boundGe(String x, String n) {
 		return String.format("%s >= %s",x,n);
-	}
-	
-	/**
-	 * @param name El nombre de la restricci&oacute;n
-	 * @param ct Una restricci&oacute;n
-	 * @return La restricci&oacute;n en el formato adecuado
-	 */
-	public static String constraint(String name, String ct) {
-		return String.format("   %s:  %s%s",name,ct,end+"\n");
 	}
 
 	

@@ -37,7 +37,7 @@ public class Tours {
 						graph, 
 						Graphs2::simpleWeightedGraph, 
 						Carretera::ofWeight);
-		Set<Ciudad> vertices = Sets2.newSet(Ciudad.ofName("Jaen"));
+		Set<Ciudad> vertices = Sets2.of(Ciudad.ofName("Jaen"));
 		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"),vertices);
 		System.out.println(r.getVertexList());
 		System.out.println(r.getEdgeList());

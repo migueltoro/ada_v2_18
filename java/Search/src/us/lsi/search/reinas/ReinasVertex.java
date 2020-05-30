@@ -13,9 +13,6 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 public class ReinasVertex extends ActionVirtualVertex<ReinasVertex,ReinasEdge,Integer>{
 	
-	
-
-
 	public static ReinasVertex copy(ReinasVertex reinas) {
 		return new ReinasVertex(reinas.index,Lists2.copy(reinas.fo),Sets2.copy(reinas.dpo),Sets2.copy(reinas.dso));
 	}
@@ -117,6 +114,12 @@ public class ReinasVertex extends ActionVirtualVertex<ReinasVertex,ReinasEdge,In
 		} else if (!index.equals(other.index))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ReinasVertex [index=" + index + ", fo=" + fo + ", dpo=" + dpo + ", dso=" + dso + ", errores=" + errores
+				+ "]";
 	}
 
 	

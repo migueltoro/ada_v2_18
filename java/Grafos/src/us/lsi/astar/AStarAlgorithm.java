@@ -11,6 +11,7 @@ import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
 import us.lsi.common.Metricas;
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -44,6 +45,16 @@ public class AStarAlgorithm<V, E>  {
 	public static <V, E> AStarAlgorithm<V, E> of(EGraph<V, E> graph, V sourceVertex, Predicate<V> goal, V targetVertex,
 			TriFunction<V, Predicate<V>, V, Double> heuristic) {
 		return new AStarAlgorithm<V, E>(graph, sourceVertex, goal, targetVertex, heuristic);
+	}
+	
+	public static <V, E> AStarAlgorithm<V, E> of(EGraph<V, E> graph, V sourceVertex, V targetVertex,
+			TriFunction<V, Predicate<V>, V, Double> heuristic) {
+		return new AStarAlgorithm<V, E>(graph, sourceVertex,null, targetVertex, heuristic);
+	}
+	
+	public static <V, E> AStarAlgorithm<V, E> of(EGraph<V, E> graph, V sourceVertex, Predicate<V> goal,
+			TriFunction<V, Predicate<V>, V, Double> heuristic) {
+		return new AStarAlgorithm<V, E>(graph, sourceVertex, goal, null, heuristic);
 	}
 
    
@@ -86,13 +97,12 @@ public class AStarAlgorithm<V, E>  {
      */
     private AStarAlgorithm(EGraph<V, E> graph, V sourceVertex, 
     		Predicate<V> goal, V targetVertex, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-        if (graph == null) {
-            throw new IllegalArgumentException("Graph cannot be null!");
-        }
-        if (!graph.containsVertex(sourceVertex) || !graph.containsVertex(targetVertex)) {
-            throw new IllegalArgumentException(
-              "Source or target vertex not contained in the graph!");
-        }
+       
+    	Preconditions.checkNotNull(graph,"Graph cannot be null!");
+    	Preconditions.checkNotNull(graph.containsVertex(sourceVertex),"Source vertex not contained in the graph!");
+    	Preconditions.checkNotNull(targetVertex == null || graph.containsVertex(targetVertex),
+    			"Target vertex not contained in the graph!");	
+    	Preconditions.checkNotNull(!(targetVertex == null && goal ==null), "Target vertex y goal null in the graph!");
         this.graph = graph;
         this.sourceVertex = sourceVertex;
         this.targetVertex = targetVertex;

@@ -48,7 +48,7 @@ public class TestColorAstar {
 				goal,
 				(v1,p,v2)->0.);
 		
-		GraphPath<ColorVertex, ColorEdge> path = ms.pathTo(goal);
+		GraphPath<ColorVertex, ColorEdge> path = ms.pathToEnd();
 		ColorVertex lv = Lists2.last(path.getVertexList());
 		System.out.println(lv.nc);
 		System.out.println(lv.cav);

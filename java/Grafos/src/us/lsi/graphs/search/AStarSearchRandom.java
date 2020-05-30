@@ -63,7 +63,7 @@ public class AStarSearchRandom<V, E> extends AStarSearch<V, E>{
 	}
 	
 	@Override
-	public GraphPath<V, E> pathTo(Predicate<V> goal) {
+	public GraphPath<V, E> pathToEnd() {
 		GraphPath<V, E> path;
 		AStarSearchRandom.iterations = 0;
 		Math2.initRandom();
@@ -79,20 +79,7 @@ public class AStarSearchRandom<V, E> extends AStarSearch<V, E>{
 		return path;
 	}
 	
-	@Override
-	public GraphPath<V, E> pathTo(V vertex) {
-		AStarSearchRandom.iterations = 0;
-		GraphPath<V, E> path;
-		do {
-			AStarSearchRandom<V, E> ms = this.copy();
-			try {
-				path = ms.pathTo(vertex);
-			} catch (IllegalArgumentException e) {
-				path = null;
-			}
-			AStarSearchRandom.iterations++;
-		} while (path == null);
-		return path;
-	}
+	
+	
 
 }

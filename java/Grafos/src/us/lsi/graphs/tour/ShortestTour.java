@@ -135,7 +135,7 @@ public class ShortestTour<V, E, G extends Graph<V, E>> {
 			super();
 			this.a = a;
 			this.b = b;
-			this.vertices = Sets2.newSet(a,b);
+			this.vertices = Sets2.of(a,b);
 		}
 		@Override
 		public int hashCode() {

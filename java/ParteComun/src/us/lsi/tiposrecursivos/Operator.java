@@ -19,7 +19,7 @@ public interface Operator {
 	
 	public static Map<Tuple2<String,List<ExpType>>,Operator> operators = new HashMap<>();
 	static Set<String> functions = new HashSet<>();
-	public static Set<String> reservedWords = Sets2.newSet("while","if","else","int","double");
+	public static Set<String> reservedWords = Sets2.of("while","if","else","int","double");
 	public static Map<String,Integer> arities = new HashMap<>();
     
 	static Object n = new Operators();

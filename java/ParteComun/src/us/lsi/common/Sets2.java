@@ -12,12 +12,12 @@ import java.util.stream.IntStream;
 
 public class Sets2 {
 
-	public static Set<Integer> newSet(Integer a, Integer b, Integer c){		
+	public static Set<Integer> range(Integer a, Integer b, Integer c){		
 		return Streams2.range(a, b, c).boxed()
 			 .collect(Collectors.toSet());
 	}	
 	
-	public static Set<Integer> newSet(Integer a, Integer b){
+	public static Set<Integer> range(Integer a, Integer b){
 		return IntStream.range(a,b).boxed().collect(Collectors.toSet());
 	}
 	
@@ -37,11 +37,11 @@ public class Sets2 {
 		return new TreeSet<>(cmp);
 	}
 	@SafeVarargs
-	public static <E> Set<E> newSet(E... e){
+	public static <E> Set<E> of(E... e){
 		return Arrays.stream(e).collect(Collectors.toSet());
 	}
 
-	public static <E,U extends Collection<E>> Set<E> newSet(U elements){
+	public static <E,U extends Collection<E>> Set<E> of(U elements){
 		return elements.stream().collect(Collectors.toSet());
 	}
 	

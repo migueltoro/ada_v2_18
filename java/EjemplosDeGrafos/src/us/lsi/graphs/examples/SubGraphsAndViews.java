@@ -54,7 +54,7 @@ public class SubGraphsAndViews {
 		de2.exportGraph(graph2, f2);
 		Strings2.toConsole(r.getEdgeList(), "Camino");
 		Graph<Ciudad, Carretera> graph3 = SubGraphView.of(graph,
-				Sets2.newSet(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")));
+				Sets2.of(Ciudad.ofName("Sevilla"),Ciudad.ofName("Cadiz"),Ciudad.ofName("Huelva"),Ciudad.ofName("Almeria")));
 		PrintWriter f3 = Files2.getWriter("ficheros/subGrafoAndalucia.gv");
 		de.exportGraph(graph3, f3);
 		Graph<Ciudad, Carretera> graph4 = SubGraphView.of(graph,v->v.getNombre().contains("e"),e->e.getKm()<100);

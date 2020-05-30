@@ -54,7 +54,7 @@ public class ListaDeAnunciosAEmitir  {
 	
 	private  ListaDeAnunciosAEmitir(List<Integer> anunciosDecididosParaEmitir){
 		this.anunciosDecididosParaEmitir = Lists2.ofCollection(anunciosDecididosParaEmitir);
-		this.anunciosDecididosParaEmitirSet = Sets2.newSet(anunciosDecididosParaEmitir);
+		this.anunciosDecididosParaEmitirSet = Sets2.of(anunciosDecididosParaEmitir);
 		calculaPropiedadesDerivadas();		
 		calculaAnunciosDisponibles();
 	}
@@ -87,7 +87,7 @@ public class ListaDeAnunciosAEmitir  {
 	
 	
 	private void calculaAnunciosDisponibles(){		
-		Set<Integer> disponibles = Sets2.newSet(DatosAnuncios.todosLosAnuncios);	
+		Set<Integer> disponibles = Sets2.of(DatosAnuncios.todosLosAnuncios);	
 		disponibles.removeAll(this.anunciosDecididosParaEmitirSet);
 		for(Tuple2<Integer,Integer> p: DatosAnuncios.restricciones){
 			if(this.anunciosDecididosParaEmitirSet.contains(p.v1)){

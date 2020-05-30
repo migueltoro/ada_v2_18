@@ -14,7 +14,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		
-		DatosJarras.iniDatos("acciones.txt");
+		DatosJarras.iniDatos("ficheros/acciones.txt");
 		DatosJarras.getAcciones().forEach(x->System.out.println(x));
 		DatosJarras.capacidadJarra1 = 4;
 		DatosJarras.capacidadJarra2 = 3;

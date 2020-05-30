@@ -1,21 +1,16 @@
 \ Model _copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
 Minimize
- 
+  0 y_1 + 0 y_2
 Subject To
- a12: x_12_0 + x_12_1 + x_12_2 + x_12_3 + x_12_4 + x_12_5 + x_12_6 + x_12_7
-   + x_12_8 + x_12_9 = 1
- c252: 2 x_12_0 <= 1
- c452: 2 x_12_1 <= 1
- c652: 2 x_12_2 <= 1
- c852: 2 x_12_3 <= 1
- c1052: 2 x_12_4 <= 1
- c1252: 2 x_12_5 <= 1
- c1452: 2 x_12_6 <= 1
- c1652: 2 x_12_7 <= 1
- c1852: 2 x_12_8 <= 1
- c2052: 2 x_12_9 <= 1
+ a0: x_1_0 + x_2_0 = 1
+ d: y_0 = 0
+ c1: x_1_0 = 1 -> y_0 - y_1 >= 1
+ c2: x_2_0 = 1 -> y_0 - y_2 >= 1
 Bounds
+ y_0 free
 Binaries
- x_12_0 x_12_1 x_12_2 x_12_3 x_12_4 x_12_5 x_12_6 x_12_7 x_12_8 x_12_9
+ x_1_0 x_2_0
+Generals
+ y_1 y_0 y_2
 End

@@ -44,7 +44,7 @@ public class ListasDePuntos {
 	}
 	
 	public static Set<Punto2D> puntosMaximalesBase(int a, int b, List<Punto2D> lista){
-		Set<Punto2D> r = Sets2.newSet();
+		Set<Punto2D> r = Sets2.of();
 		Punto2D pi;
 		Punto2D pj;
 		boolean piEsDominado;
@@ -67,7 +67,7 @@ public class ListasDePuntos {
 	
 	private static Set<Punto2D> puntosMaximalesCombina(Set<Punto2D> si, Set<Punto2D> sd){
 		Double maxYD = Double.MIN_VALUE;
-		Set<Punto2D> r = Sets2.newSet(sd);
+		Set<Punto2D> r = Sets2.of(sd);
 		for(Punto2D p:sd){
 			if(p.getY()>maxYD){
 				maxYD = p.getY();

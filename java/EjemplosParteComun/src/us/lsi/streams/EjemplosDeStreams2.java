@@ -88,6 +88,7 @@ public class EjemplosDeStreams2 {
 		var s12 = Stream.iterate(0,x->x<100,x->x+1);
 		var s13 = Streams2.consecutivePairs(s12).collect(Collectors.toList());
 		System.out.println(s13);
+		System.out.println("11: ______");
 	}
 
 }

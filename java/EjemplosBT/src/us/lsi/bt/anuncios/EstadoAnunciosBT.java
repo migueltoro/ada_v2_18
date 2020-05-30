@@ -114,7 +114,7 @@ public class EstadoAnunciosBT implements
 		r = r + an.getPrecio(te+1);
 		tr = tr - dr;
 		te = te + dr;
-		Set<Integer> s = Sets2.newSet(lista.getAnunciosDecididosParaEmitirSet());
+		Set<Integer> s = Sets2.of(lista.getAnunciosDecididosParaEmitirSet());
 		s.add(a);
 		for(Integer e : lista.getAnunciosDisponibles()){
 			if(e == a) continue;

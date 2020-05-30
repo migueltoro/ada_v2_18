@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.util.FibonacciHeap;
 import org.jgrapht.util.FibonacciHeapNode;
 
@@ -31,7 +32,7 @@ public class AStarSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V>
 		super();
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
-		this.goal = goal;
+		this.goal = goal==null?v->v.equals(end):goal;
 		this.end = end;
 		this.heuristic = heuristic;
 		this.tree = new HashMap<>();
@@ -104,6 +105,11 @@ public class AStarSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V>
 	@Override
 	public V startVertex() {
 		return this.startVertex;
+	}
+	
+	@Override
+	public GraphPath<V, E> pathToEnd() {
+		return pathTo(this.goal);
 	}
 	
 }
