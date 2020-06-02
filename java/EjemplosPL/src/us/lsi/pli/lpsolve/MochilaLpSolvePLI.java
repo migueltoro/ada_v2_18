@@ -18,7 +18,7 @@ public class MochilaLpSolvePLI{
 		DatosMochila.capacidadInicial = 78;	
 		MochilaGurobiPLI.objetos = DatosMochila.getObjetos();
 		MochilaGurobiPLI.n = MochilaGurobiPLI.objetos.size();
-		MochilaGurobiPLI.CI = DatosMochila.capacidadInicial.toString();
+		MochilaGurobiPLI.CI = DatosMochila.capacidadInicial;
 		AuxiliaryPLI.setType(AuxiliaryPLI.TipoPLI.LPSolve);
 		String ct = MochilaGurobiPLI.getConstraints();
 		Files2.toFile(ct,"ficheros/mochila_sal.txt");

@@ -8,6 +8,6 @@ Subject To
 Bounds
   0 <= x <= 5
   z >= 2
-Integer
+General
   x y z
 End

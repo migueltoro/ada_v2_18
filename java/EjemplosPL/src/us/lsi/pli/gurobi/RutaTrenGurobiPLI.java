@@ -47,12 +47,12 @@ public class RutaTrenGurobiPLI {
 		r.append(min);
 		r.append(goal(sum_2(n,n,"x",pd,costes)));
 		r.append(constraintsSection);
-		r.append(constraint("a",constraintEq(sum_2_2_p(n,0,"x",pd)," 1")));
-		r.append(constraint("b",constraintEq(sum_2_1_p(n,n-1,"x",pd)," 1")));
-		r.append(forAll_1_r(1,n-1,"b",
+		r.append(constraint("a",constraintEq(sum_2_2_p(n,0,"x",pd),1)));
+		r.append(constraint("b",constraintEq(sum_2_1_p(n,n-1,"x",pd),1)));
+		r.append(forAll_1(1,n-1,"b",
 				i->constraintEq(
 						sum(sum_2_1_p(n,i,"x",pd),sum_2_2(n,i,"x",pd,(k,j)->"-1")),
-						" 0")));
+						0)));
 		r.append(binaryVars);
 		r.append(vars_2_p(n,n,"x",pd));
 		r.append(lastEnd);

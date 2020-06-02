@@ -52,21 +52,21 @@ public class TspGurobi {
 		r.append(forAll_1(n,"a",
 				j->constraintEq(
 						sum_2_1_p(n,j,"x",(i,k) -> k != i && g.containsEdge(i,k)), 
-						" 1")));
+						1)));
 		r.append(forAll_1(n,"b",
 				i->constraintEq(
 						sum_2_2_p(n,i,"x",(k,j) -> j != i && g.containsEdge(i,j)), 
-						" 1")));
-		r.append(forAll_2_r(0,n,1,n,"c",
+						1)));
+		r.append(forAll_2(0,n,1,n,"c",
 				(i, j)-> j != i && g.containsEdge(i,j),
-				(i,j)->constraintImplyBinary(var_2("x",i,j),
+				(i,j)->constraintVarIndicator(var_2("x",i,j),
 				                             constraintGe(
 				                            		 String.format("%s - %s",var_1("y",j),var_1("y",i)), 
-				                            		 " 1"))));
-		r.append(constraint("d",constraintEq(var_1("y",0)," 0")));
+				                            		 1))));
+		r.append(constraint("d",constraintEq(var_1("y",0),0)));
 		r.append(boundsSection);
 		r.append(forAll_1_bound(n,
-				(Function<Integer,String>) i->boundLe(var_1("y",i),""+(n-1))));
+				(Function<Integer,String>) i->boundLe(var_1("y",i),(n-1))));
 		r.append(binaryVars);
 		r.append(vars_2_p(n,n,"x",(i, j)-> j != i && g.containsEdge(i,j)));
 		r.append(intVars);
@@ -87,19 +87,19 @@ public class TspGurobi {
 		r.append(forAll_1(n,"a",
 				j->constraintEq(
 						sum_2_1_p(n,j,"x",(i,k) -> k != i && g.containsEdge(i,k)), 
-						" 1")));
+						1)));
 		r.append(forAll_1(n,"b",
 				i->constraintEq(
 						sum_2_2_p(n,i,"x",(k,j) -> j != i && g.containsEdge(i,j)), 
-						" 1")));
-		r.append(forAll_2_r(0,n,1,n,"c",
+						1)));
+		r.append(forAll_2(0,n,1,n,"c",
 				(i, j)-> j != i && g.containsEdge(i,j),
 				(i,j)->constraintLe(String.format("%s - %s + %d %s",var_1("y",i),var_1("y",j),n,var_2("x",i,j)), 
-				                            		 ""+(n-1))));
-		r.append(constraint("d",constraintEq(var_1("y",0)," 0")));
+				                            		 (n-1))));
+		r.append(constraint("d",constraintEq(var_1("y",0),0)));
 		r.append(boundsSection);
 		r.append(forAll_1_bound(n,
-				(Function<Integer,String>) i->boundLe(var_1("y",i),""+(n-1))));
+				(Function<Integer,String>) i->boundLe(var_1("y",i),(n-1))));
 		r.append(binaryVars);
 		r.append(vars_2_p(n,n,"x",(i, j)-> j != i && g.containsEdge(i,j)));
 		r.append(intVars);

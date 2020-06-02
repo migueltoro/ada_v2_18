@@ -92,7 +92,7 @@ public class EstanteriaGurobiPLI {
 							Estante.anchura())));
 		r.append(forAll_1(n,"c",i->constraintEq(
 							sum_2_2_v(m+1,i,"x"),
-							" 1")));
+							1)));
 		r.append(binaryVars);
 		r.append(vars_2(n,m+1,"x"));
 		r.append(lastEnd);

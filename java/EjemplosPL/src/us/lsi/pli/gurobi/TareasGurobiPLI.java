@@ -66,7 +66,7 @@ public class TareasGurobiPLI {
 		r.append(constraintsSection);
 		r.append(forAll_2(n,n,"c",
 				(i,j)->j>i && Tarea.solape(i,j)>0, 
-				(i,j)->constraintLe(String.format("%s + %s",var_1("x",i),var_1("x",j))," 1")));
+				(i,j)->constraintLe(String.format("%s + %s",var_1("x",i),var_1("x",j)),1)));
 		r.append(binaryVars);
 		r.append(vars_1(n,"x"));
 		r.append(lastEnd);

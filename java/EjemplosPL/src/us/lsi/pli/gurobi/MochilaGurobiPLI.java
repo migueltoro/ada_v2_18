@@ -14,7 +14,7 @@ import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
 
 public class MochilaGurobiPLI {
-	public static String CI;
+	public static Integer CI;
 	public static List<ObjetoMochila>  objetos;
 	public static Integer n;
 	public static String getValor(Integer i) {
@@ -23,8 +23,8 @@ public class MochilaGurobiPLI {
 	public static String getPeso(Integer i) {
 		return objetos.get(i).getPeso().toString();
 	}
-	public static String getNMU(Integer i) {
-		return objetos.get(i).getNumMaxDeUnidades().toString();
+	public static Integer getNMU(Integer i) {
+		return objetos.get(i).getNumMaxDeUnidades();
 	}
 	
 	public static String getConstraints() {
@@ -44,7 +44,7 @@ public class MochilaGurobiPLI {
 	public static void main(String[] args) {	
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;	
-		CI = DatosMochila.capacidadInicial.toString();
+		CI = DatosMochila.capacidadInicial;
 		objetos = DatosMochila.getObjetos();
 		n = objetos.size();
 		String ct = MochilaGurobiPLI.getConstraints();

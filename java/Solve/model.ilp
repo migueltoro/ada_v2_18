@@ -1,20 +1,35 @@
 \ Model _copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
 Minimize
-  0 ar4 + 0 av0
+  0 _y_377 + 0 _y_425 + 0 _y_743
 Subject To
- sc4: x2 - x3 - r4 = 0
- ss0: x0 - x1 - v0 = 1
- ss2: x1 - x2 - v2 = 1
+ a188: x_17 - x_19 - _y_376 = 0
+ b0: x_0 - y_0 = 0
+ b17: x_17 - y_17 = -17
+ c0: y_0 - y_1 - _y_380 = 0
+ c22: y_1 - y_5 - _y_424 = 0
+ c88: y_5 - y_9 - _y_556 = 0
+ c135: y_9 - y_10 - _y_650 = 0
+ c149: y_10 - y_15 - _y_678 = 0
+ c181: y_15 - y_17 - _y_742 = 0
 Bounds
- -infinity <= x0 <= 3
- x1 free
- x2 free
- ar4 >= 0.1
- av0 >= 0.1
+ -infinity <= x_0 <= 19
+ x_17 free
+ y_0 free
+ y_1 free
+ y_5 free
+ y_9 free
+ y_10 free
+ y_15 free
+ y_17 free
+ _y_377 >= 1
+ _y_425 >= 1
+ _y_743 >= 1
 Generals
- x0 x1 x2 x3
+ x_0 x_17 x_19 _y_376 y_0 y_1 y_5 y_9 y_10 y_15 y_17 _y_380 _y_424 _y_556
+ _y_650 _y_678 _y_742 _y_377 _y_425 _y_743
 General Constraints
- c4: ar4 = ABS ( r4 )
- s0: av0 = ABS ( v0 )
+ gc188: _y_377 = ABS ( _y_376 )
+ gc212: _y_425 = ABS ( _y_424 )
+ gc371: _y_743 = ABS ( _y_742 )
 End

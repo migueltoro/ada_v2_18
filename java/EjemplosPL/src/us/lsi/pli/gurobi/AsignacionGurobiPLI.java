@@ -37,8 +37,8 @@ public class AsignacionGurobiPLI {
 		r.append(min);
 		r.append(goal(sum_2_f(n,n,"x",(i,j)->costes[i][j].toString())));
 		r.append(constraintsSection);
-		r.append(forAll_1(n,"c",i->constraintEq(sum_2_2_v(n,i,"x")," 1")));
-		r.append(forAll_1(n,"d",j->constraintEq(sum_2_1_v(n,j,"x")," 1")));
+		r.append(forAll_1(n,"c",i->constraintEq(sum_2_2_v(n,i,"x"),1)));
+		r.append(forAll_1(n,"d",j->constraintEq(sum_2_1_v(n,j,"x"),1)));
 		r.append(binaryVars);
 		r.append(vars_2(n,n,"x"));
 		r.append(lastEnd);

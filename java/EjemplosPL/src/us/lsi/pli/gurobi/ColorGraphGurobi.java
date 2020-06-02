@@ -39,14 +39,14 @@ public class ColorGraphGurobi {
 		r.append(min);
 		r.append(goal(sum_1_v(m,"y")));
 		r.append(constraintsSection);
-		r.append(forAll_1(n,"a",i->constraintEq(sum_2_2_v(m,i,"x"), " 1")));
+		r.append(forAll_1(n,"a",i->constraintEq(sum_2_2_v(m,i,"x"),1)));
 		r.append(forAll_2(n,m,"b",(i,k)->constraintLe(
 									sum(var_2("x",i,k),factor_1("y",k,v->"-1")),
-									" 0")));
+									0)));
 		r.append(forAll_3(n,n,m,"c",(i,j,k)->graph.containsEdge(i,k), 
 							(i,j,k)->constraintLe(
 									sum(var_2("x",i,k),var_2("x",j,k)),
-									" 1")));
+									1)));
 		r.append(binaryVars);
 		r.append(vars_2(n,m,"x"));
 		r.append(binaryVars);
