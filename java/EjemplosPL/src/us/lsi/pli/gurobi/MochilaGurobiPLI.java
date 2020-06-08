@@ -12,32 +12,31 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
+import us.lsi.pli.AuxiliaryPLI;
 
 public class MochilaGurobiPLI {
 	public static Integer CI;
 	public static List<ObjetoMochila>  objetos;
-	public static Integer n;
-	public static String getValor(Integer i) {
-		return objetos.get(i).getValor().toString();
+	public static int n;
+	public static Integer getValor(Integer i) {
+		return objetos.get(i).getValor();
 	}
-	public static String getPeso(Integer i) {
-		return objetos.get(i).getPeso().toString();
+	public static Integer getPeso(Integer i) {
+		return objetos.get(i).getPeso();
 	}
 	public static Integer getNMU(Integer i) {
 		return objetos.get(i).getNumMaxDeUnidades();
 	}
 	
-	public static String getConstraints() {
+	public static String getConstraints(PLIType type) {
+		AuxiliaryPLI.setType(type);
 		StringBuilder r = new StringBuilder();
-		r.append(max);
-		r.append(goal(sum_1_f(n,"x",i->getValor(i))));
-		r.append(constraintsSection);
-		r.append(constraint("a",constraintLe(sum_1_f(n,"x",i->getPeso(i)),CI)));
-		r.append(boundsSection);
-		r.append(forAll_1_bound(n,i->boundLe(var_1("x",i),getNMU(i))));
-		r.append(intVars);
-		r.append(vars_1(n,"x"));
-		r.append(lastEnd);
+		r.append(goalMaxSection(sum(listOf(0,n,i->f(getValor(i),"x",i)))));
+		r.append(constraintsSection());
+		r.append(forAll("a",constraintLe(sum(listOf(0,n,i->f(getPeso(i),"x",i))),CI)));
+		r.append(boundsSection(listOf(0,n,i->constraintLe(v("x",i),getNMU(i)))));
+		r.append(intVarsSection(listOf(0,n,i->v("x",i))));
+		r.append(endSection());
 		return r.toString();	
 	}
 	
@@ -47,7 +46,7 @@ public class MochilaGurobiPLI {
 		CI = DatosMochila.capacidadInicial;
 		objetos = DatosMochila.getObjetos();
 		n = objetos.size();
-		String ct = MochilaGurobiPLI.getConstraints();
+		String ct = MochilaGurobiPLI.getConstraints(PLIType.Gurobi);
 		Files2.toFile(ct,"ficheros/mochila_sal.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/mochila_sal.lp");

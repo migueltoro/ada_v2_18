@@ -4,8 +4,6 @@ import static us.lsi.pli.AuxiliaryPLI.*;
 
 import java.io.PrintWriter;
 import java.util.Locale;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -20,15 +18,17 @@ import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
+import us.lsi.pli.AuxiliaryPLI;
 
 public class RutaTrenGurobiPLI {
 	
 	public static Graph<Integer,SimpleEdge<Integer>> graph = null;
 	public static Integer n = null;
-	public static BiPredicate<Integer,Integer> pd = (i,j)->graph.containsEdge(i,j);
-	public static BiFunction<Integer,Integer,String> costes = 
-			(i,j)->{var e = graph.getEdge(i,j); return String.format("%.2f",graph.getEdgeWeight(e));};
 	
+	public static Double costes(int i, int j) {
+			SimpleEdge<Integer> e =  graph.getEdge(i,j); 
+			return graph.getEdgeWeight(e);
+	}
 	public static TriFunction<Integer,Integer,String[],SimpleEdge<Integer>> edge = 
 			(v1,v2,f) -> SimpleEdge.of(v1,v2,(double)Integer.parseInt(f[2]));
 
@@ -41,21 +41,22 @@ public class RutaTrenGurobiPLI {
 		return graph;
 	}
 	
-	public static String getContraints() {
+	public static String getContraints(PLIType type) {
+		AuxiliaryPLI.setType(type);
+		Locale.setDefault(new Locale("en", "US"));
 		Integer n = RutaTrenGurobiPLI.n;
 		StringBuilder r = new StringBuilder();
-		r.append(min);
-		r.append(goal(sum_2(n,n,"x",pd,costes)));
-		r.append(constraintsSection);
-		r.append(constraint("a",constraintEq(sum_2_2_p(n,0,"x",pd),1)));
-		r.append(constraint("b",constraintEq(sum_2_1_p(n,n-1,"x",pd),1)));
-		r.append(forAll_1(1,n-1,"b",
-				i->constraintEq(
-						sum(sum_2_1_p(n,i,"x",pd),sum_2_2(n,i,"x",pd,(k,j)->"-1")),
-						0)));
-		r.append(binaryVars);
-		r.append(vars_2_p(n,n,"x",pd));
-		r.append(lastEnd);
+		r.append(goalMinSection(sum(listOf(0,n,0,n,(i,j)->graph.containsEdge(i,j),(i,j)->f(costes(i,j),"x",i,j)))));
+		r.append(constraintsSection());
+		r.append(forAll("a",constraintEq(sum(listOf(0,n,j->graph.containsEdge(0,j),j->v("x",0,j))),1)));
+		r.append(forAll("b",constraintEq(sum(listOf(0,n,i->graph.containsEdge(i,n-1),i->v("x",i,n-1))),1)));
+		r.append(forAll("c",listOf(1,n-1,
+				i->constraintEq(sum(
+						sum(listOf(0,n,j->graph.containsEdge(j,i),j->v("x",j,i))),
+						sum(listOf(0,n,j->graph.containsEdge(i,j),j->f(-1,"x",i,j)))),
+					0))));
+		r.append(binaryVarsSection(listOf(0,n,0,n,(i,j)->graph.containsEdge(i,j),(i,j)->v("x",i,j))));
+		r.append(endSection());
 		return r.toString();
 	}
 	
@@ -75,7 +76,7 @@ public class RutaTrenGurobiPLI {
 	}
 	
 	public static GurobiSolution gurobi() {
-		String ct = RutaTrenGurobiPLI.getContraints();
+		String ct = RutaTrenGurobiPLI.getContraints(PLIType.Gurobi);
 		Files2.toFile(ct, "ficheros/rutas_tren_sal.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/rutas_tren_sal.lp");
@@ -91,6 +92,7 @@ public class RutaTrenGurobiPLI {
 		System.out.println(sg.toString(((x,y)->y>0.)));
 		GraphPath<Integer, SimpleEdge<Integer>> gp = shortestPath();
 		System.out.println(gp.getVertexList());
+		System.out.println(gp.getWeight());
 	}
 
 }

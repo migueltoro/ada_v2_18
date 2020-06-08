@@ -12,11 +12,11 @@ import us.lsi.pli.gurobi.TspGurobi;
 public class TspLpSolvePLI {
 
 	public static void main(String[] args) {
-		TspGurobi.graph = TspGurobi.graph(20,1.0);
+		TspGurobi.graph = TspGurobi.graph(10,1.0);
 		TspGurobi.n = TspGurobi.graph.vertexSet().size();
 		System.out.println(TspGurobi.graph);
-		AuxiliaryPLI.setType(AuxiliaryPLI.TipoPLI.LPSolve);
-		String ct = TspGurobi.getConstraints2();
+		AuxiliaryPLI.setType(AuxiliaryPLI.PLIType.LPSolve);
+		String ct = TspGurobi.getConstraints();
 		Files2.toFile(ct,"ficheros/tsp_sal.txt");
 		Locale.setDefault(new Locale("en", "US"));
 		
@@ -27,7 +27,7 @@ public class TspLpSolvePLI {
 		System.out.println("________");
 		System.out.println("________");
 		for(int i=0;i<s.getNumVar();i++){
-			if (s.getSolution(i) > 0) {
+			if (s.getName(i).startsWith("y")) {
 				System.out.println(s.getName(i) + " = " + s.getSolution(i));
 			}
 		}		

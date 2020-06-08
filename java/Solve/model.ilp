@@ -1,35 +1,47 @@
 \ Model _copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
 Minimize
-  0 _y_377 + 0 _y_425 + 0 _y_743
+ 
 Subject To
- a188: x_17 - x_19 - _y_376 = 0
- b0: x_0 - y_0 = 0
- b17: x_17 - y_17 = -17
- c0: y_0 - y_1 - _y_380 = 0
- c22: y_1 - y_5 - _y_424 = 0
- c88: y_5 - y_9 - _y_556 = 0
- c135: y_9 - y_10 - _y_650 = 0
- c149: y_10 - y_15 - _y_678 = 0
- c181: y_15 - y_17 - _y_742 = 0
+ a2: x$_0 + x$_1 = 1
+ a5: x$_2 + x$_3 = 1
+ a8: x$_4 + x$_5 = 1
+ b0: y_0 - d2_0 = 0
+ b1: y_1 - d2_1 = -1
+ b2: y_2 - d2_2 = -2
+ c2: x$_6 + x$_7 = 1
+ c8: x$_10 + x$_11 = 1
+ d0: y_0 - d1_0 = 0
+ d1: y_1 - d1_1 = 1
+ d2: y_2 - d1_2 = 2
+ e2: x$_12 + x$_13 = 1
+ e8: x$_16 + x$_17 = 1
+ a0: x$_0 = 1 -> y_0 - y_1 >= 1
+ a1: x$_1 = 1 -> y_1 - y_0 >= 1
+ a3: x$_2 = 1 -> y_0 - y_2 >= 1
+ a4: x$_3 = 1 -> y_2 - y_0 >= 1
+ a6: x$_4 = 1 -> y_1 - y_2 >= 1
+ a7: x$_5 = 1 -> y_2 - y_1 >= 1
+ c0: x$_6 = 1 -> d2_0 - d2_1 >= 1
+ c1: x$_7 = 1 -> d2_1 - d2_0 >= 1
+ c6: x$_10 = 1 -> d2_1 - d2_2 >= 1
+ c7: x$_11 = 1 -> d2_2 - d2_1 >= 1
+ e0: x$_12 = 1 -> d1_0 - d1_1 >= 1
+ e1: x$_13 = 1 -> d1_1 - d1_0 >= 1
+ e6: x$_16 = 1 -> d1_1 - d1_2 >= 1
+ e7: x$_17 = 1 -> d1_2 - d1_1 >= 1
 Bounds
- -infinity <= x_0 <= 19
- x_17 free
- y_0 free
- y_1 free
- y_5 free
- y_9 free
- y_10 free
- y_15 free
- y_17 free
- _y_377 >= 1
- _y_425 >= 1
- _y_743 >= 1
+ -infinity <= y_0 <= 2
+ y_1 <= 2
+ y_2 <= 2
+ d2_1 free
+ d2_2 free
+ d1_0 free
+ d1_1 free
+ d1_2 free
+Binaries
+ x$_0 x$_1 x$_2 x$_3 x$_4 x$_5 x$_6 x$_7 x$_10 x$_11 x$_12 x$_13 x$_16
+ x$_17
 Generals
- x_0 x_17 x_19 _y_376 y_0 y_1 y_5 y_9 y_10 y_15 y_17 _y_380 _y_424 _y_556
- _y_650 _y_678 _y_742 _y_377 _y_425 _y_743
-General Constraints
- gc188: _y_377 = ABS ( _y_376 )
- gc212: _y_425 = ABS ( _y_424 )
- gc371: _y_743 = ABS ( _y_742 )
+ y_0 y_1 y_2 d2_0 d2_1 d2_2 d1_0 d1_1 d1_2
 End

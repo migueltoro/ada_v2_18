@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
@@ -141,6 +144,12 @@ public class AlgoritmoLpSolve implements SolutionLpSolve {
 			throw new IllegalStateException("Se ha producido una excepción en LpSolve = "+e);
 		}
 
+	}
+
+	@Override
+	public Map<String, Double> solutions() {
+		return IntStream.range(0,this.getNumVar()).boxed()
+				.collect(Collectors.toMap(i->this.getName(i),i->this.solutionPoint[i]));
 	}
 	
 }

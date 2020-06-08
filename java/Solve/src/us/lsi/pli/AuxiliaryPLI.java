@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.IntPair;
+import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.common.TriPredicate;
@@ -38,76 +38,110 @@ public class AuxiliaryPLI {
 	public static Locale locale = new Locale("en", "US");
 	
 	
-	/**
-	 * El bipredicado siempre true
-	 */
-	public static BiPredicate<Integer,Integer> all2 = (i,j) -> true;
-	/**
-	 * El predicado siempre true
-	 */
-	public static Predicate<Integer> all1 = i -> true;
-	/**
-	 * Una bifunci&oacute;n que devuelve la cadena vac&iacute;a 
-	 */
-	public static BiFunction<Integer,Integer,String> nf2 = (i,j) -> "";
-	/**
-	 * Una funci&oacute;n que devuelve la cadena vac&iacute;a 
-	 */
-	public static Function<Integer,String> nf1 = i -> "";
 	
 	/**
-	 * Un contador de las varaibles binarias que se van creando implicitamente
+	 * Un contador de las variables binarias que se van creando implicitamente
 	 */
 	public static Integer nBinary = 0;
+	/**
+	 * Un contador de las variables enteras que se van creando implicitamente
+	 */
 	public static Integer nInteger = 0;
+	/**
+	 * La lista de variables libres
+	 */
+	public static List<String> freeVarsList = new ArrayList<>();
+	/**
+	 * Restricciones que se van creando implicitamente
+	 */
 	public static List<String> gConstraints = new ArrayList<>();
+	/**
+	 * Restricciones sos que se van creando implicitamente
+	 */
+	public static List<String> sosConstraints = new ArrayList<>();
+	/**
+	 * Cotas que se van creando implicitamente
+	 */
 	public static List<String> bounds = new ArrayList<>();
+	/**
+	 * Una constante para emular la restriccion con variable indicadora
+	 */
+	public static Integer M = 1000;
 	
-	public static String end = "";
-	public static String sep = "";
-	public static String min = "Minimize\n\n";
-	public static String max = "Maximize\n\n";
-	public static String intVars = "\nGeneral\n\n";
-	public static String binaryVars = "\nBinary\n\n";
-	public static String freeVars = "\nFree\n\n";
-	public static String boundsSection = "\n\nBounds\n\n";
-	public static String lastEnd = "\nEnd\n\n";
-	public static String constraintsSection = "\n\nSubject To\n\n";
-	public static String generalConstraintsSection = "\n\nGeneral Constraints\n\n";
+	private static String end = "";
+	private static String sep = " ";
+	private static String min = "Minimize\n\n";
+	private static String max = "Maximize\n\n";
+	private static String intVars = "\nGeneral\n\n";
+	private static String binaryVars = "\nBinary\n\n";
+	private static String freeVars = "\nFree\n\n";
+	private static String boundsSection = "\n\nBounds\n\n";
+	private static String lastEnd = "\nEnd\n\n";
+	private static String constraintsSection = "\n\n\nSubject To\n\n";
+	private static String generalConstraintsSection = "\n\nGeneral Constraints\n\n";
 	
-	public static enum TipoPLI{Gurobi,LPSolve}
-	public static TipoPLI type = TipoPLI.Gurobi;
+	public static enum PLIType{Gurobi,LPSolve}
+	public static PLIType type = PLIType.Gurobi;
 	
 	public static String generalConstraintsSection() {
-		return generalConstraintsSection = "\n\nGeneral Constraints\n\n" + forAll_List("gc",gConstraints);
+		StringBuilder r = new StringBuilder();		
+		if(!gConstraints.isEmpty()) {
+			r.append(String.format("%s %s\n",generalConstraintsSection,forAll("gc",gConstraints)));
+		}
+		if(!sosConstraints.isEmpty()) {
+			r.append(sosConstraints.stream().map(x->"SOS: "+x+end).collect(Collectors.joining("\n","\n\nsos\n","\n")));
+		}
+		return r.toString();
 	}
 	
-	public static String intVarsSection() {
-		return "\nGeneral\n\n" + vars_1(AuxiliaryPLI.nInteger,"_y");
+	@SafeVarargs
+	public static String intVarsSection(List<String>... vs) {
+		List<String> r = Arrays.stream(vs).flatMap(x->x.stream()).collect(Collectors.toList());
+		r.addAll(listOf(0,AuxiliaryPLI.nInteger, i->v("y$",i))); 
+		if(r.isEmpty()) return "";
+		return r.stream().collect(Collectors.joining(sep,intVars,end));
 	}
 	
-	public static String binaryVarsSection() {
-		return "\nBinary\n\n" +vars_1(AuxiliaryPLI.nBinary,"_x");
+	@SafeVarargs
+	public static String binaryVarsSection(List<String>... vs) {
+		List<String> r = Arrays.stream(vs).flatMap(x->x.stream()).collect(Collectors.toList());
+		r.addAll(listOf(0,AuxiliaryPLI.nBinary, i->v("x$",i))); 
+		if(r.isEmpty()) return "";
+		return r.stream().collect(Collectors.joining(sep,binaryVars,end));
 	}
 	
-	public static String boundsSection() {
-		return boundsSection +forAll_1_bound(bounds.size(),i->bounds.get(i));
+	
+	public static String freeVarsSection() {
+		List<String> r = freeVarsList.stream().collect(Collectors.toList()); 
+		if(r.isEmpty() || AuxiliaryPLI.type == PLIType.Gurobi) return "";
+		return r.stream().collect(Collectors.joining(sep,freeVars,end));
 	}
 	
-	public static void setType(TipoPLI type) {
+	@SafeVarargs
+	public static String boundsSection(List<String>... bnd) {
+		List<String> r = Arrays.stream(bnd).flatMap(x->x.stream()).collect(Collectors.toList()); 
+		r.addAll(bounds);
+		return IntStream.range(0,r.size()).boxed()			
+			.filter(i->!r.get(i).isEmpty())
+			.map(i -> String.format("   %s%s",r.get(i),end))
+			.collect(Collectors.joining("\n",boundsSection,"\n"));
+	}
+	
+	public static void setType(PLIType type) {
 		AuxiliaryPLI.type = type;
 		switch(type) {
 		case Gurobi:
 			end = "";
-			sep = "";
+			sep = " ";
 			min = "Minimize\n\n";
 			max = "Maximize\n\n";
 			intVars = "\nGeneral\n\n";
 			binaryVars = "\nBinary\n\n";
 			freeVars = "\nFree\n\n";
 			boundsSection = "\nBounds\n\n";
-			lastEnd = "\nEnd\n\n";
-			constraintsSection = "\nSubject To\n\n";			
+			lastEnd = "\n\nEnd\n\n";
+			constraintsSection = "\n\nSubject To\n\n";
+			generalConstraintsSection = "\n\nGeneral Constraints\n\n";
 			break;
 		case LPSolve:
 			end = ";";
@@ -116,13 +150,15 @@ public class AuxiliaryPLI {
 			max = "max:  ";
 			intVars = "\nint  ";
 			binaryVars = "\nbin  ";
-			freeVars = "\nfree\n\n";
+			freeVars = "\nfree  ";
 			boundsSection = "\n\n";
 			lastEnd = "";
 			constraintsSection = "\n\n";
+			generalConstraintsSection = "";
 			break;	
 		}
 	}
+	
 	
 	/**
 	 * @param es Un secuencia de sumandos
@@ -131,6 +167,10 @@ public class AuxiliaryPLI {
 	public static String sum(String... es) {
 		return Arrays.stream(es)
 				.collect(Collectors.joining(" + "));
+	}
+	
+	public static String sum(List<String> ls) {
+		return ls.stream().collect(Collectors.joining(" + "));
 	}
 	
 	/**
@@ -142,476 +182,99 @@ public class AuxiliaryPLI {
 		return String.format("%s - %s",e,x);
 	}
 	
-	/**
-	 * @param n El rango de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @return \( \sum_{i=0}^{n-1} x_i\)
-	 */
-	public static String sum_1_v(Integer n, String x) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> var_1(x,i))
-				.collect(Collectors.joining(" + "));
-	}
 	
 	/**
-	 * @param n1 El limite inferior de i en el sumatorio
-	 * @param n2 El limite superior sin incluir de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @return \( \sum_{i=0}^{n-1} x_i\)
-	 */
-	public static String sum_1_v(Integer n1, Integer n2, String x) {
-		return IntStream.range(n1, n2).boxed()
-				.map(i -> var_1(x,i))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @param pd Un predicado
-	 * @return \( \sum_{i=0|p(i)}^{n-1} f(i)*x_i\)
-	 */
-	public static String sum_1_p(Integer n, String x, 
-			Predicate<Integer> pd) {
-		return IntStream.range(0, n).boxed()
-				.filter(pd)
-				.map(i -> var_1(x,i))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0}^{n-1} f(i)*x_i\)
-	 */
-	public static String sum_1_f(Integer n, String x, 
-			Function<Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> String.format("%s %s",fc.apply(i),var_1(x,i)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n1 El limite inferior i en el sumatorio
-	 * @param n2 El limite superior sin incluir de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0}^{n-1} f(i)*x_i\)
-	 */
-	public static String sum_1_f(Integer n1, Integer n2, String x, 
-			Function<Integer,String> fc) {
-		return IntStream.range(n1, n2).boxed()
-				.map(i -> String.format("%s %s",fc.apply(i),var_1(x,i)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio
-	 * @param x El identificador de la variable
-	 * @param pd Un predicado
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0|p(i)}^{n-1} f(i)*x_i\)
-	 */
-	public static String sum_1(Integer n, String x, 
-			Predicate<Integer> pd, 
-			Function<Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.filter(pd)
-				.map(i -> String.format("%s %s",fc.apply(i),var_1(x,i)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	
-	
-	/**
-	 * @param n El rango de i en el sumatorio
-	 * @param j Una valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable
-	 * @return \( \sum_{i=0}^{n-1} x_{ij}\)
-	 */
-	public static String sum_2_1_v(Integer n, Integer j, String x) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> var_2(x,i,j))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio 
-	 * @param j Un valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @return \( \sum_{i=0|pd(i,j)}^{n-1} x_{ij}\)
-	 */
-	public static String sum_2_1_p(Integer n, Integer j, String x, 
-			BiPredicate<Integer,Integer> pd) {
-		return IntStream.range(0, n).boxed()
-				.filter(i->pd.test(i,j))
-				.map(i -> var_2(x,i,j))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/**
-	 * @param n El rango del sumatorio en i
-	 * @param j Un valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0}^{n-1} f(i,j)*x_{ij}\)
-	 */
-	public static String sum_2_1_f(Integer n, Integer j, String x, 
-			BiFunction<Integer,Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> String.format("%s %s", fc.apply(i,j),var_2(x,i,j)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/**
-	 * @param n El rango del sumatorio en i
-	 * @param j Un valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0|pd(i,j)}^{n-1} f(i,j)*x_{ij}\)
-	 */
-	public static String sum_2_1(Integer n, Integer j, String x, 
-			BiPredicate<Integer,Integer> pd, 
-			BiFunction<Integer,Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.filter(i->pd.test(i,j))
-				.map(i -> String.format("%s %s", fc.apply(i,j),var_2(x,i,j)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/**
-	 * @param n El rango de j en el sumatorio
-	 * @param i Una valor constante del primer &iacute;ndice
-	 * @param x El identificador de la variable
-	 * @return \( \sum_{j=0}^{n-1} x_{ij}\)
-	 */
-	public static String sum_2_2_v(Integer n, Integer i, String x) {
-		return IntStream.range(0, n).boxed()
-				.map(j -> var_2(x,i,j))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de j en el sumatorio 
-	 * @param i Un valor constante del primer &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @return \( \sum_{j=0|pd(i,j)}^{n-1} x_{ij}\)
-	 */
-	public static String sum_2_2_p(Integer n, Integer i, String x,
-			BiPredicate<Integer,Integer> pd) {
-		return IntStream.range(0, n).boxed()
-				.filter(j->pd.test(i,j))
-				.map(j -> var_2(x,i,j))
-				.collect(Collectors.joining(" + "));
-	}
-	/**
-	 * @param n El rango del sumatorio en j
-	 * @param i Un valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{j=0}^{n-1} f(i,j)*x_{ij}\)
-	 */
-	public static String sum_2_2_f(Integer n, Integer i, String x,
-			BiFunction<Integer,Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.map(j -> String.format("%s %s", fc.apply(i,j),var_2(x,i,j)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/**
-	 * @param n El rango del sumatorio en j
-	 * @param i Un valor constante del segundo &iacute;ndice
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{j=0|pd(i,j)}^{n-1} f(i,j)*x_{ij}\)
-	 */
-	public static String sum_2_2(Integer n, Integer i, String x, 
-			BiPredicate<Integer,Integer> pd, 
-			BiFunction<Integer,Integer,String> fc) {
-		return IntStream.range(0, n).boxed()
-				.filter(j->pd.test(i,j))
-				.map(j -> String.format("%s %s", fc.apply(i,j),var_2(x,i,j)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/**
-	 * @param n El rango de i en el sumatorio
-	 * @param m El rango de j en el sumatorio
-	 * @param x El identificador de la variable
-	 * @return \( \sum_{i=0,j=0}^{n-1,m-1} x_{ij}\)
-	 */
-	public static String sum_2_v(Integer n, Integer m, String x) {
-		return Streams2.allPairs(n, m)
-				.map(p -> var_2(x,p.first,p.second))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio 
-	 * @param m El rango de j en el sumatorio
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @return \( \sum_{i=0,j=0|pd(i,j)}^{n-1,m-1} x_{ij}\)
-	 */
-	public static String sum_2_p(Integer n, Integer m, String x,
-			BiPredicate<Integer, Integer> pd) {
-		return Streams2.allPairs(n, m)
-				.filter(p->pd.test(p.first,p.second))
-				.map(p -> var_2(x,p.first,p.second))				
-				.collect(Collectors.joining(" + "));
-	}
-	
-	
-	/** 
-	 * @param n El rango de i en el sumatorio 
-	 * @param m El rango de j en el sumatorio
-	 * @param x El identificador de la variable 
-	 * @param f Una funci&oacute; que calcula el coeficiente del factor
-	 * @return \( \sum_{i=0,j=0}^{n-1,m-1} f(i,j)*x_{ij}\)
-	 */
-	public static String sum_2_f(Integer n, Integer m, String x, 
-			BiFunction<Integer,Integer,String> f) {
-		return Streams2.allPairs(n, m)
-				.map(p -> String.format("%s %s", f.apply(p.first,p.second),var_2(x,p.first,p.second)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	/** 
-	 * @param n El rango de i en el sumatorio 
-	 * @param m El rango de j en el sumatorio
-	 * @param x El identificador de la variable 
-	 * @param pd Un bipredicado
-	 * @param fc Una función que devuelve el String asociado al coeficiente de un factor
-	 * @return \( \sum_{i=0,j=0|pd(i,j)}^{n-1,m-1} f(i,j)*x_{ij} \)
-	 */
-	public static String sum_2(Integer n, Integer m, String x, 
-			BiPredicate<Integer,Integer> pd, 
-			BiFunction<Integer,Integer,String> fc) {
-		return Streams2.allPairs(n, m)
-				.filter(p->pd.test(p.first,p.second))
-				.map(p -> String.format("%s %s",fc.apply(p.first,p.second),var_2(x,p.first,p.second)))
-				.collect(Collectors.joining(" + "));
-	}
-	
-	
-	/**
-	 * @param n Rango de la variable i
 	 * @param name El nombre del grupo de restricciones
 	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=0}^{n-1} fc(i) \)
+	 * @return \( \forall_{i=n1}^{n2-1} fc(i) \)
 	 */
-	public static String forAll_1(Integer n, String name,
-			Function<Integer,String> fr) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> String.format("   %s%d: %s%s",name, i, fr.apply(i),end))
+	public static String forAll(String name, List<String> fr) {
+		return IntStream.range(0, fr.size()).boxed()
+				.map(i -> String.format("   %s%d: %s%s",name,i,fr.get(i),end))
 				.collect(Collectors.joining("\n","\n","\n"));
 	}
 	
 	/**
-	 * @param n Rango de la variable i
-	 * @param fb Una funci&oacute; que calcula una cota para una variable
-	 * @return \( \forall_{i=0}^{n-1} fb(i) \)
-	 */
-	public static String forAll_1_bound(Integer n, Function<Integer,String> fb) {
-		return IntStream.range(0, n).boxed()
-				.map(i -> String.format("%s%s",fb.apply(i),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	
-	
-	/**
-	 * @param n1 L&iacute;mite inferior del rango de i
-	 * @param n2 L&iacute;mite superior sin incluir del rango de i
 	 * @param name El nombre del grupo de restricciones
 	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=n1}^{n2-1} fr(i) \)
+	 * @return \( \forall_{i=n1}^{n2-1} fc(i) \)
 	 */
-	public static String forAll_1(Integer n1, Integer n2, String name,
-			Function<Integer,String> fr) {
-		return IntStream.range(n1, n2).boxed()
-				.map(i -> String.format("   %s%d: %s%s",name,i-n1,fr.apply(i),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}	
-	
-	/**
-	 * @param n Rango de la variable i
-	 * @param name El nombre del grupo de restricciones
-	 * @param pd Un predicado
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=0|pd(i)}^{n-1} fr(i) \)
-	 */
-	public static String forAll_1(Integer n, String name,
-			Predicate<Integer> pd, 
-			Function<Integer,String> fr) {
-		return IntStream.range(0, n).boxed()
-				.filter(pd)
-				.map(i -> String.format("   %s%d: %s%s",name, i, fr.apply(i),end))
-				.collect(Collectors.joining("\n","\n","\n"));
+	public static String forAll(String name,String... fr) {
+		return IntStream.range(0,fr.length).boxed()
+				.map(i->String.format("   %s%d: %s%s",name,i,fr[i],end))
+				.collect(Collectors.joining("\n"));				
 	}
 	
-	/**
-	 * @param n1 L&iacute;mite inferior del rango de i
-	 * @param n2 L&iacute;mite superior sin incluir del rango de i
-	 * @param name El nombre del grupo de restricciones
-	 * @param pd Un predicado
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=n1|pd(i)}^{n2-1} fr(i) \)
-	 */
-	public static String forAll_1(Integer n1, Integer n2, String name,
-			Predicate<Integer> pd, 
-			Function<Integer,String> fr) {
-		return IntStream.range(n1, n2).boxed()
-				.filter(pd)
-				.map(i -> String.format("   %s%d: %s%s",name, i-n1, fr.apply(i),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	/**
-	 * @param n Rango de i
-	 * @param m Rango de j
-	 * @param name El nombre del grupo de restricciones
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=0,j=0}^{n-1,m-1} fr(i,j) \)
-	 */
-	public static String forAll_2(Integer n, Integer m, String name,
-			BiFunction<Integer,Integer,String> fr) {
-		return Streams2.allPairs(n, m)
-				.map(p -> String.format("   %s%d: %s%s",name,p.first+m*p.second,fr.apply(p.first,p.second),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	
-	/**
-	 * @param n Rango de i
-	 * @param m Rango de j
-	 * @param name El nombre del grupo de restricciones
-	 * @param pd Un predicado
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=0,j=0|pd(i,j)}^{n-1,m-1} fr(i,j) \)
-	 */
-	public static String forAll_2(Integer n, Integer m, String name,
-			BiPredicate<Integer,Integer> pd, 
-			BiFunction<Integer,Integer,String> fr) {
-		return Streams2.allPairs(n, m)
-				.filter(p->pd.test(p.first,p.second))
-				.map(p -> String.format("   %s%d: %s%s",name,p.first+m*p.second,fr.apply(p.first,p.second),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	
-	/**
-	 * @param n1 L&iacute;mite inferior del rango de i
-	 * @param n2 L&iacute;mite superior sin incuir del rango de i
-	 * @param m1 L&iacute;mite inferior del rango de j
-	 * @param m2 L&iacute;mite superior sin incuir del rango de j
-	 * @param name El nombre del grupo de restricciones
-	 * @param pd Un predicado
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=n1,j=m1|pd(i,j)}^{n2-1,m2-1} fr(i,j) \)
-	 */
-	public static String forAll_2(Integer n1, Integer n2, Integer m1, Integer m2, String name,
-			BiPredicate<Integer,Integer> pd, 
-			BiFunction<Integer,Integer,String> fr) {
-		return Streams2.allPairs(n1, n2, m1, m2)
-				.filter(p->pd.test(p.first,p.second))
-				.map(p -> String.format("   %s%d: %s%s",name,p.first-n1+(m2-m1)*(p.second-m1),fr.apply(p.first,p.second),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	
-	/**
-	 * @param n Rango de i
-	 * @param m Rango de j
-	 * @param r Rango de k
-	 * @param name El nombre del grupo de restricciones
-	 * @param pd Un predicado
-	 * @param fr Una funci&oacute; que calcula una restricci&oacute;n
-	 * @return \( \forall_{i=0,j=0, k=0|pd(i,j,j)}^{n-1,m-1,r-1} fr(i,j,k) \)
-	 */
-	public static String forAll_3(Integer n, Integer m, Integer r, String name, 
-			TriPredicate<Integer,Integer,Integer> pd, 
-			TriFunction<Integer,Integer,Integer,String> fr) {
-		return Streams2.allPairs(n, m, r)
-				.filter(p->pd.test(p.first,p.second,p.third))
-				.map(p -> String.format("   %s%d: %s%s",name,p.first+m*p.second+m*r*p.third,fr.apply(p.first,p.second,p.third),end))
-				.collect(Collectors.joining("\n","\n","\n"));
-	}
-	
-	public static String forAll_List(String name, List<String> constraints) {
-		return IntStream.range(0,constraints.size())
-				.boxed()
-				.map(i->String.format("   %s%d: %s",name,i,constraints.get(i)))
-				.collect(Collectors.joining("\n","\n","\n"));
+	public static  String endSection() {
+		return AuxiliaryPLI.lastEnd;
 	}
 		
-	public static String forAll_1_List(Integer n, String name, Function<Integer,List<String>> constraints) {
-		return IntStream.range(0, n).boxed()
-				.flatMap(i->IntStream.range(0,constraints.apply(i).size()).boxed().map(j->IntPair.of(i,j)))			
-				.map(p->String.format("   %s%d: %s",name,p.first+n*p.second,constraints.apply(p.first).get(p.second)))
-				.collect(Collectors.joining("\n","\n","\n"));
+	public static <E> List<E> listOf(List<List<E>> elems){
+		return elems.stream().flatMap(x->x.stream()).collect(Collectors.toList());
 	}
 	
-	public static <E> List<E> listOf(Integer n1, Integer n2, Function<Integer,E> e){
+	public static <E> List<E> listOf(@SuppressWarnings("unchecked") List<E>... elems){
+		return Arrays.stream(elems).flatMap(x->x.stream()).collect(Collectors.toList());
+	}
+	
+	public static <E> List<E> listOf(@SuppressWarnings("unchecked") E... elems){
+		return Arrays.asList(elems);
+	}
+	
+	public static <E> List<E> listOf(int n1, int n2, 
+			Function<Integer,E> e){
 		return IntStream.range(n1, n2).boxed()
 				.map(i->e.apply(i))
 				.collect(Collectors.toList());
 	}
 	
-	/**
-	 * @param n El n&uacute;mero de variables
-	 * @param x El identificador de la variable 
-	 * @return \( x\_0, x\_1, ... \)
-	 */
-	public static String vars_1(Integer n, String x) {
-		return IntStream.range(0,n).boxed()
-				.map(i -> var_1(x,i))
-				.collect(Collectors.joining(sep+" "," ", end+"\n"));
+	public static <E> List<E> listOf(int n1, int n2, 
+			Predicate<Integer> pd, Function<Integer,E> e){
+		return IntStream.range(n1, n2).boxed()
+				.filter(pd)
+				.map(i->e.apply(i))
+				.collect(Collectors.toList());
+	}
+
+	
+	public static <E> List<E> listOf(int n1, int n2, int m1, int m2, 
+			BiFunction<Integer,Integer,E> e){
+		return Streams2.allPairs(n1, n2, m1, m2)
+				.map(p->e.apply(p.first,p.second))
+				.collect(Collectors.toList());
 	}
 	
-	/**
-	 * @param n El rango de la i
-	 * @param m El rango de la j
-	 * @param x El identificador de la variable
-	 * @return \( x\_0\_0, x_0\_1, ... \)
-	 */
-	public static String vars_2(Integer n, Integer m, String x) {
-		return Streams2.allPairs(n, m)
-				.map(p -> var_2(x, p.first, p.second))
-			    .collect(Collectors.joining(sep+" ","  ",end+"\n"));
-	}
-	
-	/**
-	 * @param n El rango de la i
-	 * @param m El rango de la j
-	 * @param x El identificador de la variable
-	 * @param pd Un predicado
-	 * @return \( x\_0\_0, x_0\_1, ... \) con loa sub&iacute;dices filtrados por el predicado
-	 */
-	public static String vars_2_p(Integer n, Integer m, String x, BiPredicate<Integer,Integer> pd) {
-		return Streams2.allPairs(n, m)
+	public static <E> List<E> listOf(int n1, int n2, int m1, int m2, 
+			BiPredicate<Integer,Integer> pd, BiFunction<Integer,Integer,E> e){
+		return Streams2.allPairs(n1, n2, m1, m2)
 				.filter(p->pd.test(p.first,p.second))
-				.map(p -> var_2(x, p.first, p.second))
-			    .collect(Collectors.joining(sep+" ","  ",end+"\n"));
+				.map(p->e.apply(p.first,p.second))
+				.collect(Collectors.toList());
 	}
+	
+	public static <E> List<E> listOf(int n1, int n2, int m1, int m2, int r1, int r2, 
+			TriFunction<Integer,Integer,Integer,E> e){
+		return Streams2.allPairs(n1, n2, m1, m2, r1,r2)
+				.map(p->e.apply(p.first,p.second,p.third))
+				.collect(Collectors.toList());
+	}
+	
+	public static <E> List<E> listOf(int n1, int n2, int m1, int m2, int r1, int r2, 
+			TriPredicate<Integer,Integer,Integer> pd, TriFunction<Integer,Integer,Integer,E> e){
+		return Streams2.allPairs(n1, n2, m1, m2, r1,r2)
+				.filter(p->pd.test(p.first,p.second,p.third))
+				.map(p->e.apply(p.first,p.second,p.third))
+				.collect(Collectors.toList());
+	}
+	
 	
 	/**
 	 * @param x El identificador de la variable
 	 * @param i Un &iacute;dice
 	 * @return \( x\_i \)
 	 */
-	public static String var_1(String x, Integer i) {
+	public static String v(String x, int i) {
 		return String.format("%s_%d",x,i);
-	}
-	
-	/**
-	 * @param x El identificador de la variable
-	 * @param i Un &iacute;dice
-	 * @param fc Un funci&oacute;n que calcula el coeficiente 
-	 * @return \( fc(i) \: x_i\)
-	 */
-	public static String factor_1(String x, Integer i, Function<Integer,String> fc) {
-		return String.format("%s %s_%d",fc.apply(i),x,i);
 	}
 	
 	/**
@@ -620,19 +283,35 @@ public class AuxiliaryPLI {
 	 * @param j Un &iacute;dice
 	 * @return \( x\_i\_j \)
 	 */
-	public static String var_2(String x, Integer i, Integer j) {
+	public static String v(String x, int i, int j) {
 		return String.format("%s_%d_%d",x,i,j);
 	}
 	
-	/**
-	 * @param x El identificador de la variable
-	 * @param i Un &iacute;dice
-	 * @param j Un &iacute;dice
-	 * @param fc Un funci&oacute;n que calcula el coeficiente 
-	 * @return \( fc(i,j) \: x\_i\_j \)
-	 */
-	public static String factor_2(String x, Integer i, Integer j, BiFunction<Integer,Integer,String> fc) {
-		return String.format("%s %s_%d_2",fc.apply(i,j),x,i,j);
+	public static String f(Integer c, String x, Integer i) {
+		return String.format("%d %s_%d",c,x,i);
+	}
+	
+	public static String f(Double c, String x, Integer i) {
+		return String.format("%.2f %s_%d",c,x,i);
+	}
+	
+	public static String f(Integer c, String x, Integer i, Integer j) {
+		return String.format("%d %s_%d_%d",c,x,i,j);
+	}
+	
+	public static String f(Double c, String x, Integer i, Integer j) {
+		return String.format("%.2f %s_%d_%d",c,x,i,j);
+	}
+
+	
+	
+	public static String varFree(String x) {
+		String s = "";
+		switch(type) {
+		case Gurobi: s = constraintGe(x,-1000000);break;
+		case LPSolve: freeVarsList.add(x);break;
+		}
+		return s;
 	}
 	
 	/**
@@ -649,8 +328,8 @@ public class AuxiliaryPLI {
 	 * @param n Un n&uacute;mero
 	 * @return \( e \le n \)
 	 */
-	public static String constraintLe(String e, String n) {
-		return String.format("%s <= %s",e,n);
+	public static String constraintLe(String e, Double n) {
+		return String.format("%s <= %.2f",e,n);
 	}
 	/**
 	 * @param e Un expresi&oacute;n 
@@ -666,8 +345,27 @@ public class AuxiliaryPLI {
 	 * @param n Un n&uacute;mero
 	 * @return \( e \ge n \)
 	 */
-	public static String constraintGe(String e, String n) {
-		return String.format("%s >= %s",e,n);
+	public static String constraintGe(String e, Double n) {
+		return String.format("%s >= %.2f",e,n);
+	}
+	
+	/**
+	 * @param e Un expresi&oacute;n 
+	 * @param n Un n&uacute;mero
+	 * @return \( e \ge n \)
+	 */
+	public static String constraintBound(Integer ln, String e, Integer rn) {
+		return String.format("%d <= %s <= %d",ln,e,rn);
+	}
+	
+	
+	/**
+	 * @param e Un expresi&oacute;n 
+	 * @param n Un n&uacute;mero
+	 * @return \( e \le n \)
+	 */
+	public static String constraintBound(Double ln, String e, Double rn) {
+		return String.format("%.2f <= %s <= %.2f",ln,e,rn);
 	}
 	
 	/**
@@ -684,10 +382,9 @@ public class AuxiliaryPLI {
 	 * @param n Un n&uacute;mero
 	 * @return \( e = n \)
 	 */
-	public static String constraintEq(String e, String n) {
-		return String.format("%s = %s",e,n);
+	public static String constraintEq(String e, Double n) {
+		return String.format("%s = %.2f",e,n);
 	}
-	
 	
 	/**
 	 * @param x Una variable 
@@ -700,18 +397,61 @@ public class AuxiliaryPLI {
 		return s;
 	}
 	
+	public static String constraintEq(String x, String exp, Double n) {
+		String s = constraintEq(difference(exp,x),-n);
+		return s;
+	}
+	
+	/**
+	 * @param abs
+	 * @param exp
+	 * @return \( abs = |exp| \)
+	 */
+	public static List<String> constraintAbs(String abs, String exp) {
+		Integer r = AuxiliaryPLI.nInteger;
+		String s1 = constraintEq(v("y$",r),exp,0);
+		String s2;
+		String s3;
+		List<String> s = null;;
+		switch(type) {
+		case Gurobi: 
+			String s0 = String.format("%s = ABS ( %s )",abs,v("y$",r));
+			gConstraints.add(s0);
+			AuxiliaryPLI.nInteger += 1;
+			s = Lists2.of(s1);
+			break;
+		case LPSolve: 
+			s2 = constraintEq(sum(v("y$",r),f(-1,"y$",r+1),v("y$",r+2)),0);
+			s3 = constraintEq(sum(abs,f(-1,"y$",r+1),f(-1,"y$",r+2)),0);
+			String s4 = constraintLe(sum(v("y$",r+1),v("y$",r+2)),1);
+			sosConstraints.add(s4);
+			AuxiliaryPLI.nInteger += 3;
+			s = Lists2.of(s1,s2,s3);
+			break;
+		}
+		return s;
+	}
+	
 	/**
 	 * @pre Solo usable con Gurobi
 	 * @param bv Una variable binaria
 	 * @param c Una restricci&oacute;n
 	 * @return \( bv = 1 \implies constrainst \)
 	 */
-	public static String constraintVarIndicator(String bv, String c) {
-		return String.format("%s = 1 -> %s",bv,c);
+	public static String constraintIndicator(String bv, String c) {
+		String s = "";
+		switch(type) {
+		case Gurobi:
+			s = String.format("%s = 1 -> %s",bv,c);
+			break;
+		case LPSolve:
+			s = String.format("%s - %s %s + %s",M,M,bv,c);
+			break;
+		}
+		return s;
 	}
 	
 	/**
-	 * @pre Solo usable con Gurobi
 	 * @post Declara implicitamente variables binarias
 	 * @param lc Una restriccion
 	 * @param rc Una restriccion
@@ -719,17 +459,42 @@ public class AuxiliaryPLI {
 	 */
 	public static List<String> constraintImply(String lc, String rc) {
 		Integer r = AuxiliaryPLI.nBinary;
-		String s1 = constraintVarIndicator(var_1("_x",r),lc);
-		String s2 = constraintVarIndicator(var_1("_x",r+1),rc);
-		String s3 = constraintLe(difference(var_1("_x",r),var_1("_x",r+1)),0);
+		String s1 = constraintIndicator(v("x$",r),lc);
+		String s2 = constraintIndicator(v("x$",r+1),rc);
+		String s3 = constraintLe(difference(v("x$",r),v("x$",r+1)),0);
 		AuxiliaryPLI.nBinary += 2;
-		return List.of(s1,s2,s3);
+		return Lists2.of(s1,s2,s3);
 	}
 	
-	public static enum OrType{Eq,Le,Ge};
+	/**
+	 * @post Declara implicitamente variables binarias
+	 * @param lv Una variable binaria
+	 * @param rv Una variable binaria
+	 * @return \( lv \implies rv\)
+	 */
+	public static String constraintBinaryImply(String lv, String rv) {
+		return constraintLe(difference(lv,rv),0);
+	}
+	
+	public static enum RelationalOp{Eq,Le,Ge};
 	
 	/**
-	 * @pre Solo usable con Gurobi
+	 * @param op Tipo de restriccion
+	 * @param e Un expresi&oacute;n 
+	 * @param n Un n&uacute;mero
+	 * @return \( e  op n \)
+	 */
+	public static String constraintOr(RelationalOp op, String e, Integer n) {
+		String s = "";
+		switch(op) {
+		case Eq: s = constraintEq(e,n); break;
+		case Ge: s = constraintGe(e,n); break;
+		case Le: s = constraintLe(e,n); break;
+		}
+		return s;
+	}
+	
+	/**
 	 * @post Declara implicitamente variables binarias
 	 * @pre \( n <= c.length \)
 	 * @param n El numero de restricciones que se deben cumplir
@@ -738,26 +503,19 @@ public class AuxiliaryPLI {
 	 * @param c las restricciones
 	 * @return \( c_0 \or c_ 1 \or ... \)
 	 */
-	public static List<String> constraintOr(OrType type, Integer n, String... c) {
-		String op = null;;
-		switch(type) {
-		case Eq: op = " = ";break;
-		case Ge: op = " >= ";break;
-		case Le: op = " <= ";break;
-		}
+	public static List<String> constraintOr(RelationalOp type, Integer n, String... c) {
 		Preconditions.checkArgument(n>0 && n<c.length,String.format("El parametro n no cumple las restricciones y es % d",n));
 		Integer r = AuxiliaryPLI.nBinary;
-		List<String> lc = new ArrayList<>();
 		String s;
-		for (int i = 0; i < c.length; i++) {
-			s = constraintVarIndicator(var_1("_x",r+i), c[i]);
-			lc.add(s);
-		}
+		List<String> lc = listOf(0,c.length,i->constraintIndicator(v("x$",r+i), c[i]));
 		AuxiliaryPLI.nBinary += c.length;
-		s = IntStream.range(0,c.length).boxed().map(i->var_1("_x",r+i))
-				.collect(Collectors.joining(" + ", "", String.format(" %s %d",op,n)));
+		s = constraintOr(type,sum(listOf(r,r+c.length,i->v("x$",i))),1);
 		lc.add(s);
 		return lc;
+	}
+	
+	public static String constraintsSection() {
+		return AuxiliaryPLI.constraintsSection;
 	}
 	
 	/**
@@ -765,13 +523,13 @@ public class AuxiliaryPLI {
 	 * @param ns Numero de valores
 	 * @return \( x \in ns \)
 	 */
-	public static List<String> valueInList(String x, List<Integer> ns) {
+	public static List<String> constraintValueInList(String x, List<Integer> ns) {
 		Integer n = ns.size();
 		Integer r = AuxiliaryPLI.nBinary;
-		String s1 = constraintEq(difference(sum_1_f(r,r+n,"_x",i->ns.get(i-r).toString()),x),0);
+		String s1 = constraintEq(difference(sum(listOf(r,r+n,i->f(ns.get(i-r),"x$",i))),x),0);
 		AuxiliaryPLI.nBinary += n;
-		String s2 = constraintEq(sum_1_v(r,r+n,"_x"),1);
-		return List.of(s1,s2);
+		String s2 = constraintEq(sum(listOf(r,r+n,i->v("x$",i))),1);
+		return Lists2.of(s1,s2);
 	}
 	
 	/**
@@ -780,25 +538,79 @@ public class AuxiliaryPLI {
 	 * @param x2 Otra variable
 	 * @return \( x1 != x2 \)
 	 */
-	public static List<String> differentValue(String x1, String x2){	
-		return constraintOr(OrType.Eq,1,
-				constraintGe(difference(x1,x2),1),
-				constraintGe(difference(x2,x1),1));
+	public static List<String> constraintDifferentValue(String x1, String x2){	
+		List<String> ls = null;
+		switch(type) {
+		case Gurobi:
+			ls = constraintOr(RelationalOp.Eq,1,
+					constraintGe(difference(x1,x2),1),
+					constraintGe(difference(x2,x1),1));
+			break;
+		case LPSolve:
+			Integer r = AuxiliaryPLI.nBinary;
+			String s1 = constraintGe(String.format("%s - %s + %s - %s %s",x1,x2,M,M,v("x$",r)),1);
+			String s2 = constraintGe(String.format("%s - %s + %s - %s %s",x2,x1,M,M,v("x$",r+1)),1);
+			String s3 = constraintEq(sum(v("x$",r),v("x$",r+1)),1);
+			AuxiliaryPLI.nBinary += 2;
+			ls = Lists2.of(s1,s2,s3);
+			break;
+		}
+		return  ls;
 	}
 	
+//	public static List<String> constraintDifferentValue(String x1, String x2){	
+//		Integer r = AuxiliaryPLI.nInteger;
+//		AuxiliaryPLI.nInteger += 1;
+//		List<String> s1 = constraintAbs(v("y$",r),sum(difference(x1,x2)));
+//		String s2 = constraintGe(v("y$",r),1);
+//		s1.add(s2);
+//		return s1;
+//	}
+	
 	/**
-	 * @pre Solo usable con Gurobi
 	 * @param xs Una lista de variables
 	 * @return Todos los valores de las variables son diferentes
 	 */
-	public static List<String> allDifferentsVarsValues(List<String> xs){
+	public static List<String> constraintAllDifferents(List<String> xs){
 		Integer n = xs.size();
-		List<String> ls = Streams2.allPairs(n, n).filter(p->p.second > p.first)
-			.flatMap(p->differentValue(xs.get(p.first),xs.get(p.second)).stream())
+		List<String> ls = Streams2.allPairs(0,n,0,n).filter(p->p.second > p.first)
+			.flatMap(p->constraintDifferentValue(xs.get(p.first),xs.get(p.second)).stream())
 			.collect(Collectors.toList());
 		return ls;
 	}
 	
+	/**
+	 * @param xs Una lista de variables
+	 * @return Todos los valores de las variables son diferentes
+	 */
+	public static List<String> constraintAllDifferents(String... xs){
+		Integer n = xs.length;
+		List<String> ls = Streams2.allPairs(0,n,0,n)
+			.filter(p->p.second > p.first)
+			.flatMap(p->constraintDifferentValue(xs[p.first],xs[p.second]).stream())
+			.collect(Collectors.toList());
+		return ls;
+	}
+	
+	/**
+	 * @param xs Una lista de variables
+	 * @return Todos los valores de las variables son diferentes
+	 */
+	public static List<String> constraintStrictIncreasing(List<String> xs){
+		return Streams2.consecutivePairs(xs.stream())
+			.map(p->constraintGe(difference(p.second,p.first),1))
+			.collect(Collectors.toList());
+	}
+	
+	/**
+	 * @param xs Una lista de variables
+	 * @return Todos los valores de las variables son diferentes
+	 */
+	public static List<String> constraintIncreasing(List<String> xs){
+		return Streams2.consecutivePairs(xs.stream())
+			.map(p->constraintGe(difference(p.second,p.first),0))
+			.collect(Collectors.toList());
+	}
 	
 	/**
 	 * @param v1 Una variable
@@ -806,80 +618,27 @@ public class AuxiliaryPLI {
 	 * @param v3 Una variable
 	 * @return \( v1 = v2 * v3 \)
 	 */
-	public static List<String> binaryProduct(String v1, String v2, String v3) {
+	public static List<String> constraintBinaryProduct(String v1, String v2, String v3) {
 		String s1 = constraintLe(difference(v1,v2),0);
 		String s2 = constraintLe(difference(v1,v3),0);
 		String s3 = constraintGe(difference(difference(v1,v2),v3), -1);
-		return List.of(s1,s2,s3);
-	}
-	
-	/**
-	 * @param name El nombre de la restricci&oacute;n
-	 * @param ct Una restricci&oacute;n
-	 * @return La restricci&oacute;n en el formato adecuado
-	 */
-	public static String constraint(String name, String ct) {
-		return String.format("   %s:  %s%s",name,ct,end+"\n");
-	}
-	/**
-	 * @param x Una variable
-	 * @param ln Un n&uacute;mero
-	 * @param rn Un n&uacute;mero
-	 * @return \( ln \le x \le rn \)
-	 */
-	public static String bound(Integer ln, String x, Integer rn) {
-		return String.format("%d <= %s <= %d",ln,x,rn);
-	}
-	/**
-	 * @param x Una variable
-	 * @param ln Un n&uacute;mero
-	 * @param rn Un n&uacute;mero
-	 * @return \( ln \le x \le rn \)
-	 */
-	public static String bound(String ln, String x, String rn) {
-		return String.format("%s <= %s <= %s",ln,x,rn);
-	}
-	/**
-	 * @param x Una variable
-	 * @param n Un n&uacute;mero
-	 * @return \( x \le rn \)
-	 */
-	public static String boundLe(String x, Integer n) {
-		return String.format("%s <= %d",x,n);
-	}
-	/**
-	 * @param x Una variable
-	 * @param n Un n&uacute;mero
-	 * @return \( x \le rn \)
-	 */
-	public static String boundLe(String x, String n) {
-		return String.format("%s <= %s",x,n);
-	}
-	
-	/**
-	 * @param x Una variable
-	 * @param n Un n&uacute;mero
-	 * @return \( x \ge rn \)
-	 */
-	public static String boundGe(String x, Integer n) {
-		return String.format("%s >= %d",x,n);
+		return Lists2.of(s1,s2,s3);
 	}
 
 	/**
-	 * @param x Una variable
-	 * @param n Un n&uacute;mero
-	 * @return \( x \ge rn \)
+	 * @param e Una expresi&oacute;n
+	 * @return La expresi&oacute;n a ser miniminizada o maximinizada en el formato adecuado
 	 */
-	public static String boundGe(String x, String n) {
-		return String.format("%s >= %s",x,n);
+	public static String goalMaxSection(String e) {
+		return String.format("%s  %s%s",max,e,end);
 	}
 	
 	/**
 	 * @param e Una expresi&oacute;n
 	 * @return La expresi&oacute;n a ser miniminizada o maximinizada en el formato adecuado
 	 */
-	public static String goal(String e) {
-		return String.format("  %s%s",e,end);
+	public static String goalMinSection(String e) {
+		return String.format("%s  %s%s",min,e,end);
 	}
 	
 }

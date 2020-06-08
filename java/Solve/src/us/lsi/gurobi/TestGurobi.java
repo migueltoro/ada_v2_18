@@ -7,7 +7,7 @@ public class TestGurobi {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		GurobiSolution solution = GurobiLp.gurobi("ficheros/tareas_sal.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/gurobi_example.lp");
 		System.out.println("\n\n\n\n");
 		System.out.println(String.format("Objetivo : %.2f",solution.objVal));
 		System.out.println("\n\n");

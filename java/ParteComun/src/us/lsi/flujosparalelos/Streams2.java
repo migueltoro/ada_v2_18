@@ -111,26 +111,16 @@ public class Streams2 {
 		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.newValue(e), e)).filter(p->p.first!=null);
 		return r;
 	}
-		
-	/**
-	 * @param n
-	 * @param m
-	 * @return Un stream con todos los pares de enteros (i,j) con i en 0 a n-1 y j en 0 a m-1
-	 */
-	public static Stream<IntPair> allPairs(Integer n, Integer m) {
-		return IntStream.range(0, n).boxed()
-				.flatMap(i -> IntStream.range(0, m).boxed().map(j -> IntPair.of(i, j)));
-	}
-	
+			
 	public static Stream<IntPair> allPairs(Integer n1, Integer n2, Integer m1, Integer m2){
 		return IntStream.range(n1, n2).boxed()
 				.flatMap(x->IntStream.range(m1, m2).boxed().map(y->IntPair.of(x,y)));
 	}
 	
-	public static Stream<IntTrio> allPairs(Integer n, Integer m, Integer r) {
-		return IntStream.range(0, n).boxed()
-				.flatMap(i -> IntStream.range(0, m).boxed()
-						            .flatMap(j->IntStream.range(0, r).boxed().map(k -> IntTrio.of(i, j, k))));
+	public static Stream<IntTrio> allPairs(Integer n1, Integer n2, Integer m1, Integer m2, Integer r1, Integer r2) {
+		return IntStream.range(n1, n2).boxed()
+				.flatMap(i -> IntStream.range(m1, m2).boxed()
+						            .flatMap(j->IntStream.range(r1, r2).boxed().map(k -> IntTrio.of(i, j, k))));
 	}
 	
 	/**

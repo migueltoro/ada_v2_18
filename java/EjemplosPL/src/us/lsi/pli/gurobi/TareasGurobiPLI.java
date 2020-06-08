@@ -61,15 +61,13 @@ public class TareasGurobiPLI {
 	public static String getConstraints() {
 		Integer n = Tarea.n;
 		StringBuilder r = new StringBuilder();
-		r.append(max);
-		r.append(goal(sum_1(n,"x",all1,i->Tarea.tareas.get(i).ganancia.toString())));
-		r.append(constraintsSection);
-		r.append(forAll_2(n,n,"c",
-				(i,j)->j>i && Tarea.solape(i,j)>0, 
-				(i,j)->constraintLe(String.format("%s + %s",var_1("x",i),var_1("x",j)),1)));
-		r.append(binaryVars);
-		r.append(vars_1(n,"x"));
-		r.append(lastEnd);
+		r.append(goalMaxSection(sum(listOf(0,n,i->f(Tarea.tareas.get(i).ganancia,"x",i)))));
+		r.append(constraintsSection());
+		r.append(forAll("c",listOf(0,n,0,n,
+							(i,j)->j>i && Tarea.solape(i,j)>0, 
+							(i,j)->constraintLe(sum(v("x",i),v("x",j)),1))));
+		r.append(binaryVarsSection(listOf(0,n,i->v("x",i))));
+		r.append(endSection());
 		return r.toString();
 	}
 

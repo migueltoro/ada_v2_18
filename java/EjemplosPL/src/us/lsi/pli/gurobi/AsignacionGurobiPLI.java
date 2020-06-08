@@ -8,10 +8,11 @@ import java.util.Locale;
 import us.lsi.common.Files2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
+import us.lsi.pli.AuxiliaryPLI;
 
 public class AsignacionGurobiPLI {
 	
-	private static Integer n;
+	private static int n;
 	private static Integer m;
 	private static Double[][] costes;
 	
@@ -32,23 +33,24 @@ public class AsignacionGurobiPLI {
 	}
 
 	
-	public static String getConstraints() {	
+	public static String getConstraints(PLIType type) {	
+		AuxiliaryPLI.setType(type);
+		Locale.setDefault(new Locale("en", "US"));
 		StringBuilder r = new StringBuilder();
-		r.append(min);
-		r.append(goal(sum_2_f(n,n,"x",(i,j)->costes[i][j].toString())));
-		r.append(constraintsSection);
-		r.append(forAll_1(n,"c",i->constraintEq(sum_2_2_v(n,i,"x"),1)));
-		r.append(forAll_1(n,"d",j->constraintEq(sum_2_1_v(n,j,"x"),1)));
-		r.append(binaryVars);
-		r.append(vars_2(n,n,"x"));
-		r.append(lastEnd);
+		r.append(goalMinSection(sum(listOf(0,n,0,n,(i,j)->f(costes[i][j],"x",i,j)))));
+		r.append(constraintsSection());
+		r.append(forAll("c",listOf(0,n,i->constraintEq(sum(listOf(0,n,j->v("x",i,j))),1))));
+		r.append(forAll("d",listOf(0,n,j->constraintEq(sum(listOf(0,n,i->v("x",i,j))),1))));
+		r.append(binaryVarsSection(listOf(0,n,0,n,(i,j)->v("x",i,j))));
+		r.append(endSection());
 		return r.toString();		
 	}
 
 
 	public static void main(String[] args) {
+		
 		AsignacionGurobiPLI.leeFichero("ficheros/asignacionDeTareas.txt");
-		String ct = AsignacionGurobiPLI.getConstraints();
+		String ct = AsignacionGurobiPLI.getConstraints(PLIType.Gurobi);
 		Files2.toFile(ct,"ficheros/asignacionDeTareas_sal.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/asignacionDeTareas_sal.lp");

@@ -6,7 +6,7 @@ Subject To
   c1: x + 5 y + 2 z <= 10
   qc0: x + y + [ x ^ 2 - 2 x * y + 3 y ^ 2 ] <= 5
 Bounds
-  0 <= x <= 5
+  1 <= x <= 5
   z >= 2
 General
   x y z
