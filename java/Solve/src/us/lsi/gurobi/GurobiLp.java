@@ -1,7 +1,9 @@
 package us.lsi.gurobi;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /* Copyright 2020, Gurobi Optimization, LLC */
 
@@ -16,6 +18,25 @@ import gurobi.*;
 public class GurobiLp {
   
 //	public static void main(String[] args) {
+	
+	public static void solve(String file) {
+		Locale.setDefault(new Locale("en", "US"));
+		GurobiSolution solution = GurobiLp.gurobi(file);
+		System.out.println("\n\n\n\n");
+		System.out.println(String.format("Objetivo : %.2f",solution.objVal));
+		System.out.println("\n\n");
+		System.out.println(solution.values.keySet()
+				.stream()
+				.filter(e->solution.values.get(e)>0.)
+				.map(e->String.format("%s == %.1f",e,solution.values.get(e)))
+				.collect(Collectors.joining("\n")));
+	}
+	
+	public static GurobiSolution solveSolution(String file) {
+		Locale.setDefault(new Locale("en", "US"));
+		GurobiSolution solution = GurobiLp.gurobi(file);
+		return solution;
+	}
 	
 	public static GurobiSolution gurobi(String file) {
 

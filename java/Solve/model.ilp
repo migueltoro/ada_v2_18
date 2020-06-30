@@ -1,47 +1,24 @@
 \ Model _copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
-Minimize
+Maximize
  
 Subject To
- a2: x$_0 + x$_1 = 1
- a5: x$_2 + x$_3 = 1
- a8: x$_4 + x$_5 = 1
- b0: y_0 - d2_0 = 0
- b1: y_1 - d2_1 = -1
- b2: y_2 - d2_2 = -2
- c2: x$_6 + x$_7 = 1
- c8: x$_10 + x$_11 = 1
- d0: y_0 - d1_0 = 0
- d1: y_1 - d1_1 = 1
- d2: y_2 - d1_2 = 2
- e2: x$_12 + x$_13 = 1
- e8: x$_16 + x$_17 = 1
- a0: x$_0 = 1 -> y_0 - y_1 >= 1
- a1: x$_1 = 1 -> y_1 - y_0 >= 1
- a3: x$_2 = 1 -> y_0 - y_2 >= 1
- a4: x$_3 = 1 -> y_2 - y_0 >= 1
- a6: x$_4 = 1 -> y_1 - y_2 >= 1
- a7: x$_5 = 1 -> y_2 - y_1 >= 1
- c0: x$_6 = 1 -> d2_0 - d2_1 >= 1
- c1: x$_7 = 1 -> d2_1 - d2_0 >= 1
- c6: x$_10 = 1 -> d2_1 - d2_2 >= 1
- c7: x$_11 = 1 -> d2_2 - d2_1 >= 1
- e0: x$_12 = 1 -> d1_0 - d1_1 >= 1
- e1: x$_13 = 1 -> d1_1 - d1_0 >= 1
- e6: x$_16 = 1 -> d1_1 - d1_2 >= 1
- e7: x$_17 = 1 -> d1_2 - d1_1 >= 1
+ z0: x_0 - y$0 = 0
+ z1: x_1 - y$1 = 0
+ z2: x_2 - y$2 = 0
+ z7: x$_0 + x$_1 = 1
+ z10: x$_2 + x$_3 = 1
+ z19: x$_8 + x$_9 = 1
+ z5: x$_0 = 1 -> y$0 - y$1 >= 1
+ z6: x$_1 = 1 -> y$1 - y$0 >= 1
+ z8: x$_2 = 1 -> y$0 - y$2 >= 1
+ z9: x$_3 = 1 -> y$2 - y$0 >= 1
+ z17: x$_8 = 1 -> y$1 - y$2 >= 1
+ z18: x$_9 = 1 -> y$2 - y$1 >= 1
 Bounds
- -infinity <= y_0 <= 2
- y_1 <= 2
- y_2 <= 2
- d2_1 free
- d2_2 free
- d1_0 free
- d1_1 free
- d1_2 free
+ y$0 free
+ y$1 free
+ y$2 free
 Binaries
- x$_0 x$_1 x$_2 x$_3 x$_4 x$_5 x$_6 x$_7 x$_10 x$_11 x$_12 x$_13 x$_16
- x$_17
-Generals
- y_0 y_1 y_2 d2_0 d2_1 d2_2 d1_0 d1_1 d1_2
+ x_0 x_1 x_2 x$_0 x$_1 x$_2 x$_3 x$_8 x$_9
 End

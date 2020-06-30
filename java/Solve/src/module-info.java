@@ -6,11 +6,15 @@
  *
  */
 module solve {
-	exports us.lsi.lpsolve;
-	exports us.lsi.gurobi;
 	exports us.lsi.pli;
-
-	requires transitive gurobi;
-	requires transitive lpsolve;
+	exports us.lsi.lpsolve;
+	exports us.lsi.solve;
+	exports us.lsi.gurobi;
+	exports us.lsi.model;
+	
+	requires transitive antlr;
+	requires transitive datos_compartidos;
+	requires gurobi;
+	requires lpsolve;
 	requires transitive partecomun;
 }
