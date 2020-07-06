@@ -2,7 +2,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
-
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +12,7 @@ import us.lsi.common.Files2;
 import us.lsi.flujosparalelos.Streams2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
+import us.lsi.solve.AuxGrammar;
 
 public class TareasGurobiPLI {
 	
@@ -58,6 +59,18 @@ public class TareasGurobiPLI {
 		}		
 	}
 	
+	public static Integer ganancia(Integer i) {
+		return Tarea.tareas.get(i).ganancia;
+	}
+	
+	public static Boolean solape(Integer i, Integer j) {
+		return Tarea.solape(i, j) > 0;
+	}
+	
+	public static Integer getN() {
+		return Tarea.n;
+	}
+	
 	public static String getConstraints() {
 		Integer n = Tarea.n;
 		StringBuilder r = new StringBuilder();
@@ -70,19 +83,33 @@ public class TareasGurobiPLI {
 		r.append(endSection());
 		return r.toString();
 	}
-
-
-	public static void main(String[] args) {
+	
+	public static void tareas_constraint() {
 		Tarea.tareas = Tarea.datos("ficheros/tareas.txt");
-		String ss = Streams2.enumerate(Tarea.tareas.stream())
-				.map(e->String.format("%d == %s",e.counter,e.value))
+		String ss = Streams2.enumerate(Tarea.tareas.stream()).map(e -> String.format("%d == %s", e.counter, e.value))
 				.collect(Collectors.joining("\n"));
 		Tarea.n = Tarea.tareas.size();
-		Files2.toFile(getConstraints(),"ficheros/tareas_sal.lp");
+		Files2.toFile(getConstraints(), "ficheros/tareas_sal.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/tareas_sal.lp");
-		System.out.println(solution.toString((s,d)->d>0.));
+		System.out.println(solution.toString((s, d) -> d > 0.));
 		System.out.println(ss);
+	}
+
+	public static void tareas_model() throws IOException {
+		Tarea.tareas = Tarea.datos("data/tareas.txt");
+		String ss = Streams2.enumerate(Tarea.tareas.stream()).map(e -> String.format("%d == %s", e.counter, e.value))
+				.collect(Collectors.joining("\n"));
+		Tarea.n = Tarea.tareas.size();
+		AuxGrammar.generate(TareasGurobiPLI.class,"models/tareas.lsi","ficheros/tareas.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/tareas.lp");
+		System.out.println(solution.toString((s, d) -> d > 0.));
+		System.out.println(ss);
+	}
+
+	public static void main(String[] args) throws IOException {
+		tareas_model();
 	}
 
 }

@@ -2,6 +2,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import us.lsi.common.Files2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.pli.AuxiliaryPLI;
+import us.lsi.solve.AuxGrammar;
 
 public class EstanteriaGurobiPLI {
 
@@ -56,7 +58,7 @@ public class EstanteriaGurobiPLI {
 		public Estante(Double altura) {
 			super();
 			this.altura = altura;
-		}
+		}	
 		public static Double altura(Integer i) {
 			return Estante.estantes.get(i).altura;
 		}
@@ -75,6 +77,30 @@ public class EstanteriaGurobiPLI {
 		Estante.anchura = Double.parseDouble(lineas.get(p2+1));
 	}
 	
+	public static Integer getN() {
+		return Libro.libros.size();
+	}
+	
+	public static Integer getM() {
+		return Estante.estantes.size();
+	}
+	
+	public static Double alturaLibro(Integer i) {
+		return Libro.altura(i);
+	}
+	
+	public static Double alturaEstante(Integer i) {
+		return Estante.altura(i);
+	}
+	
+	public static Double anchuraLibro(Integer i) {
+		return Libro.anchura(i);
+	}
+	
+	public static Double anchuraEstante() {
+		return Estante.anchura;
+	}
+	
 	public static String getConstraints(PLIType type) {
 		AuxiliaryPLI.setType(type);
 		int n = Libro.libros.size();
@@ -90,16 +116,33 @@ public class EstanteriaGurobiPLI {
 		return r.toString();
 	}
 	
-	public static void main(String[] args) {
-		datos("ficheros/estanteria.txt");
+	public static void estanteria_constraints() {
+		datos("data/estanteria.txt");
 		System.out.println(Libro.libros);
 		System.out.println(Estante.estantes);
-		System.out.println(Estante.anchura);
+		System.out.println(Estante.anchura);		
 		String ct = EstanteriaGurobiPLI.getConstraints(PLIType.Gurobi);
 		Files2.toFile(ct,"ficheros/estanteria_sal.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/estanteria_sal.lp");
 		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	public static void estanteria_model() throws IOException {
+		datos("data/estanteria.txt");
+		System.out.println(Libro.libros);
+		System.out.println(Estante.estantes);
+		System.out.println(Estante.anchura);
+		System.out.println(Libro.libros.size());
+		System.out.println(Estante.estantes.size());
+		AuxGrammar.generate(EstanteriaGurobiPLI.class,"models/estanteria.lsi","ficheros/estanteria.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/estanteria.lp");
+		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	public static void main(String[] args) throws IOException {
+		estanteria_model();
 	}
 
 }

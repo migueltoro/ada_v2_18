@@ -2,6 +2,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -17,12 +18,13 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.math.Math2;
+import us.lsi.solve.AuxGrammar;
 
 public class TspGurobi {
 	
 	public static Graph<Integer, SimpleEdge<Integer>> graph;
 	public static int n; //numero de vertices
-	public static int m; //numero de colores maximo
+ 
 
 	public static Graph<Integer, SimpleEdge<Integer>> graph(Integer n, Double pb) {
 		Locale.setDefault(new Locale("en", "US"));
@@ -42,6 +44,19 @@ public class TspGurobi {
 	public static Double getEdgeWeight(Integer i, Integer j, Graph<Integer, SimpleEdge<Integer>> g) {
 		SimpleEdge<Integer> e = g.getEdge(i,j); 
 		return g.getEdgeWeight(e);
+	}
+	
+	public static Double getEdgeWeight(Integer i, Integer j) {
+		SimpleEdge<Integer> e = TspGurobi.graph.getEdge(i,j); 
+		return TspGurobi.graph.getEdgeWeight(e);
+	}
+	
+	public static Boolean containsEdge(Integer i, Integer j) {
+		return TspGurobi.graph.containsEdge(i,j);
+	}
+	
+	public static Integer getN() {
+		return TspGurobi.n;
 	}
 	
 	public static String getConstraints() {
@@ -103,9 +118,7 @@ public class TspGurobi {
 		return r.toString();
 	}
 	
-	
-	
-	public static void main(String[] args) {
+	public static void tsp_constraint() {
 		TspGurobi.graph = graph(100,1.0);
 		TspGurobi.n = TspGurobi.graph.vertexSet().size();
 		System.out.println(graph);
@@ -120,6 +133,21 @@ public class TspGurobi {
 				.sorted(Comparator.comparing(Entry::getValue))
 				.map(Entry::getKey)
 				.collect(Collectors.joining("\n")));
+	}
+	
+	public static void tsp_model_1() throws IOException {
+		TspGurobi.graph = graph(200,0.6);
+		TspGurobi.n = TspGurobi.graph.vertexSet().size();
+		System.out.println(TspGurobi.graph);
+		AuxGrammar.generate(TspGurobi.class,"models/tsp_1.lsi","ficheros/tsp_1.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/tsp_1.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		tsp_model_1();
 	}
 
 }

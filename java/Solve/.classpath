@@ -10,27 +10,27 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/lpsolve-5.5.2.0.jar">
+	<classpathentry exported="true" kind="lib" path="lib/lpsolve-5.5.2.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/gurobi.jar">
+	<classpathentry exported="true" kind="lib" path="lib/gurobi.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/antlr-4.8-complete.jar">
+	<classpathentry exported="true" kind="lib" path="lib/antlr-4.8-complete.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/ParteComun">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ParteComun">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/DatosCompartidos">
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/DatosCompartidos">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

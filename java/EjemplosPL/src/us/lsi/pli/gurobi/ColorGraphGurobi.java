@@ -2,6 +2,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
@@ -15,6 +16,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.math.Math2;
 import us.lsi.pli.AuxiliaryPLI;
+import us.lsi.solve.AuxGrammar;
 public class ColorGraphGurobi {
 	
 	public static Graph<Integer, SimpleEdge<Integer>> graph;
@@ -31,6 +33,18 @@ public class ColorGraphGurobi {
 			}
 		});
 		return graph;
+	}
+	
+	public static Integer getN() {
+		return ColorGraphGurobi.n;
+	}
+	
+	public static Integer getM() {
+		return ColorGraphGurobi.m;
+	}
+	
+	public static Boolean containsEdge(Integer i, Integer j) {
+		return ColorGraphGurobi.graph.containsEdge(i,j);
 	}
 	
 	public static String getConstraints(PLIType type) {
@@ -50,8 +64,7 @@ public class ColorGraphGurobi {
 	}
 	
 	
-	
-	public static void main(String[] args) {
+	public static void color_constraint() {
 		ColorGraphGurobi.graph = graph(50,0.3);
 		ColorGraphGurobi.n = graph.vertexSet().size();
 		ColorGraphGurobi.m = 25;
@@ -61,6 +74,21 @@ public class ColorGraphGurobi {
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/color_sal.lp");
 		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	
+	public static void color_model() throws IOException {
+		ColorGraphGurobi.graph = graph(50,0.3);
+		ColorGraphGurobi.n = graph.vertexSet().size();
+		ColorGraphGurobi.m = 25;
+		System.out.println(graph);
+		AuxGrammar.generate(ColorGraphGurobi.class,"models/color.lsi","ficheros/color.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/color.lp");
+		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	public static void main(String[] args) throws IOException {
+		color_model();
 	}
 
 }

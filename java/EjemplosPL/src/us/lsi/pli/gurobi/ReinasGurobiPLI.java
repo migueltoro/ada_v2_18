@@ -1,12 +1,15 @@
 package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
+
+import java.io.IOException;
 import java.util.Locale;
 
 import us.lsi.common.Files2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.pli.AuxiliaryPLI;
+import us.lsi.solve.AuxGrammar;
 
 public class ReinasGurobiPLI {
 	
@@ -51,13 +54,24 @@ public class ReinasGurobiPLI {
 		return r.toString();	
 	}
 	
-	public static void main(String[] args) {
+	public static void reinas_constraint() {
 		n = 10;
 		String ct = ReinasGurobiPLI.getConstraints2(PLIType.Gurobi);
 		Files2.toFile(ct,"ficheros/reinas_sal.lp");	
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/reinas_sal.lp");
 		System.out.println(solution.toString((s,d)->!s.contains("$")));
+	}
+	
+	public static void reinas_model_2() throws IOException {
+		AuxGrammar.generate(ReinasGurobiPLI.class,"models/reinas_2.lsi","ficheros/reinas_2.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/reinas_2.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		System.out.println(solution.toString((s,d)->!s.contains("$") && d>0.));
+	}
+	
+	public static void main(String[] args) throws IOException {
+		reinas_model_2();
 	}
 
 }

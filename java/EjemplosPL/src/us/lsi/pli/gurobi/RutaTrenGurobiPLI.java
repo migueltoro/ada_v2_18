@@ -2,6 +2,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
 
@@ -19,16 +20,27 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.pli.AuxiliaryPLI;
+import us.lsi.solve.AuxGrammar;
+
 
 public class RutaTrenGurobiPLI {
 	
 	public static Graph<Integer,SimpleEdge<Integer>> graph = null;
 	public static Integer n = null;
 	
-	public static Double costes(int i, int j) {
+	public static Integer getN() {
+		return n;
+	}
+	
+	public static Double costes(Integer i, Integer j) {
 			SimpleEdge<Integer> e =  graph.getEdge(i,j); 
 			return graph.getEdgeWeight(e);
 	}
+	
+	public static Boolean containsEdge(Integer i, Integer j) {
+		return graph.containsEdge(i,j); 
+	}
+	
 	public static TriFunction<Integer,Integer,String[],SimpleEdge<Integer>> edge = 
 			(v1,v2,f) -> SimpleEdge.of(v1,v2,(double)Integer.parseInt(f[2]));
 
@@ -83,16 +95,35 @@ public class RutaTrenGurobiPLI {
 		return solution;
 	}
 	
-	public static void main(String[] args) {
+	public static void tren_constraints() {
 		Locale.setDefault(new Locale("en", "US"));
 		RutaTrenGurobiPLI.graph = leeGrafo("ficheros/ruta_tren.txt");
 		RutaTrenGurobiPLI.n = RutaTrenGurobiPLI.graph.vertexSet().size();
-		System.out.println(graph);	
+		showGraph();	
 		GurobiSolution sg = gurobi();
 		System.out.println(sg.toString(((x,y)->y>0.)));
 		GraphPath<Integer, SimpleEdge<Integer>> gp = shortestPath();
 		System.out.println(gp.getVertexList());
 		System.out.println(gp.getWeight());
+	}
+	
+	public static void tren_model() throws IOException {
+		RutaTrenGurobiPLI.graph = leeGrafo("data/ruta_tren.txt");
+		RutaTrenGurobiPLI.n = RutaTrenGurobiPLI.graph.vertexSet().size();
+		Locale.setDefault(new Locale("en", "US"));
+		System.out.println(graph);	
+		showGraph();		
+		AuxGrammar.generate(RutaTrenGurobiPLI.class,"models/ruta_tren.lsi","ficheros/ruta_tren.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/ruta_tren.lp");
+		System.out.println(solution.toString((s,d)->d>0.));
+		GraphPath<Integer, SimpleEdge<Integer>> gp = shortestPath();
+		System.out.println(gp.getVertexList());
+		System.out.println(gp.getWeight());
+	}
+	
+	public static void main(String[] args) throws IOException {
+		tren_model();
 	}
 
 }

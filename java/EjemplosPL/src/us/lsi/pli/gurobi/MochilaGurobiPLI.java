@@ -4,6 +4,7 @@ package us.lsi.pli.gurobi;
 
 import static us.lsi.pli.AuxiliaryPLI.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,11 +14,18 @@ import us.lsi.gurobi.GurobiSolution;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
 import us.lsi.pli.AuxiliaryPLI;
+import us.lsi.solve.AuxGrammar;
 
 public class MochilaGurobiPLI {
 	public static Integer CI;
 	public static List<ObjetoMochila>  objetos;
 	public static int n;
+	public static Integer getN() {
+		return n;
+	}
+	public static Integer getCI() {
+		return CI;
+	}
 	public static Integer getValor(Integer i) {
 		return objetos.get(i).getValor();
 	}
@@ -40,7 +48,7 @@ public class MochilaGurobiPLI {
 		return r.toString();	
 	}
 	
-	public static void main(String[] args) {	
+	public static void mochila_constraint() throws IOException {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;	
 		CI = DatosMochila.capacidadInicial;
@@ -51,6 +59,22 @@ public class MochilaGurobiPLI {
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/mochila_sal.lp");
 		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	public static void mochila_model() throws IOException {
+		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.capacidadInicial = 78;	
+		CI = DatosMochila.capacidadInicial;
+		objetos = DatosMochila.getObjetos();
+		n = objetos.size();
+		AuxGrammar.generate(MochilaGurobiPLI.class,"models/mochila.lsi","ficheros/mochila.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/mochila.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		System.out.println(solution.toString((s,d)->d>0.));
+	}
+	
+	public static void main(String[] args) throws IOException {	
+		mochila_model();
 	}
 
 }

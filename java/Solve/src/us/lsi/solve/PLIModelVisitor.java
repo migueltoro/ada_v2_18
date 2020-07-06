@@ -41,11 +41,13 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		String bounds = "";
 	    if(ctx.bounds()!=null) bounds = String.format("\nBounds\n\n%s\n",AuxGrammar.asString(visit(ctx.bounds())));
 	    if(ctx.free_vars()!=null) bounds += AuxGrammar.asString(visit(ctx.free_vars()));
-	    String ints = "";
-	    if(ctx.int_vars()!=null) ints += String.format("\nGeneral\n\n%s\n",AuxGrammar.asString(visit(ctx.int_vars())));
-	    String bins = "";
-	    if(ctx.bin_vars()!=null) bins += String.format("\nBinary\n\n%s\n",AuxGrammar.asString(visit(ctx.bin_vars())));
-		return String.format("%s\n%s\n%s\n%s\n%s\n",goal,constraints,bounds,bins,ints);
+	    String ints = implicitInts();	    
+	    if(ctx.int_vars()!=null) ints += AuxGrammar.asString(visit(ctx.int_vars()));
+	    ints = AuxGrammar.allSpaces(ints)?ints:String.format("\nGeneral\n\n%s\n",ints);
+	    String bins = implicitBins();
+	    if(ctx.bin_vars()!=null) bins += AuxGrammar.asString(visit(ctx.bin_vars()));
+	    bins = AuxGrammar.allSpaces(bins)? bins:String.format("\nBinary\n\n%s\n",bins);
+		return String.format("%s\n%s\n%s\n%s\n%s\nEnd",goal,constraints,bounds,bins,ints);
 	}
 	/**
 	 * {@inheritDoc}
@@ -110,11 +112,12 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitGoalSection(PLIModelParser.GoalSectionContext ctx) { 
 		String goal = null;
 		switch(ctx.obj.getText()) {
-		case "min": goal = "Minimize";
-		case "max": goal = "Maximize";
+		case "min": goal = "Minimize"; break;
+		case "max": goal = "Maximize"; break;
 		}
 		String e = AuxGrammar.asString(visit(ctx.generate_exp()));
-		return String.format("%s\n\n%s\n",goal,e);
+		String r = String.format("%s\n\n%s\n",goal,e);
+		return r;
 	}
 		
 	/**
@@ -132,6 +135,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 			case "(double)": r = AuxGrammar.castDouble(r); break;
 			case "+":  break;
 			case "-": r = AuxGrammar.minus(r); break;
+			case "!": r = ! AuxGrammar.asBoolean(r); break;
 			} 
 		return r;  
 	}
@@ -202,9 +206,11 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 			break;
 		case 1: 
 			for(int i = limites.get(0).li;i<limites.get(0).ls;i++) {
-				AuxGrammar.values.put(indexNames.get(0),i);
-				s = AuxGrammar.asString(visit(ctx.indexed_elem()));
-				if(ctx.predicate()==null || AuxGrammar.asBoolean(visit(ctx.predicate()))) r.add(s);	
+				AuxGrammar.values.put(indexNames.get(0),i);				
+				if(ctx.exp()==null || AuxGrammar.asBoolean(visit(ctx.exp()))) {
+					s = AuxGrammar.asString(visit(ctx.indexed_elem()));
+					r.add(s);	
+				}
 			}
 			break;
 		case 2: 
@@ -212,8 +218,10 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 				AuxGrammar.values.put(indexNames.get(0),i);
 				for(int j = limites.get(1).li;j<limites.get(1).ls;j++) {
 					AuxGrammar.values.put(indexNames.get(1),j);
-					s = AuxGrammar.asString(visit(ctx.indexed_elem()));
-					if(ctx.predicate()==null || AuxGrammar.asBoolean(visit(ctx.predicate()))) r.add(s);
+					if(ctx.exp()==null || AuxGrammar.asBoolean(visit(ctx.exp()))) {
+						s = AuxGrammar.asString(visit(ctx.indexed_elem()));
+						r.add(s);
+					}
 				}
 			}
 			break;
@@ -223,9 +231,11 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 				for(int j = limites.get(1).li;j<limites.get(1).ls;j++) {
 					AuxGrammar.values.put(indexNames.get(1),j);
 					for(int k = limites.get(2).li;k<limites.get(2).ls;k++) {
-						AuxGrammar.values.put(indexNames.get(2),k);
-						s = AuxGrammar.asString(visit(ctx.indexed_elem()));
-						if(ctx.predicate()==null || AuxGrammar.asBoolean(visit(ctx.predicate()))) r.add(s);
+						AuxGrammar.values.put(indexNames.get(2),k);						
+						if(ctx.exp()==null || AuxGrammar.asBoolean(visit(ctx.exp()))) {
+							s = AuxGrammar.asString(visit(ctx.indexed_elem()));
+							r.add(s);
+						}
 					}
 				}
 			}
@@ -244,27 +254,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitIndex(PLIModelParser.IndexContext ctx) { 
 		return visitChildren(ctx); 
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Object visitPredicate(PLIModelParser.PredicateContext ctx) { 
-		Double left = (Double)AuxGrammar.castDouble(this.visit(ctx.left));
-        Double right = (Double) AuxGrammar.castDouble(this.visit(ctx.right));
-        String op = ctx.op.getText();
-        Boolean r = null;
-        switch (op) {
-            case "<=": r = left <= right; break;
-            case "<": r = left < right; break;
-            case ">=": r = left >= right; break;
-            case ">": r = left > right; break;
-            case "=": r = left == right; break;
-            default: Preconditions.checkArgument(false,String.format("Operador desconocido %s" + op));
-        }
-        return r;
-	}
+	
 	/**
 	 * {@inheritDoc}
 	 *
@@ -429,6 +419,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 				.map(i->visit(ctx.real_parameters().exp(i)))
 				.collect(Collectors.toList())
 				.toArray(new Object[n]);
+//		System.out.println(String.format("%s,%s",name,AuxGrammar.toString(parameters)));		
 		return AuxGrammar.result(name, parameters);	
 	}
 	/**
@@ -487,16 +478,24 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		Preconditions.checkNotNull(right,String.format("%s",ctx.right));
 		String op = ctx.op.getText();
 		Preconditions.checkArgument(
-				(AuxGrammar.isInteger(left) || AuxGrammar.isDouble(left))
-						&& (AuxGrammar.isInteger(right) || AuxGrammar.isDouble(right)),
+				(AuxGrammar.isInteger(left) || AuxGrammar.isDouble(left) ||  AuxGrammar.isBoolean(left))
+						&& (AuxGrammar.isInteger(right) || AuxGrammar.isDouble(right) || AuxGrammar.isBoolean(right)),
 				String.format("Los operandos deben ser numéricos"));
 		Object r = null;
-		switch (op.charAt(0)) {
-		case '%': r = AuxGrammar.rest(left,right); break;
-		case '*': r = AuxGrammar.multiply(left,right); break;
-		case '/': r = AuxGrammar.div(left,right);; break;
-		case '+': r = AuxGrammar.sum(left,right);; break;
-		case '-': r = AuxGrammar.difference(left,right);; break;
+		switch (op) {
+		case "%": r = AuxGrammar.rest(left,right); break;
+		case "*": r = AuxGrammar.multiply(left,right); break;
+		case "/": r = AuxGrammar.div(left,right);; break;
+		case "+": r = AuxGrammar.sum(left,right);; break;
+		case "-": r = AuxGrammar.difference(left,right); break;
+		case "<=": r = AuxGrammar.le(left,right); break;
+        case "<": r = AuxGrammar.lt(left,right); break;
+        case ">=": r = AuxGrammar.ge(left,right); break;
+        case ">": r = AuxGrammar.gt(left,right); break;
+        case "=": r = AuxGrammar.eq(left,right); break;
+        case "!=": r = AuxGrammar.ne(left,right); break;
+        case "&&": r = AuxGrammar.and(left,right); break;
+        case "||": r = AuxGrammar.or(left,right); break;
 		default: Preconditions.checkArgument(false, String.format("Operator %s desconocido", op));
 		}		
 		return r;
@@ -571,7 +570,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitPlusSum(PLIModelParser.PlusSumContext ctx) { 
 		List<String> ls = AuxGrammar.asListString(visit(ctx.list()));
 		String r = ls.stream().collect(Collectors.joining(" + "));
-		return r;
+		return String.format(" + %s",r);
 	}
 	
 	/**
@@ -630,6 +629,12 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	public static String implicitBins() {
+		return IntStream.range(0,AuxGrammar.nBinarys).boxed()
+				.map(i->String.format("x$_%d",i))
+				.collect(Collectors.joining(" ","",""));
+	}
+	
 	@Override public Object visitBin_vars(PLIModelParser.Bin_varsContext ctx) { 
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
@@ -637,10 +642,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		String lt1 = IntStream.range(0,n).boxed()
 				.flatMap(i ->sc.apply(i))
 				.collect(Collectors.joining(" "));
-		String lt2 = IntStream.range(0,AuxGrammar.nBinarys).boxed()
-				.map(i->String.format("x$_%d",i))
-				.collect(Collectors.joining(" ","",""));
-		return lt1+lt2;
+		return lt1;
 	}
 	/**
 	 * {@inheritDoc}
@@ -648,6 +650,13 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	
+	public static String implicitInts() {
+		return IntStream.range(0,AuxGrammar.nInts).boxed()
+				.map(i->String.format("y$_%d",i))
+				.collect(Collectors.joining(" "," ",""));
+	}
+	
 	@Override public Object visitInt_vars(PLIModelParser.Int_varsContext ctx) { 
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
@@ -655,10 +664,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		String lt1 = IntStream.range(0,n).boxed()
 				.flatMap(i ->sc.apply(i))
 				.collect(Collectors.joining(" "));
-		String lt2 = IntStream.range(0,AuxGrammar.nInts).boxed()
-				.map(i->String.format("y$_%d",i))
-				.collect(Collectors.joining(" "," ",""));
-		return lt1 + lt2;
+		return lt1;
 	}
 	/**
 	 * {@inheritDoc}

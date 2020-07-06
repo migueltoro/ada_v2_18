@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -113,6 +114,7 @@ public class AuxGrammar {
 		switch(text) {
 		case "Integer": rt = Type.INT; break;
 		case "Double": rt = Type.DOUBLE; break;
+		case "Boolean": rt = Type.BOOLEAN; break;
 		default: Preconditions.checkArgument(false,String.format("Tipo no conocido %s",text));
 		}
 		return rt;
@@ -210,8 +212,98 @@ public class AuxGrammar {
 		return r;
 	}
 	
+	public static Object le(Object a, Object b) {
+		Object r = null;
+		if (AuxGrammar.isInteger(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asInteger(a) <= AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asInteger(a) <= AuxGrammar.asDouble(b);
+		} else if(AuxGrammar.isDouble(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asDouble(a) <= AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asDouble(a) <= AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object lt(Object a, Object b) {
+		Object r = null;
+		if (AuxGrammar.isInteger(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asInteger(a) < AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asInteger(a) < AuxGrammar.asDouble(b);
+		} else if(AuxGrammar.isDouble(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asDouble(a) < AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asDouble(a) < AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object ge(Object a, Object b) {
+		Object r = null;
+		if (AuxGrammar.isInteger(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asInteger(a) >= AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asInteger(a) >= AuxGrammar.asDouble(b);
+		} else if(AuxGrammar.isDouble(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asDouble(a) >= AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asDouble(a) >= AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object gt(Object a, Object b) {
+		Object r = null;
+		if (AuxGrammar.isInteger(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asInteger(a) > AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asInteger(a) > AuxGrammar.asDouble(b);
+		} else if(AuxGrammar.isDouble(a)) {
+			if(AuxGrammar.isInteger(b))  r  = AuxGrammar.asDouble(a) > AuxGrammar.asInteger(b);
+			else if(AuxGrammar.isDouble(b)) r  = AuxGrammar.asDouble(a) > AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object eq(Object a, Object b) {
+		Object r = false;
+		if (AuxGrammar.isInteger(a) && AuxGrammar.isInteger(b)) {
+			r  = AuxGrammar.asInteger(a) == AuxGrammar.asInteger(b);
+		} 
+	    if(AuxGrammar.isDouble(a) && AuxGrammar.isDouble(b)) {
+			r  = AuxGrammar.asDouble(a) == AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object ne(Object a, Object b) {
+		Object r = false;
+		if (AuxGrammar.isInteger(a) && AuxGrammar.isInteger(b)) {
+			r  = AuxGrammar.asInteger(a) != AuxGrammar.asInteger(b);
+		} 
+	    if(AuxGrammar.isDouble(a) && AuxGrammar.isDouble(b)) {
+			r  = AuxGrammar.asDouble(a) != AuxGrammar.asDouble(b);
+		}
+		return r;
+	}
+	
+	public static Object and(Object a, Object b) {
+		Object r = false;
+		if (AuxGrammar.isBoolean(a) && AuxGrammar.isBoolean(b)) {
+			r  = AuxGrammar.asBoolean(a) && AuxGrammar.asBoolean(b);
+		} 
+		return r;
+	}
+	
+	public static Object or(Object a, Object b) {
+		Object r = false;
+		if (AuxGrammar.isBoolean(a) && AuxGrammar.isBoolean(b)) {
+			r  = AuxGrammar.asBoolean(a) || AuxGrammar.asBoolean(b);
+		} 
+		return r;
+	}
+	
 	public static String toString(Object[] types) {
 		return Arrays.stream(types).map(t->t.toString()).collect(Collectors.joining(",","{","}"));
+	}
+	
+	public static Boolean allSpaces(String s) {
+		return IntStream.range(0,s.length()).boxed().allMatch(i->Character.isSpaceChar(s.charAt(i)));
 	}
 	
 	public static List<String> constraints = new ArrayList<>();
