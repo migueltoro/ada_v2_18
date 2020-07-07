@@ -573,6 +573,19 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		return String.format(" + %s",r);
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public Object visitMinusSum(PLIModelParser.MinusSumContext ctx) { 
+		List<String> ls = AuxGrammar.asListString(visit(ctx.list()));
+		String r = ls.stream().collect(Collectors.joining(" - "));
+		return String.format(" - %s",r);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 *

@@ -244,6 +244,18 @@ public interface PLIModelListener extends ParseTreeListener {
 	 */
 	void exitPlusSum(PLIModelParser.PlusSumContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code minusSum}
+	 * labeled alternative in {@link PLIModelParser#s_factor}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinusSum(PLIModelParser.MinusSumContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code minusSum}
+	 * labeled alternative in {@link PLIModelParser#s_factor}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinusSum(PLIModelParser.MinusSumContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code minusFactor}
 	 * labeled alternative in {@link PLIModelParser#s_factor}.
 	 * @param ctx the parse tree

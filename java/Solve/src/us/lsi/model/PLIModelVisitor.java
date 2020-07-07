@@ -150,6 +150,13 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPlusSum(PLIModelParser.PlusSumContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code minusSum}
+	 * labeled alternative in {@link PLIModelParser#s_factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinusSum(PLIModelParser.MinusSumContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code minusFactor}
 	 * labeled alternative in {@link PLIModelParser#s_factor}.
 	 * @param ctx the parse tree

@@ -268,6 +268,18 @@ public class PLIModelBaseListener implements PLIModelListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMinusSum(PLIModelParser.MinusSumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMinusSum(PLIModelParser.MinusSumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMinusFactor(PLIModelParser.MinusFactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
