@@ -22,14 +22,12 @@ public class Caminos {
 		return n;
 	}
 	
-	public static Double costes(Integer i, Integer j) {
-			SimpleEdge<Integer> e =  graph.getEdge(i,j); 
-			return graph.getEdgeWeight(e);
+	public static Double coste(Integer i, Integer j) {
+		return (double) Math.abs(2*i+j);
 	}
 	
-	public static Double capacidad(Integer i, Integer j) {
-		SimpleEdge<Integer> e =  graph.getEdge(i,j); 
-		return graph.getEdgeWeight(e);
+	public static Double capacidadMax(Integer i, Integer j) {
+		return (double) Math.abs(i+j);
 	}
 	
 	public static Double longitud(Integer i, Integer j) {
@@ -48,8 +46,8 @@ public class Caminos {
 		Graph<Integer,SimpleEdge<Integer>> graph = GraphsReader.newGraph(fichero, 
 				e->Integer.parseInt(e[0]), 
 				edge,
-//				Graphs2::simpleDirectedWeightedGraph,
-				Graphs2::simpleWeightedGraph,
+				Graphs2::simpleDirectedWeightedGraph,
+//				Graphs2::simpleWeightedGraph,
 				e->e.getEdgeWeight());
 		return graph;
 	}
@@ -66,7 +64,7 @@ public class Caminos {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		caminos_model("models/shortest_path.lsi");
+		caminos_model("models/min_cost.lsi");
 	}
 
 }
