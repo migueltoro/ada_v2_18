@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import us.lsi.graphs.search.Sp;
+import us.lsi.graphs.alg.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
@@ -14,7 +14,7 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 
 
 public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
-			E extends SimpleHyperEdge<V,A>,A> implements DPSearch<V, E, A> {
+			E extends SimpleHyperEdge<V,A>,A> implements DP<V, E, A> {
 	
 
 	public enum PDType{Min,Max}

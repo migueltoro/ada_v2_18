@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 public class Sp<E> implements Comparable<Sp<E>> {
 	public Double weight;

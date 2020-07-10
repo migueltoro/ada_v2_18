@@ -1,15 +1,13 @@
 package us.lsi.graphs.examples;
 
-import java.io.PrintWriter;
 import java.util.Set;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
 
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
+import us.lsi.colors.GraphColors.Color;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Sets2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
@@ -25,12 +23,6 @@ public class Tours {
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
 				Carretera::getKm);
-		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
-				x -> x.getNombre(), 
-				x -> String.format("%.2f",x.getKm())
-				);		
-		PrintWriter f1 = Files2.getWriter("ficheros/minimimumCompleteAndalucia1.gv");
-		de.exportGraph(graph, f1);
 		
 		ShortestTour<Ciudad, Carretera, SimpleWeightedGraph<Ciudad, Carretera>> a = 
 				ShortestTour.of(
@@ -38,17 +30,17 @@ public class Tours {
 						Graphs2::simpleWeightedGraph, 
 						Carretera::ofWeight);
 		Set<Ciudad> vertices = Sets2.of(Ciudad.ofName("Jaen"));
+		
 		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"),vertices);
 		System.out.println(r.getVertexList());
 		System.out.println(r.getEdgeList());
-		DOTExporter<Ciudad, Carretera> de2 = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
-				x -> x.getNombre(), 
-				x -> String.format("%.2f",x.getKm()),
-				null,
-				e -> GraphColors.getStyleIf("bold", e, x -> r.getEdgeList().contains(x))
-				);	
-		PrintWriter f2 = Files2.getWriter("ficheros/minimimumCompleteAndalucia2.gv");
-		de2.exportGraph(graph, f2);
+		
+		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
+				x->String.format("%s",x.getNombre()),
+				x->String.format("%.sf",x.getKm()),
+				v->GraphColors.getColor(Color.black),
+				e->GraphColors.getStyleIf(Style.bold,r.getEdgeList().contains(e)));
+		
 	}
 
 }

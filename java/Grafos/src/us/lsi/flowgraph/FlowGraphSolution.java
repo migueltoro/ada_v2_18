@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
-
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
+import us.lsi.colors.GraphColors.Color;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Maps2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.lpsolve.SolutionLpSolve;
@@ -95,16 +93,11 @@ public class FlowGraphSolution {
 		return saturatedVertices;
 	}
 
-	public void exportToDot(String file) {
-		DOTExporter<FlowVertex, FlowEdge> de = 
-				new DOTExporter<FlowVertex, FlowEdge>(
-					new IntegerComponentNameProvider<>(),
-					v->v.getName()+"="+getFlowVertices().get(v).toString(),
-					e->e.getName()+"="+getFlowEdges().get(e).toString(),
-					v->GraphColors.getColorIf(1, v, 
-							x->this.getSaturatedVertices().contains(x)),
-					e->GraphColors.getColorIf(1, e, 
-							x->this.getSaturatedEdges().contains(x)));
-		de.exportGraph(this.graph, Files2.getWriter(file));
+	public static void exportToDot(FlowGraph graph, FlowGraphSolution solution, String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(graph, file, 
+				v->v.getName()+"="+solution.getFlowVertices().get(v).toString(),
+	    		e->e.getName()+"="+solution.getFlowEdges().get(e).toString(),
+		        v->GraphColors.getColorIf(Color.blue,solution.getSaturatedVertices().contains(v)),
+		        e->GraphColors.getStyleIf(Style.bold,solution.getSaturatedEdges().contains(e)));
 	}
 }

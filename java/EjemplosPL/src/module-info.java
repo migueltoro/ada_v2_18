@@ -10,4 +10,5 @@ module ejemplos_pl {
 	requires transitive solve;
 	requires transitive grafos;
 	requires partecomun;
+	requires org.jgrapht.io;
 }

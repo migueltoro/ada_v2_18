@@ -6,12 +6,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 
-@SuppressWarnings("deprecation")
 public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
 	public static <V, E, G extends Graph<V,E>> SubGraphView<V, E, G> of(G graph, Predicate<V> vertices, Predicate<E> edges) {
@@ -95,10 +93,6 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 
 	public E getEdge(V v1, V v2) {
 		return graph.getEdge(v1, v2);
-	}
-
-	public EdgeFactory<V, E> getEdgeFactory() {
-		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	public V getEdgeSource(E e) {

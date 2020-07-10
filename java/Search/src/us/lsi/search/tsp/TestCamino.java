@@ -7,7 +7,7 @@ import org.jgrapht.Graph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestCamino {
@@ -24,9 +24,9 @@ public class TestCamino {
 				Ciudad.ofName("Malaga"),
 				Ciudad.ofName("Granada"));
 		
-				TravelVertex e1 = TravelVertex.of(graph2,camino);
+		TravelVertex e1 = TravelVertex.of(graph2,camino);
 		System.out.println(e1);
-		EGraph<TravelVertex,TravelEdge> graph = Graphs2.last(e1,v->v.weight);
+		EGraph<TravelVertex,TravelEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.weight);
 		
 		GSearch<TravelVertex,TravelEdge> ml = GSearch.local(graph,e->e.getEdgeWeight()== 0.);
 		ml.stream().forEach(v->System.out.println(v));

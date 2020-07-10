@@ -1,24 +1,24 @@
 \ Model _copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
-Maximize
+Minimize
  
 Subject To
- z0: x_0 - y$0 = 0
  z1: x_1 - y$1 = 0
- z2: x_2 - y$2 = 0
- z7: x$_0 + x$_1 = 1
- z10: x$_2 + x$_3 = 1
- z19: x$_8 + x$_9 = 1
- z5: x$_0 = 1 -> y$0 - y$1 >= 1
- z6: x$_1 = 1 -> y$1 - y$0 >= 1
- z8: x$_2 = 1 -> y$0 - y$2 >= 1
- z9: x$_3 = 1 -> y$2 - y$0 >= 1
- z17: x$_8 = 1 -> y$1 - y$2 >= 1
- z18: x$_9 = 1 -> y$2 - y$1 >= 1
+ z3: x_3 - y$3 = 0
+ z4: x_4 - y$4 = 0
+ z22: x$_10 + x$_11 = 1
+ z25: x$_12 + x$_13 = 1
+ z34: x$_18 + x$_19 = 1
+ z20: x$_10 = 1 -> y$1 - y$3 >= 1
+ z21: x$_11 = 1 -> y$3 - y$1 >= 1
+ z23: x$_12 = 1 -> y$1 - y$4 >= 1
+ z24: x$_13 = 1 -> y$4 - y$1 >= 1
+ z32: x$_18 = 1 -> y$3 - y$4 >= 1
+ z33: x$_19 = 1 -> y$4 - y$3 >= 1
 Bounds
- y$0 free
  y$1 free
- y$2 free
+ y$3 free
+ y$4 free
 Binaries
- x_0 x_1 x_2 x$_0 x$_1 x$_2 x$_3 x$_8 x$_9
+ x_1 x_3 x_4 x$_10 x$_11 x$_12 x$_13 x$_18 x$_19
 End

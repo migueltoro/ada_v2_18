@@ -13,12 +13,12 @@ public class TestFlow3 {
 		FlowGraph g = FlowGraph.newGraph("ficheros/andaluciaFlow1.txt", FGType.Max);
 		System.out.println(g);
 		System.out.println(g.getMinCutConstraints());
-		g.exportToDot("ficheros/andaluciaflow1.gv");
+		FlowGraph.exportToDot(g,"ficheros/andaluciaflow1.gv");
 		String constraints = g.getMinCutConstraints();
 		Strings2.toFile(constraints, "ficheros/andaluciaConstraints1.txt");
 		SolutionLpSolve s = AlgoritmoLpSolve.getSolution(constraints);	
 		FlowGraphSolution fs = FlowGraphSolution.create(g, s);
-//		fs.exportToDot("ficheros/andaluciaMinCutSolution.gv");
+		FlowGraphSolution.exportToDot(g,fs,"ficheros/andaluciaMinCutSolution.gv");
 		System.out.println(fs.getGoal());
 		System.out.println(fs.getFlowEdges().entrySet().stream()
 				.filter(x->x.getValue()==1)

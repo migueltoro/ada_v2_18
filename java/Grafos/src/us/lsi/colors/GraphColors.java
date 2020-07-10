@@ -1,67 +1,68 @@
 package us.lsi.colors;
 
+
 import java.util.Map;
-import java.util.function.Predicate;
 
-import org.jgrapht.io.DefaultAttribute;
 
-import us.lsi.common.Colors;
-import us.lsi.common.Maps2;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
 
-import org.jgrapht.io.Attribute;
 
 public class GraphColors {
 	
+	public enum Color {
+		blank, red, yellow, gray, cyan, orange, magenta, blue, black, green
+	}
+	
+	public enum Style {
+		dotted, bold, filled, solid, invis
+	}
+	
+	public enum Shape {
+		box, polygon, ellipse, point, triangle, doublecircle
+	}
+	
 	/**
-	 * @param n Un entero que representa un color como codificado en la clase 
-	 * Colors.
+	 * @param n Un entero que representa un color como codificado en la clase Colors.
 	 * @return Un Map para ser añadido en un exportToDot.
 	 */
-	public static Map<String,Attribute> getColor(Integer n) {
-		Map<String,Attribute> m = Map.of("color", 
-					DefaultAttribute.createAttribute(
-					    Colors.getNameOfColor(n)));
+	public static Map<String,Attribute> getColor(Color c) {
+		String cl = c == Color.blank? "" : c.toString();
+		Map<String,Attribute> m = Map.of("color", DefaultAttribute.createAttribute(cl));
 		return m;
 	}
 	
-	public static <E> Map<String, Attribute> getColorIf(Integer n, E e, Predicate<E> p) {
-		Map<String, Attribute> m = Maps2.newHashMap();
-		if (p.test(e)) {
-			m = Map.of("color", DefaultAttribute.createAttribute(Colors.getNameOfColor(n)));
-		}
+	public static Map<String,Attribute> getColor(Integer c) {
+		return getColor(Color.values()[c+1]);
+	}
+	
+	public static Map<String,Attribute> getColorIf(Color c, Boolean test) {		
+		if(!test) c = Color.black;
+		String cl = c == Color.blank? "" : c.toString();
+		Map<String,Attribute> m = Map.of("color", DefaultAttribute.createAttribute(cl));		
 		return m;
 	}
 	
-	public static <E> Map<String, Attribute> getFilledColor(Integer n) {
-		Map<String, Attribute> m = Maps2.newHashMap("color",
-				DefaultAttribute.createAttribute(Colors.getNameOfColor(n)));
-		m.putAll(Maps2.newHashMap("style", DefaultAttribute.createAttribute("filled")));
-		return m;
+	public static <E> Map<String, Attribute> getLabel(String label) {
+		return Map.of("label", DefaultAttribute.createAttribute(label));
 	}
 	
-	public static <E> Map<String,Attribute> getFilledColorIf(Integer n,E e, Predicate<E> p) {
-		Map<String,Attribute> m = Maps2.newHashMap();
-		if (p.test(e)) {
-			m = Maps2.newHashMap("color", DefaultAttribute.createAttribute(Colors.getNameOfColor(n)));
-			m.putAll(Maps2.newHashMap("style", DefaultAttribute.createAttribute("filled")));
-		}
-		return m;
+	public static <E> Map<String, Attribute> getStyle(Style style) {
+		return Map.of("style", DefaultAttribute.createAttribute(style.name()));
 	}
 	
-	public static <E> Map<String, Attribute> getStyle(String style) {
-		return Map.of("style", DefaultAttribute.createAttribute(style));
+	public static <E> Map<String, Attribute> getShape(Shape shape) {
+		return Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
 	}
 	
-	public static <E> Map<String, Attribute> getStyleIf(String style, E e, Predicate<E> p) {
-		Map<String, Attribute> m = Maps2.newHashMap();
-		if (p.test(e)) {
-			m = Map.of("style", DefaultAttribute.createAttribute(style));
-		}
-		return m;
+	public static <E> Map<String, Attribute> getStyleIf(Style style, Boolean test) {
+		if(!test) style = Style.solid;
+		return Map.of("style", DefaultAttribute.createAttribute(style.name()));
 	}
 	
-	public static <E> Map<String, Attribute> getLabel(String style) {
-		return Map.of("label", DefaultAttribute.createAttribute(style));
+	public static <E> Map<String, Attribute> getShapeIf(Shape shape, Boolean test) {
+		if(!test) shape = Shape.ellipse;
+		return Map.of("style", DefaultAttribute.createAttribute(shape.name()));
 	}
 	
 }

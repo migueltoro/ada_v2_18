@@ -13,7 +13,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -41,7 +41,7 @@ public class TestColorAstar {
 		Integer m = ColorHeuristic.gredyPath(e1, goal);
 		ColorVertex.data(m, g2);
 		
-		EGraph<ColorVertex, ColorEdge> graph = Graphs2.last(e1,v->v.nc.doubleValue());		
+		EGraph<ColorVertex, ColorEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.nc.doubleValue());		
 		
 		GSearch<ColorVertex,ColorEdge> ms = GSearch.aStarGoal(
 				graph,

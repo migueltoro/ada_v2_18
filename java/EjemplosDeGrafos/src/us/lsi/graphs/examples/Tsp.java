@@ -1,6 +1,6 @@
 package us.lsi.graphs.examples;
 
-import java.io.PrintWriter;
+
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
@@ -8,11 +8,7 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
 
-import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -47,11 +43,14 @@ public class Tsp {
 		System.out.println(gp.getVertexList());
 		System.out.println(gp.getWeight());
 		System.out.println(gp.getEdgeList().stream().mapToDouble(x->x.getKm()).sum());
-		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
-				x -> x.getNombre(), x -> x.getNombre() + "--" + x.getKm(), null,
-				e -> GraphColors.getStyleIf("bold", e, x -> r.getEdgeList().contains(x)));
-		PrintWriter f1 = Files2.getWriter("ficheros/tspAndalucia2.gv");
-		de.exportGraph(graph2, f1);
+		
+		
+		
+//		DOTExporter<Ciudad, Carretera> de = new DOTExporter<Ciudad, Carretera>(new IntegerComponentNameProvider<>(),
+//				x -> x.getNombre(), x -> x.getNombre() + "--" + x.getKm(), null,
+//				e -> GraphColors.getStyleIf("bold", e, x -> r.getEdgeList().contains(x)));
+//		PrintWriter f1 = Files2.getWriter("ficheros/tspAndalucia2.gv");
+//		de.exportGraph(graph2, f1);
 	}
 
 }

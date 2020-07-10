@@ -8,11 +8,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
-@SuppressWarnings("deprecation")
+
 public class IntegerMappingGraphView<V,E> implements Graph<Integer,E>{
 	
 	public static <V, E> IntegerMappingGraphView<V, E> of(Graph<V, E> graph) {
@@ -89,11 +88,6 @@ public class IntegerMappingGraphView<V,E> implements Graph<Integer,E>{
 	@Override
 	public E getEdge(Integer v1, Integer v2) {		
 		return graph.getEdge(vertices.get(v1), vertices.get(v2));
-	}
-
-	@Override
-	public EdgeFactory<Integer, E> getEdgeFactory() {
-		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override

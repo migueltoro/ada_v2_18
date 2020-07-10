@@ -28,7 +28,7 @@ public class Flow1 {
 		Files2.toFile(constraints,"ficheros/flow1Constraints.txt");		
 		SolutionLpSolve s = AlgoritmoLpSolve.getSolutionFromFile("ficheros/flow1Constraints.txt");	
 		FlowGraphSolution fs = FlowGraphSolution.create(fg,s);
-		fs.exportToDot("ficheros/flow1Soluciones.gv");
+		FlowGraphSolution.exportToDot(fg,fs,"ficheros/flow1Soluciones.gv");
 	}
 	
 	

@@ -14,7 +14,7 @@ public class SeqEdge extends ActionSimpleEdge<SeqVertex,SeqAction>{
 	}
 
 	@Override
-	public double getEdgeWeight() {
+	public Double getEdgeWeight() {
 		return action.weight(super.source);
 	}
 

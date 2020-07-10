@@ -6,8 +6,8 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.AStarSearch;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.AStar;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -19,10 +19,10 @@ public class TestAStarTyP {
 		TyPVertex e1 = TyPVertex.first();
 //		TyPVertex e2 = TyPVertex.last();
 		
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.last(e1,v->v.getMaxCarga());		
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
 		
 		
-		AStarSearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GSearch.aStarGoal(
+		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GSearch.aStarGoal(
 				graph,
 				e->e.getIndex()==TyPVertex.n,
 				(v1,p,v2)->0.);

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Lists2;
-import us.lsi.graphs.search.Sp;
+import us.lsi.graphs.alg.Sp;
 
 public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	

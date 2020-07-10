@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 import java.util.List;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,12 +11,12 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.search.DynamicProgramming.PDType;
+import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
 
-public class DynamicProgrammingReduction<V, E, S> implements DPRSearch<V, E, S> {
+public class DynamicProgrammingReduction<V, E, S> implements DPR<V, E, S> {
 	
 	public EGraph<V,E> graph;
 	private V startVertex; 

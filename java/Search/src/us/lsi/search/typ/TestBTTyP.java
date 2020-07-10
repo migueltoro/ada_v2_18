@@ -5,10 +5,10 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.BTSearch;
-import us.lsi.graphs.search.GSearch;
-import us.lsi.graphs.search.GreedySearch;
-import us.lsi.graphs.search.BackTracking.BTType;
+import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -20,7 +20,7 @@ public class TestBTTyP {
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
 		TyPVertex e2 = TyPVertex.last();
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.last(e1,v->v.getMaxCarga());		
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
 			
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
 				GSearch.greedy(graph,TyPVertex::greadyEdge,e->e.getIndex()==TyPVertex.n);
@@ -29,7 +29,7 @@ public class TestBTTyP {
 		Double bv = path.getWeight();
 		
 		var ms = 
-				BTSearch.backTracking(
+				BT.backTracking(
 						graph,
 						e->e.getIndex()==TyPVertex.n,
 						e2,

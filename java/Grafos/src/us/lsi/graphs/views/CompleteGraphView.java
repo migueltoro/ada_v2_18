@@ -6,14 +6,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 import us.lsi.common.TriFunction;
 
-
-@SuppressWarnings("deprecation")
 public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E> {
 
 	
@@ -110,10 +107,6 @@ public class CompleteGraphView<V, E, G extends Graph<V,E>> implements Graph<V,E>
 		else
 			edge = this.edgeWeightFactory.apply(v0, v1, this.weightDefault);
 		return edge;
-	}
-	
-	public EdgeFactory<V, E> getEdgeFactory() {
-		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	public V getEdgeSource(E e) {

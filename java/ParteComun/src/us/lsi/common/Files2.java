@@ -66,6 +66,16 @@ public class Files2 {
 		}
 		return r;
 	}
+	
+	public static OutputStream getOutputStream(String file) {
+		OutputStream r = null;
+		try {
+			r = new FileOutputStream(new File(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return r;
+	}
 
 	public static PrintWriter writer = null;
 	

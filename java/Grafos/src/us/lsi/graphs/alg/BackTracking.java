@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class BackTracking<V,E,S> implements BTSearch<V, E, S> {
+public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	public enum BTType {Min,Max,All}
 	

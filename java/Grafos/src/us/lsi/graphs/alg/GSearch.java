@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
-
 
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
@@ -70,16 +69,16 @@ public interface GSearch<V,E>  {
 	 * @param end Un vertice que cumple el objetivo
 	 * @return Una algoritmo de b&uacute;squeda de Dijsktra
 	 */
-	public static <V, E> AStarSearch<V, E> dijsktra(EGraph<V, E> graph, Predicate<V> goal, V end) {
-		return new AStarSearch<V, E>(graph, goal,end, (v1,v2,v3)->0.);
+	public static <V, E> AStar<V, E> dijsktra(EGraph<V, E> graph, Predicate<V> goal, V end) {
+		return new AStar<V, E>(graph, goal,end, (v1,v2,v3)->0.);
 	}
 	
-	public static <V, E> AStarSearch<V, E> dijsktra(EGraph<V, E> graph, Predicate<V> goal) {
-		return new AStarSearch<V, E>(graph, goal,null, (v1,v2,v3)->0.);
+	public static <V, E> AStar<V, E> dijsktra(EGraph<V, E> graph, Predicate<V> goal) {
+		return new AStar<V, E>(graph, goal,null, (v1,v2,v3)->0.);
 	}
 	
-	public static <V, E> AStarSearch<V, E> dijsktra(EGraph<V, E> graph, V end) {
-		return new AStarSearch<V, E>(graph,e->e.equals(end),end,(v1,v2,v3)->0.);
+	public static <V, E> AStar<V, E> dijsktra(EGraph<V, E> graph, V end) {
+		return new AStar<V, E>(graph,e->e.equals(end),end,(v1,v2,v3)->0.);
 	}
 	
 	/**
@@ -90,34 +89,34 @@ public interface GSearch<V,E>  {
 	 * @param heuristic La heur&iacute;stica 
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
-	public static <V, E> AStarSearch<V, E> aStar(EGraph<V, E> graph, Predicate<V> goal, V end,
+	public static <V, E> AStar<V, E> aStar(EGraph<V, E> graph, Predicate<V> goal, V end,
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		return new AStarSearch<V, E>(graph, goal, end, heuristic);
+		return new AStar<V, E>(graph, goal, end, heuristic);
 	}
 	
-	public static <V, E> AStarSearch<V, E> aStarGoal(EGraph<V, E> graph, Predicate<V> goal,
+	public static <V, E> AStar<V, E> aStarGoal(EGraph<V, E> graph, Predicate<V> goal,
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		return new AStarSearch<V, E>(graph, goal,null, heuristic);
+		return new AStar<V, E>(graph, goal,null, heuristic);
 	}
 	
-	public static <V, E> AStarSearch<V, E> aStarEnd(EGraph<V, E> graph, V end,
+	public static <V, E> AStar<V, E> aStarEnd(EGraph<V, E> graph, V end,
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		return new AStarSearch<V, E>(graph,e->e.equals(end), end, heuristic);
+		return new AStar<V, E>(graph,e->e.equals(end), end, heuristic);
 	}
 	
-	public static <V, E> AStarSearchRandom<V, E> aStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
+	public static <V, E> AStarRandom<V, E> aStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, Function<V, Integer> size) {
-		return new AStarSearchRandom<V, E>(graph, goal, end, heuristic, size);
+		return new AStarRandom<V, E>(graph, goal, end, heuristic, size);
 	}
 	
-	public static <V, E> AStarSearchRandom<V, E> aStarRandomGoal(EGraph<V, E> graph, Predicate<V> goal,
+	public static <V, E> AStarRandom<V, E> aStarRandomGoal(EGraph<V, E> graph, Predicate<V> goal,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, Function<V, Integer> size) {
-		return new AStarSearchRandom<V, E>(graph, goal,null, heuristic, size);
+		return new AStarRandom<V, E>(graph, goal,null, heuristic, size);
 	}
 	
-	public static <V, E> AStarSearchRandom<V, E> aStarRandomEnd(EGraph<V, E> graph, V end,
+	public static <V, E> AStarRandom<V, E> aStarRandomEnd(EGraph<V, E> graph, V end,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, Function<V, Integer> size) {
-		return new AStarSearchRandom<V, E>(graph,e->e.equals(end), end, heuristic, size);
+		return new AStarRandom<V, E>(graph,e->e.equals(end), end, heuristic, size);
 	}
 	
 	public static <V, E> LocalSearch<V, E> local(EGraph<V, E> graph, Predicate<E> stop) {

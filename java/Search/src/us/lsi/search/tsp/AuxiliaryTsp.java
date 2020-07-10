@@ -12,8 +12,7 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
+import org.jgrapht.nio.dot.DOTExporter;
 
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
@@ -23,8 +22,8 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.search.DephtSearch;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.DephtSearch;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
 import us.lsi.math.Math2;
@@ -152,10 +151,9 @@ public class AuxiliaryTsp {
 			}
 		}
 		
-		DOTExporter<Ciudad,Carretera> de = new DOTExporter<Ciudad,Carretera>(
-				new IntegerComponentNameProvider<>(),
-				x->x.getNombre(), 
-				x->x.getNombre()+"--"+x.getKm());
+		DOTExporter<Ciudad,Carretera> de = new DOTExporter<Ciudad,Carretera>();
+		de.setVertexIdProvider(v->v.getNombre());
+		de.setEdgeIdProvider(e->String.format("%.2f",e.getKm()));
 		
 		PrintWriter f1 = Files2.getWriter("ficheros/tourAndalucia1.gv");
 		de.exportGraph(graph1, f1);

@@ -1,12 +1,15 @@
 package us.lsi.recursivos.problemasdelistas;
 
-import static org.junit.Assert.*;
+
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Comparator;
 
 import org.junit.Test;
+
+import java.util.Comparator;
 
 import us.lsi.common.Comparators;
 import us.lsi.common.Lists2;

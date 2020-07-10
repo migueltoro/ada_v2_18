@@ -1,22 +1,18 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
-import java.util.Comparator;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
-	
-	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Predicate<E> stop) {
-		return new LocalSearch<V, E>(graph, stop);
-	}
+public class GreedySearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
 
 	private EGraph<V,E> graph;
 	private V actualVertex;
@@ -24,23 +20,18 @@ public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
 	public Map<V,E> edgeToOrigin;
 	private Double weight;
 	private EGraphPath<V,E> path;
-	private Predicate<E> stop;
-	private E nextEdge;
+	private Function<V,E> nextEdge;
+	private Predicate<V> goal;
+	private Boolean hashNext;
 	
-	LocalSearch(EGraph<V, E> graph, Predicate<E> stop) {
+	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal) {
 		this.graph = graph;
+		this.actualVertex = null;
 		this.startVertex = graph.startVertex();
-		this.actualVertex = this.startVertex;
 		this.edgeToOrigin = new HashMap<>();
-		this.stop = stop;
-		this.path = this.graph.initialPath();
-		this.weight = path.getWeight();
-		this.nextEdge = nextEdge(this.actualVertex);	
-	}
-	
-	@Override
-	public LocalSearch<V,E> copy(){
-		return LocalSearch.of(this.graph,this.stop);	
+		this.nextEdge = nextEdge; 
+		this.goal = goal;
+		this.hashNext = true;
 	}
 	
 	@Override
@@ -48,11 +39,16 @@ public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
 		return Iterators.asStream(this.iterator());
 	}
 	
+	@Override
+	public GreedySearch<V,E> copy() {
+		return GSearch.greedy(this.graph,this.nextEdge,this.goal);
+	}
+	
 	public Iterator<V> iterator() {
 		return this;
 	}
 
-	
+
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
 	}
@@ -69,17 +65,7 @@ public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
 	
 	@Override
 	public boolean hasNext() {
-		return this.nextEdge != null && !this.stop.test(this.nextEdge);
-	}
-	
-	private E nextEdge(V vertex) {
-		Preconditions.checkNotNull(this.graph);
-		Preconditions.checkNotNull(this.actualVertex);
-		Preconditions.checkNotNull(this.path);
-		Preconditions.checkNotNull(this.weight);
-		return this.graph.edgesListOf(this.actualVertex).stream()
-				.min(Comparator.comparing(e->graph.getEdgeWeight(e)))
-				.get();
+		return this.hashNext;
 	}
 
 	@Override
@@ -91,12 +77,12 @@ public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
 			this.path = this.graph.initialPath();
 			this.weight = path.getWeight();
 		} else {
-			E edge = this.nextEdge;
-			this.nextEdge =	nextEdge(this.actualVertex);
+			E edge = this.nextEdge.apply(this.actualVertex);
 			this.actualVertex = this.graph.getEdgeTarget(edge);		
 			this.edgeToOrigin.put(this.actualVertex,edge);
 			this.weight = this.path.add(this.weight,edge);
 		}
+		this.hashNext = !this.goal.test(this.actualVertex);
 		return this.actualVertex;
 	}
 	
@@ -105,6 +91,10 @@ public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
 		return this.startVertex;
 	}
 	
-	
+	@Override	
+	public Double weightToEnd() {
+		this.findEnd();
+		return this.weight;
+	}
 
 }

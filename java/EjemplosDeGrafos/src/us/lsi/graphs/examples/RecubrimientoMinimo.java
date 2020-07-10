@@ -1,15 +1,12 @@
 package us.lsi.graphs.examples;
 
-import java.io.PrintWriter;
 import java.util.Map;
 
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
 
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
+import us.lsi.colors.GraphColors.Color;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Maps2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
@@ -44,13 +41,7 @@ public class RecubrimientoMinimo {
 		SpanningTreeAlgorithm<Carretera> ast = new KruskalMinimumSpanningTree<>(graph);
 		SpanningTree<Carretera> r = ast.getSpanningTree();
 		
-		System.out.println(r);
-		
-		SimpleWeightedGraph<Ciudad, Carretera> subGraphEdges = Graphs2.subGraph(graph, 
-				null,
-				x->r.getEdges().contains(x), 
-				()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));	
-		
+		System.out.println(r);	
 		
 		Map<Ciudad,Double> habitantes = Maps2.newHashMap(x->1/x.getHabitantes());
 		
@@ -59,28 +50,18 @@ public class RecubrimientoMinimo {
 		VertexCover<Ciudad> r2 = vc.getVertexCover();
 		
 		
-		ComponentNameProvider<Ciudad> vertexIDProvider = new IntegerComponentNameProvider<>();
+		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
+				x->String.format("%s",x.getNombre()),
+				x->String.format("%.sf",x.getKm()),
+				v->GraphColors.getColor(Color.black),
+				e->GraphColors.getStyleIf(Style.bold,r.getEdges().contains(e)));
 		
+		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaVertexCover.gv",
+				x->String.format("%s",x.getNombre()),
+				x->String.format("%.sf",x.getKm()),
+				v->GraphColors.getColorIf(Color.blue,r2.contains(v)),
+				e->GraphColors.getStyle(Style.solid));
 		
-		
-		DOTExporter<Ciudad,Carretera> de = new DOTExporter<Ciudad,Carretera>(
-				vertexIDProvider,
-				x->x.getNombre(), 
-				x->x.getNombre(),
-				v->GraphColors.getFilledColor(r2.contains(v)?1:2),	
-				e->GraphColors.getStyleIf("bold", e, x->r.getEdges().contains(x)));
-				
-		
-		PrintWriter f = Files2.getWriter("ficheros/recubrimientoAndalucia1.gv");
-		de.exportGraph(graph, f);
-		
-		DOTExporter<Ciudad,Carretera> de2 = new DOTExporter<Ciudad,Carretera>(
-				vertexIDProvider,
-				x->x.getNombre(), 
-				x->x.getNombre());
-		
-		PrintWriter f2 = Files2.getWriter("ficheros/recubrimientoAndalucia2.gv");
-		de2.exportGraph(subGraphEdges, f2);
 	}
 
 	

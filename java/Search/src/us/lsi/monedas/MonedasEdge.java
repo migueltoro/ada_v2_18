@@ -14,8 +14,8 @@ public class MonedasEdge extends ActionSimpleEdge<MonedasVertex,Integer> {
 	}
 	
 	@Override
-	public double getEdgeWeight() {
-		return action*Moneda.monedas.get(super.source.index).peso;
+	public Double getEdgeWeight() {
+		return (double) (action*Moneda.monedas.get(super.source.index).peso);
 	}
 
 }

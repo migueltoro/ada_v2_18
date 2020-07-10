@@ -14,7 +14,7 @@ public class TravelEdge extends ActionSimpleEdge<TravelVertex,IntPair> {
 		super(c1, c2, action);
 	}
 	@Override
-	public double getEdgeWeight() {
+	public Double getEdgeWeight() {
 		return super.target.weight-super.source.weight;
 	}
 

@@ -1,16 +1,14 @@
 package us.lsi.graphs.examples;
 
-import java.io.PrintWriter;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
 
+import us.lsi.colors.GraphColors.Style;
+import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -45,23 +43,13 @@ public class CaminoMinimo {
 						e->gp.getEdgeList().contains(e),
 						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));
 		
-		DOTExporter<Ciudad,Carretera> de1 = new DOTExporter<Ciudad,Carretera>(
-				new IntegerComponentNameProvider<>(),
-				x->x.getNombre(), 
-				x->x.getNombre()+"--"+x.getKm());
+		Graphs2.toDot(graph,"ficheros/caminoMinimoAndalucia1.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		DOTExporter<Ciudad,Carretera> de2 = new DOTExporter<Ciudad,Carretera>(
-				new IntegerComponentNameProvider<>(),
-				x->x.getNombre(), 
+		Graphs2.toDot(graph2,"ficheros/caminoMinimoAndalucia2.gv",
+				x->x.getNombre(),
 				x->x.getNombre()+"--"+x.getKm(),
-				null,
-				e->GraphColors.getStyleIf("bold",e,x->true));
-		
-		PrintWriter f1 = Files2.getWriter("ficheros/caminoMinimoAndalucia1.gv");
-		de1.exportGraph(graph, f1);
-		
-		PrintWriter f2 = Files2.getWriter("ficheros/caminoMinimoAndalucia2.gv");
-		de2.exportGraph(graph2, f2);
+				v->GraphColors.getColor(Color.black),
+				e->GraphColors.getStyle(Style.bold));
 		
 		
 	}

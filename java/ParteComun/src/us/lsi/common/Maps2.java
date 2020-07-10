@@ -86,6 +86,12 @@ public class Maps2 {
 
         return result;
     }
+	
+	public static <K, V> Map<K, V> merge(Map<K,V> m1, Map<K,V> m2) {
+		Map<K, V> r = new HashMap<>(m1);
+		r.putAll(m2);
+		return r;
+	}
     
 	/**
 	 * @param <K> El tipo de las claves 

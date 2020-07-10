@@ -16,11 +16,9 @@ bounds section
 
 x[i] <= n - 1, i in 0 .. n
 
-bin
 
 int  
 
 x[i], i in 0 .. n 
 
-free
 

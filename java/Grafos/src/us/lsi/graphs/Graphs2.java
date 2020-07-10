@@ -1,7 +1,9 @@
 package us.lsi.graphs;
 
+import java.io.Writer;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -15,14 +17,23 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.dot.DOTExporter;
+
+import us.lsi.common.Files2;
+import us.lsi.common.Maps2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath.PathType;
+
 
 public class Graphs2 {
 	
@@ -54,23 +65,23 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(V startVertex) {
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V startVertex) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> sum(
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
 			V startVertex,
 			Function<E, Double> edgeWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> last(
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
 			V startVertex,
 			Function<V, Double> vertexWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> of(
+	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
 			V startVertex,
 			Function<E, Double> edgeWeight, 
 			Function<V, Double> vertexWeight,
@@ -107,6 +118,69 @@ public class Graphs2 {
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
+	
+	public static <V,E> void toDot(Graph<V,E> graph, String file) {		
+		DOTExporter<V,E> de = new DOTExporter<V,E>();
+		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(v.toString())));
+		Writer f1 = Files2.getWriter(file);
+		de.exportGraph(graph, f1);
+	}
+	
+	public static <V,E> void toDot(Graph<V,E> graph, String file, Function<V,String> vertexLabel) {	
+		DOTExporter<V,E> de = new DOTExporter<V,E>();	
+		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))));
+		Writer f1 = Files2.getWriter(file);
+		de.exportGraph(graph, f1);
+	}
+	
+	
+	public static <V,E> void toDot(Graph<V,E> graph, String file, 
+			Function<V,String> vertexLabel,
+			Function<E,String> edgeLabel) {		
+		DOTExporter<V,E> de = new DOTExporter<V,E>();
+		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))));
+		de.setEdgeAttributeProvider(e->Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))));		
+		Writer f1 = Files2.getWriter(file);
+		de.exportGraph(graph, f1);
+	}
+	
+	public static <V,E> void toDot(Graph<V,E> graph, String file, 
+			Function<V,String> vertexLabel,
+			Function<E,String> edgeLabel,
+			Function<V,Map<String,Attribute>> vertexAttribute,
+			Function<E,Map<String,Attribute>> edgeAttribute) {
+		
+		DOTExporter<V,E> de = new DOTExporter<V,E>();
+		Function<V,Map<String,Attribute>> m1 = 
+			v->Maps2.merge(Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))),vertexAttribute.apply(v));
+		Function<E,Map<String,Attribute>> m2 = 
+			e->Maps2.merge(Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))),edgeAttribute.apply(e));
+		de.setVertexAttributeProvider(m1);
+		de.setEdgeAttributeProvider(m2);
+		
+		
+		Writer f1 = Files2.getWriter(file);
+		de.exportGraph(graph, f1);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight,
+			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight) {
+		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight, vertexWeight, vertexPassWeight);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight, 
+			Function<V, Boolean> isBaseCase) {
+		return new EGraphI<V, E, G>(graph, startVertex, type, edgeWeight, null, null);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type) {
+		return new EGraphI<V, E, G>(graph, startVertex, type, null, null, null);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex) {
+		return new EGraphI<V, E, G>(graph, startVertex,PathType.Sum, null, null, null);
+	}
+
 	
 	public static <V, E> SimpleDirectedWeightedGraph<V, E> toDirectedWeightedGraph(SimpleWeightedGraph<V, E> graph,
 			Function<E, E> edgeReverse) {

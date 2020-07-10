@@ -1,4 +1,4 @@
-Maximize
+Minimize
 
 x_0 + x_1 + x_2 + x_3 + x_4
 
@@ -144,6 +144,6 @@ x$_0 x$_1 x$_2 x$_3 x$_4 x$_5 x$_6 x$_7 x$_8 x$_9 x$_10 x$_11 x$_12 x$_13 x$_14 
 
 General
 
-x_0 x_1 x_2 x_3 x_4 
+ x_0 x_1 x_2 x_3 x_4
 
-
+End

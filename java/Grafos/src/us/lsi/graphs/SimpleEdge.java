@@ -78,7 +78,7 @@ public class SimpleEdge<V>  {
 	/**
 	 * @return El peso asociado a la arista
 	 */
-	public double getEdgeWeight(){
+	public Double getEdgeWeight(){
 		return this.weight;
 	}		
 	/**

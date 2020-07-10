@@ -5,10 +5,10 @@ import java.util.Locale;
 import org.jgrapht.Graphs;
 
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.graphs.search.BackTracking.StatePath;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.BackTracking.State;
+import us.lsi.graphs.alg.BackTracking.State;
+import us.lsi.graphs.alg.BackTracking.StatePath;
 
 
 public class TestState {
@@ -20,7 +20,7 @@ public class TestState {
 		MochilaVertex v1 = MochilaVertex.of(78.);
 		MochilaVertex v2 = MochilaVertex.lastVertex();
 		
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.sum(v1,x->x.getEdgeWeight());
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1,x->x.getEdgeWeight());
 		State<MochilaVertex,MochilaEdge> initialState = StatePath.of(graph, e->e.equals(v2), v2);
 		System.out.println(initialState);
 		MochilaEdge e1 = initialState.getActualVertex().edge(2.);

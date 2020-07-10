@@ -18,10 +18,8 @@ module ejemplos_de_varias_tecnicas {
 	exports us.lsi.astar.jarras;
 
 	requires transitive algoritmos_recursivos;
-	requires commons.math3;
 	requires transitive datos_compartidos;
 	requires transitive geneticos;
 	requires transitive grafos;
-	requires org.jgrapht.core;
 	requires transitive partecomun;
 }

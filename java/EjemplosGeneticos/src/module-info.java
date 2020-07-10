@@ -10,7 +10,6 @@ module ejemplos_geneticos {
 	exports us.lsi.ag.anuncios;
 
 	requires transitive geneticos;
-	requires transitive commons.math3;
 	requires transitive datos_compartidos;
 	requires transitive partecomun;
 }

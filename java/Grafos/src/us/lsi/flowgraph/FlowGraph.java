@@ -3,13 +3,12 @@ package us.lsi.flowgraph;
 import java.util.Locale;
 
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
 
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Files2;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Strings2;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 
 
@@ -163,18 +162,15 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		return r;
 	}
 	
-	public void exportToDot(String file) {
-		DOTExporter<FlowVertex, FlowEdge> de = 
-				new DOTExporter<FlowVertex, FlowEdge>(
-					new IntegerComponentNameProvider<>(),
-					v->v.getName(),
-					e->e.getName(),
-					v->GraphColors.getFilledColor(v.getColor()),
-					null);
-		de.exportGraph(this, Files2.getWriter(file));
+	public static void exportToDot(FlowGraph graph, String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(graph, file, 
+				v->v.getName(),
+				e->e.getName(),
+				v->GraphColors.getColor(v.getColor()), 
+				e->GraphColors.getStyle(Style.solid));
 	}
 	
-	private String vertexFormat(FlowVertex v) {
+	public String vertexFormat(FlowVertex v) {
 		return String.format("%s,%.1f,%s,%.1f",
 				v.getVariable(),
 				v.getMin(),
@@ -182,21 +178,12 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 				v.getCost());
 	}
 	
-	private String edgeFormat(FlowEdge e) {
+	public String edgeFormat(FlowEdge e) {
 		return String.format("%s,%.1f,%s,%.1f",
 				e.getVariable(),
 				e.getMin(),
 				e.getMax()<Double.MAX_VALUE?String.format("%.1f",e.getMax()):"_",
 				e.getCost());
-	}
-	
-	public void exportToDotVariables(String file) {
-		DOTExporter<FlowVertex, FlowEdge> de = 
-				new DOTExporter<FlowVertex, FlowEdge>(
-					new IntegerComponentNameProvider<>(),
-					v->vertexFormat(v),
-					e->edgeFormat(e));
-		de.exportGraph(this, Files2.getWriter(file));
 	}
 
 }

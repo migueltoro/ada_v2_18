@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.search.Sp;
+import us.lsi.graphs.alg.Sp;
 import us.lsi.graphs.virtual.EGraph;
 
 public interface EGraphPath<V, E> extends GraphPath<V, E> {	
@@ -30,7 +30,7 @@ public interface EGraphPath<V, E> extends GraphPath<V, E> {
 		return path.getEdgeList().stream().mapToDouble(e->path.getGraph().getEdgeWeight(e)).sum();
 	}
 	
-	public static <V, E> GraphWalkSum<V, E> ofMap(EGraph<V, E> graph, V vertex, Map<V,Sp<E>> solutions) {
+	public static <V, E> GraphWalkSum<V, E> ofMap(EGraph<V,E> graph, V vertex, Map<V,Sp<E>> solutions) {
 		return GraphWalkSum.ofMap(graph, vertex, solutions);
 	}
 	

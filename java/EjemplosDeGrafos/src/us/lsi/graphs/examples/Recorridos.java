@@ -1,14 +1,11 @@
 package us.lsi.graphs.examples;
 
-import java.io.PrintWriter;
 import java.util.Map;
 
 import org.jgrapht.Graph;
-import org.jgrapht.io.DOTExporter;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 
-import us.lsi.common.Files2;
 import us.lsi.common.Maps2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
@@ -40,13 +37,7 @@ public class Recorridos {
 			n++;
 		}	
 		
-		DOTExporter<Ciudad,Carretera> de1 = new DOTExporter<Ciudad,Carretera>(
-				x->m.get(x).toString(),
-				x->x.getNombre()+"/"+m.get(x).toString(), 
-				x->x.getNombre());
-		
-		PrintWriter f1 = Files2.getWriter("ficheros/recorridoEnProfundidadAndalucia.gv");
-		de1.exportGraph(graph, f1);
+		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
 		BreadthFirstIterator<Ciudad, Carretera> ra = new BreadthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
 		m.clear();
@@ -56,13 +47,8 @@ public class Recorridos {
 			n++;
 		}	
 		
-		DOTExporter<Ciudad,Carretera> de2 = new DOTExporter<Ciudad,Carretera>(
-				x->m.get(x).toString(),
-				x->x.getNombre()+"/"+m.get(x).toString(), 
-				x->x.getNombre());
+		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		PrintWriter f2 = Files2.getWriter("ficheros/recorridoEnAnchuraAndalucia.gv");
-		de2.exportGraph(graph, f2);
 	}
 
 }

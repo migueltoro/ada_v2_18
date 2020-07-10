@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -7,10 +7,11 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.search.BackTracking.BTType;
+import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
 
-public interface BTSearch<V, E, S> {
+
+public interface BT<V, E, S> {
 
 	void search();
 

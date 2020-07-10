@@ -10,8 +10,8 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.search.DPSearch;
-import us.lsi.graphs.search.DynamicProgramming.PDType;
+import us.lsi.graphs.alg.DP;
+import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 
 public class TestFloyd {
@@ -41,8 +41,8 @@ public class TestFloyd {
 		SimpleVirtualHyperGraph<FloydVertex<Ciudad,Carretera>,FloydEdge<Ciudad,Carretera>,FloydVertex.ActionFloyd> graph2 = 
 				Graphs2.simpleVirtualHyperGraph();
 		
-		DPSearch<FloydVertex<Ciudad,Carretera>,FloydEdge<Ciudad,Carretera>,FloydVertex.ActionFloyd> a = 
-				DPSearch.dynamicProgrammingSearch(graph2,PDType.Min);
+		DP<FloydVertex<Ciudad,Carretera>,FloydEdge<Ciudad,Carretera>,FloydVertex.ActionFloyd> a = 
+				DP.dynamicProgrammingSearch(graph2,PDType.Min);
 		
 		a.search(p);
 		System.out.println(FloydVertex.solution(a.tree(p)).getVertexList().stream().collect(Collectors.toList()));

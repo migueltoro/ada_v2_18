@@ -13,11 +13,16 @@ import org.jgrapht.graph.GraphWalk;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.search.Sp;
+import us.lsi.graphs.alg.Sp;
 import us.lsi.graphs.virtual.EGraph;
 
 public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static <V, E> GraphWalkLast<V, E> ofMap(EGraph<V, E> graph, V vertex, Map<V,Sp<E>> solutions){
 		Preconditions.checkArgument(graph.pathType() == PathType.Last, 
 				String.format("El tipo del EGraphPath debe ser Last y es %s",graph.pathType()));

@@ -1,4 +1,4 @@
-package us.lsi.graphs.search;
+package us.lsi.graphs.alg;
 
 
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
 import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.ToEGraph;
 import us.lsi.path.EGraphPath.PathType;
 
 public class BreadthSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
@@ -74,7 +74,7 @@ public class BreadthSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V
 
 	@Override
 	public EGraph<V, E> getGraph() {
-		return ToEGraph.of(this.graph,startVertex(),PathType.Sum);
+		return Graphs2.eGraph(this.graph,startVertex(),PathType.Sum);
 	}
 	
 	@Override

@@ -5,14 +5,14 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 
 public class MochilaHeuristic {
 	
 	public static Double heuristic(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.sum(v1);
+		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		return GSearch.greedy(
 				graph,
 				MochilaVertex::greadyEdgeHeuristic,goal).weight(goal);
@@ -43,7 +43,7 @@ public class MochilaHeuristic {
 	}
 	
 	public static GraphPath<MochilaVertex, MochilaEdge> greadyPath(MochilaVertex v1, Predicate<MochilaVertex> goal) {
-		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.sum(v1);
+		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		return GSearch.greedy(
 				graph,
 				MochilaVertex::greadyEdge,goal).pathToEnd();

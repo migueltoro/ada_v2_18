@@ -8,13 +8,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
 import us.lsi.graphs.SimpleEdge;
 
-@SuppressWarnings("deprecation")
 public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Integer>>{
 	
 	public static <V, E> IntegerVertexGraphView<V, E> of(Graph<V, E> graph) {
@@ -95,11 +93,6 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		E edge = graph.getEdge(vertices.get(v1), vertices.get(v2));
 		Double w = graph.getEdgeWeight(edge);
 		return SimpleEdge.of(v1,v2,w);
-	}
-
-	@Override
-	public EdgeFactory<Integer, SimpleEdge<Integer>> getEdgeFactory() {
-		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override

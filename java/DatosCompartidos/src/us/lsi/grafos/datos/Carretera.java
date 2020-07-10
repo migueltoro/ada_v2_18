@@ -80,7 +80,7 @@ public class Carretera {
 	}
 
 
-	public double getKm() {
+	public Double getKm() {
 		return this.km;
 	}
 

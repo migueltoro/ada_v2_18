@@ -9,8 +9,7 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.IntegerComponentNameProvider;
+import org.jgrapht.nio.dot.DOTExporter;
 
 import us.lsi.common.Files2;
 import us.lsi.common.TriFunction;
@@ -79,10 +78,10 @@ public class RutaTrenGurobiPLI {
 	}
 	
 	public static void showGraph() {
-		DOTExporter<Integer,SimpleEdge<Integer>> de1 = new DOTExporter<Integer,SimpleEdge<Integer>>(
-				new IntegerComponentNameProvider<>(),
-				x->x.toString(), 
-				x->Double.valueOf(x.getEdgeWeight()).toString());
+		DOTExporter<Integer,SimpleEdge<Integer>> de1 = new DOTExporter<Integer,SimpleEdge<Integer>>();
+		de1.setVertexIdProvider(v->v.toString());
+		de1.setEdgeIdProvider(e->e.getEdgeWeight().toString());		
+		
 		PrintWriter f1 = Files2.getWriter("ficheros/ruta_tren.gv");
 		de1.exportGraph(graph, f1);
 	}

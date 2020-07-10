@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.GraphType;
 
 import us.lsi.common.Sets2;
@@ -34,8 +33,7 @@ import us.lsi.path.EGraphPath.PathType;
  * @param <E> El tipo de las aristas
  * 
  */
-@SuppressWarnings("deprecation")
-public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> implements EGraph<V, E> {
+public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> implements EGraph<V,E> {
 	
 	
 	private Set<V> vertexSet;
@@ -290,11 +288,6 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEd
 
 	@Override
 	public Supplier<V> getVertexSupplier() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public EdgeFactory<V, E> getEdgeFactory() {
 		throw new UnsupportedOperationException();
 	}
 

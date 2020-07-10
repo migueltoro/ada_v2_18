@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.search.GSearch;
+import us.lsi.graphs.alg.GSearch;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestSeqAStar {
@@ -17,7 +17,7 @@ public class TestSeqAStar {
 		SeqVertex.data("cbrrrarreterb", "carretera");
 		SeqVertex e1 = SeqVertex.first();
 		SeqVertex e2 = SeqVertex.last();
-		EGraph<SeqVertex, SeqEdge> graph = Graphs2.sum(e1);		
+		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 		
 		GSearch<SeqVertex,SeqEdge> ms = GSearch.aStarEnd(
 				graph,

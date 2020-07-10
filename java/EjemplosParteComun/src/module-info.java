@@ -14,7 +14,6 @@ module ejemplos_parte_comun {
 	exports us.lsi.streams;
 	exports us.lsi.recursivos.puntos;
 
-	requires transitive commons.math3;
 	requires transitive datos_compartidos;
 	requires junit;
 	requires transitive partecomun;
