@@ -12,7 +12,7 @@ import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class LocalSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>{
+public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>{
 	
 	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Predicate<E> stop) {
 		return new LocalSearch<V, E>(graph, stop);

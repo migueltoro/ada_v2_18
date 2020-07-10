@@ -9,7 +9,7 @@ import us.lsi.common.IntPair;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class Test {
@@ -24,7 +24,7 @@ public class Test {
 		Casilla c2 = Laberinto.get(IntPair.of(5,7));
 		SimpleVirtualGraph<Casilla,CasillaEdge> graph = Graphs2.simpleVirtualGraph(c1,x->1.);
 		
-		AStar<Casilla, CasillaEdge> a = GSearch.aStarEnd(graph,c2,heuristic);
+		AStar<Casilla, CasillaEdge> a = GraphAlg.aStarEnd(graph,c2,heuristic);
 		
 		GraphPath<Casilla, CasillaEdge> path = a.pathToEnd();
 		System.out.println(Laberinto.showSolucionLaberinto(path));

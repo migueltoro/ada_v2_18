@@ -17,7 +17,7 @@ import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
 
-public class AStar<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
+public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 
 	public EGraph<V,E> graph; 
 	protected V startVertex;

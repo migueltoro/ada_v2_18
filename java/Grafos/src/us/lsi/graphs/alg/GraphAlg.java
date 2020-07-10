@@ -26,7 +26,7 @@ import us.lsi.path.EGraphPath;
  * Distintos tipos de b&uacute;squedas sobre grafos
  * 
  */
-public interface GSearch<V,E>  {
+public interface GraphAlg<V,E>  {
 	
 	/**
 	 * @param <V> El tipo de los v&eacute;rtices
@@ -132,7 +132,7 @@ public interface GSearch<V,E>  {
 	EGraph<V, E> getGraph();
 	V startVertex();
 	Stream<V> stream();
-	GSearch<V,E> copy();
+	GraphAlg<V,E> copy();
 		
 	
 	/**
@@ -174,7 +174,7 @@ public interface GSearch<V,E>  {
 	 */
 	default public GraphPath<V, E> pathTo(V vertex) {
 		V end = this.find(vertex);
-		return GSearch.pathBackEdge(this.getGraph(),end,x->this.getEdgeToOrigin(x));
+		return GraphAlg.pathBackEdge(this.getGraph(),end,x->this.getEdgeToOrigin(x));
 	}
 	
 	
@@ -184,7 +184,7 @@ public interface GSearch<V,E>  {
 	 */
 	default public GraphPath<V, E> pathTo(Predicate<V> goal) {
 		V end = this.find(goal);
-		return GSearch.pathBackEdge(this.getGraph(), end, v->this.getEdgeToOrigin(v));
+		return GraphAlg.pathBackEdge(this.getGraph(), end, v->this.getEdgeToOrigin(v));
 	}
 
 	/**
@@ -192,7 +192,7 @@ public interface GSearch<V,E>  {
 	 */
 	default public GraphPath<V, E> pathToEnd() {
 		V end = this.findEnd();
-		return GSearch.pathBackEdge(this.getGraph(),end,v->this.getEdgeToOrigin(v));
+		return GraphAlg.pathBackEdge(this.getGraph(),end,v->this.getEdgeToOrigin(v));
 	}
 	
 	
@@ -221,7 +221,7 @@ public interface GSearch<V,E>  {
 		Optional<V> end = this.stream().reduce((first,second)->second);
 		Preconditions.checkArgument(end.isPresent(), 
 				String.format("No se ha encontrado el vértice %s",end));
-		return GSearch.pathBackEdge(this.getGraph(),end.get(),v->this.getEdgeToOrigin(v)).getWeight();
+		return GraphAlg.pathBackEdge(this.getGraph(),end.get(),v->this.getEdgeToOrigin(v)).getWeight();
 	}
 	
 	

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
@@ -19,7 +19,7 @@ public class TestManualPuzzle {
 				Graphs2.simpleVirtualGraph(e1,x->1.);
 		
 		AStar<VertexPuzzle,ActionSimpleEdge<VertexPuzzle,ActionPuzzle>> a = 
-				GSearch.aStarEnd(graph,e2,(x,p,y)->(double)x.getNumDiferentes(y));
+				GraphAlg.aStarEnd(graph,e2,(x,p,y)->(double)x.getNumDiferentes(y));
 		
 		List<VertexPuzzle> vertices = a.pathToEnd().getVertexList();
 		String s = vertices.stream().map(x->x.toString()).collect(Collectors.joining("\n________\n","\nSolucion\n\n","\n_________"));

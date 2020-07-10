@@ -99,6 +99,6 @@ public class DynamicProgrammingReduction<V, E, S> implements DPR<V, E, S> {
 
 	@Override
 	public EGraphPath<V, E> pathFrom(V vertex) {
-		return GSearch.pathForwardEdged(graph,vertex,v->getEdgeToGoal(v));
+		return GraphAlg.pathForwardEdged(graph,vertex,v->getEdgeToGoal(v));
 	}
 }

@@ -13,7 +13,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class DijkstraTest {
@@ -29,7 +29,7 @@ public class DijkstraTest {
 		
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 		
-		AStar<Ciudad, Carretera> ra = GSearch.dijsktra(g,Ciudad.ofName("Almeria"));
+		AStar<Ciudad, Carretera> ra = GraphAlg.dijsktra(g,Ciudad.ofName("Almeria"));
 		
 		List<Carretera> carreteras = ra.pathToEnd().getEdgeList();
 		

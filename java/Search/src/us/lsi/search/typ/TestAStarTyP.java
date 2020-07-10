@@ -7,7 +7,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -22,7 +22,7 @@ public class TestAStarTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
 		
 		
-		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GSearch.aStarGoal(
+		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GraphAlg.aStarGoal(
 				graph,
 				e->e.getIndex()==TyPVertex.n,
 				(v1,p,v2)->0.);

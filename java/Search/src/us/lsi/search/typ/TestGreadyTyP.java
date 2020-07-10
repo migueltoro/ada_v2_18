@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
@@ -22,7 +22,7 @@ public class TestGreadyTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());
 		
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = 
-				GSearch.greedy(graph,
+				GraphAlg.greedy(graph,
 						TyPVertex::greadyEdge,
 						v->v.getIndex() == TyPVertex.n);	
 		

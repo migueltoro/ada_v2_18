@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 
@@ -23,7 +23,7 @@ public class TestMonedasAStar {
 
 		EGraph<MonedasVertex, MonedasEdge> graph = Graphs2.simpleVirtualGraph(e1,e ->-e.getEdgeWeight());
 
-		AStar<MonedasVertex, MonedasEdge> a = GSearch.aStarEnd(graph, e2, heuristic);
+		AStar<MonedasVertex, MonedasEdge> a = GraphAlg.aStarEnd(graph, e2, heuristic);
 
 		List<MonedasEdge> edges = a.pathToEnd().getEdgeList();
 

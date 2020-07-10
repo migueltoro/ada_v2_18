@@ -16,7 +16,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath.PathType;
 
-public class BreadthSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
+public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	
 	private Graph<V,E> graph;
 	private V startVertex;
@@ -39,7 +39,7 @@ public class BreadthSearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V
 	
 	@Override
 	public BreadthSearch<V,E> copy() {
-		return GSearch.breadth(this.graph, this.startVertex);
+		return GraphAlg.breadth(this.graph, this.startVertex);
 	}
 	
 	public Iterator<V> iterator() {

@@ -23,7 +23,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.DephtSearch;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
 import us.lsi.math.Math2;
@@ -138,7 +138,7 @@ public class AuxiliaryTsp {
 				v->graph1.vertexSet().contains(v),
 				e->tree.getEdges().contains(e));
 //		System.out.println(graph3);
-		DephtSearch<Ciudad,Carretera> ms = GSearch.depth(graph3,Ciudad.ofName("Sevilla"));
+		DephtSearch<Ciudad,Carretera> ms = GraphAlg.depth(graph3,Ciudad.ofName("Sevilla"));
 		List<Ciudad> camino = ms.stream().collect(Collectors.toList());
 		camino.add(Ciudad.ofName("Sevilla"));
 		GraphPath<Ciudad,Carretera> path = GraphPaths.of(graph2,camino);

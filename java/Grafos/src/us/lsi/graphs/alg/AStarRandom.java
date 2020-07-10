@@ -27,7 +27,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	
 	@Override
 	public AStarRandom<V, E> copy() {
-		return GSearch.aStarRandom(this.graph, this.goal, this.end, this.heuristic,this.size);
+		return GraphAlg.aStarRandom(this.graph, this.goal, this.end, this.heuristic,this.size);
 	}
 
 	@Override

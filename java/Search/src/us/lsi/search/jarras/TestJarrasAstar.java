@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestJarrasAstar {
@@ -19,7 +19,7 @@ public class TestJarrasAstar {
 			JarrasVertex e2 = JarrasVertex.last();
 			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 			
-			GSearch<JarrasVertex,JarrasEdge> ms = GSearch.aStarEnd(
+			GraphAlg<JarrasVertex,JarrasEdge> ms = GraphAlg.aStarEnd(
 					graph,
 					e2,
 					(v1,p,v2)->0.);

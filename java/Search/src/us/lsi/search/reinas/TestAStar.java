@@ -5,7 +5,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestAStar {
@@ -15,7 +15,7 @@ public class TestAStar {
 		ReinasVertex v1 = ReinasVertex.first();
 		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraph(v1);			
 		
-		AStar<ReinasVertex, ReinasEdge> ms = GSearch.aStarGoal(
+		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStarGoal(
 				graph, 
 				v->v.index == ReinasVertex.n,  
 				(e1,e2,e3)->0.);

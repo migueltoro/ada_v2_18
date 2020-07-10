@@ -5,7 +5,7 @@ import java.util.Locale;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
@@ -25,7 +25,7 @@ public class TestPDRMochila {
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());	
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GSearch.greedy(graph,MochilaVertex::greadyEdge,e->e.equals(e2));
+		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greadyEdge,e->e.equals(e2));
 		Double bv = rr.weightToEnd();	
 		
 		DynamicProgrammingReduction<MochilaVertex, MochilaEdge, SolucionMochila> ms = 

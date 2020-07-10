@@ -11,7 +11,7 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DephtSearch;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.views.SubGraphView;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.GraphPaths;
@@ -29,7 +29,7 @@ public class TestLocalSearch {
 				e->tree.getEdges().contains(e));
 //		System.out.println(graph3);
 		
-		DephtSearch<Ciudad,Carretera> ms = GSearch.depth(graph3,Ciudad.ofName("Sevilla"));
+		DephtSearch<Ciudad,Carretera> ms = GraphAlg.depth(graph3,Ciudad.ofName("Sevilla"));
 		//lista de vertices recorridos en preorden
 		List<Ciudad> camino = ms.stream().collect(Collectors.toList());
 		camino.add(Ciudad.ofName("Sevilla"));
@@ -40,7 +40,7 @@ public class TestLocalSearch {
 		System.out.println(e1);
 		EGraph<TravelVertex,TravelEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.weight);
 		
-		GSearch<TravelVertex,TravelEdge> ml = GSearch.local(graph,e->e.getEdgeWeight()== 0.);
+		GraphAlg<TravelVertex,TravelEdge> ml = GraphAlg.local(graph,e->e.getEdgeWeight()== 0.);
 		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph2,v.camino).getEdgeList());
 		System.out.println(v.camino);});	
 	}

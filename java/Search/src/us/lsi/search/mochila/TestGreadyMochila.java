@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
@@ -33,7 +33,7 @@ public class TestGreadyMochila {
 //		System.out.println(r4);
 //		System.out.println(r4.getWeight());
 		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1);
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GSearch.greedy(graph,MochilaVertex::greadyEdgeHeuristic,e->e.equals(e2));
+		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greadyEdgeHeuristic,e->e.equals(e2));
 		System.out.println(rr.weightToEnd());
 
 	}

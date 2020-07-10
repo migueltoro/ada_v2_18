@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
@@ -27,7 +27,7 @@ public class TestAstarMochila {
 		
 		SimpleVirtualGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,e->-e.getEdgeWeight());
 		
-		AStar<MochilaVertex, MochilaEdge> a = GSearch.aStarEnd(graph,e2,heuristic);
+		AStar<MochilaVertex, MochilaEdge> a = GraphAlg.aStarEnd(graph,e2,heuristic);
 		
 		List<MochilaEdge> edges = a.pathToEnd().getEdgeList();
 		System.out.println(edges);

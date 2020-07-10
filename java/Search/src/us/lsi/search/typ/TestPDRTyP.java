@@ -5,7 +5,7 @@ import java.util.Locale;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
@@ -23,7 +23,7 @@ public class TestPDRTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());	
 		
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> rr = 
-				GSearch.greedy(graph,
+				GraphAlg.greedy(graph,
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		

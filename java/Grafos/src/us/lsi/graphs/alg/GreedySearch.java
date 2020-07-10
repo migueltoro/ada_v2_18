@@ -12,7 +12,7 @@ import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class GreedySearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
+public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 
 	private EGraph<V,E> graph;
 	private V actualVertex;
@@ -41,7 +41,7 @@ public class GreedySearch<V,E> implements GSearch<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public GreedySearch<V,E> copy() {
-		return GSearch.greedy(this.graph,this.nextEdge,this.goal);
+		return GraphAlg.greedy(this.graph,this.nextEdge,this.goal);
 	}
 	
 	public Iterator<V> iterator() {

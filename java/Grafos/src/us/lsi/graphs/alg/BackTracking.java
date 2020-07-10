@@ -161,7 +161,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		
 		@Override
 		public EGraphPath<V, E> getPath() {			
-			return GSearch.pathForwardEdged(graph,graph.startVertex(),v->getEdgeToGoal(v));
+			return GraphAlg.pathForwardEdged(graph,graph.startVertex(),v->getEdgeToGoal(v));
 		}
 					
 		@Override

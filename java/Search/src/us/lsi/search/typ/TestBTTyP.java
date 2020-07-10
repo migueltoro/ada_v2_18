@@ -6,7 +6,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
@@ -23,7 +23,7 @@ public class TestBTTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
 			
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
-				GSearch.greedy(graph,TyPVertex::greadyEdge,e->e.getIndex()==TyPVertex.n);
+				GraphAlg.greedy(graph,TyPVertex::greadyEdge,e->e.getIndex()==TyPVertex.n);
 		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.pathToEnd();
 		SolucionTyP sm = TyPVertex.getSolucion(path);
 		Double bv = path.getWeight();

@@ -13,7 +13,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 
@@ -32,7 +32,7 @@ public class AStarTest {
 		
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 				
-		AStar<Ciudad, Carretera> ra = GSearch.aStarEnd(g,Ciudad.ofName("Almeria"), null);
+		AStar<Ciudad, Carretera> ra = GraphAlg.aStarEnd(g,Ciudad.ofName("Almeria"), null);
 		List<Carretera> carreteras = ra.pathToEnd().getEdgeList();
 		
 		

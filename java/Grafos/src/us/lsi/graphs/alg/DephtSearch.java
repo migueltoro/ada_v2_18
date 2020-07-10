@@ -14,7 +14,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath.PathType;
 
-public class DephtSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V> {
+public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 
 
 	protected Map<V,E> edgeToOrigin;
@@ -38,7 +38,7 @@ public class DephtSearch<V, E> implements GSearch<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public DephtSearch<V, E> copy() {
-		return GSearch.depth(this.graph, this.startVertex);
+		return GraphAlg.depth(this.graph, this.startVertex);
 	}
 	
 	public Iterator<V> iterator() {

@@ -13,7 +13,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.DephtSearch;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class RecorridoProfundidadTest {
@@ -30,7 +30,7 @@ public class RecorridoProfundidadTest {
 		
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 		
-		DephtSearch<Ciudad, Carretera> ra = GSearch.depth(g,Ciudad.ofName("Almeria"));
+		DephtSearch<Ciudad, Carretera> ra = GraphAlg.depth(g,Ciudad.ofName("Almeria"));
 		List<Carretera> carreteras = ra.pathToEnd().getEdgeList();
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());

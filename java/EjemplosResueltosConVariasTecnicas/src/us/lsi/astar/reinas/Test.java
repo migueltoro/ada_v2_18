@@ -7,7 +7,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class Test {
@@ -20,7 +20,7 @@ public class Test {
 		SimpleVirtualGraph<VertexReinas, EdgeReinas> graph = Graphs2.simpleVirtualGraph(e1,x->1.);
 		
 		AStar<VertexReinas,EdgeReinas> a = 
-				GSearch.aStarGoal(graph,p,(x,goal,y)->(double) (VertexReinas.numeroDeReinas-x.x));
+				GraphAlg.aStarGoal(graph,p,(x,goal,y)->(double) (VertexReinas.numeroDeReinas-x.x));
 		
 		GraphPath<VertexReinas,EdgeReinas> gp = a.pathToEnd();
 		

@@ -7,7 +7,7 @@ import org.jgrapht.GraphPath;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.AStarRandom;
-import us.lsi.graphs.alg.GSearch;
+import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestAStarRandom {
@@ -20,7 +20,7 @@ public class TestAStarRandom {
 		
 		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraph(v1);			
 		
-		AStar<ReinasVertex, ReinasEdge> ms = GSearch.aStarRandomGoal(
+		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStarRandomGoal(
 				graph, 
 				goal,  
 				(e1,e2,e3)->0.,
