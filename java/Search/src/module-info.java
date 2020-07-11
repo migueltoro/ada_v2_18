@@ -5,10 +5,8 @@
  * @author migueltoro
  *
  */
-module search {
-	
-	
+module ejemplos_alg {
+		
 	requires transitive datos_compartidos;
 	requires transitive grafos;
-	requires org.jgrapht.io;
 }
