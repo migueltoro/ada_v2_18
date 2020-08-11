@@ -33,7 +33,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,Range,Real,InSet,SqnSubList,SqnPermutation,SqnPermutationSubList,Expression}
+	public enum ChromosomeType {Binary,Range,Real,InSet,SqnSubList,SqnPermutation,SqnPermutationSubList}
 	
 	public static ChromosomeType tipo;
 
@@ -50,7 +50,6 @@ public class ChromosomeFactory {
 		case SqnPermutation: chromosome = PermutationChromosome.getInitialChromosome(); break;
 		case SqnPermutationSubList: chromosome = PermutationSubListChromosome.getInitialChromosome(); break;
 		case Real: chromosome = DoubleChromosome.getInitialChromosome(); break;
-		case Expression: chromosome = ExpressionChromosome.getInitialChromosome(); break;
 		case InSet: chromosome = ValuesInSetChromosome.getInitialChromosome(); break;
 		}
 		return chromosome;
@@ -115,7 +114,6 @@ public class ChromosomeFactory {
 		case SqnPermutation: crossOverPolicy = crossOverPolicyKey; break;
 		case SqnPermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
 		case Real: crossOverPolicy = crossOverPolicyBin; break;
-		case Expression: crossOverPolicy = crossOverPolicyBin; break;
 		case InSet: crossOverPolicy = crossOverPolicyBin; break;		
 		}
 		Preconditions.checkState(crossOverPolicy!=null);
@@ -136,7 +134,6 @@ public class ChromosomeFactory {
 		case SqnPermutation: mutationPolicy = new RandomKeyMutation(); break;
 		case SqnPermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
 		case Real: mutationPolicy = new BinaryMutation();	; break;
-		case Expression: mutationPolicy = new BinaryMutation();	; break;
 		case InSet: mutationPolicy = new BinaryMutation(); break;
 		}
 		Preconditions.checkState(mutationPolicy!=null);
@@ -179,7 +176,6 @@ public class ChromosomeFactory {
 		case SqnPermutation: PermutationChromosome.iniValues(problema);break;
 		case SqnPermutationSubList: PermutationSubListChromosome.iniValues(problema);break;
 		case Real: DoubleChromosome.iniValues(problema);break;
-		case Expression: ExpressionChromosome.iniValues(problema);break;
 		case InSet: ValuesInSetChromosome.iniValues(problema); break;
 		}
 	}
@@ -204,20 +200,6 @@ public class ChromosomeFactory {
 	public static SeqNomalChromosome asIndex(Chromosome cr){
 		Preconditions.checkArgument(cr instanceof SeqNomalChromosome);
 		return (SeqNomalChromosome) cr;
-	}
-
-	
-	/**
-	 * @pre Es un IExpressionChromosome&lt;T&gt;
-	 * @param <T> El tipo del resultado de la expresión 
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo IExpressionChromosome&lt;T&gt;
-	 */
-	
-	@SuppressWarnings("unchecked")
-	public static <T>  ExpressionChromosome<T> asExpression(Chromosome cr) {
-		Preconditions.checkArgument(cr instanceof ExpressionChromosome);
-		return (ExpressionChromosome<T>) cr;
 	}
 	
 	

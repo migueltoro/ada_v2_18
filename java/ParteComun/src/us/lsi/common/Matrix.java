@@ -145,8 +145,20 @@ public class Matrix<E extends FieldElement<E>> {
 	    }
 	}
 	
-	View4<Matrix<E>,E> views() {
-		return MatrixView.of(this);
+	View4<Matrix<E>> views() {
+		return View4.of(this.view(0),this.view(1),this.view(2),this.view(3));
+	}
+	
+	public static <E extends FieldElement<E>> Matrix<E> compose(Matrix<E> a, Matrix<E> b, Matrix<E> c, Matrix<E> d) {
+		int nf = a.nf+c.nf;
+		int nc = a.nc+ b.nc;
+		Matrix<E> r = Matrix.zero(a.field,nf,nc);
+		View4<Matrix<E>> vr = r.views();
+		a.copy(vr.a);
+		b.copy(vr.b);
+		c.copy(vr.c);
+		d.copy(vr.d);
+		return r;
 	}
 
 	Matrix<E> multiply(Matrix<E> in2){
@@ -166,19 +178,19 @@ public class Matrix<E extends FieldElement<E>> {
 	}
 	
 	Matrix<E> multiply_r(Matrix<E> m2){
-		Matrix<E> r = Matrix.zero(this.field, this.nf, m2.nc);
+		Matrix<E> r;
 		Boolean ch = this.nc==m2.nf;
 		Preconditions.checkArgument(ch,String.format("No se cumplen condiciones de multiplicación = (in1.nc = %d, in2.nf = %d)",this.nc,m2.nf));
 		if(this.nc < 2 || this.nf < 2 || m2.nf < 2 || m2.nc < 2) {
 			r = this.multiply(m2);
 		} else {
-			View4<Matrix<E>, E> v1 = this.views();
-			View4<Matrix<E>, E> v2 = m2.views();
-			View4<Matrix<E>, E> vr = r.views();
-			Matrix.copy(vr.m0(),(v1.m0().multiply_r(v2.m0())).add(v1.m1().multiply_r(v2.m2())));
-			Matrix.copy(vr.m1(),(v1.m0().multiply_r(v2.m1())).add(v1.m1().multiply_r(v2.m3())));
-			Matrix.copy(vr.m2(),(v1.m2().multiply_r(v2.m0())).add(v1.m3().multiply_r(v2.m2())));	
-			Matrix.copy(vr.m3(),(v1.m2().multiply_r(v2.m1())).add(v1.m3().multiply_r(v2.m3())));
+			View4<Matrix<E>> v1 = this.views();
+			View4<Matrix<E>> v2 = m2.views();
+			Matrix<E> a = v1.a.multiply_r(v2.a).add(v1.b.multiply_r(v2.c));
+			Matrix<E> b = v1.a.multiply_r(v2.b).add(v1.b.multiply_r(v2.d));
+			Matrix<E> c = v1.c.multiply_r(v2.a).add(v1.d.multiply_r(v2.c));	
+			Matrix<E> d = v1.c.multiply_r(v2.b).add(v1.d.multiply_r(v2.d));
+			r = Matrix.compose(a, b, c, d);
 		}
 		return r;
 	}
@@ -198,52 +210,23 @@ public class Matrix<E extends FieldElement<E>> {
 	
 	Matrix<E> add_r(Matrix<E> m2){
 		Boolean ch = this.nc==m2.nc && this.nf==m2.nf;
-		Preconditions.checkArgument(ch, "No se cumplen condiciones desuma");
-		Matrix<E> r = Matrix.zero(this.field, this.nf, this.nc);
+		Preconditions.checkArgument(ch, "No se cumplen condiciones de suma");
+		Matrix<E> r; 
 		if(this.nc > 1 && this.nf > 1) {
-			View4<Matrix<E>, E> v1 = this.views();
-			View4<Matrix<E>, E> v2 = m2.views();
-			View4<Matrix<E>, E> rv = r.views();
-			Matrix.copy(rv.m0(),v1.m0().add_r(v2.m0()));
-			Matrix.copy(rv.m1(),v1.m1().add_r(v2.m1()));
-			Matrix.copy(rv.m2(),v1.m2().add_r(v2.m2()));
-			Matrix.copy(rv.m3(),v1.m3().add_r(v2.m3()));
+			View4<Matrix<E>> v1 = this.views();
+			View4<Matrix<E>> v2 = m2.views();			
+			Matrix<E> a = v1.a.add_r(v2.a);
+			Matrix<E> b = v1.b.add_r(v2.b);
+			Matrix<E> c = v1.c.add_r(v2.c);
+			Matrix<E> d = v1.d.add_r(v2.d);
+			r = Matrix.compose(a, b, c, d);
 		} else {
 			r = this.add(m2);
 		}
 		return r;
 	}
 	
-	static class MatrixView<E extends FieldElement<E>> implements View4<Matrix<E>,E>{
-		private Matrix<E> m0;
-		private Matrix<E> m1;
-		private Matrix<E> m2;
-		private Matrix<E> m3;
-		public static <T extends FieldElement<T>> MatrixView<T> of(Matrix<T> m){
-			return new MatrixView<>(m.view(0), m.view(1), m.view(2), m.view(3));
-		}
-		private MatrixView(Matrix<E> m0, Matrix<E> m1, Matrix<E> m2, Matrix<E> m3) {
-			super();
-			this.m0 = m0;
-			this.m1 = m1;
-			this.m2 = m2;
-			this.m3 = m3;
-		}
-		
-		public Matrix<E> m0() {
-			return m0;
-		}
-		public Matrix<E> m1() {
-			return m1;
-		}
-		public Matrix<E> m2() {
-			return m2;
-		}
-		public Matrix<E> m3() {
-			return m3;
-		}
-		
-	}
+	
 	
 	public static void main(String[] args) {
 			Matrix<Fraction> m1 = Matrix.one(Fraction.ZERO.getField(), 7);

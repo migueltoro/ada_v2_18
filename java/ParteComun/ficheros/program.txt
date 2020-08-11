@@ -1,0 +1,16 @@
+Declaraciones
+
+r : Int
+a : Int = 1 
+b : Int = 2
+c : Double
+min ( a : Double , b : Double ) : Double
+abs () : Double
+
+Codigo  { 
+ if ( a >= b ) { 
+	  r = a + b + c -2 
+  } else {
+	  r = a - b - sqrt(23.,c)
+  }
+}

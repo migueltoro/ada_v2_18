@@ -49,7 +49,7 @@ public interface BinaryTree<E> {
 	 * @return Construye un árbol a partir de la cadena s y aplicando posteriormente la función f a las etiquetas
 	 */
 	public static <E> BinaryTree<E> parse(String s, Function<String,E> f) {
-		BinaryTreeImpl<String> tree = BinaryTreeImpl.parse(s);
+		BinaryTree<String> tree = BinaryTreeImpl.parse(s);
 		return tree.map(f);
 	}
 	

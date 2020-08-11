@@ -33,63 +33,27 @@ public class Ranges {
 			return (b-a)/c;
 		}
 		public View1<IntRange,Integer> view1(){
-			return new IntView1(this.a,IntRange.of(a+c,b));
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			return View1.of(this.a,IntRange.of(a+c,b));
 		}
 		public View2<IntRange,Integer> view2(){
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Integer central = (b+a)/(2*c)*c;
-			return new IntView2(central,IntRange.of(a,central,c),IntRange.of(central,b,c));
+			return View2.of(central,IntRange.of(a,central,c),IntRange.of(central,b,c));
 		}
 		public View2<IntRange,Integer> view2Overlapping(){
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Integer central = (b+a)/(2*c)*c;
-			return new IntView2(central,IntRange.of(a,central+c,c),IntRange.of(central,b,c));
+			return View2.of(central,IntRange.of(a,central+c,c),IntRange.of(central,b,c));
 		}
 		@Override
 		public String toString() {
 			String sc = c==1?"":("," + c);
 			return "[" + a + "," + b + sc + ")";
 		}	
-	}
-	
-	private static class IntView1 implements View1<IntRange,Integer>{
-		private Integer element;
-		private IntRange rest;		
-		public IntView1(Integer element, IntRange rest) {
-			super();
-			this.element = element;
-			this.rest = rest;
-		}
-		@Override
-		public Integer element() {
-			return element;
-		}
-		@Override
-		public IntRange rest() {
-			return rest;
-		}		
-	}
-	
-	private static class IntView2 implements View2<IntRange,Integer>{
-		public final Integer centralElement;
-		public final IntRange left;
-		public final IntRange right;		
-		public IntView2(Integer centralElement, IntRange left, IntRange right) {
-			super();
-			this.centralElement = centralElement;
-			this.left = left;
-			this.right = right;
-		}
-		@Override
-		public Integer centralElement() {
-			return centralElement;
-		}
-		@Override
-		public IntRange left() {
-			return left;
-		}
-		@Override
-		public IntRange right() {
-			return right;
-		}				
 	}
 	
 	
@@ -119,63 +83,27 @@ public class Ranges {
 			return (b-a)/c;
 		}
 		public View1<LongRange,Long> view1(){
-			return new LongRangeView1(this.a,LongRange.of(a+c,b));
+			Long n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			return View1.of(this.a,LongRange.of(a+c,b));
 		}
 		public View2<LongRange,Long> view2(){
+			Long n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Long central = (b+a)/(2*c)*c;
-			return new LongRangeView2(central,LongRange.of(a,central,c),LongRange.of(central,b,c));
+			return View2.of(central,LongRange.of(a,central,c),LongRange.of(central,b,c));
 		}
 		public View2<LongRange,Long> view2Overlapping(){
+			Long n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Long central = (b+a)/(2*c)*c;
-			return new LongRangeView2(central,LongRange.of(a,central+c,c),LongRange.of(central,b,c));
+			return View2.of(central,LongRange.of(a,central+c,c),LongRange.of(central,b,c));
 		}
 		@Override
 		public String toString() {
 			String sc = c==1?"":("," + c);
 			return "[" + a + "," + b + sc + ")";
 		}
-	}
-	
-	private static class LongRangeView1 implements View1<LongRange,Long>{
-		private Long element;
-		private LongRange rest;		
-		public LongRangeView1(Long element, LongRange rest) {
-			super();
-			this.element = element;
-			this.rest = rest;
-		}
-		@Override
-		public Long element() {
-			return element;
-		}
-		@Override
-		public LongRange rest() {
-			return rest;
-		}		
-	}
-	
-	private static class LongRangeView2 implements View2<LongRange,Long>{
-		public final Long centralElement;
-		public final LongRange left;
-		public final LongRange right;		
-		public LongRangeView2(Long centralElement, LongRange left, LongRange right) {
-			super();
-			this.centralElement = centralElement;
-			this.left = left;
-			this.right = right;
-		}
-		@Override
-		public Long centralElement() {
-			return centralElement;
-		}
-		@Override
-		public LongRange left() {
-			return left;
-		}
-		@Override
-		public LongRange right() {
-			return right;
-		}				
 	}
 	
 	
@@ -201,19 +129,25 @@ public class Ranges {
 		public Boolean contains(Double e) {
 			return e>=a && e < b;
 		}
-		public Double size() {
-			return (b-a)/c;
+		public Integer size() {
+			return (int) ((b-a)/c);
 		}
 		public View1<DoubleRange,Double> view1(){
-			return new DoubleRangeView1(this.a,DoubleRange.of(a+c,b));
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			return View1.of(this.a,DoubleRange.of(a+c,b));
 		}
 		public View2<DoubleRange,Double> view2(){
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Double central = (b+a)/2;
-			return new DoubleRangeView2(central,DoubleRange.of(a,central,c),DoubleRange.of(central,b,c));
+			return View2.of(central,DoubleRange.of(a,central,c),DoubleRange.of(central,b,c));
 		}
 		public View2<DoubleRange,Double> view2Overlapping(){
+			Integer n = this.size();
+			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Double central = (b+a)/2;
-			return new DoubleRangeView2(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
+			return View2.of(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
 		}
 		@Override
 		public String toString() {
@@ -222,46 +156,6 @@ public class Ranges {
 		}
 	}
 	
-	private static class DoubleRangeView1 implements View1<DoubleRange,Double>{
-		private Double element;
-		private DoubleRange rest;				
-		public DoubleRangeView1(Double element, DoubleRange rest) {
-			super();
-			this.element = element;
-			this.rest = rest;
-		}
-		@Override
-		public Double element() {
-			return element;
-		}
-		@Override
-		public DoubleRange rest() {
-			return rest;
-		}		
-	}
 	
-	private static class DoubleRangeView2 implements View2<DoubleRange,Double>{
-		public final Double centralElement;
-		public final DoubleRange left;
-		public final DoubleRange right;				
-		public DoubleRangeView2(Double centralElement, DoubleRange left, DoubleRange right) {
-			super();
-			this.centralElement = centralElement;
-			this.left = left;
-			this.right = right;
-		}
-		@Override
-		public Double centralElement() {
-			return centralElement;
-		}
-		@Override
-		public DoubleRange left() {
-			return left;
-		}
-		@Override
-		public DoubleRange right() {
-			return right;
-		}		
-	}
 	
 }

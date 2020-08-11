@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Spliterator;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import us.lsi.common.Enumerate;
 import us.lsi.common.Pair;
-import us.lsi.common.Preconditions;
 import us.lsi.common.View1;
 
 public class Iterators {
@@ -80,6 +81,18 @@ public class Iterators {
 		return IteratorFilter.of(r3,x->x.length() > 0) ;
 	}
 	
+	public static <E,R> Iterator<R> flatMap(Iterator<E> iterator, Function<E,Iterator<R>> fmap){
+		return new IteratorFlatMap<E,R>(iterator,fmap);
+	}
+	
+	public static <E,R> Iterator<R> map(Iterator<E> iterator, Function<E, R> fmap) {
+		return new IteratorMap<E,R>(iterator, fmap);
+	}
+	
+	public static <E> Iterator<E> filter(Iterator<E> iterator, Predicate<E> p){
+		return new IteratorFilter<>(iterator,p);
+	}
+	
 	/**
 	 * @return Un iterador vacío
 	 */
@@ -110,29 +123,11 @@ public class Iterators {
 	 * @return Una vista del mismo de tipo 1
 	 */
 	public static <T> View1<Iterator<T>,T> view(Iterator<T> iterator) {
-		return IteratorView.of(iterator);
+		T e = iterator.next();
+		return View1.of(e,iterator);
 	}
 	
-	static class IteratorView<E> implements View1<Iterator<E>,E>{
-		private E element;
-		private Iterator<E> rest;
-		public static <E> View1<Iterator<E>,E> of(Iterator<E> iterator){
-			Preconditions.checkArgument(iterator.hasNext(), "El iterador no puede estar vacía");
-			E e = iterator.next();
-			return new IteratorView<>(e, iterator);
-		}
-		private IteratorView(E element, Iterator<E> rest) {
-			super();
-			this.element = element;
-			this.rest = rest;
-		}
-		public E element() {
-			return element;
-		}
-		public Iterator<E> rest() {
-			return rest;
-		}		
-	}
+	
 	
 	
 }

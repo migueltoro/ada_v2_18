@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Files2;
 import us.lsi.common.Strings2;
-import us.lsi.regularexpressions.Token;
-import us.lsi.regularexpressions.Tokenizer;
-import us.lsi.regularexpressions.Tokenizer.TokenType;
 import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
+import us.lsi.tiposrecursivos.parsers.BinaryTreeLexer;
+import us.lsi.tiposrecursivos.parsers.BinaryTreeParser;
+import us.lsi.tiposrecursivos.parsers.BinaryTreeVisitorC;
 
 
 public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
@@ -41,14 +45,13 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 	
-	public static BinaryTreeImpl<String> parse(String s){
-		Tokenizer tk = Tokenizer.create(s);
-		BinaryTreeImpl<String> tree = BinaryTreeImpl.parse(tk);
-		if (tk.hasMoreTokens()) {
-			Preconditions.checkState(false,
-					String.format("Cadena no consumida. \nError en cadena %s\n == posición %d Sufijo %s", s, tk.index(),tk.suffix()));
-		}
-		return tree;
+	@SuppressWarnings("unchecked")
+	public static BinaryTree<String> parse(String s){
+		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString("-43.7(2.1,abc34(-27.3(_,2),78.2(3,4)))"));
+		BinaryTreeParser parser = new BinaryTreeParser(new CommonTokenStream(lexer));
+	    ParseTree parseTree = parser.binary_tree();
+	    BinaryTree<String> tree =  (BinaryTree<String>) parseTree.accept(new BinaryTreeVisitorC());
+	    return tree;
 	}
 	
 	public static <E> BinaryTree<E> parse(String s, Function<String,E> f) {
@@ -57,45 +60,6 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return tree.map(f);
 	}
 	
-	
-	private static BinaryTreeImpl<String> parse(Tokenizer tk) {
-		BinaryTreeImpl<String> r = null;
-		Token token = label_parse(tk);
-		if (token.text.equals("_")) {
-			r = BinaryTreeImpl.empty();
-		} else {
-			r = BinaryTreeImpl.leaf(token.text);
-			if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
-				tk.matchTokens("(");
-				BinaryTreeImpl<String> left = parse(tk);
-				tk.matchTokens(",");
-				BinaryTreeImpl<String> right = parse(tk);
-				tk.matchTokens(")");
-				r = BinaryTreeImpl.binary(token.text, left, right);
-			}
-		}
-		return r;
-	}
-
-	private static Token label_parse(Tokenizer tk) {	
-		Token token = tk.nextToken();
-		switch (token.type) {			
-		case Operator:
-			if(tk.isCurrentInTokens("+","-")) {
-				String op = token.text;
-				token = tk.matchTokens(TokenType.Integer,TokenType.Double); 
-				String nb = token.text;
-				token.text = op+nb;
-			} else tk.error("+","-");
-			break;
-		case Integer:
-		case Double:	
-		case Variable:
-			break;
-		default: tk.error();
-		}
-		return token;	
-	}
 
 	protected E label;
 	protected BinaryTreeImpl<E> left;

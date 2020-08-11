@@ -12,7 +12,7 @@ public class IteratorFlatMap<E,R> implements Iterator<R>, Iterable<R> {
 		return new IteratorFlatMap<>(iterator,fmap);
 	}
 	
-	private IteratorFlatMap(Iterator<E> iterator, Function<E,Iterator<R>> fmap) {
+	IteratorFlatMap(Iterator<E> iterator, Function<E,Iterator<R>> fmap) {
 		super();
 		Iterator<Iterator<R>> tmp = IteratorMap.of(iterator, fmap);
 		this.iterator = IteratorFilter.of(tmp,it->it.hasNext());

@@ -7,12 +7,16 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.regularexpressions.Token;
-import us.lsi.regularexpressions.Tokenizer;
-import us.lsi.regularexpressions.Tokenizer.TokenType;
+import us.lsi.tiposrecursivos.parsers.TreeLexer;
+import us.lsi.tiposrecursivos.parsers.TreeParser;
+import us.lsi.tiposrecursivos.parsers.TreeVisitorC;
 
 import java.io.PrintWriter;
 
@@ -102,55 +106,15 @@ public class TreeImpl<E> implements MutableTree<E> {
 		this.type = TreeType.Nary;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Tree<String> parse(String s){
-		Tokenizer t = Tokenizer.create(s);
-		return TreeImpl.parse(t);
+		TreeLexer lexer = new TreeLexer(CharStreams.fromString("39(2.,abc(_,2,3,4),9(8.,_))"));
+		TreeParser parser = new TreeParser(new CommonTokenStream(lexer));
+	    ParseTree parseTree = parser.nary_tree();
+	    Tree<String> tree =  (Tree<String>) parseTree.accept(new TreeVisitorC());
+	    return tree;
 	}
 	
-	private static Tree<String> parse(Tokenizer tk) {
-		Tree<String> r;
-		Token token = label_parse(tk);
-		if (token.text.equals("_")) {
-			r = TreeImpl.empty();
-		} else {
-			r = TreeImpl.leaf(token.text);
-			if (tk.hasMoreTokens() && tk.isNextInTokens("(")) {
-				List<Tree<String>> elements = new ArrayList<>();
-				Tree<String> t;
-				tk.matchTokens("(");
-				t = parse(tk);
-				elements.add(t);
-				while (tk.isNextInTokens(",")) {
-					tk.matchTokens(",");
-					t = parse(tk);
-					elements.add(t); //cambio aqui
-				}
-				tk.matchTokens(")");
-				r = Tree.nary(token.text, elements);
-			}
-		}
-		return r;
-	}
-	
-	private static Token label_parse(Tokenizer tk) {	
-		Token token = tk.nextToken();
-		switch (token.type) {			
-		case Operator:
-			if(tk.isCurrentInTokens("+","-")) {
-				String op = token.text;
-				token = tk.matchTokens(TokenType.Integer,TokenType.Double); 
-				String nb = token.text;
-				token.text = op+nb;
-			} else tk.error("+","-");
-			break;
-		case Integer:
-		case Double:	
-		case Variable:
-			break;
-		default: tk.error();
-		}
-		return token;	
-	}
 	
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.Tree#getType()

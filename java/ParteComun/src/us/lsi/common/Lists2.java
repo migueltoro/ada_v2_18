@@ -396,62 +396,21 @@ public class Lists2 {
 	 * @return Una vista de tipo 1
 	 */
 	public static <E> View1<List<E>,E> view1(List<E> ls){
-		return ListView1.of(ls);
+		int n = ls.size();
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+		return View1.of(ls.get(0),ls.subList(1,ls.size()));
 	}
 	
-	static class ListView1<E> implements View1<List<E>,E>{
-		private E element;
-		private List<E> rest;
-		public static <E> View1<List<E>,E> of(List<E> ls){
-			Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
-			return new ListView1<>(ls.get(0), ls.subList(1,ls.size()));
-		}
-		private ListView1(E element, List<E> rest) {
-			super();
-			this.element = element;
-			this.rest = rest;
-		}
-		public E element() {
-			return element;
-		}
-		public List<E> rest() {
-			return rest;
-		}		
-	}
 	
 	/**
 	 * @param ls Una lista
 	 * @return Una vista de tipo 2 sin solape
 	 */
-	public static <E> View2<List<E>,E> view2(List<E> ls){
-		return ListView2.of(ls);
-	}
-	
-	
-	static class ListView2<E> implements View2<List<E>,E>{
-		private E centralElement;
-		private List<E> left;
-		private List<E> right;
-		public static <E> View2<List<E>,E> of(List<E> ls){	
-			int n = ls.size();
-			int k = n/2;
-			return new ListView2<E>(ls.get(k),ls.subList(0, k), ls.subList(k,n));
-		}	
-		private ListView2(E element, List<E> left, List<E> right) {
-			super();
-			this.centralElement = element;
-			this.left = left;
-			this.right = right;
-		}
-		public E centralElement() {
-			return centralElement;
-		}
-		public List<E> left() {
-			return left;
-		}
-		public List<E> right() {
-			return right;
-		}	
+	public static <E> View2<List<E>,E> view2(List<E> ls){		
+		int n = ls.size();
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		int k = n/2;
+		return View2.of(ls.get(k),ls.subList(0, k), ls.subList(k,n));
 	}
 	
 }
