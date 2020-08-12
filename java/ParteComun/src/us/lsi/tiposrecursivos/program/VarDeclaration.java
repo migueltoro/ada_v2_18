@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.exp;
+package us.lsi.tiposrecursivos.program;
 
 public class VarDeclaration extends Declaration {
 

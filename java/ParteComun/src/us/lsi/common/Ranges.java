@@ -34,7 +34,7 @@ public class Ranges {
 		}
 		public View1<IntRange,Integer> view1(){
 			Integer n = this.size();
-			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,IntRange.of(a+c,b));
 		}
 		public View2<IntRange,Integer> view2(){
@@ -84,7 +84,7 @@ public class Ranges {
 		}
 		public View1<LongRange,Long> view1(){
 			Long n = this.size();
-			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,LongRange.of(a+c,b));
 		}
 		public View2<LongRange,Long> view2(){
@@ -134,7 +134,7 @@ public class Ranges {
 		}
 		public View1<DoubleRange,Double> view1(){
 			Integer n = this.size();
-			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,DoubleRange.of(a+c,b));
 		}
 		public View2<DoubleRange,Double> view2(){

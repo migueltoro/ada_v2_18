@@ -5,24 +5,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.tiposrecursivos.exp.Assign;
-import us.lsi.tiposrecursivos.exp.Binary;
-import us.lsi.tiposrecursivos.exp.Block;
-import us.lsi.tiposrecursivos.exp.CallFunction;
-import us.lsi.tiposrecursivos.exp.Declaration;
-import us.lsi.tiposrecursivos.exp.Exp;
-import us.lsi.tiposrecursivos.exp.FunDeclaration;
-import us.lsi.tiposrecursivos.exp.Id;
-import us.lsi.tiposrecursivos.exp.IdType;
-import us.lsi.tiposrecursivos.exp.IfThenElse;
-import us.lsi.tiposrecursivos.exp.Int;
-import us.lsi.tiposrecursivos.exp.Program;
-import us.lsi.tiposrecursivos.exp.Real;
-import us.lsi.tiposrecursivos.exp.Sentence;
-import us.lsi.tiposrecursivos.exp.Type;
-import us.lsi.tiposrecursivos.exp.Unary;
-import us.lsi.tiposrecursivos.exp.VarDeclaration;
-import us.lsi.tiposrecursivos.exp.While;
+import us.lsi.tiposrecursivos.program.Assign;
+import us.lsi.tiposrecursivos.program.Binary;
+import us.lsi.tiposrecursivos.program.Block;
+import us.lsi.tiposrecursivos.program.CallFunction;
+import us.lsi.tiposrecursivos.program.Declaration;
+import us.lsi.tiposrecursivos.program.Exp;
+import us.lsi.tiposrecursivos.program.FunDeclaration;
+import us.lsi.tiposrecursivos.program.Id;
+import us.lsi.tiposrecursivos.program.IdType;
+import us.lsi.tiposrecursivos.program.IfThenElse;
+import us.lsi.tiposrecursivos.program.Int;
+import us.lsi.tiposrecursivos.program.Program;
+import us.lsi.tiposrecursivos.program.Real;
+import us.lsi.tiposrecursivos.program.Sentence;
+import us.lsi.tiposrecursivos.program.Type;
+import us.lsi.tiposrecursivos.program.Unary;
+import us.lsi.tiposrecursivos.program.VarDeclaration;
+import us.lsi.tiposrecursivos.program.While;
 
 public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 

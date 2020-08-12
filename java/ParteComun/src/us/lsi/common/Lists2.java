@@ -397,7 +397,7 @@ public class Lists2 {
 	 */
 	public static <E> View1<List<E>,E> view1(List<E> ls){
 		int n = ls.size();
-		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+		Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 		return View1.of(ls.get(0),ls.subList(1,ls.size()));
 	}
 	

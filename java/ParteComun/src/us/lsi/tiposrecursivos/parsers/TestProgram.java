@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import us.lsi.tiposrecursivos.exp.Program;
+import us.lsi.tiposrecursivos.program.Program;
 
 
 public class TestProgram {

@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.exp;
+package us.lsi.tiposrecursivos.program;
 
 import java.util.List;
 import java.util.stream.Collectors;

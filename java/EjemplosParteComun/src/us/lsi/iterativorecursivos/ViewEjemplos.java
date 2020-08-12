@@ -16,43 +16,56 @@ public class ViewEjemplos {
 		if(ls.isEmpty()) return 0;
 		IntRange r = IntRange.of(0, ls.size());		
 		View1<IntRange,Integer> w = r.view1();	
-		Integer i = w.element;
 		Integer sum = 0;
-		while(r.size()>0) {					
-			sum = sum +ls.get(i);
+		while(r.size()>1) {					
+			sum = sum +w.element;
 			r = w.rest;
 			w = r.view1();
-			i = w.element;
 		}
 		return sum;
 	}
 	
 	public static Long sqrtLong(Long a) {
 		LongRange r = LongRange.of(0L,a+1);
-		View2<LongRange,Long> w = r.view2Overlapping();
-		Long e = w.centralElement;
-		Long ec = e*e;
-		while(r.size()>2 && ec != a) {					
-			if(a < ec) r = w.left;
-			else r = w.right;
-			w = r.view2Overlapping();
+		Long e = 1L;
+		Long ec = 1L;
+		while(r.size()>2 && ec != a) {	
+			View2<LongRange,Long> w = r.view2Overlapping();
 			e = w.centralElement;
 			ec = e*e;
+			if(a < ec) r = w.left;
+			else r = w.right;			
 		}
-		return ec == a? e: r.a;
+		return e*e == a? e : r.a;
 	}
 	
-	public static int indexOf(List<Integer>ls, Integer elem) {
+	public static Long sqrtLong_r(Long a) {
+		LongRange r = LongRange.of(0L,a+1);
+		Long e = 1L;
+		Long ec = 1L;
+		while(r.size()>2 && ec != a) {	
+			View2<LongRange,Long> w = r.view2Overlapping();
+			e = w.centralElement;
+			ec = e*e;
+			if(a < ec) r = w.left;
+			else r = w.right;			
+		}
+		return e*e == a? e : r.a;
+	}
+	
+	
+	
+	public static <E extends Comparable<? super E>> int indexOf(List<E>ls, Integer elem) {
 		IntRange r = IntRange.of(0, ls.size());		
 		View2<IntRange,Integer> w = r.view2();			
-		Integer i= w.centralElement;
-		while(r.size()>1 && ls.get(i) != elem) {			
-			if(elem < ls.get(i)) r = w.left;
+		E e = ls.get(w.centralElement);
+		while(r.size()>2 && e != elem) {			
+			if(e.compareTo(e) <0) r = w.left;
 			else r = w.right;
 			w = r.view2();
-			i = w.centralElement;
+			e = ls.get(w.centralElement);
 		}
-		return ls.get(i) == elem? i: -1;
+		return e == elem? w.centralElement: -1;
 	}
 	
 	public static int masCercano(List<Integer>ls, Integer elem) {
@@ -61,7 +74,7 @@ public class ViewEjemplos {
 		IntRange r = IntRange.of(0, ls.size());		
 		View2<IntRange,Integer> w = r.view2Overlapping();			
 		Integer i= w.centralElement;
-		while(r.size()>2 && ls.get(i) != elem) {			
+		while(r.size()>2 && ls.get(i) != elem) {	
 			if(elem < ls.get(i)) r = w.left;
 			else r = w.right;
 			w = r.view2Overlapping();
@@ -113,9 +126,9 @@ public class ViewEjemplos {
 	
 	public static void main(String[] args) {
 		System.out.println(sum(List.of(1,3,7,9,31,54,91,102)));
-		System.out.println(sqrtLong(102L));
+		System.out.println(sqrtLong(101L));
 		System.out.println(indexOf(List.of(1,3,7,9,31,54,91,102),92));
-		System.out.println(masCercano(List.of(1,3,7,9,31,54,91,102),90));
+		System.out.println(masCercano(List.of(1,3,7,9,31,54,91,102),103));
 		System.out.println(masCercano2(List.of(1,3,7,9,31,54,91,102),90));
 		System.out.println(sumIntegerOFile("ficheros/numeros.txt"));
 	}

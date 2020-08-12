@@ -10,7 +10,7 @@ module partecomun {
 	exports us.lsi.regularexpressions;
 	exports us.lsi.basictypes;
 	exports us.lsi.tiposrecursivos;
-	exports us.lsi.tiposrecursivos.exp;
+	exports us.lsi.tiposrecursivos.program;
 	exports us.lsi.flujossecuenciales;
 	exports us.lsi.flujosparalelos;
 	exports us.lsi.math;
