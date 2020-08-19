@@ -471,12 +471,15 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override
-	public Object visitOpExpr(PLIModelParser.OpExprContext ctx) {		 
+	public Object visitOpExpr(PLIModelParser.OpExprContext ctx) {	
+		String op = ctx.op.getText();
 		Object left = this.visit(ctx.left);
 		Preconditions.checkNotNull(left,String.format("%s",ctx.left));
+		if(op.equals("&&") && !AuxGrammar.asBoolean(left)) return false;
+		if(op.equals("||") && AuxGrammar.asBoolean(left)) return true;
 		Object right = this.visit(ctx.right);
 		Preconditions.checkNotNull(right,String.format("%s",ctx.right));
-		String op = ctx.op.getText();
+		
 		Preconditions.checkArgument(
 				(AuxGrammar.isInteger(left) || AuxGrammar.isDouble(left) ||  AuxGrammar.isBoolean(left))
 						&& (AuxGrammar.isInteger(right) || AuxGrammar.isDouble(right) || AuxGrammar.isBoolean(right)),

@@ -1,46 +1,31 @@
 package us.lsi.flowgraph;
 
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.common.Maps2;
 import us.lsi.graphs.Graphs2;
-import us.lsi.lpsolve.SolutionLpSolve;
+import us.lsi.gurobi.GurobiSolution;
 
 public class FlowGraphSolution {
 	
-	public static FlowGraphSolution createOnlySaturated(FlowGraphSolution fs) {
-		FlowGraph graph = Graphs2.subGraph(fs.getGraph(), 
-				null, 
-				e->fs.getSaturatedEdges().contains(e), 
-				()->FlowGraph.create());
-		Map<FlowVertex, Double> flowVertices = fs.getFlowVertices();
-		Map<FlowEdge, Double> flowEdges = Maps2.newHashMap(fs.getFlowEdges());
-		Double goal = fs.getGoal();
-		return FlowGraphSolution.create(graph,flowVertices,flowEdges,goal);	
+	public static FlowGraphSolution of(FlowGraph graph, GurobiSolution solution) {
+		Map<FlowEdge, Double> flowEdges = solution.values.entrySet().stream()
+				.filter(e->e.getKey().startsWith("y"))
+				.map(e->new SimpleEntry<>(graph.edge(e.getKey()),e.getValue()))
+				.collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
+		Map<FlowVertex, Double> flowVertices = 	solution.values.entrySet().stream()
+				.filter(e->e.getKey().startsWith("x"))
+				.map(e->new SimpleEntry<>(graph.vertex(e.getKey()),e.getValue()))
+				.collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
+		return new FlowGraphSolution(graph, flowVertices, flowEdges, solution.objVal);
 	}
 	
-	public static FlowGraphSolution create(FlowGraph graph,SolutionLpSolve s) {
-		Map<FlowVertex, Double> flowVertices = Maps2.newHashMap();
-		Map<FlowEdge, Double> flowEdges = Maps2.newHashMap(); 
-		for(int i=0;i<s.getNumVar();i++) {
-			String name = s.getName(i);
-			if(name.charAt(0) == 'v') {
-				flowVertices.put(FlowVertex.get(name), s.getSolution(i));				
-			}
-			if(name.charAt(0) == 'e') {
-				flowEdges.put(FlowEdge.get(name), s.getSolution(i));
-			}
-		}
-		Double goal = s.getGoal();
-		return new FlowGraphSolution(graph, flowVertices, flowEdges, goal);
-	}
-	
-	public static FlowGraphSolution create(FlowGraph graph, 
+	public static FlowGraphSolution of(FlowGraph graph, 
 			Map<FlowVertex, Double> flowVertices,
 			Map<FlowEdge, Double> flowEdges, 
 			Double goal) {
@@ -57,47 +42,34 @@ public class FlowGraphSolution {
 		this.saturatedEdges = graph
 				.edgeSet()
 				.stream()
-				.filter(e->e.getMax().equals(flowEdges.get(e)))
+				.filter(e->e.max.equals(flowEdges.get(e)))
 				.collect(Collectors.toSet());
 		this.saturatedVertices = graph
 				.vertexSet()
 				.stream()
-				.filter(v->v.getMax().equals(flowVertices.get(v)))
+				.filter(v->v.max.equals(flowVertices.get(v)))
 				.collect(Collectors.toSet());
 	}
-	private FlowGraph graph;
-	private Map<FlowVertex,Double> flowVertices;
-	private Map<FlowEdge,Double> flowEdges;
-	private Double goal;
-	private Set<FlowEdge> saturatedEdges;
-	private Set<FlowVertex> saturatedVertices;
+	public final FlowGraph graph;
+	public final Map<FlowVertex,Double> flowVertices;
+	public final Map<FlowEdge,Double> flowEdges;
+	public final Double goal;
+	public final Set<FlowEdge> saturatedEdges;
+	public final Set<FlowVertex> saturatedVertices;
 	
-	public Map<FlowVertex, Double> getFlowVertices() {
-		return flowVertices;
-	}
-	public Map<FlowEdge, Double> getFlowEdges() {
-		return flowEdges;
-	}
-	public Double getGoal() {
-		return goal;
-	}
-	public FlowGraph getGraph() {
-		return graph;
+	public void toDot(String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(this.graph, file, 
+				v->v.name+"="+this.flowVertices.get(v).toString(), 
+	    		e->e.name+"="+this.flowEdges.get(e).toString(),
+		        v->GraphColors.getColorIf(Color.red,Color.values()[v.getColor()],this.saturatedVertices.contains(v)),
+		        e->GraphColors.getStyleIf(Style.bold,this.saturatedEdges.contains(e)));
 	}
 	
-	public Set<FlowEdge> getSaturatedEdges() {
-		return saturatedEdges;
-	}
-
-	public Set<FlowVertex> getSaturatedVertices() {
-		return saturatedVertices;
-	}
-
-	public static void exportToDot(FlowGraph graph, FlowGraphSolution solution, String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(graph, file, 
-				v->v.getName()+"="+solution.getFlowVertices().get(v).toString(),
-	    		e->e.getName()+"="+solution.getFlowEdges().get(e).toString(),
-		        v->GraphColors.getColorIf(Color.blue,solution.getSaturatedVertices().contains(v)),
-		        e->GraphColors.getStyleIf(Style.bold,solution.getSaturatedEdges().contains(e)));
+	public void toDotIndex(String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(this.graph, file, 
+				v->this.graph.vertexIndex(v).toString()+"="+this.flowVertices.get(v).toString(), 
+	    		e->e.name+"="+this.flowEdges.get(e).toString(),
+		        v->GraphColors.getColorIf(Color.red,Color.values()[v.getColor()],this.saturatedVertices.contains(v)),
+		        e->GraphColors.getStyleIf(Style.bold,this.saturatedEdges.contains(e)));
 	}
 }

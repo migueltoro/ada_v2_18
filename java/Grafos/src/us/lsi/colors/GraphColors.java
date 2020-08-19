@@ -33,12 +33,14 @@ public class GraphColors {
 	}
 	
 	public static Map<String,Attribute> getColor(Integer c) {
-		return getColor(Color.values()[c+1]);
+		return getColor(Color.values()[c]);
 	}
 	
-	public static Map<String,Attribute> getColorIf(Color c, Boolean test) {		
-		if(!test) c = Color.black;
-		String cl = c == Color.blank? "" : c.toString();
+	public static Map<String,Attribute> getColorIf(Color yesColor, Color noColor, Boolean test) {		
+		Color c;
+		if(test) c = yesColor;
+		else c = noColor;
+		String cl = c.toString();
 		Map<String,Attribute> m = Map.of("color", DefaultAttribute.createAttribute(cl));		
 		return m;
 	}

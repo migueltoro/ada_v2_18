@@ -120,7 +120,7 @@ public class AuxiliaryAg {
 		Double d1 = distanceToAllDifferents(vertices);
 		Double d2 =	(double) vertices.stream().filter(v->graph.containsVertex(v)).count();
 		Double d3 =	(double) IntStream.range(0,n-1).boxed()
-				.filter(i->graph.containsEdge(vertices.get(i),vertices.get((i+1)%n)))
+				.filter(i->graph.containsEdge(vertices.get(i),vertices.get((i+1))))
 				.count();
 		return d1+(n-d2)*(n-d2)+(n-1-d3)*(n-1-d3);
 	}

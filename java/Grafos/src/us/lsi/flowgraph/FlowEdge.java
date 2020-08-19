@@ -16,12 +16,12 @@ public class FlowEdge {
 	
 	public static List<FlowEdge> edges = Lists2.empty();
 	
-	private final FlowVertex source;
-	private final FlowVertex target;
-	private final Double min;
-	private final Double max;
-	private final Double cost;
-	private final String name;
+	public final FlowVertex source;
+	public final FlowVertex target;
+	public final Double min;
+	public final Double max;
+	public final Double cost;
+	public final String name;
 	private final Integer id;
 	
 	private static Integer nId = 0;
@@ -79,71 +79,9 @@ public class FlowEdge {
 		nId++;	
 	}
 	
-	public Double getMin() {
-		return min;
-	}
-
-	public Double getMax() {
-		return max;
-	}
-
-	public Double getCost() {
-		return cost;
-	}
-	
-	public FlowVertex getFrom() {
-		return  this.source;
-	}
-
-	public FlowVertex getTo() {
-		return  this.target;
-	}
-	
-	
-	public String getName() {
-		return name;
-	}
-
-	public FlowVertex getSource() {
-		return source;
-	}
-
-	public FlowVertex getTarget() {
-		return target;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getVariable() {
-		return "e"+id;
-	}
-	private String number(Double d) {
+	public String number(Double d) {
 		return String.format("%+.1f", d);
 	}
-	public String toObjective() {
-		String r = "";
-		if(this.cost != 0.)
-		 r = number(this.cost)+"*"+this.getVariable();
-		return r;
-	}
-	
-	public String toConstraints() {
-		String r = "";
-		if (this.min.equals(this.max)) {
-			r = r + this.getVariable() + " = " + number(this.min) + ";\n";
-		} else {
-			if (this.min > 0.) {
-				r = r + this.getVariable() + " >= " + number(this.min) + ";\n";
-			}
-			if (this.max < Double.MAX_VALUE) {
-				r = r + this.getVariable() + " <= " + number(this.max) + ";\n";
-			}
-		}
-		return r;
-	}
-	
 	
 	@Override
 	public String toString() {
@@ -152,7 +90,7 @@ public class FlowEdge {
 	}
 	
 	public String toStringLong() {
-		return String.format("(%s,%d,%.2f,%.2f,%2.f)",this.getVariable(),this.getId(),this.getMin(),this.getMax(),this.getCost());
+		return String.format("(%d,%.2f,%.2f,%2.f)",this.id,this.min,this.max,this.cost);
 	}
 
 	@Override

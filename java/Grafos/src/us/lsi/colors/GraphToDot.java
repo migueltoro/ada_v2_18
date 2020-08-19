@@ -25,7 +25,7 @@ public class GraphToDot {
 						Carretera::getKm);
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",v->v.getNombre(),e->e.getKm().toString(),
-				v->GraphColors.getColorIf(Color.blue,v.getHabitantes() < 500000),
+				v->GraphColors.getColorIf(Color.green,Color.blue,v.getHabitantes() < 500000),
 				e->GraphColors.getStyleIf(Style.bold, e.getKm() < 100));
 
 	}

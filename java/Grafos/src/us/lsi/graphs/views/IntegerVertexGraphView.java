@@ -19,8 +19,9 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		return new IntegerVertexGraphView<V, E>(graph);
 	}
 
-	private Map<V,Integer> index;
-	private List<V> vertices;
+	public final Map<V,Integer> index;
+	public final List<V> vertices;
+	public final Integer n;
 	private Graph<V,E> graph;
 	
 	private IntegerVertexGraphView(Graph<V, E> graph) {
@@ -29,6 +30,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		this.vertices = graph.vertexSet().stream().collect(Collectors.toList());
 		this.index = IntStream.range(0,this.vertices.size()).boxed()
 				.collect(Collectors.toMap(x->this.vertices.get(x),x->x));
+		this.n = vertices.size();
 	}
 
 	@Override

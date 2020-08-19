@@ -21,26 +21,17 @@ public class FlowVertex {
 	
 	public static Double maxDouble = Double.MAX_VALUE;
 	
-	private final String externalId;	
-	private final TipoDeVertice tipo;
-	private final Double min;
-	private final Double max;
-	private final Double cost;
-	private final String name;
-	private final Integer id;
-	private static int nId = 0;
+	private final String id;	
+	public final TipoDeVertice tipo;
+	public final Double min;
+	public final Double max;
+	public final Double cost;
+	public final String name;
 
 	public static FlowVertex create(String[] formato) {
 		FlowVertex v = new FlowVertex(formato);
 		FlowVertex.vertices.add(v);
 		return v;
-	}
-	
-	public static FlowVertex get(String variable) {
-		Preconditions.checkArgument(variable.charAt(0) == 'v');
-		String r = variable.substring(1);
-		int index = Integer.parseInt(r);
-		return FlowVertex.vertices.get(index);
 	}
 	
 	
@@ -54,7 +45,7 @@ public class FlowVertex {
 		return r;
 	}
 	
-	private String convert(Double s) {
+	public String convert(Double s) {
 		String r;
 		if(s > 1000000000.0) {
 			r = "inf";
@@ -80,7 +71,7 @@ public class FlowVertex {
 	}
 	
 	private FlowVertex(String[] formato) {		
-		this.externalId = formato[0];
+		this.id = formato[0];
 		if (formato.length==1) {
 			this.tipo = TipoDeVertice.Intermediate;
 			this.min = 0.;
@@ -108,40 +99,6 @@ public class FlowVertex {
 		} else {
 			throw new IllegalArgumentException("Formato incorrecto");
 		}
-		this.id = nId;
-		nId++;
-	}
-
-	public String getName() {
-		return this.name.equals("")?this.externalId:this.name;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public TipoDeVertice getTipo() {
-		return tipo;
-	}
-
-	public Double getMin() {
-		return min;
-	}
-
-	public Double getMax() {
-		return max;
-	}
-
-	public Double getCost() {
-		return cost;
-	}
-
-	public String getExternalId() {
-		return externalId;
-	}
-	
-	public String getVariable() {
-		return "v"+id;
 	}
 	
 	public Integer getColor() {
@@ -153,43 +110,17 @@ public class FlowVertex {
 		}
 		return r;
 	}
-	
-	public String toObjective() {
-		String r = "";
-		if(this.cost != 0.)
-		 r = number(this.cost)+"*"+this.getVariable();
-		return r;
-	}
-	
-	private String number(Double d) {
-		return String.format("%+.1f", d);
-	}
-	
-	public String toConstraints() {
-		String r = "";
-		if (this.min.equals(this.max)) {
-			r = r + this.getVariable() + " = " + number(this.min) + ";\n";
-		} else {
-			if (this.min > 0.) {
-				r = r + this.getVariable() + " >= " + number(this.min) + ";\n";
-			}
-			if (this.max < Double.MAX_VALUE) {
-				r = r + this.getVariable() + " <= " + number(this.max) + ";\n";
-			}
-		}
-		return r;
-	}
 
 	public boolean isSource() {
-		return this.tipo==TipoDeVertice.Source?true:false;
+		return this.tipo==TipoDeVertice.Source;
 	}
 
 	public boolean isSink() {
-		return this.tipo==TipoDeVertice.Sink?true:false;
+		return this.tipo==TipoDeVertice.Sink;
 	}
 
 	public boolean isIntermediate() {
-		return this.tipo==TipoDeVertice.Intermediate?true:false;
+		return this.tipo==TipoDeVertice.Intermediate;
 	}
 	
 	@Override
@@ -200,13 +131,14 @@ public class FlowVertex {
 		return result;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof FlowVertex))
+		if (getClass() != obj.getClass())
 			return false;
 		FlowVertex other = (FlowVertex) obj;
 		if (id == null) {
@@ -217,14 +149,10 @@ public class FlowVertex {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
-		return name.equals("")?externalId:name;
+		return name.equals("")?id:name;
 	}
 	
-	public String toStringLong() {
-		return String.format("(%s,%d,%s,%s,%s)",
-				this.getVariable(),this.getId(),convert(this.getMin()),convert(this.getMax()),convert(this.getCost()));
-	}
-
 }

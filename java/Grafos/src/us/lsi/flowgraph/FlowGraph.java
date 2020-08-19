@@ -1,15 +1,13 @@
 package us.lsi.flowgraph;
 
-import java.util.Locale;
-
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Strings2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
+import us.lsi.graphs.views.IntegerVertexGraphView;
 
 
 /**
@@ -47,17 +45,15 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		super(arg0);
 	}
 	
-	private FGType tipo = FGType.Max;
-	private String constraints = null;
+	private IntegerVertexGraphView<FlowVertex, FlowEdge> integerGraph = null;
 
-	public static FlowGraph newGraph(String file, FGType tipo) {
+	public static FlowGraph newGraph(String file) {
 		FlowGraph r = GraphsReader.<FlowVertex,FlowEdge,FlowGraph>
 		    newGraph(file, 
 				FlowVertex::create, 
 				FlowEdge::create, 
 				FlowGraph::create);
 		Preconditions.checkArgument(check(r),checkMessage(r));
-		r.tipo = tipo;
 		return r;		
 	}
 	
@@ -97,93 +93,144 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		}
 		return r;
 	}
-
-	public FGType getTipo() {
-		return tipo;
-	}
-
-	private String kirchoff(FlowVertex v) {
-		String r = "";
-		if(v.isSource()) {
-			r = v.getVariable()+" = "+
-				 Strings2.format(this.outgoingEdgesOf(v), x->x.getVariable(), "+")+";\n";
-		} else if(v.isSink()){
-			r = Strings2.format(this.incomingEdgesOf(v), x->x.getVariable(), "+")+" = "+v.getVariable()+";\n";			 
-		} else {
-			String in = Strings2.format(this.incomingEdgesOf(v), x->x.getVariable(), "+");
-			r = v.getVariable() + " = " + in + ";\n";
-			r = r + in +" = "+ Strings2.format(this.outgoingEdgesOf(v), x->x.getVariable(), "+")+";\n";
-		}
-		return r;
-	}
 	
-	public String getConstraints() {
-		Locale.setDefault(new Locale("en", "US"));
-		if (this.constraints == null) {
-			String goal = tipo.equals(FGType.Min) ? "min: " : "max: ";
-			goal = goal + Strings2.format(this.vertexSet(), v -> v.toObjective(), "");
-			goal = goal + Strings2.format(this.edgeSet(), e -> e.toObjective(), "");
-			goal = goal + ";\n";
-			goal = goal + Strings2.format(this.vertexSet(), v -> v.toConstraints(), "");
-			goal = goal + Strings2.format(this.edgeSet(), e -> e.toConstraints(), "");
-			goal = goal + Strings2.format(this.vertexSet(), v -> this.kirchoff(v), "");
-			if (FlowGraph.allInteger) {
-				goal = goal + "int " + Strings2.format(this.vertexSet(), v -> v.getVariable(), ",");
-				goal = goal + ",";
-				goal = goal + Strings2.format(this.edgeSet(), e -> e.getVariable(), ",");
-				goal = goal + ";\n";
-			}
-			this.constraints = goal;
-		}
-		return this.constraints;
-	}
 	
-	private String edgeMinCut(FlowEdge edge) {
-		return String.format("%s-%s+%s >= 0; \n",edge.getSource().getVariable(),edge.getTarget().getVariable(),edge.getVariable());
-	}
-	
-	private String vertexMinCut(FlowVertex vertex) {
-		String r = "";
-		if(vertex.isSource()) {
-			r = String.format("R%s: %s = 0;\n",vertex.getVariable(),vertex.getVariable());
-		} else if(vertex.isSink()) {
-			r = String.format("R%s: %s = 1; \n",vertex.getVariable(),vertex.getVariable());
-		}
-		return r;
-	}
-	
-	public String getMinCutConstraints() {
-		String r = "";
-		r = r+ "min: "+Strings2.format(this.edgeSet(),e->e.getMax()+" "+e.getVariable(), "+")+";\n";
-		r = r+ Strings2.format(this.vertexSet(),v->vertexMinCut(v), "");
-		r = r+ Strings2.format(this.edgeSet(),e->edgeMinCut(e), "");
-		r = r+ "bin "+Strings2.format(this.vertexSet(),v->v.getVariable(), ",")+",";
-		r = r+Strings2.format(this.edgeSet(),e->e.getVariable(), ",")+";\n";
-		return r;
-	}
-	
-	public static void exportToDot(FlowGraph graph, String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(graph, file, 
-				v->v.getName(),
-				e->e.getName(),
+	public void toDot(String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(this, file, 
+				v->v.name,
+				e->e.name,
 				v->GraphColors.getColor(v.getColor()), 
 				e->GraphColors.getStyle(Style.solid));
 	}
 	
-	public String vertexFormat(FlowVertex v) {
-		return String.format("%s,%.1f,%s,%.1f",
-				v.getVariable(),
-				v.getMin(),
-				v.getMax()<Double.MAX_VALUE?String.format("%.1f",v.getMax()):"_",
-				v.getCost());
+	public void toDotIndex(String file) {
+		Graphs2.<FlowVertex, FlowEdge>toDot(this, file, 
+				v->this.vertexIndex(v).toString(),
+				e->e.name,
+				v->GraphColors.getColor(v.getColor()), 
+				e->GraphColors.getStyle(Style.solid));
 	}
 	
-	public String edgeFormat(FlowEdge e) {
-		return String.format("%s,%.1f,%s,%.1f",
-				e.getVariable(),
-				e.getMin(),
-				e.getMax()<Double.MAX_VALUE?String.format("%.1f",e.getMax()):"_",
-				e.getCost());
+	public IntegerVertexGraphView<FlowVertex, FlowEdge> integerGraph() {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		return this.integerGraph;
+	}
+	
+	public FlowEdge edge(Integer i, Integer j) {
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		FlowVertex v2 = this.integerGraph.getVertex(j);
+		return this.getEdge(v1,v2);
+	}
+	
+	public FlowVertex vertex(Integer i) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		return this.integerGraph.getVertex(i);
+	}
+	
+	public Integer vertexIndex(FlowVertex v) {
+		Preconditions.checkNotNull(v);
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		return this.integerGraph.index.get(v);
+	}
+	
+	public Double maxEdge(Integer i, Integer j) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Preconditions.checkArgument(this.integerGraph.containsEdge(i, j), String.format("La arista (%d,%d) no existe", i,j));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		FlowVertex v2 = this.integerGraph.getVertex(j);
+		return  this.getEdge(v1, v2).max;
+	}
+	
+	public Double minEdge(Integer i, Integer j) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Preconditions.checkArgument(this.integerGraph.containsEdge(i, j), String.format("La arista (%d,%d) no existe", i,j));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		FlowVertex v2 = this.integerGraph.getVertex(j);
+		return  this.getEdge(v1, v2).min;
+	}
+	
+	public Double costEdge(Integer i, Integer j) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Preconditions.checkArgument(this.integerGraph.containsEdge(i, j), String.format("La arista (%d,%d) no existe", i,j));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		FlowVertex v2 = this.integerGraph.getVertex(j);
+		return  this.getEdge(v1, v2).cost;
+	}
+	
+	public boolean containsEdge(Integer i, Integer j) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		return this.integerGraph.containsEdge(i, j);
+	}
+	
+	public Double maxVertex(Integer i) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Integer n = this.integerGraph.n;
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		return  v1.max;
+	}
+	
+	public Double minVertex(Integer i) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Integer n = this.integerGraph.n;
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		return  v1.min;
+	}
+	
+	public Double costVertex(Integer i) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Integer n = this.integerGraph.n;
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		FlowVertex v1 = this.integerGraph.getVertex(i);
+		return  v1.cost;
+	}
+	
+	public boolean containsVertex(Integer i) {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		Integer n = this.integerGraph.n;
+		return 0<=i && i<n;
+	}
+	
+	public Integer getN() {
+		if(this.integerGraph == null) {
+			this.integerGraph = IntegerVertexGraphView.of(this);;
+		}
+		return this.integerGraph.n;
+	}
+	
+	public FlowEdge edge(String text) {
+		String[] partes = text.split("_");
+		FlowEdge e = this.edge(Integer.parseInt(partes[1]), Integer.parseInt(partes[2]));
+		return e;
+	}
+	
+	public FlowVertex vertex(String text) {
+		String[] partes = text.split("_");
+		FlowVertex v = this.vertex(Integer.parseInt(partes[1]));
+		return v;
 	}
 
 }

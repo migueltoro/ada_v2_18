@@ -356,8 +356,13 @@ public class AuxGrammar {
 			Preconditions.checkNotNull(false,
 					String.format("InvocationTargetException en el método %s con %s",
 							name,AuxGrammar.toString(parameters)));
-		} 
-		Preconditions.checkNotNull(r,String.format("El resultado de invocar el método %s es null",name));
+		}  catch (NullPointerException e) {
+			Preconditions.checkNotNull(false,
+					String.format("NullPointerException en el método %s con %s",
+							name,AuxGrammar.toString(parameters)));
+		}
+		Preconditions.checkNotNull(r,String.format("El resultado de invocar el método %s con %s es null",
+				name,AuxGrammar.toString(parameters)));
 	    return r;
 	}
 	

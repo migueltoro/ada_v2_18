@@ -59,7 +59,7 @@ public class RecubrimientoMinimo {
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaVertexCover.gv",
 				x->String.format("%s",x.getNombre()),
 				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColorIf(Color.blue,r2.contains(v)),
+				v->GraphColors.getColorIf(Color.green,Color.blue,r2.contains(v)),
 				e->GraphColors.getStyle(Style.solid));
 		
 	}

@@ -12,9 +12,9 @@ module solve {
 	exports us.lsi.gurobi;
 	exports us.lsi.model;
 
-	requires datos_compartidos;
-	requires gurobi;
-	requires lpsolve;
-	requires org.antlr.antlr4.runtime;
-	requires partecomun;
+	requires transitive datos_compartidos;
+	requires transitive gurobi;
+	requires transitive lpsolve;
+	requires transitive org.antlr.antlr4.runtime;
+	requires transitive partecomun;
 }
