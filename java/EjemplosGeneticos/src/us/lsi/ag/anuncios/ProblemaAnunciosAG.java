@@ -4,8 +4,9 @@ package us.lsi.ag.anuncios;
 import java.util.List;
 
 import us.lsi.ag.AuxiliaryAg;
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.anuncios.datos.Anuncio;
 import us.lsi.anuncios.datos.ListaDeAnunciosAEmitir;
 import us.lsi.anuncios.datos.DatosAnuncios;
@@ -41,8 +42,13 @@ public class ProblemaAnunciosAG extends DatosAnuncios implements SeqNormalProble
 	}
 
 	@Override
-	public Integer getObjectsNumber() {
+	public Integer getIndexNumber() {
 		return this.getObjetos().size();
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.PermutationSubList;
 	}
 	
 	

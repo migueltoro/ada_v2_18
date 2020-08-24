@@ -16,7 +16,6 @@ import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.ProblemAG;
 import us.lsi.ag.SeqNormalProblemAG;
 
@@ -128,7 +127,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	}
 
 	public Integer getObjectsNumber() {
-		return PermutationSubListChromosome.problema.getObjectsNumber();
+		return PermutationSubListChromosome.problema.getIndexNumber();
 	}
 
 	public Integer getMax(int i) {

@@ -2,8 +2,9 @@ package us.lsi.ag.real;
 
 import java.util.List;
 
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 
 public class ProblemaReal implements ValuesInRangeProblemAG<Double,List<Double>> {
 
@@ -17,7 +18,7 @@ public class ProblemaReal implements ValuesInRangeProblemAG<Double,List<Double>>
 	}
 
 	@Override
-	public Integer getVariableNumber(){
+	public Integer getCellsNumber(){
 		return 2;
 	}
 	
@@ -46,6 +47,11 @@ public class ProblemaReal implements ValuesInRangeProblemAG<Double,List<Double>>
 		// (-a + b) >=0;
 		Double r = -a + b - 1;
 		return r * r;
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.Real;
 	}
 
 		

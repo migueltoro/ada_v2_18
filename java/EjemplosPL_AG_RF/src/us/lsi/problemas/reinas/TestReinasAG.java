@@ -3,11 +3,10 @@ package us.lsi.problemas.reinas;
 import java.util.List;
 import java.util.Set;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
-import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
@@ -36,7 +35,7 @@ public class TestReinasAG {
 		
 		ProblemaReinasAG.numeroDeReinas = 40;
 		SeqNormalProblemAG<List<Reina>> p = ProblemaReinasAG.create();
-		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(ChromosomeType.SqnPermutation,p);
+		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(p);
 		ap.ejecuta();
 		System.out.println("================================");
 		

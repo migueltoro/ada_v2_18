@@ -1,4 +1,4 @@
-package us.lsi.ag;
+package us.lsi.ag.agchromosomes;
 
 /**
  * @author Miguel Toro

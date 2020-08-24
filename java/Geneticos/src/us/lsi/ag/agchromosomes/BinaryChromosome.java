@@ -6,7 +6,6 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 
 /**
@@ -30,7 +29,7 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	@SuppressWarnings("unchecked")
 	public static void iniValues(ProblemAG problema){
 		BinaryChromosome.problem = (ValuesInRangeProblemAG<Integer,?>) problema; 
-		BinaryChromosome.DIMENSION = BinaryChromosome.problem.getVariableNumber();
+		BinaryChromosome.DIMENSION = BinaryChromosome.problem.getCellsNumber();
 	}
 
 	public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {
@@ -87,7 +86,7 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	}
 
 	public static int getDimension() {
-		return BinaryChromosome.problem.getVariableNumber();
+		return BinaryChromosome.problem.getCellsNumber();
 	}
 	
 	public static BinaryChromosome getInitialChromosome() {

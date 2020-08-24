@@ -6,7 +6,6 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.ProblemAG;
 import us.lsi.ag.SeqNormalProblemAG;
 
@@ -104,7 +103,7 @@ public class SubListChromosome extends BinaryChromosome implements SeqNomalChrom
 	}
 
 	public Integer getObjectsNumber() {
-		return SubListChromosome.problema.getObjectsNumber();
+		return SubListChromosome.problema.getIndexNumber();
 	}
 
 	public Integer getMax(int i) {

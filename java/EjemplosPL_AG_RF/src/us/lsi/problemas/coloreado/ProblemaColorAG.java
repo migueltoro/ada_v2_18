@@ -11,8 +11,9 @@ import java.util.stream.IntStream;
 
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphsReader;
@@ -38,7 +39,7 @@ public class ProblemaColorAG implements ValuesInRangeProblemAG<Integer,Map<Ciuda
 	}
 
 	@Override
-	public Integer getVariableNumber() {
+	public Integer getCellsNumber() {
 		return ciudades.size();
 	}
 	
@@ -85,6 +86,10 @@ public class ProblemaColorAG implements ValuesInRangeProblemAG<Integer,Map<Ciuda
 				   .collect(Collectors.groupingBy(e -> e.getValue(),Collectors.mapping(e->e.getKey(),Collectors.toSet())))
 				   .values().stream()
 				   .collect(Collectors.toSet());
+	}
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.Range;
 	}
 
 }

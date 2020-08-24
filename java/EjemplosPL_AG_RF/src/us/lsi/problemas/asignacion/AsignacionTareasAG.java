@@ -2,8 +2,9 @@ package us.lsi.problemas.asignacion;
 
 import java.util.List;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 
 
 
@@ -35,8 +36,13 @@ public class AsignacionTareasAG implements SeqNormalProblemAG<List<Integer>> {
 	}
 
 	@Override
-	public Integer getObjectsNumber() {
+	public Integer getIndexNumber() {
 		return a.getN();
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.Permutation;
 	}
 
 }

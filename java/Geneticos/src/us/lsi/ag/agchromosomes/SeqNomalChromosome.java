@@ -1,6 +1,8 @@
-package us.lsi.ag;
+package us.lsi.ag.agchromosomes;
 
 import java.util.List;
+
+import us.lsi.ag.SeqNormalProblemAG;
 
 /**
  * @author Miguel Toro

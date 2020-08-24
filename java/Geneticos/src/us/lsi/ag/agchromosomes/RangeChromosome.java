@@ -8,7 +8,6 @@ import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.math.Math2;
 
@@ -47,7 +46,7 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 	@SuppressWarnings("unchecked")
 	public static void iniValues(ProblemAG problema){
 		RangeChromosome.problem = (ValuesInRangeProblemAG<Integer,?>) problema; 
-		RangeChromosome.DIMENSION = RangeChromosome.bitsNumber*RangeChromosome.problem.getVariableNumber();
+		RangeChromosome.DIMENSION = RangeChromosome.bitsNumber*RangeChromosome.problem.getCellsNumber();
 	}
 	
 	private static Integer pow = Math2.pow(2., bitsNumber).intValue();
@@ -103,7 +102,7 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 
 	@Override
 	public Integer getObjectsNumber() {
-		return RangeChromosome.problem.getVariableNumber();
+		return RangeChromosome.problem.getCellsNumber();
 	}
 
 	@Override

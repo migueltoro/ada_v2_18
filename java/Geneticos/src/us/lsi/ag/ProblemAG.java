@@ -1,5 +1,7 @@
 package us.lsi.ag;
 
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+
 /**
  * @author Miguel Toro
  * 
@@ -7,5 +9,8 @@ package us.lsi.ag;
  *
  */
 public interface ProblemAG {
+	
+	ChromosomeType getType();
+	
 
 }

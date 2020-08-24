@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.flowgraph.examples;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -15,29 +15,6 @@ import us.lsi.solve.AuxGrammar;
 
 public class Caminos {
 
-	public static Graph<Integer,SimpleEdge<Integer>> graph = null;
-	public static Integer n = null;
-	
-	public static Integer getN() {
-		return n;
-	}
-	
-	public static Double coste(Integer i, Integer j) {
-		return (double) Math.abs(2*i+j);
-	}
-	
-	public static Double capacidadMax(Integer i, Integer j) {
-		return (double) Math.abs(i+j);
-	}
-	
-	public static Double longitud(Integer i, Integer j) {
-		SimpleEdge<Integer> e =  graph.getEdge(i,j); 
-		return graph.getEdgeWeight(e);
-	}
-	
-	public static Boolean containsEdge(Integer i, Integer j) {
-		return graph.containsEdge(i,j); 
-	}
 	
 	public static TriFunction<Integer,Integer,String[],SimpleEdge<Integer>> edge = 
 			(v1,v2,f) -> SimpleEdge.of(v1,v2,(double)Integer.parseInt(f[2]));
@@ -53,18 +30,21 @@ public class Caminos {
 	}
 	
 	public static void caminos_model(String model) throws IOException {
-		Caminos.graph = leeGrafo("data/ruta_tren.txt");
-		Caminos.n = Caminos.graph.vertexSet().size();
+		Graph<Integer,SimpleEdge<Integer>>  graph = leeGrafo("data/ruta_tren.txt");
 		Locale.setDefault(new Locale("en", "US"));
-		System.out.println(graph);		
-		AuxGrammar.generate(Caminos.class,model,"ficheros/disjuntas.lp");
+		System.out.println(graph);	
+		GraphData.graph = graph;
+		GraphData.n = graph.vertexSet().size();
+		AuxGrammar.generate(GraphData.class,model,"ficheros/disjuntas.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/disjuntas.lp");
 		System.out.println(solution.toString((s,d)->s.contains("y") || d>0.));
 	}
 	
 	public static void main(String[] args) throws IOException {
-		caminos_model("models/min_cost.lsi");
+//		caminos_model("models/caminos_aristas_y_vertices_disjuntos.lsi");
+//		caminos_model("models/caminos_aristas_disjuntas.lsi");
+		caminos_model("models/ruta_tren.lsi");
 	}
 
 }

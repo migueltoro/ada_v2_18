@@ -1,11 +1,10 @@
 package us.lsi.ag.mochila;
 
 
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.RangeChromosome;
-import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
@@ -29,7 +28,7 @@ public class TestMochilaAGRange {
 		DatosMochila.capacidadInicial = 78;
 		ValuesInRangeProblemAG<Integer,SolucionMochila> p = new ProblemaMochilaAGRange("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<ValuesInRangeChromosome<Integer>> ap = AlgoritmoAG.create(ChromosomeType.Range,p);
+		AlgoritmoAG<ValuesInRangeChromosome<Integer>> ap = AlgoritmoAG.create(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());

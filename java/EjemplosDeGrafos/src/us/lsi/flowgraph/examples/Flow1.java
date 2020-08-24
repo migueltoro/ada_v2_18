@@ -63,13 +63,14 @@ public class Flow1 {
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(solution.toString((s,d)->d>0.));
 	}
-
+	
+	
 	/**
 	 * @param args Argumentos
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {	
-		minCut();
+		minCost();
 	}
 	
 	

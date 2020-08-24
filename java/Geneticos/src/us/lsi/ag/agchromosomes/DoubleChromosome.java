@@ -9,7 +9,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 
 import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.common.Preconditions;
 import us.lsi.math.Math2;
@@ -48,7 +47,7 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	@SuppressWarnings("unchecked")
 	public static void iniValues(ProblemAG problema){
 		DoubleChromosome.problema = (ValuesInRangeProblemAG<Double,?>) problema;
-		DoubleChromosome.DIMENSION = DoubleChromosome.problema.getVariableNumber()*DoubleChromosome.numeroDeBits;
+		DoubleChromosome.DIMENSION = DoubleChromosome.problema.getCellsNumber()*DoubleChromosome.numeroDeBits;
 	}
 	
 	public DoubleChromosome(Integer[] representation) throws InvalidRepresentationException {
@@ -111,7 +110,7 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	}
 
 	public Integer getNum() {
-		return DoubleChromosome.problema.getVariableNumber();
+		return DoubleChromosome.problema.getCellsNumber();
 	}
 	
 	public Double getMax(int i) {

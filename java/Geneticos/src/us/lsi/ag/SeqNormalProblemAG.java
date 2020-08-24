@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 /**
@@ -26,9 +27,9 @@ public interface SeqNormalProblemAG<S> extends ProblemAG {
 	
 	
 	/**
-	 * @return Numero de objetos distintos
+	 * @return Numero de casillas del cromosoma
 	 */
-	Integer getObjectsNumber();
+	Integer getIndexNumber();
 	
 	/**
 	 * @pre <code> 0 &le; index &lt; getObjetos().size() </code>
@@ -38,7 +39,7 @@ public interface SeqNormalProblemAG<S> extends ProblemAG {
 	 */
 	
 	default Integer getMaxMultiplicity(int index){
-		Preconditions.checkElementIndex(index, this.getObjectsNumber());
+		Preconditions.checkElementIndex(index, this.getIndexNumber());
 		return 1;
 	}
 	
@@ -64,7 +65,7 @@ public interface SeqNormalProblemAG<S> extends ProblemAG {
      * con <code> i </code> en el rango <code> 0..n-1 </code>.
      */
     default List<Integer> getNormalSequence() {
-		List<Integer> r = IntStream.range(0,getObjectsNumber())
+		List<Integer> r = IntStream.range(0,getIndexNumber())
 				.boxed()
 				.flatMap(x->Lists2.copy(x,getMaxMultiplicity(x)).stream())
 				.collect(Collectors.toList());

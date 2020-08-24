@@ -2,11 +2,10 @@ package us.lsi.problemas.asignacion;
 
 import java.util.List;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
-import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
@@ -33,7 +32,7 @@ public class AsignacionTareasAGTest {
 		
 
 		SeqNormalProblemAG<List<Integer>> p = AsignacionTareasAG.create("ficheros/asignacionDeTareas.txt");
-		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(ChromosomeType.SqnPermutation,p);
+		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.<SeqNomalChromosome>create(p);
 		ap.ejecuta();
 		System.out.println("================================");
 		

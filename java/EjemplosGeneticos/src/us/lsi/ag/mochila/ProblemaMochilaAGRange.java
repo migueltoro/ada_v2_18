@@ -3,8 +3,9 @@ package us.lsi.ag.mochila;
 import java.util.List;
 
 import us.lsi.ag.AuxiliaryAg;
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
 import us.lsi.mochila.datos.SolucionMochila;
@@ -21,7 +22,7 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 	public SolucionMochila getSolucion(ValuesInRangeChromosome<Integer> chromosome) {
 		SolucionMochila s = SolucionMochila.empty();
 		List<Integer> ls = chromosome.decode();
-		for (int i=0; i< this.getVariableNumber();i++) {
+		for (int i=0; i< this.getCellsNumber();i++) {
 			s.add(DatosMochila.getObjeto(i),ls.get(i));
 		}
 		return s;
@@ -56,7 +57,7 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 	
 
 	@Override
-	public Integer getVariableNumber() {
+	public Integer getCellsNumber() {
 		return this.getObjetos().size();
 	}
 
@@ -68,6 +69,11 @@ public class ProblemaMochilaAGRange implements ValuesInRangeProblemAG<Integer,So
 	@Override
 	public Integer getMin(Integer i) {
 		return 0;
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.Range;
 	}
 
 }

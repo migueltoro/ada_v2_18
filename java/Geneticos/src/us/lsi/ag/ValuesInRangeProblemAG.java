@@ -1,5 +1,7 @@
 package us.lsi.ag;
 
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
+
 /**
  * @author Miguel Toro
  *
@@ -9,9 +11,9 @@ package us.lsi.ag;
 public interface ValuesInRangeProblemAG<E,S> extends ProblemAG {
 
 	/**
-	 * @return Número de variables.
+	 * @return Numero de casillas del cromosoma
 	 */
-	Integer getVariableNumber();
+	Integer getCellsNumber();
 	
 	/**
 	 * @pre 0 &le; i &lt; getVariableNumber()

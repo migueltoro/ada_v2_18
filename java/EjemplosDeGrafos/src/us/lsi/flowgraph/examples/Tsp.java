@@ -1,0 +1,67 @@
+package us.lsi.flowgraph.examples;
+
+import java.io.IOException;
+import java.util.Locale;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.SimpleWeightedGraph;
+
+import us.lsi.grafos.datos.Carretera;
+import us.lsi.grafos.datos.Ciudad;
+import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.GraphsReader;
+import us.lsi.graphs.SimpleEdge;
+import us.lsi.graphs.views.IntegerVertexGraphView;
+import us.lsi.gurobi.GurobiLp;
+import us.lsi.gurobi.GurobiSolution;
+import us.lsi.solve.AuxGrammar;
+
+public class Tsp {
+	
+	public static void tsp() throws IOException {	
+		SimpleWeightedGraph<Ciudad,Carretera> graph =  
+				GraphsReader.newGraph("ficheros/andalucia.txt",
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						Graphs2::simpleWeightedGraph,
+						Carretera::getKm);	
+		Graph<Integer,SimpleEdge<Integer>> graph3 = IntegerVertexGraphView.of(graph);
+		GraphData.graph = graph3;
+		GraphData.n = graph3.vertexSet().size();
+		AuxGrammar.generate(GraphData.class,"models/tsp.lsi","ficheros/tsp.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/tsp.lp");
+		Locale.setDefault(new Locale("en", "US"));
+		System.out.println(solution.toString((s,d)->d>0.));		
+	}
+	
+	public static void shortestPath() throws IOException {	
+		Locale.setDefault(new Locale("en", "US"));
+		SimpleWeightedGraph<Ciudad,Carretera> graph =  
+				GraphsReader.newGraph("ficheros/andalucia.txt",
+						Ciudad::ofFormat, 
+						Carretera::ofFormat,
+						Graphs2::simpleWeightedGraph,
+						Carretera::getKm);
+		System.out.println(graph);	
+		IntegerVertexGraphView<Ciudad,Carretera> graph3 = IntegerVertexGraphView.of(graph);
+		Graphs2.toDot(graph3,"ficheros/andaluciaIndex.gv",v->v.toString(),e->e.toString());
+		System.out.println(graph3);	
+		System.out.println("============   "+graph3.containsEdge(4, 6));
+		System.out.println("============   "+graph3.containsEdge(6, 4));
+		GraphData.graph = graph3;
+		GraphData.n = graph3.vertexSet().size();
+		Ciudad origin = Ciudad.ofName("Sevilla");
+		Ciudad target = Ciudad.ofName("Almeria");
+		GraphData.origin= graph3.index.get(origin);
+		GraphData.target= graph3.index.get(target);
+		AuxGrammar.generate(GraphData.class,"models/shortest_path.lsi","ficheros/shortest_path.lp");
+		GurobiSolution solution = GurobiLp.gurobi("ficheros/shortest_path.lp");
+		System.out.println(solution.toString((s,d)->s.startsWith("x_0") || d > 0.));		
+	}
+
+
+	public static void main(String[] args) throws IOException {
+		shortestPath();
+	}
+
+}

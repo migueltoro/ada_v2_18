@@ -31,7 +31,7 @@ public class TestSudokuAG {
 		
 		var p = new ProblemaSudokuAG();
 		
-		AlgoritmoAG<ValuesInSetChromosome> a = AlgoritmoAG.create(ChromosomeFactory.ChromosomeType.InSet ,p);		
+		AlgoritmoAG<ValuesInSetChromosome> a = AlgoritmoAG.create(p);		
 		a.ejecuta();
 		
 		System.out.println(p.getSolucion(a.getBestChromosome()));

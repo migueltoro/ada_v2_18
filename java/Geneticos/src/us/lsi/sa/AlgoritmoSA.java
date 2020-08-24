@@ -1,14 +1,9 @@
 package us.lsi.sa;
 
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-import org.apache.commons.math3.genetics.MutationPolicy;
-import org.apache.commons.math3.genetics.Population;
-import org.apache.commons.math3.genetics.StoppingCondition;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.math3.random.JDKRandomGenerator;
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.agchromosomes.ChromosomeFactory;
-import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
-import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.math.Math2;
 
 
@@ -37,18 +32,18 @@ public class AlgoritmoSA {
 	 * @return AlgoritmoSA
 	 */
 
-	public static AlgoritmoSA create(ChromosomeType tipo, ProblemAG p) {
-		return new AlgoritmoSA(tipo, p);
+	public static AlgoritmoSA of(StateSa estado) {
+			return new AlgoritmoSA(estado);
 	}
 
 	/**
 	 * Conjunto de soluciones encontradas
 	 */
-	public Population soluciones;
+	public Set<StateSa> soluciones;
 	/**
 	 * Mejor solución encontrada
 	 */
-	public org.apache.commons.math3.genetics.Chromosome mejorSolucionEncontrada = null;
+	public StateSa mejorSolucionEncontrada = null;
 	/**
 	 * Número de intentos. En cada intento se parte del estado incial y se llevan a
 	 * cabo un número de iteraciones por intento. En cada iteración se llevan a cabo
@@ -101,24 +96,14 @@ public class AlgoritmoSA {
 
 	private double temperatura;
 	private boolean parar = false;
-	private org.apache.commons.math3.genetics.Chromosome estado;
-	private org.apache.commons.math3.genetics.Chromosome nextEstado;
-	private ChromosomeFactory.ChromosomeType type;
-	private MutationPolicy mutationPolicy;
-	private StoppingCondition stopCond;
+	private StateSa estado;
+	private StateSa nextEstado;
 
-	/**
-	 * @param p
-	 *            Problema a resolver
-	 * @param type
-	 *            El tipo del cromosoma
-	 */
-	public AlgoritmoSA(ChromosomeFactory.ChromosomeType type, ProblemAG p) {
-		this.type = type;
-		ChromosomeFactory.iniValues(type, p);
-		this.soluciones = new ElitisticListPopulation(50, 0.20);
-		this.mutationPolicy = ChromosomeFactory.getMutationPolicy(type, p);
-		this.stopCond = StoppingConditionFactory.getStoppingCondition();
+	
+	private AlgoritmoSA(StateSa estado) {
+		this.estado = estado;
+		this.mejorSolucionEncontrada = estado;
+		this.soluciones = new HashSet<>();
 		JDKRandomGenerator random = new JDKRandomGenerator();
 		random.setSeed((int) System.currentTimeMillis());
 		Math2.rnd = random;
@@ -128,40 +113,39 @@ public class AlgoritmoSA {
 	 * Ejecución del algoritmo
 	 */
 	public void ejecuta() {
-		this.mejorSolucionEncontrada = ChromosomeFactory.randomChromosome(this.type);
+		this.mejorSolucionEncontrada = this.estado.random();
 		for (Integer n = 0; !parar && n < numeroDeIntentos; n++) {
 			this.temperatura = temperaturaInicial;
-			this.estado = ChromosomeFactory.randomChromosome(this.type);
+			this.estado = this.estado.random();
 			for (int numeroDeIteraciones = 0; !parar
 					&& numeroDeIteraciones < numeroDeIteracionesPorIntento; numeroDeIteraciones++) {
 				for (int s = 0; !parar && s < numeroDeIteracionesALaMismaTemperatura; s++) {
-					this.nextEstado = this.mutationPolicy.mutate(this.estado);
+					this.nextEstado = this.estado.mutate();
 					double incr = nextEstado.fitness() - estado.fitness();
 					if (aceptaCambio(incr)) {
 						estado = nextEstado;
 						actualizaMejorValor();
 					}
-					parar = this.stopCond.isSatisfied(this.soluciones);
 				}
 				this.temperatura = nexTemperatura(numeroDeIteraciones);
 			}
-			soluciones.addChromosome(this.estado);
+			soluciones.add(this.estado);
 		}
 	}
 
 	private void actualizaMejorValor() {
-		if (estado.fitness() > mejorSolucionEncontrada.fitness()) {
+		if (estado.fitness() < mejorSolucionEncontrada.fitness()) {
 			mejorSolucionEncontrada = estado;
 		}
 	}
 
 	private double nexTemperatura(int numeroDeIteraciones) {
 		return alfa * temperatura;
-		// return temperaturaInicial/Math.log(2+3*numeroDeIteraciones);
+//		return temperaturaInicial/Math.log(2+3*numeroDeIteraciones);
 	}
 
 	private boolean aceptaCambio(double incr) {
-		return Math2.aceptaBoltzmann(-incr, temperatura);
+		return Math2.aceptaBoltzmann(incr, temperatura);
 	}
 
 }

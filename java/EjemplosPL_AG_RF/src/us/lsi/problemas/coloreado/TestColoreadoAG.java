@@ -2,10 +2,9 @@ package us.lsi.problemas.coloreado;
 
 import java.util.Map;
 
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 import us.lsi.common.Strings2;
@@ -17,7 +16,7 @@ public class TestColoreadoAG {
 		setConstantes();
 		
 		ValuesInRangeProblemAG<Integer,Map<Ciudad,Integer>> problem = new ProblemaColorAG("./ficheros/Andalucia.txt");
-		var alg = AlgoritmoAG.<ValuesInRangeChromosome<Integer>>create(ChromosomeType.Range, problem);
+		var alg = AlgoritmoAG.<ValuesInRangeChromosome<Integer>>create(problem);
 		alg.ejecuta();
 		
 		ValuesInRangeChromosome<Integer> mejorSolucion = alg.getBestChromosome();

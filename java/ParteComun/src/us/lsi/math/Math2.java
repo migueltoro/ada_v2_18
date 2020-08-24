@@ -251,10 +251,8 @@ public class Math2 {
 	 */
 	public static double boltzmann(double increment, double t){
 		double r;
-		if(increment < 0.){
+		if(increment <= 0.){
 			r = 1.;
-		} else if(t==0.){
-			r = 0.;
 		} else {
 			r = Math.exp(-increment/t);
 		}

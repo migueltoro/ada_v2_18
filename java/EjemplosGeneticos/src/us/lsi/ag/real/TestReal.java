@@ -1,9 +1,9 @@
 package us.lsi.ag.real;
 
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
+import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 
@@ -24,7 +24,7 @@ public class TestReal {
 		ChromosomeFactory.crossoverType = ChromosomeFactory.CrossoverType.OnePoint;
 		
 		ValuesInRangeProblemAG<Double,List<Double>> p = new ProblemaReal();
-		var ap = AlgoritmoAG.<ValuesInRangeChromosome<Double>>create(ChromosomeFactory.ChromosomeType.Real,p);
+		var ap = AlgoritmoAG.<ValuesInRangeChromosome<Double>>create(p);
 		ap.ejecuta();
 		
 		ValuesInRangeChromosome<Double> cr = ap.getBestChromosome();

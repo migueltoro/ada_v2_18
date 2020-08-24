@@ -7,7 +7,6 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
-import us.lsi.ag.Chromosome;
 import us.lsi.ag.ProblemAG;
 import us.lsi.ag.ValuesInSetProblemAG;
 import us.lsi.math.Math2;

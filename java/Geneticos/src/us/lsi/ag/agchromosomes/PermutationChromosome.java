@@ -6,7 +6,6 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.ProblemAG;
 import us.lsi.ag.SeqNormalProblemAG;
 
@@ -96,7 +95,7 @@ public class PermutationChromosome extends RandomKey<Integer> implements SeqNoma
 	}
 
 	public Integer getObjectsNumber() {
-		return PermutationChromosome.problema.getObjectsNumber();
+		return PermutationChromosome.problema.getIndexNumber();
 	}
 
 	public Integer getMax(int i) {

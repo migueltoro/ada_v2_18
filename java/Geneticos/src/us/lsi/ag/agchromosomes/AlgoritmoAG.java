@@ -35,8 +35,8 @@ public class AlgoritmoAG<C> {
 	 * @return AlgoritmoAG
 	 */
 	
-	public static <C> AlgoritmoAG<C> create(ChromosomeType tipo, ProblemAG p) {
-		return new AlgoritmoAG<C>(tipo,p);
+	public static <C> AlgoritmoAG<C> create(ProblemAG p) {
+		return new AlgoritmoAG<C>(p);
 	}
 	
 	/**
@@ -107,9 +107,9 @@ public class AlgoritmoAG<C> {
 	 * @param tipo El tipo del chromosoma
 	 * @param problema Problema a resolver
 	 */
-	public AlgoritmoAG(ChromosomeType tipo, ProblemAG problema) {
+	public AlgoritmoAG(ProblemAG problema) {
 		super();
-		this.tipo = tipo;				
+		this.tipo = problema.getType();				
 		this.selectionPolicy =  ChromosomeFactory.getSelectionPolicy();
 		this.mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo, problema);
 		this.crossOverPolicy = ChromosomeFactory.getCrossoverPolicy(tipo, problema);

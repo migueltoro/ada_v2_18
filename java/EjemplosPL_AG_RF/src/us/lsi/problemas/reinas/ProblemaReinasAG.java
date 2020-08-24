@@ -3,10 +3,9 @@ package us.lsi.problemas.reinas;
 import java.util.List;
 import java.util.Set;
 
-
-
-import us.lsi.ag.SeqNomalChromosome;
 import us.lsi.ag.SeqNormalProblemAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.ag.AuxiliaryAg;
 import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
@@ -47,8 +46,13 @@ public static int numeroDeReinas = 8;
 	}
 
 	@Override
-	public Integer getObjectsNumber() {
+	public Integer getIndexNumber() {
 		return numeroDeReinas;
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeType.Permutation;
 	}	
 	
 }
