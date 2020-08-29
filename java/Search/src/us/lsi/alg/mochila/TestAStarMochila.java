@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
@@ -23,12 +24,9 @@ public class TestAStarMochila {
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getEdgeWeight());		
 		
-		GraphAlg<MochilaVertex,MochilaEdge> ms = GraphAlg.aStarEnd(
-				graph,
-				e2,
-				MochilaHeuristic::voraz);
+		AStar<MochilaVertex, MochilaEdge> ms = GraphAlg.aStarEnd(graph,e2,MochilaHeuristic::voraz);
 		
-		GraphPath<MochilaVertex,MochilaEdge> path = ms.pathTo(e2);
+		GraphPath<MochilaVertex,MochilaEdge> path = ms.search();
 		List<MochilaEdge> edges = path.getEdgeList();
 		System.out.println(edges);
 		SolucionMochila s = MochilaVertex.getSolucion(edges);

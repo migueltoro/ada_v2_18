@@ -1,7 +1,5 @@
 package us.lsi.pli.gurobi;
 
-import static us.lsi.pli.AuxiliaryPLI.*;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -10,7 +8,6 @@ import java.util.stream.Collectors;
 import us.lsi.common.Files2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
-import us.lsi.pli.AuxiliaryPLI;
 import us.lsi.solve.AuxGrammar;
 
 public class EstanteriaGurobiPLI {
@@ -101,32 +98,6 @@ public class EstanteriaGurobiPLI {
 		return Estante.anchura;
 	}
 	
-	public static String getConstraints(PLIType type) {
-		AuxiliaryPLI.setType(type);
-		int n = Libro.libros.size();
-		int m = Estante.estantes.size();
-		StringBuilder r = new StringBuilder();
-		r.append(goalMaxSection(sum(listOf(0,n,0,m,(i,j)->v("x",i,j)))));
-		r.append(constraintsSection());
-		r.append(forAll("a",listOf(0,n,0,m,(i,j)->constraintLe(f(Libro.altura(i),"x",i,j),Estante.altura(j)))));
-		r.append(forAll("b",listOf(0,m,j->constraintLe(sum(listOf(0,n,i->f(Libro.anchura(i),"x",i,j))),Estante.anchura))));
-		r.append(forAll("c",listOf(0,n,i->constraintEq(sum(listOf(0,m+1,j->v("x",i,j))),1))));
-		r.append(binaryVarsSection(listOf(0,n,0,m+1,(i,j)->v("x",i,j))));
-		r.append(endSection());
-		return r.toString();
-	}
-	
-	public static void estanteria_constraints() {
-		datos("data/estanteria.txt");
-		System.out.println(Libro.libros);
-		System.out.println(Estante.estantes);
-		System.out.println(Estante.anchura);		
-		String ct = EstanteriaGurobiPLI.getConstraints(PLIType.Gurobi);
-		Files2.toFile(ct,"ficheros/estanteria_sal.lp");
-		Locale.setDefault(new Locale("en", "US"));
-		GurobiSolution solution = GurobiLp.gurobi("ficheros/estanteria_sal.lp");
-		System.out.println(solution.toString((s,d)->d>0.));
-	}
 	
 	public static void estanteria_model() throws IOException {
 		datos("data/estanteria.txt");

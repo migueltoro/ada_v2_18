@@ -33,8 +33,8 @@ public class TestGreadyMochila {
 //		System.out.println(r4);
 //		System.out.println(r4.getWeight());
 		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1);
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greadyEdgeHeuristic,e->e.equals(e2));
-		System.out.println(rr.weightToEnd());
+		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdgeHeuristic,e->e.equals(e2));
+		System.out.println(rr.weight());
 
 	}
 

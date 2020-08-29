@@ -133,6 +133,7 @@ public interface GraphAlg<V,E>  {
 	V startVertex();
 	Stream<V> stream();
 	GraphAlg<V,E> copy();
+	
 		
 	
 	/**
@@ -217,7 +218,7 @@ public interface GraphAlg<V,E>  {
 	/**
 	 * @return Peso del camino desde el vertice inicial hasta el útimo vertice del recorrido
 	 */
-	default public Double weightToEnd() {
+	default public Double weight() {
 		Optional<V> end = this.stream().reduce((first,second)->second);
 		Preconditions.checkArgument(end.isPresent(), 
 				String.format("No se ha encontrado el vértice %s",end));

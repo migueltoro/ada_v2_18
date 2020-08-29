@@ -26,9 +26,10 @@ import us.lsi.common.Maps2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraphI;
-import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 import us.lsi.hypergraphs.VirtualHyperVertex;
@@ -65,23 +66,23 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V startVertex) {
+	public static <V extends ActionVirtualVertex<V, E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V startVertex) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
+	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
 			V startVertex,
 			Function<E, Double> edgeWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
+	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
 			V startVertex,
 			Function<V, Double> vertexWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
 	}
 	
-	public static <V extends VirtualVertex<V, E>, E extends SimpleEdge<V>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
+	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
 			V startVertex,
 			Function<E, Double> edgeWeight, 
 			Function<V, Double> vertexWeight,
@@ -93,6 +94,10 @@ public class Graphs2 {
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
 		return new SimpleVirtualHyperGraph<V, E, A>();
+	}
+	
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
+		return new SimpleVirtualHyperGraph<V, E, A>(start);
 	}
 	
 	public static <V,E> SimpleGraph<V, E> simpleGraph() {
@@ -163,16 +168,21 @@ public class Graphs2 {
 		de.exportGraph(graph, f1);
 	}
 	
-	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight,
-			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight) {
+	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
+			Function<E, Double> edgeWeight,
+			Function<V, Double> vertexWeight, 
+			TriFunction<V, E, E, Double> vertexPassWeight,
+			PathType type) {
 		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight, vertexWeight, vertexPassWeight);
 	}
 	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight, 
-			Function<V, Boolean> isBaseCase) {
-		return new EGraphI<V, E, G>(graph, startVertex, type, edgeWeight, null, null);
-	}
-	
+//	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex,  
+//			Function<E, Double> edgeWeight, 
+//			Function<V, Boolean> isBaseCase,
+//			PathType type) {
+//		return new EGraphI<V, E, G>(graph, startVertex, type, edgeWeight, null, null);
+//	}
+//	
 	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type) {
 		return new EGraphI<V, E, G>(graph, startVertex, type, null, null, null);
 	}

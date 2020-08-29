@@ -12,19 +12,19 @@ public class ActionSimpleEdge<V, A> extends SimpleEdge<V> {
 		return new ActionSimpleEdge<V, A>(c1, c2);
 	}
 
-	public static <V, A> ActionSimpleEdge<V, A> empty() {
-		return new ActionSimpleEdge<V, A>();
-	}
+//	public static <V, A> ActionSimpleEdge<V, A> empty() {
+//		return new ActionSimpleEdge<V, A>();
+//	}
 
-	public static <V, A> ActionSimpleEdge<V, A> of(V c1, V c2, Double w, A action) {
-		return new ActionSimpleEdge<V, A>(c1, c2, w, action);
-	}
+//	public static <V, A> ActionSimpleEdge<V, A> of(V c1, V c2, Double w, A action) {
+//		return new ActionSimpleEdge<V, A>(c1, c2, w, action);
+//	}
 
 	public A action = null;
 
-	private ActionSimpleEdge() {
-		super();
-	}
+//	private ActionSimpleEdge() {
+//		super();
+//	}
 
 	protected ActionSimpleEdge(V c1, V c2) {
 		super(c1, c2);
@@ -35,10 +35,10 @@ public class ActionSimpleEdge<V, A> extends SimpleEdge<V> {
 		this.action = action;
 	}
 	
-	private ActionSimpleEdge(V c1, V c2, Double w, A action) {
-		super(c1, c2, w);
-		this.action = action;
-	}
+//	private ActionSimpleEdge(V c1, V c2, Double w, A action) {
+//		super(c1, c2, w);
+//		this.action = action;
+//	}
 
 	@Override
 	public String toString() {

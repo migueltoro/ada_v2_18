@@ -13,6 +13,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
+import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.graphs.virtual.EGraph;
@@ -43,12 +44,12 @@ public class TestColorAstar {
 		
 		EGraph<ColorVertex, ColorEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.nc.doubleValue());		
 		
-		GraphAlg<ColorVertex,ColorEdge> ms = GraphAlg.aStarGoal(
+		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStarGoal(
 				graph,
 				goal,
 				(v1,p,v2)->0.);
 		
-		GraphPath<ColorVertex, ColorEdge> path = ms.pathToEnd();
+		GraphPath<ColorVertex, ColorEdge> path = ms.search();
 		ColorVertex lv = Lists2.last(path.getVertexList());
 		System.out.println(lv.nc);
 		System.out.println(lv.cav);

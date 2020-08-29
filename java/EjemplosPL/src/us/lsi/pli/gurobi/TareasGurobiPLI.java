@@ -1,7 +1,5 @@
 package us.lsi.pli.gurobi;
 
-import static us.lsi.pli.AuxiliaryPLI.*;
-
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -71,30 +69,7 @@ public class TareasGurobiPLI {
 		return Tarea.n;
 	}
 	
-	public static String getConstraints() {
-		Integer n = Tarea.n;
-		StringBuilder r = new StringBuilder();
-		r.append(goalMaxSection(sum(listOf(0,n,i->f(Tarea.tareas.get(i).ganancia,"x",i)))));
-		r.append(constraintsSection());
-		r.append(forAll("c",listOf(0,n,0,n,
-							(i,j)->j>i && Tarea.solape(i,j)>0, 
-							(i,j)->constraintLe(sum(v("x",i),v("x",j)),1))));
-		r.append(binaryVarsSection(listOf(0,n,i->v("x",i))));
-		r.append(endSection());
-		return r.toString();
-	}
 	
-	public static void tareas_constraint() {
-		Tarea.tareas = Tarea.datos("ficheros/tareas.txt");
-		String ss = Streams2.enumerate(Tarea.tareas.stream()).map(e -> String.format("%d == %s", e.counter, e.value))
-				.collect(Collectors.joining("\n"));
-		Tarea.n = Tarea.tareas.size();
-		Files2.toFile(getConstraints(), "ficheros/tareas_sal.lp");
-		Locale.setDefault(new Locale("en", "US"));
-		GurobiSolution solution = GurobiLp.gurobi("ficheros/tareas_sal.lp");
-		System.out.println(solution.toString((s, d) -> d > 0.));
-		System.out.println(ss);
-	}
 
 	public static void tareas_model() throws IOException {
 		Tarea.tareas = Tarea.datos("data/tareas.txt");

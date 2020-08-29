@@ -17,7 +17,7 @@ import us.lsi.path.EGraphPath;
 
 public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
-	public enum BTType {Min,Max,All}
+	public enum BTType {Min,Max,All,One}
 	
 	public EGraph<V,E> graph;
 	protected V startVertex; 
@@ -52,7 +52,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.bound(edge, heuristic);
+		Double w = state.getPath().boundWeight(goal,end, edge, heuristic);
 		if(this.type == BTType.Max) r = w <= this.bestValue;
 		if(this.type == BTType.Min) r = w >= this.bestValue;
 		return r;
@@ -60,11 +60,12 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	protected void update(State<V, E> state) {
 		if(this.type == BTType.All ||
-		   this.type == BTType.Max && state.getAccumulateValue() >= this.bestValue ||
-		   this.type == BTType.Min && state.getAccumulateValue() <= this.bestValue) {
+		   (this.type == BTType.Max && state.getAccumulateValue() >= this.bestValue) ||
+		   (this.type == BTType.Min && state.getAccumulateValue() <= this.bestValue)) {
 				S s = solution.apply(state.getPath());
 				this.solutions.add(s);
 				this.bestValue = state.getAccumulateValue();
+				System.out.println("Update "+this.bestValue);
 		}
 	}
 	
@@ -76,7 +77,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	public void search(State<V, E> state) {
 		V actual = this.copy.apply(state.getActualVertex());
-		if (goal.test(actual)) update(state);
+		if (goal.test(actual))	update(state);
 		else {
 			for (E edge : graph.edgesListOf(actual)) {				
 				if (this.forget(state,edge)) continue;
@@ -107,7 +108,6 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		Double getAccumulateValue();
 		EGraphPath<V, E> getPath();
 		V getActualVertex();
-		Double bound(E edge, TriFunction<V, Predicate<V>, V, Double> heuristic);
 	}
 	
 	
@@ -115,8 +115,6 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		private V actualVertex;
 		private EGraphPath<V, E> path;
 		private EGraph<V,E> graph;
-		private V end;
-		private Predicate<V> goal;
 		private Map<V,E> edges;
 		private Double accumulateValue;
 		
@@ -129,8 +127,6 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 			this.actualVertex = graph.startVertex();
 			this.graph = graph;
 			this.path = graph.initialPath();
-			this.goal = goal;
-			this.end = end;
 			this.edges = new HashMap<>();
 			this.accumulateValue = this.path.getWeight();
 		}		
@@ -146,7 +142,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		public void back(E edge) {
 			V source = graph.getEdgeSource(edge);
 			E e2 = this.edges.get(source);
-			this.accumulateValue = this.path.removeLast(this.accumulateValue,edge, e2);
+			this.accumulateValue = this.path.removeLast(this.accumulateValue,edge,e2);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
 		}
 		
@@ -167,11 +163,6 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		@Override
 		public V getActualVertex() {
 			return actualVertex;
-		}
-		
-		@Override
-		public Double bound(E edge, TriFunction<V, Predicate<V>, V, Double> heuristic) {
-			return this.path.boundWeight(goal,end, edge, heuristic);
 		}
 		
 		@Override

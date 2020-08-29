@@ -2,6 +2,7 @@ package us.lsi.alg.reinas;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -21,6 +22,7 @@ public class TestBTRandom {
 					null, 
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
+					BTType.One,
 					v->ReinasVertex.n-v.index);							
 			ms.search();
 			System.out.println(ms.iterations);

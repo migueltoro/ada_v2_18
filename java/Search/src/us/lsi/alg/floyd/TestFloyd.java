@@ -39,7 +39,7 @@ public class TestFloyd {
 		FloydVertex<Ciudad,Carretera> p = FloydVertex.of(graph,origen,destino);
 		
 		SimpleVirtualHyperGraph<FloydVertex<Ciudad,Carretera>,FloydEdge<Ciudad,Carretera>,FloydVertex.ActionFloyd> graph2 = 
-				Graphs2.simpleVirtualHyperGraph();
+				Graphs2.simpleVirtualHyperGraph(p);
 		
 		DP<FloydVertex<Ciudad,Carretera>,FloydEdge<Ciudad,Carretera>,FloydVertex.ActionFloyd> a = 
 				DP.dynamicProgrammingSearch(graph2,PDType.Min);

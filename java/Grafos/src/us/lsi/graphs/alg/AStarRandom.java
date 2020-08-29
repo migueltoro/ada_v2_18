@@ -57,7 +57,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		return vertexActual;
 	}
 	
-	@Override
+	
 	public GraphPath<V, E> pathToEnd() {
 		GraphPath<V, E> path;
 		AStarRandom.iterations = 0;
@@ -74,7 +74,9 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		return path;
 	}
 	
-	
+	public GraphPath<V, E> search() {
+		return pathToEnd();
+	}
 	
 
 }

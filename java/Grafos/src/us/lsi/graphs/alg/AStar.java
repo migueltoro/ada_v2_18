@@ -27,6 +27,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	protected AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
+	protected Boolean nonGoal;
 	
 
 	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
@@ -42,6 +43,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		Data<V,E> data = Data.of(startVertex);		
 		Handle<Double, Data<V, E>> h = this.heap.insert(ePath.estimatedWeightToEnd(0.,goal,end,heuristic),data);
 		this.tree.put(startVertex,h);
+		this.nonGoal = true;
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	}
 	
 	public boolean hasNext() {
-		return !heap.isEmpty();
+		return !heap.isEmpty() && nonGoal;
 	}
 
 	@Override
@@ -87,7 +89,8 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				}				
 			}
 		}
-		tree.get(vertexActual).getValue().closed = true;	
+		tree.get(vertexActual).getValue().closed = true;
+		this.nonGoal = !this.goal.test(vertexActual);
 		return vertexActual;
 	}
 
@@ -105,8 +108,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		return this.startVertex;
 	}
 	
-	@Override
-	public GraphPath<V, E> pathToEnd() {
+	public GraphPath<V, E> search() {
 		return pathTo(this.goal);
 	}
 	

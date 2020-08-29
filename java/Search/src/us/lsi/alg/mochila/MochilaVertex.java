@@ -62,15 +62,15 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
 	
-	public MochilaEdge greadyEdgeHeuristic() {
+	public MochilaEdge greedyEdgeHeuristic() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
 		Double a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 		return MochilaEdge.of(this,this.neighbor(a), a);
 	}
 	
-	public MochilaEdge greadyEdge() {
+	public MochilaEdge greedyEdge() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
-		Double a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+		Double a = Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 		a = Math.floor(a);
 		return MochilaEdge.of(this,this.neighbor(a), a);
 	}

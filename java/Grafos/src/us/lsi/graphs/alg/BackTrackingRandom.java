@@ -18,8 +18,9 @@ public class BackTrackingRandom<V,E,S> extends BackTracking<V,E,S> {
 	BackTrackingRandom(EGraph<V, E> graph, Predicate<V> goal, V end, 
 			Function<GraphPath<V, E>, S> solution,
 			Function<V, V> copy,
+			BTType type,
 			Function<V,Integer> size) {
-		super(graph, goal, end, null, solution, copy, null);
+		super(graph, goal, end, null, solution, copy, type);
 		this.size = size;
 	}
 		

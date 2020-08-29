@@ -27,7 +27,7 @@ public class TestMonedasAStar {
 
 		AStar<MonedasVertex, MonedasEdge> a = GraphAlg.aStarEnd(graph, e2, heuristic);
 
-		List<MonedasEdge> edges = a.pathToEnd().getEdgeList();
+		List<MonedasEdge> edges = a.search().getEdgeList();
 
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(Moneda.monedas);

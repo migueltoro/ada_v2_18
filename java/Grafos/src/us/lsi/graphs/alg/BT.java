@@ -56,8 +56,9 @@ public interface BT<V, E, S> {
 			V end,
 			Function<GraphPath<V, E>, S> solution, 
 			Function<V, V> copy, 
+			BTType type,
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph, goal, end, solution, copy, size);
+		return new BackTrackingRandom<V, E, S>(graph, goal, end, solution, copy, type, size);
 	}
 	
 	public static <V, E, S> BackTrackingRandom<V, E, S> randomGoal(
@@ -65,17 +66,19 @@ public interface BT<V, E, S> {
 			Predicate<V> goal, 
 			Function<GraphPath<V, E>, S> solution, 
 			Function<V, V> copy, 
+			BTType type,
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph, goal,null, solution, copy, size);
+		return new BackTrackingRandom<V, E, S>(graph, goal,null, solution, copy, type, size);
 	}
 	
 	public static <V, E, S> BackTrackingRandom<V, E, S> randomEnd(
 			EGraph<V, E> graph, 
 			V end,
 			Function<GraphPath<V, E>, S> solution, 
-			Function<V, V> copy, 
+			Function<V, V> copy,
+			BTType type,
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph,e->e.equals(end), end, solution, copy, size);
+		return new BackTrackingRandom<V, E, S>(graph,e->e.equals(end), end, solution, copy, type, size);
 	}
 
 }

@@ -2,6 +2,8 @@ package us.lsi.alg.typ;
 
 import java.util.Locale;
 
+import org.jgrapht.GraphPath;
+
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
@@ -10,7 +12,6 @@ import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath;
 
 public class TestPDRTyP {
 
@@ -27,22 +28,21 @@ public class TestPDRTyP {
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		
-		Double bv = rr.weightToEnd();
+		Double bv = rr.weight();
 		
-		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>,SolucionTyP> ms = 
+		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 
 				DPR.dynamicProgrammingReduction(graph,
 						e->e.getIndex()==TyPVertex.n,
 						e2,
 						(v1,p,v2)->0.,
-						TyPVertex::getSolucion,
 						PDType.Min);
 		ms.bestValue = bv;
 		ms.search();
 //		System.out.println(ms.search());
 //		System.out.println(ms.solutionsTree);
-		EGraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> s1 = ms.pathFrom(e1);
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> s1 = ms.search();
 //		System.out.println(s1);
-		SolucionTyP s = ms.getSolution(s1);
+		SolucionTyP s = TyPVertex.getSolucion(s1);
 		System.out.println(s);
 		
 	}

@@ -29,12 +29,12 @@ public class TestGreadyTyP {
 		var ms1 = ms.copy();
 		var ms2 = ms.copy();
 		
-		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.pathToEnd();
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search();
 		
 		System.out.println(TyPVertex.getSolucion(path));
 		
-		System.out.println(ms1.findEnd());
-		System.out.println(ms2.weightToEnd());
+		System.out.println(ms1.search());
+		System.out.println(ms2.weight());
 	}
 
 }

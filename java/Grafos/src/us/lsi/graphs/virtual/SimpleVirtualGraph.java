@@ -8,7 +8,6 @@ import org.jgrapht.GraphType;
 
 import us.lsi.common.Sets2;
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.SimpleEdge;
 import us.lsi.path.EGraphPath;
 import us.lsi.path.EGraphPath.PathType;
 
@@ -33,7 +32,7 @@ import us.lsi.path.EGraphPath.PathType;
  * @param <E> El tipo de las aristas
  * 
  */
-public class SimpleVirtualGraph<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>> implements EGraph<V,E> {
+public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> implements EGraph<V,E> {
 	
 	
 	private Set<V> vertexSet;

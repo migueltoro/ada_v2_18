@@ -34,6 +34,8 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 		this.solutionsTree = new HashMap<>();
 	}
 	
+	
+	
 	@Override
 	public Sp<E> search(V actual) {
 		Sp<E> r = null;

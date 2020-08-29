@@ -22,16 +22,19 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	private EGraphPath<V,E> path;
 	private Function<V,E> nextEdge;
 	private Predicate<V> goal;
-	private Boolean hashNext;
+	private Boolean hasNext;
 	
 	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal) {
 		this.graph = graph;
-		this.actualVertex = null;
 		this.startVertex = graph.startVertex();
+		this.actualVertex = this.startVertex;		
 		this.edgeToOrigin = new HashMap<>();
+		this.edgeToOrigin.put(this.actualVertex,null);
 		this.nextEdge = nextEdge; 
 		this.goal = goal;
-		this.hashNext = true;
+		this.path = this.graph.initialPath();
+		this.weight = path.getWeight();
+		this.hasNext = true;
 	}
 	
 	@Override
@@ -65,36 +68,36 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	
 	@Override
 	public boolean hasNext() {
-		return this.hashNext;
+		return this.hasNext;
 	}
 
 	@Override
 	public V next() {
-		if(this.actualVertex == null) {
-			this.edgeToOrigin.put(this.startVertex,null);
-			this.actualVertex = this.startVertex;
-			this.edgeToOrigin.put(this.actualVertex,null);
-			this.path = this.graph.initialPath();
-			this.weight = path.getWeight();
-		} else {
+		V old = this.actualVertex;
+		this.hasNext = !this.goal.test(old);
+		if (hasNext) {
 			E edge = this.nextEdge.apply(this.actualVertex);
-			this.actualVertex = this.graph.getEdgeTarget(edge);		
-			this.edgeToOrigin.put(this.actualVertex,edge);
-			this.weight = this.path.add(this.weight,edge);
+			this.actualVertex = this.graph.getEdgeTarget(edge);
+			this.edgeToOrigin.put(this.actualVertex, edge);
+			this.weight = this.path.add(this.weight, edge);
+			this.path.add(edge);
 		}
-		this.hashNext = !this.goal.test(this.actualVertex);
-		return this.actualVertex;
+		return old;
 	}
-	
+
 	@Override
 	public V startVertex() {
 		return this.startVertex;
 	}
-	
+
 	@Override	
-	public Double weightToEnd() {
-		this.findEnd();
+	public Double weight() {
+		this.find(goal);
 		return this.weight;
+	}	
+	public EGraphPath<V,E> search() {	
+		this.find(goal);
+		return this.path;
 	}
 
 }

@@ -115,15 +115,15 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 		return this;
 	}
 	
+	
 	@Override
 	public Double removeLast(Double weight, E edge, E e2) {
+		Preconditions.checkArgument(!this.isEmpty(), "El camino no puede estar vacío");
 		V target = super.graph.getEdgeTarget(edge);
 		weight -= graph.getEdgeWeight(edge);
 		weight -= graph.getVertexWeight(target);
-		if (e2 != null) {
-			V source = super.graph.getEdgeSource(edge);
-			weight -= graph.getVertexPassWeight(source, e2, edge);
-		}
+		V source = super.graph.getEdgeSource(edge);
+		weight -= graph.getVertexPassWeight(source, e2, edge);
 		return weight;
 	}
 	

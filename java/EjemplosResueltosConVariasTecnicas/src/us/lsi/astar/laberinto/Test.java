@@ -26,7 +26,7 @@ public class Test {
 		
 		AStar<Casilla, CasillaEdge> a = GraphAlg.aStarEnd(graph,c2,heuristic);
 		
-		GraphPath<Casilla, CasillaEdge> path = a.pathToEnd();
+		GraphPath<Casilla, CasillaEdge> path = a.search();
 		System.out.println(Laberinto.showSolucionLaberinto(path));
 		
 	}

@@ -27,17 +27,20 @@ public class TestBTMochila {
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());		
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greadyEdge,e->e.equals(e2));
-		GraphPath<MochilaVertex, MochilaEdge> path = rr.pathToEnd();
-		SolucionMochila sm = MochilaVertex.getSolucion(path);
-		Double bv = path.getWeight();
+		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
+		GraphPath<MochilaVertex, MochilaEdge> path = rr.search();
+		
+		SolucionMochila sm = MochilaVertex.getSolucion(path.getEdgeList());
+		
+		Double bv = rr.weight();
 		
 		var ms = BT.backTrackingEnd(
 				graph,
 				e2,
 				MochilaHeuristic::heuristic,
 				MochilaVertex::getSolucion,
-				MochilaVertex::copy,BTType.Max);		
+				MochilaVertex::copy,
+				BTType.Max);		
 		
 		ms.bestValue = bv;
 		ms.solutions.add(sm);
