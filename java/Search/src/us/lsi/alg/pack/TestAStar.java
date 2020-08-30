@@ -36,7 +36,7 @@ public class TestAStar {
 		
 		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,(v1,pd,v2)->0.);
 		
-		GraphPath<PackVertex,PackEdge> path = ms.search();
+		GraphPath<PackVertex,PackEdge> path = ms.search().get();
 		SolucionPack s = SolucionPack.of(path);
 		System.out.println(s);
 

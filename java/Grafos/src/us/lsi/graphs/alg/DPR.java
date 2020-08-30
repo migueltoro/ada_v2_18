@@ -1,15 +1,17 @@
 package us.lsi.graphs.alg;
 
+import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.jgrapht.GraphPath;
 
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath;
 
 public interface DPR<V, E> {	
 	
-	EGraphPath<V, E> search();
+	Optional<GraphPath<V, E>> search();
 	
 	
 	public static <V, E> DynamicProgrammingReduction<V, E> dynamicProgrammingReduction(

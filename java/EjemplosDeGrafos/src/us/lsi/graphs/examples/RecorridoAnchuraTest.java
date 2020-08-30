@@ -31,7 +31,7 @@ public class RecorridoAnchuraTest {
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 		
 		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Almeria"));
-		List<Carretera> carreteras = ra.pathToEnd().getEdgeList();
+		List<Carretera> carreteras = ra.pathToEnd().get().getEdgeList();
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		

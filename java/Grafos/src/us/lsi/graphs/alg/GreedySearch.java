@@ -4,10 +4,10 @@ package us.lsi.graphs.alg;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -82,6 +82,7 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 			this.weight = this.path.add(this.weight, edge);
 			this.path.add(edge);
 		}
+//		System.out.println(old);
 		return old;
 	}
 
@@ -91,10 +92,14 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	}
 
 	@Override	
-	public Double weight() {
-		this.find(goal);
-		return this.weight;
-	}	
+	public Optional<Double> weight() {
+		Optional<V> s = this.find(goal);
+		Optional<Double> r = Optional.empty();
+		if(s.isPresent()) r = Optional.of(this.weight);
+		return r;
+	}
+	
+	
 	public EGraphPath<V,E> search() {	
 		this.find(goal);
 		return this.path;

@@ -1,6 +1,7 @@
 package us.lsi.graphs.alg;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -58,23 +59,19 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	}
 	
 	
-	public GraphPath<V, E> pathToEnd() {
-		GraphPath<V, E> path;
+	public Optional<GraphPath<V, E>> pathToEnd() {
+		Optional<GraphPath<V, E>> path;
 		AStarRandom.iterations = 0;
 		Math2.initRandom();
-		do {			
+		do {
 			AStarRandom<V, E> ms = this.copy();
-			try {
-				path = ms.pathTo(goal);
-			} catch (IllegalArgumentException e) {
-				path = null;
-			}
+			path = ms.pathTo(goal);
 			AStarRandom.iterations++;
-		} while (path == null);
+		} while (!path.isPresent());
 		return path;
 	}
 	
-	public GraphPath<V, E> search() {
+	public Optional<GraphPath<V, E>> search() {
 		return pathToEnd();
 	}
 	

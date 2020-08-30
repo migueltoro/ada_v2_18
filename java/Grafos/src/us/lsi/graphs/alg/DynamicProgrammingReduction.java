@@ -12,6 +12,12 @@ import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
+import java.util.Optional;
+
+
+import org.jgrapht.GraphPath;
+
+
 
 public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	
@@ -53,11 +59,11 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	}
 	
 	@Override
-	public EGraphPath<V, E> search() {
+	public Optional<GraphPath<V, E>> search() {
 		this.solutionsTree = new HashMap<>();
 		search(this.startVertex,0.);
 //		System.out.println("1___________");
-		return pathFrom(this.startVertex);
+		return Optional.ofNullable(pathFrom(this.startVertex));
 	}
 	
 	private Sp<E> search(V actual, Double accumulateValue) {

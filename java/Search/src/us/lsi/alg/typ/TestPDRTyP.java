@@ -28,7 +28,7 @@ public class TestPDRTyP {
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		
-		Double bv = rr.weight();
+		Double bv = rr.weight().get();
 		
 		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 
 				DPR.dynamicProgrammingReduction(graph,
@@ -40,7 +40,7 @@ public class TestPDRTyP {
 		ms.search();
 //		System.out.println(ms.search());
 //		System.out.println(ms.solutionsTree);
-		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> s1 = ms.search();
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> s1 = ms.search().get();
 //		System.out.println(s1);
 		SolucionTyP s = TyPVertex.getSolucion(s1);
 		System.out.println(s);

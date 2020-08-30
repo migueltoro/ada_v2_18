@@ -3,6 +3,7 @@ package us.lsi.graphs.alg;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -108,7 +109,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		return this.startVertex;
 	}
 	
-	public GraphPath<V, E> search() {
+	public Optional<GraphPath<V, E>> search() {
 		return pathTo(this.goal);
 	}
 	

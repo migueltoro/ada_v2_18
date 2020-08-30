@@ -23,7 +23,7 @@ public class TestMainPuzzle {
 		AStar<VertexPuzzle,ActionSimpleEdge<VertexPuzzle,ActionPuzzle>> a = 
 				GraphAlg.aStarEnd(graph,e2,(x,p,y)->(double)x.getNumDiferentes(y));
 		
-		List<VertexPuzzle> vertices = a.search().getVertexList();
+		List<VertexPuzzle> vertices = a.search().get().getVertexList();
 		String s = vertices.stream().map(x->x.toString()).collect(Collectors.joining("\n________\n","Solucion\n","\n_________"));
 		System.out.println(s);
 	}

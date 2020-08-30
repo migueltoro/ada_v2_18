@@ -20,7 +20,7 @@ public class TestAStar {
 				v->v.index == ReinasVertex.n,  
 				(e1,e2,e3)->0.);
 		
-		GraphPath<ReinasVertex, ReinasEdge> path = ms.search();
+		GraphPath<ReinasVertex, ReinasEdge> path = ms.search().get();
 		System.out.println(SolucionReinas.of(path));
 	}
 

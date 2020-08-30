@@ -12,7 +12,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 
-import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -140,42 +139,39 @@ public interface GraphAlg<V,E>  {
 	 * @param goal Un predicado 
 	 * @return Encuentra el priemr v&eacute;rtice que cumple el predicado seg&uacute;n la b&uacute;squeda seguida
 	 */
-	default public V find(Predicate<V> goal) {
-		if(goal.test(startVertex())) return startVertex();
-		Optional<V> r = this.stream().filter(goal).findFirst();
-		Preconditions.checkArgument(r.isPresent(), "No se ha encontrado un vértice que cumpla el predicado");
-		return r.get();
+	default public Optional<V> find(Predicate<V> goal) {
+		if(goal.test(startVertex())) return Optional.of(startVertex());
+		return this.stream().filter(goal).findFirst();
 	}	
 	
 	/**
 	 * @param end Un v&eacute;rtice 
 	 * @return Encuentra el primer v&eacute;rtice que que es igual a v seg&uacute;n la b&uacute;squeda seguida
 	 */
-	default public V find(V end) {
-		if(this.startVertex().equals(end)) return startVertex();
-		Optional<V> r = this.stream().filter(e->e.equals(end)).findFirst();
-		Preconditions.checkArgument(r.isPresent(), 
-				String.format("No se ha encontrado el vértice %s",end));
-		return r.get();
+	default public Optional<V> find(V end) {
+		if(this.startVertex().equals(end)) return Optional.of(startVertex());
+		return this.stream().filter(e->e.equals(end)).findFirst();
 	}
 	
 	/**
 	 * @return El ultimo vertice del recorrido
 	 */
-	default public V findEnd() {
-		Optional<V> end = this.stream().reduce((first,second)->second);
-		Preconditions.checkArgument(end.isPresent(), 
-				String.format("No se ha encontrado el vértice %s",end));
-		return end.get();
+	default public Optional<V> findEnd() {
+		return this.stream().reduce((first,second)->second);
 	}
 	
 	/**
 	 * @param vertex Un vertice
 	 * @return Camino desde el vertice inicial hasta el vertice vertex
 	 */
-	default public GraphPath<V, E> pathTo(V vertex) {
-		V end = this.find(vertex);
-		return GraphAlg.pathBackEdge(this.getGraph(),end,x->this.getEdgeToOrigin(x));
+	default public Optional<GraphPath<V, E>> pathTo(V vertex) {
+		Optional<V> end = this.find(vertex);
+		Optional<GraphPath<V, E>> r = Optional.empty();
+		if(end.isPresent()) {
+			GraphPath<V, E> s =GraphAlg.pathBackEdge(this.getGraph(),end.get(),x->this.getEdgeToOrigin(x));
+			r = Optional.of(s);
+		}
+		return r;
 	}
 	
 	
@@ -183,17 +179,27 @@ public interface GraphAlg<V,E>  {
 	 * @param goal Un predicado
 	 * @return Camino desde el vertice inicial hasta el primer vertice que cumple el predicado
 	 */
-	default public GraphPath<V, E> pathTo(Predicate<V> goal) {
-		V end = this.find(goal);
-		return GraphAlg.pathBackEdge(this.getGraph(), end, v->this.getEdgeToOrigin(v));
+	default public Optional<GraphPath<V, E>> pathTo(Predicate<V> goal) {
+		Optional<V> end = this.find(goal);
+		Optional<GraphPath<V, E>> r = Optional.empty();
+		if(end.isPresent()) {
+			GraphPath<V, E> s = GraphAlg.pathBackEdge(this.getGraph(), end.get(), v->this.getEdgeToOrigin(v));
+			r = Optional.of(s);
+		}
+		return r;
 	}
 
 	/**
 	 * @return Camino desde el vertice inicial hasta el útimo vertice del recorrido
 	 */
-	default public GraphPath<V, E> pathToEnd() {
-		V end = this.findEnd();
-		return GraphAlg.pathBackEdge(this.getGraph(),end,v->this.getEdgeToOrigin(v));
+	default public Optional<GraphPath<V, E>> pathToEnd() {
+		Optional<V> end = this.findEnd();
+		Optional<GraphPath<V, E>> r = Optional.empty();
+		if(end.isPresent()) {
+			GraphPath<V, E> s = GraphAlg.pathBackEdge(this.getGraph(),end.get(),v->this.getEdgeToOrigin(v));
+			r = Optional.of(s);
+		}
+		return r;
 	}
 	
 	
@@ -201,28 +207,43 @@ public interface GraphAlg<V,E>  {
 	 * @param end Un vertice 
 	 * @return Peso del camino desde el vertice inicial hasta el vertice end
 	 */
-	default public Double weight(V end) {
-		if(end.equals(startVertex())) return 0.;
-		return this.pathTo(end).getWeight();
+	default public Optional<Double> weight(V end) {
+		if(end.equals(startVertex())) return Optional.of(0.);
+		Optional<Double> r = Optional.empty();
+		Optional<GraphPath<V, E>> p = this.pathTo(end);
+		if(p.isPresent()) {
+			Double s = p.get().getWeight();
+			r = Optional.of(s);
+		}
+		return r;
 	}
 	
 	/**
 	 * @param goal Un prdicado
 	 * @return Peso del camino desde el vertice inicial hasta primer vertice que cumple el predicado
 	 */
-	default public Double weight(Predicate<V> goal) {
-		if(goal.test(startVertex())) return 0.;
-		return this.pathTo(goal).getWeight();
+	default public Optional<Double> weight(Predicate<V> goal) {
+		if(goal.test(startVertex())) return Optional.of(0.);
+		Optional<Double> r = Optional.empty();
+		Optional<GraphPath<V, E>> p = this.pathTo(goal);
+		if(p.isPresent()) {
+			Double s = p.get().getWeight();
+			r = Optional.of(s);
+		}
+		return r;
 	}
 	
 	/**
 	 * @return Peso del camino desde el vertice inicial hasta el útimo vertice del recorrido
 	 */
-	default public Double weight() {
+	default public Optional<Double> weight() {
 		Optional<V> end = this.stream().reduce((first,second)->second);
-		Preconditions.checkArgument(end.isPresent(), 
-				String.format("No se ha encontrado el vértice %s",end));
-		return GraphAlg.pathBackEdge(this.getGraph(),end.get(),v->this.getEdgeToOrigin(v)).getWeight();
+		Optional<Double> r = Optional.empty();
+		if(end.isPresent()) {
+			Double s = GraphAlg.pathBackEdge(this.getGraph(),end.get(),v->this.getEdgeToOrigin(v)).getWeight();
+			r = Optional.of(s);
+		}
+		return r;
 	}
 	
 	

@@ -29,7 +29,7 @@ public class TestRandom {
 				PackVertex::greedyEdge,
 				goal);
 				
-		Double bv = rr.weight();
+		Double bv = rr.weight().get();
 		System.out.println(bv);
 		
 		PackVertex.m = bv.intValue();

@@ -34,7 +34,7 @@ public class TestLocalSearchInteger {
 		GraphAlg<TravelVertexInteger,TravelEdgeInteger> ml = GraphAlg.local(graph2,e->e.getEdgeWeight()== 0.);
 //		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph,v.camino).getWeight());
 //		System.out.println(v.camino);});	
-		TravelVertexInteger v = ml.findEnd();
+		TravelVertexInteger v = ml.findEnd().get();
 		System.out.println(GraphPaths.of(graph,v.camino).getWeight());
 		System.out.println(v.camino);
 	}

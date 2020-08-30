@@ -158,6 +158,7 @@ public class Multiset<E>  {
 		return elements
 				.keySet()
 				.stream()
+				.filter(x->this.count(x)>0)
 				.map(x->String.format("%s:%d",x,this.count(x)))
 				.collect(Collectors.joining(",","{","}"));
 	}

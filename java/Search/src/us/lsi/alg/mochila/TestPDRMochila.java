@@ -27,7 +27,7 @@ public class TestPDRMochila {
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
-		Double bv = rr.weight();	
+		Double bv = rr.weight().get();	
 		
 		System.out.println(bv);
 		
@@ -41,7 +41,7 @@ public class TestPDRMochila {
 		
 		System.out.println(ms.search());
 		System.out.println(ms.solutionsTree);
-		GraphPath<MochilaVertex, MochilaEdge> s1 = ms.search();
+		GraphPath<MochilaVertex, MochilaEdge> s1 = ms.search().get();
 		System.out.println(s1);
 		SolucionMochila s = MochilaVertex.getSolucion(s1);
 		System.out.println(s);

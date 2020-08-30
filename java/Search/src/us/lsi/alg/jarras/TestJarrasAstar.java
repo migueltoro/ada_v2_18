@@ -26,7 +26,7 @@ public class TestJarrasAstar {
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 			
-			GraphPath<JarrasVertex, JarrasEdge> path = ms.pathTo(e2);
+			GraphPath<JarrasVertex, JarrasEdge> path = ms.pathTo(e2).get();
 			List<JarrasEdge> edges = path.getEdgeList();
 			System.out.println(edges);
 			JarrasSolution s = JarrasSolution.of(path);
