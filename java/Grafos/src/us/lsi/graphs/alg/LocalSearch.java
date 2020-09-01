@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import us.lsi.common.Preconditions;
@@ -14,8 +14,8 @@ import us.lsi.path.EGraphPath;
 
 public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>{
 	
-	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Predicate<E> stop) {
-		return new LocalSearch<V, E>(graph, stop);
+	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Double error) {
+		return new LocalSearch<V, E>(graph, error);
 	}
 
 	private EGraph<V,E> graph;
@@ -24,23 +24,27 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	public Map<V,E> edgeToOrigin;
 	private Double weight;
 	private EGraphPath<V,E> path;
-	private Predicate<E> stop;
 	private E nextEdge;
+	private Double error;
 	
-	LocalSearch(EGraph<V, E> graph, Predicate<E> stop) {
+	LocalSearch(EGraph<V, E> graph, Double error) {
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
 		this.actualVertex = this.startVertex;
 		this.edgeToOrigin = new HashMap<>();
-		this.stop = stop;
 		this.path = this.graph.initialPath();
 		this.weight = path.getWeight();
 		this.nextEdge = nextEdge(this.actualVertex);	
+		this.error = error;
+	}
+	
+	public Optional<V> search() {
+		return findEnd();
 	}
 	
 	@Override
 	public LocalSearch<V,E> copy(){
-		return LocalSearch.of(this.graph,this.stop);	
+		return LocalSearch.of(this.graph,this.error);	
 	}
 	
 	@Override
@@ -69,7 +73,9 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public boolean hasNext() {
-		return this.nextEdge != null && !this.stop.test(this.nextEdge);
+		Preconditions.checkNotNull(this.graph,"Graph null");
+		Preconditions.checkNotNull(this.error, "Error null");
+		return this.nextEdge != null && Math.abs(this.graph.getEdgeWeight(this.nextEdge)) > this.error;
 	}
 	
 	private E nextEdge(V vertex) {
@@ -105,6 +111,4 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 		return this.startVertex;
 	}
 	
-	
-
 }

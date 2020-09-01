@@ -90,11 +90,6 @@ public class Graphs2 {
 			PathType type) {
 		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
-
-	
-	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph() {
-		return new SimpleVirtualHyperGraph<V, E, A>();
-	}
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
 		return new SimpleVirtualHyperGraph<V, E, A>(start);

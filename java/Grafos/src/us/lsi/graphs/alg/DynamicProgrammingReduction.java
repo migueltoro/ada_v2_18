@@ -38,7 +38,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 			PDType type) {
 		this.graph = g;
 		this.startVertex = graph.startVertex();
-		this.goal = goal;
+		this.goal = goal==null?v->v.equals(v):goal;
 		this.end = end;
 		this.heuristic = heuristic;
 		this.type = type;
@@ -66,17 +66,27 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		return Optional.ofNullable(pathFrom(this.startVertex));
 	}
 	
+	@Override
+	public Optional<GraphPath<V, E>> search(V vertex) {
+		if(!this.solutionsTree.containsKey(vertex)) {
+			this.solutionsTree = new HashMap<>();
+			search(vertex,0.);
+		}	
+//		System.out.println("1___________");
+		return Optional.ofNullable(pathFrom(this.startVertex));
+	}
+	
 	private Sp<E> search(V actual, Double accumulateValue) {
 		Sp<E> r = null;
 		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (this.goal.test(actual)) {
-//			System.out.println(String.format("3 %s,%.2f",actual,accumulateValue));
+//			System.out.println(String.format("D3 %s,%.2f",actual,accumulateValue));
 			r = Sp.empty();
 			this.solutionsTree.put(actual, r);
 			return r;
 		} else {
-//			System.out.println(String.format("2 %s,%.2f",actual,accumulateValue));
+//			System.out.println(String.format("D2 %s,%.2f",actual,accumulateValue));
 			List<Sp<E>> rs = new ArrayList<>();
 			for (E edge : graph.edgesListOf(actual)) {				
 				V v = graph.getEdgeTarget(edge);

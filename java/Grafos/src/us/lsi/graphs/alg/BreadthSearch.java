@@ -1,6 +1,7 @@
 package us.lsi.graphs.alg;
 
 
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 	
 	private Graph<V,E> graph;
 	private V startVertex;
-	private Map<V,E> edgeToOrigin;
+	public Map<V,E> edgeToOrigin;
 	public Queue<V> queue; 
 
 	BreadthSearch(Graph<V, E> g, V startVertex) {
@@ -43,7 +44,7 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 	}
 	
 	public Iterator<V> iterator() {
-		return this.copy();
+		return this;
 	}
 
 
@@ -82,4 +83,13 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 		return this.startVertex;
 	}	
 	
+	public Double distanceToOrigen(V vertex) {
+		Double r = 0.;
+		while(!vertex.equals(startVertex)) {		
+			E edge = this.getEdgeToOrigin(vertex);
+			vertex = Graphs.getOppositeVertex(graph, edge,vertex);
+			r = r+1;		
+		}
+		return r;
+	}
 }

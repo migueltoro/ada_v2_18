@@ -8,7 +8,7 @@ public abstract class SimpleHyperEdge<V,A> {
 	public final V source;
 	public final List<V> targets;
 	public final A action;
-	private Double weight;
+	public final Double weight;
 	
 	
 	public SimpleHyperEdge(V source, List<V> targets, A action, Double weight) {

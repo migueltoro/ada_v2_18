@@ -28,7 +28,7 @@ public class TestPDRTyP {
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		
-		Double bv = rr.weight().get();
+		Double bv = rr.weightToEnd().get();
 		
 		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 
 				DPR.dynamicProgrammingReduction(graph,

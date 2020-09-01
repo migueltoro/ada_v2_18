@@ -20,7 +20,7 @@ public class RecorridoAnchuraTest {
 	
 	public static void main(String[] args) {
 		Graph<Ciudad,Carretera> graph =  
-				GraphsReader.newGraph("ficheros/andalucia.txt",
+				GraphsReader.newGraph("data/andalucia.txt",
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
@@ -37,7 +37,7 @@ public class RecorridoAnchuraTest {
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaAStar.gv",
 				x->String.format("%s",x.getNombre()),
-				x->String.format("%.sf",x.getKm()),
+				x->String.format("%.2f",x.getKm()),
 				v->GraphColors.getColor(Color.black),
 				e->GraphColors.getStyleIf(Style.bold,carreteras.contains(e)));
 		

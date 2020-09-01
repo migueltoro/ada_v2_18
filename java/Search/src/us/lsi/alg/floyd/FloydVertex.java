@@ -14,8 +14,8 @@ import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath;
 
-public class FloydVertex<V,E> extends VirtualHyperVertex<FloydVertex<V,E>,
-		FloydEdge<V,E>,FloydVertex.ActionFloyd>{
+
+public class FloydVertex<V,E> extends VirtualHyperVertex<FloydVertex<V,E>,FloydEdge<V,E>,FloydVertex.ActionFloyd>{
 	
 	public static enum ActionFloyd{Yes, No};	
 	
@@ -113,10 +113,10 @@ public class FloydVertex<V,E> extends VirtualHyperVertex<FloydVertex<V,E>,
 			List<V> ls = Lists2.of(origen,destino);
 			gp = new GraphWalk<>(tree.vertex().graph,ls,tree.weight());
 		} else if(tree.action() == ActionFloyd.No){
-			gp = solution(tree.children().get(0));
+			gp = solution(tree.neighbords().get(0));
 		} else {
-			GraphWalk<V,E> gp1 = solution(tree.children().get(0));
-			GraphWalk<V,E> gp2 = solution(tree.children().get(1));
+			GraphWalk<V,E> gp1 = solution(tree.neighbords().get(0));
+			GraphWalk<V,E> gp2 = solution(tree.neighbords().get(1));
 			gp = gp1.concat(gp2,g->EGraphPath.weight(g));
 		}
 		return gp;

@@ -40,9 +40,9 @@ public class TestLocalSearch {
 		System.out.println(e1);
 		EGraph<TravelVertex,TravelEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.weight);
 		
-		GraphAlg<TravelVertex,TravelEdge> ml = GraphAlg.local(graph,e->e.getEdgeWeight()== 0.);
+		GraphAlg<TravelVertex,TravelEdge> ml = GraphAlg.local(graph,0.);
 		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph2,v.camino).getEdgeList());
-		System.out.println(v.camino);});	
+								System.out.println(v.camino);});	
 	}
 
 }

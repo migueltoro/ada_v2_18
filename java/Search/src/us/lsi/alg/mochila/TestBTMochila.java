@@ -32,7 +32,7 @@ public class TestBTMochila {
 		
 		SolucionMochila sm = MochilaVertex.getSolucion(path.getEdgeList());
 		
-		Double bv = rr.weight().get();
+		Double bv = rr.weightToEnd().get();
 		
 		var ms = BT.backTrackingEnd(
 				graph,

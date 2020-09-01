@@ -60,9 +60,11 @@ public class MonedaVertex extends ActionVirtualVertex<MonedaVertex, MonedaEdge, 
 	}
 	
 	public MonedaEdge accionHeuristica() {
-		Integer a = this.valorRestante/Moneda.valor(this.index) + 1;
+		Integer a = this.valorRestante/Moneda.valor(this.index);
+		if(a>0) a = a+1;
 		return MonedaEdge.of(this,this.neighbor(a),a);
 	}
+	
 	
 	@Override
 	public List<Integer> actions() {

@@ -15,7 +15,7 @@ public class MochilaHeuristic {
 		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		return GraphAlg.greedy(
 				graph,
-				MochilaVertex::greedyEdgeHeuristic,goal).weight().get();
+				MochilaVertex::greedyEdgeHeuristic,goal).weightToEnd().get();
 	}
 	
 	public static Double voraz(MochilaVertex v1, MochilaVertex v2) {

@@ -12,10 +12,11 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 
 public interface DP<V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> {
 
-	Sp<E> search(V actual);
+	GraphTree<V,E,A> searchTree(V actual);
 	SimpleVirtualHyperGraph<V, E, A> getGraph();
 	Map<V, Sp<E>> getSolutionsTree();
-	GraphTree<V,E,A> tree(V vertex);
+	Sp<E> search();
+
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> 
 		DP<V, E, A> dynamicProgrammingSearch(

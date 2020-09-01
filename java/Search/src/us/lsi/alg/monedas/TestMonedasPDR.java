@@ -31,13 +31,18 @@ public class TestMonedasPDR {
 
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
 				e -> e.equals(e2));
+		GreedySearch<MonedaVertex, MonedaEdge> rrh = GraphAlg.greedy(graph, MonedaVertex::accionHeuristica,
+				e -> e.equals(e2));
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search();
+		GraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search();
+		
 		System.out.println("1 = " + SolucionMonedas.of(path1));
+		System.out.println("1.1 = " + SolucionMonedas.of(path1h));
 
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReductionEnd(
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReductionGoal(
 				graph, 
-				e2,
+				v->v.index==MonedaVertex.n,
 				Heuristica::heuristica, 
 				PDType.Max);
 
@@ -55,14 +60,18 @@ public class TestMonedasPDR {
 		graph = Graphs2.simpleVirtualGraph(e3);
 
 		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz, e -> e.equals(e4));
-
+		rrh = GraphAlg.greedy(graph,MonedaVertex::accionHeuristica,e -> e.equals(e4));
+		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search();
+		GraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search();
+		
 
 		System.out.println("3 = " + SolucionMonedas.of(path2));
+		System.out.println("3.1 = " + SolucionMonedas.of(path2h));
 
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReductionEnd(
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReductionGoal(
 				graph, 
-				e4,
+				v->v.index==MonedaVertex.n,
 				(v1,p,v2)->0., 
 				PDType.Min);
 

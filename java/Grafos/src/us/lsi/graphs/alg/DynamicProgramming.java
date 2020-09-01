@@ -23,20 +23,24 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	private Comparator<Sp<E>> comparatorSp;
 	public Map<V,Sp<E>> solutionsTree;
 	private PDType type;
+	private V startVertex;
 	
 	DynamicProgramming(
 			SimpleVirtualHyperGraph<V,E, A> graph, 
 			PDType type) {
 		this.graph = graph;
+		this.startVertex = graph.getStartVertex();
 		this.type = type;
 		if(this.type == PDType.Min) this.comparatorSp = Comparator.naturalOrder();
 		if(this.type == PDType.Max) this.comparatorSp = Comparator.<Sp<E>>naturalOrder().reversed();
 		this.solutionsTree = new HashMap<>();
 	}
 	
-	
-	
 	@Override
+	public Sp<E> search(){
+		return search(this.startVertex);
+	}
+
 	public Sp<E> search(V actual) {
 		Sp<E> r = null;
 		if (this.solutionsTree.containsKey(actual)) {
@@ -50,17 +54,16 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			List<Sp<E>> sps = new ArrayList<>();
 			for (E edge : graph.edgesOf(actual)) {
 				List<Sp<E>> spNeighbors = new ArrayList<>();
-				Boolean isNull = false;
 				for (V neighbor : edge.targets) {
 					Sp<E> nb = search(neighbor);
 					if (nb == null) {
-						isNull = true;
+						spNeighbors = null;
 						break;
 					}
 					spNeighbors.add(nb);
 				}
 				Sp<E> spa = null;
-				if(!isNull) {
+				if(spNeighbors != null) {
 					spa = Sp.of(edge,edge.getWeight(v->this.solutionsTree.get(v).weight));
 				}
 				sps.add(spa);
@@ -81,8 +84,9 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	public PDType getType() {
 		return type;
 	}
+	
 	@Override
-	public GraphTree<V,E,A> tree(V vertex){
+	public GraphTree<V,E,A> searchTree(V vertex){
 		return GraphTree.of(this.solutionsTree,vertex);
 	}
 

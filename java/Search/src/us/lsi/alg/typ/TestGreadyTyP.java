@@ -34,7 +34,7 @@ public class TestGreadyTyP {
 		System.out.println(TyPVertex.getSolucion(path));
 		
 		System.out.println(ms1.search());
-		System.out.println(ms2.weight());
+		System.out.println(ms2.weightToEnd());
 	}
 
 }

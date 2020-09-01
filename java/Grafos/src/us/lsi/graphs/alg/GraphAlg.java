@@ -12,6 +12,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -118,8 +119,8 @@ public interface GraphAlg<V,E>  {
 		return new AStarRandom<V, E>(graph,e->e.equals(end), end, heuristic, size);
 	}
 	
-	public static <V, E> LocalSearch<V, E> local(EGraph<V, E> graph, Predicate<E> stop) {
-		return new LocalSearch<V, E>(graph, stop);
+	public static <V, E> LocalSearch<V,E> local(EGraph<V, E> graph, Double error) {
+		return new LocalSearch<V, E>(graph, error);
 	}
 	
 	public static <V, E> SimulatedAnnealingSearch<V, E> simulatedAnnealing(EGraph<V, E> graph, V startVertex,
@@ -140,7 +141,9 @@ public interface GraphAlg<V,E>  {
 	 * @return Encuentra el priemr v&eacute;rtice que cumple el predicado seg&uacute;n la b&uacute;squeda seguida
 	 */
 	default public Optional<V> find(Predicate<V> goal) {
-		if(goal.test(startVertex())) return Optional.of(startVertex());
+		Preconditions.checkNotNull(this.startVertex(),"No puede ser null startVertex");
+		Preconditions.checkNotNull(goal,"No puede ser null goal");
+		if(goal.test(this.startVertex())) return Optional.of(this.startVertex());
 		return this.stream().filter(goal).findFirst();
 	}	
 	
@@ -149,6 +152,7 @@ public interface GraphAlg<V,E>  {
 	 * @return Encuentra el primer v&eacute;rtice que que es igual a v seg&uacute;n la b&uacute;squeda seguida
 	 */
 	default public Optional<V> find(V end) {
+		Preconditions.checkNotNull(this.startVertex(),"No puede ser null");
 		if(this.startVertex().equals(end)) return Optional.of(startVertex());
 		return this.stream().filter(e->e.equals(end)).findFirst();
 	}
@@ -236,7 +240,7 @@ public interface GraphAlg<V,E>  {
 	/**
 	 * @return Peso del camino desde el vertice inicial hasta el útimo vertice del recorrido
 	 */
-	default public Optional<Double> weight() {
+	default public Optional<Double> weightToEnd() {
 		Optional<V> end = this.stream().reduce((first,second)->second);
 		Optional<Double> r = Optional.empty();
 		if(end.isPresent()) {

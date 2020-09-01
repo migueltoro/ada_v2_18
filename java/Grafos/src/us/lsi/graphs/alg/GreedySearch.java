@@ -75,7 +75,8 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	public V next() {
 		V old = this.actualVertex;
 		this.hasNext = !this.goal.test(old);
-		if (hasNext) {
+//		System.out.println(String.format("G %s = %s",old,this.hasNext?"true":"false"));
+		if (this.hasNext) {
 			E edge = this.nextEdge.apply(this.actualVertex);
 			this.actualVertex = this.graph.getEdgeTarget(edge);
 			this.edgeToOrigin.put(this.actualVertex, edge);
@@ -92,7 +93,7 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	}
 
 	@Override	
-	public Optional<Double> weight() {
+	public Optional<Double> weightToEnd() {
 		Optional<V> s = this.find(goal);
 		Optional<Double> r = Optional.empty();
 		if(s.isPresent()) r = Optional.of(this.weight);

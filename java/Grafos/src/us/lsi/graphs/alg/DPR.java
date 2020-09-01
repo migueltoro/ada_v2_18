@@ -12,6 +12,7 @@ import us.lsi.graphs.virtual.EGraph;
 public interface DPR<V, E> {	
 	
 	Optional<GraphPath<V, E>> search();
+	Optional<GraphPath<V, E>> search(V vertex);
 	
 	
 	public static <V, E> DynamicProgrammingReduction<V, E> dynamicProgrammingReduction(

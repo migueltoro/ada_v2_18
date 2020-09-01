@@ -22,8 +22,8 @@ public class TestGreedy {
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 
-		System.out.println("1 = "+e1);
-		System.out.println("2 = "+e2);
+//		System.out.println("1 = "+e1);
+//		System.out.println("2 = "+e2);
 		
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
 		
@@ -33,29 +33,29 @@ public class TestGreedy {
 				e->e.equals(e2));
 		
 		GraphPath<MonedaVertex, MonedaEdge> path = rr.search();
-		System.out.println(path.getWeight());
-		System.out.println(Heuristica.heuristica(e1,null,e2));
+		System.out.println("G "+path.getWeight());
+		System.out.println("H "+Heuristica.heuristica(e1,e->e.equals(e2),e2));
 		
 		Collections.sort(Moneda.monedas,Comparator.comparing(m->m.pesoUnitario));
 //		System.out.println(Moneda.monedas);
 		
-		MonedaVertex e3 = MonedaVertex.first();
-		MonedaVertex e4 = MonedaVertex.last();
+		e1 = MonedaVertex.first();
+		MonedaVertex e3 = MonedaVertex.last();
 		
-		System.out.println("3 = "+e1);
-		System.out.println("4 = "+e2);
+//		System.out.println("3 = "+e1);
+//		System.out.println("4 = "+e2);
 		
-		graph = Graphs2.simpleVirtualGraph(e3);
+		graph = Graphs2.simpleVirtualGraph(e1);
 		
 		rr = GraphAlg.greedy(
 				graph,
 				MonedaVertex::accionVoraz,
-				e->e.equals(e4));
+				e->e.equals(e3));
 		
 		path = rr.search();
 //		System.out.println(path);
-		System.out.println(path.getWeight());
-		System.out.println(Heuristica.heuristica(e3,null,e4));
+		System.out.println("G "+path.getWeight());
+		System.out.println("H "+Heuristica.heuristica(e1,e->e.equals(e2),e3));
 
 	}
 

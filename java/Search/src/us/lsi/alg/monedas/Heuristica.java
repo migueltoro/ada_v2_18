@@ -18,7 +18,7 @@ public class Heuristica {
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
 				graph,
 				MonedaVertex::accionHeuristica,
-				e->e.equals(end));
+				goal);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path = rr.search();
 		return path.getWeight();

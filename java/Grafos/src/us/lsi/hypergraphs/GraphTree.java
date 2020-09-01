@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Lists2;
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.alg.Sp;
 
 public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
@@ -36,20 +37,21 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 		return r;
 	}
 	
-	public List<GraphTree<V, E, A>> children() {
+	public List<GraphTree<V, E, A>> neighbords() {
 		return tree.get(this.vertex).edge.targets.stream()
 				.map(v->GraphTree.of(tree, v))
 				.collect(Collectors.toList());
 	}
 	
 	public Boolean isBaseCase() {
+		Preconditions.checkNotNull(tree.get(this.vertex),"Es null");
 		return tree.get(this.vertex).edge == null;
 	}
 	
 	private static <V, E extends SimpleHyperEdge<V, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){
 		return level.stream()
 				.filter(t->!t.isBaseCase())
-				.flatMap(t->t.children().stream())
+				.flatMap(t->t.neighbords().stream())
 				.collect(Collectors.toList());
 	}
 	

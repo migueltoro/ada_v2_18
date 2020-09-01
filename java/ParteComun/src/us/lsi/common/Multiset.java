@@ -120,11 +120,10 @@ public class Multiset<E>  {
 
 
 	public Integer add(E e, Integer n) {
+		Preconditions.checkArgument(n>=0,"No se pueden añadir cantidades negativas");
 		Integer r = n;
-		if(this.elements.containsKey(e)) {
-		     r = elements.get(e) + r;
-		}
-		return elements.put(e, r);
+		if(r>0) elements.put(e,elements.getOrDefault(e,0) + n);
+		return r;
 	}
 
 	public Integer add(E e) {

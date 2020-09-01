@@ -27,19 +27,15 @@ import java.util.*;
 public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E extends SimpleHyperEdge<V,A>, A> {
 			
 	
-	private Set<V> vertexSet;
+	private V startVertex;
 	
-	SimpleVirtualHyperGraph() {
-		this.vertexSet = new HashSet<>();	
+	public SimpleVirtualHyperGraph(V startVertex) {
+		super();
+		this.startVertex = startVertex;
 	}
 
-	/**
-	 * @param vertexSet Conjunto de vértices del grafo que queremos hacer explícitos.
-	 */
-	@SafeVarargs
-	public SimpleVirtualHyperGraph(V... vertexSet){
-		super();
-		this.vertexSet = Set.of(vertexSet);
+	public V getStartVertex() {
+		return startVertex;
 	}
 
 	public boolean containsEdge(E e) {
@@ -75,7 +71,7 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 	 */
 	
 	public Set<V> vertexSet(){
-		return this.vertexSet;
+		return Set.of(this.startVertex);
 	}	
 	public List<E> edgesOf(V v) {
 		return v.edgesOf();
