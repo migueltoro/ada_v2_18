@@ -1,10 +1,10 @@
 package us.lsi.graphs.alg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.stream.Stream;
 
@@ -21,7 +21,7 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 	protected Map<V,E> edgeToOrigin;
 	public Graph<V,E> graph;
 	protected Stack<V> stackPre;
-	protected List<V> stackPost;
+	protected Queue<V> queue;
 	protected V startVertex; 
 	protected Integer n;
 	protected Integer i;
@@ -34,10 +34,10 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 		this.edgeToOrigin.put(startVertex, null);
 		this.stackPre = new Stack<>();
 		this.stackPre.add(startVertex);
-		this.stackPost = new ArrayList<>();
+		this.queue = new LinkedList<>();
 		this.preorder();
-		this.n = this.stackPost.size();
-		this.i = 0;
+//		this.n = this.queue.size();
+//		this.i = 0;
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 
 	public V nextP() {
 		V actual = stackPre.pop();
-		this.stackPost.add(actual);
+		this.queue.add(actual);
 		for(V v:Graphs.neighborListOf(graph, actual)) {
 			if(!this.edgeToOrigin.containsKey(v)) {
 				stackPre.add(v);
@@ -82,14 +82,12 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 	
 	@Override
 	public boolean hasNext() {
-		return this.i < this.n;
+		return !this.queue.isEmpty();
 	}
 
 	@Override
 	public V next() {
-		Integer old = this.i;
-		this.i ++;
-		return this.stackPost.get(old);
+		return this.queue.remove();
 	}	
 
 	public E getEdgeToOrigin(V v) {
