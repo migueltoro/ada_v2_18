@@ -19,6 +19,7 @@ import us.lsi.solve.AuxGrammar;
 public class Tsp {
 	
 	public static void tsp() throws IOException {	
+		
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 

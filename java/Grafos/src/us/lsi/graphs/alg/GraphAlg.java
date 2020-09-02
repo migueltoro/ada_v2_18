@@ -46,11 +46,32 @@ public interface GraphAlg<V,E>  {
 	 * @param <E> El tipo de las aristas
 	 * @param g Un grafo 
 	 * @param startVertex El vértice inicial
-	 * @return Una algoritmo de b&uacute;squeda en profundidad
+	 * @return Una algoritmo de b&uacute;squeda en profundidad en preorden
 	 */
 	public static <V, E> DephtSearch<V, E> depth(Graph<V, E> g, V startVertex) {
 		return new DephtSearch<V, E>(g, startVertex);
 	}	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en profundidad en postorden
+	 */
+	public static <V, E> DephtPostSearch<V, E> depthPost(Graph<V, E> g, V startVertex) {
+		return new DephtPostSearch<V, E>(g, startVertex);
+	}
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en orden topologico
+	 */
+	public static <V, E> TopologicalSearch<V, E> topological(Graph<V, E> g, V startVertex) {
+		return new TopologicalSearch<V, E>(g, startVertex);
+	}
+	
 	/**
 	 * @param <V> El tipo de los v&eacute;rtices
 	 * @param <E> El tipo de las aristas
