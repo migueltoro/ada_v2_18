@@ -21,12 +21,12 @@ import us.lsi.common.Pair;
 public class Streams2 {
 	
 	/**
-	 * @param first Un stream 
-	 * @param b Una secuencia adicional de stream
-	 * @param <A> El tipo de los elementos de la secuencia
-	 * @param <B> El tipo de los elementos de la secuencia
-	 * @param <C> El tipo de los elementos de la secuencia resultante
-	 * @param zipper Fución de combinación
+	 * @param leftStream Un stream 
+	 * @param rightStream Un stream 
+	 * @param <L> El tipo de los elementos de la secuencia
+	 * @param <R> El tipo de los elementos de la secuencia
+	 * @param <T> El tipo de los elementos de la secuencia resultante
+	 * @param combiner Fución de combinación
 	 * @return Un stream formado por los elementos obtenidos combinando 
 	 * uno a uno los elementos de las secuencias de entrada
 	 */	
@@ -39,21 +39,19 @@ public class Streams2 {
 	
 	
 	/**
-	 * @param sm Un String
+	 * @param stream Un String
 	 * @param start Primer indice de la enumrracion
 	 * @param <E> El tipo de los elementos de la secuencia
 	 * @return Un stream formado por los pares de elementos 
 	 * formados por un elemento y el entero que indica su posición
 	 */
-
-
 	public static <E> Stream<Enumerate<E>> enumerate(Stream<E> stream, Integer start) {
 		Stream<Integer> st = Stream.iterate(start, e -> e + 1);
 		return zip(stream, st, (e, n) -> Enumerate.of(n, e));
 	}
 	
 	/**
-	 * @param sm Un String
+	 * @param stream Un String
 	 * @param <E> El tipo de los elementos de la secuencia
 	 * @return Un stream formado por los pares de elementos 
 	 * formados por un elemento y el entero que indica su posición
@@ -124,8 +122,7 @@ public class Streams2 {
 	}
 	
 	/**
-	 * @param s Un stream 
-	 * @param s1 Una secuencia adicional de stream
+	 * @param s Una secuencia de streams
 	 * @param <T> El tipo de los elementos de la secuencia
 	 * @return Un stream fromado con los parámetros concatenados
 	 */

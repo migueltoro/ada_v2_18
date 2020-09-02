@@ -27,8 +27,7 @@ public class AlgoritmoSA {
 
 	/**
 	 *
-	 * @param tipo El tipo del cromomosoma
-	 * @param p Problema
+	 * @param estado El estado del cromosoma
 	 * @return AlgoritmoSA
 	 */
 

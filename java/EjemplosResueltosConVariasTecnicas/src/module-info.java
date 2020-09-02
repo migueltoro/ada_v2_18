@@ -1,15 +1,22 @@
-
-
-
-module ejemplos_de_varias_tecnicas {
+/**
+ * 
+ */
+/**
+ * @author migueltoro
+ *
+ */
+module ejemplos_resueltos {
+	
 	exports us.lsi.geneticosbt.sudoku;
+	exports us.lsi.astar.laberinto;
 	exports us.lsi.astar.puzzle;
 	exports us.lsi.astar.vuelos;
-	exports us.lsi.astar.laberinto;
 
-	requires transitive algoritmos_recursivos;
-	requires transitive datos_compartidos;
-	requires transitive geneticos;
-	requires transitive grafos;
-	requires transitive partecomun;
+	requires commons.math3;
+	requires datos_compartidos;
+	requires geneticos;
+	requires grafos;
+	requires org.jgrapht.core;
+	requires org.jheaps;
+	requires partecomun;
 }

@@ -351,7 +351,8 @@ public class AuxiliaryPLI {
 	
 	/**
 	 * @param e Un expresi&oacute;n 
-	 * @param n Un n&uacute;mero
+	 * @param ln Un n&uacute;mero
+	 * @param rn Un n&uacute;mero
 	 * @return \( e \ge n \)
 	 */
 	public static String constraintBound(Integer ln, String e, Integer rn) {
@@ -361,7 +362,8 @@ public class AuxiliaryPLI {
 	
 	/**
 	 * @param e Un expresi&oacute;n 
-	 * @param n Un n&uacute;mero
+	 * @param ln Un n&uacute;mero
+	 * @param rn Un n&uacute;mero
 	 * @return \( e \le n \)
 	 */
 	public static String constraintBound(Double ln, String e, Double rn) {
@@ -403,8 +405,8 @@ public class AuxiliaryPLI {
 	}
 	
 	/**
-	 * @param abs
-	 * @param exp
+	 * @param abs Una expresion
+	 * @param exp Una expresion
 	 * @return \( abs = |exp| \)
 	 */
 	public static List<String> constraintAbs(String abs, String exp) {

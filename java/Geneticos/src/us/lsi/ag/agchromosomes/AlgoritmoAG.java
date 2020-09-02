@@ -30,7 +30,6 @@ public class AlgoritmoAG<C> {
 	
 	/**
 	 * @param <C> Tipo del cromosoma
-	 * @param tipo El tipo del cromomosoma
 	 * @param p Problema
 	 * @return AlgoritmoAG
 	 */
@@ -104,7 +103,6 @@ public class AlgoritmoAG<C> {
 	
 	
 	/**
-	 * @param tipo El tipo del chromosoma
 	 * @param problema Problema a resolver
 	 */
 	public AlgoritmoAG(ProblemAG problema) {

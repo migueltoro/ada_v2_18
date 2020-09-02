@@ -20,6 +20,7 @@ public interface BinaryTree<E> {
 	}
 	
 	/**
+	 * @param label Una etiqueta
 	 * @post isLeaf()
 	 * @return Construye un árbol hoja
 	 */
@@ -28,6 +29,9 @@ public interface BinaryTree<E> {
 	}
 	
 	/**
+	 * @param label Una etiqueta
+	 * @param left Un arbol
+	 * @param right Un arbol
 	 * @post isBinary()
 	 * @return Construye un árbol binario
 	 */

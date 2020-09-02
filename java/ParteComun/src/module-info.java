@@ -10,6 +10,7 @@ module partecomun {
 	exports us.lsi.regularexpressions;
 	exports us.lsi.basictypes;
 	exports us.lsi.tiposrecursivos;
+	exports us.lsi.tiposrecursivos.parsers;
 	exports us.lsi.tiposrecursivos.program;
 	exports us.lsi.flujossecuenciales;
 	exports us.lsi.flujosparalelos;
@@ -17,5 +18,5 @@ module partecomun {
 	exports us.lsi.common;
 	
 	requires transitive commons.math3;
-	requires org.antlr.antlr4.runtime;
+	requires transitive org.antlr.antlr4.runtime;
 }

@@ -23,7 +23,7 @@ public class GraphColors {
 	}
 	
 	/**
-	 * @param n Un entero que representa un color como codificado en la clase Colors.
+	 * @param c color
 	 * @return Un Map para ser añadido en un exportToDot.
 	 */
 	public static Map<String,Attribute> getColor(Color c) {
