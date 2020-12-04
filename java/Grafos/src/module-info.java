@@ -21,5 +21,5 @@ module grafos {
 	requires transitive org.jgrapht.io;
 	requires transitive partecomun;
 	requires transitive solve;
-	requires datos_compartidos;
+	requires transitive datos_compartidos;
 }

@@ -14,6 +14,7 @@ import java.util.stream.StreamSupport;
 
 import us.lsi.common.Enumerate;
 import us.lsi.common.Pair;
+import us.lsi.common.Preconditions;
 import us.lsi.common.View1;
 
 public class Iterators {
@@ -123,6 +124,7 @@ public class Iterators {
 	 * @return Una vista del mismo de tipo 1
 	 */
 	public static <T> View1<Iterator<T>,T> view(Iterator<T> iterator) {
+		Preconditions.checkArgument(iterator.hasNext(),"El iterador está vacío");
 		T e = iterator.next();
 		return View1.of(e,iterator);
 	}

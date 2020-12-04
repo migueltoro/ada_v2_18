@@ -317,6 +317,7 @@ public class EjemplosDeStreams {
 	 * @return Primer primo mayor que a
 	 */
 	public static Long siguientePrimo1(Long n){
+		if(n<2) return 2L;
 		Long e0 = n%2==0?n+1:n+2;
 		return Stream.iterate(e0, e->e+2)
 				     .filter(e->Math2.esPrimo(e))
@@ -328,6 +329,7 @@ public class EjemplosDeStreams {
 	 * @return Primer primo mayor que a
 	 */
 	public static Long siguientePrimo2(Long n){
+		if(n<2) return 2L;
 		Long e = n%2==0?n+1:n+2;
 		Long a = null;
 		while(true){	   

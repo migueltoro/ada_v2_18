@@ -333,11 +333,13 @@ public class Math2 {
 	 * @return Si a es primo
 	 */
 	public static boolean esPrimo(Integer a){
+		Preconditions.checkArgument(a>=2,String.format("El argumento debe ser mayor o igual que 2 y es %d",a));
 		Integer sqrt = (int)Math.sqrt((double)a);
 		return IntStream.rangeClosed(2, sqrt).noneMatch(x->Math2.esDivisible(a, x));
 	}
 	
 	public static boolean esPrimo(Long a){
+		Preconditions.checkArgument(a>=2L,String.format("El argumento debe ser mayor o igual que 2 y es %d",a));
 		Long sqrt = (long)Math.sqrt((double)a);
 		return LongStream.rangeClosed(2, sqrt).noneMatch(x->Math2.esDivisible(a, x));
 	}
@@ -352,17 +354,27 @@ public class Math2 {
 	 */
 	
 	public static Integer siguientePrimo(Integer a){
-		a = (a+1)%2==0?a+2:a+1;
-		return Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
+		Integer r = 2;
+		if(a>=2) {
+			a = (a+1)%2==0?a+2:a+1;
+			r = Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
+		}
+		return r;
 	}
 	
 	public static Long siguientePrimo(Long a){
-		a = (a+1)%2==0?a+2:a+1;
-		return Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
+		Long r = 2L;
+		if(a>=2) {
+			a = (a+1)%2==0?a+2:a+1;
+			r = Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
+		}
+		return r;
 	}
 	
 	public static BigInteger siguientePrimo(BigInteger a){
-		return a.nextProbablePrime();
+		BigInteger r = BigInteger.TWO;
+		if(a.compareTo(r) >=0) r = a.nextProbablePrime();
+		return r;
 	}
 	
 	/**
@@ -525,5 +537,15 @@ public class Math2 {
 		      }
 		      r.add(0,e);		      
 		      return r;
+	}
+	
+	public static void main(String[] args) {
+		BigInteger mil = new BigInteger("1000");
+		Stream<BigInteger> s = Stream.iterate(
+				BigInteger.TWO,
+				e -> e.compareTo(mil) < 0, 
+				e->siguientePrimo(e));
+		s.forEach(e->System.out.println(e.toString()));
+		System.out.println(esPrimo(3));
 	}
 }

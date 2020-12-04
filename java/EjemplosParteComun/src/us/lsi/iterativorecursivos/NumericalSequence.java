@@ -5,6 +5,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NumericalSequence {
+
+// fib(n) = fib(n-1)+fib(n-2), fib(0) = 0, fib(1) = 1
+	
+	
+	private static Long fib(Integer n) {
+		Long r;
+		if(n==0) {
+			r = 0L;
+		}else if(n==1) {
+			r = 1L;
+		} else {
+			r = fib(n-1)+fib(n-2);
+		}
+		return r;
+	}
+	
+	public static Long fib_mem(Integer n) {
+		Map<Integer,Long> m = new HashMap<>();
+		return fib(n,m);
+	}
+	private static Long fib(Integer n, Map<Integer, Long> m) {
+		Long r;
+		if(m.containsKey(n)) {
+			r = m.get(n);
+		} else if(n==0) {
+			r = 0L;
+			m.put(n,r);
+		}else if(n==1) {
+			r = 1L;
+			m.put(n,r);
+		} else {
+			r = fib(n-1,m)+fib(n-2,m);
+			m.put(n,r);
+		}
+		return r;
+	}
+	
+	
 	
 	/**
 	 * Cálculo de la función f definida por:
@@ -245,6 +283,9 @@ public class NumericalSequence {
 	
 	
 	public static void main(String[] args) {
+		Long r1 = fib(10);
+		Long r2 = fib_mem(10);
+		System.out.println(r1+","+r2);
 	
 	}
 	

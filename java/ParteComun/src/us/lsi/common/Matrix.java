@@ -1,6 +1,9 @@
 package us.lsi.common;
 
 import java.lang.reflect.Array;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
@@ -14,8 +17,26 @@ import org.apache.commons.math3.fraction.Fraction;
  */
 public class Matrix<E extends FieldElement<E>> {
 	
+	public static Matrix<Fraction> of(Integer[][] datos) {
+		int n = datos.length;
+		int m = datos[0].length;
+		Fraction[][] d = new Fraction[n][m];		
+		for(int i =0; i<n; i++)
+			for(int j = 0; j<m;j++)
+				d[i][j] = new Fraction(datos[i][j]);
+		return new Matrix<>(Fraction.ZERO.getField(),d);
+	}
+	
+	public static Matrix<Fraction> of(Fraction[][] datos) {
+		return new Matrix<>(Fraction.ZERO.getField(),datos);
+	}
+	
 	public static <T extends FieldElement<T>> Matrix<T> of(Field<T> f, T[][] datos) {
 		return new Matrix<>(f,datos);
+	}
+	
+	public static Matrix<Fraction> ofValue(int nf, int nc, Fraction value){
+		return ofValue(Fraction.ZERO.getField(),nf,nc,value);
 	}
 	
 	public static <T extends FieldElement<T>> Matrix<T> ofValue(Field<T> f, int nf, int nc, T value) {
@@ -29,6 +50,10 @@ public class Matrix<E extends FieldElement<E>> {
 		return r;
 	}
 	
+	public static  Matrix<Fraction> zero(int nf, int nc) {
+		return zero(Fraction.ZERO.getField(),nf,nc);
+	}
+	
 	public static <T extends FieldElement<T>> Matrix<T> zero(Field<T> f, int nf, int nc) {
 		@SuppressWarnings("unchecked")
 		T[][] datos = (T[][]) Array.newInstance(f.getZero().getClass(),nf,nc);
@@ -38,6 +63,10 @@ public class Matrix<E extends FieldElement<E>> {
 				r.set(i,j,f.getZero());
 		}
 		return r;
+	}
+	
+	public static  Matrix<Fraction> one(int nf) {
+		return one(Fraction.ZERO.getField(),nf);
 	}
 	
 	public static  <T extends FieldElement<T>> Matrix<T> one(Field<T> f, int nf){
@@ -56,15 +85,15 @@ public class Matrix<E extends FieldElement<E>> {
 		return  r;
 	}
 	
-	private E[][] datos;
-	private int nf;
-	private int nc;
-	private int iv;	
-	private int jv;
-	private Field<E> field; 
+	protected E[][] datos;
+	protected int nf;
+	protected int nc;
+	protected int iv;	
+	protected int jv;
+	protected Field<E> field; 
 	
 
-	private Matrix(Field<E> f, E[][] datos) {
+	protected Matrix(Field<E> f, E[][] datos) {
 		super();
 		this.datos = datos;		
 		this.nf = datos.length;
@@ -112,13 +141,17 @@ public class Matrix<E extends FieldElement<E>> {
 	}
 	
 	void print(String title) {
-		System.out.println(String.format("\n%s = (nf = %d, nc = %d, iv = %d, , jv = %d)\n",
-				title,this.nf,this.nc,this.iv,this.jv));
-		for (int i = 0; i < this.nf; i++) {
-			for (int j = 0; j < this.nc; j++)
-				System.out.print(String.format("%s ", this.get(i,j).toString()));
-			System.out.println("\n");
-		}
+		System.out.println(String.format("\n%s = (nf = %d, nc = %d, iv = %d, , jv = %d)\n", title, this.nf, this.nc,
+				this.iv, this.jv));
+		Function<Fraction,String> fs = f->f.getNumerator()+
+				(f.getDenominator() == 1? "": "/"+f.getDenominator());
+		Function<Integer, String> f = i -> IntStream.range(0, this.nc).boxed()
+				.map(j -> fs.apply((Fraction)this.get(i, j)))
+				.collect(Collectors.joining(", ", "[", "]"));
+		String s = IntStream.range(0, this.nc).boxed()
+				.map(i -> f.apply(i)).collect(Collectors.joining(",\n", "[", "]"));
+		System.out.println(s);
+
 	}
 	
 	Matrix<E> copy(){
@@ -228,18 +261,23 @@ public class Matrix<E extends FieldElement<E>> {
 	
 	
 	
+	
 	public static void main(String[] args) {
-			Matrix<Fraction> m1 = Matrix.one(Fraction.ZERO.getField(), 7);
-			m1.print("m1");
-			Matrix<Fraction> m2 = Matrix.ofValue(Fraction.ZERO.getField(), 7, 7, Fraction.TWO);
-			m2.print("m2");			
-			Matrix<Fraction> m3 = m1.add(m2);
-			m3.print("m3");
-			Matrix<Fraction> m4 = m1.add_r(m2);
-			m4.print("m4");
-			Matrix<Fraction> m5 = m1.multiply(m2);
-			m5.print("m5");
-			Matrix<Fraction> m6 = m1.multiply_r(m2);
-			m6.print("m6");
-		}
+		Matrix<Fraction> m1 = Matrix.one(7);
+		m1.print("m1");
+		Matrix<Fraction> m2 = Matrix.ofValue(7, 7, Fraction.FOUR_FIFTHS);
+		m2.print("m2");
+		Matrix<Fraction> m3 = m1.add(m2);
+		m3.print("m3");
+		Matrix<Fraction> m4 = m1.add_r(m2);
+		m4.print("m4");
+		Matrix<Fraction> m5 = m1.multiply(m2);
+		m5.print("m5");
+		Matrix<Fraction> m6 = m1.multiply_r(m2);
+		m6.print("m6");
+		m1.view(0).print("view");
+		Integer[][] a = {{1,2,3},{3,4,5},{5,6,7}};
+		Matrix<Fraction> m7 = Matrix.of(a);
+		m7.print("m7");
+	}
 }
