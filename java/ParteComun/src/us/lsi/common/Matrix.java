@@ -35,11 +35,11 @@ public class Matrix<E extends FieldElement<E>> {
 		return new Matrix<>(f,datos);
 	}
 	
-	public static Matrix<Fraction> ofValue(int nf, int nc, Fraction value){
+	public static Matrix<Fraction> ofValue(Integer nf, Integer nc, Fraction value){
 		return ofValue(Fraction.ZERO.getField(),nf,nc,value);
 	}
 	
-	public static <T extends FieldElement<T>> Matrix<T> ofValue(Field<T> f, int nf, int nc, T value) {
+	public static <T extends FieldElement<T>> Matrix<T> ofValue(Field<T> f, Integer nf, Integer nc, T value) {
 		@SuppressWarnings("unchecked")
 		T[][] datos = (T[][]) Array.newInstance(f.getZero().getClass(),nf,nc);
 		Matrix<T> r = Matrix.of(f,datos);
@@ -50,11 +50,11 @@ public class Matrix<E extends FieldElement<E>> {
 		return r;
 	}
 	
-	public static  Matrix<Fraction> zero(int nf, int nc) {
+	public static  Matrix<Fraction> zero(Integer nf, Integer nc) {
 		return zero(Fraction.ZERO.getField(),nf,nc);
 	}
 	
-	public static <T extends FieldElement<T>> Matrix<T> zero(Field<T> f, int nf, int nc) {
+	public static <T extends FieldElement<T>> Matrix<T> zero(Field<T> f, Integer nf, Integer nc) {
 		@SuppressWarnings("unchecked")
 		T[][] datos = (T[][]) Array.newInstance(f.getZero().getClass(),nf,nc);
 		Matrix<T> r = Matrix.of(f,datos);
@@ -69,7 +69,7 @@ public class Matrix<E extends FieldElement<E>> {
 		return one(Fraction.ZERO.getField(),nf);
 	}
 	
-	public static  <T extends FieldElement<T>> Matrix<T> one(Field<T> f, int nf){
+	public static  <T extends FieldElement<T>> Matrix<T> one(Field<T> f, Integer nf){
 		@SuppressWarnings("unchecked")
 		T[][] datos = (T[][]) Array.newInstance(f.getZero().getClass(),nf,nf);
 		Matrix<T> r = Matrix.of(f,datos);
@@ -103,7 +103,7 @@ public class Matrix<E extends FieldElement<E>> {
 		this.field = f;
 	}
 
-	private Matrix(Field<E> f, E[][] datos, int nf, int nc, int iv, int jv) {
+	private Matrix(Field<E> f, E[][] datos, Integer nf, Integer nc, Integer iv, Integer jv) {
 		super();
 		this.datos = datos;
 		this.nf = nf;
@@ -113,20 +113,28 @@ public class Matrix<E extends FieldElement<E>> {
 		this.field = f;
 	}
 
-	E get(int i, int j) {
+	public E get(Integer i, Integer j) {
 		return this.datos[this.iv+i][this.jv+j];
 	}
-	void set(int i, int j, E value) {
+	public void set(Integer i, Integer j, E value) {
 		this.datos[this.iv+i][this.jv+j] = value;
 	}
 	
-	Matrix<E> view(int nf, int nc, int iv, int jv){
+	public Integer nf() {
+		return this.nf;
+	}
+	
+	public Integer nc() {
+		return this.nc;
+	}
+	
+	public Matrix<E> view(Integer nf, Integer nc, Integer iv, Integer jv){
 		Matrix<E> r = of(this.field,this.datos);
 		r.iv = this.iv +iv; r.nf = nf; r.jv = this.jv +jv; r.nc = nc;
 		return r;
 	}
 	
-	Matrix<E> view(int nv){
+	public Matrix<E> view(Integer nv){
 		int nf = this.nf/2;
 		int nc = this.nc/2;
 		Matrix<E> r = of(this.field,this.datos);
@@ -140,7 +148,7 @@ public class Matrix<E extends FieldElement<E>> {
 		return r;
 	}
 	
-	void print(String title) {
+	public void print(String title) {
 		System.out.println(String.format("\n%s = (nf = %d, nc = %d, iv = %d, , jv = %d)\n", title, this.nf, this.nc,
 				this.iv, this.jv));
 		Function<Fraction,String> fs = f->f.getNumerator()+
@@ -148,17 +156,17 @@ public class Matrix<E extends FieldElement<E>> {
 		Function<Integer, String> f = i -> IntStream.range(0, this.nc).boxed()
 				.map(j -> fs.apply((Fraction)this.get(i, j)))
 				.collect(Collectors.joining(", ", "[", "]"));
-		String s = IntStream.range(0, this.nc).boxed()
+		String s = IntStream.range(0, this.nf).boxed()
 				.map(i -> f.apply(i)).collect(Collectors.joining(",\n", "[", "]"));
 		System.out.println(s);
 
 	}
 	
-	Matrix<E> copy(){
+	public Matrix<E> copy(){
 		return new Matrix<>(this.field,this.datos, this.nf, this.nc, this.iv,this.jv);
 	}
 	
-	void copy(Matrix<E> r){
+	public void copy(Matrix<E> r){
 		Boolean ch = this.nc==r.nc && this.nf==r.nf;
 		Preconditions.checkArgument(ch, "No se cumplen condiciones de copia");
 	    for (int i = 0; i < this.nf; i++) {
@@ -178,7 +186,7 @@ public class Matrix<E extends FieldElement<E>> {
 	    }
 	}
 	
-	View4<Matrix<E>> views() {
+	public View4<Matrix<E>> views() {
 		return View4.of(this.view(0),this.view(1),this.view(2),this.view(3));
 	}
 	
@@ -194,7 +202,7 @@ public class Matrix<E extends FieldElement<E>> {
 		return r;
 	}
 
-	Matrix<E> multiply(Matrix<E> in2){
+	public Matrix<E> multiply(Matrix<E> in2){
 		Matrix<E> r = Matrix.zero(this.field,this.nf,in2.nc);
 		Boolean ch = this.nc==in2.nf && r.nf == this.nf && r.nc == in2.nc;
 		Preconditions.checkArgument(ch, "No se cumplen condiciones de multiplicación");
@@ -210,7 +218,7 @@ public class Matrix<E extends FieldElement<E>> {
 	    return r;
 	}
 	
-	Matrix<E> multiply_r(Matrix<E> m2){
+	public Matrix<E> multiply_r(Matrix<E> m2){
 		Matrix<E> r;
 		Boolean ch = this.nc==m2.nf;
 		Preconditions.checkArgument(ch,String.format("No se cumplen condiciones de multiplicación = (in1.nc = %d, in2.nf = %d)",this.nc,m2.nf));
@@ -228,7 +236,7 @@ public class Matrix<E extends FieldElement<E>> {
 		return r;
 	}
 	
-	Matrix<E> add(Matrix<E> m2){
+	public Matrix<E> add(Matrix<E> m2){
 		Matrix<E> r = Matrix.zero(this.field,this.nf,m2.nc);
 		Boolean ch = this.nc==m2.nc && this.nf==m2.nf && r.nc == this.nc && r.nf == this.nf;
 		Preconditions.checkArgument(ch, "No se cumplen condiciones de suma");
@@ -241,7 +249,7 @@ public class Matrix<E extends FieldElement<E>> {
 	    return r;
 	}
 	
-	Matrix<E> add_r(Matrix<E> m2){
+	public Matrix<E> add_r(Matrix<E> m2){
 		Boolean ch = this.nc==m2.nc && this.nf==m2.nf;
 		Preconditions.checkArgument(ch, "No se cumplen condiciones de suma");
 		Matrix<E> r; 

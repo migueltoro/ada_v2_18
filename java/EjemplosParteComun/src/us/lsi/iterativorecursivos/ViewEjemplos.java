@@ -3,8 +3,11 @@ package us.lsi.iterativorecursivos;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.math3.fraction.Fraction;
+
 import us.lsi.common.Ranges.IntRange;
 import us.lsi.common.Ranges.LongRange;
+import us.lsi.common.Matrix;
 import us.lsi.common.View1;
 import us.lsi.common.View2;
 import us.lsi.flujossecuenciales.Iterators;
@@ -124,13 +127,29 @@ public class ViewEjemplos {
 		return sum;
 	}
 	
+	public static void matrix() {
+			Integer[][] a = {{1,2,3,5,6},{3,4,5,-2,3},{5,6,7,5,6},{5,6,7,5,6},{5,6,7,5,6}};
+			Matrix<Fraction> m7 = Matrix.of(a);
+			m7.print("m7");
+			Matrix<Fraction> m8 = m7.view(2);
+			m8.print("m8");
+			System.out.println(String.format("%d,%d",m7.nf(),m7.nc()));
+			System.out.println(String.format("%d,%d",m8.nf(),m8.nc()));
+			System.out.println(String.format("%s,%s,%s,%s",
+					m8.get(0,0),
+					m8.get(0,m8.nc()-1),
+					m8.get(m8.nf()-1,0),
+					m8.get(m8.nf()-1,m8.nc()-1)));
+	}
+	
 	public static void main(String[] args) {
-		System.out.println(sum(List.of(1,3,7,9,31,54,91,102)));
-		System.out.println(sqrtLong(101L));
-		System.out.println(indexOf(List.of(1,3,7,9,31,54,91,102),92));
-		System.out.println(masCercano(List.of(1,3,7,9,31,54,91,102),103));
-		System.out.println(masCercano2(List.of(1,3,7,9,31,54,91,102),90));
-		System.out.println(sumIntegerOFile("ficheros/numeros.txt"));
+//		System.out.println(sum(List.of(1,3,7,9,31,54,91,102)));
+//		System.out.println(sqrtLong(101L));
+//		System.out.println(indexOf(List.of(1,3,7,9,31,54,91,102),92));
+//		System.out.println(masCercano(List.of(1,3,7,9,31,54,91,102),103));
+//		System.out.println(masCercano2(List.of(1,3,7,9,31,54,91,102),90));
+//		System.out.println(sumIntegerOFile("ficheros/numeros.txt"));
+		matrix();
 	}
 
 }
