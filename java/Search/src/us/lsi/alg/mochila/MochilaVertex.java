@@ -15,9 +15,9 @@ import us.lsi.mochila.datos.DatosMochila;
 
 
 
-public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Double> {
+public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
 
-	public static MochilaVertex of(Double capacidadInicial) {
+	public static MochilaVertex of(Integer capacidadInicial) {
 		return of(0, capacidadInicial);
 	}
 	
@@ -25,25 +25,25 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return of(m.index, m.capacidadRestante);
 	}
 	
-	public static MochilaVertex of(int index, Double capacidadRestante) {
+	public static MochilaVertex of(int index, Integer capacidadRestante) {
 		return new MochilaVertex(index, capacidadRestante);
 	}
 	
 	public static MochilaVertex lastVertex() {
-		return new MochilaVertex(n, 0.);
+		return new MochilaVertex(n, 0);
 	}
 
 	public int index;
-	public Double capacidadRestante;
+	public Integer capacidadRestante;
 	public static Integer n = DatosMochila.numeroDeObjetos;
 	
-	public MochilaVertex(int index, Double capacidadRestante) {
+	public MochilaVertex(int index, Integer capacidadRestante) {
 		super();
 		this.index = index;
 		if (index < n) {
 			this.capacidadRestante = capacidadRestante;
 		} else {
-			this.capacidadRestante = 0.;
+			this.capacidadRestante = 0;
 		}
 	}
 	
@@ -62,51 +62,56 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
 	
-	public MochilaEdge greedyEdgeHeuristic() {
-		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
-		Double a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
-		return MochilaEdge.of(this,this.neighbor(a), a);
-	}
+//	public MochilaEdge greedyEdgeHeuristic() {
+//		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
+//		Integer a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+//		return MochilaEdge.of(this,this.neighbor(a), a);
+//	}
+	
+	
 	
 	public MochilaEdge greedyEdge() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
-		Double a = Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
-		a = Math.floor(a);
+		Integer a = Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 		return MochilaEdge.of(this,this.neighbor(a), a);
 	}
 	
-	public Double greedyAction() {
+	public Integer greedyAction() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
 		return Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
 	}
+	
+	public Double heuristicAction() {
+		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
+		return Math.min(this.capacidadRestante.doubleValue()/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
+	}
 
 	@Override
-	public List<Double> actions() {
+	public List<Integer> actions() {
 		if(this.index == n) return new ArrayList<>();
 		Integer nu = greedyAction().intValue();
-		if(this.index == n-1) return Lists2.of(nu.doubleValue());
-		List<Double> alternativas = IntStream.rangeClosed(0,nu)
+		if(this.index == n-1) return Lists2.of(nu);
+		List<Integer> alternativas = IntStream.rangeClosed(0,nu)
 				.boxed()
-				.map(x->x.doubleValue())
 				.collect(Collectors.toList());
 		Collections.reverse(alternativas);
 		return alternativas;
 	}
 	
 	@Override
-	public MochilaVertex neighbor(Double a) {
-		 MochilaVertex r;
-		if(this.capacidadRestante == 0.) r =  MochilaVertex.of(n,0.);
-		if(this.index == n-1) r =  MochilaVertex.of(n,0.);
+	public MochilaVertex neighbor(Integer a) {
+		MochilaVertex r;
+		if(this.capacidadRestante == 0.) r =  MochilaVertex.of(n,0);
+		if(this.index == n-1) r =  MochilaVertex.of(n,0);
 		else {
-			Double cr = capacidadRestante-a*DatosMochila.getPeso(index);
+			Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 			r = MochilaVertex.of(index+1,cr);
 		}
 		return r;
 	}
 	
 	@Override
-	public MochilaEdge edge(Double a) {
+	public MochilaEdge edge(Integer a) {
 		MochilaVertex v = this.neighbor(a);
 		return MochilaEdge.of(this,v,a);
 	}
@@ -114,9 +119,9 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 
 	@Override
 	public String toString() {
-		return String.format("(%d,%.2f)",index,capacidadRestante);
+		return String.format("(%d,%d)",index,capacidadRestante);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -144,6 +149,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 			return false;
 		return true;
 	}
-
+	
+	
 }
 

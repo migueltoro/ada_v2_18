@@ -2,12 +2,12 @@ package us.lsi.alg.mochila;
 
 
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 
@@ -18,23 +18,29 @@ public class TestGreadyMochila {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;		
-		MochilaVertex e1 = MochilaVertex.of(78.);
-		MochilaVertex e2 = MochilaVertex.lastVertex();
+		MochilaVertex v1 = MochilaVertex.of(78);
+		MochilaVertex v2 = MochilaVertex.lastVertex();
+		Predicate<MochilaVertex> goal = v->v.equals(v2);
 //		System.out.println(e1);
 //		System.out.println(e2);			
-		Double r2 = MochilaHeuristic.heuristic(e1,e->e.equals(e2),e2);
+		Double r2 = MochilaHeuristic.heuristic(v1,v->v.equals(v2),v2);
 		System.out.println(r2);
-		GraphPath<MochilaVertex, MochilaEdge> r = MochilaHeuristic.greadyPath(e1,e->e.equals(e2));
-		System.out.println(r);
+		
+		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
+		
+		GraphPath<MochilaVertex, MochilaEdge> r = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal).search();
+		System.out.println(r.getWeight());
 //		System.out.println(r.getWeight());
 //		Double r3 = MochilaHeuristic.voraz(e1, e->e.equals(e2),e2);
 //		System.out.println(r3);
 //		GraphPath<MochilaVertex, MochilaEdge> r4 = MochilaHeuristic.greadyPath(e1,e->e.equals(e2));
 //		System.out.println(r4);
 //		System.out.println(r4.getWeight());
-		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1);
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdgeHeuristic,e->e.equals(e2));
-		System.out.println(rr.weightToEnd());
+//		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1);
+//		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,
+//				MochilaVertex::greedyEdgeHeuristic,
+//				e->e.equals(e2));
+//		System.out.println(rr.weightToEnd());
 
 	}
 

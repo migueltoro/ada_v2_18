@@ -23,7 +23,7 @@ public class TestBTMochila {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex e1 = MochilaVertex.of(78.);
+		MochilaVertex e1 = MochilaVertex.of(78);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());		
 		
@@ -32,7 +32,7 @@ public class TestBTMochila {
 		
 		SolucionMochila sm = MochilaVertex.getSolucion(path.getEdgeList());
 		
-		Double bv = rr.weightToEnd().get();
+		Double bv = path.getWeight();
 		
 		var ms = BT.backTrackingEnd(
 				graph,

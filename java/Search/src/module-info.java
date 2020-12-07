@@ -19,10 +19,10 @@ module ejemplos_algoritmos {
 	exports us.lsi.alg.colorgraphs;
 	exports us.lsi.alg.recorridos;
 
-	requires datos_compartidos;
-	requires grafos;
+	requires transitive datos_compartidos;
+	requires transitive grafos;
 	requires org.jgrapht.core;
 	requires org.jgrapht.io;
 	requires org.jheaps;
-	requires partecomun;
+	requires transitive partecomun;
 }

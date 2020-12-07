@@ -20,11 +20,11 @@ public class TestAStarMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 //		Integer n = DatosMochila.numeroDeObjetos;
 		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex e1 = MochilaVertex.of(78.);
+		MochilaVertex e1 = MochilaVertex.of(78);
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getEdgeWeight());		
 		
-		AStar<MochilaVertex, MochilaEdge> ms = GraphAlg.aStarEnd(graph,e2,MochilaHeuristic::voraz);
+		AStar<MochilaVertex, MochilaEdge> ms = GraphAlg.aStarEnd(graph,e2,MochilaHeuristic::heuristic_negate);
 		
 		GraphPath<MochilaVertex,MochilaEdge> path = ms.search().get();
 		List<MochilaEdge> edges = path.getEdgeList();
