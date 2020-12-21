@@ -150,8 +150,6 @@ public class ProblemasDeListas {
 		}
 	}
 	
-	
-	
 	private static <E> void copia(List<E> lista, int i, int j, List<E> ls){
 		for(int k = i; k<j; k++){
 			lista.set(k, ls.get(k));
@@ -214,14 +212,14 @@ public class ProblemasDeListas {
 		return r;
 	}	
 	
-	private static SubSecuencia getSubSecuenciaMaximaCentrada(List<Double> lista, int a, int b, int k){
+	private static SubSecuencia getSubSecuenciaMaximaCentrada(List<Double> lista, int i, int j, int k){
 		Double sumaMaxima = Double.MIN_VALUE;
 		Double suma = 0.;
 		int i1 = k;
 		int j1 = k;
 		int from = i1;
 		int to = j1;
-		for(i1 = k-1;i1 >= a; i1--){
+		for(i1 = k-1;i1 >= i; i1--){
 			suma = suma + lista.get(i1);  
 			if(suma > sumaMaxima){
 				sumaMaxima = suma;
@@ -229,7 +227,7 @@ public class ProblemasDeListas {
 			}
 		}
 		suma = sumaMaxima;
-		for(j1=k;j1<b;j1++){
+		for(j1=k;j1<j;j1++){
 			suma = suma + lista.get(j1);  
 			if(suma > sumaMaxima){
 				sumaMaxima = suma;

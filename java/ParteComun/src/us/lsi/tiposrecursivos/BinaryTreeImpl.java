@@ -47,7 +47,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@SuppressWarnings("unchecked")
 	public static BinaryTree<String> parse(String s){
-		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString("-43.7(2.1,abc34(-27.3(_,2),78.2(3,4)))"));
+		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString(s));
 		BinaryTreeParser parser = new BinaryTreeParser(new CommonTokenStream(lexer));
 	    ParseTree parseTree = parser.binary_tree();
 	    BinaryTree<String> tree =  (BinaryTree<String>) parseTree.accept(new BinaryTreeVisitorC());

@@ -108,7 +108,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	@SuppressWarnings("unchecked")
 	public static Tree<String> parse(String s){
-		TreeLexer lexer = new TreeLexer(CharStreams.fromString("39(2.,abc(_,2,3,4),9(8.,_))"));
+		TreeLexer lexer = new TreeLexer(CharStreams.fromString(s));
 		TreeParser parser = new TreeParser(new CommonTokenStream(lexer));
 	    ParseTree parseTree = parser.nary_tree();
 	    Tree<String> tree =  (Tree<String>) parseTree.accept(new TreeVisitorC());

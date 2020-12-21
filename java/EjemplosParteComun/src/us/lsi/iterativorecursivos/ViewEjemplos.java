@@ -129,9 +129,9 @@ public class ViewEjemplos {
 	
 	public static void matrix() {
 			Integer[][] a = {{1,2,3,5,6},{3,4,5,-2,3},{5,6,7,5,6},{5,6,7,5,6},{5,6,7,5,6}};
-			Matrix<Fraction> m7 = Matrix.of(a);
+			Matrix<Integer> m7 = Matrix.of(a);
 			m7.print("m7");
-			Matrix<Fraction> m8 = m7.view(2);
+			Matrix<Integer> m8 = m7.view(2);
 			m8.print("m8");
 			System.out.println(String.format("%d,%d",m7.nf(),m7.nc()));
 			System.out.println(String.format("%d,%d",m8.nf(),m8.nc()));
