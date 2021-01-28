@@ -60,6 +60,20 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return nary(label, nElements);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static Tree<String> parse(String s){
+		TreeLexer lexer = new TreeLexer(CharStreams.fromString(s));
+		TreeParser parser = new TreeParser(new CommonTokenStream(lexer));
+	    ParseTree parseTree = parser.nary_tree();
+	    Tree<String> tree =  (Tree<String>) parseTree.accept(new TreeVisitorC());
+	    return tree;
+	}
+	
+	public static <R> Tree<R> parse(String s, Function<String,R> f){
+		Tree<String> tree = TreeImpl.parse(s);
+		return tree.map(f);
+	}
+	
 	
 	public static <R> Tree<R> toTree(BinaryTree<R> t){
 		Tree<R> r = null;
@@ -81,7 +95,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		super();
 		this.id = null;
 		this.label = null;
-		this.elements = null;
+		this.elements = new ArrayList<>();
 		this.father = null;
 		this.type = TreeType.Empty;
 	}
@@ -90,7 +104,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		super();		
 		this.id = null;
 		this.label = label;
-		this.elements = null;
+		this.elements = new ArrayList<>();
 		this.father = null;
 		this.type = TreeType.Leaf;
 	}
@@ -106,14 +120,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		this.type = TreeType.Nary;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static Tree<String> parse(String s){
-		TreeLexer lexer = new TreeLexer(CharStreams.fromString(s));
-		TreeParser parser = new TreeParser(new CommonTokenStream(lexer));
-	    ParseTree parseTree = parser.nary_tree();
-	    Tree<String> tree =  (Tree<String>) parseTree.accept(new TreeVisitorC());
-	    return tree;
-	}
+	
 	
 	
 	/* (non-Javadoc)
@@ -334,17 +341,19 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 * @see us.lsi.tiposrecursivos.Tree#copy(java.util.function.Function)
 	 */
 	@Override
-	public <R> Tree<R> copy(Function<E,R> f){
+	public <R> Tree<R> map(Function<E,R> f){
 		Tree<R> r = null;
 		switch(this.getType()) {
 		case Empty: r = Tree.empty(); break;
 		case Leaf:  r = Tree.leaf(f.apply(label)); break;
 		case Nary:
-			List<Tree<R>> nElements = elements.stream().map(x->x.copy(f)).collect(Collectors.toList());	
+			List<Tree<R>> nElements = elements.stream().map(x->x.map(f)).collect(Collectors.toList());	
 			return Tree.nary(f.apply(label), nElements);
 		}
 		return r;
 	}
+	
+	
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.Tree#getReverse()
 	 */
@@ -505,11 +514,10 @@ public class TreeImpl<E> implements MutableTree<E> {
 		List<Tree<E>> nLevel;
 		nLevel = new ArrayList<>();
 		for (Tree<E> t : level) {
-			switch (this.getType()) {
+			switch (t.getType()) {
 			case Empty:  break;
 			case Leaf:  break;
-			case Nary:
-				nLevel.addAll(t.getChildren());
+			case Nary: nLevel.addAll(t.getChildren());
 			}
 		}
 		return nLevel;
@@ -520,11 +528,10 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public List<Tree<E>> getLevel(Integer n) {
-		Integer i =0;
+		Preconditions.checkArgument(n>=0,String.format("El nivel debe ser mayor o igual a cero y es %d",n));
 		List<Tree<E>> level = Arrays.asList(this);
-		while(i<n){
-			level = level.stream().flatMap(x->x.getChildren().stream()).collect(Collectors.toList());
-			i++;
+		for(Integer i=0;i<n; i++){
+			level = this.getNextLevel(level);
 		}
 		return level;
 	}
@@ -534,16 +541,18 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getDepth(Tree<E> root){
-		List<Tree<E>> level = Lists2.of(this);
-		int n = 0;		
+		List<Tree<E>> level = Lists2.of(root);
+		int n = 0;	
+		int r = -1;
 		while(!level.isEmpty()){
-			if(level.stream().anyMatch(x->x==this)){
+			if(level.stream().anyMatch(x->x.equals(this))) {
+				r = n;
 				break;
 			}
 			level = getNextLevel(level);
 			n++;
 		}
-		return n;
+		return r;
 	}
 	
 	
@@ -611,17 +620,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return true;
 	}
 	
-	public static void test1() {
-		System.out.println("--------------------");
-		List<String> filas = Files2.linesFromFile("ficheros/test.txt");
-		Tree<String> nary = null;
-		for (String fila : filas) {
-			nary = TreeImpl.parse(fila);
-			System.out.println(nary);
-		}
-	}
-
-	public static void main(String[] args) {
+	public static void test0() {
 		Tree<Integer> t1 = Tree.empty();
 		Tree<Integer> t2 = Tree.leaf(2);
 		Tree<Integer> t3 = Tree.leaf(3);
@@ -639,7 +638,47 @@ public class TreeImpl<E> implements MutableTree<E> {
 		System.out.println(t8);
 		System.out.println(t8.getChild(0).getFather());
 		System.out.println(Tree.parse("39(2.,27(_,2,3,4),9(8.,_))"));
-		test1();
+	}
+	
+	public static void test1() {
+		System.out.println("--------------------");
+		List<String> filas = Files2.linesFromFile("ficheros/test2.txt");
+		Tree<String> nary = null;
+		for (String fila : filas) {
+			nary = TreeImpl.parse(fila);
+			System.out.println(nary);
+		}
+	}
+	
+	
+	public static void test2() {
+		System.out.println("--------------------");
+		List<String> filas = Files2.linesFromFile("ficheros/test2.txt");
+		for (String fila : filas) {
+			Tree<String> nary = TreeImpl.parse(fila);
+			List<Tree<String>> nary2 = nary.getLevel(2);
+			System.out.println("Tree ="+nary);
+			System.out.println("Level 2 ="+nary2);
+			System.out.println("Labels ="+nary.getLabelByLevel());
+		}
+	}
+	
+	
+	public static void test3() {
+		Tree<String> t1 = Tree.parse("39(2.,27(_,2,3,4),9(8.,_))");
+		Tree<Double> t2 = t1.map(s->Double.parseDouble(s));
+		Tree<String> t3 = Tree.parse("9(8.,_)");
+		Tree<Double> t4 = t3.map(s->Double.parseDouble(s));
+		int d = t4.getDepth(t2);
+		System.out.println(t2);
+		System.out.println(t4);
+		System.out.println(d);
+	}
+	
+	
+
+	public static void main(String[] args) {
+		test2();
 	}
 	
 }

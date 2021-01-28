@@ -40,6 +40,10 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 		return TreeImpl.parse(s);
 	}
 	
+	public static <R> Tree<R> parse(String s, Function<String,R> f){
+		return TreeImpl.parse(s,f);
+	}
+	
 	/**
 	 * @return El tipo del árbol
 	 */
@@ -86,7 +90,7 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 
 	Tree<E> copy();
 
-	<R> Tree<R> copy(Function<E, R> f);
+	<R> Tree<R> map(Function<E, R> f);
 
 	/**
 	 * @return Un árbol que es la imagen especular de this

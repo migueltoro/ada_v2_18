@@ -45,6 +45,10 @@ public class MonedaVertex extends ActionVirtualVertex<MonedaVertex, MonedaEdge, 
 		this.valorRestante = valorRestante<0?0:valorRestante;
 	}
 	
+	public MonedaVertex copy() {
+		return MonedaVertex.of(this.index, this.valorRestante);
+	}
+	
 	public Integer size() {
 		return MonedaVertex.n - this.index;
 	}
@@ -70,12 +74,9 @@ public class MonedaVertex extends ActionVirtualVertex<MonedaVertex, MonedaEdge, 
 	public List<Integer> actions() {
 		List<Integer> r;
 		if(this.index == MonedaVertex.n) r = new ArrayList<>();
-		else if(this.index == MonedaVertex.n-1) {	
-			if(this.valorRestante%Moneda.valor(this.index) == 0) {
-				r = List.of(this.accionVoraz().action);
-			} else {
-				r = new ArrayList<>();
-			}
+		else if(this.index == MonedaVertex.n-1 ) {	
+			if(this.valorRestante%Moneda.valor(this.index) == 0) r = List.of(this.accionVoraz().action);
+			else r = new ArrayList<>();
 		} else {
 			Integer nue = this.valorRestante/Moneda.valor(this.index);
 			r = IntStream.range(0,nue+1).boxed().collect(Collectors.toList());
@@ -86,7 +87,10 @@ public class MonedaVertex extends ActionVirtualVertex<MonedaVertex, MonedaEdge, 
 
 	@Override
 	public MonedaVertex neighbor(Integer a) {
-		return MonedaVertex.of(this.index+1,this.valorRestante-a*Moneda.valor(this.index));
+		MonedaVertex r;
+		if(this.valorRestante == 0) r = MonedaVertex.last();
+		else r = MonedaVertex.of(this.index+1,this.valorRestante-a*Moneda.valor(this.index));
+		return r;
 	}
 
 	@Override

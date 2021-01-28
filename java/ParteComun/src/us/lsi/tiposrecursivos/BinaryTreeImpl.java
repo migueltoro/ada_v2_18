@@ -285,7 +285,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public int getHeight() {
 		Integer r=0;
 		switch(this.getType()) {
-		case Empty: r = -1; break;
+		case Empty: r = 0; break;
 		case Leaf:  r = 0; break;
 		case Binary: r = 1+ Math.max(this.getLeft().getHeight(),this.getRight().getHeight()); break;
 		}
@@ -296,7 +296,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		List<BinaryTree<E>> r = Lists2.empty();
 		for(BinaryTree<E> tree: ls) {
 			switch(tree.getType()) {			
-			case Empty:
+			case Empty: break;
 			case Leaf: r.add(BinaryTree.empty()); r.add(BinaryTree.empty()); break;
 			case Binary: r.add(tree.getLeft()); r.add(tree.getRight()); break;
 			}
