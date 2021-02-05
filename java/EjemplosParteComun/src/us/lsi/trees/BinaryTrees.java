@@ -243,6 +243,8 @@ public class BinaryTrees {
 		return r;		
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		BinaryTree<Integer> tree = addOrdered(List.of(1,7,2,5,10,9,-1,14,67,67), Comparator.naturalOrder());
 		System.out.println(tree.toString());

@@ -235,7 +235,7 @@ public class Ejemplos {
 	 */
 	public static Map<Cuadrante,Double> ejemploU(Stream<Punto2D> st){
 		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante, 
-							Collectors.<Punto2D,Double>reducing(0.,x->x.getX(),(x,y)->x+y)));
+							Collectors.reducing(0.,x->x.getX(),(x,y)->x+y)));
 	}
 		
 	/**
