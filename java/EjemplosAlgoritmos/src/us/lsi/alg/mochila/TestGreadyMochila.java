@@ -17,8 +17,8 @@ public class TestGreadyMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-		DatosMochila.capacidadInicial = 78;		
-		MochilaVertex v1 = MochilaVertex.of(78);
+		MochilaVertex.capacidadInicial = 78;
+		MochilaVertex v1 = MochilaVertex.initialVertex();
 		MochilaVertex v2 = MochilaVertex.lastVertex();
 		Predicate<MochilaVertex> goal = v->v.equals(v2);
 //		System.out.println(e1);

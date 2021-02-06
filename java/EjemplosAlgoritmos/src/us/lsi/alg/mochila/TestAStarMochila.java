@@ -19,8 +19,9 @@ public class TestAStarMochila {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 //		Integer n = DatosMochila.numeroDeObjetos;
-		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex e1 = MochilaVertex.of(78);
+//		DatosMochila.capacidadInicial = 78;	
+		MochilaVertex.capacidadInicial = 78;
+		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getEdgeWeight());		
 		

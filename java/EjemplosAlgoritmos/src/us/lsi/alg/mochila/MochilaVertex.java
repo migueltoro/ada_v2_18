@@ -3,6 +3,7 @@ package us.lsi.alg.mochila;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.*;
 
 import org.jgrapht.GraphPath;
@@ -17,7 +18,7 @@ import us.lsi.mochila.datos.DatosMochila;
 
 public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
 
-	public static MochilaVertex of(Integer capacidadInicial) {
+	public static MochilaVertex initialVertex() {
 		return of(0, capacidadInicial);
 	}
 	
@@ -32,10 +33,15 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public static MochilaVertex lastVertex() {
 		return new MochilaVertex(n, 0);
 	}
+	
+	public static Predicate<MochilaVertex> goal() {
+		return (MochilaVertex v)->v.index == MochilaVertex.n;
+	}
 
 	public int index;
 	public Integer capacidadRestante;
 	public static Integer n = DatosMochila.numeroDeObjetos;
+	public static Integer capacidadInicial;
 	
 	public MochilaVertex(int index, Integer capacidadRestante) {
 		super();
@@ -61,12 +67,6 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public Boolean isValid() {
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
-	
-//	public MochilaEdge greedyEdgeHeuristic() {
-//		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
-//		Integer a =  Math.min(this.capacidadRestante/DatosMochila.getPeso(index),DatosMochila.getNumMaxDeUnidades(index));
-//		return MochilaEdge.of(this,this.neighbor(a), a);
-//	}
 	
 	
 	
