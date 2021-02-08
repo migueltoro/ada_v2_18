@@ -1,12 +1,13 @@
 package us.lsi.alg.mochila.manual;
 
+import java.util.List;
 import java.util.Locale;
 
+import us.lsi.alg.mochila.MochilaEdge;
 import us.lsi.alg.mochila.MochilaVertex;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
 
-public class TestMochilaBT {
+public class TestMochilaPD {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
@@ -14,9 +15,9 @@ public class TestMochilaBT {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 		Integer maxValue = Auxiliar.voraz(v1);
-		SolucionMochila s = Auxiliar.solucionVoraz(v1);
-		MochilaBT.btm(78,maxValue,s);	
-		System.out.println(MochilaBT.soluciones);
+		List<MochilaEdge> edges = MochilaPD.pd(78,maxValue);	
+		System.out.println(Auxiliar.solucionFromEdges(edges));
+		
 	}
 
 }

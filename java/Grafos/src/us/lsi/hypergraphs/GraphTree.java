@@ -48,7 +48,7 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 		return tree.get(this.vertex).edge == null;
 	}
 	
-	private static <V, E extends SimpleHyperEdge<V, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){
+	public static <V, E extends SimpleHyperEdge<V, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){
 		return level.stream()
 				.filter(t->!t.isBaseCase())
 				.flatMap(t->t.neighbords().stream())
