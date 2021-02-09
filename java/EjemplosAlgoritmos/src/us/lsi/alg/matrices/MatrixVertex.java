@@ -36,7 +36,7 @@ public class MatrixVertex extends VirtualHyperVertex<MatrixVertex,MatrixEdge,Int
 
 	@Override
 	public List<Integer> actions() {
-		return IntStream.range(i+1,j).boxed().collect(Collectors.toList());
+		return IntStream.range(i+1,j-1).boxed().collect(Collectors.toList());
 	}
 
 	@Override

@@ -30,9 +30,9 @@ public class Auxiliar {
 			Integer i = tree.vertex().i;
 			Integer j = tree.vertex().j;
 			if(j-i ==1) r = MatrixVertex.matrices.get(tree.vertex().i).toString();
-			else r = String.format("(%s,%s)",MatrixVertex.matrices.get(i).toString(),MatrixVertex.matrices.get(i+1).toString());
+			else r = String.format("(%s * %s)",MatrixVertex.matrices.get(i).toString(),MatrixVertex.matrices.get(i+1).toString());
 		} else {
-			r = String.format("(%s,%s)",solucion(tree.neighbords().get(0)),solucion(tree.neighbords().get(1)));
+			r = String.format("(%s * %s)",solucion(tree.neighbords().get(0)),solucion(tree.neighbords().get(1)));
 		}
 		return r;
 	}

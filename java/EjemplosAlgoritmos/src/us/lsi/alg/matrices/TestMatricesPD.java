@@ -12,7 +12,7 @@ public class TestMatricesPD {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		Auxiliar.leeFichero("./ficheros/matrices_2.txt");
+		Auxiliar.leeFichero("./ficheros/matrices.txt");
 		
 		MatrixVertex initial = MatrixVertex.initial();
 		
