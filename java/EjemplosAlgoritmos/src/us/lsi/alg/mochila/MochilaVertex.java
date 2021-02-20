@@ -50,7 +50,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 			this.capacidadRestante = capacidadRestante;
 		} else {
 			this.capacidadRestante = 0;
-		}
+		}		
 	}
 	
 	public static SolucionMochila getSolucion(GraphPath<MochilaVertex, MochilaEdge> path){

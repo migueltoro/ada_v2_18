@@ -64,7 +64,7 @@ public class GraphColors {
 	
 	public static <E> Map<String, Attribute> getShapeIf(Shape shape, Boolean test) {
 		if(!test) shape = Shape.ellipse;
-		return Map.of("style", DefaultAttribute.createAttribute(shape.name()));
+		return Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
 	}
 	
 }
