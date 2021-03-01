@@ -5,15 +5,28 @@ public class FlowData {
 	
 	public static FlowGraph graph;
 	
-	public static Double maxEdge(Integer i, Integer j) {	
+	public static void leeDatos(String file) {
+		FlowData.graph = FlowGraph.newGraph(file);
+		FlowData.graph.integerGraph();
+	}
+	
+	public static Double edgeMax(Integer i, Integer j) {	
 		return  graph.maxEdge(i,j);
 	}
 	
-	public static Double minEdge(Integer i, Integer j) {
+	public static Boolean edgeHasMax(Integer i, Integer j) {	
+		return  graph.maxEdge(i,j) < Double.MAX_VALUE;
+	}
+	
+	public static Double edgeMin(Integer i, Integer j) {
 		return  graph.minEdge(i,j);
 	}
 	
-	public static  Double costEdge(Integer i, Integer j) {
+	public static Boolean edgHaseMin(Integer i, Integer j) {
+		return  graph.minEdge(i,j) > 0.;
+	}
+	
+	public static  Double edgeCost(Integer i, Integer j) {
 		 return graph.costEdge(i,j);
 	}
 	
@@ -21,15 +34,23 @@ public class FlowData {
 		return graph.containsEdge(i,j);
 	}
 	
-	public static Double maxVertex(Integer i) {
+	public static Double vertexMax(Integer i) {
 		return graph.maxVertex(i);
 	}
 	
-	public static Double minVertex(Integer i) {
+	public static Boolean vertexHasMax(Integer i) {
+		return graph.maxVertex(i) < Double.MAX_VALUE;
+	}
+	
+	public static Double vertexMin(Integer i) {
 		return graph.minVertex(i);
 	}
 	
-	public static Double costVertex(Integer i) {
+	public static Boolean vertexHasMin(Integer i) {
+		return graph.minVertex(i) > 0.;
+	}
+	
+	public static Double vertexCost(Integer i) {
 		return graph.costVertex(i);
 	}
 	
