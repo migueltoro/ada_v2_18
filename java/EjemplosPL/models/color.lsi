@@ -14,7 +14,7 @@ constraints section
 
 sum(x[i,k], k in 0 .. m) = 1, i in 0 .. n
 x[i,k] - y[k] <= 0, i in 0 .. n, k in 0 ..m
-x[i,k] + x[j,k] <= 1, i in 0 ..n, j in 0 .. n, k in 0 .. m | containsEdge(i,k)
+x[i,k] + x[j,k] <= 1, i in 0 ..n, j in 0 .. n, k in 0 .. m | containsEdge(i,j)
 
 bin
 
