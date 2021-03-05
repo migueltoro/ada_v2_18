@@ -120,19 +120,21 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 	}
 
 	public int inDegreeOf(V v) {
-		throw new IllegalArgumentException("Metodo no permitido");
+		return this.incomingEdgesOf(v).size();
 	}
 
 	public Set<E> incomingEdgesOf(V v) {
-		throw new IllegalArgumentException("Metodo no permitido");
+		Set<E> edges = graph.incomingEdgesOf(v);
+		return edges.stream().filter(e->this.containsEdge(e)).collect(Collectors.toSet());
 	}
 
 	public int outDegreeOf(V v) {
-		throw new IllegalArgumentException("Metodo no permitido");
+		return this.outgoingEdgesOf(v).size();
 	}
 
 	public Set<E> outgoingEdgesOf(V v) {
-		throw new IllegalArgumentException("Metodo no permitido");
+		Set<E> edges = graph.outgoingEdgesOf(v);
+		return edges.stream().filter(e->this.containsEdge(e)).collect(Collectors.toSet());
 	}
 
 	public boolean removeAllEdges(Collection<? extends E> c) {
