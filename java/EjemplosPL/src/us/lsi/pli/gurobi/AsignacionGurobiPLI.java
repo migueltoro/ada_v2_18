@@ -43,7 +43,7 @@ public class AsignacionGurobiPLI {
 	}
 	
 	public static void asignacion_model() throws IOException {
-		AsignacionGurobiPLI.leeFichero("data/asignacionDeTareas.txt");
+		AsignacionGurobiPLI.leeFichero("data/asignacionDeTareas_2.txt");
 		AuxGrammar.generate(AsignacionGurobiPLI.class,"models/asignacion.lsi","ficheros/asignacion.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/asignacion.lp");
 		Locale.setDefault(new Locale("en", "US"));
