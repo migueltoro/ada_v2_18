@@ -73,6 +73,4 @@ public class Flow1 {
 		minCost();
 	}
 	
-	
-	
 }
