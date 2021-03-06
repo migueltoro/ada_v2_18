@@ -8,6 +8,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
+import us.lsi.graphs.GraphData;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;

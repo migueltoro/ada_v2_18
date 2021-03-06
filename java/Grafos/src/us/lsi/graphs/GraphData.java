@@ -9,6 +9,10 @@ public class GraphData {
 	
 	public static Graph<Integer,SimpleEdge<Integer>> graph;
 	public static Map<Integer,Double> vertexWeight;
+	public static Integer n;
+	public static Integer m;
+	public static Integer origin;
+	public static Integer target;
 	
 	public static Boolean containsEdge(Integer i, Integer j) {
 		return graph.containsEdge(i,j);
@@ -27,12 +31,21 @@ public class GraphData {
 	}
 	
 	public static Integer getN() {
-		return graph.vertexSet().size();
+		return n;
 	}
 	
 	public static Integer getM() {
-		return graph.edgeSet().size();
+		return m;
 	}
+	
+	public static Integer origin() {
+		return origin;
+	}
+	
+	public static Integer target() {
+		return target;
+	}
+
 
 
 }

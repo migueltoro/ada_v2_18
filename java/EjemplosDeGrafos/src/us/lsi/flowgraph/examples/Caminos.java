@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 
 import us.lsi.common.TriFunction;
+import us.lsi.graphs.GraphData;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;

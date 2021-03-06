@@ -31,8 +31,9 @@ public class VertexEdgeCover {
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		g = IntegerVertexGraphView.of(graph);
+		GraphData.n = g.vertexSet().size();
 		GraphData.vertexWeight = g.vertexSet().stream()
-				.collect(Collectors.toMap(x->x,x->g.vertices.get(x).getHabitantes()));
+				.collect(Collectors.toMap(x->x,x->1./g.vertices.get(x).getHabitantes()));
 		GraphData.graph = g;
 	}
 	
