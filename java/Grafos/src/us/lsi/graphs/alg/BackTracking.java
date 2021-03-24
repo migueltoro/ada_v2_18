@@ -1,8 +1,11 @@
 package us.lsi.graphs.alg;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -52,7 +55,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.getPath().boundWeight(goal,end, edge, heuristic);
+		Double w = state.getPath().boundWeight(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
 		if(this.type == BTType.Max) r = w <= this.bestValue;
 		if(this.type == BTType.Min) r = w >= this.bestValue;
 		return r;
@@ -60,12 +63,16 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	
 	protected void update(State<V, E> state) {
 		if(this.type == BTType.All ||
-		   (this.type == BTType.Max && state.getAccumulateValue() >= this.bestValue) ||
-		   (this.type == BTType.Min && state.getAccumulateValue() <= this.bestValue)) {
+		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
+		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
 				S s = solution.apply(state.getPath());
+//				System.out.println("Path "+state.getPath());
+//				System.out.println("Solution "+s);
 				this.solutions.add(s);
 				this.bestValue = state.getAccumulateValue();
-				System.out.println("Update "+this.bestValue);
+//				System.out.println("Update "+this.bestValue);
+//				System.out.println("Path "+);
+//				System.out.println("Numero de soluciones "+this.solutions.size());
 		}
 	}
 	
@@ -115,7 +122,7 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		private V actualVertex;
 		private EGraphPath<V, E> path;
 		private EGraph<V,E> graph;
-		private Map<V,E> edges;
+		private Map<V,E> edgeToOrigin;
 		private Double accumulateValue;
 		
 		public static <V,E> State<V, E> of(EGraph<V,E> graph, Predicate<V> goal, V end){
@@ -127,22 +134,23 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 			this.actualVertex = graph.startVertex();
 			this.graph = graph;
 			this.path = graph.initialPath();
-			this.edges = new HashMap<>();
+			this.edgeToOrigin = new HashMap<>();
 			this.accumulateValue = this.path.getWeight();
 		}		
 	
 		@Override
 		public void forward(E edge) {
-			this.edges.put(this.actualVertex,edge);
-			this.accumulateValue = this.path.add(this.accumulateValue,edge);
+			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
+			this.accumulateValue = this.path.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
+			this.edgeToOrigin.put(this.actualVertex,edge);
+//			System.out.println(this.edgeToOrigin);			
 		}
 		
 		@Override
 		public void back(E edge) {
-			V source = graph.getEdgeSource(edge);
-			E e2 = this.edges.get(source);
-			this.accumulateValue = this.path.removeLast(this.accumulateValue,edge,e2);
+			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
+			this.accumulateValue = this.path.removeLast(this.accumulateValue,this.actualVertex,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
 		}
 		
@@ -151,13 +159,28 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 			return this.accumulateValue;
 		}	
 		
-		private E getEdgeToGoal(V vertex) {
-			return this.edges.get(vertex);
+		private E getEdgeToOrigin(V vertex) {
+			return this.edgeToOrigin.get(vertex);
 		}
 		
 		@Override
-		public EGraphPath<V, E> getPath() {			
-			return GraphAlg.pathForwardEdged(graph,graph.startVertex(),v->getEdgeToGoal(v));
+		public EGraphPath<V, E> getPath() {				
+			V end = this.actualVertex;
+			EGraphPath<V,E> ePath = graph.initialPath();
+			V startVertex = graph.startVertex();
+			if(end.equals(startVertex)) return ePath;
+			E edge = this.getEdgeToOrigin(end);
+			List<E> edges = new ArrayList<>();		
+			while(edge!=null) {				
+				edges.add(edge);
+				end = Graphs.getOppositeVertex(graph, edge, end);
+				edge = this.getEdgeToOrigin(end);			
+			}
+			Collections.reverse(edges);
+			for(E e:edges) {
+				ePath.add(e);
+			}
+			return ePath;
 		}
 					
 		@Override

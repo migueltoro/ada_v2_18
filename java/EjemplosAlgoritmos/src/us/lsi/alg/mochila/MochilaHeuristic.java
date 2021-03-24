@@ -16,8 +16,7 @@ public class MochilaHeuristic {
 	}
 
 	public static Double heuristic(int index, Double capacidadRestante, int lastIndex) {
-		Double r = 0.;
-		
+		Double r = 0.;		
 		while (capacidadRestante> 0 && index < lastIndex) {
 			Double a = Math.min(capacidadRestante / DatosMochila.getPeso(index), DatosMochila.getNumMaxDeUnidades(index));
 			r = r + a * DatosMochila.getValor(index);

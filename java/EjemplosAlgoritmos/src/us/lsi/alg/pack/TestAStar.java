@@ -31,12 +31,13 @@ public class TestAStar {
 	
 		GraphPath<PackVertex, PackEdge> p = rr.search();
 		SolucionPack sp = SolucionPack.of(p);
-	
+		System.out.println(sp);
 		PackVertex.m = sp.nc();
 		
 		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,(v1,pd,v2)->0.);
+//		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,Heuristica::heuristic);
 		
-		GraphPath<PackVertex,PackEdge> path = ms.search().get();
+		GraphPath<PackVertex,PackEdge> path = ms.search();
 		SolucionPack s = SolucionPack.of(path);
 		System.out.println(s);
 

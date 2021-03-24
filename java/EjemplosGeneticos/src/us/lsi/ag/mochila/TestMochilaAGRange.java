@@ -1,14 +1,13 @@
 package us.lsi.ag.mochila;
 
 
-import us.lsi.ag.ValuesInRangeProblemAG;
+import java.util.List;
+
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.RangeChromosome;
-import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
 
 
 public class TestMochilaAGRange {
@@ -20,22 +19,23 @@ public class TestMochilaAGRange {
 		AlgoritmoAG.MUTATION_RATE = 0.7;
 		AlgoritmoAG.POPULATION_SIZE = 50;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 60000;
+		StoppingConditionFactory.NUM_GENERATIONS = 5000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 623;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionFactory.StoppingConditionType.SolutionsNumber;
 		
 		DatosMochila.capacidadInicial = 78;
-		ValuesInRangeProblemAG<Integer,SolucionMochila> p = new ProblemaMochilaAGRange("ficheros/objetosmochila.txt");
+		DatosMochilaAGRange p = new DatosMochilaAGRange("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<ValuesInRangeChromosome<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
 		System.out.println(RangeChromosome.bitsNumber);
 		System.out.println("================================");
-		System.out.println(ap.getBestChromosome().decode());
-		System.out.println(p.getSolucion(ap.getBestChromosome()));
+		List<Integer> dc = ap.getBestChromosome().decode();
+		System.out.println(dc);
+		System.out.println(p.getSolucion(dc));
 		System.out.println("================================");
 		System.out.println(SolutionsNumber.numeroDeGeneraciones);
 	}

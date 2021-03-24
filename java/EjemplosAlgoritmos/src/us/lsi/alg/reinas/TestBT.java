@@ -21,7 +21,7 @@ public class TestBT {
 				SolucionReinas::of, ReinasVertex::copy, BTType.All);
 
 		ms.search();
-		System.out.println(ms.getSolutions());
+		System.out.println(ms.getSolution());
 
 	}
 }

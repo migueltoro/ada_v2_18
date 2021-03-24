@@ -2,12 +2,13 @@ package us.lsi.ag.anuncios;
 
 
 
-import us.lsi.ag.SeqNormalProblemAG;
+import java.util.List;
+import java.util.Locale;
+
+import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.SeqNomalChromosome;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.anuncios.datos.ListaDeAnunciosAEmitir;
 import us.lsi.anuncios.datos.DatosAnuncios;
 
 
@@ -27,13 +28,13 @@ public class TestAnunciosAG {
 		
 		DatosAnuncios.tiempoTotal = 30;
 		System.out.println("ficheros/anuncios.txt");
-		SeqNormalProblemAG<ListaDeAnunciosAEmitir> p = new ProblemaAnunciosAG("ficheros/anuncios.txt");		
-		AlgoritmoAG<SeqNomalChromosome> ap = AlgoritmoAG.create(p);
+		SeqNormalData<SolucionAnuncios> p = new DatosAnunciosAG("ficheros/anuncios.txt");		
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
 		ap.ejecuta();
 		
-		
+		Locale.setDefault(new Locale("en", "US"));
 		System.out.println("================================");
-		System.out.println(p.getSolucion(ap.getBestChromosome()));
+		System.out.println(p.getSolucion(ap.getBestChromosome().decode()));
 		System.out.println("================================");		
 	}	
 

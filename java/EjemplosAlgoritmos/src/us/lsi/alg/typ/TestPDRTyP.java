@@ -28,15 +28,19 @@ public class TestPDRTyP {
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		
-		Double bv = rr.weightToEnd().get();
+		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> path = rr.search();
+		Double bv = path.getWeight();
 		
 		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 
 				DPR.dynamicProgrammingReduction(graph,
 						e->e.getIndex()==TyPVertex.n,
 						e2,
-						(v1,p,v2)->0.,
+						Heuristica::heuristic,
 						PDType.Min);
+		
+		
 		ms.bestValue = bv;
+		ms.solutionPath = path;
 		ms.search();
 //		System.out.println(ms.search());
 //		System.out.println(ms.solutionsTree);

@@ -11,4 +11,5 @@ module ejemplos_geneticos {
 	requires transitive geneticos;
 	requires transitive datos_compartidos;
 	requires transitive partecomun;
+	requires grafos;
 }

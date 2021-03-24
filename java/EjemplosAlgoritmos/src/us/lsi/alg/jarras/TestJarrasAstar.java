@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -19,14 +20,14 @@ public class TestJarrasAstar {
 			JarrasVertex e2 = JarrasVertex.last();
 			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 			
-			GraphAlg<JarrasVertex,JarrasEdge> ms = GraphAlg.aStarEnd(
+			AStar<JarrasVertex, JarrasEdge> ms = GraphAlg.aStarEnd(
 					graph,
 					e2,
 					(v1,p,v2)->0.);
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 			
-			GraphPath<JarrasVertex, JarrasEdge> path = ms.pathTo(e2).get();
+			GraphPath<JarrasVertex, JarrasEdge> path = ms.search();
 			List<JarrasEdge> edges = path.getEdgeList();
 			System.out.println(edges);
 			JarrasSolution s = JarrasSolution.of(path);

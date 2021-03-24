@@ -26,7 +26,7 @@ public class TestAStarRandom {
 				(e1,e2,e3)->0.,
 				e->ReinasVertex.n-e.index);
 		
-		GraphPath<ReinasVertex, ReinasEdge> path = ms.search().get();
+		GraphPath<ReinasVertex, ReinasEdge> path = ms.search();
 		System.out.println(SolucionReinas.of(path));
 
 	}

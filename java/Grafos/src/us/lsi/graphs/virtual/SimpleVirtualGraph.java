@@ -3,8 +3,10 @@ package us.lsi.graphs.virtual;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.jgrapht.GraphType;
+import org.jgrapht.graph.DefaultGraphType;
 
 import us.lsi.common.Sets2;
 import us.lsi.common.TriFunction;
@@ -54,7 +56,6 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 		this.edgeWeight = edgeWeight;
 		this.vertexWeight = vertexWeight;
 		this.vertexPassWeight = vertexPassWeight;
-		this.type = PathType.Sum;
 		this.startVertex = startVertex;
 		this.vertexSet = new HashSet<V>();
 		this.vertexSet.add(this.startVertex);
@@ -140,8 +141,9 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	
 	@Override
 	public Set<E> edgesOf(V v) {
-		return v.edgesOf();
+		throw new UnsupportedOperationException();
 	}
+	
 	@Override
 	public List<E> edgesListOf(V v) {
 		return v.edgesListOf();
@@ -149,17 +151,17 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	
 	@Override
 	public int degreeOf(V v) {
-		return v.edgesOf().size();
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	public int outDegreeOf(V v) {
-		return v.edgesOf().size();
+		return v.edgesListOf().size();
 	}
 
 	@Override
 	public Set<E> outgoingEdgesOf(V v) {
-		return edgesOf(v);
+		return v.edgesListOf().stream().collect(Collectors.toSet());
 	}
 	
 	@Override
@@ -189,7 +191,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	 */
 	@Override
 	public GraphType getType() {
-		throw new UnsupportedOperationException();
+		return new DefaultGraphType.Builder().build().asDirected();
 	}	
 	
 	/**

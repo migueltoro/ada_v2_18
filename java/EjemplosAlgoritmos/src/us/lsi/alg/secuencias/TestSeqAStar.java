@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -19,14 +20,14 @@ public class TestSeqAStar {
 		SeqVertex e2 = SeqVertex.last();
 		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 		
-		GraphAlg<SeqVertex,SeqEdge> ms = GraphAlg.aStarEnd(
+		AStar<SeqVertex, SeqEdge> ms = GraphAlg.aStarEnd(
 				graph,
 				e2,
 				SeqHeuristic::heuristic);
 		
 //		Optional<SeqVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 		
-		GraphPath<SeqVertex, SeqEdge> path = ms.pathTo(e2).get();
+		GraphPath<SeqVertex, SeqEdge> path = ms.search();
 		List<SeqEdge> edges = path.getEdgeList();
 		System.out.println(edges);
 		SeqSolution s = SeqSolution.of(path);

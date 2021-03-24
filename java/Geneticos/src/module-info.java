@@ -10,4 +10,5 @@ module geneticos {
 	requires transitive commons.math3;
 	requires transitive org.jgrapht.core;
 	requires transitive partecomun;
+	requires transitive grafos;
 }

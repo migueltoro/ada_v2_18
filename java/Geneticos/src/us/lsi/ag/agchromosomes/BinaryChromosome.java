@@ -5,8 +5,10 @@ import java.util.List;
 import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
+import us.lsi.ag.ValuesInRangeData;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
 /**
  * @author Miguel Toro
@@ -16,20 +18,20 @@ import us.lsi.ag.ValuesInRangeProblemAG;
  * La implementación es una adaptación de la clase {@link org.apache.commons.math3.genetics.Chromosome Chromosome} de Apache. </p>
  *
  */
-public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryChromosome implements ValuesInRangeChromosome<Integer> {
-	
-	public static ValuesInRangeProblemAG<Integer,?> problem;
+public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryChromosome implements
+                   ValuesInRangeData<Integer,Object>, Chromosome<List<Integer>> {
 	
 	/**
 	 * Dimensión del cromosoma
 	 */
 	
 	protected static int DIMENSION;
+	protected static ValuesInRangeData<Integer,Object> data;
 	
 	@SuppressWarnings("unchecked")
-	public static void iniValues(ProblemAG problema){
-		BinaryChromosome.problem = (ValuesInRangeProblemAG<Integer,?>) problema; 
-		BinaryChromosome.DIMENSION = BinaryChromosome.problem.getCellsNumber();
+	public static void iniValues(Data data){
+		BinaryChromosome.data = (ValuesInRangeData<Integer,Object>) data;
+		BinaryChromosome.DIMENSION = BinaryChromosome.data.size();
 	}
 
 	public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {
@@ -55,43 +57,47 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	private Double ft = null;
 	
 	private double calculateFt(){
-		return BinaryChromosome.problem.fitnessFunction(this);
+		return this.fitnessFunction(this.decode());
 	}
 
 	@Override
 	public AbstractListChromosome<Integer> newFixedLengthChromosome(List<Integer> ar) {
 		return new BinaryChromosome(ar);
 	}
-
-	public ValuesInRangeProblemAG<Integer,?> getProblem() {
-		return problem;
-	}
-
-	@Override
-	public Integer getMin(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getMax(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getObjectsNumber() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static int getDimension() {
-		return BinaryChromosome.problem.getCellsNumber();
-	}
 	
 	public static BinaryChromosome getInitialChromosome() {
-		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(BinaryChromosome.getDimension());
+		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(BinaryChromosome.DIMENSION);
 		return new BinaryChromosome(ls);
+	}
+
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeFactory.ChromosomeType.Binary;
+	}
+
+	@Override
+	public Integer size() {
+		return BinaryChromosome.data.size();
+	}
+
+	@Override
+	public Integer getMax(Integer i) {
+		return BinaryChromosome.data.getMax(i);
+	}
+
+	@Override
+	public Integer getMin(Integer i) {
+		return BinaryChromosome.data.getMin(i);
+	}
+
+	@Override
+	public Double fitnessFunction(List<Integer> dc) {
+		return BinaryChromosome.data.fitnessFunction(dc);
+	}
+
+	@Override
+	public Object getSolucion(List<Integer> dc) {
+		return BinaryChromosome.data.getSolucion(dc);
 	}
 
 }

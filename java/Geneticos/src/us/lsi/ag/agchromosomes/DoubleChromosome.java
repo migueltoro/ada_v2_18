@@ -7,9 +7,10 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
-
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
+import us.lsi.ag.ValuesInRangeData;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
 import us.lsi.math.Math2;
 
@@ -28,7 +29,8 @@ import us.lsi.math.Math2;
  * reales en un espacio de n dimensiones </p>
  *
  */
-public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeChromosome<Double> {
+public class DoubleChromosome extends BinaryChromosome 
+        implements ValuesInRangeData<Double,Object>, Chromosome<List<Double>> {
 
 	
 	/**
@@ -36,7 +38,7 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	 */
 	public static Integer numeroDeBits = 10;
 	private static Double fact = null;
-	public static ValuesInRangeProblemAG<Double,?> problema;
+	public static ValuesInRangeData<Double,Object> data;
 	
 	/**
 	 * Dimensión del cromosoma igual al numeroDeBits*getNumeroDeVariables()
@@ -45,9 +47,9 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	public static int DIMENSION;
 	
 	@SuppressWarnings("unchecked")
-	public static void iniValues(ProblemAG problema){
-		DoubleChromosome.problema = (ValuesInRangeProblemAG<Double,?>) problema;
-		DoubleChromosome.DIMENSION = DoubleChromosome.problema.getCellsNumber()*DoubleChromosome.numeroDeBits;
+	public static void iniValues(Data data){
+		DoubleChromosome.data = (ValuesInRangeData<Double,Object>) data;
+		DoubleChromosome.DIMENSION = DoubleChromosome.data.size()*DoubleChromosome.numeroDeBits;
 	}
 	
 	public DoubleChromosome(Integer[] representation) throws InvalidRepresentationException {
@@ -75,7 +77,7 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	public List<Double> decode() {
 		List<Integer> ls = super.getRepresentation();
 		List<Double> r = new ArrayList<Double>();
-		for(int i = 0; i< this.getNum(); i++){
+		for(int i = 0; i< this.size(); i++){
 			int index1 = i*numeroDeBits;
 			int index2 = index1+numeroDeBits;
 			Preconditions.checkElementIndex(index1, ls.size());
@@ -106,34 +108,38 @@ public class DoubleChromosome extends BinaryChromosome implements ValuesInRangeC
 	private double ft;
 	
 	private double calculateFt(){
-		return DoubleChromosome.problema.fitnessFunction(this);
-	}
-
-	public Integer getNum() {
-		return DoubleChromosome.problema.getCellsNumber();
-	}
-	
-	public Double getMax(int i) {
-		return DoubleChromosome.problema.getMax(i);
-	}
-	
-	public Double getMin(int i) {
-		return DoubleChromosome.problema.getMin(i);
-	}
-
-	public  ValuesInRangeProblemAG<Double,?> getProblema() {
-		return DoubleChromosome.problema;
+		return DoubleChromosome.data.fitnessFunction(this.decode());
 	}
 
 	@Override
-	public ValuesInRangeProblemAG<Integer,?> getProblem() {
-		// TODO Auto-generated method stub
-		return null;
+	public ChromosomeType getType() {
+		return ChromosomeFactory.ChromosomeType.Real;
 	}
 
 	@Override
-	public Integer getObjectsNumber() {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer size() {
+		return DoubleChromosome.data.size();
 	}
+
+	@Override
+	public Double getMax(Integer i) {
+		return DoubleChromosome.data.getMax(i);
+	}
+
+	@Override
+	public Double getMin(Integer i) {
+		return DoubleChromosome.data.getMin(i);
+	}
+
+	@Override
+	public Double fitnessFunction(List<Double> dc) {
+		return DoubleChromosome.data.fitnessFunction(dc);
+	}
+
+	@Override
+	public Object getSolucion(List<Double> dc) {
+		return DoubleChromosome.data.getSolucion(dc);
+	}
+
+	
 }

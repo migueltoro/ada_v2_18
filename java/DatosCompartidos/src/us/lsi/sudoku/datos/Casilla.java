@@ -34,7 +34,7 @@ public class Casilla {
 	final private Integer sc;
 	final private Integer p;
 	final Integer initialValue;
-	final Boolean initialFree;
+	public final Boolean initialFree;
 	private Integer value;
 	
 	private Casilla(Integer x, Integer y, Integer value) {

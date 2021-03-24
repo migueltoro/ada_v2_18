@@ -1,4 +1,5 @@
 package us.lsi.model;
+
 // Generated from PLIModel.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -104,15 +105,15 @@ public interface PLIModelListener extends ParseTreeListener {
 	 */
 	void exitList(PLIModelParser.ListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PLIModelParser#index}.
+	 * Enter a parse tree produced by {@link PLIModelParser#indx}.
 	 * @param ctx the parse tree
 	 */
-	void enterIndex(PLIModelParser.IndexContext ctx);
+	void enterIndx(PLIModelParser.IndxContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PLIModelParser#index}.
+	 * Exit a parse tree produced by {@link PLIModelParser#indx}.
 	 * @param ctx the parse tree
 	 */
-	void exitIndex(PLIModelParser.IndexContext ctx);
+	void exitIndx(PLIModelParser.IndxContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PLIModelParser#indexed_elem}.
 	 * @param ctx the parse tree
@@ -280,18 +281,6 @@ public interface PLIModelListener extends ParseTreeListener {
 	 */
 	void exitVarFactor(PLIModelParser.VarFactorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code numFactor}
-	 * labeled alternative in {@link PLIModelParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumFactor(PLIModelParser.NumFactorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code numFactor}
-	 * labeled alternative in {@link PLIModelParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumFactor(PLIModelParser.NumFactorContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PLIModelParser#var_id}.
 	 * @param ctx the parse tree
 	 */
@@ -301,6 +290,16 @@ public interface PLIModelListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVar_id(PLIModelParser.Var_idContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PLIModelParser#index_var_id}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndex_var_id(PLIModelParser.Index_var_idContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PLIModelParser#index_var_id}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndex_var_id(PLIModelParser.Index_var_idContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code oneSideBound}
 	 * labeled alternative in {@link PLIModelParser#bound}.

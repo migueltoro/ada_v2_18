@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.antlr.v4.runtime.misc.NotNull;
+
 import us.lsi.common.Preconditions;
 import us.lsi.flujosparalelos.Streams2;
 import us.lsi.model.PLIModelBaseVisitor;
@@ -187,14 +189,14 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Object visitList(PLIModelParser.ListContext ctx) { 
-		Integer n = ctx.index().size();
+		Integer n = ctx.indx().size();
 		List<Limits> limites = new ArrayList<>(); 
 		List<String> indexNames = new ArrayList<>();
 		for(int i = 0;i<n;i++) {
-			String name = ctx.index(i).index_name.getText();
+			String name = ctx.indx(i).index_name.getText();
 			indexNames.add(name);
-			Integer li = AuxGrammar.asInteger(visit(ctx.index(i).li));
-			Integer ls = AuxGrammar.asInteger(visit(ctx.index(i).ls));
+			Integer li = AuxGrammar.asInteger(visit(ctx.indx(i).li));
+			Integer ls = AuxGrammar.asInteger(visit(ctx.indx(i).ls));
 			Limits lm = Limits.of(li, ls);
 			limites.add(lm);
 		}
@@ -251,7 +253,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Object visitIndex(PLIModelParser.IndexContext ctx) { 
+	@Override public Object visitIndx(PLIModelParser.IndxContext ctx) { 
 		return visitChildren(ctx); 
 	}
 	
@@ -379,15 +381,15 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		}
 		return e;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Object visitNumFactor(PLIModelParser.NumFactorContext ctx) { 
-		return visit(ctx.exp()).toString();	
-	}
+//	/**
+//	 * {@inheritDoc}
+//	 *
+//	 * <p>The default implementation returns the result of calling
+//	 * {@link #visitChildren} on {@code ctx}.</p>
+//	 */
+//	@Override public Object visitNumFactor(PLIModelParser.NumFactorContext ctx) { 
+//		return visit(ctx.exp()).toString();	
+//	}
 	
 	/**
 	 * {@inheritDoc}
@@ -395,16 +397,37 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Object visitVar_id(PLIModelParser.Var_idContext ctx) { 
+	@Override
+	public Object visitVar_id(PLIModelParser.Var_idContext ctx) {
 		String name = ctx.name.getText();
-		Integer n = ctx.exp().size();
-		name = n>0? name+"_":name;
-		name = IntStream.range(0,n).boxed()
-				.map(i->AuxGrammar.asInteger(visit(ctx.exp(i))))
-				.map(e->e.toString())
-			    .collect(Collectors.joining("_",name,""));
+		List<String> ls = AuxGrammar.asListString(visit(ctx.index_var_id()));
+		if (ls != null) {
+			Integer n = ls.size();
+			name = IntStream.range(0, n).boxed()
+					.map(i -> ls.get(i))
+					.collect(Collectors.joining("_",name+"_", ""));
+		}
 		return name;
 	}
+	
+	
+	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#index_var_id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	
+	@Override public Object visitIndex_var_id(@NotNull PLIModelParser.Index_var_idContext ctx) {
+		Integer n = ctx.exp().size();
+		if(n == 0) return null;
+		List<String>  r = IntStream.range(0,n).boxed()
+				.map(i->AuxGrammar.asInteger(visit(ctx.exp(i))))
+				.map(e->e.toString())
+			    .collect(Collectors.toList());
+		return ListString.of(r);
+	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	 *

@@ -56,7 +56,6 @@ public class TestGreedy {
 //		System.out.println(path);
 		System.out.println("G "+path.getWeight());
 		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.equals(e2),e3));
-
 	}
 
 }

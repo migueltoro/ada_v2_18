@@ -3,7 +3,9 @@ package us.lsi.graphs.alg;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
@@ -21,6 +23,8 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	public Graph<V,E> graph;
 	protected Stack<V> stack;
 	protected V startVertex; 
+	public Map<V,Integer> position;
+	private Integer n = 0;
 
 	DephtSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
@@ -29,6 +33,7 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 		this.edgeToOrigin.put(startVertex, null);
 		this.stack = new Stack<>();
 		this.stack.add(startVertex);
+		this.position = new HashMap<>();
 	}
 	
 	@Override
@@ -62,6 +67,8 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 				this.edgeToOrigin.put(v,graph.getEdge(actual, v));
 			}
 		}
+		this.position.put(actual,n);
+		n++;
 		return actual;
 	}
 
@@ -77,6 +84,10 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	@Override
 	public V startVertex() {
 		return this.startVertex;
-	}	
+	}
+	
+	public Set<E> edges() {
+		return this.edgeToOrigin.values().stream().collect(Collectors.toSet());
+	}
 
 }

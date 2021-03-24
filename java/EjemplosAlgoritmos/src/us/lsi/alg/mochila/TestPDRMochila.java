@@ -1,6 +1,7 @@
 package us.lsi.alg.mochila;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -27,9 +28,10 @@ public class TestPDRMochila {
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
-		Double bv = rr.weightToEnd().get();	
+		GraphPath<MochilaVertex, MochilaEdge> path = rr.search();	
+		Double bv = path.getWeight();
 		
-		System.out.println(bv);
+		System.out.println("1 = "+bv);
 		
 		DynamicProgrammingReduction<MochilaVertex, MochilaEdge> ms = 
 				DPR.dynamicProgrammingReductionEnd(graph,
@@ -38,10 +40,10 @@ public class TestPDRMochila {
 						PDType.Max);
 		
 		ms.bestValue = bv;
+		ms.solutionPath = path;
 		
-		System.out.println(ms.search());
-		System.out.println(ms.solutionsTree);
-		GraphPath<MochilaVertex, MochilaEdge> s1 = ms.search().get();
+		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();
+		GraphPath<MochilaVertex, MochilaEdge> s1 = sp.get();
 		System.out.println(s1);
 		SolucionMochila s = MochilaVertex.getSolucion(s1);
 		System.out.println(s);

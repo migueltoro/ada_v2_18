@@ -63,7 +63,7 @@ public class Tsp {
 
 
 	public static void main(String[] args) throws IOException {
-		shortestPath();
+		tsp();
 	}
 
 }

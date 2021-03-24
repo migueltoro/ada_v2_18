@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.math3.genetics.Chromosome;
+//import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.CrossoverPolicy;
 import org.apache.commons.math3.genetics.ElitisticListPopulation;
 import org.apache.commons.math3.genetics.GeneticAlgorithm;
@@ -14,7 +14,8 @@ import org.apache.commons.math3.genetics.SelectionPolicy;
 import org.apache.commons.math3.genetics.StoppingCondition;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 
-import us.lsi.ag.ProblemAG;
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.common.Preconditions;
@@ -26,7 +27,7 @@ import us.lsi.common.Preconditions;
  * @author Miguel Toro
  *
  */
-public class AlgoritmoAG<C> {
+public class AlgoritmoAG<E> {
 	
 	/**
 	 * @param <C> Tipo del cromosoma
@@ -34,8 +35,8 @@ public class AlgoritmoAG<C> {
 	 * @return AlgoritmoAG
 	 */
 	
-	public static <C> AlgoritmoAG<C> create(ProblemAG p) {
-		return new AlgoritmoAG<C>(p);
+	public static <E> AlgoritmoAG<E> create(Data data) {
+		return new AlgoritmoAG<E>(data);
 	}
 	
 	/**
@@ -79,11 +80,12 @@ public class AlgoritmoAG<C> {
 	public static long INITIAL_TIME;
 	
 	
-	private ChromosomeType tipo;
-	private CrossoverPolicy crossOverPolicy;	
-	private MutationPolicy mutationPolicy;
-	private SelectionPolicy selectionPolicy;
-	protected StoppingCondition stopCond;
+	public static Data  data;
+	public static ChromosomeType tipo;
+	public static CrossoverPolicy crossOverPolicy;
+	public static MutationPolicy mutationPolicy;
+	public static SelectionPolicy selectionPolicy;
+	public static StoppingCondition stopCond;
 		
 	
 
@@ -91,41 +93,44 @@ public class AlgoritmoAG<C> {
 	 * Lista con los mejores cromosomas de cada una de la generaciones si se usa la condición de parada SolutionsNumbers.
 	 * En otro caso null.
  	 */
-	public static List<Chromosome> bestChromosomes;
+	public static List<org.apache.commons.math3.genetics.Chromosome> bestChromosomes;
 	
 
-	protected Population initialPopulation;
+	protected static Population initialPopulation;
 	
 	
-	protected Chromosome bestFinal;
-	protected Population finalPopulation;
+	protected static org.apache.commons.math3.genetics.Chromosome bestFinal;
+	protected static Population finalPopulation;
 	
+	public static JDKRandomGenerator random;
 	
 	
 	/**
 	 * @param problema Problema a resolver
 	 */
-	public AlgoritmoAG(ProblemAG problema) {
+	public AlgoritmoAG(Data data) {
 		super();
-		this.tipo = problema.getType();				
-		this.selectionPolicy =  ChromosomeFactory.getSelectionPolicy();
-		this.mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo, problema);
-		this.crossOverPolicy = ChromosomeFactory.getCrossoverPolicy(tipo, problema);
-		this.stopCond = StoppingConditionFactory.getStoppingCondition();
-		ChromosomeFactory.iniValues(tipo, problema);
-		JDKRandomGenerator random = new JDKRandomGenerator();		
+		random = new JDKRandomGenerator();		
 		random.setSeed((int)System.currentTimeMillis());
 		GeneticAlgorithm.setRandomGenerator(random);
+		AlgoritmoAG.data = data;
+		AlgoritmoAG.tipo = data.getType();				
+		AlgoritmoAG.selectionPolicy =  ChromosomeFactory.getSelectionPolicy();
+		AlgoritmoAG.mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo);
+		AlgoritmoAG.crossOverPolicy = ChromosomeFactory.getCrossoverPolicy(tipo);
+		AlgoritmoAG.stopCond = StoppingConditionFactory.getStoppingCondition();
+		ChromosomeFactory.iniValues(data,tipo);
 	}
 
 	/**
 	 * Inicializa aleatoriamente la población.
 	 */
 	public ElitisticListPopulation randomPopulation() {
-		List<Chromosome> popList = new LinkedList<>();
+		List<org.apache.commons.math3.genetics.Chromosome> popList = new LinkedList<>();
 
 		for (int i = 0; i < POPULATION_SIZE; i++) {
-			Chromosome randChrom = ChromosomeFactory.randomChromosome(this.tipo);
+			org.apache.commons.math3.genetics.Chromosome randChrom = 
+					(org.apache.commons.math3.genetics.Chromosome) ChromosomeFactory.randomChromosome(AlgoritmoAG.tipo);
 			popList.add(randChrom);
 		}
 		return new ElitisticListPopulation(popList, popList.size(), ELITISM_RATE);
@@ -136,8 +141,8 @@ public class AlgoritmoAG<C> {
 	 */
 	public void ejecuta() {
 		INITIAL_TIME = System.currentTimeMillis();
-		this.initialPopulation = randomPopulation();
-		Preconditions.checkNotNull(this.initialPopulation);		
+		AlgoritmoAG.initialPopulation = randomPopulation();
+		Preconditions.checkNotNull(AlgoritmoAG.initialPopulation);		
 		
 		GeneticAlgorithm ga = new GeneticAlgorithm(
 				crossOverPolicy, 
@@ -147,9 +152,9 @@ public class AlgoritmoAG<C> {
 				selectionPolicy);
 		
 		
-		this.finalPopulation = ga.evolve(this.initialPopulation, this.stopCond);		
-		Preconditions.checkNotNull(this.finalPopulation);
-		this.bestFinal = this.finalPopulation.getFittestChromosome();
+		AlgoritmoAG.finalPopulation = ga.evolve(AlgoritmoAG.initialPopulation, AlgoritmoAG.stopCond);		
+		Preconditions.checkNotNull(AlgoritmoAG.finalPopulation);
+		AlgoritmoAG.bestFinal = AlgoritmoAG.finalPopulation.getFittestChromosome();
 	}
 
 	/**
@@ -163,14 +168,14 @@ public class AlgoritmoAG<C> {
 	 * @return El mejor cromosoma en la población final
 	 */
 	@SuppressWarnings("unchecked")
-	public C getBestChromosome() {
-		return (C)bestFinal;
+	public Chromosome<E> getBestChromosome() {
+		return (Chromosome<E>)bestFinal;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<C> getBestChromosomes(){
+	public List<Chromosome<E>> getBestChromosomes(){
 		return bestChromosomes.stream()
-				.map(x->(C)x)
+				.map(x->(Chromosome<E>)x)
 				.collect(Collectors.toList());
 	}
 

@@ -1,4 +1,5 @@
 package us.lsi.model;
+
 // Generated from PLIModel.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -80,7 +81,7 @@ public class PLIModelBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIndex(PLIModelParser.IndexContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIndx(PLIModelParser.IndxContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -185,14 +186,14 @@ public class PLIModelBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNumFactor(PLIModelParser.NumFactorContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVar_id(PLIModelParser.Var_idContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVar_id(PLIModelParser.Var_idContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIndex_var_id(PLIModelParser.Index_var_idContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

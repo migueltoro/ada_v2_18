@@ -4,8 +4,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.jgrapht.Graphs;
 
 import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.Iterators;
@@ -38,7 +39,7 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 		this.error = error;
 	}
 	
-	public Optional<V> search() {
+	public V search() {
 		return findEnd();
 	}
 	
@@ -97,11 +98,12 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 			this.path = this.graph.initialPath();
 			this.weight = path.getWeight();
 		} else {
+			V old = this.actualVertex;
 			E edge = this.nextEdge;
-			this.nextEdge =	nextEdge(this.actualVertex);
-			this.actualVertex = this.graph.getEdgeTarget(edge);		
+			this.nextEdge =	this.nextEdge(this.actualVertex);
+			this.actualVertex = Graphs.getOppositeVertex(graph,edge,old);		
 			this.edgeToOrigin.put(this.actualVertex,edge);
-			this.weight = this.path.add(this.weight,edge);
+			this.weight = this.path.add(this.weight,this.actualVertex,edge,this.edgeToOrigin.get(old));
 		}
 		return this.actualVertex;
 	}

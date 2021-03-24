@@ -6,7 +6,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Streams2;
+import us.lsi.common.StreamTools;
+
 
 public class SolucionSudoku {
 	
@@ -114,7 +115,7 @@ public class SolucionSudoku {
 	@Override
 	public String toString() {
 		errores = calculaErrores();
-		return Streams2.range(DatosSudoku.numeroDeFilas-1, -1, -1)
+		return StreamTools.range(DatosSudoku.numeroDeFilas-1, -1, -1)
 			    .boxed()
 			    .map(y->fila(y))
 			    .collect(Collectors.joining("\n",

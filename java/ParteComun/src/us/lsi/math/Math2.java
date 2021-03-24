@@ -6,10 +6,9 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
 
 
 
@@ -221,14 +220,14 @@ public class Math2 {
 	/**
 	 * @pre b &gt; a
 	 * @param a Límite inferior
-	 * @param b Límte Superior
+	 * @param b Límite Superior
 	 * @return Un par aleatorio cuyos elementos son distintos y están en el intervalo  a &lt; = r &lt; b
 	 */
-	public static Tuple2<Integer, Integer> getParAleatorioYDistinto(Integer a, Integer b){   	
+	public static IntPair getParAleatorioYDistinto(Integer a, Integer b){   	
     	Preconditions.checkArgument(b-a>=2,a+","+b);
     	Integer c1 = getEnteroAleatorio(a,b-1);
     	Integer c2 = getEnteroAleatorio(c1+1,b);
-		return Tuple.create(c1, c2);
+		return IntPair.of(c1, c2);
 	}
 	
 	/**
@@ -547,5 +546,6 @@ public class Math2 {
 				e->siguientePrimo(e));
 		s.forEach(e->System.out.println(e.toString()));
 		System.out.println(esPrimo(3));
+		System.out.println(getParAleatorioYDistinto(0,11));
 	}
 }

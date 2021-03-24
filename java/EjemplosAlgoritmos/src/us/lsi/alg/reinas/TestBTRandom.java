@@ -26,7 +26,7 @@ public class TestBTRandom {
 					v->ReinasVertex.n-v.index);							
 			ms.search();
 			System.out.println(ms.iterations);
-			System.out.println(ms.getSolutions());
+			System.out.println(ms.getSolution());
 
 	}
 

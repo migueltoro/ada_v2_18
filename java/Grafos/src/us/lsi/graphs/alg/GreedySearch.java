@@ -1,13 +1,18 @@
 package us.lsi.graphs.alg;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import org.jgrapht.Graphs;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -75,15 +80,15 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	public V next() {
 		V old = this.actualVertex;
 		this.hasNext = !this.goal.test(old);
-//		System.out.println(String.format("G %s = %s",old,this.hasNext?"true":"false"));
 		if (this.hasNext) {
-			E edge = this.nextEdge.apply(this.actualVertex);
-			this.actualVertex = this.graph.getEdgeTarget(edge);
-			this.edgeToOrigin.put(this.actualVertex, edge);
-			this.weight = this.path.add(this.weight, edge);
+			E edge = this.nextEdge.apply(old);
+			this.actualVertex = Graphs.getOppositeVertex(this.graph,edge,old);
+			this.edgeToOrigin.put(this.actualVertex,edge);
+			E edgeToOrigin = this.edgeToOrigin.get(old);
+			if(edgeToOrigin == null) this.weight = this.path.getWeight();
+			else this.weight = this.path.add(this.weight,this.actualVertex,edge,edgeToOrigin);			
 			this.path.add(edge);
 		}
-//		System.out.println(old);
 		return old;
 	}
 
@@ -92,18 +97,30 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 		return this.startVertex;
 	}
 
-	@Override	
-	public Optional<Double> weightToEnd() {
-		Optional<V> s = this.find(goal);
-		Optional<Double> r = Optional.empty();
-		if(s.isPresent()) r = Optional.of(this.weight);
-		return r;
+	public Double weightToEnd() {
+		return search().getWeight();
 	}
 	
 	
-	public EGraphPath<V,E> search() {	
-		this.find(goal);
-		return this.path;
+	public EGraphPath<V,E> search() {
+		EGraphPath<V,E> ePath = graph.initialPath();
+		V startVertex = graph.startVertex();
+		if(this.goal.test(startVertex)) return ePath;
+		Optional<V> last = this.stream().filter(this.goal).findFirst();
+		if(last.isPresent()) {
+			V end = last.get();
+			E edge = this.getEdgeToOrigin(end);
+			List<E> edges = new ArrayList<>();		
+			while(edge!=null) {				
+				edges.add(edge);
+				end = Graphs.getOppositeVertex(graph, edge, end);
+				edge = this.getEdgeToOrigin(end);			
+			}
+			Collections.reverse(edges);
+			for(E e:edges) {
+				ePath.add(e);
+			}
+		}
+		return ePath;
 	}
-
 }

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
@@ -22,7 +24,9 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 	private Graph<V,E> graph;
 	private V startVertex;
 	public Map<V,E> edgeToOrigin;
-	public Queue<V> queue; 
+	public Queue<V> queue;
+	public Map<V,Integer> position;
+	private Integer n = 0;
 
 	BreadthSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
@@ -31,6 +35,7 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 		this.edgeToOrigin.put(startVertex, null);
 		this.queue = new LinkedList<>();
 		this.queue.add(startVertex);
+		this.position = new HashMap<>();
 	}
 
 	@Override
@@ -65,6 +70,8 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 				this.edgeToOrigin.put(v,graph.getEdge(actual, v));
 			}
 		}
+		this.position.put(actual,n);
+		n++;
 		return actual;
 	}
 
@@ -91,5 +98,9 @@ public class BreadthSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<
 			r = r+1;		
 		}
 		return r;
+	}
+	
+	public Set<E> edges() {
+		return this.edgeToOrigin.values().stream().collect(Collectors.toSet());
 	}
 }

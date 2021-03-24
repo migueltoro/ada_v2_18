@@ -1,13 +1,13 @@
 head section
 
 Integer getN()
-Double edgeCost(Integer i, Integer j)
+Double edgeWeight(Integer i, Integer j)
 Boolean containsEdge(Integer i, Integer j)
 Integer n = getN()
 
 goal section
 
-min sum(edgeCost(i,j) x[i,j], i in 0 .. n, j in 0 .. n | containsEdge(i,j))
+min sum(edgeWeight(i,j) x[i,j], i in 0 .. n, j in 0 .. n | containsEdge(i,j))
 
 constraints section
 

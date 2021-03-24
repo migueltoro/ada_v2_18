@@ -33,7 +33,7 @@ public class Multiset<E>  {
 	 * @return Un Multiset construido a partir del iterable
 	 */
 	public static <E> Multiset<E> of(Collection<E> it){
-		return Streams2.toMultiSet(it.stream());
+		return StreamTools.toMultiSet(it.stream());
 	}
 	
 	/**

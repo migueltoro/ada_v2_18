@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
@@ -114,6 +115,10 @@ public class Graphs2 {
     public static <V,E> SimpleDirectedWeightedGraph<V, E> simpleDirectedWeightedGraph() {
 		return new SimpleDirectedWeightedGraph<>(null,null);
 	}
+    
+    public static <V,E> DirectedWeightedMultigraph<V,E> directedWeightedMultigraph() {
+    	return new DirectedWeightedMultigraph<>(null,null);
+    }
 
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
@@ -168,7 +173,7 @@ public class Graphs2 {
 			Function<V, Double> vertexWeight, 
 			TriFunction<V, E, E, Double> vertexPassWeight,
 			PathType type) {
-		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight, vertexWeight, vertexPassWeight);
+		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
 	
 //	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex,  
@@ -177,7 +182,7 @@ public class Graphs2 {
 //			PathType type) {
 //		return new EGraphI<V, E, G>(graph, startVertex, type, edgeWeight, null, null);
 //	}
-//	
+	
 	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type) {
 		return new EGraphI<V, E, G>(graph, startVertex, type, null, null, null);
 	}

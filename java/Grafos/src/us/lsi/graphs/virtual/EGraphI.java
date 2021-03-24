@@ -26,8 +26,8 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private V startVertex;
 	private PathType type;
 	
-	public EGraphI(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight) {
+	public EGraphI(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight
+			,TriFunction<V, E, E, Double> vertexPassWeight) {
 		super();
 		this.graph = graph;
 		this.edgeWeight = edgeWeight;
@@ -186,7 +186,8 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	}
 	@Override
 	public List<E> edgesListOf(V v) {
-		return graph.edgesOf(v).stream().collect(Collectors.toList());
+		if(graph.getType().isUndirected()) return graph.edgesOf(v).stream().collect(Collectors.toList());
+		else return graph.outgoingEdgesOf(v).stream().collect(Collectors.toList());
 	}
 	@Override
 	public EGraphPath<V, E> initialPath() {

@@ -16,84 +16,82 @@ import java.util.Optional;
 
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 
 
 
 public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
-	
-	public EGraph<V,E> graph;
-	private V startVertex; 
+
+	public EGraph<V, E> graph;
+	private V startVertex;
 	private Predicate<V> goal;
 	private V end;
 	public Double bestValue;
+	public GraphPath<V, E> solutionPath = null;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
 	private Comparator<Sp<E>> comparatorEdges;
-	public Map<V,Sp<E>> solutionsTree;
+	public Map<V, Sp<E>> solutionsTree;
+	public Map<V, E> edgeToOrigen;
 	private PDType type;
-	private EGraphPath<V,E> path;
-	
-	DynamicProgrammingReduction(EGraph<V, E> g, 
-			Predicate<V> goal, V end,
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			PDType type) {
+	private EGraphPath<V, E> path;
+
+	DynamicProgrammingReduction(EGraph<V, E> g, Predicate<V> goal, V end,
+			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
 		this.graph = g;
 		this.startVertex = graph.startVertex();
-		this.goal = goal==null?v->v.equals(v):goal;
+		this.goal = goal == null ? v -> v.equals(v) : goal;
 		this.end = end;
 		this.heuristic = heuristic;
 		this.type = type;
-		if(this.type == PDType.Min) this.comparatorEdges = Comparator.naturalOrder();
-		if(this.type == PDType.Max) this.comparatorEdges = Comparator.<Sp<E>>naturalOrder().reversed();
+		if (this.type == PDType.Min) this.comparatorEdges = Comparator.naturalOrder();
+		if (this.type == PDType.Max) this.comparatorEdges = Comparator.<Sp<E>>naturalOrder().reversed();
 		this.solutionsTree = new HashMap<>();
-		if(this.type == PDType.Max) this.bestValue = -Double.MAX_VALUE;
-		if(this.type == PDType.Min) this.bestValue = Double.MAX_VALUE;
+		if (this.type == PDType.Max) this.bestValue = -Double.MAX_VALUE;
+		if (this.type == PDType.Min) this.bestValue = Double.MAX_VALUE;
 		this.path = graph.initialPath();
 	}
-	
-	private Boolean forget(Double accumulateValue, Predicate<V> goal, V end, E edge) {
+
+	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {
 		Boolean r = false;
-		Double w = this.path.boundWeight(accumulateValue,goal,end,edge,this.heuristic);
-		if(this.type == PDType.Max) r = w < this.bestValue;
-		if(this.type == PDType.Min) r = w > this.bestValue;
-		return  r;
+		Double w = this.path.boundWeight(accumulateValue, actual, edge, goal, end, this.heuristic);
+		if (this.type == PDType.Max) r = w <= this.bestValue;
+		if (this.type == PDType.Min) r = w >= this.bestValue;
+		return r;
 	}
-	
+
 	@Override
 	public Optional<GraphPath<V, E>> search() {
-		this.solutionsTree = new HashMap<>();
-		search(this.startVertex,0.);
-//		System.out.println("1___________");
-		return Optional.ofNullable(pathFrom(this.startVertex));
+		return search(this.startVertex);
 	}
-	
+
 	@Override
 	public Optional<GraphPath<V, E>> search(V vertex) {
-		if(!this.solutionsTree.containsKey(vertex)) {
+		if (!this.solutionsTree.containsKey(vertex)) {
 			this.solutionsTree = new HashMap<>();
-			search(vertex,0.);
-		}	
-//		System.out.println("1___________");
+			search(vertex,0., null);
+		}
 		return Optional.ofNullable(pathFrom(this.startVertex));
 	}
 	
-	private Sp<E> search(V actual, Double accumulateValue) {
+	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
 		Sp<E> r = null;
 		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (this.goal.test(actual)) {
-//			System.out.println(String.format("D3 %s,%.2f",actual,accumulateValue));
 			r = Sp.empty();
 			this.solutionsTree.put(actual, r);
 			return r;
 		} else {
-//			System.out.println(String.format("D2 %s,%.2f",actual,accumulateValue));
-			List<Sp<E>> rs = new ArrayList<>();
+			List<Sp<E>> rs = new ArrayList<>();			
 			for (E edge : graph.edgesListOf(actual)) {				
-				V v = graph.getEdgeTarget(edge);
-				if (this.forget(accumulateValue,this.goal,this.end,edge)) continue;
-				Sp<E> s = search(v,this.path.add(accumulateValue, edge));
-				if (s!=null) {					
-					Sp<E> sp = Sp.of(edge,this.path.add(s.weight, edge));
+				if (this.forget(edge,actual,accumulateValue,this.goal,this.end)) continue;
+				V v = Graphs.getOppositeVertex(graph,edge,actual);
+				Double ac = this.path.add(accumulateValue,actual,edge,edgeToOrigin); 
+				Sp<E> s = search(v,ac,edge);
+				if (s!=null) {
+					E lastEdge = this.solutionsTree.get(v).edge;
+					Double spv = this.path.add(s.weight,v,edge,lastEdge);	
+					Sp<E> sp = Sp.of(edge,spv);
 					rs.add(sp);
 				}
 			}
@@ -102,13 +100,25 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		}
 		return r;
 	}
-	
-	private E getEdgeToGoal(V vertex) {
-		return this.solutionsTree.get(vertex).edge;
-	}
 
-
-	private EGraphPath<V, E> pathFrom(V vertex) {
-		return GraphAlg.pathForwardEdged(graph,vertex,v->getEdgeToGoal(v));
+	private GraphPath<V, E> pathFrom(V vertex) {
+		EGraphPath<V,E> ePath = graph.initialPath();
+		if(!this.solutionsTree.containsKey(vertex) || 
+				(this.solutionsTree.get(vertex) == null && this.solutionPath !=null)) return this.solutionPath;
+		System.out.println(this.solutionsTree.containsKey(vertex));
+		System.out.println(this.solutionPath);
+		System.out.println(this.solutionsTree.get(vertex));
+		System.out.println(this.solutionsTree.get(vertex).edge);
+		E edge = this.solutionsTree.get(vertex).edge;
+		List<E> edges = new ArrayList<>();		
+		while(edge != null) {
+			edges.add(edge);
+			vertex = Graphs.getOppositeVertex(graph,edge,vertex);
+			edge = this.solutionsTree.get(vertex).edge;			
+		}
+		for(E e:edges) {
+			ePath.add(e);
+		}
+		return ePath;
 	}
 }

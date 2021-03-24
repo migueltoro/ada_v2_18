@@ -22,6 +22,7 @@ public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer>
 	public final Integer index;
 	public final List<Integer> as;
 	public final Map<Integer,Integer> carga;
+	public final List<Integer> sort_carga;
 	public final Integer cmax;
 	public final Integer cmin;
 	public final Integer nc;
@@ -35,9 +36,11 @@ public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer>
 		this.index = index;
 		this.as = as;
 		this.carga = carga;
+		this.sort_carga = IntStream.range(0,n).boxed().map(i->carga.getOrDefault(i,0)).collect(Collectors.toList());
 		this.nc = this.carga.keySet().size();
 		this.cmax = this.carga.isEmpty()?0:this.carga.entrySet().stream().max(Comparator.comparing(e->e.getValue())).get().getKey();
 		this.cmin = this.carga.isEmpty()?0:this.carga.entrySet().stream().min(Comparator.comparing(e->e.getValue())).get().getKey();
+//		System.out.println(this);
 	}
 
 	private Integer volumen(Integer i) {
@@ -69,7 +72,9 @@ public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer>
 		ls.add(a);
 		Map<Integer,Integer> carga = new HashMap<>(this.carga);
 		carga.put(a,this.carga.getOrDefault(a,0)+volumen(index));
-		return PackVertex.of(this.index+1,ls,carga);
+		PackVertex r= PackVertex.of(this.index+1,ls,carga);
+//		System.out.println(r);
+		return r;
 	}
 
 	@Override
@@ -101,8 +106,8 @@ public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer>
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((as == null) ? 0 : as.hashCode());
 		result = prime * result + ((index == null) ? 0 : index.hashCode());
+		result = prime * result + ((sort_carga == null) ? 0 : sort_carga.hashCode());
 		return result;
 	}
 
@@ -115,18 +120,20 @@ public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer>
 		if (getClass() != obj.getClass())
 			return false;
 		PackVertex other = (PackVertex) obj;
-		if (as == null) {
-			if (other.as != null)
-				return false;
-		} else if (!as.equals(other.as))
-			return false;
 		if (index == null) {
 			if (other.index != null)
 				return false;
 		} else if (!index.equals(other.index))
 			return false;
+		if (sort_carga == null) {
+			if (other.sort_carga != null)
+				return false;
+		} else if (!sort_carga.equals(other.sort_carga))
+			return false;
 		return true;
 	}
+
+	
 	
 	
 

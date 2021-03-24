@@ -2,12 +2,10 @@ package us.lsi.anuncios.datos;
 
 import java.util.*;
 
-
+import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Sets2;
-import us.lsi.common.Tuple;
-import us.lsi.common.Tuple2;
 import us.lsi.math.Math2;
 
 
@@ -77,8 +75,8 @@ public class ListaDeAnunciosAEmitir  {
 		}
 		this.tiempoRestante = DatosAnuncios.tiempoTotal-this.tiempoConsumido;	
 		this.numAnunciosIncompatibles = 0;				
-		for(Tuple2<Integer,Integer> p: DatosAnuncios.restricciones){
-			if(this.anunciosDecididosParaEmitirSet.contains(p.v1) && this.anunciosDecididosParaEmitirSet.contains(p.v2)){
+		for(IntPair p: DatosAnuncios.restricciones){
+			if(this.anunciosDecididosParaEmitirSet.contains(p.first) && this.anunciosDecididosParaEmitirSet.contains(p.second)){
 				this.numAnunciosIncompatibles = this.numAnunciosIncompatibles +1;
 			}
 		}
@@ -89,9 +87,9 @@ public class ListaDeAnunciosAEmitir  {
 	private void calculaAnunciosDisponibles(){		
 		Set<Integer> disponibles = Sets2.of(DatosAnuncios.todosLosAnuncios);	
 		disponibles.removeAll(this.anunciosDecididosParaEmitirSet);
-		for(Tuple2<Integer,Integer> p: DatosAnuncios.restricciones){
-			if(this.anunciosDecididosParaEmitirSet.contains(p.v1)){
-				disponibles.remove(p.v2);
+		for(IntPair p: DatosAnuncios.restricciones){
+			if(this.anunciosDecididosParaEmitirSet.contains(p.first)){
+				disponibles.remove(p.second);
 			}
 		}
 		Set<Integer> quitar = Sets2.empty();
@@ -186,15 +184,15 @@ public class ListaDeAnunciosAEmitir  {
 		return Math2.getEnteroAleatorio(0, this.anunciosDecididosParaEmitir.size());
 	}	
 	
-	public Tuple2<Integer,Integer> getAlternativaInsertar() {
+	public IntPair getAlternativaInsertar() {
 		Preconditions.checkState(!this.anunciosDisponibles.isEmpty());
 		Integer pos = Math2.getEnteroAleatorio(0,this.anunciosDecididosParaEmitir.size() + 1);
 		List<Integer> ls = Lists2.ofCollection(this.anunciosDisponibles);
 		Integer r = Math2.getEnteroAleatorio(0,ls.size());
-		return Tuple.create(pos, ls.get(r));		
+		return IntPair.of(pos, ls.get(r));		
 	}
 
-	public Tuple2<Integer,Integer> getAlternativaIntercambiar(){
+	public IntPair getAlternativaIntercambiar(){
 		return Math2.getParAleatorioYDistinto(0, this.anunciosDecididosParaEmitir.size());	
 	}
 

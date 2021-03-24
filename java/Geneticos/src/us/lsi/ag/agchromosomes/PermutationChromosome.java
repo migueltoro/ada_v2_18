@@ -6,10 +6,10 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.SeqNormalProblemAG;
-
-
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
+import us.lsi.ag.SeqNormalData;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
 
 /**
@@ -29,10 +29,11 @@ import us.lsi.common.Preconditions;
  * Es un cromosoma adecuado para codificar problemas de permutaciones </p>
  *
  */
-public class PermutationChromosome extends RandomKey<Integer> implements SeqNomalChromosome {
+public class PermutationChromosome extends RandomKey<Integer> 
+				implements SeqNormalData<Object>, Chromosome<List<Integer>> {
 
 	public static List<Integer> normalSequence = null;
-	public static SeqNormalProblemAG<?> problema;
+	public static SeqNormalData<Object> data;
 	
 	/**
 	 * Dimensión del cromosoma
@@ -40,9 +41,10 @@ public class PermutationChromosome extends RandomKey<Integer> implements SeqNoma
 	
 	public static int DIMENSION;
 	
-	public static void iniValues(ProblemAG problema){
-		PermutationChromosome.problema = (SeqNormalProblemAG<?>) problema; 
-		PermutationChromosome.normalSequence = PermutationChromosome.problema.getNormalSequence();
+	@SuppressWarnings("unchecked")
+	public static void iniValues(Data data){
+		PermutationChromosome.data = (SeqNormalData<Object>) data; 
+		PermutationChromosome.normalSequence = PermutationChromosome.data.getNormalSequence();
 		PermutationChromosome.DIMENSION = PermutationChromosome.normalSequence.size();
 	}
 
@@ -61,8 +63,7 @@ public class PermutationChromosome extends RandomKey<Integer> implements SeqNoma
 
 	@Override
 	public AbstractListChromosome<Double> newFixedLengthChromosome(List<Double> ls) {
-		return new PermutationChromosome(ls);
-		
+		return new PermutationChromosome(ls);	
 	}
 
 	@Override
@@ -86,20 +87,33 @@ public class PermutationChromosome extends RandomKey<Integer> implements SeqNoma
 	private double ft;
 	
 	private double calculateFt(){
-		return PermutationChromosome.problema.fitnessFunction(this);
+		return PermutationChromosome.data.fitnessFunction(this.decode());
 	}
+
 
 	@Override
-	public SeqNormalProblemAG<?> getProblem() {
-		return PermutationChromosome.problema;
+	public ChromosomeType getType() {
+		return ChromosomeFactory.ChromosomeType.Permutation;
 	}
 
-	public Integer getObjectsNumber() {
-		return PermutationChromosome.problema.getIndexNumber();
+
+	@Override
+	public Integer size() {
+		return PermutationChromosome.data.size();
 	}
 
-	public Integer getMax(int i) {
-		return PermutationChromosome.problema.getMaxMultiplicity(i);
+
+	@Override
+	public Double fitnessFunction(List<Integer> dc) {
+		return PermutationChromosome.data.fitnessFunction(dc);
 	}
+
+
+	@Override
+	public Object getSolucion(List<Integer> dc) {
+		return PermutationChromosome.data.getSolucion(dc);
+	}
+
+	
 	
 }

@@ -16,7 +16,7 @@ public class SolucionTyP {
 	private Integer npMax;
 	
 	
-	private SolucionTyP(Map<Integer, List<Tarea>> carga,Double maxCarga, Integer npMin, Integer npMax) {
+	private SolucionTyP(Map<Integer, List<Tarea>> carga, Double maxCarga, Integer npMin, Integer npMax) {
 		super();
 		this.carga = carga;
 		this.maxCarga = maxCarga;

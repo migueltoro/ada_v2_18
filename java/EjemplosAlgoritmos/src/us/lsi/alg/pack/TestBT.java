@@ -39,7 +39,7 @@ public class TestBT {
 		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BT.backTrackingGoal(
 				graph,
 				goal,
-				(v1,p,v2)->0.,
+				Heuristica::heuristic,
 				SolucionPack::of,
 				PackVertex::copy,
 				BTType.Min);	

@@ -22,21 +22,18 @@ public class DataAstar {
 	public MochilaVertex vertex;
 	public MochilaEdge edge;
 	public Double distanceToOrigin;
-	public Boolean closed;
 	
 	private DataAstar(MochilaVertex vertex, MochilaEdge edge, Double distance) {
 		super();
 		this.vertex = vertex;
 		this.edge = edge;
 		this.distanceToOrigin = distance;
-		this.closed = false;
 	}
 
 
 	@Override
 	public String toString() {
-		return "DataAstar [vertex=" + vertex + ", edge=" + edge + ", distanceToOrigin=" + distanceToOrigin + ", closed="
-				+ closed + "]";
+		return "DataAstar [vertex=" + vertex + ", edge=" + edge + ", distanceToOrigin=" + distanceToOrigin+ "]";
 	}
 	
 	

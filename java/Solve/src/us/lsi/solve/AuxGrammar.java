@@ -64,7 +64,6 @@ public class AuxGrammar {
 		return r;
 	}
 	
-	
 	public static Integer asInteger(Object d) {
 		Integer r = null;
 		Class<? extends Object> c = d.getClass();
@@ -75,6 +74,7 @@ public class AuxGrammar {
 		}
 		return r;
 	}
+
 	
 	public static Double asDouble(Object d) {
 		Double r = null;
@@ -99,10 +99,22 @@ public class AuxGrammar {
 	}
 	
 	public static List<String> asListString(Object d) {
+		if(d == null) return null;
 		List<String> r = null;
 		Class<? extends Object> c = d.getClass();
 		if(c.equals(ListString.class)) {
 			r = (ListString) d;
+		} else {
+			Preconditions.checkArgument(false,String.format("Tipo no es List<String> %s",c));
+		}
+		return r;
+	}
+	
+	public static List<Integer> asListInteger(Object d) {
+		List<Integer> r = null;
+		Class<? extends Object> c = d.getClass();
+		if(c.equals(ListInteger.class)) {
+			r = (ListInteger) d;
 		} else {
 			Preconditions.checkArgument(false,String.format("Tipo no es List<String> %s",c));
 		}
@@ -397,6 +409,22 @@ public class AuxGrammar {
 			super();
 		}
 		public ListString(Collection<? extends String> c) {
+			super(c);
+		}	
+	}
+	
+	public static class ListInteger extends ArrayList<Integer> implements List<Integer> {
+		public static ListInteger of() {
+			return new ListInteger();
+		}	
+		public static ListInteger of(List<Integer> ls) {
+			return new ListInteger(ls);
+		}
+		private static final long serialVersionUID = 1L;
+		public ListInteger() {
+			super();
+		}
+		public ListInteger(Collection<? extends Integer> c) {
 			super(c);
 		}	
 	}

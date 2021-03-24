@@ -41,6 +41,7 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 
 	private Integer index;
 	private List<Double> cargas;
+	private List<Double> sort_cargas;
 	private Double maxCarga;
 	private Integer npMax;
 	private Integer npMin;
@@ -106,7 +107,9 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 		List<Double> nc = this.getCargas();
 		Double d = Tarea.getDuracion(this.index) + nc.get(a); 
 		nc.set(a,d);
-		return new TyPVertex(index+1, nc);
+		TyPVertex v = new TyPVertex(index+1, nc);
+//		System.out.println(v);
+		return v;
 	}
 	
 	@Override
@@ -163,6 +166,7 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 			return false;
 		return true;
 	}
+
 	
 	
 

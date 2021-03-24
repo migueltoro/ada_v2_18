@@ -1,17 +1,20 @@
 package us.lsi.graphs.alg;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
 import org.jheaps.AddressableHeap.Handle;
 
 import us.lsi.common.Lists2;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.math.Math2;
+import us.lsi.path.EGraphPath;
 
 public class AStarRandom<V, E> extends AStar<V, E>{
 
@@ -30,49 +33,55 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	public AStarRandom<V, E> copy() {
 		return GraphAlg.aStarRandom(this.graph, this.goal, this.end, this.heuristic,this.size);
 	}
-
+	
+	
 	@Override
 	public V next() {
 		Handle<Double, Data<V, E>> dataActual = heap.deleteMin();
 		V vertexActual = dataActual.getValue().vertex;
+		Double actualDistance = tree.get(vertexActual).getValue().distanceToOrigin;
+		E edgeToOrigen = tree.get(vertexActual).getValue().edge;
 		List<E> edges = graph.edgesListOf(vertexActual);
-		if(size.apply(vertexActual) > threshold) edges = Lists2.randomUnitary(edges);
-		for(E backEdge: edges) {
+		if (size.apply(vertexActual) > threshold)
+			edges = Lists2.randomUnitary(edges);
+		for (E backEdge : edges) {
 			V v = graph.getEdgeTarget(backEdge);
-			Double newDistance = ePath.add(dataActual.getValue().distanceToOrigin,backEdge);
-			Double newDistanceToEnd = ePath.estimatedWeightToEnd(newDistance,goal,end,heuristic);
-			if(!tree.containsKey(v)) {				
-				Data<V,E> nd = Data.of(v,backEdge,newDistance);
-				Handle<Double,Data<V, E>> h = heap.insert(newDistanceToEnd,nd);
-				tree.put(v,h);
-			} else if(!tree.get(v).getValue().closed){
-				Double oldDistance = tree.get(v).getValue().distanceToOrigin;
-				if(newDistance < oldDistance) {
-					tree.get(v).getValue().distanceToOrigin = newDistance;
-					tree.get(v).getValue().edge = backEdge;
-					tree.get(v).decreaseKey(newDistanceToEnd);
-				}				
+			Double newDistance = ePath.add(actualDistance,v,backEdge,edgeToOrigen);
+			double newDistanceToEnd =  ePath.estimatedWeightToEnd(newDistance,v, goal, end, heuristic);
+			if (!tree.containsKey(v)) {
+				Data<V, E> nd = Data.of(v, backEdge, newDistance);
+				Handle<Double, Data<V, E>> h = heap.insert(newDistanceToEnd, nd);
+				tree.put(v, h);
+			} else if (newDistance < tree.get(v).getValue().distanceToOrigin) {
+				tree.get(v).getValue().distanceToOrigin = newDistance;
+				tree.get(v).getValue().edge = backEdge;
+				tree.get(v).decreaseKey(newDistanceToEnd);
 			}
 		}
-		tree.get(vertexActual).getValue().closed = true;	
+		this.nonGoal = !this.goal.test(vertexActual);
 		return vertexActual;
 	}
 	
-	
-	public Optional<GraphPath<V, E>> pathToEnd() {
-		Optional<GraphPath<V, E>> path;
-		AStarRandom.iterations = 0;
-		Math2.initRandom();
-		do {
-			AStarRandom<V, E> ms = this.copy();
-			path = ms.pathTo(goal);
-			AStarRandom.iterations++;
-		} while (!path.isPresent());
-		return path;
-	}
-	
-	public Optional<GraphPath<V, E>> search() {
-		return pathToEnd();
+	public GraphPath<V, E> search() {
+		EGraphPath<V,E> ePath = graph.initialPath();
+		V startVertex = graph.startVertex();
+		if(this.goal.test(startVertex)) return ePath;
+		Optional<V> last = this.stream().filter(this.goal).findFirst();
+		if(last.isPresent()) {
+			V end = last.get();
+			E edge = this.getEdgeToOrigin(end);
+			List<E> edges = new ArrayList<>();		
+			while(edge!=null) {				
+				edges.add(edge);
+				end = Graphs.getOppositeVertex(graph, edge, end);
+				edge = this.getEdgeToOrigin(end);			
+			}
+			Collections.reverse(edges);
+			for(E e:edges) {
+				ePath.add(e);
+			}
+		}
+		return ePath;
 	}
 	
 

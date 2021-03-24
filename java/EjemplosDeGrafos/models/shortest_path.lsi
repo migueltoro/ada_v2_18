@@ -1,7 +1,7 @@
 head section
 
 Integer getN()
-Double edgeCost(Integer i, Integer j)
+Double edgeWeight(Integer i, Integer j)
 Boolean containsEdge(Integer i, Integer j)
 Integer n = getN()
 Integer origin()

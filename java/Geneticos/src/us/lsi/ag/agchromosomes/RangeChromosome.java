@@ -7,8 +7,10 @@ import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
+import us.lsi.ag.ValuesInRangeData;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.math.Math2;
 
 /**
@@ -28,14 +30,15 @@ import us.lsi.math.Math2;
  * <p> Es un cromosoma adecuado para codificar problemas de subconjuntos de multiconjuntos</p>
  *
  */
-public class RangeChromosome extends BinaryChromosome implements ValuesInRangeChromosome<Integer> {
+public class RangeChromosome extends BinaryChromosome 
+             implements ValuesInRangeData<Integer,Object>, Chromosome<List<Integer>> {
 	
 	/**
 	 * Número de bits usado para representar un entero. El rango de enteros que podemos obtener dependerá de este número de bits.
 	 */
 	public static Integer bitsNumber = 10;
 	
-	public static ValuesInRangeProblemAG<Integer,?> problem;
+	public static ValuesInRangeData<Integer,Object> data;
 	
 	/**
 	 * Dimensión del cromosoma igual a bitsNumber*getVariableNumber()
@@ -44,9 +47,9 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 	public static int DIMENSION;
 	
 	@SuppressWarnings("unchecked")
-	public static void iniValues(ProblemAG problema){
-		RangeChromosome.problem = (ValuesInRangeProblemAG<Integer,?>) problema; 
-		RangeChromosome.DIMENSION = RangeChromosome.bitsNumber*RangeChromosome.problem.getCellsNumber();
+	public static void iniValues(Data data){
+		RangeChromosome.data = (ValuesInRangeData<Integer,Object>) data; 
+		RangeChromosome.DIMENSION = RangeChromosome.bitsNumber*RangeChromosome.data.size();
 	}
 	
 	private static Integer pow = Math2.pow(2., bitsNumber).intValue();
@@ -70,7 +73,7 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 		List<Integer> ls = super.getRepresentation();
 		List<Integer> r = new ArrayList<Integer>();
 		int index1 = 0;
-		for(int i = 0; i < getObjectsNumber(); i++){			
+		for(int i = 0; i < this.size(); i++){			
 			int index2 = index1+bitsNumber;
 			Integer e = Math2.decode(ls.subList(index1, index2));
 			Integer d = getMin(i)+Math2.escala(e, pow, getMax(i)-getMin(i));
@@ -97,27 +100,36 @@ public class RangeChromosome extends BinaryChromosome implements ValuesInRangeCh
 	private double ft;
 	
 	protected double calculateFt(){
-		return RangeChromosome.problem.fitnessFunction(this);
+		return RangeChromosome.data.fitnessFunction(this.decode());
 	}
 
 	@Override
-	public Integer getObjectsNumber() {
-		return RangeChromosome.problem.getCellsNumber();
+	public Integer getMax(Integer i) {
+		return RangeChromosome.data.getMax(i);
 	}
 
 	@Override
-	public Integer getMax(int i) {
-		return RangeChromosome.problem.getMax(i);
+	public Integer getMin(Integer i) {
+		return RangeChromosome.data.getMin(i);
 	}
 
 	@Override
-	public Integer getMin(int i) {
-		return RangeChromosome.problem.getMin(i);
+	public ChromosomeType getType() {
+		return ChromosomeFactory.ChromosomeType.Range;
 	}
-	
+
 	@Override
-	public ValuesInRangeProblemAG<Integer,?> getProblem() {
-		return RangeChromosome.problem;
+	public Integer size() {
+		return RangeChromosome.data.size();
 	}
-	
+
+	@Override
+	public Double fitnessFunction(List<Integer> dc) {
+		return RangeChromosome.data.fitnessFunction(dc);
+	}
+
+	@Override
+	public Object getSolucion(List<Integer> dc) {
+		return RangeChromosome.data.getSolucion(dc);
+	}
 }

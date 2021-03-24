@@ -58,10 +58,12 @@ public class Anuncio implements Comparable<Anuncio> {
 		}
 		return r;
 	}
+	
+	
 
 	@Override
 	public String toString() {
-		return codigo.toString();
+		return String.format("(%s,%d,%d)",codigo,duracion,precioBase);
 	}
 	@Override
 	public int hashCode() {

@@ -73,11 +73,6 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 
 	
 	public GraphWalkSum<V,E> add(E edge) {
-		if (!super.edgeList.isEmpty()) {
-			E e = Lists2.last(super.edgeList);
-			V v = Lists2.last(super.vertexList);
-			super.weight -= graph.getVertexPassWeight(v, e, edge);
-		}
 		V target = graph.getEdgeTarget(edge);
 		super.edgeList.add(edge);
 		super.vertexList.add(target);
@@ -87,15 +82,15 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	}
 	
 	@Override
-	public Double add(Double weight, E edge) {
-		if (!super.edgeList.isEmpty()) {
-			E e = Lists2.last(super.edgeList);
-			V v = Lists2.last(super.vertexList);
-			weight -= graph.getVertexPassWeight(v, e, edge);
-		}
-		V target = graph.getEdgeTarget(edge);
+	public Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge) {
+		Preconditions.checkNotNull(edge, "La arista no puede ser null");
+//		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
+		Double weight = acumulateValue;
+		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
 		weight += graph.getEdgeWeight(edge);
-		weight += graph.getVertexWeight(target);		
+		weight += graph.getVertexWeight(target);
+//		System.out.println("En 1 = "+graph.getVertexPassWeight(vertexActual, lastEdge, edge));
+		if (lastEdge != null) weight += graph.getVertexPassWeight(vertexActual, lastEdge, edge);
 		return weight;
 	}
 	
@@ -107,23 +102,19 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 		super.vertexList.remove(target);
 		super.weight -= graph.getEdgeWeight(edge);
 		super.weight -= graph.getVertexWeight(target);
-		if (!super.edgeList.isEmpty()) {
-			E e = Lists2.last(super.edgeList);
-			V v = Lists2.last(super.vertexList);
-			super.weight -= graph.getVertexPassWeight(v, e, edge);
-		}
 		return this;
 	}
 	
 	
 	@Override
-	public Double removeLast(Double weight, E edge, E e2) {
-		Preconditions.checkArgument(!this.isEmpty(), "El camino no puede estar vacío");
-		V target = super.graph.getEdgeTarget(edge);
+	public Double removeLast(Double acumulateValue,V vertexActual,E edge,E lastEdge) {
+		Preconditions.checkNotNull(edge, "La arista no puede ser null");
+//		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
+		Double weight = acumulateValue;
 		weight -= graph.getEdgeWeight(edge);
-		weight -= graph.getVertexWeight(target);
-		V source = super.graph.getEdgeSource(edge);
-		weight -= graph.getVertexPassWeight(source, e2, edge);
+		weight -= graph.getVertexWeight(vertexActual);
+		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
+		if (lastEdge != null) weight -= graph.getVertexPassWeight(target,lastEdge,edge);
 		return weight;
 	}
 	
@@ -141,46 +132,17 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	}
 
 	@Override
-	public Double boundWeight(Predicate<V> goal, V end, E edge, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		Double weight = super.weight;
-		if (!super.edgeList.isEmpty()) {
-			E e = Lists2.last(super.edgeList);
-			V v = Lists2.last(super.vertexList);
-			weight += graph.getVertexPassWeight(v, e, edge);
-		}
-		V target = graph.getEdgeTarget(edge);
+	public Double boundWeight(Double acumulateValue,V vertexActual, E edge, Predicate<V> goal, V end,  TriFunction<V,Predicate<V>,V,Double> heuristic) {
+		Double weight = acumulateValue;
+		V target = Graphs.getOppositeVertex(graph,edge,vertexActual);
 		weight += graph.getEdgeWeight(edge);
 		weight += graph.getVertexWeight(target);	
 		return weight + heuristic.apply(target, goal, end);
 	}
-	
-	@Override
-	public Double boundWeight(Double weight,Predicate<V> goal, V end, E edge, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		Double w = weight;
-		if (!super.edgeList.isEmpty()) {
-			E e = Lists2.last(super.edgeList);
-			V v = Lists2.last(super.vertexList);
-			w += graph.getVertexPassWeight(v, e, edge);
-		}
-		V target = graph.getEdgeTarget(edge);
-		w += graph.getEdgeWeight(edge);
-		w += graph.getVertexWeight(target);	
-		return w + heuristic.apply(target, goal,end);
-	}
 
 	@Override
-	public Double estimatedWeightToEnd(Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		V last = super.getEndVertex();
-		return super.getWeight()+heuristic.apply(last, goal, end);
-	}
-	
-	@Override
-	public Double estimatedWeightToEnd(Double weight, Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		V last = super.getEndVertex();
-		Double r =weight+heuristic.apply(last, goal, end);
-//		System.out.println(String.format("w = %.2f,wToEnd = %.2f",weight,r));
-//		Preconditions.checkArgument(r, message);
-		return r;
+	public Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
+		return acumulateValue+heuristic.apply(vertexActual, goal, end);
 	}
 
 	@Override

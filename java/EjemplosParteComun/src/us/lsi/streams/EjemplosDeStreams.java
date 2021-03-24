@@ -15,7 +15,7 @@ import us.lsi.common.Files2;
 import us.lsi.common.Lists2;
 import us.lsi.common.Multiset;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Streams2;
+import us.lsi.common.StreamTools;
 import us.lsi.common.Strings2;
 import us.lsi.geometria.Punto2D;
 import us.lsi.geometria.Punto2D.Cuadrante;
@@ -245,7 +245,7 @@ public class EjemplosDeStreams {
 	}
 	
 	public static Multiset<Cuadrante> ejemploV2(Stream<Punto2D> st){
-		return Streams2.toMultiSet(st.map(Punto2D::getCuadrante));	
+		return StreamTools.toMultiSet(st.map(Punto2D::getCuadrante));	
 	}
 	
 	/**

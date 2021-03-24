@@ -61,16 +61,12 @@ public class MochilaAStar {
 					DataAstar nd = DataAstar.of(v,backEdge,newDistance);
 					Handle<Double, DataAstar> h = heap.insert(newDistanceToEnd,nd);
 					tree.put(v,h);
-				} else if(!tree.get(v).getValue().closed){
-					Double oldDistance = tree.get(v).getValue().distanceToOrigin;
-					if(newDistance < oldDistance) {
+				} else if(newDistance < tree.get(v).getValue().distanceToOrigin) {
 						tree.get(v).getValue().distanceToOrigin = newDistance;
 						tree.get(v).getValue().edge = backEdge;
 						tree.get(v).decreaseKey(newDistanceToEnd);
-					}
 				}
 			}
-			tree.get(vertexActual).getValue().closed = true;
 			this.nonGoal = !this.goal.test(vertexActual);
 		}
 		if(this.nonGoal) return Optional.empty();

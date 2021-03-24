@@ -27,7 +27,7 @@ public class TestAStarMochila {
 		
 		AStar<MochilaVertex, MochilaEdge> ms = GraphAlg.aStarEnd(graph,e2,MochilaHeuristic::heuristic_negate);
 		
-		GraphPath<MochilaVertex,MochilaEdge> path = ms.search().get();
+		GraphPath<MochilaVertex,MochilaEdge> path = ms.search();
 		List<MochilaEdge> edges = path.getEdgeList();
 		System.out.println(edges);
 		SolucionMochila s = MochilaVertex.getSolucion(edges);

@@ -1,13 +1,13 @@
 package us.lsi.ag.real;
 
-import us.lsi.ag.ValuesInRangeProblemAG;
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.ChromosomeFactory;
-import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 
 import java.util.List;
+import java.util.Locale;
 
 public class TestReal {
 
@@ -21,15 +21,15 @@ public class TestReal {
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.GenerationCount;
 		StoppingConditionFactory.NUM_GENERATIONS = 100;
 		
-		ChromosomeFactory.crossoverType = ChromosomeFactory.CrossoverType.OnePoint;
-		
-		ValuesInRangeProblemAG<Double,List<Double>> p = new ProblemaReal();
-		var ap = AlgoritmoAG.<ValuesInRangeChromosome<Double>>create(p);
+		ValuesInRangeData<Double,List<Double>> p = new DatosReal();
+		AlgoritmoAG<List<Double>> ap = AlgoritmoAG.create(p);
 		ap.ejecuta();
 		
-		ValuesInRangeChromosome<Double> cr = ap.getBestChromosome();
+		
+		Locale.setDefault(new Locale("en", "US"));
+		Chromosome<List<Double>> cr = ap.getBestChromosome();
 		System.out.println("================================");
-		System.out.println(p.getSolucion(cr)+","+(cr.fitness()));
+		System.out.println(p.getSolucion(cr.decode())+","+(cr.fitness()));
 		System.out.println("================================");
 		
 	}	

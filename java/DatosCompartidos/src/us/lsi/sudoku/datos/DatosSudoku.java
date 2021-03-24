@@ -34,7 +34,7 @@ public class DatosSudoku {
 	private static List<Set<Casilla>> casillasEnFila;
 	private static List<Set<Casilla>> casillasEnColumna;
 	private static List<Set<Casilla>> casillasEnSubCuadro;
-	private static List<Casilla> casillasLibres;
+	public static List<Casilla> casillasLibres;
 //	private static Map<Casilla,List<Integer>> valoresLibres = new HashMap<>();
 	private static Comparator<Casilla> orden = 
 		Comparator.comparing(c->getValoresLibresEnCasilla(c).size());

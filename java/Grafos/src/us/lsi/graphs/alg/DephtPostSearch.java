@@ -3,7 +3,9 @@ package us.lsi.graphs.alg;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
@@ -98,6 +100,8 @@ public class DephtPostSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterab
 		return this.startVertex;
 	}
 
-	
+	public Set<E> edges() {
+		return this.edgeToOrigin.values().stream().collect(Collectors.toSet());
+	}
 
 }

@@ -2,23 +2,17 @@ package us.lsi.ag.agchromosomes;
 
 import java.util.List;
 
-
-
-
-
-
 import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.BinaryChromosome;
 
-
-
-import org.apache.commons.math3.genetics.Chromosome;
+//import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
-import us.lsi.ag.ProblemAG;
-import us.lsi.ag.SeqNormalProblemAG;
-
+import us.lsi.ag.Chromosome;
+import us.lsi.ag.Data;
+import us.lsi.ag.SeqNormalData;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Lists2;
 
@@ -48,12 +42,10 @@ import us.lsi.common.Lists2;
  * Es un cromosoma adecuado para codificar problemas de subcojuntos de permutaciones.</p>
  */
 public class PermutationSubListChromosome extends org.apache.commons.math3.genetics.Chromosome 
+          implements SeqNormalData<Object>, Chromosome<List<Integer>> {
 
-							implements SeqNomalChromosome {
-
-	public static List<Integer> normalSequence;
-	
-	public static SeqNormalProblemAG<?> problema;
+	public static List<Integer> normalSequence;	
+	public static SeqNormalData<Object> data;
 	
 	/**
 	 * Dimensión del cromosoma
@@ -62,9 +54,10 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	protected static int DIMENSION;
 	
 	
-	public static void iniValues(ProblemAG problema){
-		PermutationSubListChromosome.problema = (SeqNormalProblemAG<?>) problema; 
-		PermutationSubListChromosome.normalSequence = PermutationSubListChromosome.problema.getNormalSequence();
+	@SuppressWarnings("unchecked")
+	public static void iniValues(Data data){
+		PermutationSubListChromosome.data = (SeqNormalData<Object>) data; 
+		PermutationSubListChromosome.normalSequence = PermutationSubListChromosome.data.getNormalSequence();
 		PermutationSubListChromosome.DIMENSION = PermutationSubListChromosome.normalSequence.size();
 	}
 	
@@ -77,7 +70,8 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	 * @param binary Un cromosoma binario
 	 * @param randomKey Un cromosoma randomKey
 	 */
-	public PermutationSubListChromosome(Chromosome binary, Chromosome randomKey) {
+	public PermutationSubListChromosome(org.apache.commons.math3.genetics.Chromosome binary, 
+			org.apache.commons.math3.genetics.Chromosome randomKey) {
 		super();
 		if(binary instanceof BinaryChromosome2){
 			this.binary = (BinaryChromosome2)binary;
@@ -105,11 +99,6 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 		this.ft = 0.;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.commons.math3.genetics.Fitness#fitness()
-	 */
-	
-	
 	@Override
 	public double fitness() {
 		return ft;
@@ -118,24 +107,39 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	private Double ft;
 	
 	private double calculateFt(){
-		return PermutationSubListChromosome.problema.fitnessFunction(this);
-	}
-	
-	@Override
-	public SeqNormalProblemAG<?> getProblem() {
-		return PermutationSubListChromosome.problema;
+		return PermutationSubListChromosome.data.fitnessFunction(this.decode());
 	}
 
 	public Integer getObjectsNumber() {
-		return PermutationSubListChromosome.problema.getIndexNumber();
+		return PermutationSubListChromosome.data.size();
 	}
 
 	public Integer getMax(int i) {
-		return PermutationSubListChromosome.problema.getMaxMultiplicity(i);
+		return PermutationSubListChromosome.data.getMaxMultiplicity(i);
 	}
 	
+	@Override
+	public ChromosomeType getType() {
+		return ChromosomeFactory.ChromosomeType.PermutationSubList;
+	}
+
+	@Override
+	public Integer size() {
+		return PermutationSubListChromosome.data.size();
+	}
+
+	@Override
+	public Double fitnessFunction(List<Integer> cr) {
+		return PermutationSubListChromosome.data.fitnessFunction(cr);
+	}
+
+	@Override
+	public Object getSolucion(List<Integer> dc) {
+		return PermutationSubListChromosome.data.getSolucion(dc);
+	}
+
 	
-	public int compareTo(Chromosome another) {
+	public int compareTo(org.apache.commons.math3.genetics.Chromosome another) {
 		if (!(another instanceof PermutationSubListChromosome))
 			throw new IllegalArgumentException();;
 		PermutationSubListChromosome other = (PermutationSubListChromosome) another;
@@ -204,8 +208,6 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	public String toString() {
 		return this.fitness()+","+this.decode();
 	}
-
-	
 	
 	public BinaryChromosome getBinary() {
 		return binary;
@@ -282,11 +284,5 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 			return new RandomKey2(ls);
 		}
 	}
-
-	
-
-	
-	
-	
 	
 }

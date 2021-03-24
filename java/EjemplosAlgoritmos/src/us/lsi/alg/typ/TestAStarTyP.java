@@ -27,11 +27,11 @@ public class TestAStarTyP {
 		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GraphAlg.aStarGoal(
 				graph,
 				goal,
-				(v1,p,v2)->0.);
+				Heuristica::heuristic);
 		
 //		ms.stream().forEach(v->System.out.println(v));
 		
-		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search().get();
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search();
 //		List<MochilaEdge> edges = path.getEdgeList();
 //		System.out.println(path);
 		SolucionTyP s = TyPVertex.getSolucion(path);

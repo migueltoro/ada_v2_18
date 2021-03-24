@@ -12,14 +12,12 @@ import us.lsi.graphs.virtual.EGraph;
 public interface EGraphPath<V, E> extends GraphPath<V, E> {	
 	E lastEdge();
 	EGraphPath<V, E> add(E edge);
-	Double add(Double weight, E edge);
+	Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge);
 	EGraphPath<V, E> removeLast();
-	Double removeLast(Double weight, E edge, E e2);
+	Double removeLast(Double acumulateValue, V vertexActual, E edge, E lastEdge);
 	EGraphPath<V, E> copy();
-	Double boundWeight(Predicate<V> goal,V end,E edge, TriFunction<V,Predicate<V>,V,Double> heuristic);
-	Double boundWeight(Double weight, Predicate<V> goal, V end, E edge, TriFunction<V,Predicate<V>,V,Double> heuristic);
-	Double estimatedWeightToEnd(Predicate<V> goal,V end,TriFunction<V,Predicate<V>,V,Double> heuristic);
-	Double estimatedWeightToEnd(Double weight,Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic);
+	Double boundWeight(Double acumulateValue,V vertexActual,E edge,Predicate<V> goal,V end,TriFunction<V,Predicate<V>,V,Double> heuristic);
+	Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal,V end,TriFunction<V,Predicate<V>,V,Double> heuristic);
 	EGraphPath<V, E> concat(GraphPath<V,E> path);
 	GraphPath<V, E> reverse();
 	PathType type();

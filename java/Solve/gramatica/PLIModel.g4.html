@@ -145,6 +145,7 @@ footer {
   <li><a href="#s_factor">s_factor</a></li>
   <li><a href="#factor">factor</a></li>
   <li><a href="#var_id">var_id</a></li>
+  <li><a href="#index_var_id">index_var_id</a></li>
   <li><a href="#bound">bound</a></li>
   <li><a href="#bounds">bounds</a></li>
   <li><a href="#bin_vars">bin_vars</a></li>
@@ -393,7 +394,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">factor</span> :  <a href="#exp" class="rule">exp</a><span class="operator">?</span> <a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#varFactor" class="rule">varFactor</a> <span class="operator">|</span> <a href="#exp" class="rule">exp</a> <span class="operator">#</span><a href="#numFactor" class="rule">numFactor</a> ;
+    <span class="rule">factor</span> :  <a href="#exp" class="rule">exp</a><span class="operator">?</span> <a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#varFactor" class="rule">varFactor</a> ;
   </div>
   </div>
   <div class="railroad">
@@ -410,12 +411,29 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">var_id</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <span class="literal">'['</span> <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> <span class="literal">']'</span> ;
+    <span class="rule">var_id</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <a href="#index_var_id" class="rule">index_var_id</a> ;
   </div>
   </div>
   <div class="railroad">
   <h4>Visual notation:</h4>
   <img border="0" src="images/var_id.png" />
+  </div>
+  </li>
+  <li class="rule" id="index_var_id">
+  <h3>index_var_id <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">index_var_id</span> :  <span class="operator">(</span><span class="literal">'['</span> <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> <span class="literal">']'</span><span class="operator">)</span><span class="operator">?</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/index_var_id.png" />
   </div>
   </li>
   <li class="rule" id="bound">

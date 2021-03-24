@@ -1,13 +1,12 @@
 package us.lsi.ag.mochila;
 
 
-import us.lsi.ag.ValuesInRangeProblemAG;
-import us.lsi.ag.agchromosomes.ValuesInRangeChromosome;
+
+import java.util.List;
+
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.sa.AlgoritmoSA;
-import us.lsi.sa.StateSa;
 import us.lsi.sa.StateSaChromosome;
 
 public class TestMochilaSARange {
@@ -22,14 +21,15 @@ public class TestMochilaSARange {
 		AlgoritmoSA.temperaturaInicial = 500.;
 		
 		DatosMochila.capacidadInicial = 78;
-		ValuesInRangeProblemAG<Integer,SolucionMochila> p = new ProblemaMochilaAGRange("ficheros/objetosmochila.txt");
-		StateSa c = StateSaChromosome.random(p,ChromosomeType.Range);
+		DatosMochilaAGRange p = new DatosMochilaAGRange("ficheros/objetosmochila.txt");
+		StateSaChromosome c = StateSaChromosome.random(p,ChromosomeType.Range);
 		AlgoritmoSA a = AlgoritmoSA.of(c);
 		
 		a.ejecuta();		
-		var s = a.mejorSolucionEncontrada;
-		System.out.println(s.fitness());
-		System.out.println(p.getSolucion((ValuesInRangeChromosome<Integer>) ((StateSaChromosome) s).chromosome));
+		StateSaChromosome s = (StateSaChromosome) a.mejorSolucionEncontrada;
+		@SuppressWarnings("unchecked")
+		List<Integer> d = (List<Integer>) s.decode();
+		System.out.println(p.getSolucion(d));
 	}
 
 }

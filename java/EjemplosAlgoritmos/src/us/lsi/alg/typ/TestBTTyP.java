@@ -1,11 +1,13 @@
 package us.lsi.alg.typ;
 
+import java.util.Comparator;
 import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.BackTracking.BTType;
@@ -28,24 +30,22 @@ public class TestBTTyP {
 		SolucionTyP sm = TyPVertex.getSolucion(path);
 		Double bv = path.getWeight();
 		
-		var ms = 
-				BT.backTracking(
+		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTracking(
 						graph,
 						e->e.getIndex()==TyPVertex.n,
 						e2,
-						(v1,p,v2)->0.,
+						Heuristica::heuristic,
 						TyPVertex::getSolucion,
 						TyPVertex::copy,
 						BTType.Min);		
 		
-		ms.bestValue = bv;
+		ms.bestValue = bv+4;
 		ms.solutions.add(sm);
 		
 		ms.search();
-		
-		SolucionTyP s = ms.getSolution();
-		System.out.println(s);
-		System.out.println(ms.getSolutions().size());
+
+		System.out.println(ms.getSolutions().stream().min(Comparator.comparing(x->x.getMaxCarga())).get());
+//		System.out.println(ms.getSolutions());
 
 	}
 

@@ -36,7 +36,7 @@ public class TestLocalSearchInteger {
 //		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph,v.camino).getWeight());
 //		System.out.println(v.camino);});
 //		m.stream().forEach(v->System.out.println(v));
-		TravelVertexInteger v = m.search().get();
+		TravelVertexInteger v = m.search();
 		System.out.println(GraphPaths.of(graph,v.camino).getWeight());
 		System.out.println(v.camino);
 	}

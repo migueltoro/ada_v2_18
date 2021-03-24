@@ -1,6 +1,7 @@
 package us.lsi.alg.mochila;
 
 
+import java.util.Comparator;
 import java.util.Locale;
 
 import org.jgrapht.GraphPath;
@@ -48,7 +49,7 @@ public class TestBTMochila {
 		ms.search();
 		SolucionMochila s = ms.getSolution();
 		System.out.println(s);
-		System.out.println(ms.getSolutions());
+		System.out.println(ms.getSolutions().stream().max(Comparator.comparing(x->x.getValor())).get());
 	}
 
 }

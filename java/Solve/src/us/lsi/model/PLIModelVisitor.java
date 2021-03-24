@@ -1,4 +1,5 @@
 package us.lsi.model;
+
 // Generated from PLIModel.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -68,11 +69,11 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitList(PLIModelParser.ListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PLIModelParser#index}.
+	 * Visit a parse tree produced by {@link PLIModelParser#indx}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIndex(PLIModelParser.IndexContext ctx);
+	T visitIndx(PLIModelParser.IndxContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#indexed_elem}.
 	 * @param ctx the parse tree
@@ -171,18 +172,17 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarFactor(PLIModelParser.VarFactorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code numFactor}
-	 * labeled alternative in {@link PLIModelParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumFactor(PLIModelParser.NumFactorContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#var_id}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVar_id(PLIModelParser.Var_idContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#index_var_id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndex_var_id(PLIModelParser.Index_var_idContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code oneSideBound}
 	 * labeled alternative in {@link PLIModelParser#bound}.

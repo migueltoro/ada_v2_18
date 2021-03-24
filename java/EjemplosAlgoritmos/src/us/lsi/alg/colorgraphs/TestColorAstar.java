@@ -33,7 +33,7 @@ public class TestColorAstar {
 	public static void main(String[] args) {
 
 		SimpleWeightedGraph<Ciudad, Carretera> g0 = leeGrafo("./ficheros/andalucia.txt");		
-		System.out.println(g0);		
+//		System.out.println(g0);		
 		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(g0);	
 		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
@@ -47,11 +47,11 @@ public class TestColorAstar {
 		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStarGoal(
 				graph,
 				goal,
-				(v1,p,v2)->0.);
+				ColorHeuristic::heuristic);
 		
-		GraphPath<ColorVertex, ColorEdge> path = ms.search().get();
+		GraphPath<ColorVertex, ColorEdge> path = ms.search();
 		ColorVertex lv = Lists2.last(path.getVertexList());
-		System.out.println(lv.nc);
+		System.out.println("Numero de Colores = "+lv.nc);
 		System.out.println(lv.cav);
 
 	}
