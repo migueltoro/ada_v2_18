@@ -2,9 +2,9 @@ package us.lsi.ag.mochila;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.RangeChromosome;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
@@ -13,6 +13,7 @@ import us.lsi.mochila.datos.DatosMochila;
 public class TestMochilaAGRange {
 
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
 		
 		AlgoritmoAG.ELITISM_RATE  = 0.30;
 		AlgoritmoAG.CROSSOVER_RATE = 0.8;
@@ -27,11 +28,11 @@ public class TestMochilaAGRange {
 		DatosMochila.capacidadInicial = 78;
 		DatosMochilaAGRange p = new DatosMochilaAGRange("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
-		System.out.println(RangeChromosome.bitsNumber);
+//		System.out.println(RangeChromosome.bitsNumber);
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);

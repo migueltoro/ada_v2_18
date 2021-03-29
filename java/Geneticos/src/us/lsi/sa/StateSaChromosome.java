@@ -5,31 +5,29 @@ import org.apache.commons.math3.genetics.MutationPolicy;
 
 import us.lsi.ag.Chromosome;
 import us.lsi.ag.Data;
+import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
-public class StateSaChromosome extends org.apache.commons.math3.genetics.Chromosome implements StateSa {
+public class StateSaChromosome implements StateSa  {
 
-	public static  StateSaChromosome of(Chromosome<?> chromosome, MutationPolicy mutationPolicy) {
-		return new StateSaChromosome(chromosome, mutationPolicy);
+	public static  StateSaChromosome of(Chromosome<?> chromosome) {	
+		return new StateSaChromosome(chromosome);
 	}
 	
-	public static StateSaChromosome random(Data data, ChromosomeType tipo) {
+	public static StateSaChromosome random(Data data, ChromosomeType tipo) {	
 		ChromosomeFactory.iniValues(data,tipo);
 		MutationPolicy mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo);
+		AlgoritmoAG.mutationPolicy = mutationPolicy;
 		Chromosome<?> chr = ChromosomeFactory.randomChromosome(tipo);
-		return new StateSaChromosome(chr, mutationPolicy);
+		return new StateSaChromosome(chr);
 	}
 	
 	public final Chromosome<?> chromosome;
-	private ChromosomeFactory.ChromosomeType type;
-	private MutationPolicy mutationPolicy;
 	
-	private StateSaChromosome(Chromosome<?> chromosome, MutationPolicy mutationPolicy) {
+	private StateSaChromosome(Chromosome<?> chromosome) {
 		super();
-		this.chromosome = chromosome;
-		this.mutationPolicy = mutationPolicy;
-		
+		this.chromosome = chromosome;	
 	}
 	
 	@Override
@@ -38,17 +36,18 @@ public class StateSaChromosome extends org.apache.commons.math3.genetics.Chromos
 	}
 	@Override
 	public StateSa mutate() {
-		return StateSaChromosome.of((Chromosome<?>) this.mutationPolicy.mutate(this),this.mutationPolicy);
+		return StateSaChromosome.of( 
+				(Chromosome<?>) AlgoritmoAG.mutationPolicy.mutate((org.apache.commons.math3.genetics.Chromosome) this.chromosome));
 	}
 
 	@Override
 	public StateSa random() {
-		return StateSaChromosome.of(ChromosomeFactory.randomChromosome(this.type),this.mutationPolicy);
+		return StateSaChromosome.of(ChromosomeFactory.randomChromosome(AlgoritmoAG.tipo));
 	}
 
 	@Override
 	public StateSa copy() {
-		return StateSaChromosome.of(this.chromosome,this.mutationPolicy);
+		return StateSaChromosome.of(this.chromosome);
 	}
 	
 	public Object decode() {

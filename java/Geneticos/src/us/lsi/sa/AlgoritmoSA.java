@@ -94,7 +94,7 @@ public class AlgoritmoSA {
 	public static double alfa = 0.97;
 
 	private double temperatura;
-	private boolean parar = false;
+//	private boolean parar = false;
 	private StateSa estado;
 	private StateSa nextEstado;
 
@@ -113,12 +113,12 @@ public class AlgoritmoSA {
 	 */
 	public void ejecuta() {
 		this.mejorSolucionEncontrada = this.estado.random();
-		for (Integer n = 0; !parar && n < numeroDeIntentos; n++) {
+		for (Integer n = 0; n < numeroDeIntentos; n++) {
 			this.temperatura = temperaturaInicial;
 			this.estado = this.estado.random();
-			for (int numeroDeIteraciones = 0; !parar
-					&& numeroDeIteraciones < numeroDeIteracionesPorIntento; numeroDeIteraciones++) {
-				for (int s = 0; !parar && s < numeroDeIteracionesALaMismaTemperatura; s++) {
+			for (int numeroDeIteraciones = 0;
+				     numeroDeIteraciones < numeroDeIteracionesPorIntento; numeroDeIteraciones++) {
+				for (int s = 0; s < numeroDeIteracionesALaMismaTemperatura; s++) {
 					this.nextEstado = this.estado.mutate();
 					double incr = nextEstado.fitness() - estado.fitness();
 					if (aceptaCambio(incr)) {

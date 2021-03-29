@@ -1,17 +1,17 @@
 package us.lsi.ag.agchromosomes;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.apache.commons.math3.genetics.AbstractListChromosome;
-import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
+import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
 import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
-import us.lsi.math.Math2;
+
 
 /**
  * @author Miguel Toro
@@ -20,28 +20,22 @@ import us.lsi.math.Math2;
  * <p> Una implementación del tipo ValuesInRangeCromosome&lt;Integer&gt;. Toma como información la definición de un problema que implementa el interfaz 
  * ValuesInRangeProblemAG. </p>
  * 
- * <p> Asumimos que el número de varibles es n. La lista decodificada está formada por una lista de  
+ * <p> Asumimos que el número de variables es n. La lista decodificada está formada por una lista de  
  * enteros de tamaño n cuyos elementos para cada i son 
  * valores en en rango [getMin(i),getMax(i)]. </p>
  * 
- * <p> La implementación usa un cromosoma binario del tamaño n*nbits. 
- * Siendo nbits el número de bits usados para representar cada uno de los enteros. </p>
+ * <p> La implementación usa un cromosoma RandomKey del tamaño n.  </p>
  * 
  * <p> Es un cromosoma adecuado para codificar problemas de subconjuntos de multiconjuntos</p>
  *
  */
-public class RangeChromosome extends BinaryChromosome 
+public class RangeChromosome extends RandomKey<Integer>  
              implements ValuesInRangeData<Integer,Object>, Chromosome<List<Integer>> {
-	
-	/**
-	 * Número de bits usado para representar un entero. El rango de enteros que podemos obtener dependerá de este número de bits.
-	 */
-	public static Integer bitsNumber = 10;
 	
 	public static ValuesInRangeData<Integer,Object> data;
 	
 	/**
-	 * Dimensión del cromosoma igual a bitsNumber*getVariableNumber()
+	 * Dimensión del cromosoma igual a size()
 	 */
 	
 	public static int DIMENSION;
@@ -49,46 +43,36 @@ public class RangeChromosome extends BinaryChromosome
 	@SuppressWarnings("unchecked")
 	public static void iniValues(Data data){
 		RangeChromosome.data = (ValuesInRangeData<Integer,Object>) data; 
-		RangeChromosome.DIMENSION = RangeChromosome.bitsNumber*RangeChromosome.data.size();
+		RangeChromosome.DIMENSION = RangeChromosome.data.size();
 	}
 	
-	private static Integer pow = Math2.pow(2., bitsNumber).intValue();
-	
-	public RangeChromosome(Integer[] representation) throws InvalidRepresentationException {
+	public RangeChromosome(Double[] representation) throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
 	}
 
-	public RangeChromosome(List<Integer> representation) throws InvalidRepresentationException {
+	public RangeChromosome(List<Double> representation) throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
 	}
 
 	@Override
-	public AbstractListChromosome<Integer> newFixedLengthChromosome(List<Integer> ls) {
+	public AbstractListChromosome<Double> newFixedLengthChromosome(List<Double> ls) {
 		return new RangeChromosome(ls);
 	}
 	
-	public List<Integer> decode() {
-		List<Integer> ls = super.getRepresentation();
-		List<Integer> r = new ArrayList<Integer>();
-		int index1 = 0;
-		for(int i = 0; i < this.size(); i++){			
-			int index2 = index1+bitsNumber;
-			Integer e = Math2.decode(ls.subList(index1, index2));
-			Integer d = getMin(i)+Math2.escala(e, pow, getMax(i)-getMin(i));
-			r.add(d);
-			index1 = index1+bitsNumber;;
-		}
-		return r;
+	private Integer convert(Double e, Integer i) {
+//		System.out.printf("%.2f,%d,%d,%d,%d\n",e,i,RangeChromosome.DIMENSION,this.getMin(i),this.getMax(i));
+		return (int) (this.getMin(i) + (this.getMax(i)-this.getMin(i))*e);
 	}
-
-	public List<Integer> getRepresentation(){
-		return super.getRepresentation();
+	
+	public List<Integer> decode() {
+		List<Double> ls = super.getRepresentation();
+		return IntStream.range(0,ls.size()).boxed().map(i->this.convert(ls.get(i),i)).toList();
 	}
 	
 	public static RangeChromosome getInitialChromosome() {
-		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(RangeChromosome.DIMENSION);
+		List<Double> ls = RandomKey.randomPermutation(RangeChromosome.DIMENSION);
 		return new RangeChromosome(ls);
 	}
 
@@ -132,4 +116,7 @@ public class RangeChromosome extends BinaryChromosome
 	public Object getSolucion(List<Integer> dc) {
 		return RangeChromosome.data.getSolucion(dc);
 	}
+
+	
 }
+

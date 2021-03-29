@@ -18,7 +18,7 @@ public class TestColorAG {
 		setConstantes();
 		
 		ValuesInRangeData<Integer,Map<Ciudad,Integer>> problem = new DatosColorAG("./ficheros/Andalucia.txt");
-		AlgoritmoAG<List<Integer>> alg = AlgoritmoAG.create(problem);
+		AlgoritmoAG<List<Integer>> alg = AlgoritmoAG.of(problem);
 		alg.ejecuta();
 		
 	    Chromosome<List<Integer>> mejorSolucion = alg.getBestChromosome();

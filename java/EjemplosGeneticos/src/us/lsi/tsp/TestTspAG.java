@@ -22,7 +22,7 @@ public class TestTspAG {
 		
 		DatosTspAG p = new DatosTspAG("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println("================================");

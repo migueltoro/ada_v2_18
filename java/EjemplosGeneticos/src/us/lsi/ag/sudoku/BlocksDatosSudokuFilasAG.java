@@ -13,13 +13,13 @@ import us.lsi.sudoku.datos.Casilla;
 import us.lsi.sudoku.datos.DatosSudoku;
 import us.lsi.sudoku.datos.SolucionSudoku;
 
-public class BlocksDatosSudokuAG implements BlocksData<SolucionSudoku>{
+public class BlocksDatosSudokuFilasAG implements BlocksData<SolucionSudoku>{
 	
 	public List<Integer> blocksLimits;
 	public List<Integer> initialValues;
 	public List<Casilla> casillasLibres;
 	
-	public BlocksDatosSudokuAG(){
+	public BlocksDatosSudokuFilasAG(){
 		super();
 //		DatosSudoku.tamSubCuadro = 3;
 //		DatosSudoku.iniDatos("ficheros/sudoku.txt");
@@ -27,6 +27,7 @@ public class BlocksDatosSudokuAG implements BlocksData<SolucionSudoku>{
 		this.blocksLimits = new ArrayList<Integer>();
 		Integer limits = 0;
 		this.casillasLibres = new ArrayList<Casilla>();
+		this.blocksLimits.add(0);
 		for(int j=8; j>=0;j--) {	
 			Set<Integer> s0 = new HashSet<>();
 			for(int i=0; i<9;i++) {
@@ -43,6 +44,7 @@ public class BlocksDatosSudokuAG implements BlocksData<SolucionSudoku>{
 			}
 		}
 		this.initialValues = Collections.unmodifiableList(this.initialValues);
+		this.blocksLimits.add(this.initialValues.size());
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class TestReal {
 		StoppingConditionFactory.NUM_GENERATIONS = 100;
 		
 		ValuesInRangeData<Double,List<Double>> p = new DatosReal();
-		AlgoritmoAG<List<Double>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Double>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		

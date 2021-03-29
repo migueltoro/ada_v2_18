@@ -3,7 +3,6 @@ package us.lsi.ag.mochila;
 import java.util.List;
 
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.RangeChromosome;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
@@ -25,11 +24,11 @@ public static void main(String[] args) {
 		DatosMochila.capacidadInicial = 78;
 		DatosMochilaIndex p = new DatosMochilaIndex("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
-		System.out.println(RangeChromosome.bitsNumber);
+//		System.out.println(RangeChromosome.bitsNumber);
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);

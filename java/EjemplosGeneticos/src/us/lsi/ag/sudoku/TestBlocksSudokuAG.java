@@ -1,9 +1,10 @@
 package us.lsi.ag.sudoku;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
+import us.lsi.ag.agchromosomes.ChromosomeFactory;
+import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 import us.lsi.sudoku.datos.DatosSudoku;
@@ -13,38 +14,52 @@ public class TestBlocksSudokuAG {
 	
 	public static void main(String[] args) {
 		AlgoritmoAG.ELITISM_RATE  = 0.1;
-		AlgoritmoAG.CROSSOVER_RATE = 0.8;
-		AlgoritmoAG.MUTATION_RATE = 0.8;
-		AlgoritmoAG.POPULATION_SIZE = 70;
+		AlgoritmoAG.CROSSOVER_RATE = 0.6;
+		AlgoritmoAG.MUTATION_RATE = 0.6;
+		AlgoritmoAG.POPULATION_SIZE = 30;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 10000;
+		StoppingConditionFactory.NUM_GENERATIONS = 500;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 0.;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
 		
+		ChromosomeFactory.crossoverType = CrossoverType.OnePoint;
+		ChromosomeFactory.TOURNAMENT_ARITY = 2;
+		
 		DatosSudoku.tamSubCuadro = 3;
-		DatosSudoku.iniDatos("ficheros/sudoku.txt");
+		DatosSudoku.iniDatos("ficheros/sudoku2.txt");
 		System.out.println(SolucionSudoku.of());
 		
-		BlocksDatosSudokuAG p = new BlocksDatosSudokuAG();
+//		BlocksDatosSudokuAG p = new BlocksDatosSudokuAG();
+		BlocksDatosSudokuSubCuadroAG p = new BlocksDatosSudokuSubCuadroAG();
 		
-		AlgoritmoAG<List<Integer>> a = AlgoritmoAG.create(p);		
-		a.ejecuta();
+		AlgoritmoAG<List<Integer>> a = null;
+		List<Integer> values = null;
+		Double fitnessMax = -100.;
 		
-		List<Integer> values = a.getBestChromosome().decode();		
-		System.out.println(p.getSolucion(values));
-//		System.out.println(IntStream.range(0,p.n)
-//				.allMatch(i->p.values(i).contains(a.getBestChromosome().decode().get(i))));
-//		System.out.println(a.getBestChromosome().fitness());
-//		System.out.println(p.values);
-
-		System.out.println(p.initialValues.subList(0,p.blocksLimits().get(0)));
-		for(int i=0;i<p.blocksLimits().size()-1;i++) {
-			System.out.println(p.initialValues.subList(p.blocksLimits().get(i),p.blocksLimits().get(i+1)));
+		for (int i = 0; i < 10; i++) {
+			a = AlgoritmoAG.of(p);	
+			a.ejecuta();
+			Double f = a.getBestChromosome().fitness();
+			System.out.println(a.getBestChromosome().fitness());
+			if(f> fitnessMax) {
+				fitnessMax = f;
+				values = a.getBestChromosome().decode();
+			}	
 		}
-		System.out.println(p.initialValues.subList(p.blocksLimits().get(p.blocksLimits.size()-1),p.initialValues.size()));
-		System.out.println(p.initialValues);
-		System.out.println(p.blocksLimits);
+		System.out.println(p.getSolucion(values));
+		for(int y = 8; y >=0; y--) {
+			var d = DatosSudoku.getValoresOcupadosEnFila(y);
+			System.out.printf("Fila %d, %d,%s\n",y,d.size(),d);
+		}
+		for(int x = 0; x <9; x++) {
+			var d = DatosSudoku.getValoresOcupadosEnColumna(x);
+			System.out.printf("Comuna %d, %d, %s\n",x,d.size(),d);
+		}
+		for(int c = 0; c <9; c++) {
+			var d = DatosSudoku.getValoresOcupadosEnSubCuadro(c);
+			System.out.printf("Subcuadro %d, %d, %s\n",c,d.size(),d);
+		}
 	}
 
 }

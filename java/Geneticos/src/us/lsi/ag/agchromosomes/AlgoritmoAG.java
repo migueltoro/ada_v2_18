@@ -35,7 +35,7 @@ public class AlgoritmoAG<E> {
 	 * @return AlgoritmoAG
 	 */
 	
-	public static <E> AlgoritmoAG<E> create(Data data) {
+	public static <E> AlgoritmoAG<E> of(Data data) {
 		return new AlgoritmoAG<E>(data);
 	}
 	

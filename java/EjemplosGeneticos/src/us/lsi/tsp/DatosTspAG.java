@@ -43,7 +43,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 
 	@Override
 	public ChromosomeType getType() {
-		return ChromosomeType.PermutationInteger;
+		return ChromosomeType.Permutation;
 	}
 	
 	private static Double edgeCost(Integer i, Integer j) {

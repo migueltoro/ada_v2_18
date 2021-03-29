@@ -1,29 +1,26 @@
 package us.lsi.ag.agchromosomes;
 
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.apache.commons.math3.genetics.AbstractListChromosome;
-import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
+import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
 import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInSetData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
-import us.lsi.math.Math2;
 
-public class ValuesInSetChromosomeC extends BinaryChromosome 
+public class ValuesInSetChromosomeC extends RandomKey<Integer> 
        implements ValuesInSetData<Object>,Chromosome<List<Integer>> {
 	
-	/**
-	 * Número de bits usado para representar un entero. El rango de enteros que podemos obtener dependerá de este número de bits.
-	 */
-	public static Integer bitsNumber = 10;
+		
 	public static ValuesInSetData<Object> data;
 	
 	/**
-	 * Dimensión del cromosoma igual a bitsNumber*getVariableNumber()
+	 * Dimensión del cromosoma igual a size()
 	 */
 	
 	public static int DIMENSION;
@@ -31,46 +28,37 @@ public class ValuesInSetChromosomeC extends BinaryChromosome
 	@SuppressWarnings("unchecked")
 	public static void iniValues(Data data){
 		ValuesInSetChromosomeC.data = (ValuesInSetData<Object>) data; 
-		ValuesInSetChromosomeC.DIMENSION = ValuesInSetChromosomeC.bitsNumber*ValuesInSetChromosomeC.data.size();
+		ValuesInSetChromosomeC.DIMENSION = ValuesInSetChromosomeC.data.size();
 	}
 	
-	private static Integer pow = Math2.pow(2., bitsNumber).intValue();
-	
-	public ValuesInSetChromosomeC(Integer[] representation) throws InvalidRepresentationException {
+	public ValuesInSetChromosomeC(Double[] representation) throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
 	}
 
-	public ValuesInSetChromosomeC(List<Integer> representation) throws InvalidRepresentationException {
+	public ValuesInSetChromosomeC(List<Double> representation) throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
 	}
 
 	@Override
-	public AbstractListChromosome<Integer> newFixedLengthChromosome(List<Integer> ls) {
+	public AbstractListChromosome<Double> newFixedLengthChromosome(List<Double> ls) {
 		return new ValuesInSetChromosomeC(ls);
 	}
 	
-	public List<Integer> decode() {
-		List<Integer> ls = super.getRepresentation();
-		List<Integer> r = new ArrayList<Integer>();
-		int index1 = 0;
-		for(int i = 0; i < getObjectsNumber(); i++){			
-			int index2 = index1+bitsNumber;
-			Integer e = Math2.decode(ls.subList(index1, index2));
-			Integer d = getMin(i)+Math2.escala(e, pow, getMax(i)-getMin(i));
-			r.add(values(i).get(d));
-			index1 = index1+bitsNumber;
-		}
-		return r;
+	private Integer convert(Double e, Integer i) {
+		Integer index = (int) (this.values(i).size()*e);
+		return this.values(i).get(index);
 	}
 
-	public List<Integer> getRepresentation(){
-		return super.getRepresentation();
+	
+	public List<Integer> decode() {
+		List<Double> ls = super.getRepresentation();
+		return IntStream.range(0,ls.size()).boxed().map(i->this.convert(ls.get(i),i)).toList();
 	}
 	
 	public static ValuesInSetChromosomeC getInitialChromosome() {
-		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(ValuesInSetChromosomeC.DIMENSION);
+		List<Double> ls =  RandomKey.randomPermutation(ValuesInSetChromosomeC.DIMENSION);
 		return new ValuesInSetChromosomeC(ls);
 	}
 
@@ -89,13 +77,6 @@ public class ValuesInSetChromosomeC extends BinaryChromosome
 		return ValuesInSetChromosomeC.data.size();
 	}
 
-	private Integer getMax(int i) {
-		return ValuesInSetChromosomeC.data.values(i).size();
-	}
-
-	private Integer getMin(int i) {
-		return 0;
-	}
 	
 	public List<Integer> values(int i){
 		return ValuesInSetChromosomeC.data.values(i);

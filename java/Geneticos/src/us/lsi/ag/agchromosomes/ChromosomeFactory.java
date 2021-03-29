@@ -19,9 +19,6 @@ import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.ValuesInSetData;
-import us.lsi.ag.agoperators.BlocksCrossoverPolicy;
-import us.lsi.ag.agoperators.BlocksMutationPolicy;
-import us.lsi.ag.agoperators.PermutationIntegerMutationPolicy;
 import us.lsi.ag.agoperators.SubListCrossoverPolicy;
 import us.lsi.ag.agoperators.SubListMutationPolicy;
 import us.lsi.common.Preconditions;
@@ -39,7 +36,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,Range,Real,InSet,IndexSubList,Permutation,PermutationInteger,PermutationSubList,Blocks}
+	public enum ChromosomeType {Binary,Range,Real,InSet,IndexSubList,Permutation,PermutationSubList,Blocks}
 	
 //	public static ChromosomeType tipo;
 
@@ -54,11 +51,10 @@ public class ChromosomeFactory {
 		case IndexSubList: chromosome = IndexSubListChromosome.getInitialChromosome(); break;
 		case Range: chromosome = RangeChromosome.getInitialChromosome(); break;
 		case Permutation: chromosome = PermutationChromosome.getInitialChromosome(); break;
-		case PermutationInteger: chromosome = PermutationIntegerChromosome.getInitialChromosome(); break;
 		case PermutationSubList: chromosome = PermutationSubListChromosome.getInitialChromosome(); break;
 		case Real: chromosome = DoubleChromosome.getInitialChromosome(); break;
 		case InSet: chromosome = ValuesInSetChromosomeC.getInitialChromosome(); break;
-		case Blocks: chromosome = BlocksChromosome.getInitialChromosome(); break;
+		case Blocks: chromosome = BlocksChromosomePermutation.getInitialChromosome(); break;
 		}
 		return chromosome;
 	}
@@ -118,13 +114,12 @@ public class ChromosomeFactory {
 		switch(tipo){
 		case Binary: crossOverPolicy = crossOverPolicyBin; break;
 		case IndexSubList: crossOverPolicy = crossOverPolicyBin; break;
-		case Range: crossOverPolicy = crossOverPolicyBin; break;
+		case Range: crossOverPolicy = crossOverPolicyKey; break;
 		case Permutation: crossOverPolicy = crossOverPolicyKey; break;
-		case PermutationInteger: crossOverPolicy = crossOverPolicyBin; break;
 		case PermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
-		case Real: crossOverPolicy = crossOverPolicyBin; break;
-		case InSet: crossOverPolicy = crossOverPolicyBin; break;	
-		case Blocks: crossOverPolicy = new BlocksCrossoverPolicy(); break;
+		case Real: crossOverPolicy = crossOverPolicyKey; break;
+		case InSet: crossOverPolicy = crossOverPolicyKey; break;	
+		case Blocks: crossOverPolicy = crossOverPolicyKey; break;
 		}
 		Preconditions.checkState(crossOverPolicy!=null);
 		return crossOverPolicy;
@@ -140,13 +135,12 @@ public class ChromosomeFactory {
 		switch(tipo){
 		case Binary:  mutationPolicy = new BinaryMutation()	; break;
 		case IndexSubList: mutationPolicy = new BinaryMutation(); break;
-		case Range: mutationPolicy = new BinaryMutation();	; break;
+		case Range: mutationPolicy = new RandomKeyMutation();	; break;
 		case Permutation: mutationPolicy = new RandomKeyMutation(); break;
-		case PermutationInteger: mutationPolicy = new PermutationIntegerMutationPolicy(); break;
 		case PermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
-		case Real: mutationPolicy = new BinaryMutation();	; break;
-		case InSet: mutationPolicy = new BinaryMutation(); break;
-		case Blocks: mutationPolicy = new BlocksMutationPolicy(); break;
+		case Real: mutationPolicy = new RandomKeyMutation();	; break;
+		case InSet: mutationPolicy = new RandomKeyMutation(); break;
+		case Blocks: mutationPolicy = new RandomKeyMutation(); break;
 		}
 		Preconditions.checkState(mutationPolicy!=null);
 		return mutationPolicy;
@@ -186,11 +180,10 @@ public class ChromosomeFactory {
 		case IndexSubList: IndexSubListChromosome.iniValues(data);break;
 		case Range: RangeChromosome.iniValues(data); break;
 		case Permutation: PermutationChromosome.iniValues(data);break;
-		case PermutationInteger: PermutationIntegerChromosome.iniValues(data);break;
 		case PermutationSubList: PermutationSubListChromosome.iniValues(data);break;
 		case Real: DoubleChromosome.iniValues(data);break;
 		case InSet: ValuesInSetChromosomeC.iniValues(data); break;
-		case Blocks: BlocksChromosome.iniValues(data); break;
+		case Blocks: BlocksChromosomePermutation.iniValues(data); break;
 		}
 	}
 	

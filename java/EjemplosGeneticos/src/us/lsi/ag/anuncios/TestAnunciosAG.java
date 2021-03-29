@@ -29,7 +29,7 @@ public class TestAnunciosAG {
 		DatosAnuncios.tiempoTotal = 30;
 		System.out.println("ficheros/anuncios.txt");
 		SeqNormalData<SolucionAnuncios> p = new DatosAnunciosAG("ficheros/anuncios.txt");		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		Locale.setDefault(new Locale("en", "US"));

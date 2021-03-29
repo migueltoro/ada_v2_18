@@ -28,7 +28,7 @@ public class TestAsignacionTareasAG {
 		
 
 		SeqNormalData<List<Integer>> p = DatosAsignacionTareasAG.create("ficheros/asignacionDeTareas.txt");
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		System.out.println("================================");
 		

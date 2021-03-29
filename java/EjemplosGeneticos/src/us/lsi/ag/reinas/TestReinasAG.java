@@ -35,7 +35,7 @@ public class TestReinasAG {
 		
 		DatosReinasAG.numeroDeReinas = 40;
 		SeqNormalData<List<Reina>> p = DatosReinasAG.create();
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.create(p);
+		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		System.out.println("================================");
 		
