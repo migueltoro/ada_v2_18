@@ -355,6 +355,9 @@ public class AuxGrammar {
 		Preconditions.checkNotNull(parameters,String.format("Parameters null"));	
 		Object r = null;
 		try {
+//			System.out.println(name);
+//			System.out.println(m);
+//			System.out.println(Arrays.asList(parameters));
 			r = m.invoke(null,parameters);
 		} catch (IllegalAccessException e) {
 			Preconditions.checkNotNull(false,

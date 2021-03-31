@@ -442,7 +442,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 				.map(i->visit(ctx.real_parameters().exp(i)))
 				.collect(Collectors.toList())
 				.toArray(new Object[n]);
-//		System.out.println(String.format("%s,%s",name,AuxGrammar.toString(parameters)));		
+//		System.out.println(String.format("En Visit Call %s,%d,%s",name,parameters.length,AuxGrammar.toString(parameters)));		
 		return AuxGrammar.result(name, parameters);	
 	}
 	/**

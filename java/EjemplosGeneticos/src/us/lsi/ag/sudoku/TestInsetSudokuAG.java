@@ -18,7 +18,7 @@ public class TestInsetSudokuAG {
 		AlgoritmoAG.MUTATION_RATE = 0.6;
 		AlgoritmoAG.POPULATION_SIZE = 30;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 500;
+		StoppingConditionFactory.NUM_GENERATIONS = 1000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 0.;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
@@ -28,6 +28,19 @@ public class TestInsetSudokuAG {
 		
 		DatosSudoku.tamSubCuadro = 3;
 		DatosSudoku.iniDatos("ficheros/sudoku.txt");
+		
+		for(int y = 8; y >=0; y--) {
+			var d = DatosSudoku.getValoresOcupadosEnFila(y);
+			System.out.printf("Fila %d, %d,%s\n",y,d.size(),d);
+		}
+		for(int x = 0; x <9; x++) {
+			var d = DatosSudoku.getValoresOcupadosEnColumna(x);
+			System.out.printf("Comuna %d, %d, %s\n",x,d.size(),d);
+		}
+		for(int c = 0; c <9; c++) {
+			var d = DatosSudoku.getValoresOcupadosEnSubCuadro(c);
+			System.out.printf("Subcuadro %d, %d, %s\n",c,d.size(),d);
+		}
 		
 		InSetDatosSudokuAG p = new InSetDatosSudokuAG();
 		

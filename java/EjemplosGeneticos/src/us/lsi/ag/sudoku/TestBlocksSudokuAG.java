@@ -18,7 +18,7 @@ public class TestBlocksSudokuAG {
 		AlgoritmoAG.MUTATION_RATE = 0.6;
 		AlgoritmoAG.POPULATION_SIZE = 30;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 500;
+		StoppingConditionFactory.NUM_GENERATIONS = 1000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 0.;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
@@ -27,8 +27,22 @@ public class TestBlocksSudokuAG {
 		ChromosomeFactory.TOURNAMENT_ARITY = 2;
 		
 		DatosSudoku.tamSubCuadro = 3;
-		DatosSudoku.iniDatos("ficheros/sudoku2.txt");
+		DatosSudoku.iniDatos("ficheros/sudoku.txt");
 		System.out.println(SolucionSudoku.of());
+		
+//		System.out.println(p.getSolucion(values));
+		for(int y = 8; y >=0; y--) {
+			var d = DatosSudoku.getValoresOcupadosEnFila(y);
+			System.out.printf("Fila %d, %d,%s\n",y,d.size(),d);
+		}
+		for(int x = 0; x <9; x++) {
+			var d = DatosSudoku.getValoresOcupadosEnColumna(x);
+			System.out.printf("Comuna %d, %d, %s\n",x,d.size(),d);
+		}
+		for(int c = 0; c <9; c++) {
+			var d = DatosSudoku.getValoresOcupadosEnSubCuadro(c);
+			System.out.printf("Subcuadro %d, %d, %s\n",c,d.size(),d);
+		}
 		
 //		BlocksDatosSudokuAG p = new BlocksDatosSudokuAG();
 		BlocksDatosSudokuSubCuadroAG p = new BlocksDatosSudokuSubCuadroAG();

@@ -32,7 +32,7 @@ public class MochilaGurobiPLI {
 	}
 	
 	public static void mochila_model() throws IOException {
-		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.iniDatos("data/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;	
 		CI = DatosMochila.capacidadInicial;
 		objetos = DatosMochila.getObjetos();
