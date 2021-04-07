@@ -46,11 +46,11 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public MochilaVertex(int index, Integer capacidadRestante) {
 		super();
 		this.index = index;
-		if (index < n) {
+//		if (index < n) {
 			this.capacidadRestante = capacidadRestante;
-		} else {
-			this.capacidadRestante = 0;
-		}		
+//		} else {
+//			this.capacidadRestante = 0;
+//		}		
 	}
 	
 	public static SolucionMochila getSolucion(GraphPath<MochilaVertex, MochilaEdge> path){
@@ -67,8 +67,6 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public Boolean isValid() {
 		return index>=0 && index<=DatosMochila.getObjetos().size();
 	}
-	
-	
 	
 	public MochilaEdge greedyEdge() {
 		Preconditions.checkElementIndex(index, DatosMochila.numeroDeObjetos);
@@ -102,11 +100,11 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	public MochilaVertex neighbor(Integer a) {
 		MochilaVertex r;
 		if(this.capacidadRestante == 0.) r =  MochilaVertex.of(n,0);
-		if(this.index == n-1) r =  MochilaVertex.of(n,0);
-		else {
+//		if(this.index == n-1) r =  MochilaVertex.of(n,0);
+//		else {
 			Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
 			r = MochilaVertex.of(index+1,cr);
-		}
+//		}
 		return r;
 	}
 	

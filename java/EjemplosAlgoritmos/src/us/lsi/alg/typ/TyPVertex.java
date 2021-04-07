@@ -41,7 +41,6 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 
 	private Integer index;
 	private List<Double> cargas;
-	private List<Double> sort_cargas;
 	private Double maxCarga;
 	private Integer npMax;
 	private Integer npMin;
