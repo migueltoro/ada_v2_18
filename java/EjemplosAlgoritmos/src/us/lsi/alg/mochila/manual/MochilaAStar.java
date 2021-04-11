@@ -4,95 +4,108 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.PriorityQueue;
 
-import org.jheaps.AddressableHeap;
-import org.jheaps.AddressableHeap.Handle;
-import org.jheaps.tree.FibonacciHeap;
 
-import us.lsi.alg.mochila.MochilaEdge;
-import us.lsi.alg.mochila.MochilaVertex;
-import us.lsi.common.TriFunction;
-
+import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 
 public class MochilaAStar {
 	
-	public static MochilaAStar of(MochilaVertex startVertex, MochilaVertex end,
-			TriFunction<MochilaVertex, Predicate<MochilaVertex>, MochilaVertex, Double> heuristic) {
-		return new MochilaAStar(startVertex, end, heuristic);
+	public static record AStarMochila(Mochila vertex, Integer a, Mochila lastVertex,
+			Double distanceToOrigin, Double distanceToEnd) implements Comparable<AStarMochila>{
+		public static AStarMochila of(Mochila vertex, Integer a, Mochila lastVertex,
+			Double distanceToOrigin, Double distanceToEnd) {
+			return new AStarMochila(vertex, a, lastVertex,distanceToOrigin, distanceToEnd);
+		}
+		@Override
+		public int compareTo(AStarMochila other) {
+			return this.distanceToEnd().compareTo(other.distanceToEnd());
+		}	
 	}
-		 
-	public MochilaVertex startVertex;
-	public Predicate<MochilaVertex> goal;
-	protected MochilaVertex end;
-	protected TriFunction<MochilaVertex,Predicate<MochilaVertex>,MochilaVertex,Double> heuristic;
-	public Map<MochilaVertex,Handle<Double,DataAstar>> tree;
-	protected AddressableHeap<Double,DataAstar> heap; 
-	protected Boolean nonGoal;
 	
+	public static MochilaAStar of(Mochila start) {
+		return new MochilaAStar(start);
+	}
 	
-	private MochilaAStar(MochilaVertex startVertex, MochilaVertex end, 
-			TriFunction<MochilaVertex,Predicate<MochilaVertex>,MochilaVertex,Double> heuristic) {
+	public Mochila start;
+	public Map<Mochila,AStarMochila> tree;
+	public PriorityQueue<AStarMochila> heap; 
+	public Boolean goal;
+	
+	private MochilaAStar(Mochila start) {
 		super();
-		this.startVertex = startVertex;		
-		this.end = end;
-		this.goal = goal==null?v->v.equals(this.end):goal;
-		this.heuristic = heuristic;
+		this.start = start;
+		AStarMochila a = AStarMochila.of(start, null,null,0., Heuristica.heuristica(start));
 		this.tree = new HashMap<>();
-		this.heap = new FibonacciHeap<>();
-		DataAstar data = DataAstar.of(startVertex);		
-		Handle<Double, DataAstar> h = this.heap.insert(-heuristic.apply(startVertex, goal, end),data);
-		this.tree.put(startVertex,h);
-		this.nonGoal = true;
+		this.tree.put(start, a);
+		this.heap = new PriorityQueue<>();
+		this.heap.add(a);
+		this.goal = false;
 	}
 	
-	public Optional<List<MochilaEdge>> search() {
-		MochilaVertex vertexActual = null;
-		while(!heap.isEmpty() && nonGoal) {
-			Handle<Double,DataAstar> dataActual = heap.deleteMin();
-			vertexActual = dataActual.getValue().vertex;
-			for(MochilaEdge backEdge:vertexActual.edgesListOf()) { 
-				MochilaVertex v = backEdge.target; 
-				Double newDistance = dataActual.getValue().distanceToOrigin-backEdge.weight;
-				Double newDistanceToEnd = newDistance-heuristic.apply(v, goal, end);
-				if(!tree.containsKey(v)) {				
-					DataAstar nd = DataAstar.of(v,backEdge,newDistance);
-					Handle<Double, DataAstar> h = heap.insert(newDistanceToEnd,nd);
-					tree.put(v,h);
-				} else if(newDistance < tree.get(v).getValue().distanceToOrigin) {
-						tree.get(v).getValue().distanceToOrigin = newDistance;
-						tree.get(v).getValue().edge = backEdge;
-						tree.get(v).decreaseKey(newDistanceToEnd);
+	private List<Integer> path(Mochila v) {
+		List<Integer> ls = new ArrayList<>();
+		Integer a = this.tree.get(v).a();
+		while (a != null) {
+			ls.add(a);
+			v = this.tree.get(v).lastVertex();
+			a = this.tree.get(v).a();
+		}
+		Collections.reverse(ls);
+		return ls;
+	}
+
+
+	public List<Integer> search() {
+		Mochila vertexActual = null;
+		while (!heap.isEmpty() && !goal) {
+			AStarMochila dataActual = heap.poll();
+			vertexActual = dataActual.vertex();
+			for (Integer a : vertexActual.acciones()) {
+				Mochila v = vertexActual.vecino(a);
+				Double newDistance = dataActual.distanceToOrigin()-a*DatosMochila.getValor(vertexActual.index());
+				Double newDistanceToEnd = newDistance - Heuristica.heuristica(v);				
+				if (!tree.containsKey(v)) {	
+					AStarMochila ac = AStarMochila.of(v, a, vertexActual, newDistance, newDistanceToEnd);
+					heap.add(ac);
+					tree.put(v, ac);	
+				}else if (newDistance < tree.get(v).distanceToOrigin()) {
+					heap.remove(tree.get(v));
+					AStarMochila ac = AStarMochila.of(v, a, vertexActual, newDistance, newDistanceToEnd);
+					heap.add(ac);
+					tree.put(v, ac);
 				}
 			}
-			this.nonGoal = !this.goal.test(vertexActual);
+			this.goal = vertexActual.index() == DatosMochila.n;
 		}
-		if(this.nonGoal) return Optional.empty();
-		else return Optional.of(edges(vertexActual));
+		return path(vertexActual);
 	}
 
-	public List<MochilaEdge> edges(MochilaVertex end){
-		MochilaEdge edge = tree.get(end).getValue().edge;
-		List<MochilaEdge> edges = new ArrayList<>();
-		if(end.equals(startVertex)) return edges;
-		while(edge!=null) {				
-			edges.add(edge);
-			end = oppositeVertex(edge, end);
-			edge = tree.get(end).getValue().edge;			
+	public SolucionMochila solucion(List<Integer> ls) {
+		SolucionMochila s = SolucionMochila.empty();
+		Mochila v = this.start;
+		for(Integer a: ls) {	
+			s.add(DatosMochila.getObjeto(v.index()), a);
+			v = v.vecino(a);
 		}
-		Collections.reverse(edges);
-		return edges;
-	}
-
-	public static MochilaVertex oppositeVertex(MochilaEdge edge, MochilaVertex v) {
-		if(edge.source.equals(v)) return edge.target;
-		else return edge.source;
-	}
-
-	public static void printHandle(Handle<Double, DataAstar> h) {
-		System.out.println(String.format("(%.2f,%s)", h.getKey(),h.getValue().toString()));
+		return s;
 	}
 	
+
+	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
+		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.capacidadInicial = 78;
+		Mochila v1 = Mochila.of(0, DatosMochila.capacidadInicial);
+		MochilaAStar a = MochilaAStar.of(v1);
+		List<Integer> ls = a.search();
+		SolucionMochila s = a.solucion(ls);
+		System.out.println(s);
+	}
+
+	
+
 }

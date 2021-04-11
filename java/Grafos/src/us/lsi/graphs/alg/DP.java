@@ -3,7 +3,6 @@ package us.lsi.graphs.alg;
 
 import java.util.Map;
 
-import us.lsi.graphs.alg.Sp;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;

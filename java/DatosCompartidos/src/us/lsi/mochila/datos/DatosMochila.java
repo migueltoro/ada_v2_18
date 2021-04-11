@@ -31,6 +31,7 @@ public class DatosMochila {
 	private static Comparator<ObjetoMochila> ordenObjetos;
 	public static Integer capacidadInicial;
 	public static Integer numeroDeObjetos;
+	public static Integer n;
 
 	/**
 	 * El método lee el fichero de entrada y actualiza la lista ObjetosDisponibles que queda ordenada 
@@ -45,6 +46,7 @@ public class DatosMochila {
 				.sorted(ordenObjetos)
 				.collect(Collectors.<ObjetoMochila> toList());
 		numeroDeObjetos = objetosDisponibles.size();
+		n = numeroDeObjetos;
 	}
 	
 	public static List<ObjetoMochila> getObjetos() {
