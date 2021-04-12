@@ -1,4 +1,4 @@
-package usl.lsi.alg.puzzle;
+package us.lsi.alg.puzzle;
 
 import java.util.function.Predicate;
 import java.util.stream.IntStream;

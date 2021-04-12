@@ -1,4 +1,4 @@
-package usl.lsi.alg.puzzle;
+package us.lsi.alg.puzzle;
 
 import us.lsi.common.IntPair;
 
