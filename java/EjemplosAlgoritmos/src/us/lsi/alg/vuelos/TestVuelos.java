@@ -1,4 +1,4 @@
-package us.lsi.vuelos;
+package us.lsi.alg.vuelos;
 
 
 import java.util.Locale;

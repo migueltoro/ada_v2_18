@@ -17,15 +17,20 @@ public class Heuristica {
 			return Math.min(this.capacidadRestante()/DatosMochila.getPeso(this.index()),DatosMochila.getNumMaxDeUnidades(index));
 		}
 		
+		public HMochila vecino(Double a) {
+			return HMochila.of(this.index() + 1, this.capacidadRestante() - a * DatosMochila.getPeso(this.index()));
+		}
+		
 	}
 
+	
 	public static Integer voraz(Mochila v1) {
 		Mochila v = v1;
 		Integer r = 0;
 		while (v.capacidadRestante() > 0 && v.index() < DatosMochila.n) {
 			Integer a = v.greedyAction();
 			r = r + a * DatosMochila.getValor(v.index());
-			v = Mochila.of(v.index() + 1, v.capacidadRestante() - a * DatosMochila.getPeso(v.index()));
+			v = v.vecino(a);
 		}
 		return r;
 	}
@@ -48,7 +53,7 @@ public class Heuristica {
 		while (v.capacidadRestante() > 0 && v.index() < DatosMochila.n) {
 			Double a = v.heuristicAction();
 			r = r + a * DatosMochila.getValor(v.index());
-			v = HMochila.of(v.index() + 1, v.capacidadRestante() - a * DatosMochila.getPeso(v.index()));
+			v = v.vecino(a);
 		}
 		return r;
 	}

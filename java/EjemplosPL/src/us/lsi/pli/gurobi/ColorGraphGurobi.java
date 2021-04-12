@@ -45,9 +45,9 @@ public class ColorGraphGurobi {
 	
 	
 	public static void color_model() throws IOException {
-		ColorGraphGurobi.graph = graph(50,0.3);
+		ColorGraphGurobi.graph = graph(30,0.3);
 		ColorGraphGurobi.n = graph.vertexSet().size();
-		ColorGraphGurobi.m = 25;
+		ColorGraphGurobi.m = 10;
 		System.out.println(graph);
 		AuxGrammar.generate(ColorGraphGurobi.class,"models/color.lsi","ficheros/color.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/color.lp");
