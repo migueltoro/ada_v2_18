@@ -3,10 +3,10 @@ package us.lsi.recursivos.problemasdelistas;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.*;
+
+import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Tuple2;
-import us.lsi.common.Tuple;
 import us.lsi.math.*;
 
 
@@ -52,7 +52,7 @@ public class ProblemasDeListas {
 		quickSort(lista,0,lista.size(),cmp);	
 	}
 	
-	public static <T> Tuple2<Integer,Integer> banderaHolandesa(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
+	public static <T> IntPair banderaHolandesa(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
 		int a, b, c;
 		a = i;	
 		b = i;	
@@ -70,7 +70,7 @@ public class ProblemasDeListas {
 		    	b++;
 		    }
 		}
-		return Tuple.create(a, b);
+		return IntPair.of(a, b);
 	}
 
 	public static <T> Integer reordenaSobrePivote(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
@@ -96,9 +96,9 @@ public class ProblemasDeListas {
 			ordenaBase(lista, i, j, ord);
 		}else{
 			E pivote = escogePivote(lista, i, j);
-			Tuple2<Integer,Integer> p = banderaHolandesa(lista, pivote, i, j, ord);
-			quickSort(lista,i,p.v1,ord);
-			quickSort(lista,p.v2,j,ord);			
+			IntPair p = banderaHolandesa(lista, pivote, i, j, ord);
+			quickSort(lista,i,p.first,ord);
+			quickSort(lista,p.second,j,ord);			
 		}
 	}
 
@@ -181,11 +181,11 @@ public class ProblemasDeListas {
 			r = lista.get(i);
 		}else{
 			E pivote = escogePivote(lista, i, j);
-			Tuple2<Integer,Integer> p = banderaHolandesa(lista, pivote, i, j, ord);
-			if(k < p.v1){
-				r = escogeKesimo(lista,i,p.v1,k,ord);
-			}else if(k >= p.v2){
-				r = escogeKesimo(lista,p.v2,j,k,ord);
+			IntPair p = banderaHolandesa(lista, pivote, i, j, ord);
+			if(k < p.first){
+				r = escogeKesimo(lista,i,p.first,k,ord);
+			}else if(k >= p.second){
+				r = escogeKesimo(lista,p.second,j,k,ord);
 			}else{
 				r = lista.get(k);
 			}					

@@ -6,8 +6,8 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Tuple2;
-import us.lsi.common.Tuple;
+import us.lsi.common.IntPair;
+
 
 public class DatosJarras {
 	
@@ -44,16 +44,16 @@ public class DatosJarras {
 			DatosJarras.acciones.get(6).aplicable = (x1,x2)->x2>0 ;
 			DatosJarras.acciones.get(7).aplicable = (x1,x2)->x2>0 ;
 			
-			DatosJarras.acciones.get(0).actualiza = (x1,x2)-> Tuple.create(0, x2);
-			DatosJarras.acciones.get(1).actualiza = (x1,x2)-> Tuple.create(0, Math.min(x1+x2,capacidadJarra2)) ;
+			DatosJarras.acciones.get(0).actualiza = (x1,x2)-> IntPair.of(0, x2);
+			DatosJarras.acciones.get(1).actualiza = (x1,x2)-> IntPair.of(0, Math.min(x1+x2,capacidadJarra2)) ;
 			DatosJarras.acciones.get(2).actualiza = (x1,x2)-> 
-				Tuple.create(Math.max(0,x1+x2-capacidadJarra2), Math.min(x1+x2,capacidadJarra2));
-			DatosJarras.acciones.get(3).actualiza = (x1,x2)-> Tuple.create(capacidadJarra1, x2);
-			DatosJarras.acciones.get(4).actualiza = (x1,x2)-> Tuple.create(x1,capacidadJarra2);
-			DatosJarras.acciones.get(5).actualiza = (x1,x2)-> Tuple.create(x1, 0);;
-			DatosJarras.acciones.get(6).actualiza = (x1,x2)-> Tuple.create(Math.min(x1+x2,capacidadJarra1),0) ; 
+			IntPair.of(Math.max(0,x1+x2-capacidadJarra2), Math.min(x1+x2,capacidadJarra2));
+			DatosJarras.acciones.get(3).actualiza = (x1,x2)-> IntPair.of(capacidadJarra1, x2);
+			DatosJarras.acciones.get(4).actualiza = (x1,x2)-> IntPair.of(x1,capacidadJarra2);
+			DatosJarras.acciones.get(5).actualiza = (x1,x2)-> IntPair.of(x1, 0);;
+			DatosJarras.acciones.get(6).actualiza = (x1,x2)-> IntPair.of(Math.min(x1+x2,capacidadJarra1),0) ; 
 			DatosJarras.acciones.get(7).actualiza = (x1,x2)->  
-				Tuple.create(Math.min(x1+x2,capacidadJarra1), Math.max(0,x1+x2-capacidadJarra1));		
+			IntPair.of(Math.min(x1+x2,capacidadJarra1), Math.max(0,x1+x2-capacidadJarra1));		
 		
 		}
 	}
@@ -65,7 +65,7 @@ public class DatosJarras {
 		private String descripcionCorta;
 		private String descripcion;
 		private BiPredicate<Integer,Integer> aplicable;
-		private BiFunction<Integer,Integer,Tuple2<Integer,Integer>> actualiza;
+		private BiFunction<Integer,Integer,IntPair> actualiza;
 		
 		private static Operacion create(String s) {
 			return new Operacion(s);
@@ -97,7 +97,7 @@ public class DatosJarras {
 			return aplicable.test(j1, j2);
 		}
 		
-		public Tuple2<Integer, Integer> result(Integer j1, Integer j2) {
+		public IntPair result(Integer j1, Integer j2) {
 			return actualiza.apply(j1, j2);
 		}
 

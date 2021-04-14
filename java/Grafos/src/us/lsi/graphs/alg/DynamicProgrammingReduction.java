@@ -26,7 +26,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	private V startVertex;
 	private Predicate<V> goal;
 	private V end;
-	public Double bestValue;
+	public Double bestValue = null;
 	public GraphPath<V, E> solutionPath = null;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
 	private Comparator<Sp<E>> comparatorEdges;
@@ -78,7 +78,10 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (this.goal.test(actual)) {
-			r = Sp.empty();
+			switch(graph.pathType()) {
+			case Last: r = Sp.of(null,graph.getVertexWeight(actual)); break;
+			case Sum: r = Sp.of(null,0.); break;
+			}	
 			this.solutionsTree.put(actual, r);
 			return r;
 		} else {
@@ -88,10 +91,19 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 				V v = Graphs.getOppositeVertex(graph,edge,actual);
 				Double ac = this.path.add(accumulateValue,actual,edge,edgeToOrigin); 
 				Sp<E> s = search(v,ac,edge);
+				
 				if (s!=null) {
-					E lastEdge = this.solutionsTree.get(v).edge;
-					Double spv = this.path.add(s.weight,v,edge,lastEdge);	
-					Sp<E> sp = Sp.of(edge,spv);
+					Sp<E> sp = null;
+					switch(graph.pathType()) {
+					case Last:
+						sp = Sp.of(edge,s.weight);
+						break;
+					case Sum:
+						E lastEdge = this.solutionsTree.get(v).edge;
+						Double spv = this.path.add(s.weight,v,edge,lastEdge);	
+						sp = Sp.of(edge,spv);
+						break;
+					}
 					rs.add(sp);
 				}
 			}
@@ -105,10 +117,10 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		EGraphPath<V,E> ePath = graph.initialPath();
 		if(!this.solutionsTree.containsKey(vertex) || 
 				(this.solutionsTree.get(vertex) == null && this.solutionPath !=null)) return this.solutionPath;
-		System.out.println(this.solutionsTree.containsKey(vertex));
-		System.out.println(this.solutionPath);
-		System.out.println(this.solutionsTree.get(vertex));
-		System.out.println(this.solutionsTree.get(vertex).edge);
+//		System.out.println(this.solutionsTree.containsKey(vertex));
+//		System.out.println(this.solutionPath);
+//		System.out.println(this.solutionsTree.get(vertex));
+//		System.out.println(this.solutionsTree.get(vertex).edge);
 		E edge = this.solutionsTree.get(vertex).edge;
 		List<E> edges = new ArrayList<>();		
 		while(edge != null) {

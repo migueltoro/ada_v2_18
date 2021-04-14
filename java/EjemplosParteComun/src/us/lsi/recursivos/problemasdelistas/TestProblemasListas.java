@@ -21,14 +21,14 @@ public class TestProblemasListas {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
 		Comparator<Double> ord = Comparator.naturalOrder();
 		Double pivote = lista.get(0);
-		Tuple2<Integer,Integer> p = ProblemasDeListas.banderaHolandesa(lista, pivote, 0,lista.size(), ord);
-		for(int i=0;i<p.getV1();i++){
+		IntPair p = ProblemasDeListas.banderaHolandesa(lista, pivote, 0,lista.size(), ord);
+		for(int i=0;i<p.first;i++){
 			assertTrue(lista.get(i)<pivote);
 		}
-		for(int i=p.getV1();i<p.getV2();i++){
+		for(int i=p.first;i<p.second;i++){
 			assertTrue(lista.get(i).equals(pivote));
 		}
-		for(int i=p.getV2();i<lista.size();i++){
+		for(int i=p.second;i<lista.size();i++){
 			assertTrue(lista.get(i)>pivote);
 		}
 	}

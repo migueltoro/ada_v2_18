@@ -39,8 +39,8 @@ public class TestPDRTyP {
 						PDType.Min);
 		
 		
-		ms.bestValue = bv;
-		ms.solutionPath = path;
+//		ms.bestValue = bv;
+//		ms.solutionPath = path;
 		ms.search();
 //		System.out.println(ms.search());
 //		System.out.println(ms.solutionsTree);
