@@ -8,15 +8,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-
-import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
-
 public class MochilaAStar {
 	
-	public static record AStarMochila(Mochila vertex, Integer a, Mochila lastVertex,
+	public static record AStarMochila(MochilaProblem vertex, Integer a, MochilaProblem lastVertex,
 			Double distanceToOrigin, Double distanceToEnd) implements Comparable<AStarMochila>{
-		public static AStarMochila of(Mochila vertex, Integer a, Mochila lastVertex,
+		public static AStarMochila of(MochilaProblem vertex, Integer a, MochilaProblem lastVertex,
 			Double distanceToOrigin, Double distanceToEnd) {
 			return new AStarMochila(vertex, a, lastVertex,distanceToOrigin, distanceToEnd);
 		}
@@ -26,16 +22,16 @@ public class MochilaAStar {
 		}	
 	}
 	
-	public static MochilaAStar of(Mochila start) {
+	public static MochilaAStar of(MochilaProblem start) {
 		return new MochilaAStar(start);
 	}
 	
-	public Mochila start;
-	public Map<Mochila,AStarMochila> tree;
+	public MochilaProblem start;
+	public Map<MochilaProblem,AStarMochila> tree;
 	public PriorityQueue<AStarMochila> heap; 
 	public Boolean goal;
 	
-	private MochilaAStar(Mochila start) {
+	private MochilaAStar(MochilaProblem start) {
 		super();
 		this.start = start;
 		AStarMochila a = AStarMochila.of(start, null,null,0., Heuristica.heuristica(start));
@@ -46,7 +42,7 @@ public class MochilaAStar {
 		this.goal = false;
 	}
 	
-	private List<Integer> path(Mochila v) {
+	private List<Integer> acciones(MochilaProblem v) {
 		List<Integer> ls = new ArrayList<>();
 		Integer a = this.tree.get(v).a();
 		while (a != null) {
@@ -60,13 +56,13 @@ public class MochilaAStar {
 
 
 	public List<Integer> search() {
-		Mochila vertexActual = null;
+		MochilaProblem vertexActual = null;
 		while (!heap.isEmpty() && !goal) {
 			AStarMochila dataActual = heap.poll();
 			vertexActual = dataActual.vertex();
 			for (Integer a : vertexActual.acciones()) {
-				Mochila v = vertexActual.vecino(a);
-				Double newDistance = dataActual.distanceToOrigin()-a*DatosMochila.getValor(vertexActual.index());
+				MochilaProblem v = vertexActual.vecino(a);
+				Double newDistance = dataActual.distanceToOrigin()-a*DatosMochila.valor(vertexActual.index());
 				Double newDistanceToEnd = newDistance - Heuristica.heuristica(v);				
 				if (!tree.containsKey(v)) {	
 					AStarMochila ac = AStarMochila.of(v, a, vertexActual, newDistance, newDistanceToEnd);
@@ -81,25 +77,20 @@ public class MochilaAStar {
 			}
 			this.goal = vertexActual.index() == DatosMochila.n;
 		}
-		return path(vertexActual);
+		return acciones(vertexActual);
 	}
-
-	public SolucionMochila solucion(List<Integer> ls) {
-		SolucionMochila s = SolucionMochila.empty();
-		Mochila v = this.start;
-		for(Integer a: ls) {	
-			s.add(DatosMochila.getObjeto(v.index()), a);
-			v = v.vecino(a);
-		}
-		return s;
+	
+	public SolucionMochila solucion(List<Integer> acciones) {
+		return SolucionMochila.of(start,acciones);
 	}
+	
 	
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.datos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;
-		Mochila v1 = Mochila.of(0, DatosMochila.capacidadInicial);
+		MochilaProblem v1 = MochilaProblem.of(0, DatosMochila.capacidadInicial);
 		MochilaAStar a = MochilaAStar.of(v1);
 		List<Integer> ls = a.search();
 		SolucionMochila s = a.solucion(ls);

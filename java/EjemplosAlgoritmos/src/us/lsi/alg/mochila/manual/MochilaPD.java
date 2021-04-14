@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
-import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
-
 public class MochilaPD {
 	
 	public static record Spm(Integer a,Integer weight) implements Comparable<Spm> {
@@ -26,12 +22,12 @@ public class MochilaPD {
 	}
 	
 	public static Integer maxValue = Integer.MIN_VALUE;
-	public static Mochila start;
-	public static Map<Mochila,Spm> memory;
+	public static MochilaProblem start;
+	public static Map<MochilaProblem,Spm> memory;
 	
 	public static SolucionMochila pd(Integer initialCapacity) {
 		MochilaPD.maxValue = Integer.MIN_VALUE;
-		MochilaPD.start = Mochila.of(0,initialCapacity);
+		MochilaPD.start = MochilaProblem.of(0,initialCapacity);
 		MochilaPD.memory = new HashMap<>();
 		pd(start,0,memory);
 		return MochilaPD.solucion();
@@ -39,14 +35,14 @@ public class MochilaPD {
 	
 	public static SolucionMochila pd(Integer initialCapacity, Integer maxValue, SolucionMochila s) {
 		MochilaPD.maxValue = maxValue;
-		MochilaPD.start = Mochila.of(0,initialCapacity);
+		MochilaPD.start = MochilaProblem.of(0,initialCapacity);
 		MochilaPD.memory = new HashMap<>();
 		pd(start,0,memory);
 		if(MochilaPD.memory.get(start) == null) return s;
 		else return MochilaPD.solucion();
 	}
 	
-	public static Spm pd(Mochila vertex,Integer accumulateValue, Map<Mochila,Spm> memory) {
+	public static Spm pd(MochilaProblem vertex,Integer accumulateValue, Map<MochilaProblem,Spm> memory) {
 		Spm r;
 		if(memory.containsKey(vertex)) {
 			r = memory.get(vertex);
@@ -59,9 +55,9 @@ public class MochilaPD {
 			for(Integer a:vertex.acciones()) {	
 				Double cota = accumulateValue + Heuristica.cota(vertex,a);
 				if(cota < MochilaPD.maxValue) continue;				
-				Spm s = pd(vertex.vecino(a),accumulateValue+a*DatosMochila.getValor(vertex.index()),memory);
+				Spm s = pd(vertex.vecino(a),accumulateValue+a*DatosMochila.valor(vertex.index()),memory);
 				if(s!=null) {
-					Spm sp = Spm.of(a,s.weight()+a*DatosMochila.getValor(vertex.index()));
+					Spm sp = Spm.of(a,s.weight()+a*DatosMochila.valor(vertex.index()));
 					soluciones.add(sp);
 				}
 			}
@@ -72,25 +68,27 @@ public class MochilaPD {
 	}
 	
 	public static SolucionMochila solucion(){
-		SolucionMochila r = SolucionMochila.empty();
-		Mochila v = MochilaPD.start;
+		List<Integer> acciones = new ArrayList<>();
+		MochilaProblem v = MochilaPD.start;
 		Spm s = MochilaPD.memory.get(v);
 		while(s.a() != null) {
-			r.add(DatosMochila.getObjeto(v.index()), s.a());
+			acciones.add(s.a());
 			v = v.vecino(s.a());	
 			s = MochilaPD.memory.get(v);
 		}
-		return r;
+		return SolucionMochila.of(MochilaPD.start,acciones);
 	}
 	
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
+		DatosMochila.datos("ficheros/objetosMochila.txt");
 		DatosMochila.capacidadInicial = 78;
-		Mochila v1 = Mochila.of(0, DatosMochila.capacidadInicial);
+		MochilaProblem v1 = MochilaProblem.of(0, DatosMochila.capacidadInicial);
 		SolucionMochila s = Heuristica.solucionVoraz(v1);	
-		MochilaPD.pd(78,s.getValor(),s);	
-		System.out.println(MochilaPD.solucion());		
+		MochilaPD.pd(78);	
+		System.out.println(MochilaPD.solucion());	
+		MochilaPD.pd(78,s.valor(),s);	
+		System.out.println(MochilaPD.solucion());	
 	}
 
 
