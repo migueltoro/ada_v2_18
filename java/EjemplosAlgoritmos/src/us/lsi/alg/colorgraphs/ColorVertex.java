@@ -95,16 +95,14 @@ public class ColorVertex extends ActionVirtualVertex<ColorVertex,ColorEdge,Integ
 		return String.format("(%s,%s)",index,cav);
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((ca == null) ? 0 : ca.hashCode());
 		result = prime * result + ((cav == null) ? 0 : cav.hashCode());
+		result = prime * result + ((index == null) ? 0 : index.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -115,18 +113,20 @@ public class ColorVertex extends ActionVirtualVertex<ColorVertex,ColorEdge,Integ
 		if (getClass() != obj.getClass())
 			return false;
 		ColorVertex other = (ColorVertex) obj;
-		if (ca == null) {
-			if (other.ca != null)
-				return false;
-		} else if (!ca.equals(other.ca))
-			return false;
 		if (cav == null) {
 			if (other.cav != null)
 				return false;
 		} else if (!cav.equals(other.cav))
 			return false;
+		if (index == null) {
+			if (other.index != null)
+				return false;
+		} else if (!index.equals(other.index))
+			return false;
 		return true;
 	}
+
+
 	
 	
 }
