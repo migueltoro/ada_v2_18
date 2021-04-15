@@ -1,21 +1,24 @@
 package us.lsi.alg.typ.manual;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import us.lsi.common.Lists2;
+
 
 public class TyPBT {
-	
-	
 	
 	public static record StateTyP(TyPProblem vertice, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
 		
 		public static StateTyP of(TyPProblem vertex, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
-			return new StateTyP(vertex, valorAcumulado, acciones,vertices);
+			List<Integer> accionesC = Collections.unmodifiableList(acciones);
+			List<TyPProblem> verticesC = Collections.unmodifiableList(vertices);
+			return new StateTyP(vertex, valorAcumulado, accionesC,verticesC);
 		}
 		
 		public static StateTyP of(TyPProblem vertex) {
@@ -24,20 +27,16 @@ public class TyPBT {
 		}
 
 		StateTyP forward(Integer a) {
-			List<Integer> as = new ArrayList<>(this.acciones());
-			as.add(a);
-			List<TyPProblem> vt = new ArrayList<>(this.vertices());
+			List<Integer> as = Lists2.addLast(this.acciones(),a);
 			TyPProblem vcn = this.vertice().vecino(a);
-			vt.add(vcn);
+			List<TyPProblem> vt = Lists2.addLast(this.vertices(),vcn);
 			return StateTyP.of(vcn,vcn.maxCarga(),as,vt);
 		}
 
 		StateTyP back(Integer a) {
-			List<Integer> as = new ArrayList<>(this.acciones());
-			as.remove(as.size()-1);
-			List<TyPProblem> vt = new ArrayList<>(this.vertices());
-			vt.remove(vt.size()-1);
-			TyPProblem van = vt.get(vt.size()-1);
+			List<Integer> as = Lists2.removeLast(this.acciones());
+			List<TyPProblem> vt = Lists2.removeLast(this.vertices());
+			TyPProblem van = Lists2.last(vt);
 			return StateTyP.of(van,van.maxCarga(),as,vt);
 		}
 		

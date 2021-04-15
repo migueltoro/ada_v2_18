@@ -1,10 +1,13 @@
 package us.lsi.alg.mochila.manual;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import us.lsi.common.Lists2;
 
 
 public class MochilaBT {
@@ -12,7 +15,9 @@ public class MochilaBT {
 	public static record StateMochila(MochilaProblem vertice, Integer valorAcumulado, 
 			List<Integer> acciones, List<MochilaProblem> vertices) {
 		public static StateMochila of(MochilaProblem vertex, Integer valorAcumulado, List<Integer> acciones, List<MochilaProblem> vertices) {
-			return new StateMochila(vertex, valorAcumulado, acciones, vertices);
+			List<Integer> accionesC = Collections.unmodifiableList(acciones);
+			List<MochilaProblem> verticesC = Collections.unmodifiableList(vertices);
+			return new StateMochila(vertex, valorAcumulado, accionesC, verticesC);
 		}
 		
 		public static StateMochila of(MochilaProblem vertex) {
@@ -21,26 +26,17 @@ public class MochilaBT {
 		}
 
 		StateMochila forward(Integer a) {
-			List<Integer> as = new ArrayList<>(this.acciones());
-			as.add(a);
-			List<MochilaProblem> vt = new ArrayList<>(this.vertices());
+			List<Integer> as = Lists2.addLast(this.acciones(), a);
 			MochilaProblem vcn = this.vertice().vecino(a);
-			vt.add(vcn);
-			return StateMochila.of(vcn, 
-					this.valorAcumulado() + a * DatosMochila.valor(this.vertice().index()),
-					as,vt);
+			List<MochilaProblem> vt = Lists2.addLast(this.vertices(), vcn);
+			return StateMochila.of(vcn, this.valorAcumulado() + a * DatosMochila.valor(this.vertice().index()), as, vt);
 		}
 
 		StateMochila back(Integer a) {
-			List<Integer> as = new ArrayList<>(this.acciones());
-			as.remove(as.size()-1);
-			List<MochilaProblem> vt = new ArrayList<>(this.vertices());
-			vt.remove(vt.size()-1);
-			MochilaProblem van = vt.get(vt.size()-1);
-			return StateMochila.of(
-					van, 
-					this.valorAcumulado() - a * DatosMochila.valor(van.index()),
-					as,vt);
+			List<Integer> as = Lists2.removeLast(this.acciones());
+			List<MochilaProblem> vt = Lists2.removeLast(this.vertices());
+			MochilaProblem van = Lists2.last(vt);
+			return StateMochila.of(van, this.valorAcumulado() - a * DatosMochila.valor(van.index()), as, vt);
 		}
 		
 		SolucionMochila solucion() {

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,22 +39,30 @@ public class Lists2 {
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @return Un conjunto formado por los elementos de la lista
+	 * @pre La lista no puede estar vacía
+	 * @return Una copia de la lista con el último elemnto eliminado
 	 */
-	public static <E> Set<E> toSet(List<E> ls){
-		return ls.stream().collect(Collectors.toSet());
+	public static <E> List<E> removeLast(List<E> ls){
+		Preconditions.checkNotNull(ls);
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		List<E> cp = new ArrayList<>(ls);
+		int last = cp.size()-1;
+		cp.remove(last);
+		return cp;
 	}
+	
+	
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @post La lista queda con el último elemento eliminado
-	 * @pre la lista no puede estar vacía
-	 * @return El último elemento eliminado
+	 * @return Una copia de la lista con el último elemento añadido
 	 */
-	public static <E> E removeLast(List<E> ls){
-		int last = ls.size()-1;
-		E e = ls.remove(last);
-		return e;
+	public static <E> List<E> addLast(List<E> ls, E e){
+		Preconditions.checkNotNull(ls);
+		Preconditions.checkNotNull(e);
+		List<E> cp = new ArrayList<>(ls);
+		cp.add(e);
+		return cp;
 	}
 	
 	/**
