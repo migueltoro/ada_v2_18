@@ -55,7 +55,7 @@ public class Lists2 {
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @return Una copia de la lista con el último elemento añadido
+	 * @return Una copia de la lista con el elemento añadido en último lugar
 	 */
 	public static <E> List<E> addLast(List<E> ls, E e){
 		Preconditions.checkNotNull(ls);
@@ -69,11 +69,31 @@ public class Lists2 {
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @param e Un elemento
-	 * @post La lista queda con e añadido en primer lugar
+	 * @return Una copia de la lista con el elemento añadido en último primer lugar
 	 */
-	public static <E> void addFirst(List<E> ls, E e){
-		ls.add(0,e);
+	public static <E> List<E> addFirst(List<E> ls, E e){
+		Preconditions.checkNotNull(ls);
+		Preconditions.checkNotNull(e);
+		List<E> cp = new ArrayList<>(ls);
+		cp.add(0,e);
+		return cp;
 	}
+	
+	/**
+	 * @param <E> tipo de los elementos de la lista
+	 * @param ls Una lista
+	 * @param e Un elemento
+	 * @return Una copia de la lista con el elemento cambiado en la posicion index
+	 */
+	public static <E> List<E> setElement(List<E> ls, int index, E e){
+		Preconditions.checkNotNull(ls);
+		Preconditions.checkNotNull(e);
+		List<E> cp = new ArrayList<>(ls);
+		cp.set(index,e);
+		return cp;
+	}
+	
+	
 	
 	/**
 	 * @param <E> Tipo de los elementos

@@ -9,12 +9,12 @@ import us.lsi.common.Files2;
 
 public class DatosTyP {
 	
-	public static record Tarea(Integer id, Double duracion) {
+	public static record Tarea(Integer id, Integer duracion) {
 		private static Integer nId = 0;
 		public static Tarea parse(String s) {
 			Integer id = nId;
 			nId++;
-			return new Tarea(id,Double.parseDouble(s));
+			return new Tarea(id,(int)Double.parseDouble(s));
 		}
 	}
 	
@@ -27,13 +27,13 @@ public class DatosTyP {
 	
 	public static void datos(String fichero, Integer np) {
 		DatosTyP.tareas = Files2.streamFromFile(fichero).map(s -> Tarea.parse(s))
-				.sorted(Comparator.<Tarea, Double>comparing(Tarea::duracion).reversed())
+				.sorted(Comparator.comparing(Tarea::duracion).reversed())
 				.collect(Collectors.toList());
 		DatosTyP.n = tareas.size();
 		DatosTyP.numeroDeProcesadores = np;
 		DatosTyP.numeroDeTareas = DatosTyP.tareas.size();
 		DatosTyP.n = numeroDeTareas;
-		DatosTyP.m = numeroDeProcesadores;
+		DatosTyP.m = np;
 	}
 
 	public static void main(String[] args) {

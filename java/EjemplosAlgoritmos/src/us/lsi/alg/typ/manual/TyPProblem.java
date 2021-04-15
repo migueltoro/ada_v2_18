@@ -1,6 +1,5 @@
 package us.lsi.alg.typ.manual;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,10 +23,6 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 		return new TyPProblem(index,cargasC,maxCarga,npMax,npMin);
 	}
 	
-	public List<Integer> cargasC(){
-		return new ArrayList<>(this.cargas());
-	}
-	
 	public static TyPProblem first() {
 		return TyPProblem.of(0,Lists2.copy(0,DatosTyP.m));
 	}
@@ -42,9 +37,8 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	}
 	
 	public TyPProblem vecino(Integer a) {
-		List<Integer> nc = this.cargasC();
-		Integer d = DatosTyP.tareas.get(this.index).duracion().intValue() + nc.get(a); 
-		nc.set(a,d);
+		Integer nd = this.cargas().get(a)+DatosTyP.tareas.get(this.index).duracion(); 
+		List<Integer> nc = Lists2.setElement(this.cargas(),a,nd);
 		TyPProblem v = TyPProblem.of(index+1, nc);
 		return v;
 	}
