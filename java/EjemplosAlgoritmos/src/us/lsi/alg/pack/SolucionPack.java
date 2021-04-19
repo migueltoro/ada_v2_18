@@ -10,7 +10,7 @@ import org.jgrapht.GraphPath;
 import us.lsi.common.IntPair;
 import us.lsi.common.Lists2;
 
-public class SolucionPack {
+public class SolucionPack implements Comparable<SolucionPack>{
 	
 	public static SolucionPack of(GraphPath<PackVertex, PackEdge> path) {
 		return new SolucionPack(path);
@@ -40,7 +40,10 @@ public class SolucionPack {
 		return "SolucionPack [ nc ="+nc()+", carga ="+asignacion + "]";
 	}
 
-
+	@Override
+	public int compareTo(SolucionPack other) {
+		return this.nc().compareTo(other.nc());
+	}
 
 	@Override
 	public int hashCode() {

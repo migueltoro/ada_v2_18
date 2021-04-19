@@ -5,7 +5,7 @@ import java.util.Map;
 
 import us.lsi.tareasyprocesadores.datos.Tarea;
 
-public class SolucionTyP {
+public class SolucionTyP implements Comparable<SolucionTyP>{
 	
 	public static SolucionTyP of(Map<Integer, List<Tarea>> carga, Double maxCarga, Integer npMin, Integer npMax) {
 		return new SolucionTyP(carga,maxCarga,npMin,npMax);
@@ -38,6 +38,10 @@ public class SolucionTyP {
 	}
 	public Integer getNpMax() {
 		return npMax;
+	}
+	@Override
+	public int compareTo(SolucionTyP other) {
+		return this.getMaxCarga().compareTo(other.getMaxCarga());
 	}
 	
 }

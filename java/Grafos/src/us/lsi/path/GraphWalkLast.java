@@ -99,8 +99,8 @@ public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,
 	@Override
 	public Double removeLast(Double acumulateValue, V vertexActual, E edge, E lastEdge) {
 		Preconditions.checkNotNull(edge, "La arista no puede ser null");
-//		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
-//		Preconditions.checkNotNull(edge, "La arista no puede ser null");
+ 		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
+		Preconditions.checkNotNull(edge, "La arista no puede ser null");
 		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
 		return graph.getVertexWeight(target);
 	}
@@ -145,7 +145,14 @@ public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,
 		return PathType.Last;
 	}
 
-	
-	
+	@Override
+	public Double solutionBase(V vertexActual) {
+		return graph.getVertexWeight(vertexActual);
+	}
+
+	@Override
+	public Double solution(Double weight, V vertexActual, E edge, E lastEdge) {
+		return weight;
+	}
 }
 

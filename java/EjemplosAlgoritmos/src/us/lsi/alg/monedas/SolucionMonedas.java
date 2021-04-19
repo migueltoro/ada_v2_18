@@ -2,9 +2,9 @@ package us.lsi.alg.monedas;
 
 
 import org.jgrapht.GraphPath;
-
 import us.lsi.common.Multiset;
-public class SolucionMonedas {
+
+public class SolucionMonedas implements Comparable<SolucionMonedas> {
 
 	public final Multiset<Moneda> monedas;
 	public final Integer peso;
@@ -39,6 +39,11 @@ public class SolucionMonedas {
 				this.valor,
 				this.peso,
 				this.monedas);
+	}
+
+	@Override
+	public int compareTo(SolucionMonedas other) {
+		return this.peso.compareTo(other.peso);
 	}
 
 }

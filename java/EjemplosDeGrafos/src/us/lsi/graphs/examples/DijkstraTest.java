@@ -31,7 +31,7 @@ public class DijkstraTest {
 		
 		AStar<Ciudad, Carretera> ra = GraphAlg.dijsktra(g,Ciudad.ofName("Almeria"));
 		
-		List<Carretera> carreteras = ra.search().getEdgeList();
+		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());

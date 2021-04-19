@@ -9,7 +9,7 @@ import us.lsi.common.Lists2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
-public class BackTrackingRandom<V,E,S> extends BackTracking<V,E,S> {
+public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTracking<V,E,S> {
 	
 	public static Integer threshold;
 	public static Integer solutionsNumber;

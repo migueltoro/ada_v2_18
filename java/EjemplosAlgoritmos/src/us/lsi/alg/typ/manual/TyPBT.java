@@ -1,7 +1,6 @@
 package us.lsi.alg.typ.manual;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +15,8 @@ public class TyPBT {
 	public static record StateTyP(TyPProblem vertice, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
 		
 		public static StateTyP of(TyPProblem vertex, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
-			List<Integer> accionesC = Collections.unmodifiableList(acciones);
-			List<TyPProblem> verticesC = Collections.unmodifiableList(vertices);
+			List<Integer> accionesC = List.copyOf(acciones);
+			List<TyPProblem> verticesC = List.copyOf(vertices);
 			return new StateTyP(vertex, valorAcumulado, accionesC,verticesC);
 		}
 		

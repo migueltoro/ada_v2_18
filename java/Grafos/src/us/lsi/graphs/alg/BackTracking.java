@@ -3,10 +3,12 @@ package us.lsi.graphs.alg;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -18,7 +20,7 @@ import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class BackTracking<V,E,S> implements BT<V, E, S> {
+public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	
 	public enum BTType {Min,Max,All,One}
 	
@@ -66,13 +68,8 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
 		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
 				S s = solution.apply(state.getPath());
-//				System.out.println("Path "+state.getPath());
-//				System.out.println("Solution "+s);
 				this.solutions.add(s);
 				this.bestValue = state.getAccumulateValue();
-//				System.out.println("Update "+this.bestValue);
-//				System.out.println("Path "+);
-//				System.out.println("Numero de soluciones "+this.solutions.size());
 		}
 	}
 	
@@ -96,8 +93,13 @@ public class BackTracking<V,E,S> implements BT<V, E, S> {
 	}
 	
 	@Override
-	public S getSolution(){
-		return this.solutions.stream().findAny().get();
+	public Optional<S> getSolution(){
+		return switch(this.type) {
+		case All -> this.solutions.stream().findAny();
+		case Max -> this.solutions.stream().max(Comparator.naturalOrder());
+		case Min -> this.solutions.stream().min(Comparator.naturalOrder());
+		case One -> this.solutions.stream().findAny();
+		};
 	}
 	
 	@Override

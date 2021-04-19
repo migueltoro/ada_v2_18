@@ -3,13 +3,13 @@ package us.lsi.alg.monedas;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
-
-import org.jgrapht.GraphPath;
+import java.util.Optional;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.path.EGraphPath;
 
 public class TestGreedy {
 
@@ -32,8 +32,8 @@ public class TestGreedy {
 				MonedaVertex::accionVoraz,
 				e->e.equals(e2));
 		
-		GraphPath<MonedaVertex, MonedaEdge> path = rr.search();
-		System.out.println("G "+path.getWeight());
+		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
+		System.out.println("G "+path.get().getWeight());
 		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.equals(e2),e2));
 		
 		Collections.sort(Moneda.monedas,Comparator.comparing(m->m.pesoUnitario));
@@ -54,7 +54,7 @@ public class TestGreedy {
 		
 		path = rr.search();
 //		System.out.println(path);
-		System.out.println("G "+path.getWeight());
+		System.out.println("G "+path.get().getWeight());
 		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.equals(e2),e3));
 	}
 

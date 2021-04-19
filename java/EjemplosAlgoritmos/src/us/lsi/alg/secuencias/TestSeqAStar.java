@@ -27,7 +27,7 @@ public class TestSeqAStar {
 		
 //		Optional<SeqVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 		
-		GraphPath<SeqVertex, SeqEdge> path = ms.search();
+		GraphPath<SeqVertex, SeqEdge> path = ms.search().orElse(null);
 		List<SeqEdge> edges = path.getEdgeList();
 		System.out.println(edges);
 		SeqSolution s = SeqSolution.of(path);

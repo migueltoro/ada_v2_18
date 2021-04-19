@@ -1,7 +1,6 @@
 package us.lsi.alg.mochila.manual;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -15,8 +14,8 @@ public class MochilaBT {
 	public static record StateMochila(MochilaProblem vertice, Integer valorAcumulado, 
 			List<Integer> acciones, List<MochilaProblem> vertices) {
 		public static StateMochila of(MochilaProblem vertex, Integer valorAcumulado, List<Integer> acciones, List<MochilaProblem> vertices) {
-			List<Integer> accionesC = Collections.unmodifiableList(acciones);
-			List<MochilaProblem> verticesC = Collections.unmodifiableList(vertices);
+			List<Integer> accionesC = List.copyOf(acciones);
+			List<MochilaProblem> verticesC = List.copyOf(vertices);
 			return new StateMochila(vertex, valorAcumulado, accionesC, verticesC);
 		}
 		

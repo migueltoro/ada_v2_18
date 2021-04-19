@@ -24,7 +24,7 @@ public class TestMonedasAStar {
 		
 		AStar<MonedaVertex, MonedaEdge> ms = GraphAlg.aStarGoal(graph,v->v.index==MonedaVertex.n,MonedasHeuristica::heuristica);
 		
-		GraphPath<MonedaVertex,MonedaEdge> path = ms.search();
+		GraphPath<MonedaVertex,MonedaEdge> path = ms.search().orElse(null);
 //		List<MonedaEdge> edges = path.getEdgeList();
 //		System.out.println(edges);
 		SolucionMonedas s = SolucionMonedas.of(path);
@@ -39,7 +39,7 @@ public class TestMonedasAStar {
 		
 	    ms = GraphAlg.aStarEnd(graph,e2,MonedasHeuristica::heuristica);
 		
-		path = ms.search();
+		path = ms.search().orElse(path);
 //		edges = path.getEdgeList();
 //		System.out.println(edges);
 		s = SolucionMonedas.of(path);

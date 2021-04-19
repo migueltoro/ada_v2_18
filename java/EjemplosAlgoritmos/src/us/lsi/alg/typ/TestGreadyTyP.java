@@ -29,7 +29,7 @@ public class TestGreadyTyP {
 		var ms1 = ms.copy();
 		var ms2 = ms.copy();
 		
-		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search();
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search().orElse(null);
 		
 		System.out.println(TyPVertex.getSolucion(path));
 		

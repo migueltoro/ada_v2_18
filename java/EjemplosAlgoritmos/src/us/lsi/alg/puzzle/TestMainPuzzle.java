@@ -33,7 +33,7 @@ public class TestMainPuzzle {
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = GraphAlg.aStarEnd(graph,e2,HeuristicaPuzzle::heuristica);
 		
-		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search();
+		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();
 		for (VertexPuzzle v: vertices) {
 			System.out.println(v);

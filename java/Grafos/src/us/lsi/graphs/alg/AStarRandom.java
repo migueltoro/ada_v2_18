@@ -62,10 +62,10 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		return vertexActual;
 	}
 	
-	public GraphPath<V, E> search() {
+	public Optional<GraphPath<V, E>> search() {
 		EGraphPath<V,E> ePath = graph.initialPath();
 		V startVertex = graph.startVertex();
-		if(this.goal.test(startVertex)) return ePath;
+		if(this.goal.test(startVertex)) return Optional.of(ePath);
 		Optional<V> last = this.stream().filter(this.goal).findFirst();
 		if(last.isPresent()) {
 			V end = last.get();
@@ -80,8 +80,10 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 			for(E e:edges) {
 				ePath.add(e);
 			}
+			return Optional.of(ePath);
+		} else {
+			return Optional.ofNullable(null);
 		}
-		return ePath;
 	}
 	
 

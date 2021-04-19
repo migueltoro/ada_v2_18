@@ -28,7 +28,7 @@ public class TestPDRTyP {
 				TyPVertex::greadyEdge,
 				v->v.getIndex() == TyPVertex.n);
 		
-		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> path = rr.search();
+		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> path = rr.search().orElse(null);
 		Double bv = path.getWeight();
 		
 		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 

@@ -2,6 +2,7 @@ package us.lsi.alg.mochila;
 
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -10,6 +11,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.path.EGraphPath;
 
 
 public class TestGreadyMochila {
@@ -28,8 +30,8 @@ public class TestGreadyMochila {
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		
-		GraphPath<MochilaVertex, MochilaEdge> r = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal).search();
-		System.out.println(r.getWeight());
+		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal).search();
+		System.out.println(r.get().getWeight());
 //		System.out.println(r.getWeight());
 //		Double r3 = MochilaHeuristic.voraz(e1, e->e.equals(e2),e2);
 //		System.out.println(r3);

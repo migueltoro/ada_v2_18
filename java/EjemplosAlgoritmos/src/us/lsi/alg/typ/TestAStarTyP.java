@@ -31,7 +31,7 @@ public class TestAStarTyP {
 		
 //		ms.stream().forEach(v->System.out.println(v));
 		
-		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search();
+		GraphPath<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> path = ms.search().orElse(null);
 //		List<MochilaEdge> edges = path.getEdgeList();
 //		System.out.println(path);
 		SolucionTyP s = TyPVertex.getSolucion(path);

@@ -29,7 +29,7 @@ public class TestRandom {
 				PackVertex::greedyEdge,
 				goal);
 				
-		Double bv = rr.weightToEnd();
+		Double bv = rr.weightToEnd().orElse(null);
 		System.out.println(bv);
 		
 		PackVertex.m = bv.intValue();
@@ -48,7 +48,7 @@ public class TestRandom {
 		ms.bestValue = bv;
 		ms.search();
 
-		SolucionPack s1 = ms.getSolution();
+		SolucionPack s1 = ms.getSolution().orElse(null);
 		System.out.println(s1);
 	}
 

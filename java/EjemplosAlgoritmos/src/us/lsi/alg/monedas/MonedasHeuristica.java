@@ -1,13 +1,13 @@
 package us.lsi.alg.monedas;
 
+import java.util.Optional;
 import java.util.function.Predicate;
-
-import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.path.EGraphPath;
 
 public class MonedasHeuristica {
 
@@ -23,8 +23,8 @@ public class MonedasHeuristica {
 				MonedaVertex::accionHeuristica,
 				goal);
 		
-		GraphPath<MonedaVertex, MonedaEdge> path = rr.search();
-		return path.getWeight();
+		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
+		return path.get().getWeight();
 	}
 	
 

@@ -97,15 +97,15 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 		return this.startVertex;
 	}
 
-	public Double weightToEnd() {
-		return search().getWeight();
+	public Optional<Double> weightToEnd() {
+		return this.search().map(g->g.getWeight());
 	}
 	
 	
-	public EGraphPath<V,E> search() {
+	public Optional<EGraphPath<V,E>> search() {
 		EGraphPath<V,E> ePath = graph.initialPath();
 		V startVertex = graph.startVertex();
-		if(this.goal.test(startVertex)) return ePath;
+		if(this.goal.test(startVertex)) return Optional.of(ePath);
 		Optional<V> last = this.stream().filter(this.goal).findFirst();
 		if(last.isPresent()) {
 			V end = last.get();
@@ -120,7 +120,9 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 			for(E e:edges) {
 				ePath.add(e);
 			}
+			return Optional.ofNullable(ePath);
+		}else {
+			return Optional.ofNullable(null);
 		}
-		return ePath;
 	}
 }

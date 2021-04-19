@@ -30,7 +30,7 @@ public class TestMonedasBT {
 //		GreedySearch<MonedaVertex, MonedaEdge> rrh = GraphAlg.greedy(graph, MonedaVertex::accionHeuristica,
 //				e -> e.equals(e2));
 
-		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search();
+		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 //		GraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search();
 		
 //		System.out.println("1 = " + SolucionMonedas.of(path1));
@@ -61,7 +61,7 @@ public class TestMonedasBT {
 		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz, e -> e.equals(e4));
 //		rrh = GraphAlg.greedy(graph,MonedaVertex::accionHeuristica,e -> e.equals(e4));
 		
-		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search();
+		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
 //		GraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search();
 		
 

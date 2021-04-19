@@ -34,7 +34,7 @@ public class TestVuelos {
 		
 		AStar<String,Vuelo> ms = GraphAlg.aStarEnd(g,"Malaga",(v1,p,v2)->0.);
 		
-		GraphPath<String,Vuelo> path = ms.search();
+		GraphPath<String,Vuelo> path = ms.search().orElse(null);
 		System.out.printf("Timepo de Recorrido = %.2f\n",path.getWeight());
 		System.out.println(path.getVertexList().stream().map(e->e.toString()).collect(Collectors.joining("\n")));	
 		System.out.println(path.getEdgeList().stream().map(e->e.toString()).collect(Collectors.joining("\n")));

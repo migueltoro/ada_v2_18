@@ -33,7 +33,7 @@ public class AStarTest {
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 				
 		AStar<Ciudad, Carretera> ra = GraphAlg.aStarEnd(g,Ciudad.ofName("Almeria"), null);
-		List<Carretera> carreteras = ra.search().getEdgeList();
+		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());

@@ -3,6 +3,7 @@ package us.lsi.alg.mochila;
 
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -14,6 +15,7 @@ import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
+import us.lsi.path.EGraphPath;
 
 
 
@@ -29,11 +31,11 @@ public class TestBTMochila {
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());		
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
-		GraphPath<MochilaVertex, MochilaEdge> path = rr.search();
+		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
 		
-		SolucionMochila sm = MochilaVertex.getSolucion(path.getEdgeList());
+		SolucionMochila sm = MochilaVertex.getSolucion(path.get().getEdgeList());
 		
-		Double bv = path.getWeight();
+		Double bv = path.get().getWeight();
 		
 		var ms = BT.backTrackingEnd(
 				graph,
@@ -47,7 +49,7 @@ public class TestBTMochila {
 		ms.solutions.add(sm);
 		
 		ms.search();
-		SolucionMochila s = ms.getSolution();
+		SolucionMochila s = ms.getSolution().orElse(null);
 		System.out.println(s);
 		System.out.println(ms.getSolutions().stream().max(Comparator.comparing(x->x.getValor())).get());
 	}

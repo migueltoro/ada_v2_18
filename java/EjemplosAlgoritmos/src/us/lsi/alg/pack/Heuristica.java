@@ -15,7 +15,7 @@ public class Heuristica {
 		EGraph<PackVertex, PackEdge> graph = Graphs2.simpleVirtualGraphLast(v1,v->(double)v.nc);
 
 		GreedySearch<PackVertex, PackEdge> rr = GraphAlg.greedy(graph, PackVertex::greedyEdge, goal);
-		GraphPath<PackVertex, PackEdge> p = rr.search();
+		GraphPath<PackVertex, PackEdge> p = rr.search().orElse(null);
 		Double r = (double) p.getEndVertex().nc;
 		return r;
 	}

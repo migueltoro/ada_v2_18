@@ -35,8 +35,8 @@ public class TestMonedasPDR {
 		GreedySearch<MonedaVertex, MonedaEdge> rrh = GraphAlg.greedy(graph, MonedaVertex::accionHeuristica,
 				e -> e.equals(e2));
 
-		EGraphPath<MonedaVertex, MonedaEdge> path1 = rr.search();
-		EGraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search();
+		EGraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
+		EGraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search().orElse(path1);
 		
 		System.out.println("1 = " + SolucionMonedas.of(path1));
 		System.out.println("1.1 = " + SolucionMonedas.of(path1h));
@@ -64,8 +64,8 @@ public class TestMonedasPDR {
 		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz, e -> e.equals(e4));
 		rrh = GraphAlg.greedy(graph,MonedaVertex::accionHeuristica,e -> e.equals(e4));
 		
-		EGraphPath<MonedaVertex, MonedaEdge> path2 = rr.search();
-		EGraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search();
+		EGraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(path1h);
+		EGraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search().orElse(path2);
 		
 
 		System.out.println("3 = " + SolucionMonedas.of(path2));
@@ -80,7 +80,7 @@ public class TestMonedasPDR {
 		ms2.bestValue = path2.getWeight();
 		ms2.solutionPath = path2;
 		
-		GraphPath<MonedaVertex, MonedaEdge> s2 = ms2.search().get();
+		GraphPath<MonedaVertex, MonedaEdge> s2 = ms2.search().orElse(null);
 		System.out.println("4 = " + SolucionMonedas.of(s2));
 
 	}

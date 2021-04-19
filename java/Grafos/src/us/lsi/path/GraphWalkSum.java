@@ -109,7 +109,7 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	@Override
 	public Double removeLast(Double acumulateValue,V vertexActual,E edge,E lastEdge) {
 		Preconditions.checkNotNull(edge, "La arista no puede ser null");
-//		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
+		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
 		Double weight = acumulateValue;
 		weight -= graph.getEdgeWeight(edge);
 		weight -= graph.getVertexWeight(vertexActual);
@@ -153,6 +153,16 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	@Override
 	public PathType type() {
 		return PathType.Sum;
+	}
+
+	@Override
+	public Double solutionBase(V vertexActual) {
+		return 0.;
+	}
+
+	@Override
+	public Double solution(Double weight, V vertexActual, E edge, E lastEdge) {
+		return this.add(weight,vertexActual,edge,lastEdge);
 	}	
 	
 }

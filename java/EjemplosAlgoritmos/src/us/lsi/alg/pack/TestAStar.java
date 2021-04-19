@@ -29,7 +29,7 @@ public class TestAStar {
 				PackVertex::greedyEdge,
 				goal);
 	
-		GraphPath<PackVertex, PackEdge> p = rr.search();
+		GraphPath<PackVertex, PackEdge> p = rr.search().orElse(null);
 		SolucionPack sp = SolucionPack.of(p);
 		System.out.println(sp);
 		PackVertex.m = sp.nc();
@@ -37,7 +37,7 @@ public class TestAStar {
 		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,(v1,pd,v2)->0.);
 //		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,Heuristica::heuristic);
 		
-		GraphPath<PackVertex,PackEdge> path = ms.search();
+		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);
 		SolucionPack s = SolucionPack.of(path);
 		System.out.println(s);
 

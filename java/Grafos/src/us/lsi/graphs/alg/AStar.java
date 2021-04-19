@@ -113,11 +113,11 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		return this.startVertex;
 	}
 	
-	public GraphPath<V, E> search() {
+	public Optional<GraphPath<V, E>> search() {
 		GraphPath<V,E> gp = null;
 		V startVertex = graph.startVertex();
 		V endVertex = null;
-		if(this.goal.test(startVertex)) return ePath;
+		if(this.goal.test(startVertex)) return Optional.of(ePath);
 		Optional<V> last = this.stream().filter(this.goal).findFirst();		
 		if(last.isPresent()) {
 			endVertex = last.get();
@@ -138,8 +138,10 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				vertices.add(v);
 			}
 			gp = new GraphWalk<>(graph,startVertex,endVertex,vertices,edges,weight);
+			return Optional.of(gp);
+		} else {
+			return Optional.ofNullable(null);
 		}
-		return gp;
 	}
 	
 	

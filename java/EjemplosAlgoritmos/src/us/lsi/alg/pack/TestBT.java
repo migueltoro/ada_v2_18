@@ -31,7 +31,7 @@ public class TestBT {
 				PackVertex::greedyEdge,
 				goal);
 	
-		GraphPath<PackVertex, PackEdge> path = rr.search();
+		GraphPath<PackVertex, PackEdge> path = rr.search().orElse(null);
 		SolucionPack sp = SolucionPack.of(path);
 	
 		PackVertex.m = sp.nc();

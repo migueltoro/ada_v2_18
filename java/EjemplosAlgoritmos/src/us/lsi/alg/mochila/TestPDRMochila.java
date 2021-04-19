@@ -14,6 +14,7 @@ import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
+import us.lsi.path.EGraphPath;
 
 
 public class TestPDRMochila {
@@ -28,8 +29,8 @@ public class TestPDRMochila {
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
-		GraphPath<MochilaVertex, MochilaEdge> path = rr.search();	
-		Double bv = path.getWeight();
+		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();	
+		Double bv = path.get().getWeight();
 		
 		System.out.println("1 = "+bv);
 		
@@ -40,7 +41,7 @@ public class TestPDRMochila {
 						PDType.Max);
 		
 		ms.bestValue = bv;
-		ms.solutionPath = path;
+		ms.solutionPath = path.get();
 		
 		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();
 		GraphPath<MochilaVertex, MochilaEdge> s1 = sp.get();

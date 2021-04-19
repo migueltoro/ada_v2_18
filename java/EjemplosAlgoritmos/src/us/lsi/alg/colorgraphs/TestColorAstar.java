@@ -49,7 +49,7 @@ public class TestColorAstar {
 				goal,
 				ColorHeuristic::heuristic);
 		
-		GraphPath<ColorVertex, ColorEdge> path = ms.search();
+		GraphPath<ColorVertex, ColorEdge> path = ms.search().orElse(null);
 		ColorVertex lv = Lists2.last(path.getVertexList());
 		System.out.println("Numero de Colores = "+lv.nc);
 		System.out.println(lv.cav);

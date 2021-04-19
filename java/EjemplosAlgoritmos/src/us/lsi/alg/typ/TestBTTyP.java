@@ -26,7 +26,7 @@ public class TestBTTyP {
 			
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
 				GraphAlg.greedy(graph,TyPVertex::greadyEdge,e->e.getIndex()==TyPVertex.n);
-		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search();
+		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search().orElse(null);
 		SolucionTyP sm = TyPVertex.getSolucion(path);
 		Double bv = path.getWeight();
 		

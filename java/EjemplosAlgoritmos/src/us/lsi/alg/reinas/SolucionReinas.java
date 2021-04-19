@@ -6,7 +6,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.common.Lists2;
 
-public class SolucionReinas {
+public class SolucionReinas implements Comparable<SolucionReinas> {
 	
 	public static SolucionReinas of(GraphPath<ReinasVertex, ReinasEdge> path) {		
 		SolucionReinas r = new SolucionReinas(path);
@@ -33,6 +33,11 @@ public class SolucionReinas {
 	@Override
 	public String toString() {
 		return String.format("\nErrores %d\n%s",this.errores,this.last.fo);
+	}
+
+	@Override
+	public int compareTo(SolucionReinas other) {
+		return 0;
 	}
 	
 }
