@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import us.lsi.graphs.alg.DynamicProgrammingReduction.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
@@ -46,7 +47,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			r = this.solutionsTree.get(actual);
 		} else if (actual.isBaseCase()) {
 			Double w = actual.baseCaseSolution();
-			if(w!=null) r = Sp.of(w);
+			if(w!=null) r = Sp.of(w,null);
 			else r = null;
 			this.solutionsTree.put(actual, r);
 		} else {
@@ -63,7 +64,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 				}
 				Sp<E> spa = null;
 				if(spNeighbors != null) {
-					spa = Sp.of(edge,edge.getWeight(v->this.solutionsTree.get(v).weight));
+					spa = Sp.of(edge.getWeight(v->this.solutionsTree.get(v).weight), edge);
 				}
 				sps.add(spa);
 			}
@@ -87,6 +88,19 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	@Override
 	public GraphTree<V,E,A> searchTree(V vertex){
 		return GraphTree.of(this.solutionsTree,vertex);
+	}
+	
+	public record Sp<E>(Double weight, E edge) implements Comparable<Sp<E>> {
+		
+		public static <E> Sp<E> of(Double weight,E edge) {
+			return new Sp<>(weight,edge);
+		}
+
+		@Override
+		public int compareTo(Sp<E> sp) {
+			return this.weight.compareTo(sp.weight);
+		}
+
 	}
 
 }

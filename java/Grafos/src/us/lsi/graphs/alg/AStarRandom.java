@@ -37,10 +37,11 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	
 	@Override
 	public V next() {
-		Handle<Double, Data<V, E>> dataActual = heap.deleteMin();
-		V vertexActual = dataActual.getValue().vertex;
-		Double actualDistance = tree.get(vertexActual).getValue().distanceToOrigin;
-		E edgeToOrigen = tree.get(vertexActual).getValue().edge;
+		Handle<Double, Data<V, E>> hActual = heap.deleteMin();
+		Data<V, E> dActual = hActual.getValue();
+		V vertexActual = dActual.vertex();
+		Double actualDistance = tree.get(vertexActual).getValue().distanceToOrigin();
+		E edgeToOrigen = tree.get(vertexActual).getValue().edge();
 		List<E> edges = graph.edgesListOf(vertexActual);
 		if (size.apply(vertexActual) > threshold)
 			edges = Lists2.randomUnitary(edges);
@@ -52,10 +53,11 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 				Data<V, E> nd = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> h = heap.insert(newDistanceToEnd, nd);
 				tree.put(v, h);
-			} else if (newDistance < tree.get(v).getValue().distanceToOrigin) {
-				tree.get(v).getValue().distanceToOrigin = newDistance;
-				tree.get(v).getValue().edge = backEdge;
-				tree.get(v).decreaseKey(newDistanceToEnd);
+			} else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {
+				Data<V, E> dv = Data.of(v, backEdge, newDistance);
+				Handle<Double, Data<V, E>> hv = tree.get(v);
+				hv.setValue(dv);
+				hv.decreaseKey(newDistanceToEnd);
 			}
 		}
 //		this.nonGoal = !this.goal.test(vertexActual);

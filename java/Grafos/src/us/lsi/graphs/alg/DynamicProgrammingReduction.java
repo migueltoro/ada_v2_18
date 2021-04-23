@@ -138,7 +138,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		} else if (this.goal.test(actual)) {
 			if(this.withGraph) outGraph.addVertex(actual);
 			update(accumulateValue);
-			r = Sp.of(null,this.path.solutionBase(actual)); 
+			r = Sp.of(this.path.solutionBase(actual),null); 
 			this.solutionsTree.put(actual, r);
 			return r;
 		} else {
@@ -152,7 +152,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 				if (s!=null) {
 					E lastEdge = this.solutionsTree.get(v).edge;
 					Double spv = this.path.solution(s.weight,v,edge,lastEdge);	
-					Sp<E> sp = Sp.of(edge,spv);
+					Sp<E> sp = Sp.of(spv,edge);
 					rs.add(sp);
 				}
 				if(this.withGraph) outGraph.addEdge(actual,Graphs.getOppositeVertex(graph, edge,actual), edge);
@@ -179,5 +179,18 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 			ePath.add(e);
 		}
 		return ePath;
+	}
+	
+	public record Sp<E>(Double weight, E edge) implements Comparable<Sp<E>> {
+		
+		public static <E> Sp<E> of(Double weight,E edge) {
+			return new Sp<>(weight,edge);
+		}
+
+		@Override
+		public int compareTo(Sp<E> sp) {
+			return this.weight.compareTo(sp.weight);
+		}
+
 	}
 }

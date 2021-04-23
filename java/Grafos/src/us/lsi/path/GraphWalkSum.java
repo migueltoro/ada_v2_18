@@ -13,7 +13,7 @@ import org.jgrapht.graph.GraphWalk;
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.alg.Sp;
+import us.lsi.graphs.alg.DynamicProgrammingReduction.Sp;
 import us.lsi.graphs.virtual.EGraph;
 
 public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E> {
@@ -28,11 +28,11 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 		Preconditions.checkArgument(graph.pathType() == PathType.Sum, 
 				String.format("El tipo del EGraphPath debe ser Sum y es %s",graph.pathType()));
 		Sp<E> sp = solutions.get(vertex);
-		GraphWalkSum<V, E> gp = GraphWalkSum.ofEdge(graph,sp.edge);
-		while(sp.edge != null) {
-			vertex = Graphs.getOppositeVertex(graph,sp.edge,vertex);
+		GraphWalkSum<V, E> gp = GraphWalkSum.ofEdge(graph,sp.edge());
+		while(sp.edge() != null) {
+			vertex = Graphs.getOppositeVertex(graph,sp.edge(),vertex);
 			sp = solutions.get(vertex);
-			gp.add(sp.edge);
+			gp.add(sp.edge());
 		}
 		return gp;
 	}

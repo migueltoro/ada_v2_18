@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.Lists2;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.alg.Sp;
+import us.lsi.graphs.alg.DynamicProgramming.Sp;
 
 public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	
@@ -28,24 +28,24 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	}
 	
 	public Double weight() {
-		return tree.get(this.vertex).weight;
+		return tree.get(this.vertex).weight();
 	}
 	
 	public A action() {	
 		A r = null;
-		if(tree.get(this.vertex).edge != null) r = tree.get(this.vertex).edge.action;
+		if(tree.get(this.vertex).edge() != null) r = tree.get(this.vertex).edge().action;
 		return r;
 	}
 	
 	public List<GraphTree<V, E, A>> neighbords() {
-		return tree.get(this.vertex).edge.targets.stream()
+		return tree.get(this.vertex).edge().targets.stream()
 				.map(v->GraphTree.of(tree, v))
 				.collect(Collectors.toList());
 	}
 	
 	public Boolean isBaseCase() {
 		Preconditions.checkNotNull(tree.get(this.vertex),"Es null");
-		return tree.get(this.vertex).edge == null;
+		return tree.get(this.vertex).edge() == null;
 	}
 	
 	public static <V, E extends SimpleHyperEdge<V, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){

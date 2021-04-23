@@ -35,7 +35,6 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
-//	protected Boolean nonGoal = true;
 	public Graph<V,E> outGraph;
 	public Boolean withGraph = false;
 	public Optional<GraphPath<V,E>> optPath;
@@ -55,7 +54,6 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		Double d = ePath.estimatedWeightToEnd(data.distanceToOrigin,startVertex,goal,end,heuristic);
 		Handle<Double, Data<V, E>> h = this.heap.insert(d,data);
 		this.tree.put(startVertex,h);
-//		this.nonGoal = true;
 	}
 
 	@Override
@@ -97,7 +95,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				Data<V, E> dv = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
 				tree.put(v, hv);
-			} else if (newDistance < tree.get(v).getValue().distanceToOrigin) {	
+			} else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {	
 				Data<V, E> dv = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> hv = tree.get(v);
 				hv.setValue(dv);
@@ -160,40 +158,16 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	}
 	
 	
-	public static class Data<V,E> {
-		public V vertex;
-		public E edge;
-		public Double distanceToOrigin;
-		
-		public static <V,E> Data<V,E> of(V vertex, E edge, Double distance) {
-			return new Data<>(vertex,edge, distance);
-		}
-		
-		public static <V,E> Data<V,E> of(V vertex, E edge) {
-			return new Data<>(vertex,edge,0.);
-		}
-		
-		public static <V,E> Data<V,E> of(V vertex) {
-			return new Data<>(vertex,null,0.);
-		}
-		
-		public static <V,E> Data<V,E> of(Data<V,E> d) {
-			return new Data<>(d.vertex,d.edge, d.distanceToOrigin);
-		}
-		
-		public Data(V vertex, E edge, Double distance) {
-			super();
-			this.vertex = vertex;
-			this.edge = edge;
-			this.distanceToOrigin = distance;
+	public static record Data<V, E> (V vertex, E edge, Double distanceToOrigin) {
+
+		public static <V, E> Data<V, E> of(V vertex, E edge, Double distance) {
+			return new Data<>(vertex, edge, distance);
 		}
 
-		@Override
-		public String toString() {
-			return "Data [vertex=" + vertex + ", edge=" + edge + ", distanceToOrigin=" + distanceToOrigin + "]";
+		public static <V, E> Data<V, E> of(Data<V, E> d) {
+			return new Data<>(d.vertex, d.edge, d.distanceToOrigin);
 		}
 
 	}
-
 	
 }

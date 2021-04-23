@@ -4,6 +4,7 @@ package us.lsi.graphs.alg;
 import java.util.Map;
 
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
+import us.lsi.graphs.alg.DynamicProgramming.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
