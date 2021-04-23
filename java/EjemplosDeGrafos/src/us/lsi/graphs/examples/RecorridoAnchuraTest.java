@@ -1,12 +1,11 @@
 package us.lsi.graphs.examples;
 
+import java.util.Locale;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
-import us.lsi.colors.GraphColors.Style;
+
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -18,6 +17,7 @@ import us.lsi.graphs.virtual.EGraph;
 public class RecorridoAnchuraTest {
 	
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("data/andalucia.txt",
 						Ciudad::ofFormat, 
@@ -30,16 +30,15 @@ public class RecorridoAnchuraTest {
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
 		
 		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Sevilla"));
+		ra.withGraph = true;
 		ra.findEnd();
 		Set<Carretera> carreteras = ra.edges();
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		Graphs2.toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaAnchura.gv",
+		Graphs2.toDot(ra.outGraph,"ficheros/andaluciaAnchura.gv",
 				x->String.format("%s",x.getNombre()+ra.position.get(x)),
-				x->String.format("%.2f",x.getKm()),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyleIf(Style.bold,carreteras.contains(e)));
+				x->String.format("%.2f",x.getKm()));
 		
 		
 		System.out.println(carreteras);

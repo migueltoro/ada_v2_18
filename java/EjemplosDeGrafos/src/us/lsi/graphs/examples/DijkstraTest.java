@@ -2,12 +2,10 @@ package us.lsi.graphs.examples;
 
 
 import java.util.List;
+import java.util.Locale;
 
 import org.jgrapht.Graph;
 
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
-import us.lsi.colors.GraphColors.Style;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -20,6 +18,7 @@ public class DijkstraTest {
 
 	
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
 		Graph<Ciudad,Carretera> graph =  
 				GraphsReader.newGraph("ficheros/andalucia.txt",
 						Ciudad::ofFormat, 
@@ -27,20 +26,20 @@ public class DijkstraTest {
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
 		
-		AStar<Ciudad, Carretera> ra = GraphAlg.dijsktra(g,Ciudad.ofName("Almeria"));
+		AStar<Ciudad, Carretera> rd = GraphAlg.dijsktra(g,Ciudad.ofName("Almeria"));
+		rd.withGraph = true;
 		
-		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
+		List<Carretera> carreteras = rd.search().orElse(null).getEdgeList();
 		
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		Graphs2.toDot(graph,"ficheros/andalucia.gv",
+				x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaAStar.gv",
+		Graphs2.toDot(rd.outGraph,"ficheros/andaluciaAStar.gv",
 				x->String.format("%s",x.getNombre()),
-				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyleIf(Style.bold,carreteras.contains(e)));
+				x->String.format("%.2f",x.getKm()));
 		
 		System.out.println(carreteras);
 	}

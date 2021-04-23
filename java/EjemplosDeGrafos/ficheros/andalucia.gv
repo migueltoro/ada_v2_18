@@ -9,7 +9,6 @@ strict graph G {
   8 [ label="Granada" ];
   9 [ label="Jaen" ];
   10 [ label="Algeciras" ];
-  11 [ label="Londres" ];
   2 -- 3 [ label="Mar--150.2" ];
   1 -- 3 [ label="A-49--92.85" ];
   1 -- 4 [ label="A-4--140.543" ];

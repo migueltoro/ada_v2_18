@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.Iterators;
@@ -27,6 +29,8 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	private EGraphPath<V,E> path;
 	private E nextEdge;
 	private Double error;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
 	
 	LocalSearch(EGraph<V, E> graph, Double error) {
 		this.graph = graph;
@@ -50,6 +54,7 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public Stream<V> stream() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 	
@@ -98,12 +103,17 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 			this.path = this.graph.initialPath();
 			this.weight = path.getWeight();
 		} else {
+			if(this.withGraph) outGraph.addVertex(this.actualVertex);
 			V old = this.actualVertex;
 			E edge = this.nextEdge;
 			this.nextEdge =	this.nextEdge(this.actualVertex);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,old);		
 			this.edgeToOrigin.put(this.actualVertex,edge);
 			this.weight = this.path.add(this.weight,this.actualVertex,edge,this.edgeToOrigin.get(old));
+			if(this.withGraph) {
+				outGraph.addVertex(old);
+				outGraph.addEdge(old,this.actualVertex,edge);
+			}
 		}
 		return this.actualVertex;
 	}

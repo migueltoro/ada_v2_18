@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.Graphs2;
@@ -25,6 +26,8 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	protected V startVertex; 
 	public Map<V,Integer> position;
 	private Integer n = 0;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
 
 	DephtSearch(Graph<V, E> g, V startVertex) {
 		this.graph = g;
@@ -38,6 +41,7 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	
 	@Override
 	public Stream<V> stream() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 	
@@ -61,10 +65,15 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	@Override
 	public V next() {
 		V actual = stack.pop();
+		if(this.withGraph) outGraph.addVertex(actual);
 		for(V v:Graphs.neighborListOf(graph, actual)) {
 			if(!this.edgeToOrigin.containsKey(v)) {
 				stack.add(v);
 				this.edgeToOrigin.put(v,graph.getEdge(actual, v));
+				if(this.withGraph) {
+					outGraph.addVertex(v);
+					outGraph.addEdge(actual,v,graph.getEdge(actual, v));
+				}
 			}
 		}
 		this.position.put(actual,n);

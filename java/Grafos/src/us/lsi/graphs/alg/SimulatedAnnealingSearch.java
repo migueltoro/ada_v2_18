@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
 import us.lsi.common.Lists2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
@@ -18,6 +21,8 @@ public class SimulatedAnnealingSearch<V,E> {
 	private double temperatura;
 	public V bestVertex;
 	public Double bestWeight;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
 	
 		
 	SimulatedAnnealingSearch(EGraph<V, E> graph, V startVertex,Function<V, Double> fitness) {
@@ -46,17 +51,23 @@ public class SimulatedAnnealingSearch<V,E> {
 	public static Predicate<Double> stop = e->false;
 	
 	public void search() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		Math2.initRandom();
 		for (Integer n = 0; n < numIntentos; n++) {
 			this.temperatura = temperaturaInicial;
 			this.actualVertex = this.startVertex;
 			for (int i = 0; i < numPorIntento; i++) {
+				if(this.withGraph) outGraph.addVertex(this.actualVertex);
 				for (int s = 0; s < numMismaTemperatura; s++) {
-					V nv = nextVertex(this.actualVertex);
+					V nv = nextVertex(this.actualVertex);	
 					Double incr = fitness.apply(nv) - fitness.apply(this.actualVertex);
 					if (Math2.aceptaBoltzmann(incr,temperatura)) {
 						this.actualVertex = nv;
 						actualizaMejorValor();
+						if(this.withGraph) {
+							outGraph.addVertex(nv);
+							outGraph.addEdge(this.actualVertex,nv,graph.getEdge(this.actualVertex,nv));
+						}
 						if(SimulatedAnnealingSearch.stop.test(this.bestWeight)) return;
 					}
 				}

@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.Graphs2;
@@ -25,6 +26,8 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 	protected V startVertex; 
 	protected Integer n;
 	protected Integer i;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
 
 
 	TopologicalSearch(Graph<V, E> g, V startVertex) {
@@ -42,6 +45,7 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 	
 	@Override
 	public Stream<V> stream() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 	
@@ -64,11 +68,16 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 
 	public V nextP() {
 		V actual = stackPre.pop();
+		if(this.withGraph) outGraph.addVertex(actual);
 		this.queue.add(actual);
 		for(V v:Graphs.neighborListOf(graph, actual)) {
 			if(!this.edgeToOrigin.containsKey(v)) {
 				stackPre.add(v);
-				this.edgeToOrigin.put(v,graph.getEdge(actual, v));			
+				this.edgeToOrigin.put(v,graph.getEdge(actual, v));
+				if(this.withGraph) {
+					outGraph.addVertex(v);
+					outGraph.addEdge(actual,v,graph.getEdge(actual,v));
+				}
 			}
 		}
 		return actual;

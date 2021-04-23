@@ -12,7 +12,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -28,6 +31,8 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	private Function<V,E> nextEdge;
 	private Predicate<V> goal;
 	private Boolean hasNext;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
 	
 	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal) {
 		this.graph = graph;
@@ -44,6 +49,7 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	
 	@Override
 	public Stream<V> stream() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 	
@@ -78,11 +84,16 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 
 	@Override
 	public V next() {
+		if(this.withGraph) outGraph.addVertex(this.actualVertex);
 		V old = this.actualVertex;
 		this.hasNext = !this.goal.test(old);
 		if (this.hasNext) {
 			E edge = this.nextEdge.apply(old);
 			this.actualVertex = Graphs.getOppositeVertex(this.graph,edge,old);
+			if(this.withGraph) {
+				outGraph.addVertex(old);
+				outGraph.addEdge(old,this.actualVertex,graph.getEdge(old, this.actualVertex));
+			}
 			this.edgeToOrigin.put(this.actualVertex,edge);
 			E edgeToOrigin = this.edgeToOrigin.get(old);
 			if(edgeToOrigin == null) this.weight = this.path.getWeight();
