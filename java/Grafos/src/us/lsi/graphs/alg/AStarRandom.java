@@ -58,7 +58,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 				tree.get(v).decreaseKey(newDistanceToEnd);
 			}
 		}
-		this.nonGoal = !this.goal.test(vertexActual);
+//		this.nonGoal = !this.goal.test(vertexActual);
 		return vertexActual;
 	}
 	

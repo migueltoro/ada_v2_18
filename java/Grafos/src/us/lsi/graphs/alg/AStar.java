@@ -10,9 +10,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jheaps.AddressableHeap;
 import org.jheaps.AddressableHeap.Handle;
 import org.jheaps.tree.FibonacciHeap;
@@ -31,9 +33,12 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	protected V end;
 	protected TriFunction<V,Predicate<V>,V,Double> heuristic;
 	public Map<V,Handle<Double,Data<V,E>>> tree;
-	protected AddressableHeap<Double,Data<V,E>> heap; 
+	public AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
-	protected Boolean nonGoal;
+//	protected Boolean nonGoal = true;
+	public Graph<V,E> outGraph;
+	public Boolean withGraph = false;
+	public Optional<GraphPath<V,E>> optPath;
 	
 
 	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
@@ -50,11 +55,12 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		Double d = ePath.estimatedWeightToEnd(data.distanceToOrigin,startVertex,goal,end,heuristic);
 		Handle<Double, Data<V, E>> h = this.heap.insert(d,data);
 		this.tree.put(startVertex,h);
-		this.nonGoal = true;
+//		this.nonGoal = true;
 	}
 
 	@Override
 	public Stream<V> stream() {
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 		
@@ -72,30 +78,37 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	}
 	
 	public boolean hasNext() {
-		return !heap.isEmpty() && nonGoal;
+		return !heap.isEmpty(); 
 	}
 
 	@Override
 	public V next() {
-		Handle<Double, Data<V, E>> dataActual = heap.deleteMin();
-		V vertexActual = dataActual.getValue().vertex;
-		Double actualDistance = tree.get(vertexActual).getValue().distanceToOrigin;
-		E edgeToOrigen = tree.get(vertexActual).getValue().edge;
+		Handle<Double, Data<V, E>> hActual = heap.deleteMin();
+		Data<V, E> dActual = hActual.getValue();
+		V vertexActual = dActual.vertex;
+		if(this.withGraph) outGraph.addVertex(vertexActual);
+		Double actualDistance = dActual.distanceToOrigin;
+		E edgeToOrigen = dActual.edge;
 		for (E backEdge : graph.edgesListOf(vertexActual)) {
 			V v = Graphs.getOppositeVertex(graph,backEdge,vertexActual);
 			Double newDistance = ePath.add(actualDistance,v,backEdge,edgeToOrigen);
-			double newDistanceToEnd =  ePath.estimatedWeightToEnd(newDistance,v, goal, end, heuristic);
+			Double newDistanceToEnd =  ePath.estimatedWeightToEnd(newDistance,v, goal, end, heuristic);
 			if (!tree.containsKey(v)) {
-				Data<V, E> nd = Data.of(v, backEdge, newDistance);
-				Handle<Double, Data<V, E>> h = heap.insert(newDistanceToEnd, nd);
-				tree.put(v, h);
-			} else if (newDistance < tree.get(v).getValue().distanceToOrigin) {
-				tree.get(v).getValue().distanceToOrigin = newDistance;
-				tree.get(v).getValue().edge = backEdge;
-				tree.get(v).decreaseKey(newDistanceToEnd);
+				Data<V, E> dv = Data.of(v, backEdge, newDistance);
+				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
+				tree.put(v, hv);
+			} else if (newDistance < tree.get(v).getValue().distanceToOrigin) {	
+				Data<V, E> dv = Data.of(v, backEdge, newDistance);
+				Handle<Double, Data<V, E>> hv = tree.get(v);
+				hv.setValue(dv);
+				hv.decreaseKey(newDistanceToEnd);
+			}
+			if(this.withGraph) {
+				outGraph.addVertex(v);
+				outGraph.addEdge(vertexActual,v,backEdge);
 			}
 		}
-		this.nonGoal = !this.goal.test(vertexActual);
+		if(this.goal.test(vertexActual)) this.optPath = this.path(startVertex,Optional.of(vertexActual));
 		return vertexActual;
 	}
 
@@ -113,40 +126,41 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		return this.startVertex;
 	}
 	
-	public Optional<GraphPath<V, E>> search() {
-		GraphPath<V,E> gp = null;
-		V startVertex = graph.startVertex();
-		V endVertex = null;
-		if(this.goal.test(startVertex)) return Optional.of(ePath);
-		Optional<V> last = this.stream().filter(this.goal).findFirst();		
-		if(last.isPresent()) {
-			endVertex = last.get();
-			Double weight = this.tree.get(endVertex).getValue().distanceToOrigin;
-			E edge = this.getEdgeToOrigin(endVertex);
-			List<E> edges = new ArrayList<>();		
-			while(edge!=null) {				
-				edges.add(edge);
-				endVertex = Graphs.getOppositeVertex(graph, edge, endVertex);
-				edge = this.getEdgeToOrigin(endVertex);			
-			}
-			Collections.reverse(edges);
-			List<V> vertices = new ArrayList<>();
-			V v = startVertex;
-			vertices.add(v);
-			for(E e:edges) {
-				v = Graphs.getOppositeVertex(graph, e, v);
-				vertices.add(v);
-			}
-			gp = new GraphWalk<>(graph,startVertex,endVertex,vertices,edges,weight);
-			return Optional.of(gp);
-		} else {
-			return Optional.ofNullable(null);
+	public Optional<GraphPath<V, E>> path(V startVertex, Optional<V> last) {
+		if (!last.isPresent())
+			return Optional.empty();
+		V endVertex = last.get();
+		Handle<Double, Data<V, E>> hav = this.tree.get(endVertex);
+		Data<V, E> dav = hav.getValue();
+		Double weight = dav.distanceToOrigin;
+		E edge = dav.edge;
+		List<E> edges = new ArrayList<>();
+		while (edge != null) {
+			edges.add(edge);
+			endVertex = Graphs.getOppositeVertex(graph, edge, endVertex);
+			edge = this.getEdgeToOrigin(endVertex);
 		}
+		Collections.reverse(edges);
+		List<V> vertices = new ArrayList<>();
+		V v = startVertex;
+		vertices.add(v);
+		for (E e : edges) {
+			v = Graphs.getOppositeVertex(graph, e, v);
+			vertices.add(v);
+		}
+		GraphPath<V, E> gp = new GraphWalk<>(graph, startVertex, endVertex, vertices, edges, weight);
+		return Optional.of(gp);
+	}
+
+	public Optional<GraphPath<V, E>> search() {
+		V startVertex = graph.startVertex();
+		if(this.goal.test(startVertex)) return Optional.of(ePath);
+		Optional<V> last = this.stream().filter(this.goal).findFirst();	
+		return path(startVertex,last);
 	}
 	
 	
 	public static class Data<V,E> {
-		
 		public V vertex;
 		public E edge;
 		public Double distanceToOrigin;
@@ -172,6 +186,11 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 			this.vertex = vertex;
 			this.edge = edge;
 			this.distanceToOrigin = distance;
+		}
+
+		@Override
+		public String toString() {
+			return "Data [vertex=" + vertex + ", edge=" + edge + ", distanceToOrigin=" + distanceToOrigin + "]";
 		}
 
 	}

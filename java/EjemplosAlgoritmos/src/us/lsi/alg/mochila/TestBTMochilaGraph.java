@@ -1,10 +1,13 @@
 package us.lsi.alg.mochila;
 
-
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.jgrapht.GraphPath;
+
+import us.lsi.colors.GraphColors;
+import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GraphAlg;
@@ -15,10 +18,7 @@ import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.path.EGraphPath;
 
-
-
-public class TestBTMochila {
-
+public class TestBTMochilaGraph {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
@@ -41,15 +41,26 @@ public class TestBTMochila {
 				MochilaHeuristic::heuristic,
 				MochilaVertex::getSolucion,
 				MochilaVertex::copy,
-				BTType.Max);		
+				BTType.Max);
 		
-		ms.bestValue = bv;
-		ms.solutions.add(sm);
+		ms.withGraph = true;
+		
+//		ms.bestValue = bv;
+//		ms.solutions.add(sm);
 		
 		ms.search();
+		
 		SolucionMochila s = ms.getSolution().orElse(null);
+		GraphPath<MochilaVertex, MochilaEdge> sp = ms.path;
+		Graphs2.toDot(ms.outGraph,"ficheros/MochilaBTGraph2.gv",
+				v->v.toString(),
+				e->e.a.toString(),
+				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
+				e->GraphColors.getColorIf(Color.red,sp.getEdgeList().contains(e))
+				);
 		System.out.println(s);
 		System.out.println(ms.getSolutions().stream().max(Comparator.comparing(x->x.getValor())).get());
+
 	}
 
 }

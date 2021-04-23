@@ -176,13 +176,6 @@ public class Graphs2 {
 		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
 	
-//	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex,  
-//			Function<E, Double> edgeWeight, 
-//			Function<V, Boolean> isBaseCase,
-//			PathType type) {
-//		return new EGraphI<V, E, G>(graph, startVertex, type, edgeWeight, null, null);
-//	}
-	
 	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type) {
 		return new EGraphI<V, E, G>(graph, startVertex, type, null, null, null);
 	}

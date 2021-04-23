@@ -1,6 +1,6 @@
 package us.lsi.colors;
 
-
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -45,6 +45,12 @@ public class GraphColors {
 		return m;
 	}
 	
+	public static Map<String,Attribute> getColorIf(Color yesColor, Boolean test) {		
+		Map<String,Attribute> m = new HashMap<>();
+		if(test) m = Map.of("color", DefaultAttribute.createAttribute(yesColor.toString()));
+		return m;
+	}
+	
 	public static <E> Map<String, Attribute> getLabel(String label) {
 		return Map.of("label", DefaultAttribute.createAttribute(label));
 	}
@@ -63,8 +69,9 @@ public class GraphColors {
 	}
 	
 	public static <E> Map<String, Attribute> getShapeIf(Shape shape, Boolean test) {
-		if(!test) shape = Shape.ellipse;
-		return Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
+		Map<String,Attribute> m = new HashMap<>();
+		if(!test) m = Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
+		return m;
 	}
 	
 }

@@ -99,15 +99,13 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 	@Override
 	public MochilaVertex neighbor(Integer a) {
 		MochilaVertex r;
-		if(this.capacidadRestante == 0.) r =  MochilaVertex.of(n,0);
-//		if(this.index == n-1) r =  MochilaVertex.of(n,0);
-//		else {
-			Integer cr = capacidadRestante-a*DatosMochila.getPeso(index);
-			r = MochilaVertex.of(index+1,cr);
-//		}
+		if (this.capacidadRestante == 0.) return MochilaVertex.of(n, 0);
+		Integer cr = capacidadRestante - a * DatosMochila.getPeso(index);
+		if (this.index == MochilaVertex.n - 1) r = MochilaVertex.of(index + 1, 0);
+		else r = MochilaVertex.of(index + 1, cr);
 		return r;
 	}
-	
+
 	@Override
 	public MochilaEdge edge(Integer a) {
 		MochilaVertex v = this.neighbor(a);
