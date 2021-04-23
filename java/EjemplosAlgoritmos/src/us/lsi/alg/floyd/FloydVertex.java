@@ -9,7 +9,7 @@ import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.common.Lists2;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.alg.Sp;
+import us.lsi.graphs.alg.DynamicProgramming.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath;
@@ -124,16 +124,16 @@ public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydV
 	public static GraphWalk<Integer,SimpleEdge<Integer>> solution(Map<FloydVertex, Sp<FloydEdge>> tree,FloydVertex vertex){
 		GraphWalk<Integer,SimpleEdge<Integer>> gp = null;
 		Sp<FloydEdge> s = tree.get(vertex);
-		if(s.edge == null) {
+		if(s.edge() == null) {
 			Integer origen = vertex.i;
 			Integer destino = vertex.j;
 			List<Integer> ls = Lists2.of(origen,destino);
-			gp = new GraphWalk<>(vertex.graph,ls,s.weight);
-		} else if(s.edge.action == ActionFloyd.No){
-			gp = solution(tree,s.edge.targets.get(0));
+			gp = new GraphWalk<>(vertex.graph,ls,s.weight());
+		} else if(s.edge().action == ActionFloyd.No){
+			gp = solution(tree,s.edge().targets.get(0));
 		} else {
-			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree,s.edge.targets.get(0));
-			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree,s.edge.targets.get(1));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree,s.edge().targets.get(0));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree,s.edge().targets.get(1));
 			gp = gp1.concat(gp2,g->EGraphPath.weight(g));
 		}
 		return gp;
