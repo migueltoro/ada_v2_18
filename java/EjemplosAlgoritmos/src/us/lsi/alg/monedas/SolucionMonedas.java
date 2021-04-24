@@ -20,7 +20,7 @@ public class SolucionMonedas implements Comparable<SolucionMonedas> {
 		Integer peso = 0;
 		Integer valor = 0;
 		for (MonedaEdge e : path.getEdgeList()) {
-			Integer i = e.getSource().index;
+			Integer i = e.getSource().index();
 			Moneda m = Moneda.get(i);
 			Integer p = Moneda.peso(i);
 			Integer v = Moneda.valor(i);

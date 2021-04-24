@@ -18,8 +18,10 @@ public interface EGraphPath<V, E> extends GraphPath<V, E> {
 	Double solutionBase(V vertexActual);
 	Double solution(Double weight, V vertexActual, E edge, E lastEdge); 
 	EGraphPath<V, E> copy();
-	Double boundWeight(Double acumulateValue,V vertexActual,E edge,Predicate<V> goal,V end,TriFunction<V,Predicate<V>,V,Double> heuristic);
-	Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal,V end,TriFunction<V,Predicate<V>,V,Double> heuristic);
+	Double boundWeight(Double acumulateValue,V vertexActual,E edge,Predicate<V> goal,V end,
+			TriFunction<V,Predicate<V>,V,Double> heuristic);
+	Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal,V end,
+			TriFunction<V,Predicate<V>,V,Double> heuristic);
 	EGraphPath<V, E> concat(GraphPath<V,E> path);
 	GraphPath<V, E> reverse();
 	PathType type();

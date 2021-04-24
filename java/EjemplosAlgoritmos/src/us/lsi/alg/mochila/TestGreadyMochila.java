@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;

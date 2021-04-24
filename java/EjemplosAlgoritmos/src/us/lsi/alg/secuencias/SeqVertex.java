@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
-public class SeqVertex extends ActionVirtualVertex<SeqVertex,SeqEdge,SeqAction>{
+public class SeqVertex implements ActionVirtualVertex<SeqVertex,SeqEdge,SeqAction>{
 	
 	public static SeqVertex of(Integer index, String s) {
 		return new SeqVertex(index, s);

@@ -15,7 +15,7 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
 
-public class VertexPuzzle extends ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
+public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
 	
 	
 	public static VertexPuzzle copy(VertexPuzzle m) {

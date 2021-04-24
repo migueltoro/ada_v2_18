@@ -72,49 +72,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		}
 	}
 
-//	@Override
-//	public Optional<GraphPath<V, E>> search() {
-//		return search(this.startVertex);
-//	}
 
-//	@Override
-//	public Optional<GraphPath<V, E>> search(V vertex) {		
-//		if (!this.solutionsTree.containsKey(vertex)) {
-//			this.solutionsTree = new HashMap<>();
-//			search(vertex,0., null);
-//		}
-//		return Optional.ofNullable(pathFrom(this.startVertex));
-//	}
-//	
-//	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
-//		Sp<E> r = null;
-//		if(this.solutionsTree.containsKey(actual)) {
-//			r = this.solutionsTree.get(actual);
-//		} else if (this.goal.test(actual)) {
-//			update(accumulateValue);
-//			r = Sp.of(null,this.path.solutionBase(actual)); 
-//			this.solutionsTree.put(actual, r);
-//			return r;
-//		} else {
-//			List<Sp<E>> rs = new ArrayList<>();			
-//			for (E edge : graph.edgesListOf(actual)) {				
-//				if (this.forget(edge,actual,accumulateValue,this.goal,this.end)) continue;
-//				V v = Graphs.getOppositeVertex(graph,edge,actual);
-//				Double ac = this.path.add(accumulateValue,actual,edge,edgeToOrigin); 
-//				Sp<E> s = search(v,ac,edge);
-//				if (s!=null) {
-//					E lastEdge = this.solutionsTree.get(v).edge;
-//					Double spv = this.path.solution(s.weight,v,edge,lastEdge);	
-//					Sp<E> sp = Sp.of(edge,spv);
-//					rs.add(sp);
-//				}
-//			}
-//			r = rs.stream().filter(s->s!=null).min(this.comparatorEdges).orElse(null);
-//			this.solutionsTree.put(actual, r);
-//		}
-//		return r;
-//	}
-//	
 	@Override
 	public Optional<GraphPath<V, E>> search() {
 		return search(this.startVertex);

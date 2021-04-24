@@ -14,9 +14,8 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
 
-
-
-public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
+public record MochilaVertex(Integer index, Integer capacidadRestante)
+          implements ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
 
 	public static MochilaVertex initialVertex() {
 		return of(0, capacidadInicial);
@@ -38,20 +37,9 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		return (MochilaVertex v)->v.index == MochilaVertex.n;
 	}
 
-	public int index;
-	public Integer capacidadRestante;
 	public static Integer n = DatosMochila.numeroDeObjetos;
 	public static Integer capacidadInicial;
-	
-	public MochilaVertex(int index, Integer capacidadRestante) {
-		super();
-		this.index = index;
-//		if (index < n) {
-			this.capacidadRestante = capacidadRestante;
-//		} else {
-//			this.capacidadRestante = 0;
-//		}		
-	}
+
 	
 	public static SolucionMochila getSolucion(GraphPath<MochilaVertex, MochilaEdge> path){
 		return MochilaVertex.getSolucion(path.getEdgeList());
@@ -111,41 +99,6 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 		MochilaVertex v = this.neighbor(a);
 		return MochilaEdge.of(this,v,a);
 	}
-	
-
-	@Override
-	public String toString() {
-		return String.format("(%d,%d)",index,capacidadRestante);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((capacidadRestante == null) ? 0 : capacidadRestante.hashCode());
-		result = prime * result + index;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MochilaVertex other = (MochilaVertex) obj;
-		if (capacidadRestante == null) {
-			if (other.capacidadRestante != null)
-				return false;
-		} else if (!capacidadRestante.equals(other.capacidadRestante))
-			return false;
-		if (index != other.index)
-			return false;
-		return true;
-	}
-	
 	
 }
 

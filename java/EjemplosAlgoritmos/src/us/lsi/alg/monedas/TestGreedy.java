@@ -30,11 +30,11 @@ public class TestGreedy {
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
 				graph,
 				MonedaVertex::accionVoraz,
-				e->e.equals(e2));
+				e->e.goal());
 		
 		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
 		System.out.println("G "+path.get().getWeight());
-		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.equals(e2),e2));
+		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.index() == MonedaVertex.n,e2));
 		
 		Collections.sort(Moneda.monedas,Comparator.comparing(m->m.pesoUnitario));
 //		System.out.println(Moneda.monedas);
@@ -55,7 +55,7 @@ public class TestGreedy {
 		path = rr.search();
 //		System.out.println(path);
 		System.out.println("G "+path.get().getWeight());
-		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.equals(e2),e3));
+		System.out.println("H "+MonedasHeuristica.heuristica(e1,e->e.goal(),e3));
 	}
 
 }

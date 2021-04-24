@@ -132,7 +132,8 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	}
 
 	@Override
-	public Double boundWeight(Double acumulateValue,V vertexActual, E edge, Predicate<V> goal, V end,  TriFunction<V,Predicate<V>,V,Double> heuristic) {
+	public Double boundWeight(Double acumulateValue,V vertexActual, E edge, Predicate<V> goal, V end,  
+			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		Double weight = acumulateValue;
 		V target = Graphs.getOppositeVertex(graph,edge,vertexActual);
 		weight += graph.getEdgeWeight(edge);
@@ -141,7 +142,8 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	}
 
 	@Override
-	public Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
+	public Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal, V end, 
+			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		return acumulateValue+heuristic.apply(vertexActual, goal, end);
 	}
 

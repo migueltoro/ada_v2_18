@@ -12,7 +12,7 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.path.GraphPaths;
 
-public class TravelVertex extends ActionVirtualVertex<TravelVertex, TravelEdge, IntPair> {
+public class TravelVertex implements ActionVirtualVertex<TravelVertex, TravelEdge, IntPair> {
 	
 	public static TravelVertex of(Graph<Ciudad, Carretera> graph, List<Ciudad> camino) {
 		return new TravelVertex(graph, camino);

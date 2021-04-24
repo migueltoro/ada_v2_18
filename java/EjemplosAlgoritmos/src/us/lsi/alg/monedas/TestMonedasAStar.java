@@ -22,7 +22,8 @@ public class TestMonedasAStar {
 		
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getWeight());		
 		
-		AStar<MonedaVertex, MonedaEdge> ms = GraphAlg.aStarGoal(graph,v->v.index==MonedaVertex.n,MonedasHeuristica::heuristica);
+		AStar<MonedaVertex, MonedaEdge> ms = 
+				GraphAlg.aStarGoal(graph,v->v.goal(),MonedasHeuristica::heuristica);
 		
 		GraphPath<MonedaVertex,MonedaEdge> path = ms.search().orElse(null);
 //		List<MonedaEdge> edges = path.getEdgeList();
@@ -37,7 +38,7 @@ public class TestMonedasAStar {
 
 		graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
 		
-	    ms = GraphAlg.aStarEnd(graph,e2,MonedasHeuristica::heuristica);
+	    ms = GraphAlg.aStarGoal(graph,e->e.goal(),MonedasHeuristica::heuristica);
 		
 		path = ms.search().orElse(path);
 //		edges = path.getEdgeList();

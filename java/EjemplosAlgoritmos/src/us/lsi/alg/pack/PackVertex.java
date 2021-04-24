@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
-public class PackVertex extends ActionVirtualVertex<PackVertex,PackEdge,Integer> {
+public class PackVertex implements ActionVirtualVertex<PackVertex,PackEdge,Integer> {
 
 
 	public static PackVertex of(Integer index, List<Integer> as, Map<Integer, Integer> carga) {

@@ -40,7 +40,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V,E>> optPath;
 	
 
-	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
+	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>, V,Double> heuristic) {
 		super();
 		this.graph = graph;
 		this.startVertex = graph.startVertex();

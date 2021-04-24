@@ -8,11 +8,11 @@ public class MochilaHeuristic {
 	
 	
 	public static Double heuristic_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		return -heuristic(v1.index, v1.capacidadRestante.doubleValue(),v2.index);
+		return -heuristic(v1.index(), v1.capacidadRestante().doubleValue(),v2.index());
 	}
 	
 	public static Double heuristic(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		return heuristic(v1.index, v1.capacidadRestante.doubleValue(), v2.index);
+		return heuristic(v1.index(), v1.capacidadRestante().doubleValue(), v2.index());
 	}
 	
 	public static Double heuristic2_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
@@ -21,8 +21,8 @@ public class MochilaHeuristic {
 	}
 	
 	public static Double heuristic2(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		Integer index = v1.index;
-		Integer capacidadRestante = v1.capacidadRestante;
+		Integer index = v1.index();
+		Integer capacidadRestante = v1.capacidadRestante();
 		Integer a = 1+ Math.min(capacidadRestante / DatosMochila.getPeso(index), DatosMochila.getNumMaxDeUnidades(index));
 		Integer valor = a * DatosMochila.getValor(index);
 		return valor.doubleValue();

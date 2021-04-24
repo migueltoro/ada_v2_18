@@ -13,7 +13,7 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 //import us.lsi.path.GraphPaths;
 import us.lsi.path.GraphPaths;
 
-public class TravelVertexInteger extends ActionVirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
+public class TravelVertexInteger implements ActionVirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
 	
 	public static TravelVertexInteger of(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> camino) {
 		return new TravelVertexInteger(graph, camino, GraphPaths.of(graph,camino).getWeight());

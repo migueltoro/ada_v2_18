@@ -8,8 +8,8 @@ import us.lsi.common.Preconditions;
 
 public class ColorHeuristic {
 	
-	public static Double heuristic(ColorVertex v1, Predicate<ColorVertex> goal, ColorVertex v2) {
-		return (double) v1.nc;
+	public static Double heuristic(ColorVertex v1, Predicate<?> goal, ColorVertex v2) {
+		return (double) v1.nc();
 	}
 	
 	public static Integer gredyPath(ColorVertex v1, Predicate<ColorVertex> p) {
@@ -18,10 +18,9 @@ public class ColorHeuristic {
 			Integer a = v.greedyAction();
 			v = v.neighbor(a);
 		};	 
-		Preconditions.checkState(AuxiliaryColor.check(ColorVertex.graph,v.cav),"Error en solucion");
-		return v.nc;
+		Preconditions.checkState(AuxiliaryColor.check(ColorVertex.graph,v.cav()),"Error en solucion");
+		return v.nc();
 	}
-	
 	
 
 }

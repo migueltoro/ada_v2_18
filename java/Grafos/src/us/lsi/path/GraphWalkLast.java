@@ -119,14 +119,16 @@ public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,
 	}
 
 	@Override
-	public Double boundWeight(Double accumulateValue,V vertexActual,E edge,Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
+	public Double boundWeight(Double accumulateValue,V vertexActual,E edge,Predicate<V> goal, V end, 
+			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
 		V target = Graphs.getOppositeVertex(super.graph,edge,vertexActual);	
 		return heuristic.apply(target, goal, end);
 	}
 
 	@Override
-	public Double estimatedWeightToEnd(Double accumulateValue,V vertexActual,Predicate<V> goal, V end, TriFunction<V,Predicate<V>,V,Double> heuristic) {
+	public Double estimatedWeightToEnd(Double accumulateValue,V vertexActual,Predicate<V> goal, V end, 
+			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		return heuristic.apply(vertexActual, goal, end);
 	}
 	

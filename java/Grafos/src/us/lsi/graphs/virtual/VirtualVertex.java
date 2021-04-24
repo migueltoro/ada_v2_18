@@ -27,18 +27,23 @@ public interface VirtualVertex<V extends VirtualVertex<V,E>, E> {
 	/**
 	 * @return Lista de las aristas hacia los v&eacute;rtices vecinos
 	 */
-	List<E> edgesListOf();	
+	List<E> edgesListOf();
+	
 	/**
 	 * @param v V&eacute;rtice que se pregunta si es vecino
 	 * @return Si el v&eacute;rtice es vecino
-	 */	
-	Boolean isNeighbor(V v);	
+	 */		
+	
+	public default Boolean isNeighbor(V v) {
+		return this.getNeighborListOf().contains(v);
+	}
 
 	/**
 	 * 
 	 * @param v2 Otro v&eacute;rtice
 	 * @return La arista desde this a v2
 	 */	
-	E getEdge(V v2);
+	E getEdgeToVertex(V v2);
+	
 	
 }

@@ -14,7 +14,7 @@ import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.tareasyprocesadores.datos.Tarea;
 
-public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>, Integer>{
+public class TyPVertex implements ActionVirtualVertex<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>, Integer>{
 
 	
 	public static Integer numeroDeProcesadores;

@@ -38,7 +38,7 @@ public class TestMonedasBT {
 
 		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTrackingGoal(
 				graph, 
-				v->v.index==MonedaVertex.n,
+				v->v.index()==MonedaVertex.n,
 				MonedasHeuristica::heuristica, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,
@@ -70,7 +70,7 @@ public class TestMonedasBT {
 
 		BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTrackingGoal(
 				graph, 
-				v->v.index==MonedaVertex.n,
+				v->v.index()==MonedaVertex.n,
 				MonedasHeuristica::heuristica, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,

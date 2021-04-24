@@ -122,7 +122,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	
 	@Override
 	public E getEdge(V v1, V v2) {
-		return v1.getEdge(v2);
+		return v1.getEdgeToVertex(v2);
 	}	
 	@Override
 	public Set<E> getAllEdges(V v1, V v2) {

@@ -14,7 +14,7 @@ public class MonedasHeuristica {
 	
 	public static Double heuristica(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex end) {
 		
-		if(v1.equals(end)) return 0.;
+		if(goal.test(v1)) return 0.;
 		
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		

@@ -11,7 +11,7 @@ import us.lsi.common.Lists2;
 import us.lsi.common.Sets2;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
-public class ReinasVertex extends ActionVirtualVertex<ReinasVertex,ReinasEdge,Integer>{
+public class ReinasVertex implements ActionVirtualVertex<ReinasVertex,ReinasEdge,Integer>{
 	
 	public static ReinasVertex copy(ReinasVertex reinas) {
 		return new ReinasVertex(reinas.index,Lists2.copy(reinas.fo),Sets2.copy(reinas.dpo),Sets2.copy(reinas.dso));

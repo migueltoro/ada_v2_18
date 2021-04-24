@@ -43,7 +43,7 @@ public class TestMonedasPDR {
 
 		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReductionGoal(
 				graph, 
-				v->v.index==MonedaVertex.n,
+				v->v.index()==MonedaVertex.n,
 				MonedasHeuristica::heuristica, 
 				PDType.Max);
 
@@ -73,7 +73,7 @@ public class TestMonedasPDR {
 
 		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReductionGoal(
 				graph, 
-				v->v.index==MonedaVertex.n,
+				v->v.index()==MonedaVertex.n,
 				(v1,p,v2)->0., 
 				PDType.Min);
 
