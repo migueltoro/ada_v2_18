@@ -9,26 +9,10 @@ package us.lsi.graphs;
  */
 public class SimpleEdge<V>  {
 
-	/**
-	 * 
-	 */
-	public Double weight;
-	public V source;
-	public V target;
-		
-	/**
-	 * @param v1 Un vértice
-	 * @param v2 Un segundo vértice
-	 * @param <V> El tipo de los vértices que une la arista
-	 * @return Una arista entre ambos vértices
-	 */
-	public static <V> SimpleEdge<V> of(V v1, V v2) {
-		return new SimpleEdge<>(v1,v2);
-	}
 	
-	public static <V> SimpleEdge<V> of() {
-		return new SimpleEdge<>();
-	}
+	private final V source;
+	private final V target;
+	private final Double weight;
 	
 	/**
 	 * @param v1 Un vértice
@@ -40,51 +24,11 @@ public class SimpleEdge<V>  {
 	public static <V> SimpleEdge<V> of(V v1, V v2, double weight) {
 		return new SimpleEdge<V>(v1, v2, weight);
 	}
-
-	public SimpleEdge() {
-		super();
-		this.source = null;
-		this.target = null;
-		this.weight = 1.;
-	}
-
-	public SimpleEdge(V c1, V c2) {
-		super();
-		this.source = c1;
-		this.target = c2;
-		this.weight = 1.;
-	}
-
-	public SimpleEdge(V c1, V c2, double weight) {
-		super();
-		this.source = c1;
-		this.target = c2;
-		this.weight = weight;
-	}
 	
-	
-	/**
-	 * @return El vértice origen
-	 */
-	public V getSource(){
-		return this.source;
-	}
-	/**
-	 * @return El vértice destino
-	 */
-	public V getTarget(){
-		return this.target;
-	}
-	/**
-	 * @return El peso asociado a la arista
-	 */
-	public Double getEdgeWeight(){
-		return this.weight;
-	}		
-	/**
-	 * @param weight El nuevo peso de la arista
-	 */
-	public void setWeight(double weight) {
+	protected SimpleEdge(V source, V target, Double weight) {
+		super();
+		this.source = source;
+		this.target = target;
 		this.weight = weight;
 	}
 
@@ -95,17 +39,21 @@ public class SimpleEdge<V>  {
 
 	public  V otherVertex(V v){
 		V r = null;
-		if(v.equals(this.source)){
-			r = this.target;
-		} else if(v.equals(this.target)){
-			r = this.source;
-		}
+		if(v.equals(this.source)) r = this.target;
+		else if(v.equals(this.target)) r = this.source;
 		return r;
 	}
-	
-	@Override
-	public String toString() {
-		return String.format("(%s,%s)=%.2f",this.source,this.target,this.weight);
+
+	public V getSource() {
+		return source;
+	}
+
+	public V getTarget() {
+		return target;
+	}
+
+	public Double getWeight() {
+		return weight;
 	}
 
 	@Override
@@ -114,8 +62,11 @@ public class SimpleEdge<V>  {
 		int result = 1;
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
 		result = prime * result + ((target == null) ? 0 : target.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -123,7 +74,7 @@ public class SimpleEdge<V>  {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof SimpleEdge))
+		if (getClass() != obj.getClass())
 			return false;
 		SimpleEdge<?> other = (SimpleEdge<?>) obj;
 		if (source == null) {
@@ -136,8 +87,18 @@ public class SimpleEdge<V>  {
 				return false;
 		} else if (!target.equals(other.target))
 			return false;
+		if (weight == null) {
+			if (other.weight != null)
+				return false;
+		} else if (!weight.equals(other.weight))
+			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "SimpleEdge [source=" + source + ", target=" + target + ", weight=" + weight + "]";
+	}
+
 }
 

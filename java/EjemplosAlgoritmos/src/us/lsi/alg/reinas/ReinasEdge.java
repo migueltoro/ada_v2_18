@@ -9,6 +9,6 @@ public class ReinasEdge extends ActionSimpleEdge<ReinasVertex,Integer> {
 	}
 
 	private ReinasEdge(ReinasVertex c1, ReinasVertex c2, Integer action) {
-		super(c1, c2, action);
+		super(c1, c2, action, 1.);
 	}
 }

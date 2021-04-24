@@ -20,7 +20,7 @@ public class TestState {
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 		MochilaVertex v2 = MochilaVertex.lastVertex();
 		
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1,x->x.getEdgeWeight());
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1,x->x.getWeight());
 		State<MochilaVertex,MochilaEdge> initialState = StatePath.of(graph, e->e.equals(v2), v2);
 		System.out.println(initialState);
 		MochilaEdge e1 = initialState.getActualVertex().edge(2);

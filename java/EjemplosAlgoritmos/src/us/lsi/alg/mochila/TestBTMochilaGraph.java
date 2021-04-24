@@ -26,7 +26,7 @@ public class TestBTMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
@@ -54,7 +54,7 @@ public class TestBTMochilaGraph {
 		GraphPath<MochilaVertex, MochilaEdge> sp = ms.path;
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaBTGraph2.gv",
 				v->v.toString(),
-				e->e.a.toString(),
+				e->e.getAction().toString(),
 				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
 				e->GraphColors.getColorIf(Color.red,sp.getEdgeList().contains(e))
 				);

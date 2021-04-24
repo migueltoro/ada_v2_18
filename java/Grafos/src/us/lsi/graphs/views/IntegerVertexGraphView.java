@@ -55,7 +55,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 
 	@Override
 	public boolean containsEdge(SimpleEdge<Integer> e) {
-		return graph.containsEdge(this.getVertex(e.source), this.getVertex(e.target));
+		return graph.containsEdge(this.getVertex(e.getSource()), this.getVertex(e.getTarget()));
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 
 	@Override
 	public Integer getEdgeSource(SimpleEdge<Integer> e) {
-		return e.source;
+		return e.getSource();
 	}
 
 	@Override
@@ -109,12 +109,12 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 
 	@Override
 	public Integer getEdgeTarget(SimpleEdge<Integer> e) {
-		return e.target;
+		return e.getTarget();
 	}
 
 	@Override
 	public double getEdgeWeight(SimpleEdge<Integer> e) {
-		return e.weight;
+		return e.getWeight();
 	}
 	
 	public double getEdgeWeight(int i, int j) {

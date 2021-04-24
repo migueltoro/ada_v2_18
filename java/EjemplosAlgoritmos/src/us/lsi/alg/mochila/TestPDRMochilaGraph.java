@@ -3,9 +3,6 @@ package us.lsi.alg.mochila;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
@@ -16,7 +13,6 @@ import us.lsi.graphs.alg.GreedySearch;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.path.EGraphPath;
 
 public class TestPDRMochilaGraph {
@@ -27,7 +23,7 @@ public class TestPDRMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());	
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();	
@@ -54,7 +50,7 @@ public class TestPDRMochilaGraph {
 		
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
 				v->v.toString(),
-				e->e.a.toString(),
+				e->e.getAction().toString(),
 				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
 				e->GraphColors.getColorIf(Color.red,ms.optPath.get().getEdgeList().contains(e))
 				);

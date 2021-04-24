@@ -59,7 +59,7 @@ public class MochilaVertex extends ActionVirtualVertex<MochilaVertex, MochilaEdg
 
 	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
 		SolucionMochila s = SolucionMochila.empty();
-		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.a.intValue()));
+		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.getAction().intValue()));
 		return s;
 	}
 

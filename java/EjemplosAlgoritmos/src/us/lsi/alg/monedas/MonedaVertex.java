@@ -75,7 +75,7 @@ public class MonedaVertex extends ActionVirtualVertex<MonedaVertex, MonedaEdge, 
 		List<Integer> r;
 		if(this.index == MonedaVertex.n) r = new ArrayList<>();
 		else if(this.index == MonedaVertex.n-1 ) {	
-			if(this.valorRestante%Moneda.valor(this.index) == 0) r = List.of(this.accionVoraz().action);
+			if(this.valorRestante%Moneda.valor(this.index) == 0) r = List.of(this.accionVoraz().getAction());
 			else r = new ArrayList<>();
 		} else {
 			Integer nue = this.valorRestante/Moneda.valor(this.index);

@@ -20,13 +20,13 @@ public class SolucionMonedas implements Comparable<SolucionMonedas> {
 		Integer peso = 0;
 		Integer valor = 0;
 		for (MonedaEdge e : path.getEdgeList()) {
-			Integer i = e.source.index;
+			Integer i = e.getSource().index;
 			Moneda m = Moneda.get(i);
 			Integer p = Moneda.peso(i);
 			Integer v = Moneda.valor(i);
-			monedas.add(m, e.action);
-			peso = peso + e.action * p;
-			valor = valor + e.action * v;
+			monedas.add(m, e.getAction());
+			peso = peso + e.getAction() * p;
+			valor = valor + e.getAction() * v;
 		}
 		this.monedas = Multiset.copy(monedas);
 		this.peso = peso;

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import us.lsi.graphs.SimpleEdge;
-
 
 /**
  * @author Miguel Toro
@@ -19,7 +17,7 @@ import us.lsi.graphs.SimpleEdge;
  * Cada acci&oacute;n v&aacute;lida identifica de forma única uno de los vecinos del v&eacute;rtice. 
  * Cada v&eacute;rtice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones v&aacute;lidas disponibles </a>
  */
-public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extends SimpleEdge<V>, A> implements VirtualVertex<V,E> {
+public abstract class ActionVirtualVertex<V extends VirtualVertex<V,E>, E extends ActionSimpleEdge<V,A>, A> implements VirtualVertex<V,E> {
 
 	public ActionVirtualVertex() {
 	}

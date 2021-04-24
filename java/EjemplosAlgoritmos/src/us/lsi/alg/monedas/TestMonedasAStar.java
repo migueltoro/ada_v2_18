@@ -20,7 +20,7 @@ public class TestMonedasAStar {
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getEdgeWeight());		
+		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getWeight());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = GraphAlg.aStarGoal(graph,v->v.index==MonedaVertex.n,MonedasHeuristica::heuristica);
 		
@@ -35,7 +35,7 @@ public class TestMonedasAStar {
 		e1 = MonedaVertex.first();
 		e2 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraph(e1,x->x.getEdgeWeight());		
+		graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
 		
 	    ms = GraphAlg.aStarEnd(graph,e2,MonedasHeuristica::heuristica);
 		

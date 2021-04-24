@@ -9,12 +9,12 @@ public class JarrasEdge extends ActionSimpleEdge<JarrasVertex,JarrasAction> {
 	}
 
 	private JarrasEdge(JarrasVertex c1, JarrasVertex c2, JarrasAction action) {
-		super(c1, c2, action);
+		super(c1, c2, action, 1.);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("[%s,%s]",super.getSource(),action);
+		return String.format("[%s,%s]",getSource(),getAction());
 	}
 
 }

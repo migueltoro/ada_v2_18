@@ -24,7 +24,7 @@ public class ColorGraphGurobi {
 		IntStream.range(0, n).forEach(v -> graph.addVertex(v));
 		Streams2.allPairs(0,n, 0,n).filter(p -> p.second > p.first).forEach(p -> {
 			if (pb < Math2.getDoubleAleatorio(0., 1.)) {
-				SimpleEdge<Integer> e = SimpleEdge.of(p.first, p.second);
+				SimpleEdge<Integer> e = SimpleEdge.of(p.first, p.second, 1.);
 				graph.addEdge(p.first, p.second, e);
 			}
 		});

@@ -6,22 +6,12 @@ import us.lsi.graphs.virtual.ActionSimpleEdge;
 public class SeqEdge extends ActionSimpleEdge<SeqVertex,SeqAction>{
 
 	public static SeqEdge of(SeqVertex c1, SeqVertex c2, SeqAction action) {
-		return new SeqEdge(c1, c2, action);
+		Double w = action.weight(c1);
+		return new SeqEdge(c1, c2, action, w);
 	}
 
-	private SeqEdge(SeqVertex c1, SeqVertex c2, SeqAction action) {
-		super(c1, c2, action);
+	private SeqEdge(SeqVertex c1, SeqVertex c2, SeqAction action, Double w) {
+		super(c1, c2, action, w);
 	}
 
-	@Override
-	public Double getEdgeWeight() {
-		return action.weight(super.source);
-	}
-
-	@Override
-	public String toString() {
-		return String.format("(%s,%d,%s)", this.action,super.getSource().index,super.getSource().s);
-	}
-
-	
 }

@@ -113,7 +113,7 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 	
 	@Override
 	public ActionSimpleEdge<TyPVertex, Integer> edge(Integer a) {
-		return ActionSimpleEdge.of(this,this.neighbor(a), a);
+		return ActionSimpleEdge.of(this,this.neighbor(a), a, 1.);
 	}
 	
 	public static TyPVertex copy(TyPVertex vertex) {
@@ -123,7 +123,7 @@ public class TyPVertex extends ActionVirtualVertex<TyPVertex, ActionSimpleEdge<T
 	
 	public static SolucionTyP getSolucion(GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path){	
 		Map<Integer,List<Tarea>> carga = path.getEdgeList().stream()
-				.map(e->IntPair.of(e.action,e.source.getIndex()))
+				.map(e->IntPair.of(e.getAction(),e.getSource().getIndex()))
 				.collect(Collectors.groupingBy(p->p.first,Collectors.mapping(p->Tarea.getTarea(p.second), Collectors.toList())));
 		
 		TyPVertex v = Lists2.last(path.getVertexList());

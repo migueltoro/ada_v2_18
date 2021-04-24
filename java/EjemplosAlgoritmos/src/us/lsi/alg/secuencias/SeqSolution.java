@@ -23,7 +23,7 @@ public class SeqSolution {
 
 	@Override
 	public String toString() {
-		return this.edges.stream().filter(e->!e.action.equals(SeqAction.actions.get(3))).map(e->e.toString()).collect(Collectors.joining(",","{","}"));
+		return this.edges.stream().filter(e->!e.getAction().equals(SeqAction.actions.get(3))).map(e->e.toString()).collect(Collectors.joining(",","{","}"));
 	}
 	
 

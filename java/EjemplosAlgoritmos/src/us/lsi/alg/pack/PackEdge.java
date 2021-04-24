@@ -9,14 +9,7 @@ public class PackEdge extends ActionSimpleEdge<PackVertex,Integer> {
 	}
 
 	protected PackEdge(PackVertex c1, PackVertex c2, Integer action) {
-		super(c1, c2, action);
+		super(c1, c2, action, 1.);
 	}
-
-	@Override
-	public String toString() {
-		return "PackEdge [action=" + action + ", weight=" + weight + ", source=" + source + ", target=" + target + "]";
-	}
-	
-	
 
 }

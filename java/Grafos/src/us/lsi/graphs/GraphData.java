@@ -19,7 +19,7 @@ public class GraphData {
 	}
 	
 	public static Double edgeWeight(Integer i, Integer j) {
-		return graph.getEdge(i,j).getEdgeWeight();
+		return graph.getEdge(i,j).getWeight();
 	}
 	
 	public static Boolean containsVertex(Integer i) {

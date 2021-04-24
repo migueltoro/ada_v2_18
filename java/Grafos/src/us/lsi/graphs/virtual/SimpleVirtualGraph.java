@@ -94,7 +94,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	public double getEdgeWeight(E edge) {
 		Double r;
 		if(edgeWeight != null) r = edgeWeight.apply(edge);
-		else r = edge.getEdgeWeight();
+		else r = edge.getWeight();
 		return r;
 	}
 	
@@ -166,7 +166,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	
 	@Override
 	public void setEdgeWeight(E edge, double weight) {
-		edge.setWeight(weight);		
+		throw new UnsupportedOperationException();	
 	}	
 
 	/**

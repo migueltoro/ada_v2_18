@@ -9,7 +9,7 @@ public class ColorEdge extends ActionSimpleEdge<ColorVertex,Integer> {
 	}
 
 	private ColorEdge(ColorVertex c1, ColorVertex c2, Integer action) {
-		super(c1, c2, action);
+		super(c1, c2, action, 1.);
 	}
 
 }
