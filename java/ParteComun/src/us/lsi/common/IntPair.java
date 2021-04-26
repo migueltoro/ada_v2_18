@@ -12,23 +12,23 @@ public class IntPair extends Pair<Integer, Integer> {
 	}
 
 	public IntPair add(IntPair p) {
-		return IntPair.of(super.first+p.first, super.second+p.second);
+		return IntPair.of(this.first()+p.first(), this.second()+p.second());
 	}
 
 	public IntPair minus(IntPair p) {
-		return IntPair.of(super.first-p.first, super.second-p.second);
+		return IntPair.of(this.first()-p.first(), this.second()-p.second());
 	}
 	
 	public IntPair multiply(Integer e) {
-		return IntPair.of(e*super.first, e*super.second);
+		return IntPair.of(e*this.first(), e*this.second());
 	}
 	
 	public Integer sumAbs() {
-		return Math.abs(this.first)+Math.abs(this.second);
+		return Math.abs(this.first())+Math.abs(this.second());
 	}
 	
 	public Double module() {
-		return Math.sqrt(this.first*this.first+this.second*this.second);
+		return Math.sqrt(this.first()*this.first()+this.second()*this.second());
 	}
 	
 	public Integer manhattan(IntPair p) {

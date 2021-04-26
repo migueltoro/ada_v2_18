@@ -15,9 +15,10 @@ public class TestAStar {
 		ReinasVertex v1 = ReinasVertex.first();
 		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraph(v1);			
 		
-		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStarGoal(
+		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStar(
 				graph, 
-				v->v.index == ReinasVertex.n,  
+				ReinasVertex.goal(),  
+				ReinasVertex.last(),
 				(e1,e2,e3)->0.);
 		
 		GraphPath<ReinasVertex, ReinasEdge> path = ms.search().orElse(null);

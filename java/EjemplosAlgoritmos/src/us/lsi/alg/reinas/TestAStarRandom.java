@@ -16,13 +16,13 @@ public class TestAStarRandom {
 		ReinasVertex.n = 120;
 		AStarRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
-		Predicate<ReinasVertex> goal = v->v.index == ReinasVertex.n;
 		
 		EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraph(v1);			
 		
-		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStarRandomGoal(
+		AStar<ReinasVertex, ReinasEdge> ms = GraphAlg.aStarRandom(
 				graph, 
-				goal,  
+				ReinasVertex.goal(), 
+				ReinasVertex.last(),
 				(e1,e2,e3)->0.,
 				e->ReinasVertex.n-e.index);
 		

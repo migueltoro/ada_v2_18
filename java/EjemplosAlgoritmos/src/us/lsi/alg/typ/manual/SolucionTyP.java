@@ -24,8 +24,8 @@ public record SolucionTyP(Integer maxCarga,Integer npMin, Integer npMax, Map<Int
 					IntStream.range(0, acciones.size())
 					.boxed()
 					.map(t -> IntPair.of(t,acciones.get(t)))
-				    .collect(Collectors.groupingBy(p -> p.second,
-							Collectors.mapping(p -> DatosTyP.tareas.get(p.first), Collectors.toList())));
+				    .collect(Collectors.groupingBy(p -> p.second(),
+							Collectors.mapping(p -> DatosTyP.tareas.get(p.first()), Collectors.toList())));
 			return SolucionTyP.of(v.maxCarga(), v.npMin(), v.npMax(),carga);
 		}
 

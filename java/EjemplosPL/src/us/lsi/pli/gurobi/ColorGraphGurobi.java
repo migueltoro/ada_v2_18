@@ -22,10 +22,10 @@ public class ColorGraphGurobi {
 	public static Graph<Integer, SimpleEdge<Integer>> graph(Integer n, Double pb) {
 		Graph<Integer, SimpleEdge<Integer>> graph = Graphs2.simpleGraph();
 		IntStream.range(0, n).forEach(v -> graph.addVertex(v));
-		Streams2.allPairs(0,n, 0,n).filter(p -> p.second > p.first).forEach(p -> {
+		Streams2.allPairs(0,n, 0,n).filter(p -> p.second() > p.first()).forEach(p -> {
 			if (pb < Math2.getDoubleAleatorio(0., 1.)) {
-				SimpleEdge<Integer> e = SimpleEdge.of(p.first, p.second, 1.);
-				graph.addEdge(p.first, p.second, e);
+				SimpleEdge<Integer> e = SimpleEdge.of(p.first(), p.second(), 1.);
+				graph.addEdge(p.first(), p.second(), e);
 			}
 		});
 		return graph;

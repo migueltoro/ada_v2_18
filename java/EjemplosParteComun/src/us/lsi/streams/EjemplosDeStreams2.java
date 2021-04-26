@@ -18,7 +18,7 @@ public class EjemplosDeStreams2 {
 	
 	public static List<Pair<Long,Long>> primosPar(Long start, Integer diff, Integer limit){
 		var r10 = Stream.iterate(Math2.siguientePrimo(start),x->true,x->Math2.siguientePrimo(x));
-		var r11 = Streams2.consecutivePairs(r10).filter(t->t.second-t.first==diff).limit(limit).collect(Collectors.toList());;
+		var r11 = Streams2.consecutivePairs(r10).filter(t->t.second()-t.first()==diff).limit(limit).collect(Collectors.toList());;
 		return r11;
 	}
 	
@@ -53,10 +53,10 @@ public class EjemplosDeStreams2 {
 		var b = 7L;
 		var s6 = Stream.iterate(n,x->x>0,x->x/2);
 		var s7 = Stream.iterate(Pair.of(n,b),
-								t->t.first>0,
-								t->Pair.of(t.first/2,t.second*t.second))
-						.filter(t->t.first%2!=0)
-						.map(t->t.second)
+								t->t.first()>0,
+								t->Pair.of(t.first()/2,t.second()*t.second()))
+						.filter(t->t.first()%2!=0)
+						.map(t->t.second())
 						.reduce(1L,(x,y)->x*y);
 		System.out.println("4: ______");
 		var ss = StreamsS.enumerate(r2.stream().iterator());

@@ -16,10 +16,10 @@ public class TestBTRandom {
 			ReinasVertex e1 = ReinasVertex.first();
 			EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.errores.doubleValue());		
 			
-			BackTrackingRandom<ReinasVertex, ReinasEdge, SolucionReinas> ms = BT.<ReinasVertex,ReinasEdge,SolucionReinas>random(
+			BackTrackingRandom<ReinasVertex, ReinasEdge, SolucionReinas> ms = 
+					BT.<ReinasVertex,ReinasEdge,SolucionReinas>randomGoal(
 					graph, 
 					v->v.index == ReinasVertex.n, 
-					null, 
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
 					BTType.One,

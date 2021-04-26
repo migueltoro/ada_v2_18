@@ -5,6 +5,7 @@ package us.lsi.alg.monedas;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -23,7 +24,7 @@ public class TestMonedasPDR {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
@@ -31,57 +32,57 @@ public class TestMonedasPDR {
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
 
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
-				e -> e.equals(e2));
-		GreedySearch<MonedaVertex, MonedaEdge> rrh = GraphAlg.greedy(graph, MonedaVertex::accionHeuristica,
-				e -> e.equals(e2));
+				v->v.goal(), v->v.constraint());
+		
 
 		EGraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
-		EGraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search().orElse(path1);
 		
-		System.out.println("1 = " + SolucionMonedas.of(path1));
-		System.out.println("1.1 = " + SolucionMonedas.of(path1h));
-
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReductionGoal(
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReduction(
 				graph, 
-				v->v.index()==MonedaVertex.n,
-				MonedasHeuristica::heuristica, 
+				v->v.goal(),
+				e2,
+				v->v.constraint(),
+				MonedasHeuristica::heuristic, 
 				PDType.Max);
 
-		ms1.bestValue = path1.getWeight();
-		ms1.solutionPath = path1;
+		if (path1 != null) {
+			System.out.println("1 = " + SolucionMonedas.of(path1));
+			ms1.bestValue = path1.getWeight();
+			ms1.solutionPath = path1;
+		}
+		
+		Optional<GraphPath<MonedaVertex, MonedaEdge>> s1 = ms1.search();
+		
+		if (s1.isPresent()) System.out.println("2 = " + SolucionMonedas.of(s1.get()));
+		else System.out.println("2 = No hay solucion");
 
-		GraphPath<MonedaVertex, MonedaEdge> s1 = ms1.search().get();
-
-		System.out.println("2 = " + SolucionMonedas.of(s1));
-
-		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario));
+		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
 		graph = Graphs2.simpleVirtualGraph(e3);
 
-		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz, e -> e.equals(e4));
-		rrh = GraphAlg.greedy(graph,MonedaVertex::accionHeuristica,e -> e.equals(e4));
+		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(),v->v.constraint());
 		
-		EGraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(path1h);
-		EGraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search().orElse(path2);
-		
+		EGraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
 
-		System.out.println("3 = " + SolucionMonedas.of(path2));
-		System.out.println("3.1 = " + SolucionMonedas.of(path2h));
-
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReductionGoal(
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReduction(
 				graph, 
-				v->v.index()==MonedaVertex.n,
-				(v1,p,v2)->0., 
+				v->v.goal(),
+				e4,
+				v->v.constraint(),
+				MonedasHeuristica::heuristic, 
 				PDType.Min);
 
-		ms2.bestValue = path2.getWeight();
-		ms2.solutionPath = path2;
-		
-		GraphPath<MonedaVertex, MonedaEdge> s2 = ms2.search().orElse(null);
-		System.out.println("4 = " + SolucionMonedas.of(s2));
+		if (path2 != null) {
+			System.out.println("3 = " + SolucionMonedas.of(path2));
+			ms2.bestValue = path2.getWeight();
+			ms2.solutionPath = path2;
+		}
+		Optional<GraphPath<MonedaVertex, MonedaEdge>> s2 = ms2.search();
+		if (s2.isPresent()) System.out.println("4 = " + SolucionMonedas.of(s2.get()));
+		else System.out.println("4 = No hay solucion");
 
 	}
 }

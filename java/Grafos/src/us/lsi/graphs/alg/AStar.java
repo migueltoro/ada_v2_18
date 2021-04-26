@@ -30,7 +30,8 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public EGraph<V,E> graph; 
 	protected V startVertex;
 	public Predicate<V> goal;
-	protected V end;
+	public V end;
+	public Predicate<V> constraint;
 	protected TriFunction<V,Predicate<V>,V,Double> heuristic;
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
@@ -40,12 +41,14 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V,E>> optPath;
 	
 
-	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, TriFunction<V,Predicate<V>, V,Double> heuristic) {
+	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, Predicate<V> constraint,
+			TriFunction<V,Predicate<V>, V,Double> heuristic) {
 		super();
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
 		this.goal = goal==null?v->v.equals(end):goal;
 		this.end = end;
+		this.constraint = constraint;
 		this.heuristic = heuristic;
 		this.tree = new HashMap<>();
 		this.ePath = graph.initialPath();
@@ -64,7 +67,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		
 	@Override
 	public AStar<V,E> copy(){
-		return new AStar<V,E>(this.graph, this.goal, this.end, this.heuristic);
+		return new AStar<V,E>(this.graph, this.goal, this.end, this.constraint, this.heuristic);
 	}
 	
 	public Iterator<V> iterator() {
@@ -95,7 +98,8 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				Data<V, E> dv = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
 				tree.put(v, hv);
-			} else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {	
+			} else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {
+//				System.out.printf("%s,%s,%.2f,%.2f\n",vertexActual,v,newDistance,newDistanceToEnd);
 				Data<V, E> dv = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> hv = tree.get(v);
 				hv.setValue(dv);
@@ -125,8 +129,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	}
 	
 	public Optional<GraphPath<V, E>> path(V startVertex, Optional<V> last) {
-		if (!last.isPresent())
-			return Optional.empty();
+		if (!last.isPresent() || !this.constraint.test(last.get())) return Optional.empty();
 		V endVertex = last.get();
 		Handle<Double, Data<V, E>> hav = this.tree.get(endVertex);
 		Data<V, E> dav = hav.getValue();

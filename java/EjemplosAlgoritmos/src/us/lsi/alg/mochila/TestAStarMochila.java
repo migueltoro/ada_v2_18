@@ -26,7 +26,7 @@ public class TestAStarMochila {
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getWeight());		
 		
 		AStar<MochilaVertex, MochilaEdge> ms = 
-				GraphAlg.aStarEnd(graph,e2,MochilaHeuristic::heuristic_negate);
+				GraphAlg.aStar(graph,v->v.equals(e2),e2,MochilaHeuristic::heuristic_negate);
 		
 		GraphPath<MochilaVertex,MochilaEdge> path = ms.search().orElse(null);
 		List<MochilaEdge> edges = path.getEdgeList();

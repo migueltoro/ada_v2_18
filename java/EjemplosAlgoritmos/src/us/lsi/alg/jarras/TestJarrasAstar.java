@@ -20,8 +20,9 @@ public class TestJarrasAstar {
 			JarrasVertex e2 = JarrasVertex.last();
 			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 			
-			AStar<JarrasVertex, JarrasEdge> ms = GraphAlg.aStarEnd(
+			AStar<JarrasVertex, JarrasEdge> ms = GraphAlg.aStar(
 					graph,
+					v->v.equals(e2),
 					e2,
 					(v1,p,v2)->0.);
 			

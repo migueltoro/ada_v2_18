@@ -27,11 +27,14 @@ public class TestMainPuzzle {
 		
 		VertexPuzzle e1 = v1;
 		VertexPuzzle e2 = v8;
-		System.out.println(VertexPuzzle.isSolvable2(e1.datos,e2.datos));
+		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
 		
-		EGraph<VertexPuzzle, EdgePuzzle> graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
+		EGraph<VertexPuzzle, EdgePuzzle> graph = Graphs2.simpleVirtualGraph(e1);		
 		
-		AStar<VertexPuzzle, EdgePuzzle> ms = GraphAlg.aStarEnd(graph,e2,HeuristicaPuzzle::heuristica);
+		AStar<VertexPuzzle, EdgePuzzle> ms = 
+				GraphAlg.aStar(graph,e->e.equals(e2),e2,HeuristicaPuzzle::heuristicaManhattan);
+		
+//		ms.search();
 		
 		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();

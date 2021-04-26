@@ -19,12 +19,14 @@ public class TestGreadyTyP {
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
 //		TyPVertex e2 = TyPVertex.last();
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());
 		
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = 
 				GraphAlg.greedy(graph,
 						TyPVertex::greadyEdge,
-						v->v.getIndex() == TyPVertex.n);	
+						v->v.goal(),
+						v->true);	
 		
 		var ms1 = ms.copy();
 		var ms2 = ms.copy();

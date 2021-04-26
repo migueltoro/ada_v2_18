@@ -2,8 +2,8 @@ package us.lsi.common;
 
 public class Pair<A, B> {
 
-	public A first;
-	public B second;
+	private A first;
+	private B second;
 	
 	public static <A,B>  Pair<A,B> of(A a, B b){
 		return new Pair<>(a,b);
@@ -15,6 +15,16 @@ public class Pair<A, B> {
 		this.second = b;
 	}
 	
+	
+	
+	public A first() {
+		return first;
+	}
+
+	public B second() {
+		return second;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("(%s,%s)",first,second);

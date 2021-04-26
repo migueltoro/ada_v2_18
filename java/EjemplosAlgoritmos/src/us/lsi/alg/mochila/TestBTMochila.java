@@ -28,7 +28,8 @@ public class TestBTMochila {
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2));
+		GreedySearch<MochilaVertex, MochilaEdge> rr = 
+				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.goal(),v->true);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
 		
 		SolucionMochila sm = MochilaVertex.getSolucion(path.get().getEdgeList());

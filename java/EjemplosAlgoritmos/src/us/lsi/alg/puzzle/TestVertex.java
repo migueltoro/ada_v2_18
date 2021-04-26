@@ -7,12 +7,15 @@ public class TestVertex {
 	public static void main(String[] args) {
 		VertexPuzzle v1 = VertexPuzzle.of(1, 2, 3, 4, 5, 0, 6, 7, 8);
 		VertexPuzzle end = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
-		System.out.printf("_________\n%s\n",v1);
+		System.out.printf("_________\n%s\n%s\n",v1,v1.blackPosition());
+//		System.out.printf("_________\n%s\n%s\n",end,end.blackPosition());
 		System.out.printf("_________\n%.0f\n",HeuristicaPuzzle.heuristicaManhattan(v1, null, end));
+		System.out.printf("_________\n%s\n",v1.actions());
 		VertexPuzzle v2 = v1.neighbor(ActionPuzzle.of("Right"));
 		System.out.printf("_________\n%s\n",v2);
+		System.out.printf("_________\n%s\n",v2.actions());
 		System.out.printf("_________\n%.0f\n",HeuristicaPuzzle.heuristicaManhattan(v2, null, end));
-		VertexPuzzle v3 = v2.neighbor(ActionPuzzle.of("Right"));
+		VertexPuzzle v3 = v2.neighbor(ActionPuzzle.of("Left"));
 		System.out.printf("_________\n%s\n",v3);
 		System.out.printf("_________\n%.0f\n",HeuristicaPuzzle.heuristicaManhattan(v3, null, end));
 		System.out.printf("_________\n%s\n",end);
@@ -24,11 +27,11 @@ public class TestVertex {
 		Integer[][] puzzle = {{1, 8, 2},{0, 4, 3},{7, 6, 5}};
 		VertexPuzzle v42 = VertexPuzzle.of(puzzle,IntPair.of(1, 0));
 		System.out.println("______________");
-		System.out.println(VertexPuzzle.getInvCount(goal.datos));
-		System.out.println(VertexPuzzle.getInvCount(v4.datos));
-		System.out.println(VertexPuzzle.getInvCount(v42.datos));
-		System.out.println(VertexPuzzle.getInvCount(v5.datos));
-		System.out.println(VertexPuzzle.getInvCount(v6.datos));
+		System.out.println(VertexPuzzle.getInvCount(goal.datos()));
+		System.out.println(VertexPuzzle.getInvCount(v4.datos()));
+		System.out.println(VertexPuzzle.getInvCount(v42.datos()));
+		System.out.println(VertexPuzzle.getInvCount(v5.datos()));
+		System.out.println(VertexPuzzle.getInvCount(v6.datos()));
 	}
 
 }

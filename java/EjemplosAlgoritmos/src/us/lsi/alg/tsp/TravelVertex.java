@@ -39,13 +39,13 @@ public class TravelVertex implements ActionVirtualVertex<TravelVertex, TravelEdg
 	@Override
 	public List<IntPair> actions() {
 		return Streams2.allPairs(0,n,0,n)
-				.filter(p->p.second > p.first)
+				.filter(p->p.second() > p.first())
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public TravelVertex neighbor(IntPair a) {
-		return TravelVertex.of(this.graph, AuxiliaryTsp.neighbor(this.graph,this.camino,a.first,a.second));
+		return TravelVertex.of(this.graph, AuxiliaryTsp.neighbor(this.graph,this.camino,a.first(),a.second()));
 	}
 
 	@Override

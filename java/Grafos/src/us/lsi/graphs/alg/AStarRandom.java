@@ -23,15 +23,16 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	public static Integer iterations;
 
 	AStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
+			Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			Function<V,Integer> size) {
-		super(graph, goal, end, heuristic);
+		super(graph, goal, end, constraint, heuristic);
 		this.size = size;
 	}
 	
 	@Override
 	public AStarRandom<V, E> copy() {
-		return GraphAlg.aStarRandom(this.graph, this.goal, this.end, this.heuristic,this.size);
+		return GraphAlg.aStarRandom(this.graph, this.goal, this.end, this.constraint, this.heuristic,this.size);
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import us.lsi.common.Files2;
 
 public class DatosAbogados {
+	
 	public static int NUM_CASOS, NUM_ABOGADOS;
 	private static List<Abogado> abogados; 
 	

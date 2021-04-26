@@ -15,12 +15,12 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	public static Integer solutionsNumber;
 	private static Boolean work = true;
 
-	BackTrackingRandom(EGraph<V, E> graph, Predicate<V> goal, V end, 
+	BackTrackingRandom(EGraph<V, E> graph, Predicate<V> goal, V end, Predicate<V> constraint,
 			Function<GraphPath<V, E>, S> solution,
 			Function<V, V> copy,
 			BTType type,
 			Function<V,Integer> size) {
-		super(graph, goal, end, null, solution, copy, type);
+		super(graph, goal, end, constraint,null, solution, copy, type);
 		this.size = size;
 	}
 		

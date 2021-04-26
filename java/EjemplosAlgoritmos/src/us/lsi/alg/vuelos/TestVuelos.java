@@ -32,7 +32,9 @@ public class TestVuelos {
 		EGraph<String, Vuelo> g = Graphs2.eGraph(graph,"Sevilla",Vuelo::getDuracion,null,
 				(v,e1,e2)->Vuelo.getVertexPassWeight(v,e1,e2),PathType.Sum);
 		
-		AStar<String,Vuelo> ms = GraphAlg.aStarEnd(g,"Malaga",(v1,p,v2)->0.);
+		String end = "Malaga";
+		
+		AStar<String,Vuelo> ms = GraphAlg.aStar(g,v->v.equals(end),end,(v1,p,v2)->0.);
 		
 		GraphPath<String,Vuelo> path = ms.search().orElse(null);
 		System.out.printf("Timepo de Recorrido = %.2f\n",path.getWeight());

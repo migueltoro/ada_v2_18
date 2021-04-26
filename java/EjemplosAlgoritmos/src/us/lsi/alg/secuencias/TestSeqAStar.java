@@ -20,8 +20,9 @@ public class TestSeqAStar {
 		SeqVertex e2 = SeqVertex.last();
 		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraph(e1);		
 		
-		AStar<SeqVertex, SeqEdge> ms = GraphAlg.aStarEnd(
+		AStar<SeqVertex, SeqEdge> ms = GraphAlg.aStar(
 				graph,
+				v->v.equals(e2),
 				e2,
 				SeqHeuristic::heuristic);
 		

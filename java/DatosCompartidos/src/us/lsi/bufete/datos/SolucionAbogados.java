@@ -30,8 +30,8 @@ public class SolucionAbogados extends TipoSolucion {
 			String s = "Abogado_"+formato((ls.get(i)+1));
 			Pair<Integer,List<String>> casos = solucion.get(s);
 			if(casos!=null) {
-				casos.first += tiempo;
-				casos.second.add("Caso "+(i+1));
+				casos.second().add("Caso "+(i+1));
+				casos = Pair.of(casos.first() + tiempo,casos.second());
 			} else {
 				List<String> ls_casos = new ArrayList<>();
 				ls_casos.add("Caso "+(i+1));
@@ -59,8 +59,8 @@ public class SolucionAbogados extends TipoSolucion {
 				int tiempo = DatosAbogados.getHoras(x-1, y-1);
 				Pair<Integer,List<String>> p = solucion.get("Abogado_"+formato(x));
 				if(p!=null) {
-					p.first += tiempo;
-					p.second.add("Caso "+y);
+					p.second().add("Caso "+y);
+					p = Pair.of(p.first() + tiempo, p.second());
 				} else {
 					List<String> ls = new ArrayList<>();
 					ls.add("Caso "+y);
@@ -75,12 +75,12 @@ public class SolucionAbogados extends TipoSolucion {
 	public String toString() {
 		String msg = "";
 		for (Map.Entry<String,Pair<Integer,List<String>>> g: solucion.entrySet()) {
-			msg += g.getKey()+"\n\tHoras empleadas: "+g.getValue().first+"\n\t"+
-			"Casos estudiados: "+g.getValue().second+"\n\tMedia (horas/caso):"+
-			String.format("%.2f", 1.*g.getValue().first/g.getValue().second.size())+
+			msg += g.getKey()+"\n\tHoras empleadas: "+g.getValue().first()+"\n\t"+
+			"Casos estudiados: "+g.getValue().second()+"\n\tMedia (horas/caso):"+
+			String.format("%.2f", 1.*g.getValue().first()/g.getValue().second().size())+
 			"\n===================================================================\n";
 		}
-		int tiempo = solucion.values().stream().mapToInt(p->p.first).max().getAsInt();
+		int tiempo = solucion.values().stream().mapToInt(p->p.first()).max().getAsInt();
 		return msg+"El estudio de todos los casos ha supuesto un total de "+total+
 		" horas de trabajo para el bufete,\nque al trabajar en paralelo se ha podido "+
 		"llevar a cabo en "+tiempo+" horas";

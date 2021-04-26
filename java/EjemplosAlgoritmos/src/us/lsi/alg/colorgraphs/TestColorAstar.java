@@ -38,15 +38,16 @@ public class TestColorAstar {
 		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex e1 = ColorVertex.first();
-		Predicate<ColorVertex> goal  = e->e.index() == n;
-		Integer m = ColorHeuristic.gredyPath(e1, goal);
+//		Predicate<ColorVertex> goal  = e->e.index() == n;
+		Integer m = ColorHeuristic.gredyPath(e1, ColorVertex.goal());
 		ColorVertex.data(m, g2);
 		
 		EGraph<ColorVertex, ColorEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.nc().doubleValue());		
 		
-		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStarGoal(
+		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStar(
 				graph,
-				goal,
+				ColorVertex.goal(),
+				ColorVertex.last(),
 				ColorHeuristic::heuristic);
 		
 		GraphPath<ColorVertex, ColorEdge> path = ms.search().orElse(null);

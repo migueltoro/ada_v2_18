@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
@@ -25,8 +26,12 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 		return new ColorVertex(0,new HashMap<>());
 	}
 	
-	public static Boolean goal(ColorVertex v) {
-		return v.index() == ColorVertex.n;
+	public static ColorVertex last() {
+		return new ColorVertex(ColorVertex.n,new HashMap<>());
+	}
+	
+	public static Predicate<ColorVertex> goal() {
+		return v -> v.index() == ColorVertex.n;
 	}
 
 	

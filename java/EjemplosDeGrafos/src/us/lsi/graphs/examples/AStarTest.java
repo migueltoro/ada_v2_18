@@ -32,8 +32,11 @@ public class AStarTest {
 						Carretera::getKm);		
 		
 		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
+		
+		Ciudad end = Ciudad.ofName("Almeria");
 				
-		AStar<Ciudad, Carretera> ra = GraphAlg.aStarEnd(g,Ciudad.ofName("Almeria"), null);
+		AStar<Ciudad, Carretera> ra = GraphAlg.aStar(g,c->c.equals(end),end,c->true,(v1,p,v2)->0.);
+		
 		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		
 		

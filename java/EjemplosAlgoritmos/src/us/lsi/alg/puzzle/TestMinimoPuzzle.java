@@ -15,7 +15,7 @@ public class TestMinimoPuzzle {
 		VertexPuzzle start = VertexPuzzle.of(1, 2, 3, 4, 5, 0, 6, 7, 8);
 		VertexPuzzle end = VertexPuzzle.of(1,2,3,4,6,5,8,7,0);
 		EGraph<VertexPuzzle, EdgePuzzle> graph = Graphs2.simpleVirtualGraph(start,x->x.getWeight());	
-		AStar<VertexPuzzle, EdgePuzzle> a = GraphAlg.dijsktra(graph, end);
+		AStar<VertexPuzzle, EdgePuzzle> a = GraphAlg.aStar(graph,v->v.equals(end),end,(v1,p,v2)->0.);
 		GraphPath<VertexPuzzle,EdgePuzzle> path = a.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();
 		for (VertexPuzzle v: vertices) {

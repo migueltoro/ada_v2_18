@@ -27,6 +27,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	private V startVertex;
 	private Predicate<V> goal;
 	private V end;
+	private Predicate<V> constraint;
 	public Double bestValue = null;
 	public GraphPath<V, E> solutionPath = null;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
@@ -39,12 +40,13 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	public Optional<GraphPath<V,E>> optPath;
 	public Boolean withGraph = false;
 
-	DynamicProgrammingReduction(EGraph<V, E> g, Predicate<V> goal, V end,
+	DynamicProgrammingReduction(EGraph<V, E> g, Predicate<V> goal, V end, Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
 		this.graph = g;
 		this.startVertex = graph.startVertex();
 		this.goal = goal == null ? v -> v.equals(v) : goal;
 		this.end = end;
+		this.constraint = constraint;
 		this.heuristic = heuristic;
 		this.type = type;
 		if (this.type == PDType.Min) this.comparatorEdges = Comparator.naturalOrder();
@@ -68,7 +70,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		   (this.type == PDType.Max && accumulateValue > this.bestValue) ||
 		   (this.type == PDType.Min && accumulateValue < this.bestValue)) {
 				this.bestValue = accumulateValue;
-				this.optPath = Optional.ofNullable(pathFrom(this.startVertex));
+//				this.optPath = Optional.of(pathFrom(this.startVertex));
 		}
 	}
 
@@ -85,7 +87,9 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 			this.solutionsTree = new HashMap<>();
 			search(vertex,0., null);
 		}
-		this.optPath = Optional.ofNullable(pathFrom(this.startVertex));
+		GraphPath<V, E> gp = pathFrom(this.startVertex);
+		if(gp != null) this.optPath = Optional.of(gp);
+		else this.optPath = Optional.empty();
 		return this.optPath;
 	}
 	
@@ -96,7 +100,11 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		} else if (this.goal.test(actual)) {
 			if(this.withGraph) outGraph.addVertex(actual);
 			update(accumulateValue);
-			r = Sp.of(this.path.solutionBase(actual),null); 
+			if (this.constraint.test(actual)) {
+				r = Sp.of(this.path.goalBaseSolution(actual), null);
+			} else {
+				r = null;
+			}
 			this.solutionsTree.put(actual, r);
 			return r;
 		} else {
@@ -109,7 +117,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 				Sp<E> s = search(v,ac,edge);
 				if (s!=null) {
 					E lastEdge = this.solutionsTree.get(v).edge;
-					Double spv = this.path.solution(s.weight,v,edge,lastEdge);	
+					Double spv = this.path.fromNeighbordSolution(s.weight,v,edge,lastEdge);	
 					Sp<E> sp = Sp.of(spv,edge);
 					rs.add(sp);
 				}
@@ -126,6 +134,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		if(!this.solutionsTree.containsKey(vertex) || 
 				(this.solutionsTree.get(vertex) == null && this.solutionPath !=null)) 
 			return this.solutionPath;
+		if(this.solutionsTree.get(vertex) == null) return null;
 		E edge = this.solutionsTree.get(vertex).edge;
 		List<E> edges = new ArrayList<>();		
 		while(edge != null) {

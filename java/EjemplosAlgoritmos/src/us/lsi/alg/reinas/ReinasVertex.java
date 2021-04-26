@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,13 +26,21 @@ public class ReinasVertex implements ActionVirtualVertex<ReinasVertex,ReinasEdge
 		return new ReinasVertex(0,Lists2.empty(),new HashSet<>(),new HashSet<>());
 	}
 	
+	public static ReinasVertex last() {
+		return new ReinasVertex(n,Lists2.empty(),new HashSet<>(),new HashSet<>());
+	}
+	
+	public static Predicate<ReinasVertex> goal() {
+		return v->v.index == ReinasVertex.n;
+	}
+	
 	public final Integer index; // numero de columna
 	public final List<Integer> fo; //
 	public final Set<Integer> dpo; //
 	public final Set<Integer> dso; //
 	public final Integer errores;
 	public static Integer n; // numero de reinas
-	
+
 	
 	ReinasVertex(Integer index, List<Integer> fo, Set<Integer> dpo, Set<Integer> dso) {
 		super();

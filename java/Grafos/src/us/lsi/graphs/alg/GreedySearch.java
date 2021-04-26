@@ -30,11 +30,12 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	private EGraphPath<V,E> path;
 	private Function<V,E> nextEdge;
 	private Predicate<V> goal;
+	private Predicate<V> constraint;
 	private Boolean hasNext;
 	public Graph<V,E> outGraph;
 	public Boolean withGraph = false;
 	
-	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal) {
+	GreedySearch(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal, Predicate<V> constraint) {
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
 		this.actualVertex = this.startVertex;		
@@ -42,6 +43,7 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 		this.edgeToOrigin.put(this.actualVertex,null);
 		this.nextEdge = nextEdge; 
 		this.goal = goal;
+		this.constraint = constraint;
 		this.path = this.graph.initialPath();
 		this.weight = path.getWeight();
 		this.hasNext = true;
@@ -55,7 +57,7 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	
 	@Override
 	public GreedySearch<V,E> copy() {
-		return GraphAlg.greedy(this.graph,this.nextEdge,this.goal);
+		return GraphAlg.greedy(this.graph,this.nextEdge,this.goal, this.constraint);
 	}
 	
 	public Iterator<V> iterator() {
@@ -113,27 +115,26 @@ public class GreedySearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	}
 	
 	
-	public Optional<EGraphPath<V,E>> search() {
-		EGraphPath<V,E> ePath = graph.initialPath();
+	public Optional<EGraphPath<V, E>> search() {
+		EGraphPath<V, E> ePath = graph.initialPath();
 		V startVertex = graph.startVertex();
-		if(this.goal.test(startVertex)) return Optional.of(ePath);
+		if (this.goal.test(startVertex))
+			return Optional.of(ePath);
 		Optional<V> last = this.stream().filter(this.goal).findFirst();
-		if(last.isPresent()) {
-			V end = last.get();
-			E edge = this.getEdgeToOrigin(end);
-			List<E> edges = new ArrayList<>();		
-			while(edge!=null) {				
-				edges.add(edge);
-				end = Graphs.getOppositeVertex(graph, edge, end);
-				edge = this.getEdgeToOrigin(end);			
-			}
-			Collections.reverse(edges);
-			for(E e:edges) {
-				ePath.add(e);
-			}
-			return Optional.ofNullable(ePath);
-		}else {
-			return Optional.ofNullable(null);
+		if (!last.isPresent()) return Optional.empty();
+		V end = last.get();
+		if (!this.constraint.test(end)) return Optional.empty();
+		E edge = this.getEdgeToOrigin(end);
+		List<E> edges = new ArrayList<>();
+		while (edge != null) {
+			edges.add(edge);
+			end = Graphs.getOppositeVertex(graph, edge, end);
+			edge = this.getEdgeToOrigin(end);
 		}
+		Collections.reverse(edges);
+		for (E e : edges) {
+			ePath.add(e);
+		}
+		return Optional.of(ePath);
 	}
 }

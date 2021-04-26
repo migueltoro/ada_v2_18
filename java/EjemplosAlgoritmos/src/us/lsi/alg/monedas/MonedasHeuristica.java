@@ -1,31 +1,33 @@
 package us.lsi.alg.monedas;
 
-import java.util.Optional;
+
 import java.util.function.Predicate;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
-import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath;
+
+
 
 public class MonedasHeuristica {
 
 	
-	public static Double heuristica(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex end) {
-		
-		if(goal.test(v1)) return 0.;
-		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(v1);
-		
-		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
-				graph,
-				MonedaVertex::accionHeuristica,
-				goal);
-		
-		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
-		return path.get().getWeight();
+	public static Double heuristic_negate(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex v2) {
+		return -heuristic(v1.index(), v1.valorRestante().doubleValue(),v2.index());
 	}
 	
+	public static Double heuristic(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex v2) {
+		return heuristic(v1.index(), v1.valorRestante().doubleValue(), v2.index());
+	}
+
+
+	public static Double heuristic(int index, Double valorRestante, Integer lastIndex) {
+		Double r = 0.;	
+		if(index == MonedaVertex.n-1) return 0.;
+		while (valorRestante> 0 && index < lastIndex) {
+			Double a = valorRestante / Moneda.valor(index);
+			r = r + a * Moneda.valor(index);
+			valorRestante = valorRestante - a * Moneda.valor(index);
+			index = index + 1;
+		}
+		return r;
+	}	
 
 }

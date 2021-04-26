@@ -3,9 +3,9 @@ package us.lsi.alg.monedas;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
-
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
@@ -16,35 +16,53 @@ public class TestMonedasAStar {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
+		Predicate<MonedaVertex> constraint = v->v.valorRestante() == 0;
 		
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getWeight());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
-				GraphAlg.aStarGoal(graph,v->v.goal(),MonedasHeuristica::heuristica);
+				GraphAlg.aStar(graph,v->v.goal(),e2,constraint,MonedasHeuristica::heuristic_negate);
+		
+//		ms.stream().limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
+		
 		
 		GraphPath<MonedaVertex,MonedaEdge> path = ms.search().orElse(null);
-//		List<MonedaEdge> edges = path.getEdgeList();
-//		System.out.println(edges);
-		SolucionMonedas s = SolucionMonedas.of(path);
-		System.out.println(s);
+		SolucionMonedas s;
+		if (path != null) {
+			s = SolucionMonedas.of(path);
+			System.out.println(s);
+		} else {
+			System.out.println("No hay solucion");
+		}
+		System.out.println("_________________________________");
 		
-		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario));
+		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 		
-		e1 = MonedaVertex.first();
-		e2 = MonedaVertex.last();
+		MonedaVertex e3 = MonedaVertex.first();
+		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());		
+		graph = Graphs2.simpleVirtualGraph(e3,x->x.getWeight());		
 		
-	    ms = GraphAlg.aStarGoal(graph,e->e.goal(),MonedasHeuristica::heuristica);
+	    ms = GraphAlg.aStar(graph,e->e.goal(),e4,constraint,MonedasHeuristica::heuristic);
+//	    ms.withGraph = true;
 		
-		path = ms.search().orElse(path);
-//		edges = path.getEdgeList();
-//		System.out.println(edges);
-		s = SolucionMonedas.of(path);
-		System.out.println(s);
+		path = ms.search().orElse(null);
+//	    ms.stream()..limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
+		if (path != null) {
+			s = SolucionMonedas.of(path);
+			System.out.println(s);
+		} else {			
+			System.out.println("No hay solucion");
+		}
+//		Graphs2.toDot(ms.outGraph,"ficheros/MonedasAstarGraph.gv",
+//				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
+//				e->e.getAction().toString(),
+//				v->GraphColors.getColorIf(Color.red,v.goal()),
+//				e->GraphColors.getColor(Color.black)
+//				);
 	}
 
 }

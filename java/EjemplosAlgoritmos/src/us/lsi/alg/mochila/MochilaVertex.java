@@ -33,8 +33,8 @@ public record MochilaVertex(Integer index, Integer capacidadRestante)
 		return new MochilaVertex(n, 0);
 	}
 	
-	public static Predicate<MochilaVertex> goal() {
-		return (MochilaVertex v)->v.index == MochilaVertex.n;
+	public Boolean goal() {
+		return this.index == MochilaVertex.n;
 	}
 
 	public static Integer n = DatosMochila.numeroDeObjetos;

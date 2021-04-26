@@ -18,15 +18,16 @@ public class TestAStarTyP {
 		Locale.setDefault(new Locale("en", "US"));
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
-//		TyPVertex e2 = TyPVertex.last();
-		Predicate<TyPVertex> goal = v->v.getIndex()==TyPVertex.n;
+		TyPVertex e2 = TyPVertex.last();
 		
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());		
 		
 		
-		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GraphAlg.aStarGoal(
+		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GraphAlg.aStar(
 				graph,
-				goal,
+				v->v.goal(),
+				e2,
 				Heuristica::heuristic);
 		
 //		ms.stream().forEach(v->System.out.println(v));

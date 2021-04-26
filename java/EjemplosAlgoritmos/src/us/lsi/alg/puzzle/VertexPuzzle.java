@@ -15,28 +15,45 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
 
-public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
+public class VertexPuzzle
+         implements ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
 	
 	
 	public static VertexPuzzle copy(VertexPuzzle m) {
-		return of(m.datos, m.blackPosition);
+		return VertexPuzzle.of(m.datos, m.blackPosition);
 	}
 
 	/**
-	 * @param d Lista de valores del puzzle dados por filas de abajo arriba
+	 * @param d Lista de valores del puzzle dados por filas de arriba abajo
 	 * @return Un EstadoPuzzle
 	 */
 	
-	public static VertexPuzzle of(Integer... d) {				
-		return new VertexPuzzle(d);
+	public static VertexPuzzle of(Integer... d) {	
+		Integer dt[][] = Arrays2.toMultiArray(d, VertexPuzzle.n, VertexPuzzle.n);	
+		IntPair bp = Arrays2.findPosition(dt, e->e==0);
+		Preconditions.checkArgument(isValid(dt),"No es valido");
+		return VertexPuzzle.of(dt,bp);
 	}
 	
+	private static Boolean isValid(Integer[][] datos) {
+		Set<Integer> s = Arrays.stream(datos)
+				.flatMap(f->Arrays.stream(f))
+				.filter(e->VertexPuzzle.validDato(e))
+				.collect(Collectors.toSet());
+		return s.size()== n*n;
+	}	
+	
 	public static VertexPuzzle of(Integer[][] datos, IntPair blackPosition) {
-		return new VertexPuzzle(datos, blackPosition);
+		Integer[][] dt = Arrays2.copyArray(datos);
+		VertexPuzzle r = new VertexPuzzle(dt, blackPosition);
+		Preconditions.checkArgument(r.isValid(),"No es válido");
+		return r;
 	}
 	
 	public static int getInvCount(Integer[][] dt) {
-		List<Integer> d = Streams2.allPairs(0,3,0,3).map(p->dt[p.first][p.second]).collect(Collectors.toList());
+		List<Integer> d = Streams2.allPairs(0,3,0,3)
+				.map(p->dt[p.first()][p.second()])
+				.collect(Collectors.toList());
 	    int inv_count = 0;
 	    for (int i = 0; i < 9 - 1; i++)
 	        for (int j = i + 1; j < 9; j++)
@@ -56,54 +73,46 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 	    return (invCount % 2 == 0);
 	}
 	
-	public final Integer[][] datos; 
-	public final IntPair blackPosition;
-	public final Map<Integer,IntPair> positions;
-	public static final int numFilas = 3;
+	public static Integer numFilas = 3;
+	public static Integer n = numFilas;
 	
+	private Integer[][] datos;
+	private IntPair blackPosition;
+	
+	private VertexPuzzle(Integer[][] datos, IntPair blackPosition) {
+		super();
+		this.datos = datos;
+		this.blackPosition = blackPosition;
+	}
+
+	public Integer[][] datos() {
+		return datos;
+	}
+
+	public IntPair blackPosition() {
+		return blackPosition;
+	}
+
 	private static boolean validDato(Integer d) {
 		return 0<=d && d < VertexPuzzle.numFilas*VertexPuzzle.numFilas;
 	}
 	
 	public boolean validPosition(IntPair p) {
-		return p.first>=0 && p.first< VertexPuzzle.numFilas && p.second>=0 && p.second<VertexPuzzle.numFilas;
+		return p.first()>=0 && p.first()< VertexPuzzle.numFilas && p.second()>=0 && p.second()<VertexPuzzle.numFilas;
 	}
 	
-	private VertexPuzzle(Integer...datos) {
-		Integer n = VertexPuzzle.numFilas;
-		Integer dt[][] = Arrays2.toMultiArray(datos, n, n);	
-		IntPair bp = Arrays2.findPosition(dt, e->e==0);
-		this.datos = dt;
-		this.blackPosition = bp;
-		if (!this.isValid()) {System.out.println("No es valido");}
-		this.positions = Streams2.allPairs(0,n,0,n).collect(Collectors.toMap(p->dt[p.first][p.second],p->p));
-	}
-	
-	private VertexPuzzle(Integer[][] datos, IntPair blackPosition) {
-		super();
-		Integer n = VertexPuzzle.numFilas;
-		this.datos = Arrays2.copyArray(datos);
-		this.blackPosition = blackPosition;
-		this.positions = Streams2.allPairs(0,n,0,n).collect(Collectors.toMap(p->datos[p.first][p.second],p->p));
+	public Map<Integer,IntPair> positions(){
+		return Streams2.allPairs(0,VertexPuzzle.n,0,VertexPuzzle.n)
+				.collect(Collectors.toMap(p->datos()[p.first()][p.second()],p->p));
 	}
 	
 	@Override
 	public Boolean isValid() {
-		Integer n = VertexPuzzle.numFilas;
-		Set<Integer> s = Arrays.stream(this.datos)
-				.flatMap(f->Arrays.stream(f))
-				.filter(e->VertexPuzzle.validDato(e))
-				.collect(Collectors.toSet());
-		return s.size()== n*n;
-	}	
-
-	public IntPair getBlackPosition() {
-		return blackPosition;
+		return isValid(this.datos()) && getDato(blackPosition()) == 0;
 	}
 
 	@Override
 	public List<ActionPuzzle> actions() {
-//		if(this.equals(VertexPuzzle.lastVertex())) return new ArrayList<>();
     	return ActionPuzzle.actions.stream()
 				.filter(a->a.isApplicable(this))
 				.collect(Collectors.toList());
@@ -112,18 +121,17 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 	@Override
 	public VertexPuzzle neighbor(ActionPuzzle a) {
 		Preconditions.checkArgument(a.isApplicable(this), String.format("La acción %s no es aplicable",a.toString()));
-		IntPair np = this.blackPosition.add(a.direction);
-		IntPair op = this.blackPosition;
-		Integer dd[][] = Arrays2.copyArray(this.datos);
-		Integer value = dd[np.first][np.second];
-		dd[op.first][op.second] = value;
-		dd[np.first][np.second] = 0;
+		IntPair op = this.blackPosition();
+		IntPair np = op.add(a.direction());
+//		System.out.printf("\n%s,%s,%s\n",op,a,np);
+		Integer dd[][] = Arrays2.copyArray(this.datos());
+		Integer value = dd[np.first()][np.second()];
+		dd[op.first()][op.second()] = value;
+		dd[np.first()][np.second()] = 0;
 		VertexPuzzle v  = VertexPuzzle.of(dd,np);
 		Preconditions.checkState(!this.equals(v),String.format("No deben ser iguales %s \n %s \n %s",a.toString(),this.toString(),v.toString()));
 		return v;
 	}
-	
-	
 	
 	public Integer getDato(int x, int y) {
 		return getDato(IntPair.of(x, y));
@@ -131,7 +139,7 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 	
 	public Integer getDato(IntPair p) {
 		Preconditions.checkArgument(validPosition(p),"No se cumple la precondición");
-		return datos[p.first][p.second];
+		return datos[p.first()][p.second()];
 	}
 	
 	public Integer getNumDiferentes(VertexPuzzle e){
@@ -148,7 +156,7 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 		String s = IntStream.range(0,VertexPuzzle.numFilas).boxed()
 				.map(y->fila(y))
 				.collect(Collectors.joining("\n", "", ""));
-		return s;
+		return s+"\n"+this.blackPosition();
 	}
 
 	private String fila(int y) {
@@ -162,7 +170,6 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 		return  EdgePuzzle.of(this, this.neighbor(a), a);
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -171,7 +178,6 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 		result = prime * result + Arrays.deepHashCode(datos);
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -191,10 +197,7 @@ public class VertexPuzzle implements ActionVirtualVertex<VertexPuzzle, EdgePuzzl
 			return false;
 		return true;
 	}
-
 	
 	
-
-
 	
 }

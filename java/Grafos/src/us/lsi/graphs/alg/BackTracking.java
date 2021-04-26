@@ -31,6 +31,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	protected V startVertex; 
 	protected Predicate<V> goal;
 	protected V end;
+	protected Predicate<V> constraint;
 	public Double bestValue;
 	public GraphPath<V,E> path;
 	protected TriFunction<V, Predicate<V>, V, Double> heuristic;
@@ -44,6 +45,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	BackTracking(EGraph<V, E> graph, 
 			Predicate<V> goal,
 			V end,
+			Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			Function<GraphPath<V,E>,S> solution,
 			Function<V,V> copy,
@@ -52,6 +54,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		this.startVertex = graph.startVertex();
 		this.goal = goal;
 		this.end = end;
+		this.constraint = constraint;
 		this.heuristic = heuristic;
 		this.copy = copy;
 		this.type = type;
@@ -74,10 +77,12 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		   (this.bestValue == null)||
 		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
 		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
-				S s = solution.apply(state.getPath());
-				this.solutions.add(s);
 				this.bestValue = state.getAccumulateValue();
-				this.path = state.getPath();
+				if (this.constraint.test(state.getActualVertex())) {
+					S s = solution.apply(state.getPath());
+					this.solutions.add(s);
+					this.path = state.getPath();
+				}
 		}
 	}
 	

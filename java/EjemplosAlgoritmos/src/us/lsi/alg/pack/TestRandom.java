@@ -19,15 +19,16 @@ public class TestRandom {
 		Locale.setDefault(new Locale("en", "US"));
 		Data.data("ficheros/pack.txt",12);
 		Data.m = Data.n;
-		PackVertex e1 = PackVertex.first;
-		Predicate<PackVertex> goal  = PackVertex.goal;
+		PackVertex e1 = PackVertex.first();
+		Predicate<PackVertex> goal  = PackVertex.goal();
 		
 		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
 		
 		GreedySearch<PackVertex,PackEdge> rr = GraphAlg.greedy(
 				graph,
 				PackVertex::greedyEdge,
-				goal);
+				goal,
+				v->true);
 				
 		Double bv = rr.weightToEnd().orElse(null);
 		System.out.println(bv);

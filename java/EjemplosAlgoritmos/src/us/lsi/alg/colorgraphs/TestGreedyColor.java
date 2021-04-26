@@ -38,7 +38,7 @@ public class TestGreedyColor {
 		ColorVertex.data(9, g2);	
 		ColorVertex v1 = ColorVertex.first();
 		
-		Integer nc = ColorHeuristic.gredyPath(v1,v->ColorVertex.goal(v));
+		Integer nc = ColorHeuristic.gredyPath(v1,ColorVertex.goal());
 		
 		System.out.println(nc);
 	}

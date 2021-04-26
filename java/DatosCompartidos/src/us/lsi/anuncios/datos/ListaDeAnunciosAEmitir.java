@@ -76,7 +76,8 @@ public class ListaDeAnunciosAEmitir  {
 		this.tiempoRestante = DatosAnuncios.tiempoTotal-this.tiempoConsumido;	
 		this.numAnunciosIncompatibles = 0;				
 		for(IntPair p: DatosAnuncios.restricciones){
-			if(this.anunciosDecididosParaEmitirSet.contains(p.first) && this.anunciosDecididosParaEmitirSet.contains(p.second)){
+			if(this.anunciosDecididosParaEmitirSet.contains(p.first()) && 
+					this.anunciosDecididosParaEmitirSet.contains(p.second())){
 				this.numAnunciosIncompatibles = this.numAnunciosIncompatibles +1;
 			}
 		}
@@ -88,8 +89,8 @@ public class ListaDeAnunciosAEmitir  {
 		Set<Integer> disponibles = Sets2.of(DatosAnuncios.todosLosAnuncios);	
 		disponibles.removeAll(this.anunciosDecididosParaEmitirSet);
 		for(IntPair p: DatosAnuncios.restricciones){
-			if(this.anunciosDecididosParaEmitirSet.contains(p.first)){
-				disponibles.remove(p.second);
+			if(this.anunciosDecididosParaEmitirSet.contains(p.first())){
+				disponibles.remove(p.second());
 			}
 		}
 		Set<Integer> quitar = Sets2.empty();

@@ -24,8 +24,8 @@ public class SolucionPack implements Comparable<SolucionPack>{
 		this.asignacion = IntStream.range(0,as.size()).boxed()
 				.map(i->IntPair.of(i, as.get(i)))
 				.collect(Collectors.toMap(
-						e->e.second,
-						e->Lists2.of(e.first),
+						e->e.second(),
+						e->Lists2.of(e.first()),
 						(List<Integer> a, List<Integer> b)->Lists2.concat(a,b)));
 	}
 	

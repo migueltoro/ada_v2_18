@@ -286,7 +286,7 @@ public class Ejemplos1 {
 		if(it.hasNext()) a2 = it.next(); else return false;
 		Integer rz = a2-a1;
 		Stream<Pair<Integer,Integer>> it2 = StreamsS.consecutivePairs(it);
-		return it2.allMatch(p->(p.second-p.first) == rz);
+		return it2.allMatch(p->(p.second()-p.first()) == rz);
 	}
 
 	public static Boolean esAritmetica4(Iterator<Integer> it) {

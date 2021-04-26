@@ -97,8 +97,8 @@ public class ProblemasDeListas {
 		}else{
 			E pivote = escogePivote(lista, i, j);
 			IntPair p = banderaHolandesa(lista, pivote, i, j, ord);
-			quickSort(lista,i,p.first,ord);
-			quickSort(lista,p.second,j,ord);			
+			quickSort(lista,i,p.first(),ord);
+			quickSort(lista,p.second(),j,ord);			
 		}
 	}
 
@@ -182,10 +182,10 @@ public class ProblemasDeListas {
 		}else{
 			E pivote = escogePivote(lista, i, j);
 			IntPair p = banderaHolandesa(lista, pivote, i, j, ord);
-			if(k < p.first){
-				r = escogeKesimo(lista,i,p.first,k,ord);
-			}else if(k >= p.second){
-				r = escogeKesimo(lista,p.second,j,k,ord);
+			if(k < p.first()){
+				r = escogeKesimo(lista,i,p.first(),k,ord);
+			}else if(k >= p.second()){
+				r = escogeKesimo(lista,p.second(),j,k,ord);
 			}else{
 				r = lista.get(k);
 			}					

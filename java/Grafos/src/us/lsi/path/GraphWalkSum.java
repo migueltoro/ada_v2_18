@@ -158,12 +158,12 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 	}
 
 	@Override
-	public Double solutionBase(V vertexActual) {
+	public Double goalBaseSolution(V vertexActual) {
 		return 0.;
 	}
 
 	@Override
-	public Double solution(Double weight, V vertexActual, E edge, E lastEdge) {
+	public Double fromNeighbordSolution(Double weight, V vertexActual, E edge, E lastEdge) {
 		return this.add(weight,vertexActual,edge,lastEdge);
 	}	
 	

@@ -29,7 +29,8 @@ public class TestGreadyMochila {
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraph(v1);
 		
-		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal).search();
+		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = 
+				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal,v->true).search();
 		System.out.println(r.get().getWeight());
 //		System.out.println(r.getWeight());
 //		Double r3 = MochilaHeuristic.voraz(e1, e->e.equals(e2),e2);

@@ -3,6 +3,7 @@ package us.lsi.alg.monedas;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -18,7 +19,7 @@ public class TestMonedasBT {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
@@ -26,62 +27,61 @@ public class TestMonedasBT {
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
 
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
-				e -> e.equals(e2));
-//		GreedySearch<MonedaVertex, MonedaEdge> rrh = GraphAlg.greedy(graph, MonedaVertex::accionHeuristica,
-//				e -> e.equals(e2));
+				v->v.goal(), v->v.constraint());
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
-//		GraphPath<MonedaVertex, MonedaEdge> path1h = rrh.search();
-		
-//		System.out.println("1 = " + SolucionMonedas.of(path1));
-//		System.out.println("1.1 = " + SolucionMonedas.of(path1h));
 
-		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTrackingGoal(
+		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTracking(
 				graph, 
-				v->v.index()==MonedaVertex.n,
-				MonedasHeuristica::heuristica, 
+				v->v.goal(),
+				e2,
+				v->v.constraint(),
+				MonedasHeuristica::heuristic, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,
 				BTType.Max);
 
-		ms1.bestValue = path1.getWeight();
-		ms1.solutions.add(SolucionMonedas.of(path1));
-		
+		if (path1 != null) {
+			ms1.bestValue = path1.getWeight();
+			ms1.solutions.add(SolucionMonedas.of(path1));
+		}
 		ms1.search();
+		Optional<SolucionMonedas> s = ms1.getSolution();
+		
+		if(s.isPresent()) System.out.println("2 = " + s.get().toString());
+		else System.out.println("2 = No hay solucion");
 
-		System.out.println("2 = " + ms1.getSolution());
-
-		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario));
+		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
 		graph = Graphs2.simpleVirtualGraph(e3);
 
-		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz, e -> e.equals(e4));
-//		rrh = GraphAlg.greedy(graph,MonedaVertex::accionHeuristica,e -> e.equals(e4));
+		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(), v->v.constraint());
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
-//		GraphPath<MonedaVertex, MonedaEdge> path2h = rrh.search();
-		
 
-//		System.out.println("3 = " + SolucionMonedas.of(path2));
-//		System.out.println("3.1 = " + SolucionMonedas.of(path2h));
-
-		BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTrackingGoal(
+		BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTracking(
 				graph, 
-				v->v.index()==MonedaVertex.n,
-				MonedasHeuristica::heuristica, 
+				v->v.goal(),
+				e4,
+				v->v.constraint(),
+				MonedasHeuristica::heuristic, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,
 				BTType.Min);
 
-		ms2.bestValue = path2.getWeight();
-		ms2.solutions.add(SolucionMonedas.of(path2));
-		
+		if (path2 != null) {
+			ms2.bestValue = path2.getWeight();
+			ms2.solutions.add(SolucionMonedas.of(path2));
+		}
 		ms2.search();
-		System.out.println("4 = " + ms2.getSolution());
-
+	
+		Optional<SolucionMonedas> s2 = ms2.getSolution();
+		
+		if(s2.isPresent()) System.out.println("4 = " + s2.get().toString());
+		else System.out.println("2 = No hay solucion");
 	}
 	}
 

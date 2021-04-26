@@ -148,12 +148,12 @@ public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,
 	}
 
 	@Override
-	public Double solutionBase(V vertexActual) {
+	public Double goalBaseSolution(V vertexActual) {
 		return graph.getVertexWeight(vertexActual);
 	}
 
 	@Override
-	public Double solution(Double weight, V vertexActual, E edge, E lastEdge) {
+	public Double fromNeighbordSolution(Double weight, V vertexActual, E edge, E lastEdge) {
 		return weight;
 	}
 }

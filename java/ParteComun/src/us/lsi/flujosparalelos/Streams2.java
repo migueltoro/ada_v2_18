@@ -106,7 +106,7 @@ public class Streams2 {
 	 */
 	public static <E> Stream<Pair<E,E>> consecutivePairs(Stream<E> sm) {
 		MutableType<E> rf = MutableType.of(null);
-		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.newValue(e), e)).filter(p->p.first!=null);
+		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.newValue(e), e)).filter(p->p.first()!=null);
 		return r;
 	}
 			

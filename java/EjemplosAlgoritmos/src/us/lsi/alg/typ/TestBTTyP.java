@@ -22,18 +22,21 @@ public class TestBTTyP {
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
 		TyPVertex e2 = TyPVertex.last();
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.getMaxCarga());		
+		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());		
 			
 		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
-				GraphAlg.greedy(graph,TyPVertex::greadyEdge,e->e.getIndex()==TyPVertex.n);
+				GraphAlg.greedy(graph,TyPVertex::greadyEdge,
+						e->e.goal(),
+						v->true);
+		
 		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search().orElse(null);
 		SolucionTyP sm = TyPVertex.getSolucion(path);
 		Double bv = path.getWeight();
 		
-		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTracking(
+		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTrackingGoal(
 						graph,
-						e->e.getIndex()==TyPVertex.n,
-						e2,
+						e->e.goal(),
 						Heuristica::heuristic,
 						TyPVertex::getSolucion,
 						TyPVertex::copy,

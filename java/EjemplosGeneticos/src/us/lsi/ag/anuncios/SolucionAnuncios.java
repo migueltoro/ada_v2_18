@@ -44,7 +44,7 @@ public class SolucionAnuncios {
 		this.numAnunciosIncompatibles = 0;	
 		List<Integer> ae = this.indices.subList(0,pos);
 		for(IntPair p: DatosAnuncios.restricciones){
-			if(ae.contains(p.first) && ae.contains(p.second)){
+			if(ae.contains(p.first()) && ae.contains(p.second())){
 				this.numAnunciosIncompatibles = this.numAnunciosIncompatibles +1;
 			}
 		}

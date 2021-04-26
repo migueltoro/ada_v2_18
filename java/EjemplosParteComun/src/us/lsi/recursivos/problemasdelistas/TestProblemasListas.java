@@ -22,13 +22,13 @@ public class TestProblemasListas {
 		Comparator<Double> ord = Comparator.naturalOrder();
 		Double pivote = lista.get(0);
 		IntPair p = ProblemasDeListas.banderaHolandesa(lista, pivote, 0,lista.size(), ord);
-		for(int i=0;i<p.first;i++){
+		for(int i=0;i<p.first();i++){
 			assertTrue(lista.get(i)<pivote);
 		}
-		for(int i=p.first;i<p.second;i++){
+		for(int i=p.first();i<p.second();i++){
 			assertTrue(lista.get(i).equals(pivote));
 		}
-		for(int i=p.second;i<lista.size();i++){
+		for(int i=p.second();i<lista.size();i++){
 			assertTrue(lista.get(i)>pivote);
 		}
 	}
