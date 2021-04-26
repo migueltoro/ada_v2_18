@@ -27,6 +27,7 @@ public record MochilaProblem(Integer index, Integer capacidadRestante) {
 	public Integer greedyAction() {
 		return Math.min(this.capacidadRestante/DatosMochila.peso(this.index()),DatosMochila.numMaxDeUnidades(this.index()));
 	}
+	
 
 	public List<Integer> acciones() {
 		if(this.index() == DatosMochila.n) return new ArrayList<>();

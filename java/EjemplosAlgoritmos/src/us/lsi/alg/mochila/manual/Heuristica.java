@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class Heuristica {
-	
-	
+
 	private static record HMochila(Integer index, Double capacidadRestante) {		
+		
 		public static HMochila of(Integer index, Double capacidadRestante) {
 			return new HMochila(index, capacidadRestante);
 		}
@@ -95,3 +95,4 @@ public class Heuristica {
 	}
 
 }
+

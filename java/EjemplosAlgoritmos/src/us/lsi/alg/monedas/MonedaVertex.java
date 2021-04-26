@@ -4,7 +4,6 @@ package us.lsi.alg.monedas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -74,8 +73,6 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Actio
 		if(this.index() == MonedaVertex.n) r = new ArrayList<>();
 		else if(this.index() == MonedaVertex.n-1 ) {
 			r = List.of(this.accionVoraz().getAction());
-//			if(this.valorRestante()%Moneda.valor(this.index()) == 0) r = List.of(this.accionVoraz().getAction());
-//			else r = new ArrayList<>();
 		} else {
 			Integer nue = this.valorRestante()/Moneda.valor(this.index);
 			r = IntStream.range(0,nue+1).boxed().collect(Collectors.toList());
