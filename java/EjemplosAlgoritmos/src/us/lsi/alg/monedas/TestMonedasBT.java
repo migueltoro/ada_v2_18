@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.alg.mochila.MochilaVertex;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
@@ -21,7 +22,7 @@ public class TestMonedasBT {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
@@ -29,7 +30,7 @@ public class TestMonedasBT {
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
 //
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
-				v->v.goal(), v->v.constraint());
+				v->v.goal(), v->true);
 //
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 		
@@ -47,7 +48,10 @@ public class TestMonedasBT {
 
 		if (path1 != null) {
 			ms1.bestValue = path1.getWeight();
-			ms1.solutions.add(SolucionMonedas.of(path1));
+			SolucionMonedas ss = SolucionMonedas.of(path1);
+			if (ss.valor == MochilaVertex.capacidadInicial) {
+				ms1.solutions.add(ss);
+			}
 		}
 		ms1.search();
 		Optional<SolucionMonedas> s = ms1.getSolution();
@@ -62,7 +66,7 @@ public class TestMonedasBT {
 
 		graph = Graphs2.simpleVirtualGraph(e3);
 
-		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(), v->v.constraint());
+		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(), v->true);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
 
@@ -78,7 +82,10 @@ public class TestMonedasBT {
 
 		if (path2 != null) {
 			ms2.bestValue = path2.getWeight();
-			ms2.solutions.add(SolucionMonedas.of(path2));
+			SolucionMonedas ss = SolucionMonedas.of(path2);
+			if (ss.valor == MochilaVertex.capacidadInicial) {
+				ms2.solutions.add(ss);
+			}
 		}
 		ms2.withGraph = true;
 		ms2.search();
