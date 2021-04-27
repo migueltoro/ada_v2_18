@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.colors.GraphColors;
+import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
@@ -19,17 +21,19 @@ public class TestMonedasBT {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 
 		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
-
+//
 		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
 				v->v.goal(), v->v.constraint());
-
+//
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
+		
+		Double bv = MonedasHeuristica.voraz_left(0,MonedaVertex.valorInicial,MonedaVertex.n).peso().doubleValue();
 
 		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTracking(
 				graph, 
@@ -76,12 +80,20 @@ public class TestMonedasBT {
 			ms2.bestValue = path2.getWeight();
 			ms2.solutions.add(SolucionMonedas.of(path2));
 		}
+		ms2.withGraph = true;
 		ms2.search();
 	
 		Optional<SolucionMonedas> s2 = ms2.getSolution();
 		
 		if(s2.isPresent()) System.out.println("4 = " + s2.get().toString());
 		else System.out.println("2 = No hay solucion");
+		
+		Graphs2.toDot(ms2.outGraph,"ficheros/MonedasBTGraph.gv",
+				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
+				e->e.getAction().toString(),
+				v->GraphColors.getColorIf(Color.red,v.goal()),
+				e->GraphColors.getColor(Color.black)
+				);
 	}
 	}
 
