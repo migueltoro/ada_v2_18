@@ -54,7 +54,6 @@ public class EjemplosIterativos {
 			return b;
 	}
 	
-	
 	public static void main(String[] args) {
 		System.out.println(binom(10,5));
 		System.out.println(fib(10));
