@@ -9,6 +9,7 @@ import us.lsi.common.Matrix;
 import us.lsi.common.View1;
 import us.lsi.common.View2;
 import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.geometria.Punto2D;
 
 
 public class ViewEjemplos {
