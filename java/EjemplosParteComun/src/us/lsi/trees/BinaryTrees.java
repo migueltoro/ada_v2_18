@@ -203,15 +203,12 @@ public class BinaryTrees {
 	
 	public static Integer sumIfPredicate(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
 		BinaryType type = tree.getType();
-		return switch(type) {
-		case Empty -> 0; 
-		case Leaf -> predicate.test(tree.getLabel())?tree.getLabel():0; 
-		case Binary -> {
-			yield predicate.test(tree.getLabel())?tree.getLabel():0 +
-			    sumIfPredicate(tree.getLeft(),predicate) +
-			    sumIfPredicate(tree.getRight(),predicate);
-		}
-		};		
+		return switch (type) {
+		case Empty -> 0;
+		case Leaf -> predicate.test(tree.getLabel()) ? tree.getLabel() : 0;
+		case Binary -> predicate.test(tree.getLabel()) ? tree.getLabel()
+				: 0 + sumIfPredicate(tree.getLeft(), predicate) + sumIfPredicate(tree.getRight(), predicate);
+		};
 	}
 	
 	
