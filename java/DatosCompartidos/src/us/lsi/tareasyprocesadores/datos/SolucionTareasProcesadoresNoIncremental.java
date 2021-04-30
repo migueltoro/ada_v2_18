@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.flujosparalelos.Streams2;
 
 public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasProcesadores  {
@@ -105,7 +105,7 @@ public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasPr
 	@Override
 	public SolucionTareasProcesadores copy() {
 		return new SolucionTareasProcesadoresNoIncremental(this.tareasEnProcesador.stream()
-				   .map(x->Lists2.ofCollection(x))
+				   .map(x->List2.ofCollection(x))
 				   .collect(Collectors.toList()));
 	}
 	

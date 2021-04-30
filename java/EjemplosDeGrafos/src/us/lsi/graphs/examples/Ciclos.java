@@ -10,7 +10,7 @@ import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -43,14 +43,14 @@ public class Ciclos {
 		List<Ciudad> r3 = tsp.getTour(gc).getVertexList();
 		GraphWalk<Ciudad,Carretera> gw = new GraphWalk<>(gc,r3,0.);
 		
-		Strings2.toConsole("Hamiltonian");
-		Strings2.toConsole(r3,"Ciudades en el camino");
-		Strings2.toConsole(gw.getEdgeList(), "Aristas en el camino");	
+		String2.toConsole("Hamiltonian");
+		String2.toConsole(r3,"Ciudades en el camino");
+		String2.toConsole(gw.getEdgeList(), "Aristas en el camino");	
 		
 		HierholzerEulerianCycle<Ciudad,Carretera> hc = new HierholzerEulerianCycle<>();
 		Boolean r2 = hc.isEulerian(graph);
 		
-		Strings2.toConsole(r2.toString());
+		String2.toConsole(r2.toString());
 		
 		var sc = new PatonCycleBase<Ciudad,Carretera>(graph);
 		CycleBasis<Ciudad,Carretera> r = sc.getCycleBasis();
@@ -62,7 +62,7 @@ public class Ciclos {
 //				 .collect(Collectors.toSet());
 //		
 //		sgw.stream().forEach(x->System.out.println(x.getWeight()+"==="+x.getLength()+"==="+x.getVertexList()));
-		Strings2.toConsole(r.getCyclesAsGraphPaths(),"Ciclos");
+		String2.toConsole(r.getCyclesAsGraphPaths(),"Ciclos");
 	}
 	
 	

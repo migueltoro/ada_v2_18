@@ -11,7 +11,7 @@ import org.apache.commons.math3.genetics.Population;
 import org.apache.commons.math3.genetics.StoppingCondition;
 
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 /**
  * 
@@ -39,14 +39,14 @@ public class SolutionsNumber implements StoppingCondition {
 	public SolutionsNumber(Integer numBestChromosomes, Integer NUM_GENERATIONS) {
 		super();
 		this.ns = numBestChromosomes;
-		AlgoritmoAG.bestChromosomes = Lists2.empty();
+		AlgoritmoAG.bestChromosomes = List2.empty();
 		this.fixed = new FixedGenerationCount(NUM_GENERATIONS);
 		predicate = (Chromosome x) -> x.fitness() >= StoppingConditionFactory.FITNESS_MIN; 
 	}
 
 	@Override
 	public boolean isSatisfied(Population population) {
-		List<Chromosome> r = Lists2.empty();
+		List<Chromosome> r = List2.empty();
 		for(Chromosome cr:population) {
 			r.add(cr);
 		}

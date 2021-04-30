@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 
@@ -63,7 +63,7 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	public String toString() {
 		Integer n = 0;
 		String r = String.format("%3d  [%s]",n,string(this));
-		List<GraphTree<V, E, A>> children = nextLevel(Lists2.of(this));		
+		List<GraphTree<V, E, A>> children = nextLevel(List2.of(this));		
 		while(!children.isEmpty()) {
 			n++;
 			r = String.format("%s\n%3d  %s",r,n,children.stream().map(t->string(t)).collect(Collectors.joining(",","[","]")));

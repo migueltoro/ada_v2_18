@@ -3,8 +3,6 @@ package us.lsi.iterativorecursivos;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.math3.fraction.Fraction;
-
 import us.lsi.common.Ranges.IntRange;
 import us.lsi.common.Ranges.LongRange;
 import us.lsi.common.Matrix;
@@ -39,7 +37,7 @@ public class ViewEjemplos {
 			if(a < ec) r = w.left;
 			else r = w.right;			
 		}
-		return e*e == a? e : r.a;
+		return e*e == a? e : r.a();
 	}
 	
 	public static Long sqrtLong_r(Long a) {
@@ -53,7 +51,7 @@ public class ViewEjemplos {
 			if(a < ec) r = w.left;
 			else r = w.right;			
 		}
-		return e*e == a? e : r.a;
+		return e*e == a? e : r.a();
 	}
 	
 	
@@ -87,8 +85,8 @@ public class ViewEjemplos {
 	}
 	
 	public static Integer masCercanoBase(List<Integer>ls, Integer elem, IntRange r) {
-		Integer a = ls.get(r.a);
-		Integer b = ls.get(r.a+1);
+		Integer a = ls.get(r.a());
+		Integer b = ls.get(r.a()+1);
 		if(Math.abs(elem-a) < Math.abs(elem-b)) return a;
 		else return b;
 	}

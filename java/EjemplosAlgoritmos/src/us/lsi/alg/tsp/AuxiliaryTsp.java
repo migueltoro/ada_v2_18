@@ -15,7 +15,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.nio.dot.DOTExporter;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
@@ -56,10 +56,10 @@ public class AuxiliaryTsp {
 		GraphPath<Ciudad,Carretera> path = GraphPaths.of(graph,ciudades);
 		Double w = path.getWeight();
 		Integer n = ciudades.size();
-		List<Ciudad> ls1 = Lists2.copy(ciudades.subList(0,i));
-		List<Ciudad> ls2 = Lists2.copy(ciudades.subList(i,j));
+		List<Ciudad> ls1 = List2.copy(ciudades.subList(0,i));
+		List<Ciudad> ls2 = List2.copy(ciudades.subList(i,j));
 		Collections.reverse(ls2);
-		List<Ciudad> ls3 = Lists2.copy(ciudades.subList(j,n));
+		List<Ciudad> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
 		GraphPath<Ciudad,Carretera> path2 = GraphPaths.of(graph,ls1);	
@@ -71,10 +71,10 @@ public class AuxiliaryTsp {
 		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPaths.of(graph,ciudades);
 		Double w = path.getWeight();
 		Integer n = ciudades.size();
-		List<Integer> ls1 = Lists2.copy(ciudades.subList(0,i));
-		List<Integer> ls2 = Lists2.copy(ciudades.subList(i,j));
+		List<Integer> ls1 = List2.copy(ciudades.subList(0,i));
+		List<Integer> ls2 = List2.copy(ciudades.subList(i,j));
 		Collections.reverse(ls2);
-		List<Integer> ls3 = Lists2.copy(ciudades.subList(j,n));
+		List<Integer> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
 		GraphPath<Integer,SimpleEdge<Integer>> path2 = GraphPaths.of(graph,ls1);	
@@ -84,10 +84,10 @@ public class AuxiliaryTsp {
 	public static List<Ciudad> neighbor(Graph<Ciudad,Carretera> graph, List<Ciudad> ciudades, Integer i, Integer j) {
 		Preconditions.checkArgument(i<j);
 		Integer n = ciudades.size();
-		List<Ciudad> ls1 = Lists2.copy(ciudades.subList(0,i));
-		List<Ciudad> ls2 = Lists2.copy(ciudades.subList(i,j));
+		List<Ciudad> ls1 = List2.copy(ciudades.subList(0,i));
+		List<Ciudad> ls2 = List2.copy(ciudades.subList(i,j));
 		Collections.reverse(ls2);
-		List<Ciudad> ls3 = Lists2.copy(ciudades.subList(j,n));
+		List<Ciudad> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
 		return ls1;
@@ -96,10 +96,10 @@ public class AuxiliaryTsp {
 	public static List<Integer> neighborInteger(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> ciudades, Integer i, Integer j) {
 		Preconditions.checkArgument(i<j);
 		Integer n = ciudades.size();
-		List<Integer> ls1 = Lists2.copy(ciudades.subList(0,i));
-		List<Integer> ls2 = Lists2.copy(ciudades.subList(i,j));
+		List<Integer> ls1 = List2.copy(ciudades.subList(0,i));
+		List<Integer> ls2 = List2.copy(ciudades.subList(i,j));
 		Collections.reverse(ls2);
-		List<Integer> ls3 = Lists2.copy(ciudades.subList(j,n));
+		List<Integer> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
 		return ls1;

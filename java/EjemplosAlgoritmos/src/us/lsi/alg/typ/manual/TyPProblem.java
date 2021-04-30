@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,Integer npMax,Integer npMin) {
 
@@ -24,12 +24,12 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	}
 	
 	public static TyPProblem first() {
-		return TyPProblem.of(0,Lists2.copy(0,DatosTyP.m));
+		return TyPProblem.of(0,List2.copy(0,DatosTyP.m));
 	}
 	
 	public List<Integer> acciones() {
-		if(this.index == DatosTyP.n) return Lists2.of();
-		return Lists2.rangeList(0,DatosTyP.m);
+		if(this.index == DatosTyP.n) return List2.of();
+		return List2.rangeList(0,DatosTyP.m);
 	}
 	
 	public Integer greadyAction() {
@@ -38,7 +38,7 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	
 	public TyPProblem vecino(Integer a) {
 		Integer nd = this.cargas().get(a)+DatosTyP.tareas.get(this.index).duracion(); 
-		List<Integer> nc = Lists2.setElement(this.cargas(),a,nd);
+		List<Integer> nc = List2.setElement(this.cargas(),a,nd);
 		TyPProblem v = TyPProblem.of(index+1, nc);
 		return v;
 	}

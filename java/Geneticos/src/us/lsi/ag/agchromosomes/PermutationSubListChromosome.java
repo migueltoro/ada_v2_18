@@ -14,7 +14,7 @@ import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 
 
@@ -154,7 +154,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	 */
 	public List<Integer> decode() {	
 		List<Integer> rk = randomKey.decode(normalSequence);
-		List<Integer> r = Lists2.empty();
+		List<Integer> r = List2.empty();
 		List<Integer> bn = binary.getRepresentation();
 		Preconditions.checkArgument(rk.size()==bn.size());
 		for(int i=0; i< rk.size();i++){

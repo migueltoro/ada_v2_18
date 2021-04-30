@@ -8,7 +8,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -29,7 +29,7 @@ public class Tours {
 						graph, 
 						Graphs2::simpleWeightedGraph, 
 						Carretera::ofWeight);
-		Set<Ciudad> vertices = Sets2.of(Ciudad.ofName("Jaen"));
+		Set<Ciudad> vertices = Set2.of(Ciudad.ofName("Jaen"));
 		
 		GraphPath<Ciudad, Carretera> r = a.getTour(Ciudad.ofName("Sevilla"),Ciudad.ofName("Almeria"),vertices);
 		System.out.println(r.getVertexList());

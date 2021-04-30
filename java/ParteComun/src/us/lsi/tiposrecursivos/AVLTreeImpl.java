@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import us.lsi.common.Comparators;
 import us.lsi.common.MutableType;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 
 
 /**
@@ -342,8 +342,8 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 //			Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getHeight()));
 		}
 		
-		Strings2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getTree().getHeight()));
-		Strings2.toConsole(String.format("%s", tree.getTree().toString()));
+		String2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getTree().getHeight()));
+		String2.toConsole(String.format("%s", tree.getTree().toString()));
 	}
 
 }

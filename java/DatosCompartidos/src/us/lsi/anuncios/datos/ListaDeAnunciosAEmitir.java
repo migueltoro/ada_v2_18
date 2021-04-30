@@ -3,9 +3,9 @@ package us.lsi.anuncios.datos;
 import java.util.*;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.math.Math2;
 
 
@@ -47,12 +47,12 @@ public class ListaDeAnunciosAEmitir  {
 	}
 	
 	private  ListaDeAnunciosAEmitir(){	
-		this(Lists2.empty());
+		this(List2.empty());
 	}
 	
 	private  ListaDeAnunciosAEmitir(List<Integer> anunciosDecididosParaEmitir){
-		this.anunciosDecididosParaEmitir = Lists2.ofCollection(anunciosDecididosParaEmitir);
-		this.anunciosDecididosParaEmitirSet = Sets2.of(anunciosDecididosParaEmitir);
+		this.anunciosDecididosParaEmitir = List2.ofCollection(anunciosDecididosParaEmitir);
+		this.anunciosDecididosParaEmitirSet = Set2.of(anunciosDecididosParaEmitir);
 		calculaPropiedadesDerivadas();		
 		calculaAnunciosDisponibles();
 	}
@@ -86,14 +86,14 @@ public class ListaDeAnunciosAEmitir  {
 	
 	
 	private void calculaAnunciosDisponibles(){		
-		Set<Integer> disponibles = Sets2.of(DatosAnuncios.todosLosAnuncios);	
+		Set<Integer> disponibles = Set2.of(DatosAnuncios.todosLosAnuncios);	
 		disponibles.removeAll(this.anunciosDecididosParaEmitirSet);
 		for(IntPair p: DatosAnuncios.restricciones){
 			if(this.anunciosDecididosParaEmitirSet.contains(p.first())){
 				disponibles.remove(p.second());
 			}
 		}
-		Set<Integer> quitar = Sets2.empty();
+		Set<Integer> quitar = Set2.empty();
 		for(Integer e : disponibles){
 			if(DatosAnuncios.getAnuncio(e).getDuracion()>this.tiempoRestante){
 				quitar.add(e);
@@ -101,14 +101,14 @@ public class ListaDeAnunciosAEmitir  {
 		}
 		disponibles.removeAll(quitar);
 		Comparator<Integer> cmp = Comparator.<Integer,Anuncio>comparing(x->DatosAnuncios.getAnuncio(x), Comparator.<Anuncio>reverseOrder());
-		this.anunciosDisponibles = Sets2.newTreeSet(cmp);
+		this.anunciosDisponibles = Set2.newTreeSet(cmp);
 		this.anunciosDisponibles.addAll(disponibles);
 	}
 	
 	public ListaDeAnunciosAEmitir insertar(int pos, Integer e){
 		Preconditions.checkPositionIndex(pos, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkArgument(!this.anunciosDecididosParaEmitirSet.contains(e));
-		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
+		List<Integer> ls = List2.ofCollection(this.anunciosDecididosParaEmitir);
 		ls.add(pos, e);
 		return create(ls);
 	}
@@ -119,7 +119,7 @@ public class ListaDeAnunciosAEmitir  {
 	
 	public ListaDeAnunciosAEmitir eliminar(int pos){
 		Preconditions.checkElementIndex(pos, this.anunciosDecididosParaEmitir.size());
-		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
+		List<Integer> ls = List2.ofCollection(this.anunciosDecididosParaEmitir);
 		ls.remove(pos);
 		return create(ls);
 	}
@@ -133,13 +133,13 @@ public class ListaDeAnunciosAEmitir  {
 		Preconditions.checkElementIndex(i, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkElementIndex(j, this.anunciosDecididosParaEmitir.size());
 		Preconditions.checkArgument(i!=j);
-		List<Integer> ls = Lists2.ofCollection(this.anunciosDecididosParaEmitir);
-		Lists2.intercambia(ls, i, j);
+		List<Integer> ls = List2.ofCollection(this.anunciosDecididosParaEmitir);
+		List2.intercambia(ls, i, j);
 		return create(ls);
 	}
 	
 	public List<Anuncio> getAnunciosDecididosParaEmitir() {
-		List<Anuncio> ls = Lists2.empty();
+		List<Anuncio> ls = List2.empty();
 		for(Integer e: this.anunciosDecididosParaEmitir){
 			ls.add(DatosAnuncios.getAnuncio(e));
 		}
@@ -188,7 +188,7 @@ public class ListaDeAnunciosAEmitir  {
 	public IntPair getAlternativaInsertar() {
 		Preconditions.checkState(!this.anunciosDisponibles.isEmpty());
 		Integer pos = Math2.getEnteroAleatorio(0,this.anunciosDecididosParaEmitir.size() + 1);
-		List<Integer> ls = Lists2.ofCollection(this.anunciosDisponibles);
+		List<Integer> ls = List2.ofCollection(this.anunciosDisponibles);
 		Integer r = Math2.getEnteroAleatorio(0,ls.size());
 		return IntPair.of(pos, ls.get(r));		
 	}
@@ -198,7 +198,7 @@ public class ListaDeAnunciosAEmitir  {
 	}
 
 	public List<Opcion> getTiposDeOpcionesAlternativasPosibles(){
-		List<Opcion> ls = Lists2.empty();
+		List<Opcion> ls = List2.empty();
 		for(Opcion op : Opcion.values()){
 			switch(op){
 			case Insertar :

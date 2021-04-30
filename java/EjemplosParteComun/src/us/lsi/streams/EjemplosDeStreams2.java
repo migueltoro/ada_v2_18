@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import us.lsi.common.Multiset;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.common.Pair;
 import us.lsi.flujosparalelos.Collectors2;
 import us.lsi.flujosparalelos.Streams2;
@@ -69,7 +69,7 @@ public class EjemplosDeStreams2 {
 		System.out.println(r4);
 		System.out.println("6: ______");
 		var pp = primosPar(100L,2,3);
-		Strings2.toConsole(pp,"Pares de primos");
+		String2.toConsole(pp,"Pares de primos");
 		System.out.println("7: ______");
 		Long m1 = 1000L;
 		Long n1 = 2000L;

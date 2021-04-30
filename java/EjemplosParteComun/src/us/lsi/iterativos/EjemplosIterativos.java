@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.fraction.BigFractionField;
@@ -23,7 +23,7 @@ public class EjemplosIterativos {
 		List<Integer> lsa = Arrays.asList(1);
 		int i = 1;
 		while (i <= n) {
-			List<Integer> ls = Lists2.empty();
+			List<Integer> ls = List2.empty();
 			for (int s = 0; s <= i; s++) {
 				if (s == 0 || s == i) {
 					ls.add(1);
@@ -34,7 +34,7 @@ public class EjemplosIterativos {
 				}
 			}
 			i = i + 1;
-			lsa = Lists2.ofCollection(ls);
+			lsa = List2.ofCollection(ls);
 		}
 		return lsa.get(k);
 	}

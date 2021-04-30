@@ -11,7 +11,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jheaps.AddressableHeap.Handle;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -45,7 +45,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		E edgeToOrigen = tree.get(vertexActual).getValue().edge();
 		List<E> edges = graph.edgesListOf(vertexActual);
 		if (size.apply(vertexActual) > threshold)
-			edges = Lists2.randomUnitary(edges);
+			edges = List2.randomUnitary(edges);
 		for (E backEdge : edges) {
 			V v = graph.getEdgeTarget(backEdge);
 			Double newDistance = ePath.add(actualDistance,v,backEdge,edgeToOrigen);

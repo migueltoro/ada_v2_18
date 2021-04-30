@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import java.util.stream.IntStream;
 import java.util.stream.DoubleStream;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Pair;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.flujosparalelos.Streams2;
 
 
@@ -71,13 +71,13 @@ public class OtrosEjemplos {
 		List<Long> s2 = List.of(5L, 15L, 20L, 39L);
 		
 		
-		List<Long> r = Lists2.concat(s0,s1);
+		List<Long> r = List2.concat(s0,s1);
 		Streams2.join(()->r.stream(),()->s2.stream(), x -> x, x -> x, (x, y) -> x).forEach(imprimeEnConsola());		
 	}
 
 	public static void ejemplo6() {
-		Set<Integer> s1 = Sets2.of(1, 3, 5);
-		Set<Integer> s2 = Sets2.of(16, 13, 15);
+		Set<Integer> s1 = Set2.of(1, 3, 5);
+		Set<Integer> s2 = Set2.of(16, 13, 15);
 		Streams2.cartesianProduct(s1.stream(),s2.stream(),(x, y) -> Pair.of(x, y)).forEach(imprimeEnConsola());
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 
 public class MochilaBT {
@@ -25,16 +25,16 @@ public class MochilaBT {
 		}
 
 		StateMochila forward(Integer a) {
-			List<Integer> as = Lists2.addLast(this.acciones(), a);
+			List<Integer> as = List2.addLast(this.acciones(), a);
 			MochilaProblem vcn = this.vertice().vecino(a);
-			List<MochilaProblem> vt = Lists2.addLast(this.vertices(), vcn);
+			List<MochilaProblem> vt = List2.addLast(this.vertices(), vcn);
 			return StateMochila.of(vcn, this.valorAcumulado() + a * DatosMochila.valor(this.vertice().index()), as, vt);
 		}
 
 		StateMochila back(Integer a) {
-			List<Integer> as = Lists2.removeLast(this.acciones());
-			List<MochilaProblem> vt = Lists2.removeLast(this.vertices());
-			MochilaProblem van = Lists2.last(vt);
+			List<Integer> as = List2.removeLast(this.acciones());
+			List<MochilaProblem> vt = List2.removeLast(this.vertices());
+			MochilaProblem van = List2.last(vt);
 			return StateMochila.of(van, this.valorAcumulado() - a * DatosMochila.valor(van.index()), as, vt);
 		}
 		

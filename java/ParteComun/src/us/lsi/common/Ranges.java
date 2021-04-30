@@ -7,22 +7,15 @@ package us.lsi.common;
  */
 public class Ranges {
 
-	public static class IntRange {
-		public final Integer a;
-		public final Integer b;
-		public final Integer c;
+	public record IntRange(Integer a,Integer b, Integer c) {
+		
 		public static IntRange of(Integer a, Integer b, Integer c) {
 			return new IntRange(a,b,c);
 		}
 		public static IntRange of(Integer a, Integer b) {
 			return new IntRange(a,b,1);
 		}
-		public IntRange(Integer a, Integer b, Integer c) {
-			super();
-			this.a = a;
-			this.b = b;
-			this.c = c;
-		}
+		
 		public Boolean isEmpty() {
 			return a>=b;
 		}
@@ -48,31 +41,19 @@ public class Ranges {
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Integer central = (b+a)/(2*c)*c;
 			return View2.of(central,IntRange.of(a,central+c,c),IntRange.of(central,b,c));
-		}
-		@Override
-		public String toString() {
-			String sc = c==1?"":("," + c);
-			return "[" + a + "," + b + sc + ")";
 		}	
 	}
 	
 	
-	public static class LongRange {
-		public final Long a;
-		public final Long b;
-		public final Long c;
+	public static record LongRange(Long a, Long b, Long c) {
+		
 		public static LongRange of(Long a, Long b, Long c) {
 			return new LongRange(a,b,c);
 		}
 		public static LongRange of(Long a, Long b) {
 			return new LongRange(a,b,1L);
 		}
-		public LongRange(Long a, Long b, Long c) {
-			super();
-			this.a = a;
-			this.b = b;
-			this.c = c;
-		}
+
 		public Boolean isEmpty() {
 			return a>=b;
 		}
@@ -99,29 +80,16 @@ public class Ranges {
 			Long central = (b+a)/(2*c)*c;
 			return View2.of(central,LongRange.of(a,central+c,c),LongRange.of(central,b,c));
 		}
-		@Override
-		public String toString() {
-			String sc = c==1?"":("," + c);
-			return "[" + a + "," + b + sc + ")";
-		}
 	}
 	
 	
-	public static class DoubleRange {
-		public final Double a;
-		public final Double b;
-		public final Double c;
+	public static record DoubleRange(Double a,Double b, Double c) {
+		
 		public static DoubleRange of(Double a, Double b, Double c) {
 			return new DoubleRange(a,b,c);
 		}
 		public static DoubleRange of(Double a, Double b) {
 			return new DoubleRange(a,b,1.);
-		}
-		DoubleRange(Double a, Double b, Double c) {
-			super();
-			this.a = a;
-			this.b = b;
-			this.c = c;
 		}
 		public Boolean isEmpty() {
 			return a>=b;
@@ -148,11 +116,6 @@ public class Ranges {
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Double central = (b+a)/2;
 			return View2.of(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
-		}
-		@Override
-		public String toString() {
-			String sc = c==1?"":("," + c);
-			return "[" + a + "," + b + sc + ")";
 		}
 	}
 	

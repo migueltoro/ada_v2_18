@@ -7,7 +7,7 @@ import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.grafos.datos.Ciudad;
 
 import us.lsi.ag.Chromosome;
@@ -24,7 +24,7 @@ public class TestColorAG {
 	    Chromosome<List<Integer>> mejorSolucion = alg.getBestChromosome();
 		System.out.println("================================");
 		System.out.println("Numero de colores: "+-problem.fitnessFunction(mejorSolucion.decode()));
-		Strings2.toConsole(problem.getSolucion(mejorSolucion.decode()).entrySet(),"Coloreado obtenido");
+		String2.toConsole(problem.getSolucion(mejorSolucion.decode()).entrySet(),"Coloreado obtenido");
 		System.out.println("================================");
 	}
 

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.DefaultGraphType;
 
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.common.TriFunction;
 import us.lsi.path.EGraphPath;
 import us.lsi.path.EGraphPath.PathType;
@@ -52,7 +52,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 			Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
 		super();
-		this.vertexSet = Sets2.empty();;
+		this.vertexSet = Set2.empty();;
 		this.edgeWeight = edgeWeight;
 		this.vertexWeight = vertexWeight;
 		this.vertexPassWeight = vertexPassWeight;

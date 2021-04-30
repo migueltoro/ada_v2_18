@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 
 public record MochilaProblem(Integer index, Integer capacidadRestante) {
@@ -32,7 +32,7 @@ public record MochilaProblem(Integer index, Integer capacidadRestante) {
 	public List<Integer> acciones() {
 		if(this.index() == DatosMochila.n) return new ArrayList<>();
 		Integer nu = this.greedyAction();
-		if(this.index() == DatosMochila.n-1) return Lists2.of(nu);
+		if(this.index() == DatosMochila.n-1) return List2.of(nu);
 		List<Integer> alternativas = IntStream.rangeClosed(0,nu)
 				.boxed()
 				.collect(Collectors.toList());

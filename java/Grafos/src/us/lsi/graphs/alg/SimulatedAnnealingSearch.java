@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
@@ -39,7 +39,7 @@ public class SimulatedAnnealingSearch<V,E> {
 	
 	private V nextVertex(V vertex) {
 		 List<E> edges = this.graph.edgesListOf(this.actualVertex);
-		 List<E> edge = Lists2.randomUnitary(edges);
+		 List<E> edge = List2.randomUnitary(edges);
 		 return this.graph.getEdgeTarget(edge.get(0));
 	}
 	

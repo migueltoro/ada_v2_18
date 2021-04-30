@@ -2,7 +2,7 @@ package us.lsi.flowgraph;
 
 import java.util.List;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 
 /**
@@ -17,7 +17,7 @@ public class FlowVertex {
 	
 	public enum TipoDeVertice{Source,Sink,Intermediate};
 	
-	public static List<FlowVertex> vertices = Lists2.empty();
+	public static List<FlowVertex> vertices = List2.empty();
 	
 	public static Double maxDouble = Double.MAX_VALUE;
 	

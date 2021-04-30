@@ -6,7 +6,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 
-import us.lsi.common.Maps2;
+import us.lsi.common.Map2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -30,7 +30,7 @@ public class Recorridos {
 						Carretera::getKm);
 		
 		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
-		Map<Ciudad,Integer> m = Maps2.newHashMap();
+		Map<Ciudad,Integer> m = Map2.newHashMap();
 		Integer n = 0;
 		while(rp.hasNext()){
 			m.put(rp.next(), n);

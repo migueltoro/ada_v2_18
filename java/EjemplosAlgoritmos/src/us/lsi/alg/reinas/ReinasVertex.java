@@ -8,14 +8,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
-import us.lsi.common.Sets2;
+import us.lsi.common.List2;
+import us.lsi.common.Set2;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 public class ReinasVertex implements ActionVirtualVertex<ReinasVertex,ReinasEdge,Integer>{
 	
 	public static ReinasVertex copy(ReinasVertex reinas) {
-		return new ReinasVertex(reinas.index,Lists2.copy(reinas.fo),Sets2.copy(reinas.dpo),Sets2.copy(reinas.dso));
+		return new ReinasVertex(reinas.index,List2.copy(reinas.fo),Set2.copy(reinas.dpo),Set2.copy(reinas.dso));
 	}
 
 	public static ReinasVertex of(Integer index, List<Integer> fo, Set<Integer> dpo, Set<Integer> dso) {
@@ -23,11 +23,11 @@ public class ReinasVertex implements ActionVirtualVertex<ReinasVertex,ReinasEdge
 	}
 
 	public static ReinasVertex first() {
-		return new ReinasVertex(0,Lists2.empty(),new HashSet<>(),new HashSet<>());
+		return new ReinasVertex(0,List2.empty(),new HashSet<>(),new HashSet<>());
 	}
 	
 	public static ReinasVertex last() {
-		return new ReinasVertex(n,Lists2.empty(),new HashSet<>(),new HashSet<>());
+		return new ReinasVertex(n,List2.empty(),new HashSet<>(),new HashSet<>());
 	}
 	
 	public static Predicate<ReinasVertex> goal() {
@@ -72,8 +72,8 @@ public class ReinasVertex implements ActionVirtualVertex<ReinasVertex,ReinasEdge
 	public ReinasVertex neighbor(Integer a) {
 		Integer index = this.index+1;
 		List<Integer> fo = new ArrayList<>(this.fo); fo.add(a);
-		Set<Integer> dpo = Sets2.copy(this.dpo); dpo.add(a+this.index);
-		Set<Integer> dso = Sets2.copy(this.dso); dso.add(a-this.index);
+		Set<Integer> dpo = Set2.copy(this.dpo); dpo.add(a+this.index);
+		Set<Integer> dso = Set2.copy(this.dso); dso.add(a-this.index);
 		return ReinasVertex.of(index, fo, dpo, dso);
 	}
 

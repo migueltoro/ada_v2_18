@@ -9,10 +9,10 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Files2;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeLexer;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeParser;
@@ -293,7 +293,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	}
 	
 	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls){
-		List<BinaryTree<E>> r = Lists2.empty();
+		List<BinaryTree<E>> r = List2.empty();
 		for(BinaryTree<E> tree: ls) {
 			switch(tree.getType()) {			
 			case Empty: break;
@@ -307,7 +307,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public List<BinaryTree<E>> getLevel(int n){
-		List<BinaryTree<E>> r = Lists2.of(this);
+		List<BinaryTree<E>> r = List2.of(this);
 		for(int i=0; i < n ; i++) {
 			r = nextLevel(r);
 		}
@@ -402,10 +402,10 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getPreOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Binary:
-			r = Lists2.of(this.label);
+			r = List2.of(this.label);
 			r.addAll(this.getLeft().getPreOrder());
 			r.addAll(this.getRight().getPreOrder());
 		}
@@ -419,8 +419,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getPostOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Binary:
 			r = this.getLeft().getPostOrder();
 			r.addAll(this.getRight().getPostOrder());
@@ -436,8 +436,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public List<E> getInOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Binary:
 			r = this.getLeft().getInOrder();
 			r.add(this.getLabel());
@@ -542,14 +542,14 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
 		BinaryTree<String> t7 = BinaryTree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.of(1,2,3,4,5,6,7,8,9)));
+		System.out.println(List2.reverse(List2.of(1,2,3,4,5,6,7,8,9)));
 		BinaryTree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		MutableBinaryTree<String> t = t8.mutableView();
 		t.setLabel("578.");
 		t.setLeft(t8.getLeft().getLeft());
 		System.out.println(t8);
-		Strings2.toConsole(t8.getLevel(3).stream().map(x->x.getHeight()).collect(Collectors.toList()).toString());
+		String2.toConsole(t8.getLevel(3).stream().map(x->x.getHeight()).collect(Collectors.toList()).toString());
 		BinaryTree<String> t10 = t8.getRight();
 		System.out.println(t8);
 		System.out.println(t10);

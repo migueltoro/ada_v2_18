@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Lists2;
-import us.lsi.common.Sets2;
+import us.lsi.common.List2;
+import us.lsi.common.Set2;
 
 
 
@@ -25,15 +25,15 @@ public class DatosAfinidad {
 	 * @return Un problema de ejemplo
 	 */
 	public static DatosAfinidad createEjemplo(){
-		clientes= Lists2.of(
-				Cliente.create("Juan", 10, Sets2.of("Amparo", "Rosa")),
-				Cliente.create("Maria", 10, Sets2.of("Rosa")),
-				Cliente.create("Sara", 11, Sets2.of("Amparo", "Rosa")),
-				Cliente.create("Andres", 11, Sets2.of("Marco", "Rosa")),
-				Cliente.create("Antonio", 11,Sets2.of("Marco")),
-				Cliente.create("Sonia", 12, Sets2.of("Marco")),
-				Cliente.create("Marta", 12, Sets2.of("Marco")),
-				Cliente.create("Ivan", 12, Sets2.of("Amparo"))			
+		clientes= List2.of(
+				Cliente.create("Juan", 10, Set2.of("Amparo", "Rosa")),
+				Cliente.create("Maria", 10, Set2.of("Rosa")),
+				Cliente.create("Sara", 11, Set2.of("Amparo", "Rosa")),
+				Cliente.create("Andres", 11, Set2.of("Marco", "Rosa")),
+				Cliente.create("Antonio", 11,Set2.of("Marco")),
+				Cliente.create("Sonia", 12, Set2.of("Marco")),
+				Cliente.create("Marta", 12, Set2.of("Marco")),
+				Cliente.create("Ivan", 12, Set2.of("Amparo"))			
 				);
 		Set<String> trab= new HashSet<>();	
 		clientes.stream().forEach(x-> trab.addAll(x.nombresDeTrabajadoresAfines));

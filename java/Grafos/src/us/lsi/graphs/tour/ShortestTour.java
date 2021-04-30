@@ -14,7 +14,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.graph.GraphWalk;
 
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.common.TriFunction;
 
 public class ShortestTour<V, E, G extends Graph<V, E>> {
@@ -135,7 +135,7 @@ public class ShortestTour<V, E, G extends Graph<V, E>> {
 			super();
 			this.a = a;
 			this.b = b;
-			this.vertices = Sets2.of(a,b);
+			this.vertices = Set2.of(a,b);
 		}
 		@Override
 		public int hashCode() {

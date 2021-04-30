@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
@@ -51,7 +51,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 		if (goal.test(actual)) update(state);		
 		else {
 			List<E> edges = graph.edgesListOf(actual);
-			if(size.apply(actual) > BackTrackingRandom.threshold) edges = Lists2.randomUnitary(edges);
+			if(size.apply(actual) > BackTrackingRandom.threshold) edges = List2.randomUnitary(edges);
 			for (E edge : edges) {				
 				state.forward(edge);
 				search(state);

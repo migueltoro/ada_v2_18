@@ -2,7 +2,7 @@ package us.lsi.flowgraph;
 
 import java.util.List;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 
 /**
@@ -14,7 +14,7 @@ import us.lsi.common.Preconditions;
  */
 public class FlowEdge {
 	
-	public static List<FlowEdge> edges = Lists2.empty();
+	public static List<FlowEdge> edges = List2.empty();
 	
 	public final FlowVertex source;
 	public final FlowVertex target;

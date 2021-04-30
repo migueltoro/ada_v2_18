@@ -2,7 +2,7 @@ package us.lsi.geometria;
 
 import java.util.List;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 
 
@@ -24,7 +24,7 @@ public class ObjetoGeometricoAgregado2D implements ObjetoGeometrico2D {
 	private List<ObjetoGeometrico2D> objetosGeometricos;
 		
 	private ObjetoGeometricoAgregado2D() {
-		this.objetosGeometricos = Lists2.empty();
+		this.objetosGeometricos = List2.empty();
 	}
 	
 	private ObjetoGeometricoAgregado2D(List<ObjetoGeometrico2D> objetosGeometricos) {

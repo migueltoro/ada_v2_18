@@ -11,7 +11,7 @@ import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 /**
  * @author Miguel Toro
@@ -73,7 +73,7 @@ public class IndexSubListChromosome extends BinaryChromosome
 	 */
 	@Override
 	public List<Integer> decode() {	
-		List<Integer> r = Lists2.empty();
+		List<Integer> r = List2.empty();
 		List<Integer> bn = this.getRepresentation();
 		Preconditions.checkArgument(normalSequence.size() == bn.size(),normalSequence.size()+","+bn.size());
 		for (int i = 0; i < normalSequence.size(); i++) {

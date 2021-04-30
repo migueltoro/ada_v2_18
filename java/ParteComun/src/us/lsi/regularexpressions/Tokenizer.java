@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Preconditions;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 
 
 public class Tokenizer {
 
 	public enum TokenType{Integer,Double,Variable,Function,ReservedWord,Operator,Separator,Symbol};
-	public static Set<String> separators = Sets2.of("{", "}", ",", ";", "(", ")");
+	public static Set<String> separators = Set2.of("{", "}", ",", ";", "(", ")");
 	private static String space = "\\s+";
 	private static String number = "[0-9]+(\\.[0-9]*)?";
 	private static String identifier = "[_a-zA-Z][a-zA-Z0-9]*";
@@ -50,9 +50,9 @@ public class Tokenizer {
 		super();
 		this.text = text;
 		if (functions != null) this.functions = functions;
-		else this.functions = Sets2.of();
+		else this.functions = Set2.of();
 		if (reservedWords != null) this.reservedWords = reservedWords;
-		else this.reservedWords = Sets2.of();
+		else this.reservedWords = Set2.of();
 		
 		
 		this.index=0;
@@ -266,8 +266,8 @@ public class Tokenizer {
 	public static void main(String[] args) {
 		String ex = "while{d==!=(int)23.4   *_y+5+((double)4*x+2.)^3  -sqrt(45.6+2.*@a23),;+45.6/(45<=z*7}";
 		System.out.println(Tokenizer.operatorOrSeparator);
-		Set<String> functions = Sets2.of("sqrt");
-		Set<String> reservedWords = Sets2.of("while");
+		Set<String> functions = Set2.of("sqrt");
+		Set<String> reservedWords = Set2.of("while");
 		Tokenizer t = Tokenizer.create(ex,functions,reservedWords);
 		String s = t.tokens.stream().map(x->x.toString()).collect(Collectors.joining("\n"));
 		System.out.println(s);

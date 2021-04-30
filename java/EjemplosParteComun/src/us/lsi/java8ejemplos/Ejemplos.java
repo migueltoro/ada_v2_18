@@ -14,11 +14,11 @@ import java.util.stream.Stream;
 
 
 import us.lsi.common.Files2;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Multiset;
 import us.lsi.common.Preconditions;
 import us.lsi.common.SetMultimap;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.geometria.Punto2D;
 import us.lsi.geometria.Punto2D.Cuadrante;
 import us.lsi.math.Math2;
@@ -138,7 +138,7 @@ public class Ejemplos {
 		String r = Stream.iterate(1, x->x<=limit, x->Math2.siguientePrimo(x))
 			  .map(x->x.toString())
 			  .collect(Collectors.joining("\n"));
-		Strings2.toFile(r, fileOut);
+		String2.toFile(r, fileOut);
 	}
 	
 	/**
@@ -354,7 +354,7 @@ public class Ejemplos {
 	 */
 	public static List<Long> primosMenoresOIgualesA2(Long limit){
 		Long e = 1L;
-		List<Long> a = Lists2.empty();
+		List<Long> a = List2.empty();
 		while(e<=limit){	   
 	      	a.add(e);
 	   		e = siguientePrimo2(e);		   

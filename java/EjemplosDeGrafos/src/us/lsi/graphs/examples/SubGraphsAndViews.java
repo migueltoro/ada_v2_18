@@ -11,7 +11,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -37,7 +37,7 @@ public class SubGraphsAndViews {
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();
 		GraphPath<Ciudad, Carretera> r = a.getTour(graph2);
 			
-		Strings2.toConsole(r.getEdgeList(), "Camino");	
+		String2.toConsole(r.getEdgeList(), "Camino");	
 		
 		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
 				x->String.format("%s",x.getNombre()),

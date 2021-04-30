@@ -6,8 +6,8 @@ import java.util.Set;
 import us.lsi.ag.AuxiliaryAg;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
-import us.lsi.common.Lists2;
-import us.lsi.common.Sets2;
+import us.lsi.common.List2;
+import us.lsi.common.Set2;
 import us.lsi.reinas.datos.Reina;
 
 
@@ -24,7 +24,7 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 
 	@Override
 	public List<Reina> getSolucion(List<Integer> ls) {
-		List<Reina> r = Lists2.empty();
+		List<Reina> r = List2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			r.add(Reina.create(i, ls.get(i)));
 		}
@@ -33,8 +33,8 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 
 	@Override
 	public Double fitnessFunction(List<Integer> ls) {
-		Set<Integer> dp = Sets2.empty();
-		Set<Integer> ds = Sets2.empty();
+		Set<Integer> dp = Set2.empty();
+		Set<Integer> ds = Set2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);

@@ -23,7 +23,7 @@ import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.dot.DOTExporter;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Maps2;
+import us.lsi.common.Map2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -157,9 +157,9 @@ public class Graphs2 {
 		
 		DOTExporter<V,E> de = new DOTExporter<V,E>();
 		Function<V,Map<String,Attribute>> m1 = 
-			v->Maps2.merge(Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))),vertexAttribute.apply(v));
+			v->Map2.merge(Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))),vertexAttribute.apply(v));
 		Function<E,Map<String,Attribute>> m2 = 
-			e->Maps2.merge(Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))),edgeAttribute.apply(e));
+			e->Map2.merge(Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))),edgeAttribute.apply(e));
 		de.setVertexAttributeProvider(m1);
 		de.setEdgeAttributeProvider(m2);
 		

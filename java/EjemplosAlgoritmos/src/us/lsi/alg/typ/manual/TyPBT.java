@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 
 public class TyPBT {
@@ -26,16 +26,16 @@ public class TyPBT {
 		}
 
 		StateTyP forward(Integer a) {
-			List<Integer> as = Lists2.addLast(this.acciones(),a);
+			List<Integer> as = List2.addLast(this.acciones(),a);
 			TyPProblem vcn = this.vertice().vecino(a);
-			List<TyPProblem> vt = Lists2.addLast(this.vertices(),vcn);
+			List<TyPProblem> vt = List2.addLast(this.vertices(),vcn);
 			return StateTyP.of(vcn,vcn.maxCarga(),as,vt);
 		}
 
 		StateTyP back(Integer a) {
-			List<Integer> as = Lists2.removeLast(this.acciones());
-			List<TyPProblem> vt = Lists2.removeLast(this.vertices());
-			TyPProblem van = Lists2.last(vt);
+			List<Integer> as = List2.removeLast(this.acciones());
+			List<TyPProblem> vt = List2.removeLast(this.vertices());
+			TyPProblem van = List2.last(vt);
 			return StateTyP.of(van,van.maxCarga(),as,vt);
 		}
 		

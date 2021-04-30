@@ -7,7 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -51,7 +51,7 @@ public class TestColorAstar {
 				ColorHeuristic::heuristic);
 		
 		GraphPath<ColorVertex, ColorEdge> path = ms.search().orElse(null);
-		ColorVertex lv = Lists2.last(path.getVertexList());
+		ColorVertex lv = List2.last(path.getVertexList());
 		System.out.println("Numero de Colores = "+lv.nc());
 		System.out.println(lv.cav());
 

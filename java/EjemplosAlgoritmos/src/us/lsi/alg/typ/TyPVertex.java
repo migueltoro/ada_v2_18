@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.tareasyprocesadores.datos.Tarea;
@@ -34,13 +34,13 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	}
 	
 	public static TyPVertex first() {
-		return new TyPVertex(0,Lists2.copy(0.,m));
+		return new TyPVertex(0,List2.copy(0.,m));
 	}
 	
 	public static TyPVertex last() {
 		n = numeroDeTareas;
 		m = numeroDeProcesadores;
-		return new TyPVertex(n,Lists2.copy(0.,m));
+		return new TyPVertex(n,List2.copy(0.,m));
 	}
 	
 	public static TyPVertex of(Integer index, List<Double> cargas) {
@@ -77,8 +77,8 @@ public record TyPVertex(Integer index, List<Double> cargas)
 
 	@Override
 	public List<Integer> actions() {
-		if(this.goal()) return Lists2.of();
-		return Lists2.rangeList(0,m);
+		if(this.goal()) return List2.of();
+		return List2.rangeList(0,m);
 	}
 	
 	public Integer greadyAction() {
@@ -114,7 +114,7 @@ public record TyPVertex(Integer index, List<Double> cargas)
 				.map(e->IntPair.of(e.getAction(),e.getSource().index()))
 				.collect(Collectors.groupingBy(p->p.first(),Collectors.mapping(p->Tarea.getTarea(p.second()), Collectors.toList())));
 		
-		TyPVertex v = Lists2.last(path.getVertexList());
+		TyPVertex v = List2.last(path.getVertexList());
 		return SolucionTyP.of(carga, v.maxCarga(), v.npMin(), v.npMax());
 	}
 

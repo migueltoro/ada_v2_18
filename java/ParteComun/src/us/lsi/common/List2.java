@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import us.lsi.math.Math2;
 
-public class Lists2 {
+public class List2 {
 	
 	/**
 	 * @pre La lista no está vacía
@@ -221,7 +221,7 @@ public class Lists2 {
 	 */
 	public static List<Double> rangeList(Double a, Double b){
 		Preconditions.checkArgument(a<=b);
-		List<Double> s = Lists2.empty();
+		List<Double> s = List2.empty();
 		for(double i = a; i<b; i++){
 			s.add(i);
 		}
@@ -235,7 +235,7 @@ public class Lists2 {
 	 */
 	public static List<Double> rangeList(Double a, Double b, Double c){
 		Preconditions.checkArgument(a<=b  && c>0);
-		List<Double> s = Lists2.empty();
+		List<Double> s = List2.empty();
 		for(double i = a; i<b; i=i+c){
 			s.add(i);
 		}
@@ -272,13 +272,13 @@ public class Lists2 {
 	 * @return La concatenación d elas dos listas
 	 */
 	public static <E> List<E> concat(List<E> ls1, List<E> ls2){
-		List<E> r = Lists2.ofCollection(ls1);
+		List<E> r = List2.ofCollection(ls1);
 		r.addAll(ls2);
 		return r;
 	}
 	
 	public static <E> List<E> concatPath(List<E> ls1, List<E> ls2){
-		List<E> r = Lists2.ofCollection(ls1.subList(0,ls1.size()-1));
+		List<E> r = List2.ofCollection(ls1.subList(0,ls1.size()-1));
 		r.addAll(ls2);
 		return r;
 	}
@@ -299,7 +299,7 @@ public class Lists2 {
 	public static <E> List<E> mergeOrdered(List<E> r1, List<E> r2, Comparator<? super E> cmp){
 //		Preconditions.checkState(isOrdered(r1,cmp));
 //		Preconditions.checkState(isOrdered(r2,cmp));
-		List<E> r3 = Lists2.empty();
+		List<E> r3 = List2.empty();
 		int k1= 0;
 		int k2= 0;
 		int k3= 0;
@@ -379,7 +379,7 @@ public class Lists2 {
 	 * @return Una lista unitaria escogida aleatoriamente o vacía si lo es la de entrada
 	 */
 	public static <T> List<T> randomUnitary(List<T> ls){
-		List<T> r = Lists2.empty();
+		List<T> r = List2.empty();
 		if(!ls.isEmpty()){
 			int e = Math2.getEnteroAleatorio(0, ls.size());
 			r.add(ls.get(e));	

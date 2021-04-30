@@ -7,7 +7,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.common.Maps2;
+import us.lsi.common.Map2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -43,7 +43,7 @@ public class RecubrimientoMinimo {
 		
 		System.out.println(r);	
 		
-		Map<Ciudad,Double> habitantes = Maps2.newHashMap(x->1/x.getHabitantes());
+		Map<Ciudad,Double> habitantes = Map2.newHashMap(x->1/x.getHabitantes());
 		
 		VertexCoverAlgorithm<Ciudad> vc = new RecursiveExactVCImpl<>(graph,habitantes);
 		

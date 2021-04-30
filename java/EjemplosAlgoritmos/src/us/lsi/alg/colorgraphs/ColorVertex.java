@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
@@ -39,7 +39,7 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 		ColorVertex.m = m;; 
 		ColorVertex.n = graph.vertexSet().size(); 
 		ColorVertex.graph = graph;
-		ColorVertex.colors = Lists2.rangeList(0, ColorVertex.m);
+		ColorVertex.colors = List2.rangeList(0, ColorVertex.m);
 	}
 	
 
@@ -94,14 +94,14 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 
 	@Override
 	public List<Integer> actions() {		
-		List<Integer> r = Lists2.difference(ColorVertex.colors,this.cv());
+		List<Integer> r = List2.difference(ColorVertex.colors,this.cv());
 		return r;
 	}
 	
 	public Integer greedyAction() {
-		List<Integer> r = Lists2.difference(this.ca(),this.cv());
-		if(r.isEmpty()) r = Lists2.difference(ColorVertex.colors,this.cv());
-		return Lists2.randomUnitary(r).get(0);
+		List<Integer> r = List2.difference(this.ca(),this.cv());
+		if(r.isEmpty()) r = List2.difference(ColorVertex.colors,this.cv());
+		return List2.randomUnitary(r).get(0);
 	}
 
 

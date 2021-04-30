@@ -10,10 +10,10 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Sets2 {
+public class Set2 {
 
 	public static Set<Integer> range(Integer a, Integer b, Integer c){		
-		return StreamTools.range(a, b, c).boxed()
+		return Stream2.range(a, b, c).boxed()
 			 .collect(Collectors.toSet());
 	}	
 	

@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import us.lsi.common.Files2;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.tiposrecursivos.parsers.TreeLexer;
 import us.lsi.tiposrecursivos.parsers.TreeParser;
@@ -364,7 +364,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		case Empty: r = Tree.empty(); break;
 		case Leaf: r = Tree.leaf(label); break;
 		case Nary:
-			List<Tree<E>> nElements = Lists2.reverse(elements).stream().map(x -> x.getReverse())
+			List<Tree<E>> nElements = List2.reverse(elements).stream().map(x -> x.getReverse())
 					.collect(Collectors.toList());
 			r = Tree.nary(label, nElements);
 		}
@@ -435,11 +435,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getPreOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Nary:
-			r = Lists2.of(this.label);
-			r.addAll(elements.stream().map(x -> x.getPreOrder()).reduce(Lists2.empty(), Lists2::concat));
+			r = List2.of(this.label);
+			r.addAll(elements.stream().map(x -> x.getPreOrder()).reduce(List2.empty(), List2::concat));
 		}
 		return r;
 	}
@@ -453,10 +453,10 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getPostOrder() {
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Nary:
-			r = elements.stream().map(x -> x.getPostOrder()).reduce(Lists2.empty(), Lists2::concat);
+			r = elements.stream().map(x -> x.getPostOrder()).reduce(List2.empty(), List2::concat);
 			r.add(label);
 		}
 		return r;
@@ -469,15 +469,15 @@ public class TreeImpl<E> implements MutableTree<E> {
 	public List<E> getInOrder(int k){
 		List<E> r = null;
 		switch (this.getType()) {
-		case Empty: r = Lists2.empty(); break;
-		case Leaf: r = Lists2.of(this.label); break;
+		case Empty: r = List2.empty(); break;
+		case Leaf: r = List2.of(this.label); break;
 		case Nary:
-			List<TreeImpl<E>> nElements = Lists2.ofCollection(elements);
+			List<TreeImpl<E>> nElements = List2.ofCollection(elements);
 			int nk = Math.min(k, elements.size());
 			nElements.add(nk,TreeImpl.leaf(label));
 			r = nElements.stream()
 					.map(x->x.getInOrder(k))
-					.reduce(Lists2.empty(),Lists2::concat);
+					.reduce(List2.empty(),List2::concat);
 		}
 		return r;
 	}
@@ -486,8 +486,8 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public List<Tree<E>> getByLevel(){
-		List<Tree<E>> r = Lists2.of(this);
-		List<Tree<E>> level = Lists2.of(this);		
+		List<Tree<E>> r = List2.of(this);
+		List<Tree<E>> level = List2.of(this);		
 		while(!level.isEmpty()){
 			level = getNextLevel(level);
 			r.addAll(level);
@@ -541,7 +541,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getDepth(Tree<E> root){
-		List<Tree<E>> level = Lists2.of(root);
+		List<Tree<E>> level = List2.of(root);
 		int n = 0;	
 		int r = -1;
 		while(!level.isEmpty()){
@@ -633,7 +633,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		String ex = "39(2,27(_,2,3,4))";
 		Tree<String> t7 = Tree.parse(ex);
 		System.out.println(t7);
-		System.out.println(Lists2.reverse(Lists2.of(1,2,3,4,5,6,7,8,9)));
+		System.out.println(List2.reverse(List2.of(1,2,3,4,5,6,7,8,9)));
 		Tree<String> t8 = t7.getReverse();
 		System.out.println(t8);
 		System.out.println(t8.getChild(0).getFather());

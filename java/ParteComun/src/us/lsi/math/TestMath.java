@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Multiset;
 
 
@@ -28,7 +28,7 @@ public class TestMath {
 		}
 		System.out.println(m1);
 		List<Integer> r = new ArrayList<>();
-		List<Integer> max = Lists2.copy(4, 4);
+		List<Integer> max = List2.copy(4, 4);
 		for(int i=0;i<12;i++){
 			r.add(Math2.getEnteroAleatorio(0, 2));
 		}

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.flujosparalelos.Streams2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
@@ -27,7 +27,7 @@ public class TravelVertexInteger implements ActionVirtualVertex<TravelVertexInte
 	TravelVertexInteger(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> camino, Double weight) {
 		super();
 		this.graph = graph;
-		this.camino = Lists2.copy(camino);
+		this.camino = List2.copy(camino);
 		this.weight = weight;
 		this.n = camino.size()-1;
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.*;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.math.*;
 
@@ -60,11 +60,11 @@ public class ProblemasDeListas {
 		while (c-b>0) {
 		    T elem =  lista.get(b);
 		    if (cmp.compare(elem, pivote)<0) {
-		    	Lists2.intercambia(lista, a,b);
+		    	List2.intercambia(lista, a,b);
 				a++;
 				b++;
 		    } else if (cmp.compare(elem, pivote)>0) {
-		    	Lists2.intercambia(lista,b,c-1);
+		    	List2.intercambia(lista,b,c-1);
 				c--;	
 		    } else {
 		    	b++;
@@ -82,7 +82,7 @@ public class ProblemasDeListas {
 			 if (cmp.compare(elem, pivote)<0){
 				 a++; 
 			 } else {
-				 Lists2.intercambia(lista, a,b-1);
+				 List2.intercambia(lista, a,b-1);
 				 b--;
 			 }
 		}
@@ -104,12 +104,12 @@ public class ProblemasDeListas {
 
 	public static <E extends Comparable<? super E>> void mergeSort(List<E> lista){
 		Comparator<? super E> ord = Comparator.naturalOrder();
-		List<E> ls = Lists2.ofCollection(lista);
+		List<E> ls = List2.ofCollection(lista);
 		mgSort(lista,0,lista.size(),ord,ls);	
 	}
 	
 	public static <E> void mergeSort(List<E> lista, Comparator<? super E> ord){
-		List<E> ls = Lists2.ofCollection(lista);
+		List<E> ls = List2.ofCollection(lista);
 		mgSort(lista,0,lista.size(),ord,ls);	
 	}
 	
@@ -322,7 +322,7 @@ public class ProblemasDeListas {
 		for (int i = inf; i < sup; i++) {
 		      for(int j = i+1; j < sup; j++){
 		    	  if(ord.compare(lista.get(i),lista.get(j))>0){
-		    		  Lists2.intercambia(lista, i, j);
+		    		  List2.intercambia(lista, i, j);
 		    	  }
 		      }
 		}

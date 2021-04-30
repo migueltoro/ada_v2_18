@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 
 /**
@@ -61,7 +61,7 @@ public interface SeqNormalData<S> extends Data {
 	    default List<Integer> getNormalSequence() {
 			List<Integer> r = IntStream.range(0,size())
 					.boxed()
-					.flatMap(x->Lists2.copy(x,getMaxMultiplicity(x)).stream())
+					.flatMap(x->List2.copy(x,getMaxMultiplicity(x)).stream())
 					.collect(Collectors.toList());
 			return r;
 		}

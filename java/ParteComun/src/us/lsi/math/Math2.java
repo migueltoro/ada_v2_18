@@ -7,7 +7,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 
 
@@ -296,7 +296,7 @@ public class Math2 {
 	 * entre 0 y ls.size(), no incluido, con las probababilidades proporcionadas en la lista
 	 */
 	public static Integer escogeEntre(Double...rest){
-		return escogeEntre(Lists2.of(rest));
+		return escogeEntre(List2.of(rest));
 	}
 	 
 	/**
@@ -406,7 +406,7 @@ public class Math2 {
 	 * @return Un lista de tamaño n con números reales en el intervalo a &lt; = r &lt; b 
 	 */
 	public static List<Double> getListDoubleAleatoria(int n, double a, double b){
-		List<Double> lista = Lists2.empty();
+		List<Double> lista = List2.empty();
 		for(int i =0; i<n;i++){
 			lista.add(getDoubleAleatorio(a,b));
 		}

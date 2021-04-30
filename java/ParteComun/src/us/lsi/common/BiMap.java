@@ -20,8 +20,8 @@ public class BiMap<K, V> {
 	
 	private BiMap() {
 		super();
-		this.map = Maps2.newHashMap();
-		this.inverseMap = Maps2.newHashMap();
+		this.map = Map2.newHashMap();
+		this.inverseMap = Map2.newHashMap();
 	}
 
 

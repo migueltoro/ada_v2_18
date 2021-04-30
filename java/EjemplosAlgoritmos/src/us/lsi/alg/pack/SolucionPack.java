@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 public class SolucionPack implements Comparable<SolucionPack>{
 	
@@ -25,8 +25,8 @@ public class SolucionPack implements Comparable<SolucionPack>{
 				.map(i->IntPair.of(i, as.get(i)))
 				.collect(Collectors.toMap(
 						e->e.second(),
-						e->Lists2.of(e.first()),
-						(List<Integer> a, List<Integer> b)->Lists2.concat(a,b)));
+						e->List2.of(e.first()),
+						(List<Integer> a, List<Integer> b)->List2.concat(a,b)));
 	}
 	
 	

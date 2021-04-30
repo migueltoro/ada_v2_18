@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.flujosparalelos.Streams2;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.grafos.datos.Carretera;
@@ -26,7 +26,7 @@ public class TravelVertex implements ActionVirtualVertex<TravelVertex, TravelEdg
 	TravelVertex(Graph<Ciudad,Carretera> graph, List<Ciudad> camino) {
 		super();
 		this.graph = graph;
-		this.camino = Lists2.copy(camino);
+		this.camino = List2.copy(camino);
 		this.weight = GraphPaths.of(graph,camino).getWeight();
 		this.n = camino.size();
 	}

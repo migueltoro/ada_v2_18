@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Multiset;
 import us.lsi.common.MutableType;
 
@@ -41,8 +41,8 @@ public class Collectors2 {
 	public static <E> Collector<E,List<E>,List<E>> mergeSort(Comparator<? super E> cmp) {
 		return Collector.of(
 				()->new ArrayList<>(), 
-				(x,e)->Lists2.insertOrdered(x,e,cmp), 
-				(x,y)->Lists2.mergeOrdered(x,y,cmp), 
+				(x,e)->List2.insertOrdered(x,e,cmp), 
+				(x,y)->List2.mergeOrdered(x,y,cmp), 
 				x->x);
 	}
 	

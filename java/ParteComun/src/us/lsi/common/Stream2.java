@@ -26,7 +26,7 @@ import us.lsi.math.Math2;
 
 import java.util.Spliterators.AbstractSpliterator;
 
-public class StreamTools {
+public class Stream2 {
 	
 	public static <L, R, T> Spliterator<T> zip(Spliterator<L> lefts, Spliterator<R> rights,
 			BiFunction<L, R, T> combiner) {

@@ -1,6 +1,6 @@
 package us.lsi.basictypes;
 
-import us.lsi.common.Strings2;
+import us.lsi.common.String2;
 
 public class Test {
 
@@ -41,7 +41,7 @@ public class Test {
 		double r = d4.put(3, -15.);
 		double r2 = d4.remove(6);
 		System.out.println("Hash Size = "+d4.size()+", r = "+r+", r2 = "+r2);
-		Strings2.toConsole(d4.entryList(), "Hash Table 1");
+		String2.toConsole(d4.entryList(), "Hash Table 1");
 		
 		HashTable<Integer, String> ht= HashTable.empty();
 		ht.put(1, "1");
@@ -51,7 +51,7 @@ public class Test {
 		System.out.println("1----");
 		System.out.println(ht.get(1)); //no funciona. Se queda bloqueado ya que entryData <14,"14"> apunta a si mismo y no al <1,"1">
 		System.out.println("2----");
-		Strings2.toConsole(ht.entryList(), "Hash Table 2");
+		String2.toConsole(ht.entryList(), "Hash Table 2");
 	}
 
 }

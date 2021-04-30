@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 
-public class Maps2 {
+public class Map2 {
 		
 	public static <K,V> Entry<K,V> newEntry(K key,V value){	
 		return new SimpleEntry<>(key,value);
@@ -50,7 +50,7 @@ public class Maps2 {
 	 */
 	public static <K,V,U extends Collection<V>> Map<V,K> reverseHashMap(Map<K,U> m){
 		return m.keySet().stream()
-				.<Entry<K,V>>flatMap(x->m.get(x).stream().map(y->Maps2.newEntry(x,y)))
+				.<Entry<K,V>>flatMap(x->m.get(x).stream().map(y->Map2.newEntry(x,y)))
 				.collect(Collectors.toMap(z->z.getValue(), z->z.getKey()));
 	}
 	
@@ -66,7 +66,7 @@ public class Maps2 {
 	 */
 	public static <K,V,R> Map<K,R> newHashMap(Map<K,V> m,Function<V,R> f){
 		return m.entrySet().stream()
-				.map(x->Maps2.newEntry(x.getKey(), f.apply(x.getValue())))
+				.map(x->Map2.newEntry(x.getKey(), f.apply(x.getValue())))
 				.collect(Collectors.toMap(x->x.getKey(), x->x.getValue()));
 	}
 	
@@ -100,7 +100,7 @@ public class Maps2 {
 	 * @return Un Map cuyo dominio y valores son los de la función. Este Map sólo tiene disponible el método get.
 	 */
 	public static <K,V> Map<K, V> newHashMap(Function<K,V> f){
-		MapOfFunction<K,V> r = new Maps2.MapOfFunction<>(f);
+		MapOfFunction<K,V> r = new Map2.MapOfFunction<>(f);
 		return r;
 		
 	}

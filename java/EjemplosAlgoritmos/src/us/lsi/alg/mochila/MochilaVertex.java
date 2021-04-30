@@ -8,7 +8,7 @@ import java.util.stream.*;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
@@ -76,7 +76,7 @@ public record MochilaVertex(Integer index, Integer capacidadRestante)
 	public List<Integer> actions() {
 		if(this.index == n) return new ArrayList<>();
 		Integer nu = greedyAction().intValue();
-		if(this.index == n-1) return Lists2.of(nu);
+		if(this.index == n-1) return List2.of(nu);
 		List<Integer> alternativas = IntStream.rangeClosed(0,nu)
 				.boxed()
 				.collect(Collectors.toList());

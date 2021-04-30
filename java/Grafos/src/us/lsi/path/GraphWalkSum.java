@@ -10,7 +10,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.GraphWalk;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.alg.DynamicProgrammingReduction.Sp;
@@ -42,8 +42,8 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 				String.format("El tipo del EGraphPath debe ser Sum y es %s",graph.pathType()));
 		V startVertex = graph.getEdgeSource(edge);
 		V endVertex = graph.getEdgeTarget(edge);
-		List<V> vertexList = Lists2.of(startVertex,endVertex);
-		List<E> edgeList = Lists2.of(edge);
+		List<V> vertexList = List2.of(startVertex,endVertex);
+		List<E> edgeList = List2.of(edge);
 		Double weight = graph.getEdgeWeight(edge);
 	    weight += graph.getVertexWeight(startVertex);
 		weight += graph.getVertexWeight(endVertex);
@@ -55,8 +55,8 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 				String.format("El tipo del EGraphPath debe ser Sum y es %s",graph.pathType()));
 		V startVertex = vertex;
 		V endVertex = vertex;
-		List<V> vertexList = Lists2.of(vertex);
-		List<E> edgeList = Lists2.of();
+		List<V> vertexList = List2.of(vertex);
+		List<E> edgeList = List2.of();
 		Double weight = 0.;
 	    weight += graph.getVertexWeight(vertex);
 		return new GraphWalkSum<V, E>(graph, startVertex, endVertex, vertexList, edgeList, weight);
@@ -149,7 +149,7 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 
 	@Override
 	public E lastEdge() {
-		return Lists2.last(this.edgeList);
+		return List2.last(this.edgeList);
 	}
 
 	@Override

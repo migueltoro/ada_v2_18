@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 public class JarrasSolution {
 	
@@ -26,7 +26,7 @@ public class JarrasSolution {
 	@Override
 	public String toString() {
 		String s = this.edges.stream().map(e->e.toString()).collect(Collectors.joining("\n"));
-		s = s +"\n"+Lists2.last(this.path.getVertexList());
+		s = s +"\n"+List2.last(this.path.getVertexList());
 		return s;
 	}
 

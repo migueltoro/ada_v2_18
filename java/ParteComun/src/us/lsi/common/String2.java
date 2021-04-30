@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Strings2 {
+public class String2 {
 	
 	public static void toFile(String s, String file){
 		try {

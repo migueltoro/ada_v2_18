@@ -3,9 +3,9 @@ package us.lsi.recursivos.puntos;
 import java.util.*;
 
 import us.lsi.common.Comparators;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.geometria.ParDePuntos;
 import us.lsi.geometria.Punto2D;
 import us.lsi.math.Math2;
@@ -44,7 +44,7 @@ public class ListasDePuntos {
 	}
 	
 	public static Set<Punto2D> puntosMaximalesBase(int a, int b, List<Punto2D> lista){
-		Set<Punto2D> r = Sets2.of();
+		Set<Punto2D> r = Set2.of();
 		Punto2D pi;
 		Punto2D pj;
 		boolean piEsDominado;
@@ -67,7 +67,7 @@ public class ListasDePuntos {
 	
 	private static Set<Punto2D> puntosMaximalesCombina(Set<Punto2D> si, Set<Punto2D> sd){
 		Double maxYD = Double.MIN_VALUE;
-		Set<Punto2D> r = Sets2.of(sd);
+		Set<Punto2D> r = Set2.of(sd);
 		for(Punto2D p:sd){
 			if(p.getY()>maxYD){
 				maxYD = p.getY();
@@ -112,8 +112,8 @@ public class ListasDePuntos {
 		if(j-i <= umbral){
 			r = parMasCercanoBase(i,j,puntosX);
 		}else{
-			List<Punto2D> puntosYIzq = Lists2.empty();
-			List<Punto2D> puntosYDer = Lists2.empty();
+			List<Punto2D> puntosYIzq = List2.empty();
+			List<Punto2D> puntosYDer = List2.empty();
 			Double xk = puntosX.get(k).getX();
 			for(Punto2D p:puntosY){
 				if(p.getX() < xk){
@@ -125,7 +125,7 @@ public class ListasDePuntos {
 			ParDePuntos s1 = masCercano(i,k,puntosX, puntosYIzq,umbral,ordNatural);
 			ParDePuntos s2 = masCercano(k,j,puntosX, puntosYDer,umbral,ordNatural);
 			r = Comparators.min(s1, s2,ordNatural);
-			List<Punto2D> yCentral = Lists2.empty();
+			List<Punto2D> yCentral = List2.empty();
 			for(Punto2D p: puntosY){
 				if(Math.abs(p.getX()- xk) < r.getDistancia()){
 						yCentral.add(p);
@@ -190,7 +190,7 @@ public class ListasDePuntos {
 	}
 	
 	public static List<Punto2D> getListaPuntosAleatoria(int n){
-		List<Punto2D> r = Lists2.empty();
+		List<Punto2D> r = List2.empty();
 		for(int i=0; i < n; i++){
 			r.add(Punto2D.create(Math2.getDoubleAleatorio(-1000., 1000.),Math2.getDoubleAleatorio(-1000., 1000.)));
 		}

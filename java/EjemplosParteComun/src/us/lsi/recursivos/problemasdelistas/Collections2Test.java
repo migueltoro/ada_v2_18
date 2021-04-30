@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.util.Comparator;
 
 import us.lsi.common.Comparators;
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.math.Math2;
 import us.lsi.recursivos.problemasdelistas.ProblemasDeListas.SubSecuencia;
 
@@ -69,7 +69,7 @@ public class Collections2Test {
 	@Test
 	public void testSubSecuencia() {
 		Double[] r = {1., -2., 11., -4., 13., -5., 2., 3.};
-		List<Double> lista = Lists2.empty();
+		List<Double> lista = List2.empty();
 		for(Double e:r){
 			lista.add(e);
 		}

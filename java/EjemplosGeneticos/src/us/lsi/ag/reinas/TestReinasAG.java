@@ -10,7 +10,7 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.common.Sets2;
+import us.lsi.common.Set2;
 import us.lsi.reinas.datos.Reina;
 
 
@@ -45,8 +45,8 @@ public class TestReinasAG {
 		System.out.println(cr.fitness());
 		System.out.println(p.getSolucion(cr.decode()));
 		List<Integer> ls = cr.decode();
-		Set<Integer> dp = Sets2.empty();
-		Set<Integer> ds = Sets2.empty();
+		Set<Integer> dp = Set2.empty();
+		Set<Integer> ds = Set2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			dp.add(ls.get(i)-i);
 			ds.add(ls.get(i)+i);

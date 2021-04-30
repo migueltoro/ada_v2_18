@@ -2,7 +2,7 @@ package us.lsi.basictypes;
 
 import java.util.List;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.math.Math2;
 
 public class HashTable<K, V> {
@@ -145,7 +145,7 @@ public class HashTable<K, V> {
 	}
 	
 	public List<EntryTable<K,V>> entryList(){
-		List<EntryTable<K,V>> r = Lists2.empty();
+		List<EntryTable<K,V>> r = List2.empty();
 		for(int i =0;i<this.capacityData;i++) {
 			EntryData<K,V> e = data.get(i);
 			if(e.key == null) continue;

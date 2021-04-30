@@ -7,7 +7,7 @@ import java.util.Map;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.GraphWalk;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 import us.lsi.hypergraphs.GraphTree;
@@ -109,7 +109,7 @@ public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydV
 		if(tree.isBaseCase()) {
 			Integer origen = tree.vertex().i;
 			Integer destino = tree.vertex().j;
-			List<Integer> ls = Lists2.of(origen,destino);
+			List<Integer> ls = List2.of(origen,destino);
 			gp = new GraphWalk<>(tree.vertex().graph,ls,tree.weight());
 		} else if(tree.action() == ActionFloyd.No){
 			gp = solution(tree.neighbords().get(0));
@@ -127,7 +127,7 @@ public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydV
 		if(s.edge() == null) {
 			Integer origen = vertex.i;
 			Integer destino = vertex.j;
-			List<Integer> ls = Lists2.of(origen,destino);
+			List<Integer> ls = List2.of(origen,destino);
 			gp = new GraphWalk<>(vertex.graph,ls,s.weight());
 		} else if(s.edge().action == ActionFloyd.No){
 			gp = solution(tree,s.edge().targets.get(0));

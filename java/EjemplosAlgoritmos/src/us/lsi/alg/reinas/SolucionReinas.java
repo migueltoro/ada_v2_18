@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.common.Lists2;
+import us.lsi.common.List2;
 
 public class SolucionReinas implements Comparable<SolucionReinas> {
 	
@@ -23,7 +23,7 @@ public class SolucionReinas implements Comparable<SolucionReinas> {
 
 	private SolucionReinas(GraphPath<ReinasVertex, ReinasEdge> path) {
 		super();
-		this.last = Lists2.last(path.getVertexList());
+		this.last = List2.last(path.getVertexList());
 		this.error1 = (ReinasVertex.n - this.last.fo.stream().collect(Collectors.toSet()).size());
 		this.error2 = ReinasVertex.n - this.last.dpo.size();
 		this.error3 = ReinasVertex.n - this.last.dso.size();
