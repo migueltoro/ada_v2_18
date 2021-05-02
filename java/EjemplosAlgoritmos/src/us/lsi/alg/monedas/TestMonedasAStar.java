@@ -23,7 +23,7 @@ public class TestMonedasAStar {
 		MonedaVertex e2 = MonedaVertex.last();
 		Predicate<MonedaVertex> constraint = v->v.valorRestante() == 0;
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.getWeight());		
+		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.weight());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
 				GraphAlg.aStar(graph,v->v.goal(),e2,constraint,MonedasHeuristica::heuristic_negate);
@@ -42,7 +42,7 @@ public class TestMonedasAStar {
 		}
 		Graphs2.toDot(ms.outGraph,"ficheros/MonedasAstarGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
-				e->e.getAction().toString(),
+				e->e.action().toString(),
 				v->GraphColors.getColorIf(Color.red,v.goal()),
 				e->GraphColors.getColor(Color.black)
 				);
@@ -54,7 +54,7 @@ public class TestMonedasAStar {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraph(e3,x->x.getWeight());		
+		graph = Graphs2.simpleVirtualGraph(e3,x->x.weight());		
 		
 	    ms = GraphAlg.aStar(graph,e->e.goal(),e4,constraint,MonedasHeuristica::heuristic);
 //	    ms.withGraph = true;

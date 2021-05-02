@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.model.PLIModelBaseVisitor;
 import us.lsi.model.PLIModelParser;
 import us.lsi.solve.AuxGrammar.Limits;
@@ -152,7 +152,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		Function<Integer,String> cn = i->AuxGrammar.constraintName[i];
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
-		Function<Integer,Stream<String>> sc = i ->Streams2.enumerate(cs.apply(i).stream().filter(ls->!ls.isEmpty()))
+		Function<Integer,Stream<String>> sc = i ->Stream2.enumerate(cs.apply(i).stream().filter(ls->!ls.isEmpty()))
 				      .map(p->String.format("%s%d: %s",cn.apply(i),p.counter,p.value));
 		String lt1 = IntStream.range(0,n).boxed()
 				.flatMap(i ->sc.apply(i))

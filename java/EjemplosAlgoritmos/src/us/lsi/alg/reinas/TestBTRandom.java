@@ -4,6 +4,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
+import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
 
 
@@ -14,16 +15,16 @@ public class TestBTRandom {
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
-			EGraph<ReinasVertex, ReinasEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.errores.doubleValue());		
+			EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.errores().doubleValue());		
 			
-			BackTrackingRandom<ReinasVertex, ReinasEdge, SolucionReinas> ms = 
-					BT.<ReinasVertex,ReinasEdge,SolucionReinas>randomGoal(
+			BackTrackingRandom<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
+					BT.<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,SolucionReinas>randomGoal(
 					graph, 
-					v->v.index == ReinasVertex.n, 
+					v->v.index() == ReinasVertex.n, 
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
 					BTType.One,
-					v->ReinasVertex.n-v.index);							
+					v->ReinasVertex.n-v.index());							
 			ms.search();
 			System.out.println(ms.iterations);
 			System.out.println(ms.getSolution());

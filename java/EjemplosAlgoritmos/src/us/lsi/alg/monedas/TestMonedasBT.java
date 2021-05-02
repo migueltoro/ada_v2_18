@@ -49,7 +49,7 @@ public class TestMonedasBT {
 		if (path1 != null) {
 			ms1.bestValue = path1.getWeight();
 			SolucionMonedas ss = SolucionMonedas.of(path1);
-			if (ss.valor == MochilaVertex.capacidadInicial) {
+			if (ss.valor() == MochilaVertex.capacidadInicial) {
 				ms1.solutions.add(ss);
 			}
 		}
@@ -83,7 +83,7 @@ public class TestMonedasBT {
 		if (path2 != null) {
 			ms2.bestValue = path2.getWeight();
 			SolucionMonedas ss = SolucionMonedas.of(path2);
-			if (ss.valor == MochilaVertex.capacidadInicial) {
+			if (ss.valor() == MochilaVertex.capacidadInicial) {
 				ms2.solutions.add(ss);
 			}
 		}
@@ -97,7 +97,7 @@ public class TestMonedasBT {
 		
 		Graphs2.toDot(ms2.outGraph,"ficheros/MonedasBTGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
-				e->e.getAction().toString(),
+				e->e.action().toString(),
 				v->GraphColors.getColorIf(Color.red,v.goal()),
 				e->GraphColors.getColor(Color.black)
 				);

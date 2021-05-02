@@ -72,7 +72,7 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Actio
 		List<Integer> r;
 		if(this.index() == MonedaVertex.n) r = new ArrayList<>();
 		else if(this.index() == MonedaVertex.n-1 && this.valorRestante%Moneda.valor(this.index) == 0) {
-			r = List.of(this.accionVoraz().getAction());
+			r = List.of(this.accionVoraz().action());
 		} else if(this.index() == MonedaVertex.n-1 && this.valorRestante%Moneda.valor(this.index) != 0) {
 		    r = new ArrayList<>();
 		} else {

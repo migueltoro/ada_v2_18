@@ -111,7 +111,7 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	
 	public static SolucionTyP getSolucion(GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path){	
 		Map<Integer,List<Tarea>> carga = path.getEdgeList().stream()
-				.map(e->IntPair.of(e.getAction(),e.getSource().index()))
+				.map(e->IntPair.of(e.action(),e.source().index()))
 				.collect(Collectors.groupingBy(p->p.first(),Collectors.mapping(p->Tarea.getTarea(p.second()), Collectors.toList())));
 		
 		TyPVertex v = List2.last(path.getVertexList());

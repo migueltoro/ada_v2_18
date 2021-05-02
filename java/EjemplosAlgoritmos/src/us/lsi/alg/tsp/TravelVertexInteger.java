@@ -1,5 +1,6 @@
 package us.lsi.alg.tsp;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,60 +8,65 @@ import org.jgrapht.Graph;
 
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.common.Preconditions;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 //import us.lsi.path.GraphPaths;
 import us.lsi.path.GraphPaths;
 
-public class TravelVertexInteger implements ActionVirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
+public record TravelVertexInteger(List<Integer> camino) implements ActionVirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
 	
-	public static TravelVertexInteger of(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> camino) {
-		return new TravelVertexInteger(graph, camino, GraphPaths.of(graph,camino).getWeight());
+	public static TravelVertexInteger of(List<Integer> camino) {
+		return new TravelVertexInteger(List2.copy(camino));
 	}
 
-	public final Graph<Integer,SimpleEdge<Integer>> graph;
-	public final List<Integer> camino;
-	public final Double weight;
-	public Integer n;
-
-	TravelVertexInteger(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> camino, Double weight) {
-		super();
-		this.graph = graph;
-		this.camino = List2.copy(camino);
-		this.weight = weight;
-		this.n = camino.size()-1;
-	}
+	public static Graph<Integer,SimpleEdge<Integer>> graph;
 
 	@Override
 	public Boolean isValid() {
 		return true;
 	}
+	
+	IntPair greedyAction() {
+		return this.actions().stream().min(Comparator.comparing(a->this.neighbor(a).weight())).get();
+	}
+	
+	TravelEdgeInteger geedyEdge() {
+		return this.edge(this.greedyAction());
+	}
+	
+	TravelVertexInteger geedyVertex() {
+		return this.neighbor(this.greedyAction());
+	}
 
 	@Override
 	public List<IntPair> actions() {
-		return Streams2.allPairs(1,n,0,n-1)
-				.filter(p->p.second() > p.first())
+		Integer n = camino.size()-1;
+		return Stream2.allPairs(1,n,0,n-1)
+				.filter(p->p.second() > p.first() +2)
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public TravelVertexInteger neighbor(IntPair a) {
-		return TravelVertexInteger.of(this.graph, AuxiliaryTsp.neighborInteger(this.graph,this.camino,a.first(),a.second()));
+		return TravelVertexInteger.of(AuxiliaryTsp.neighborInteger(this.camino,a));
 	}
 
 	@Override
 	public TravelEdgeInteger edge(IntPair a) {
-		return TravelEdgeInteger.of(this,this.neighbor(a),a);
+		TravelVertexInteger v = this.neighbor(a);
+		Preconditions.checkArgument(!this.equals(v),"No puede ser igual al vecino");
+		return TravelEdgeInteger.of(this,v,a);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("(%.2f,%s",this.getWeight(),camino);
+		return String.format("(%.2f,%s",this.weight(),this.camino());
 	}
 	
-	public Double getWeight() {
-		return GraphPaths.of(graph,camino).getWeight();
+	public Double weight() {
+		return GraphPaths.of(TravelVertexInteger.graph,this.camino()).getWeight();
 	}
 
 }

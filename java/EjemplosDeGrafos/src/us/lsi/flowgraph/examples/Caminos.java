@@ -26,7 +26,7 @@ public class Caminos {
 				edge,
 				Graphs2::simpleDirectedWeightedGraph,
 //				Graphs2::simpleWeightedGraph,
-				e->e.getWeight());
+				e->e.weight());
 		return graph;
 	}
 	

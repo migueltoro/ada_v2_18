@@ -1,18 +1,19 @@
 package us.lsi.alg.tsp;
 
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.LocalSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.GraphPaths;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
 
 public class TestLocalSearchInteger {
 
@@ -20,25 +21,37 @@ public class TestLocalSearchInteger {
 		Locale.setDefault(new Locale("en", "US"));
 		
 		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(50);
-		System.out.println(graph);
-		System.out.println(graph.edgeSet());
-		List<Integer> camino = graph.vertexSet().stream().collect(Collectors.toList());
-		camino.add(0);
-//		System.out.println(graph.getEdgeWeight(graph.getEdge(0,1)));
-		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPaths.of(graph,camino);
-		System.out.println(path.getWeight());
-		TravelVertexInteger e1 = TravelVertexInteger.of(graph, camino);
-		System.out.println(e1);
+		TravelVertexInteger.graph = graph;
+		List<Integer> camino = new ArrayList<>(graph.vertexSet().stream().toList());
 		
-		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = Graphs2.simpleVirtualGraphLast(e1,v->v.getWeight());
+		camino.add(camino.get(0));
 		
-		LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = GraphAlg.local(graph2,0.);
-//		ml.stream().forEach(v->{System.out.println(GraphPaths.of(graph,v.camino).getWeight());
-//		System.out.println(v.camino);});
-//		m.stream().forEach(v->System.out.println(v));
-		TravelVertexInteger v = m.search();
-		System.out.println(GraphPaths.of(graph,v.camino).getWeight());
-		System.out.println(v.camino);
+		Collections.shuffle(camino.subList(1,camino.size()-2));
+		
+		TravelVertexInteger e1 = TravelVertexInteger.of(camino);
+		
+		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = Graphs2.simpleVirtualGraphLast(e1,v->v.weight());
+		
+		LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = GraphAlg.local(graph2,v->v.geedyVertex(),10.);
+		
+		Optional<TravelVertexInteger> vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
+//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
+		System.out.println(vr.get());
+		
+		Double bb = 1000000000.;
+		int i = 0;
+		while (i< 5) {
+			Collections.shuffle(camino.subList(1, camino.size() - 2));
+			e1 = TravelVertexInteger.of(camino);
+			graph2 = Graphs2.simpleVirtualGraphLast(e1, v -> v.weight());
+			m = GraphAlg.local(graph2, v -> v.geedyVertex(), 1.);
+			vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
+			//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
+			if(vr.get().weight() < bb) bb = vr.get().weight();
+			System.out.println(vr.get());
+			i++;
+		}
+		System.out.println(bb);
 	}
 
 }

@@ -3,6 +3,7 @@ package us.lsi.flujosparalelos;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -18,7 +19,11 @@ import us.lsi.common.IntTrio;
 import us.lsi.common.MutableType;
 import us.lsi.common.Pair;
 
-public class Streams2 {
+public class Stream2 {
+	
+	public static <E> Optional<E> findLast(Stream<E> stream){
+		return stream.reduce((first,second)->second);
+	}
 	
 	/**
 	 * @param leftStream Un stream 

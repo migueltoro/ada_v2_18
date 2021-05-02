@@ -11,7 +11,7 @@ import java.util.stream.DoubleStream;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.common.Set2;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 
 
 /**
@@ -56,7 +56,7 @@ public class OtrosEjemplos {
 
 		System.out.println("========");
 
-		Streams2.join(()->IntStream.range(0, 5).boxed(),
+		Stream2.join(()->IntStream.range(0, 5).boxed(),
 				      ()->IntStream.range(10, 15).boxed(),
 					  x -> x % 5, 
 					  x -> x % 3, 
@@ -72,13 +72,13 @@ public class OtrosEjemplos {
 		
 		
 		List<Long> r = List2.concat(s0,s1);
-		Streams2.join(()->r.stream(),()->s2.stream(), x -> x, x -> x, (x, y) -> x).forEach(imprimeEnConsola());		
+		Stream2.join(()->r.stream(),()->s2.stream(), x -> x, x -> x, (x, y) -> x).forEach(imprimeEnConsola());		
 	}
 
 	public static void ejemplo6() {
 		Set<Integer> s1 = Set2.of(1, 3, 5);
 		Set<Integer> s2 = Set2.of(16, 13, 15);
-		Streams2.cartesianProduct(s1.stream(),s2.stream(),(x, y) -> Pair.of(x, y)).forEach(imprimeEnConsola());
+		Stream2.cartesianProduct(s1.stream(),s2.stream(),(x, y) -> Pair.of(x, y)).forEach(imprimeEnConsola());
 	}
 
 	public static void ejemplo7() {
@@ -87,7 +87,7 @@ public class OtrosEjemplos {
 	}
 
 	public static void ejemplo8() {
-		Streams2.join(
+		Stream2.join(
 				()->Stream.of(1L, 2L, 3L, 4L, 9L),
 				()->Stream.of(4L, 10L, 9L, 29L), 
 				x -> x, 

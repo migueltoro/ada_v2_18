@@ -23,7 +23,7 @@ public class TestPDRMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.getWeight());	
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.weight());	
 		
 		GreedySearch<MochilaVertex, MochilaEdge> rr = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2), v->true);
@@ -51,7 +51,7 @@ public class TestPDRMochilaGraph {
 		
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
 				v->v.toString(),
-				e->e.getAction().toString(),
+				e->e.action().toString(),
 				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
 				e->GraphColors.getColorIf(Color.red,ms.optPath.get().getEdgeList().contains(e))
 				);

@@ -9,7 +9,7 @@ import us.lsi.common.Multiset;
 import us.lsi.common.String2;
 import us.lsi.common.Pair;
 import us.lsi.flujosparalelos.Collectors2;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.flujossecuenciales.StreamsS;
 import us.lsi.math.Math2;
 
@@ -18,7 +18,7 @@ public class EjemplosDeStreams2 {
 	
 	public static List<Pair<Long,Long>> primosPar(Long start, Integer diff, Integer limit){
 		var r10 = Stream.iterate(Math2.siguientePrimo(start),x->true,x->Math2.siguientePrimo(x));
-		var r11 = Streams2.consecutivePairs(r10).filter(t->t.second()-t.first()==diff).limit(limit).collect(Collectors.toList());;
+		var r11 = Stream2.consecutivePairs(r10).filter(t->t.second()-t.first()==diff).limit(limit).collect(Collectors.toList());;
 		return r11;
 	}
 	
@@ -28,7 +28,7 @@ public class EjemplosDeStreams2 {
 	
 	public static Stream<Pair<Long,Long>> primos(Long a){
 		var r = Stream.iterate(Math2.siguientePrimo(a),x->Math2.siguientePrimo(x));
-		var r2 = Streams2.consecutivePairs(r);
+		var r2 = Stream2.consecutivePairs(r);
 		return r2;
 	}
 	
@@ -46,7 +46,7 @@ public class EjemplosDeStreams2 {
 		var s3 = r2.stream().map(x->x.toString());
 		System.out.println("2: ______");
 		var s4 = Stream.iterate(0, x->x+1);
-		var s5 = Streams2.zip(s2.stream(),s4,(x,y)->Pair.of(x, y));
+		var s5 = Stream2.zip(s2.stream(),s4,(x,y)->Pair.of(x, y));
 		s5.forEach(System.out::println);
 		System.out.println("3: ______");
 		var n = 14L;
@@ -82,11 +82,11 @@ public class EjemplosDeStreams2 {
 		System.out.println(Math2.esDivisible(0, 15));
 		System.out.println("9: ______");
 		var s10 = Stream.iterate(0,x->x<100,x->x+1);
-		var s11 = Streams2.cartesianProduct(s10).collect(Collectors.toList());
+		var s11 = Stream2.cartesianProduct(s10).collect(Collectors.toList());
 		System.out.println(s11);
 		System.out.println("10: ______");
 		var s12 = Stream.iterate(0,x->x<100,x->x+1);
-		var s13 = Streams2.consecutivePairs(s12).collect(Collectors.toList());
+		var s13 = Stream2.consecutivePairs(s12).collect(Collectors.toList());
 		System.out.println(s13);
 		System.out.println("11: ______");
 	}

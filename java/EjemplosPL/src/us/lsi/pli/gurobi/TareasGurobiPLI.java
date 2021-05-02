@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Files2;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
@@ -73,7 +73,7 @@ public class TareasGurobiPLI {
 
 	public static void tareas_model() throws IOException {
 		Tarea.tareas = Tarea.datos("data/tareas.txt");
-		String ss = Streams2.enumerate(Tarea.tareas.stream()).map(e -> String.format("%d == %s", e.counter, e.value))
+		String ss = Stream2.enumerate(Tarea.tareas.stream()).map(e -> String.format("%d == %s", e.counter, e.value))
 				.collect(Collectors.joining("\n"));
 		Tarea.n = Tarea.tareas.size();
 		AuxGrammar.generate(TareasGurobiPLI.class,"models/tareas.lsi","ficheros/tareas.lp");

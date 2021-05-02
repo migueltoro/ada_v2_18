@@ -18,7 +18,7 @@ public interface ActionVirtualVertex<V extends VirtualVertex<V,E>, E extends Act
 	@Override
 	public default E getEdgeToVertex(V v) {
 		return this.edgesOf().stream()
-				.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
+				.filter(e->e.source().equals(v) || e.target().equals(v))
 				.findFirst()
 				.get();
 	}

@@ -15,6 +15,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.nio.dot.DOTExporter;
 
 import us.lsi.common.Files2;
+import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.grafos.datos.Carretera;
@@ -51,7 +52,10 @@ public class AuxiliaryTsp {
 		return r;
 	}
 	
-	public static Double increment(Graph<Ciudad,Carretera> graph, List<Ciudad> ciudades, Integer i, Integer j) {
+	public static Double increment(List<Ciudad> ciudades, IntPair p) {
+		Graph<Ciudad,Carretera> graph = TravelVertex.graph;
+		Integer i = p.first();
+		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
 		GraphPath<Ciudad,Carretera> path = GraphPaths.of(graph,ciudades);
 		Double w = path.getWeight();
@@ -66,7 +70,10 @@ public class AuxiliaryTsp {
 		return w-path2.getWeight();
 	}
 	
-	public static Double incrementInteger(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> ciudades, Integer i, Integer j) {
+	public static Double incrementInteger(List<Integer> ciudades, IntPair p) {
+		Graph<Integer,SimpleEdge<Integer>> graph = TravelVertexInteger.graph;
+		Integer i = p.first();
+		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
 		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPaths.of(graph,ciudades);
 		Double w = path.getWeight();
@@ -81,7 +88,9 @@ public class AuxiliaryTsp {
 		return w-path2.getWeight();
 	}
 	
-	public static List<Ciudad> neighbor(Graph<Ciudad,Carretera> graph, List<Ciudad> ciudades, Integer i, Integer j) {
+	public static List<Ciudad> neighbor(List<Ciudad> ciudades, IntPair p) {
+		Integer i = p.first();
+		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
 		Integer n = ciudades.size();
 		List<Ciudad> ls1 = List2.copy(ciudades.subList(0,i));
@@ -93,7 +102,10 @@ public class AuxiliaryTsp {
 		return ls1;
 	}
 	
-	public static List<Integer> neighborInteger(Graph<Integer,SimpleEdge<Integer>> graph, List<Integer> ciudades, Integer i, Integer j) {
+	public static List<Integer> neighborInteger(List<Integer> ciudades, IntPair p) {
+//		Graph<Integer,SimpleEdge<Integer>> graph = TravelVertexInteger.graph;
+		Integer i = p.first();
+		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
 		Integer n = ciudades.size();
 		List<Integer> ls1 = List2.copy(ciudades.subList(0,i));
@@ -146,7 +158,7 @@ public class AuxiliaryTsp {
 		Integer n = camino.size();
 		for (int i = 0; i < n; i++) {
 			for (int j = i+1; j < n; j++) {
-				Double w = increment(graph2, camino, i, j);
+				Double w = increment(camino, IntPair.of(i, j));
 				System.out.println(String.format("%d,%d,%.2f",i,j,w));
 			}
 		}

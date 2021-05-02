@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 
 public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasProcesadores  {
 
@@ -121,7 +121,7 @@ public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasPr
 	
 	@Override
 	public String toString() {
-		var s = Streams2.enumerate(this.getTareasEnProcesador().stream());
+		var s = Stream2.enumerate(this.getTareasEnProcesador().stream());
 		return s.map(
 				x -> "    (" + x.counter + "=" + x.value.toString() + "," + this.getCargaProcesador(x.counter) + ")")
 				.collect(Collectors.joining("\n", "Solucion, Objetivo = " + getObjetivo() + " {\n", "\n}\n"));

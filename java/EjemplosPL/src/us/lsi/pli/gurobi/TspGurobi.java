@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 import org.jgrapht.Graph;
 
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.gurobi.GurobiLp;
@@ -26,7 +26,7 @@ public class TspGurobi {
 		Locale.setDefault(new Locale("en", "US"));
 		Graph<Integer, SimpleEdge<Integer>> graph = Graphs2.simpleWeightedGraph();
 		IntStream.range(0, n).forEach(v -> graph.addVertex(v));
-		Streams2.allPairs(0,n, 0,n).filter(p -> p.second() > p.first()).forEach(p -> {
+		Stream2.allPairs(0,n, 0,n).filter(p -> p.second() > p.first()).forEach(p -> {
 			if (Math2.getDoubleAleatorio(0., 1.) < pb) {
 				Double w = Math2.getDoubleAleatorio(0., 100.);
 				SimpleEdge<Integer> e1 = SimpleEdge.of(p.first(), p.second(),w);

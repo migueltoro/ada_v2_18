@@ -13,25 +13,33 @@ import java.util.stream.IntStream;
  *
  * Un conjunto de un rango de enteros
  */
-public class RangeIntegerSet implements Set<Integer>{
+public class RangeIntegerSet implements Set<Integer> {
 	
-	public static RangeIntegerSet of(Integer infLimit, Integer numDigits) {
+	/**
+	 * @param infLimit Limite inferior del conjunto de enteros
+	 * @param numDigits Número de digitos usados para representar el conjunto
+	 * @return Un RangeIntegerSet
+	 */
+	public static RangeIntegerSet empty(Integer infLimit, Integer numDigits) {
 		return new RangeIntegerSet(infLimit, numDigits);
 	}
-	static RangeIntegerSet of(BitSet bits, Integer infLimit) {
-		return new RangeIntegerSet(bits, infLimit);
+	
+	public static RangeIntegerSet empty() {
+		return RangeIntegerSet.empty(0, 10);
 	}
 	
-	public static RangeIntegerSet of() {
-		return of(0, 10);
+	public static RangeIntegerSet of(Integer... elems) {
+		RangeIntegerSet r = RangeIntegerSet.empty();
+		r.addAll(Arrays.asList(elems));
+		return r;
 	}
 	
-	public static RangeIntegerSet of(RangeIntegerSet s) {
+	public static RangeIntegerSet copy(RangeIntegerSet s) {
 		return new RangeIntegerSet(s);
 	}
 	
 	private final Integer infLimit;
-	private BitSet bits;
+	private final BitSet bits;
 
 	private RangeIntegerSet(Integer infLimit, Integer numDigits) {
 		super();
@@ -80,12 +88,18 @@ public class RangeIntegerSet implements Set<Integer>{
 
 	@Override
 	public Object[] toArray() {
-		throw new UnsupportedOperationException();
+		return this.stream().toArray();
 	}
-
+	
+	
 	@Override
-	public <T> T[] toArray(T[] a) {
-		throw new UnsupportedOperationException();
+	public <T> T[] toArray(T[] a) {		
+		@SuppressWarnings("unchecked")
+		T[] r = (T[]) this.stream().toArray();
+		for(int i = 0 ; i <r.length; i++) {
+			a[i] = r[i];
+		}
+		return r;
 	}
 
 	@Override
@@ -96,16 +110,35 @@ public class RangeIntegerSet implements Set<Integer>{
 		this.bits.set(ne, true);
 		return c != this.bits.get(ne);
 	}
+	
+	public RangeIntegerSet addNew(Integer e) {
+		RangeIntegerSet cp = this.copy();
+		Preconditions.checkArgument(e>=infLimit, "Fuera de rango");
+		Integer ne = e-infLimit;
+		this.bits.get(ne);
+		cp.bits.set(ne, true);
+		return cp;
+	}
 
 	@Override
-	public boolean remove(Object object) {
-		Integer e = (int) object;
+	public boolean remove(Object ob) {
+		Integer e = (int) ob;
 		Preconditions.checkArgument(e>=infLimit, "Fuera de rango");
 		Integer ne = e-infLimit;
 		Boolean c = this.bits.get(ne);
 		this.bits.set(ne, false);
 		return c != this.bits.get(ne);
 	}
+	
+	public RangeIntegerSet removeNew(Object ob) {
+		RangeIntegerSet cp = this.copy();
+		Integer e = (int) ob;
+		Preconditions.checkArgument(e>=infLimit, "Fuera de rango");
+		Integer ne = e-infLimit;
+		cp.bits.set(ne, false);
+		return cp;
+	}
+	
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
@@ -124,8 +157,6 @@ public class RangeIntegerSet implements Set<Integer>{
 		return this.bits.intersects(c.bits);
 	}
 	
-	
-
 	@Override
 	public boolean addAll(Collection<? extends Integer> c) {
 		MutableType<Boolean> change = MutableType.of(false);
@@ -152,7 +183,7 @@ public class RangeIntegerSet implements Set<Integer>{
 				String.format("Sets no compatibles %d %d",this.infLimit,c.infLimit));
 		BitSet cp = (BitSet) this.bits.clone();
 		cp.or(c.bits);
-		return RangeIntegerSet.of(cp, this.infLimit);
+		return new RangeIntegerSet(cp, this.infLimit);
 	}
 
 	public boolean addAll(Integer... elems) {
@@ -177,6 +208,7 @@ public class RangeIntegerSet implements Set<Integer>{
 		this.bits.and(c.bits);
 		return n != this.bits.cardinality();
 	}
+	
 	public RangeIntegerSet intersection(Collection<? extends Integer> c) {
 		RangeIntegerSet r = this.copy();
 		r.retainAll(c);
@@ -188,7 +220,7 @@ public class RangeIntegerSet implements Set<Integer>{
 				String.format("Sets no compatibles %d %d",this.infLimit,c.infLimit));
 		BitSet cp = (BitSet) this.bits.clone();
 		cp.and(c.bits);
-		return RangeIntegerSet.of(cp, this.infLimit);
+		return new RangeIntegerSet(cp, this.infLimit);
 	}
 	
 	public boolean retainAll(Integer... elems) {
@@ -225,7 +257,7 @@ public class RangeIntegerSet implements Set<Integer>{
 				String.format("Sets no compatibles %d %d",this.infLimit,c.infLimit));
 		BitSet cp = (BitSet) this.bits.clone();
 		cp.andNot(c.bits);
-		return RangeIntegerSet.of(cp, this.infLimit);
+		return new RangeIntegerSet(cp, this.infLimit);
 	}
 	
 	public RangeIntegerSet simetricDifference(RangeIntegerSet c) {
@@ -233,7 +265,7 @@ public class RangeIntegerSet implements Set<Integer>{
 				String.format("Sets no compatibles %d %d",this.infLimit,c.infLimit));
 		BitSet cp = (BitSet) this.bits.clone();
 		cp.xor(c.bits);
-		return RangeIntegerSet.of(cp, this.infLimit);
+		return new RangeIntegerSet(cp, this.infLimit);
 	}
 	
 	public boolean removeAll(Integer... elems) {
@@ -253,12 +285,13 @@ public class RangeIntegerSet implements Set<Integer>{
 	}
 
 	public static void main(String[] args) {
-		RangeIntegerSet s1 = RangeIntegerSet.of();
-		s1.addAll(20,25,43,457);
-		RangeIntegerSet s2 = RangeIntegerSet.of();
-		s2.addAll(25,43,20);
-		RangeIntegerSet s8 = RangeIntegerSet.of();
-		s8.addAll(25,45);
+		RangeIntegerSet s1 = RangeIntegerSet.of(20,25,43,457);
+		RangeIntegerSet s2 = RangeIntegerSet.of(25,43,20);
+		RangeIntegerSet s3 = RangeIntegerSet.of(25,45);
+		System.out.println(s1);
+		System.out.println(s2);
+		System.out.println(s3);
+		System.out.println(s3.addNew(54));
 		System.out.println("Union");
 		System.out.println(s2.union(s1));
 		System.out.println("Interseccion");
@@ -275,6 +308,9 @@ public class RangeIntegerSet implements Set<Integer>{
 		System.out.println(s2.simetricDifference(s1));	
 		System.out.println("ContainsAll");
 		System.out.println(s2.containsAll(s1));
+		Object[] a = new Integer[s2.size()];
+		System.out.println(Arrays.asList(s2.toArray(a)));
+		System.out.println(Arrays.asList(a));
 	}
 
 	@Override

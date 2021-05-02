@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 import us.lsi.common.Arrays2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Streams2;
+import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
@@ -51,7 +51,7 @@ public class VertexPuzzle
 	}
 	
 	public static int getInvCount(Integer[][] dt) {
-		List<Integer> d = Streams2.allPairs(0,3,0,3)
+		List<Integer> d = Stream2.allPairs(0,3,0,3)
 				.map(p->dt[p.first()][p.second()])
 				.collect(Collectors.toList());
 	    int inv_count = 0;
@@ -102,7 +102,7 @@ public class VertexPuzzle
 	}
 	
 	public Map<Integer,IntPair> positions(){
-		return Streams2.allPairs(0,VertexPuzzle.n,0,VertexPuzzle.n)
+		return Stream2.allPairs(0,VertexPuzzle.n,0,VertexPuzzle.n)
 				.collect(Collectors.toMap(p->datos()[p.first()][p.second()],p->p));
 	}
 	

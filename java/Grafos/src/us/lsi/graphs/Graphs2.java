@@ -280,8 +280,8 @@ public class Graphs2 {
 
 	public static <V, E extends SimpleEdge<V>> V getOppositeVertex(Graph<V, E> graph, E edge, V vertex) {
 		V r = null;
-		if (edge.getSource().equals(vertex)) r = edge.getTarget();
-		if (edge.getTarget().equals(vertex)) r = edge.getSource();
+		if (edge.source().equals(vertex)) r = edge.target();
+		if (edge.target().equals(vertex)) r = edge.source();
 		Preconditions.checkNotNull(r);
 		return r;
 	}

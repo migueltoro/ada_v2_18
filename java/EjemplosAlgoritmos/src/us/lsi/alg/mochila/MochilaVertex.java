@@ -3,7 +3,6 @@ package us.lsi.alg.mochila;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.*;
 
 import org.jgrapht.GraphPath;
@@ -47,7 +46,7 @@ public record MochilaVertex(Integer index, Integer capacidadRestante)
 
 	public static SolucionMochila getSolucion(List<MochilaEdge> ls){
 		SolucionMochila s = SolucionMochila.empty();
-		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.getSource().index),e.getAction().intValue()));
+		ls.stream().forEach(e->s.add(DatosMochila.getObjeto(e.source().index),e.action().intValue()));
 		return s;
 	}
 

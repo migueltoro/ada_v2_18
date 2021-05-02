@@ -1,46 +1,41 @@
 package us.lsi.graphs.alg;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
-
-import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
-import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath;
 
 public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>{
 	
-	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Double error) {
-		return new LocalSearch<V, E>(graph, error);
+	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Function<V,V> nextVertex, Double error) {
+		return new LocalSearch<V, E>(graph, nextVertex, error);
 	}
 
 	private EGraph<V,E> graph;
 	private V actualVertex;
 	private V startVertex;
 	public Map<V,E> edgeToOrigin;
-	private Double weight;
-	private EGraphPath<V,E> path;
-	private E nextEdge;
+	private List<V> path;
+	private Function<V,V> nextVertex;
+	private V oldVertex;
 	private Double error;
-	public Graph<V,E> outGraph;
-	public Boolean withGraph = false;
+	private Boolean hasNext = true;
 	
-	LocalSearch(EGraph<V, E> graph, Double error) {
+	LocalSearch(EGraph<V, E> graph, Function<V,V> nextVertex, Double error) {
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
 		this.actualVertex = this.startVertex;
 		this.edgeToOrigin = new HashMap<>();
-		this.path = this.graph.initialPath();
-		this.weight = path.getWeight();
-		this.nextEdge = nextEdge(this.actualVertex);	
+		this.path = new ArrayList<>();
+		this.nextVertex = nextVertex;
+		this.oldVertex = null;
 		this.error = error;
+		this.hasNext = true;
 	}
 	
 	public V search() {
@@ -49,12 +44,11 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public LocalSearch<V,E> copy(){
-		return LocalSearch.of(this.graph,this.error);	
+		return LocalSearch.of(this.graph,this.nextVertex,this.error);	
 	}
 	
 	@Override
 	public Stream<V> stream() {
-		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return Iterators.asStream(this.iterator());
 	}
 	
@@ -79,43 +73,17 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public boolean hasNext() {
-		Preconditions.checkNotNull(this.graph,"Graph null");
-		Preconditions.checkNotNull(this.error, "Error null");
-		return this.nextEdge != null && Math.abs(this.graph.getEdgeWeight(this.nextEdge)) > this.error;
-	}
-	
-	private E nextEdge(V vertex) {
-		Preconditions.checkNotNull(this.graph);
-		Preconditions.checkNotNull(this.actualVertex);
-		Preconditions.checkNotNull(this.path);
-		Preconditions.checkNotNull(this.weight);
-		return this.graph.edgesListOf(this.actualVertex).stream()
-				.min(Comparator.comparing(e->graph.getEdgeWeight(e)))
-				.get();
+		return hasNext;
 	}
 
 	@Override
 	public V next() {
-		if(this.actualVertex == null) {
-			this.edgeToOrigin.put(this.startVertex,null);
-			this.actualVertex = this.startVertex;
-			this.edgeToOrigin.put(this.actualVertex,null);
-			this.path = this.graph.initialPath();
-			this.weight = path.getWeight();
-		} else {
-			if(this.withGraph) outGraph.addVertex(this.actualVertex);
-			V old = this.actualVertex;
-			E edge = this.nextEdge;
-			this.nextEdge =	this.nextEdge(this.actualVertex);
-			this.actualVertex = Graphs.getOppositeVertex(graph,edge,old);		
-			this.edgeToOrigin.put(this.actualVertex,edge);
-			this.weight = this.path.add(this.weight,this.actualVertex,edge,this.edgeToOrigin.get(old));
-			if(this.withGraph) {
-				outGraph.addVertex(old);
-				outGraph.addEdge(old,this.actualVertex,edge);
-			}
-		}
-		return this.actualVertex;
+		this.oldVertex = this.actualVertex;
+		this.path.add(oldVertex);
+		this.actualVertex = this.nextVertex.apply(this.oldVertex);
+		this.hasNext = !this.actualVertex.equals(this.oldVertex) && !this.path.contains(this.actualVertex) &&
+				Math.abs(graph.getVertexWeight(this.oldVertex) - graph.getVertexWeight(this.actualVertex)) >= this.error;
+		return this.oldVertex;
 	}
 	
 	@Override

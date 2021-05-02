@@ -111,8 +111,8 @@ public interface GraphAlg<V,E>  {
 	}
 
 	
-	public static <V, E> LocalSearch<V,E> local(EGraph<V, E> graph, Double error) {
-		return new LocalSearch<V, E>(graph, error);
+	public static <V, E> LocalSearch<V,E> local(EGraph<V, E> graph, Function<V,V> nextVertex, Double error) {
+		return new LocalSearch<V, E>(graph, nextVertex, error);
 	}
 	
 	public static <V, E> SimulatedAnnealingSearch<V, E> simulatedAnnealing(EGraph<V, E> graph, V startVertex,

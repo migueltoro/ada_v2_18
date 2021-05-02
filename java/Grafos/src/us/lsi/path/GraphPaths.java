@@ -15,12 +15,13 @@ public class GraphPaths {
 		Preconditions.checkNotNull(graph);
 		Preconditions.checkNotNull(vertexList);
 		Integer n = vertexList.size();
-		Double r = IntStream.range(0,n-1)
-				.mapToDouble(i->{E e = graph.getEdge(vertexList.get(i),vertexList.get(i+1)); 
-				Preconditions.checkNotNull(e,String.format("No existe la arista %d, %d",i,i+1));
-				return graph.getEdgeWeight(e);})
+		Double r = IntStream.range(0, n - 1)
+				.mapToDouble(i -> {
+						E e = graph.getEdge(vertexList.get(i), vertexList.get(i + 1));
+						Preconditions.checkNotNull(e, String.format("No existe la arista %d, %d", i, i + 1));
+						return graph.getEdgeWeight(e);})
 				.sum();
-		return new GraphWalk<V, E>(graph,vertexList,r);
+		return new GraphWalk<V, E>(graph, vertexList, r);
 	}
 
 }

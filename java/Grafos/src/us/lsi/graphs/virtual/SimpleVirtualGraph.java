@@ -65,7 +65,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 
 	@Override
 	public boolean containsEdge(E e) {
-		return e.getSource().isNeighbor(e.getTarget());
+		return e.source().isNeighbor(e.target());
 	}
 
 	@Override
@@ -78,12 +78,12 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	}
 	@Override
 	public V getEdgeSource(E e) {
-		return e.getSource();
+		return e.source();
 	}
 
 	@Override
 	public V getEdgeTarget(E e) {
-		return e.getTarget();
+		return e.target();
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	public double getEdgeWeight(E edge) {
 		Double r;
 		if(edgeWeight != null) r = edgeWeight.apply(edge);
-		else r = edge.getWeight();
+		else r = edge.weight();
 		return r;
 	}
 	
