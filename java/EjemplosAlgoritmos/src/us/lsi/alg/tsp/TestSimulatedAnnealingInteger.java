@@ -50,7 +50,9 @@ public class TestSimulatedAnnealingInteger {
 		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
 				GraphAlg.simulatedAnnealing(graph2,e1,e->e.weight());
 		
-		m.search();
+//		m.search();
+		Optional<TravelVertexInteger> vr = 
+				Stream2.findLast(m.stream().peek(v->System.out.println(String.format("%d === %.2f",m.i,v.weight()))));
 //		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
 		System.out.println(m.bestWeight);
 		System.out.println(m.bestVertex);
