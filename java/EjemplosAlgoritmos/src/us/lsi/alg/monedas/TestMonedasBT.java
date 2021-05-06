@@ -7,9 +7,6 @@ import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.alg.mochila.MochilaVertex;
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
@@ -34,7 +31,11 @@ public class TestMonedasBT {
 //
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 		
-		Double bv = MonedasHeuristica.voraz_left(0,MonedaVertex.valorInicial,MonedaVertex.n).peso().doubleValue();
+		Double bv = MonedasHeuristica.voraz(e1,e->e.goal(),e2).doubleValue();
+		
+		System.out.println("1 = "+bv);
+		SolucionMonedas ss = SolucionMonedas.of(path1);
+		System.out.println("1 = "+ss);
 
 		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTracking(
 				graph, 
@@ -48,14 +49,17 @@ public class TestMonedasBT {
 
 		if (path1 != null) {
 			ms1.bestValue = path1.getWeight();
-			SolucionMonedas ss = SolucionMonedas.of(path1);
-			if (ss.valor() == MochilaVertex.capacidadInicial) {
+			System.out.println("1.1 = "+ms1.bestValue);
+			ss = SolucionMonedas.of(path1);
+			System.out.println("1.1 = "+ss);
+			if (ss.valor().equals(MonedaVertex.valorInicial)) {
 				ms1.solutions.add(ss);
 			}
 		}
 		ms1.search();
-		Optional<SolucionMonedas> s = ms1.getSolution();
 		
+		Optional<SolucionMonedas> s = ms1.getSolution();
+		System.out.println("2 = Soluciones\n"+ms1.toStringSolutions());
 		if(s.isPresent()) System.out.println("2 = " + s.get().toString());
 		else System.out.println("2 = No hay solucion");
 
@@ -69,6 +73,11 @@ public class TestMonedasBT {
 		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(), v->true);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
+		bv = MonedasHeuristica.voraz(e3,e->e.goal(),e4).doubleValue();
+		
+		System.out.println("3 = "+bv);
+		ss = SolucionMonedas.of(path2);
+		System.out.println("3 = "+ss);
 
 		BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTracking(
 				graph, 
@@ -82,25 +91,28 @@ public class TestMonedasBT {
 
 		if (path2 != null) {
 			ms2.bestValue = path2.getWeight();
-			SolucionMonedas ss = SolucionMonedas.of(path2);
-			if (ss.valor() == MochilaVertex.capacidadInicial) {
+			System.out.println("3.1 = "+ms2.bestValue);
+			ss = SolucionMonedas.of(path2);
+			System.out.println("3.1 = "+ss);
+			if (ss.valor().equals(MonedaVertex.valorInicial)) {
 				ms2.solutions.add(ss);
 			}
 		}
-		ms2.withGraph = true;
+//		ms2.withGraph = true;
 		ms2.search();
 	
 		Optional<SolucionMonedas> s2 = ms2.getSolution();
 		
+		System.out.println("4 = Soluciones\n"+ms2.toStringSolutions());
 		if(s2.isPresent()) System.out.println("4 = " + s2.get().toString());
-		else System.out.println("2 = No hay solucion");
+		else System.out.println("4 = No hay solucion");
 		
-		Graphs2.toDot(ms2.outGraph,"ficheros/MonedasBTGraph.gv",
-				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
-				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,v.goal()),
-				e->GraphColors.getColor(Color.black)
-				);
+//		Graphs2.toDot(ms2.outGraph,"ficheros/MonedasBTGraph.gv",
+//				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
+//				e->e.action().toString(),
+//				v->GraphColors.getColorIf(Color.red,v.goal()),
+//				e->GraphColors.getColor(Color.black)
+//				);
 	}
 	}
 

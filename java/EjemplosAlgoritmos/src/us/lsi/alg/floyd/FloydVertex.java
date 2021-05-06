@@ -1,6 +1,7 @@
 package us.lsi.alg.floyd;
 
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import us.lsi.path.EGraphPath;
 
 
 public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydVertex.ActionFloyd>{
-	
+
 	public static enum ActionFloyd{Yes, No};	
 	
 	public static FloydVertex of(Graph<Integer,SimpleEdge<Integer>> graph, Integer origen, Integer destino) {

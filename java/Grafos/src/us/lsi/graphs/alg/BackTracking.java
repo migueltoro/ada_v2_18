@@ -89,8 +89,8 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	
 	@Override
 	public void search() {	
-		State<V,E> initialState = StatePath.of(graph,this.goal,this.end);
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
+		State<V,E> initialState = StatePath.of(graph,this.goal,this.end);
 		search(initialState);
 	}
 	
@@ -99,7 +99,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		if(this.withGraph) outGraph.addVertex(actual);
 		if (goal.test(actual)) update(state);
 		else {
-			for (E edge : graph.edgesListOf(actual)) {				
+			for (E edge : graph.edgesListOf(actual)) {	
 				if (this.forget(state,edge)) continue;
 				state.forward(edge);
 				search(state);
@@ -122,6 +122,10 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	@Override
 	public Set<S> getSolutions(){
 		return this.solutions;
+	}
+	
+	public String toStringSolutions() {
+		return this.solutions.stream().sorted().map(e->e.toString()).collect(Collectors.joining("\n"));
 	}
 	
 	public V getStartVertex() {

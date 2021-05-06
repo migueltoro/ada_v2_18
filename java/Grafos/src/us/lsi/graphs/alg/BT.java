@@ -19,6 +19,7 @@ public interface BT<V, E, S extends Comparable<S>> {
 	Optional<S> getSolution();
 
 	Set<S> getSolutions();
+	String toStringSolutions();
 
 	public static <V, E, S extends Comparable<S>> BackTracking<V, E, S> backTracking(
 			EGraph<V, E> graph,

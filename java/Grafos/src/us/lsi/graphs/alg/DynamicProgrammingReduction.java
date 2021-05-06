@@ -89,7 +89,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		}
 		GraphPath<V, E> gp = pathFrom(this.startVertex);
 		if(gp != null) this.optPath = Optional.of(gp);
-		else this.optPath = Optional.empty();
+		else if(this.optPath == null) this.optPath = Optional.empty();
 		return this.optPath;
 	}
 	

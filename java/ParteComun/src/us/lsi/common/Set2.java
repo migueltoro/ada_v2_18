@@ -4,13 +4,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Set2 {
+	
+	public static <E> List<E> parse(String s, String sep, Function<String,E> f_map) {
+		return Arrays.stream(s.split("["+sep+"]"))
+		.filter(e->e!=null && e.length()>0)
+		.map(e->f_map.apply(e.trim())).collect(Collectors.toList());
+	}
+	
+	public static <E> Set<E> parseSet(String[] tokens, Function<String,E> f_map) {
+		return Arrays.stream(tokens)
+		.filter(e->e!=null && e.length()>0)
+		.map(e->f_map.apply(e.trim())).collect(Collectors.toSet());
+	}
 
 	public static Set<Integer> range(Integer a, Integer b, Integer c){		
 		return Stream2.range(a, b, c).boxed()
