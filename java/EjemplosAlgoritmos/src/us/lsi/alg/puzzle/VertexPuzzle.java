@@ -15,7 +15,7 @@ import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
 
-public class VertexPuzzle
+public record VertexPuzzle(IntPair blackPosition,Integer[][] datos)
          implements ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
 	
 	
@@ -45,7 +45,7 @@ public class VertexPuzzle
 	
 	public static VertexPuzzle of(Integer[][] datos, IntPair blackPosition) {
 		Integer[][] dt = Arrays2.copyArray(datos);
-		VertexPuzzle r = new VertexPuzzle(dt, blackPosition);
+		VertexPuzzle r = new VertexPuzzle(blackPosition,dt);
 		Preconditions.checkArgument(r.isValid(),"No es válido");
 		return r;
 	}
@@ -75,23 +75,14 @@ public class VertexPuzzle
 	
 	public static Integer numFilas = 3;
 	public static Integer n = numFilas;
-	
-	private Integer[][] datos;
-	private IntPair blackPosition;
-	
-	private VertexPuzzle(Integer[][] datos, IntPair blackPosition) {
-		super();
-		this.datos = datos;
-		this.blackPosition = blackPosition;
-	}
 
-	public Integer[][] datos() {
-		return datos;
-	}
-
-	public IntPair blackPosition() {
-		return blackPosition;
-	}
+//	public Integer[][] datos() {
+//		return datos;
+//	}
+//
+//	public IntPair blackPosition() {
+//		return blackPosition;
+//	}
 
 	private static boolean validDato(Integer d) {
 		return 0<=d && d < VertexPuzzle.numFilas*VertexPuzzle.numFilas;

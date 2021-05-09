@@ -33,6 +33,7 @@ public class TestBTTyP {
 		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search().orElse(null);
 		SolucionTyP sm = TyPVertex.getSolucion(path);
 		Double bv = path.getWeight();
+		System.out.println(bv);
 		
 		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTrackingGoal(
 						graph,

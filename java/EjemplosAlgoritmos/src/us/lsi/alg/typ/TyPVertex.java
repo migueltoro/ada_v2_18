@@ -1,6 +1,5 @@
 package us.lsi.alg.typ;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -81,8 +80,16 @@ public record TyPVertex(Integer index, List<Double> cargas)
 		return List2.rangeList(0,m);
 	}
 	
+//	public Integer greadyAction() {
+//		return this.npMin();
+//	}
+	
 	public Integer greadyAction() {
-		return this.npMin();
+		return IntStream.range(0,m)
+				.boxed()
+				.min(Comparator.comparing(a->{Double d = Tarea.getDuracion(this.index) + this.cargas().get(a);
+				                             return List2.setElement(this.cargas(), a, d).get(a);}))
+				.get();
 	}
 	
 	public  ActionSimpleEdge<TyPVertex, Integer> greadyEdge() {
@@ -91,11 +98,8 @@ public record TyPVertex(Integer index, List<Double> cargas)
 
 	@Override
 	public TyPVertex neighbor(Integer a) {
-		List<Double> nc = new ArrayList<>(this.cargas());
-		Double d = Tarea.getDuracion(this.index) + nc.get(a); 
-		nc.set(a,d);
-		TyPVertex v = TyPVertex.of(index+1, nc);
-//		System.out.println(v);
+		Double d = Tarea.getDuracion(this.index) + this.cargas().get(a); 
+		TyPVertex v = TyPVertex.of(index+1, List2.setElement(this.cargas(), a, d));
 		return v;
 	}
 	
