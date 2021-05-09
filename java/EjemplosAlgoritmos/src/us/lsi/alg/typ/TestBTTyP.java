@@ -43,8 +43,8 @@ public class TestBTTyP {
 						TyPVertex::copy,
 						BTType.Min);		
 		
-//		ms.bestValue = bv+4;
-//		ms.solutions.add(sm);
+		ms.bestValue = bv;
+		ms.solutions.add(sm);
 		
 		ms.search();
 

@@ -80,15 +80,15 @@ public record TyPVertex(Integer index, List<Double> cargas)
 		return List2.rangeList(0,m);
 	}
 	
-//	public Integer greadyAction() {
-//		return this.npMin();
-//	}
+	public List<Double> cargasDespues(Integer a){
+		Double d = Tarea.getDuracion(this.index) + this.cargas().get(a);
+        return List2.setElement(this.cargas(), a, d);
+	}
 	
 	public Integer greadyAction() {
 		return IntStream.range(0,m)
 				.boxed()
-				.min(Comparator.comparing(a->{Double d = Tarea.getDuracion(this.index) + this.cargas().get(a);
-				                             return List2.setElement(this.cargas(), a, d).get(a);}))
+				.min(Comparator.comparing(a->cargasDespues(a).get(a)))
 				.get();
 	}
 	
@@ -98,9 +98,7 @@ public record TyPVertex(Integer index, List<Double> cargas)
 
 	@Override
 	public TyPVertex neighbor(Integer a) {
-		Double d = Tarea.getDuracion(this.index) + this.cargas().get(a); 
-		TyPVertex v = TyPVertex.of(index+1, List2.setElement(this.cargas(), a, d));
-		return v;
+		return TyPVertex.of(index+1, cargasDespues(a));
 	}
 	
 	@Override
