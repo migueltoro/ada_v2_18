@@ -38,7 +38,7 @@ public class Test_aS {
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = GraphAlg.aStar(graph, finalVertex, null,
 					MulticonjuntoHeuristic::heuristic);
 

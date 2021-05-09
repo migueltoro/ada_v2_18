@@ -8,7 +8,7 @@ import java.util.Optional;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
@@ -26,9 +26,9 @@ public class TestBTMochila {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.weight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->x.weight());		
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = 
+		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.goal(),v->true);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
 		

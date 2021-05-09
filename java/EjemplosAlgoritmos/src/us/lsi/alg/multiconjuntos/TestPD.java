@@ -39,7 +39,7 @@ public class TestPD {
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DPR
 					.dynamicProgrammingReductionGoal(graph, finalVertex, 
 							MulticonjuntoHeuristic::heuristic, 

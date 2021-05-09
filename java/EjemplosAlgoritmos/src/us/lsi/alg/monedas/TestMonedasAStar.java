@@ -18,12 +18,12 @@ public class TestMonedasAStar {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 78);
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 		Predicate<MonedaVertex> constraint = v->v.valorRestante() == 0;
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.weight());		
+		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->-x.weight());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
 				GraphAlg.aStar(graph,v->v.goal(),e2,constraint,MonedasHeuristica::heuristic_negate);
@@ -54,7 +54,7 @@ public class TestMonedasAStar {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraph(e3,x->x.weight());		
+		graph = Graphs2.simpleVirtualGraphSum(e3,x->x.weight());		
 		
 	    ms = GraphAlg.aStar(graph,e->e.goal(),e4,constraint,MonedasHeuristica::heuristic);
 //	    ms.withGraph = true;

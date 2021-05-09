@@ -8,7 +8,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
@@ -24,7 +24,7 @@ public class TestPDRTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
 				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());	
 		
-		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> rr = 
+		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> rr = 
 				GraphAlg.greedy(graph,
 				TyPVertex::greadyEdge,
 				v->v.goal(),

@@ -1,42 +1,53 @@
 package us.lsi.alg.productos;
 
-import java.util.HashSet;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
-import us.lsi.alg.multiconjuntos.DatosMulticonjunto;
+import org.jgrapht.GraphPath;
+
+import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.virtual.EGraph;
 
 public class ProductosHeuristic {
 
 	public static Double heuristic(ProductosVertex v1, Predicate<ProductosVertex> goal, ProductosVertex v2) {
-		return heuristic(v1, DatosProductos.NUM_PRODUCTOS);
+		return heuristic2(v1, DatosProductos.NUM_PRODUCTOS);
 	}
 
-	public static Double heuristic(ProductosVertex vertice, int lastIndex) {
+	public static Double heuristic(ProductosVertex vertice, Integer lastIndex) {
 		return 0.;
 	}
 	
-	public static Double entero(ProductosVertex vertice, Integer lastIndex) {
-		ProductosVertex v = vertice;
-		Double precioTotal = 0.;
-		Set<Producto> productos = new HashSet<>();
-		List<String> funciones = DatosProductos.getFunciones();
-		while(!v.actions().isEmpty() &&  v.indice < lastIndex) {
-			Integer a = v.actionInteger();
-			Producto p = DatosProductos.getProducto(v.indice);
-			if (a >0) {
-				productos.add(p);
-				funciones.removeAll(p.funciones());
-				precioTotal += p.precio();
-			}
-			v = v.neighbor(a);
-		}
-//		System.out.println("Funciones restantes = "+funciones);
-		return precioTotal;
+	
+	public static GraphPath<ProductosVertex, ProductosEdge> graphPathVoraz(ProductosVertex vertice,
+			Predicate<ProductosVertex> goal) {
+		EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(vertice, x -> x.weight());
+		GreedySearchOnGraph<ProductosVertex, ProductosEdge> rr = GraphAlg.greedy(graph, ProductosVertex::greedyEdge,
+				v -> ProductosVertex.goal(v), v -> true);
+		GraphPath<ProductosVertex, ProductosEdge> p = rr.search().orElse(null);
+		return p;
 	}
 	
+	public static Double heuristic2(ProductosVertex vertice, Integer lastIndex) {		
+		if (vertice.funcionalidades_restantes.isEmpty()) {
+			return 0.;
+		} else {
+			return IntStream.range(vertice.indice,lastIndex)
+					.mapToDouble(i->DatosProductos.getProducto(i).precio())
+					.min()
+					.getAsDouble();
+		}
+	}
+
+
+	
+
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 
@@ -44,12 +55,16 @@ public class ProductosHeuristic {
 
 			DatosProductos.iniDatos("ficheros/productos" + id_fichero + ".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
-			System.out.println("#### Algoritmo A* ####");
+			System.out.println("#### Voraz ####");
+//			DatosProductos.toConsole();
+		
 
-			ProductosVertex start = ProductosVertex.createInitialVertex();
+			ProductosVertex start = ProductosVertex.initial();
 //			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
-			
-			System.out.println(ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS));
+			GraphPath<ProductosVertex,ProductosEdge> path = ProductosHeuristic.graphPathVoraz(start,v -> ProductosVertex.goal(v));
+			List<Integer> la = path.getEdgeList().stream().map(e->e.action()).toList();
+			System.out.println(SolucionProductos.of(la).precioTotal());
+			System.out.println(heuristic2(start,DatosProductos.NUM_PRODUCTOS));
 		}
 	}
 

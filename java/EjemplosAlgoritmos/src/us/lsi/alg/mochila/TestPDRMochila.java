@@ -9,7 +9,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
@@ -26,9 +26,9 @@ public class TestPDRMochila {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.weight());	
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->x.weight());	
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = 
+		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2), v->true);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();	
 		Double bv = path.get().getWeight();

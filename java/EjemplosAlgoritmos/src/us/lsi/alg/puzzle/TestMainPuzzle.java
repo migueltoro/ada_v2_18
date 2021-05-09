@@ -29,7 +29,7 @@ public class TestMainPuzzle {
 		VertexPuzzle e2 = v8;
 		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
 		
-		EGraph<VertexPuzzle, EdgePuzzle> graph = Graphs2.simpleVirtualGraph(e1);		
+		EGraph<VertexPuzzle, EdgePuzzle> graph = Graphs2.simpleVirtualGraphSum(e1);		
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = 
 				GraphAlg.aStar(graph,e->e.equals(e2),e2,HeuristicaPuzzle::heuristicaManhattan);

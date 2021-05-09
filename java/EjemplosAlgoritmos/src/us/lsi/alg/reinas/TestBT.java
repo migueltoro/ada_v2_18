@@ -16,7 +16,7 @@ public class TestBT {
 		ReinasVertex e1 = ReinasVertex.first();
 		Predicate<ReinasVertex> goal = v -> v.index() == ReinasVertex.n;
 
-		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraph(e1);
+		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphSum(e1);
 
 		BT<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = BT.backTrackingGoal(graph, goal, (v1, p, v2) -> 0.,
 				SolucionReinas::of, ReinasVertex::copy, BTType.All);

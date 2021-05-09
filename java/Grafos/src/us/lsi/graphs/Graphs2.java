@@ -67,11 +67,11 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends ActionVirtualVertex<V, E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(V startVertex) {
+	public static <V extends ActionVirtualVertex<V, E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(V startVertex) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
 	}
 	
-	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
+	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
 			V startVertex,
 			Function<E, Double> edgeWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);

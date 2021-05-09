@@ -25,26 +25,26 @@ public class TestAS {
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 			System.out.println("#### Algoritmo A* ####");
 
-			ProductosVertex start = ProductosVertex.createInitialVertex();
+			ProductosVertex start = ProductosVertex.initial();
 			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
 
-			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
-
-			
+			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());	
 
 			// Algoritmo A*
-//			graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
-			AStar<ProductosVertex, ProductosEdge> aStar = GraphAlg.aStar(graph, finalVertex, null, (v1, p, v2) -> 0.);
+			AStar<ProductosVertex, ProductosEdge> aStar = GraphAlg.aStar(
+					graph, 
+					finalVertex, 
+					null, 
+					ProductosHeuristic::heuristic);
 			aStar.withGraph = true;
 			GraphPath<ProductosVertex, ProductosEdge> gp = aStar.search().get();
 
 			List<Integer> gp_as = gp.getEdgeList().stream().map(x -> x.action()).collect(Collectors.toList()); // getEdgeList();
 
-			SolucionProductos s_as = SolucionProductos.create(gp_as);
+			SolucionProductos s_as = SolucionProductos.of(gp_as);
 			System.out.println(s_as);
 
-//			System.out.println(gp.getVertexList());
-//			System.out.println(gp.getEdgeList());
+
 			Graphs2.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
 					e -> e.action().toString(), v -> GraphColors.getColorIf(Color.red, ProductosVertex.goal(v)),
 					e -> GraphColors.getColorIf(Color.red, gp.getEdgeList().contains(e)));

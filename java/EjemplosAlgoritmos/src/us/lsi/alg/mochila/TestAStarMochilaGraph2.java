@@ -19,7 +19,7 @@ public class TestAStarMochilaGraph2 {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->-x.weight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->-x.weight());		
 		
 		AStar<MochilaVertex, MochilaEdge> ms = 
 				GraphAlg.aStar(graph,v->v.equals(e2),e2,MochilaHeuristic::heuristic_negate);

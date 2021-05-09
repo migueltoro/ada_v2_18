@@ -11,7 +11,7 @@ import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
@@ -26,9 +26,9 @@ public class TestBTMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraph(e1,x->x.weight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->x.weight());		
 		
-		GreedySearch<MochilaVertex, MochilaEdge> rr = 
+		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2), v->true);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
 		
@@ -52,7 +52,7 @@ public class TestBTMochilaGraph {
 		ms.search();
 		
 		SolucionMochila s = ms.getSolution().orElse(null);
-		GraphPath<MochilaVertex, MochilaEdge> sp = ms.path;
+		GraphPath<MochilaVertex, MochilaEdge> sp = ms.optimalPath;
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaBTGraph2.gv",
 				v->v.toString(),
 				e->e.action().toString(),

@@ -22,26 +22,27 @@ public class TestPD {
 
 			DatosProductos.iniDatos("ficheros/productos" + id_fichero + ".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
+			
 
-			ProductosVertex start = ProductosVertex.createInitialVertex();
+			ProductosVertex start = ProductosVertex.initial();
 			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
 
-			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
+			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
 					DPR.dynamicProgrammingReductionGoal(graph,
 					finalVertex,
 					(v1,p,v2)->0., 
 					PDType.Min);
-			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
+//			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
 			pdr.withGraph = true;
 			List<Integer> gp_pdr = pdr.search().get().getEdgeList().stream().map(x -> x.action())
 					.collect(Collectors.toList()); // getEdgeList();
-			SolucionProductos s_pdr = SolucionProductos.create(gp_pdr);
+			SolucionProductos s_pdr = SolucionProductos.of(gp_pdr);
 			System.out.println(s_pdr);
 			Graphs2.toDot(pdr.outGraph,"ficheros/productosPDRGraph.gv",
 					v->v.toGraph(),

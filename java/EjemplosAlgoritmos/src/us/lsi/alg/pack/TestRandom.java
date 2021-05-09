@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
 import us.lsi.graphs.virtual.EGraph;
@@ -24,7 +24,7 @@ public class TestRandom {
 		
 		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
 		
-		GreedySearch<PackVertex,PackEdge> rr = GraphAlg.greedy(
+		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
 				graph,
 				PackVertex::greedyEdge,
 				goal,

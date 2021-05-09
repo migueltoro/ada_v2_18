@@ -14,7 +14,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -24,14 +24,14 @@ public class TestMonedasPDR {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas3.txt", 36);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
+		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1);
 
-		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
+		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
 				v->v.goal(), v->v.constraint());
 		
 
@@ -61,7 +61,7 @@ public class TestMonedasPDR {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraph(e3);
+		graph = Graphs2.simpleVirtualGraphSum(e3);
 
 		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(),v->v.constraint());
 		

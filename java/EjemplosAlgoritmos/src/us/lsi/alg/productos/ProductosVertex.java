@@ -21,7 +21,7 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 
 	// Factorías vacías
 
-	public static ProductosVertex createInitialVertex() {
+	public static ProductosVertex initial() {
 		return ProductosVertex.of(0,Set2.of(DatosProductos.getFunciones()));
 	}
 
@@ -54,8 +54,12 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 		return indice >= 0 && indice <= DatosProductos.getProductos().size();
 	}
 	
-	public Integer actionInteger() {
+	public Integer geedyAction() {
 		return actions().stream().max(Comparator.naturalOrder()).get();
+	}
+	
+	public ProductosEdge greedyEdge() {
+		return this.edge(geedyAction());
 	}
 
 	@Override
@@ -64,9 +68,10 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 		if (this.indice.equals(DatosProductos.NUM_PRODUCTOS))
 			alternativas = List2.of();
 		if (this.indice.equals(DatosProductos.NUM_PRODUCTOS - 1)) {
-			if (!this.funcionalidades_restantes.isEmpty()
-					&& DatosProductos.getFuncionesProducto(this.indice).containsAll(
-							      this.funcionalidades_restantes))
+			if (this.funcionalidades_restantes.isEmpty())
+				alternativas = List2.of(0);
+			else if (!this.funcionalidades_restantes.isEmpty()
+					&& DatosProductos.getFuncionesProducto(this.indice).containsAll(this.funcionalidades_restantes))
 				alternativas = List2.of(1);
 			else
 				alternativas = List2.of();
@@ -74,13 +79,13 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 		} else if (this.indice < DatosProductos.NUM_PRODUCTOS - 1) {
 			if (this.funcionalidades_restantes.isEmpty())
 				alternativas = List2.of(0);
-			else if (Set2.intersection(this.funcionalidades_restantes, 
-					                   DatosProductos.getFuncionesProducto(this.indice)).isEmpty())
+			else if (Set2.intersection(this.funcionalidades_restantes, DatosProductos.getFuncionesProducto(this.indice))
+					.isEmpty())
 				alternativas = List2.of(0);
 			else
-				alternativas = List2.of(1,0);
+				alternativas = List2.of(1, 0);
 		}
-		Preconditions.checkNotNull(alternativas, String.format("%s",this));
+		Preconditions.checkNotNull(alternativas, String.format("%s", this.toGraph()));
 		return alternativas;
 	}
 
@@ -102,11 +107,16 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 	// Métodos auxiliares
 
 	public String toString() {
-		return String.format("(Indice: %d, Asignación pendiente: %s)", this.indice, this.funcionalidades_restantes);
+		String nombre = this.indice<DatosProductos.NUM_PRODUCTOS?
+				DatosProductos.getProducto(this.indice).nombre():"_";
+		return String.format("(Indice: %d, %s, Asignación pendiente: %s)", 
+				this.indice,nombre,funcionalidades_restantes);
 	}
 	
 	public String toGraph() {
-		return String.format("(P%2d,%s)", this.indice,this.funcionalidades_restantes);
+		String nombre = this.indice < DatosProductos.NUM_PRODUCTOS? 
+				DatosProductos.getProducto(this.indice).nombre() : "_";
+		return String.format("(%s,%s)",nombre,this.funcionalidades_restantes);
 	}
 
 	
@@ -121,7 +131,7 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 			alternativas.add(edge.action());
 		}
 
-		return SolucionProductos.create(alternativas);
+		return SolucionProductos.of(alternativas);
 	}
 
 	@Override

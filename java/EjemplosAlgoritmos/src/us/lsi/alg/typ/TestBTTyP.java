@@ -9,7 +9,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.ActionSimpleEdge;
 import us.lsi.graphs.virtual.EGraph;
@@ -25,7 +25,7 @@ public class TestBTTyP {
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
 				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());		
 			
-		GreedySearch<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
+		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
 				GraphAlg.greedy(graph,TyPVertex::greadyEdge,
 						e->e.goal(),
 						v->true);

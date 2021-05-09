@@ -8,7 +8,7 @@ import org.jgrapht.GraphPath;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 
 
@@ -22,7 +22,7 @@ public class TestAStar {
 		
 		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
 		
-		GreedySearch<PackVertex,PackEdge> rr = GraphAlg.greedy(
+		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
 				graph,
 				PackVertex::greedyEdge,
 				PackVertex.goal(),

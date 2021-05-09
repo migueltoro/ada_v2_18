@@ -16,7 +16,7 @@ public class TestAStarRandom {
 		AStarRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
 		
-		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraph(v1);			
+		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphSum(v1);			
 		
 		AStar<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> ms = GraphAlg.aStarRandom(
 				graph, 

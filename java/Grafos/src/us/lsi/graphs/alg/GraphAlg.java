@@ -31,13 +31,26 @@ public interface GraphAlg<V,E>  {
 	 * @param constraint El predicado que debe cumplir el último vértice para que haya solución
 	 * @return Un algoritmo de b&uacute;squeda voraz siguiendo las aristas del grafo
 	 */
-	public static <V, E> GreedySearch<V, E> greedy(
+	public static <V, E> GreedySearchOnGraph<V, E> greedy(
 			EGraph<V,E> graph,
 			Function<V,E> nextEdge,
 			Predicate<V> goal,
 			Predicate<V> constraint) {
-		return new GreedySearch<V, E>(graph,nextEdge,goal, constraint);
+		return new GreedySearchOnGraph<V, E>(graph,nextEdge,goal, constraint);
 	}
+	
+	
+	/**
+	 * @param <V> El tipo del estado
+	 * @param start E estado inicial
+	 * @param next el siguiente estado
+	 * @param end Si el estado es el último
+	 * @return Un algoritmo Voraz
+	 */
+	public static <V> Greedy<V> greedy(V start, Function<V, V> next, Predicate<V> end) {
+		return Greedy.of(start, next, end);
+	}
+	
 	/**
 	 * @param <V> El tipo de los v&eacute;rtices
 	 * @param <E> El tipo de las aristas

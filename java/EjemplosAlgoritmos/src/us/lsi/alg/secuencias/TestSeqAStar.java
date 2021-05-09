@@ -18,7 +18,7 @@ public class TestSeqAStar {
 		SeqVertex.data("cbrrrarreterb", "carretera");
 		SeqVertex e1 = SeqVertex.first();
 		SeqVertex e2 = SeqVertex.last();
-		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraph(e1);		
+		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraphSum(e1);		
 		
 		AStar<SeqVertex, SeqEdge> ms = GraphAlg.aStar(
 				graph,

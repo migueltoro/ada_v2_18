@@ -36,7 +36,7 @@ public class Test_BT {
 			System.out.println("\n\n#### Algoritmo BT ####");
 
 			// Algoritmo BT
-			graph = Graphs2.simpleVirtualGraph(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
 					BT.backTrackingGoal(graph, finalVertex, 
 					MulticonjuntoHeuristic::heuristic,
@@ -56,7 +56,7 @@ public class Test_BT {
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
 					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal(v)),
-					e -> GraphColors.getColorIf(Color.red, bta.path.getEdgeList().contains(e)));
+					e -> GraphColors.getColorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
 
 		}
 	}

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearch;
+import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
@@ -15,7 +15,7 @@ public class TestGreedy {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 307);
+		MonedaVertex.datosIniciales("ficheros/monedas3.txt", 36);
 		System.out.println(Moneda.monedas);
 		System.out.println(Moneda.monedas.size());
 
@@ -25,9 +25,9 @@ public class TestGreedy {
 //		System.out.println("1 = "+e1);
 //		System.out.println("2 = "+e2);
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraph(e1);
+		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1);
 		
-		GreedySearch<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
+		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
 				graph,
 				MonedaVertex::accionVoraz,
 				v->v.goal(),
@@ -46,7 +46,7 @@ public class TestGreedy {
 //		System.out.println("3 = "+e1);
 //		System.out.println("4 = "+e2);
 		
-		graph = Graphs2.simpleVirtualGraph(e1);
+		graph = Graphs2.simpleVirtualGraphSum(e1);
 		
 		rr = GraphAlg.greedy(
 				graph,

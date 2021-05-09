@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record SolucionProductos(Double precioTotal,Set<Producto> productos, Set<String> funciones) implements Comparable<SolucionProductos>{
+public record SolucionProductos(Double precioTotal,Set<Producto> productos,Set<String> funciones) implements Comparable<SolucionProductos>{
 	
-	public static SolucionProductos create(List<Integer> ls) {
+	public static SolucionProductos of(List<Integer> ls) {
 		List<Integer> lsC = new ArrayList<>(ls);
 		Double precioTotal = 0.;
 		Set<Producto> productos = new HashSet<>();
@@ -23,15 +23,19 @@ public record SolucionProductos(Double precioTotal,Set<Producto> productos, Set<
 		}
 		return new SolucionProductos(precioTotal,productos,funciones);
 	}
-
+	
+	
+	public static SolucionProductos of(Double precioTotal,Set<Producto> productos, Set<String> funciones) {
+		return new SolucionProductos(precioTotal,productos,funciones);
+	}
 
 	@Override
 	public String toString() {
-		return String.format("Funcionalidades a cubrir: %s\nComposicion del lote seleccionado: %s"
+		return String.format("Funcionalidades a cubrir: %s\nComposicion del lote seleccionado:\n\t%s"
 				+ "\nFuncionalidades del lote seleccionado:\n\t%s\nPrecio total del lote seleccionado: %.2f euros", 			
 				DatosProductos.getFunciones(),
-				productos.stream().map(e->e.toString()).collect(Collectors.joining("\n\t")),
-		        funciones,
+				this.productos().stream().map(e->e.toString()).collect(Collectors.joining("\n\t")),
+		        this.funciones(),
 		        precioTotal);
 	}
 

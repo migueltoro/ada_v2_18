@@ -33,7 +33,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	protected V end;
 	protected Predicate<V> constraint;
 	public Double bestValue;
-	public GraphPath<V,E> path;
+	public GraphPath<V,E> optimalPath;
 	protected TriFunction<V, Predicate<V>, V, Double> heuristic;
 	public Set<S> solutions;
 	protected Function<GraphPath<V,E>,S> solution;
@@ -81,7 +81,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 				if (this.constraint.test(state.getActualVertex())) {
 					S s = solution.apply(state.getPath());
 					this.solutions.add(s);
-					this.path = state.getPath();
+					this.optimalPath = state.getPath();
 				}
 		}
 	}
@@ -163,6 +163,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	
 		@Override
 		public void forward(E edge) {
+//			System.out.println(this.edgeToOrigin.size());
 			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
 			this.accumulateValue = this.path.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
@@ -171,9 +172,13 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		
 		@Override
 		public void back(E edge) {
+//			System.out.println(this.actualVertex);
+//			System.out.println(this.edgeToOrigin.size());
 			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
 			this.accumulateValue = this.path.removeLast(this.accumulateValue,this.actualVertex,edge,lastEdge);
-			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
+			this.edgeToOrigin.remove(this.actualVertex); // repasar
+			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);			
+//			System.out.println(this.edgeToOrigin.size());
 		}
 		
 		@Override
@@ -183,6 +188,10 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		
 		private E getEdgeToOrigin(V vertex) {
 			return this.edgeToOrigin.get(vertex);
+		}
+		
+		public Map<V,E> edgeToOrigin() {
+			return this.edgeToOrigin;
 		}
 		
 		@Override

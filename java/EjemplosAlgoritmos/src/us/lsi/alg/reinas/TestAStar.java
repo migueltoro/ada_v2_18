@@ -13,7 +13,7 @@ public class TestAStar {
 	public static void main(String[] args) {
 		ReinasVertex.n = 10;	
 		ReinasVertex v1 = ReinasVertex.first();
-		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraph(v1);			
+		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphSum(v1);			
 		
 		AStar<ReinasVertex, ActionSimpleEdge<ReinasVertex,Integer>> ms = GraphAlg.aStar(
 				graph, 
