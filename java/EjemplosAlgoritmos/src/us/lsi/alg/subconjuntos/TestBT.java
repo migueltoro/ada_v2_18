@@ -52,12 +52,13 @@ public class TestBT {
 			bta.search();
 			
 			System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
+			List<SubconjuntosEdge> ls = bta.optimalPath != null?bta.optimalPath.getEdgeList():null;
 			
 			Graphs2.toDot(bta.outGraph,"ficheros/subconjuntosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.getColorIf(Color.red,SubconjuntosVertex.goal().test(v)),
-					e->GraphColors.getColorIf(Color.red,bta.optimalPath.getEdgeList().contains(e))
+					e->GraphColors.getColorIf(Color.red,(bta.optimalPath != null?ls:le).contains(e))
 					);
 		}
 	}
