@@ -1,6 +1,8 @@
 package us.lsi.alg.subconjuntos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -16,9 +18,9 @@ public class SubconjuntosHeuristic {
 	
 	public static Double voraz(SubconjuntosVertex vertice, Integer lastIndex) {
 		Double peso = 0.;
-		while(!vertice.cubreUniverso() && vertice.indice() < lastIndex) {
+		while(!vertice.actions().isEmpty() && vertice.indice() < lastIndex && !vertice.cubreUniverso()) {
 			Integer a = vertice.greedyAction();
-			peso = a*DatosSubconjuntos.peso(vertice.indice());
+			peso += a*DatosSubconjuntos.peso(vertice.indice());
 			vertice = vertice.neighbor(a);
 		}
 		return peso;
@@ -28,7 +30,7 @@ public class SubconjuntosHeuristic {
 		Double peso = 0.;
 		Set<String> s = new HashSet<>();
 		Set<Integer> ss = new HashSet<>();
-		while(vertice.indice() < lastIndex && !vertice.cubreUniverso()) {
+		while(!vertice.actions().isEmpty() && vertice.indice() < lastIndex && !vertice.cubreUniverso()) {
 			Integer a = vertice.greedyAction();
 			peso += a*DatosSubconjuntos.peso(vertice.indice());
 			if(a==1) {
@@ -41,9 +43,23 @@ public class SubconjuntosHeuristic {
 		Boolean c = ss.equals(DatosSubconjuntos.universo());
 		return new SolucionSubconjuntos(peso,s,c);
 	}
+	
+	
+	public static List<SubconjuntosEdge> pathVoraz(SubconjuntosVertex vertice, Integer lastIndex) {
+		List<SubconjuntosEdge> ls = new ArrayList<>();
+		while(!vertice.actions().isEmpty() && vertice.indice() < lastIndex && !vertice.cubreUniverso()) {
+			Integer a = vertice.greedyAction();
+			SubconjuntosEdge e = vertice.edge(a);
+			ls.add(e);
+			vertice = vertice.neighbor(a);
+		}
+		return ls;
+	}
+	
+	
 
 	public static Double heuristic1(SubconjuntosVertex vertice, Integer lastIndex) {
-		if (vertice.cubreUniverso())  return 0.;
+		if (vertice.cubreUniverso() || voraz(vertice,lastIndex) == 0.)  return 0.;
 		else return IntStream.range(vertice.indice(),lastIndex)
 				.mapToDouble(i->DatosSubconjuntos.peso(i))
 				.min()
@@ -52,7 +68,7 @@ public class SubconjuntosHeuristic {
 	
 	public static Double heuristic2(SubconjuntosVertex vertice, Integer lastIndex) {
 		Double peso = 0.;
-		while(vertice.indice() < lastIndex && !vertice.cubreUniversoDespues()) {
+		while(!vertice.actions().isEmpty() && vertice.indice() < lastIndex && !vertice.cubreUniversoDespues()) {
 			Integer a = vertice.greedyAction();
 			peso += a*DatosSubconjuntos.peso(vertice.indice());
 			vertice = vertice.neighbor(a);
@@ -73,7 +89,8 @@ public class SubconjuntosHeuristic {
 			
 			SubconjuntosVertex start = SubconjuntosVertex.initial();
 			
-			String2.toConsole("Voraz = "+solucionVoraz(start,DatosSubconjuntos.NUM_SC).toString());
+			String2.toConsole("Solucion Voraz = "+solucionVoraz(start,DatosSubconjuntos.NUM_SC).toString());
+			String2.toConsole("Voraz = "+voraz(start,DatosSubconjuntos.NUM_SC).toString());
 			String2.toConsole("H1 = "+heuristic1(start,DatosSubconjuntos.NUM_SC).toString());
 			String2.toConsole("H2 = "+heuristic2(start,DatosSubconjuntos.NUM_SC).toString());
 		}

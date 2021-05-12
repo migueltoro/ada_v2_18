@@ -69,6 +69,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		Double w = state.getPath().boundWeight(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
 		if(this.bestValue != null && this.type == BTType.Max) r = w <= this.bestValue;
 		if(this.bestValue != null && this.type == BTType.Min) r = w >= this.bestValue;
+//		System.out.printf("En forget = %s,%s,%.1f,%.1f\n",r,state.getActualVertex(),w,this.bestValue);
 		return r;
 	}
 	
@@ -78,10 +79,12 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
 		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
 				this.bestValue = state.getAccumulateValue();
+//				System.out.printf("En update = %.1f\n",this.bestValue);
 				if (this.constraint.test(state.getActualVertex())) {
-					S s = solution.apply(state.getPath());
-					this.solutions.add(s);
 					this.optimalPath = state.getPath();
+//					System.out.println(this.optimalPath);
+					S s = solution.apply(this.optimalPath);
+					this.solutions.add(s);
 				}
 		}
 	}
@@ -97,9 +100,13 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	public void search(State<V, E> state) {
 		V actual = this.copy.apply(state.getActualVertex());
 		if(this.withGraph) outGraph.addVertex(actual);
-		if (goal.test(actual)) update(state);
+		if (goal.test(actual)) {
+//			System.out.println(state);
+			update(state);
+		}
 		else {
 			for (E edge : graph.edgesListOf(actual)) {	
+//				System.out.println(state);
 				if (this.forget(state,edge)) continue;
 				state.forward(edge);
 				search(state);
@@ -221,9 +228,9 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		
 		@Override
 		public String toString() {
-			return String.format("%s,%.2f,\n%s",
+			return String.format("%s,\n%.2f,\n%s",
 					this.actualVertex,this.getAccumulateValue(),
 					this.getPath().getEdgeList().stream().map(e->e.toString()).collect(Collectors.joining(",","{","}")));
-		}		
+		}	
 	}	
 }

@@ -62,6 +62,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		Double w = this.path.boundWeight(accumulateValue, actual, edge, goal, end, this.heuristic);
 		if (this.type == PDType.Max) r = w <= this.bestValue;
 		if (this.type == PDType.Min) r = w >= this.bestValue;
+//		System.out.printf("En forget = %s,%s,%.1f,%.1f\n",r,actual,w,this.bestValue);
 		return r;
 	}
 	
@@ -71,6 +72,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		   (this.type == PDType.Min && accumulateValue < this.bestValue)) {
 				this.bestValue = accumulateValue;
 //				this.optPath = Optional.of(pathFrom(this.startVertex));
+//				System.out.printf("En update = %.1f,%.1f\n",accumulateValue,this.bestValue);
 		}
 	}
 
@@ -94,6 +96,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	}
 	
 	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
+//		System.out.printf("En search = %.1f,%s\n",accumulateValue,actual);
 		Sp<E> r = null;
 		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);

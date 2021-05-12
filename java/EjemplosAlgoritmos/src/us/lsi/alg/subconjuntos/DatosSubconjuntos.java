@@ -30,7 +30,7 @@ public class DatosSubconjuntos {
 		}
 		DatosSubconjuntos.NUM_SC = datosDeConjuntos.size();
 		DatosSubconjuntos.NUM_E = universo.size();
-		Collections.sort(DatosSubconjuntos.datosDeConjuntos,Comparator.comparing(d->d.pesoUnitario()));
+//		Collections.sort(DatosSubconjuntos.datosDeConjuntos,Comparator.comparing(d->d.pesoUnitario()));
 	}
 	
 	public static List<DatoDeConjunto> datosDeConjuntos() {

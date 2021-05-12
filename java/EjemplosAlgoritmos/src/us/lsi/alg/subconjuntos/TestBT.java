@@ -1,5 +1,6 @@
 package us.lsi.alg.subconjuntos;
 
+import java.util.List;
 import java.util.Locale;
 
 import us.lsi.colors.GraphColors;
@@ -43,11 +44,14 @@ public class TestBT {
 					BTType.Min);
 
 			bta.withGraph = true;
-//			bta.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);
+			bta.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);
+			System.out.println("Best = "+bta.bestValue);
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
+			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
+			System.out.println("Sv = "+sv);
 			bta.search();
 			
-			System.out.println(bta.getSolution().isPresent()?bta.getSolution():sv);
+			System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
 			
 			Graphs2.toDot(bta.outGraph,"ficheros/subconjuntosBTGraph.gv",
 					v->v.toGraph(),
