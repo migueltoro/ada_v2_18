@@ -10,7 +10,7 @@ import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 
-public interface DP<V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> {
+public interface DP<V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, E, A>, A> {
 
 	GraphTree<V,E,A> searchTree(V actual);
 	SimpleVirtualHyperGraph<V, E, A> getGraph();
@@ -18,7 +18,7 @@ public interface DP<V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyper
 	Sp<E> search();
 
 	
-	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> 
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, E, A>, A> 
 		DP<V, E, A> dynamicProgrammingSearch(
 			SimpleVirtualHyperGraph<V, E, A> graph, 
 			PDType type) {

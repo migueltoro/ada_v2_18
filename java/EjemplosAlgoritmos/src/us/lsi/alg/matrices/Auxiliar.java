@@ -27,9 +27,9 @@ public class Auxiliar {
 	public static String solucion(GraphTree<MatrixVertex, MatrixEdge, Integer> tree) {
 		String r;
 		if(tree.isBaseCase()) {
-			Integer i = tree.vertex().i;
-			Integer j = tree.vertex().j;
-			if(j-i ==1) r = MatrixVertex.matrices.get(tree.vertex().i).toString();
+			Integer i = tree.vertex().i();
+			Integer j = tree.vertex().j();
+			if(j-i ==1) r = MatrixVertex.matrices.get(tree.vertex().i()).toString();
 			else r = String.format("(%s * %s)",MatrixVertex.matrices.get(i).toString(),MatrixVertex.matrices.get(i+1).toString());
 		} else {
 			r = String.format("(%s * %s)",solucion(tree.neighbords().get(0)),solucion(tree.neighbords().get(1)));

@@ -6,8 +6,6 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.jgrapht.graph.SimpleWeightedGraph;
-
-import us.lsi.alg.floyd.FloydVertex.ActionFloyd;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -42,16 +40,18 @@ public class TestFloyd {
 		Integer origen = graph2.getIndex(Ciudad.ofName("Sevilla"));
 		Integer destino = graph2.getIndex(Ciudad.ofName("Almeria"));
 		
-		FloydVertex p = FloydVertex.of(graph2,origen,destino);
+		FloydVertex.graph = graph2;
+		FloydVertex.n = graph2.vertexSet().size();
+		FloydVertex p = FloydVertex.initial(origen,destino);
 		
-		SimpleVirtualHyperGraph<FloydVertex,FloydEdge,FloydVertex.ActionFloyd> graph3 = 
+		SimpleVirtualHyperGraph<FloydVertex,FloydEdge,Boolean> graph3 = 
 				Graphs2.simpleVirtualHyperGraph(p);
 		
-		DP<FloydVertex,FloydEdge,FloydVertex.ActionFloyd> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
+		DP<FloydVertex,FloydEdge,Boolean> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
 		
 		a.search();
 		
-		GraphTree<FloydVertex, FloydEdge, ActionFloyd> tree = a.searchTree(p);
+		GraphTree<FloydVertex, FloydEdge,Boolean> tree = a.searchTree(p);
 //		System.out.println(FloydVertex.solution(tree).getVertexList().stream().collect(Collectors.toList()));
 //		System.out.println(tree);
 		List<Ciudad> lc = FloydVertex.solution(tree).getVertexList().stream()

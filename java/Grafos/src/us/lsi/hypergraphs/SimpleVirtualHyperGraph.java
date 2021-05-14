@@ -24,7 +24,7 @@ import java.util.*;
  * 
  */
 
-public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E extends SimpleHyperEdge<V,A>, A> {
+public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E extends SimpleHyperEdge<V,E,A>, A> {
 			
 	
 	private V startVertex;
@@ -39,11 +39,11 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 	}
 
 	public boolean containsEdge(E e) {
-		return e.source.actions().contains(e.action);
+		return e.source().actions().contains(e.action());
 	}
 
 	public boolean containsEdge(V v1, V v2) {
-		return this.edgesOf(v1).stream().anyMatch(e->e.targets.contains(v2));
+		return this.edgesOf(v1).stream().anyMatch(e->e.targets().contains(v2));
 	}
 
 	public boolean containsVertex(V v) {
@@ -51,19 +51,19 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 	}
 	
 	public V getEdgeSource(E e) {
-		return e.source;
+		return e.source();
 	}
 
 	public List<V> getEdgeTargets(E e) {
-		return e.targets;
+		return e.targets();
 	}
 
-	public double getEdgeWeight(E e) {
-		return e.getWeight();
-	}	
+//	public double getEdgeWeight(E e) {
+//		return e.weight();
+//	}	
 	
 	public E getEdge(V v1, V v2) {
-		return this.edgesOf(v1).stream().filter(e->e.targets.contains(v2)).findFirst().get();
+		return this.edgesOf(v1).stream().filter(e->e.targets().contains(v2)).findFirst().get();
 	}	
 	
 	/** 

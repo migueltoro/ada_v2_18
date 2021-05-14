@@ -33,13 +33,13 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	}
 	
 	public static TyPVertex first() {
-		return new TyPVertex(0,List2.copy(0.,m));
+		return new TyPVertex(0,List2.ofTam(0.,m));
 	}
 	
 	public static TyPVertex last() {
 		n = numeroDeTareas;
 		m = numeroDeProcesadores;
-		return new TyPVertex(n,List2.copy(0.,m));
+		return new TyPVertex(n,List2.ofTam(0.,m));
 	}
 	
 	public static TyPVertex of(Integer index, List<Double> cargas) {

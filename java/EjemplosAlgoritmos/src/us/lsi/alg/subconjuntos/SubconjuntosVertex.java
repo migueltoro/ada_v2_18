@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
@@ -15,11 +14,7 @@ public record SubconjuntosVertex(Integer indice, Set<Integer> elementosCubiertos
     implements ActionVirtualVertex<SubconjuntosVertex, SubconjuntosEdge, Integer>{
 	
 	public static SubconjuntosVertex of(Integer indice, Set<Integer> elementosCubiertos) {
-		SubconjuntosVertex r = new SubconjuntosVertex(indice,elementosCubiertos);
-		Double vz = SubconjuntosHeuristic.voraz(r,DatosSubconjuntos.NUM_SC); 
-		Double hu = SubconjuntosHeuristic.heuristic1(r,DatosSubconjuntos.NUM_SC);
-		Preconditions.checkArgument(vz>=hu,String.format("vz = %.1f, hu = %.1f",vz,hu));
-		return r;
+		return new SubconjuntosVertex(indice,elementosCubiertos);
 	}
 	
 	public static SubconjuntosVertex initial() {
@@ -35,9 +30,9 @@ public record SubconjuntosVertex(Integer indice, Set<Integer> elementosCubiertos
 	}
 	
 	public String toGraph() {
-		Double hu = SubconjuntosHeuristic.heuristic1(this,DatosSubconjuntos.NUM_SC);
+//		Double hu = SubconjuntosHeuristic.heuristic1(this,DatosSubconjuntos.NUM_SC);
 //		Double hu = 0.;
-		return String.format("%s,%s,%s",DatosSubconjuntos.nombre(this.indice()),this.cubreUniverso()?"Y":"N",this.elementosCubiertos);
+		return String.format("%s,%s)",DatosSubconjuntos.nombre(this.indice()),this.cubreUniverso()?"Y":"N");
 	}
 	
     public Boolean cubreUniverso() {

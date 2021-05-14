@@ -49,6 +49,7 @@ public class TestBT {
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
 			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
 			System.out.println("Sv = "+sv);
+			bta.action = e->e.action();
 			bta.search();
 			
 			System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
@@ -60,6 +61,8 @@ public class TestBT {
 					v->GraphColors.getColorIf(Color.red,SubconjuntosVertex.goal().test(v)),
 					e->GraphColors.getColorIf(Color.red,(bta.optimalPath != null?ls:le).contains(e))
 					);
+			
+//			System.out.println(ls.stream().map(e->e.action()).toList());
 		}
 	}
 

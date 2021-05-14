@@ -14,6 +14,7 @@ import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
+
 public class TestAStarMochilaGraph {
 
 	public static void main(String[] args) {

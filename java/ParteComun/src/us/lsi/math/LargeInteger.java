@@ -135,7 +135,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	
 	public static LargeInteger completeWithLeftZeros(LargeInteger a, int m){
 		int n = m-a.size();
-		List<Integer> nDigits = List2.copy(n, 0);
+		List<Integer> nDigits = List2.of(n, 0);
 		nDigits.addAll(a.digits);
 		return LargeInteger.create(nDigits,a.isPositive);
 	}
@@ -150,7 +150,7 @@ public class LargeInteger implements Comparable<LargeInteger> {
 	 */
 	public LargeInteger multiplyRadixToM(int m){
 		List<Integer> r = List2.ofCollection(this.digits);
-		List<Integer> nDigits = List2.copy(m, 0);
+		List<Integer> nDigits = List2.of(m, 0);
 		r.addAll(nDigits);
 		return LargeInteger.create(r,this.isPositive);	
 	}

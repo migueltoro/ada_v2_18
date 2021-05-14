@@ -138,7 +138,8 @@ public class GraphWalkSum<V, E> extends GraphWalk<V,E> implements EGraphPath<V,E
 		V target = Graphs.getOppositeVertex(graph,edge,vertexActual);
 		weight += graph.getEdgeWeight(edge);
 		weight += graph.getVertexWeight(target);	
-		return weight + heuristic.apply(target, goal, end);
+		Double r = weight + heuristic.apply(target, goal, end);
+		return r;
 	}
 
 	@Override

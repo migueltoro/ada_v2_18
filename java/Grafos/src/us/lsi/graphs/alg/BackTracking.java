@@ -41,6 +41,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	protected BTType type;
 	public Graph<V,E> outGraph;
 	public Boolean withGraph = false;
+	public Function<E,Object> action;
 	
 	BackTracking(EGraph<V, E> graph, 
 			Predicate<V> goal,
@@ -67,9 +68,8 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
 		Double w = state.getPath().boundWeight(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
-		if(this.bestValue != null && this.type == BTType.Max) r = w <= this.bestValue;
-		if(this.bestValue != null && this.type == BTType.Min) r = w >= this.bestValue;
-//		System.out.printf("En forget = %s,%s,%.1f,%.1f\n",r,state.getActualVertex(),w,this.bestValue);
+		if(this.bestValue != null && this.type == BTType.Max) r = w < this.bestValue;
+		if(this.bestValue != null && this.type == BTType.Min) r = w > this.bestValue;
 		return r;
 	}
 	
@@ -79,10 +79,8 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
 		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
 				this.bestValue = state.getAccumulateValue();
-//				System.out.printf("En update = %.1f\n",this.bestValue);
 				if (this.constraint.test(state.getActualVertex())) {
 					this.optimalPath = state.getPath();
-//					System.out.println(this.optimalPath);
 					S s = solution.apply(this.optimalPath);
 					this.solutions.add(s);
 				}

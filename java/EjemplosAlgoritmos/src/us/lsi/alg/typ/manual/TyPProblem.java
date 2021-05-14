@@ -24,7 +24,7 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	}
 	
 	public static TyPProblem first() {
-		return TyPProblem.of(0,List2.copy(0,DatosTyP.m));
+		return TyPProblem.of(0,List2.of(0,DatosTyP.m));
 	}
 	
 	public List<Integer> acciones() {

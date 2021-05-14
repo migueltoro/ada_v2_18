@@ -13,7 +13,7 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 
 
 public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
-			E extends SimpleHyperEdge<V,A>,A> implements DP<V, E, A> {
+			E extends SimpleHyperEdge<V,E,A>,A> implements DP<V, E, A> {
 	
 
 	public enum PDType{Min,Max}
@@ -53,7 +53,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			List<Sp<E>> sps = new ArrayList<>();
 			for (E edge : graph.edgesOf(actual)) {
 				List<Sp<E>> spNeighbors = new ArrayList<>();
-				for (V neighbor : edge.targets) {
+				for (V neighbor : edge.targets()) {
 					Sp<E> nb = search(neighbor);
 					if (nb == null) {
 						spNeighbors = null;
@@ -63,7 +63,8 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 				}
 				Sp<E> spa = null;
 				if(spNeighbors != null) {
-					spa = Sp.of(edge.getWeight(v->this.solutionsTree.get(v).weight), edge);
+					List<Double> solutions = spNeighbors.stream().map(sp->sp.weight()).toList();
+					spa = Sp.of(edge.weight(solutions), edge);
 				}
 				sps.add(spa);
 			}

@@ -61,7 +61,7 @@ public interface SeqNormalData<S> extends Data {
 	    default List<Integer> getNormalSequence() {
 			List<Integer> r = IntStream.range(0,size())
 					.boxed()
-					.flatMap(x->List2.copy(x,getMaxMultiplicity(x)).stream())
+					.flatMap(x->List2.of(x,getMaxMultiplicity(x)).stream())
 					.collect(Collectors.toList());
 			return r;
 		}

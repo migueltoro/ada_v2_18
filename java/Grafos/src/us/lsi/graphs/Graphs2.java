@@ -92,7 +92,7 @@ public class Graphs2 {
 		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
 	
-	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V,E,A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
 		return new SimpleVirtualHyperGraph<V, E, A>(start);
 	}
 	

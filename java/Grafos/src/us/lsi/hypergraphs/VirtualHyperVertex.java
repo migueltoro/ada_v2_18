@@ -1,41 +1,16 @@
 package us.lsi.hypergraphs;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * @author Miguel Toro
- *
- * @param <A> Tipo de la acci&oacute;n
- * @param <V> Tipo del v&eacute;rtice
- * 
- * 
- * <a> Tipo adecuado para modelar un v&eacute;rtice de un grafo virtual simple cuyas aristas est&aacute;n 
- * definidas por un conjunto de acciones o alternativas. 
- * Cada acci&oacute;n v&aacute;lida identifica de forma única uno de los vecinos del v&eacute;rtice. 
- * Cada v&eacute;rtice conoce sus vecinos y la forma de llegar a ellos mediante una de las acciones v&aacute;lidas disponibles </a>
- */
-public abstract class VirtualHyperVertex<V,E,A> {
-
-	public VirtualHyperVertex() {
-	}
+public interface VirtualHyperVertex<V,E,A> {
 	
-	/**
-	 * @return Si es un valor v&aacute;lido del tipo
-	 */
-	public abstract Boolean isValid();
+	public List<A> actions();
 	
-	/**
-	 * Para ser implementado por el subtipo
-	 * @return Lista de acciones disponibles y adecuadas para alcanzar un v&eacute;rtice v&aacute;lido
-	 */
-	public abstract List<A> actions();
+	public Boolean isBaseCase();
 	
-//	public abstract V getThis();
+	public Double baseCaseSolution();
 	
-	public abstract Boolean isBaseCase();
-	
-	public abstract Double baseCaseSolution();
+	public Boolean isValid();
 	
 	/**
 	 * @param a Una acci&oacute;n
@@ -52,61 +27,25 @@ public abstract class VirtualHyperVertex<V,E,A> {
 	 */
 	public abstract E edge(A a); 
 	
-	private List<List<V>> neighbors = null;
-	private List<E> edges = null;
-	
-	/**
-	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
-	 * @param v Otro v&eacute;rtice
-	 * @return La arista desde this a v2
-	 */
-//	@Override
-//	public E getEdge(V v) {
-//		E edge = null;
-//		if (this.isNeighbor(v)) {
-//			edge = this.edgesOf()
-//					.stream()
-//					.filter(e->e.getSource().equals(v) || e.getTarget().equals(v))
-//					.findFirst()
-//					.get();
-//		}
-//		return edge;
-//	}
-//	
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @return El conjunto de los vecinos
 	 */
-	public List<List<V>> getNeighborListOf() {
-		if (this.neighbors==null) {
-			this.neighbors=actions()
+	default public List<List<V>> getNeighborListOf() {
+		return this.actions()
 					.stream()
 					.map(a->this.neighbors(a))
-					.collect(Collectors.toList());
-		}
-		return this.neighbors;
+					.toList();
 	}
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
 	 * @return El conjunto de las aristas hacia los vecinos
 	 */
-	public List<E> edgesOf() {
-		if (this.edges==null) {
-			this.edges= actions()
+	default public List<E> edgesOf() {
+		return this.actions()
 					.stream()
 					.map(a->this.edge(a))
-					.collect(Collectors.toList());				
-		}
-		return edges;
+					.toList();				
 	}
-	/**
-	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo
-	 * @param v Otro v&eacute;rtice
-	 * @return Si v es vecino
-	 */
-//	@Override
-//	public Boolean isNeighbor(V v) {
-//		return this.getNeighborListOf().contains(v);
-//	}
-	
+
 }

@@ -8,9 +8,9 @@ import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 
-public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
+public class GraphTree<V, E extends SimpleHyperEdge<V,E,A>, A> {
 	
-	public static <V, E extends SimpleHyperEdge<V, A>, A> GraphTree<V, E, A> of(Map<V, Sp<E>> tree,V vertex) {
+	public static <V, E extends SimpleHyperEdge<V, E, A>, A> GraphTree<V, E, A> of(Map<V, Sp<E>> tree,V vertex) {
 		return new GraphTree<V, E, A>(tree,vertex);
 	}
 
@@ -33,12 +33,12 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 	
 	public A action() {	
 		A r = null;
-		if(tree.get(this.vertex).edge() != null) r = tree.get(this.vertex).edge().action;
+		if(tree.get(this.vertex).edge() != null) r = tree.get(this.vertex).edge().action();
 		return r;
 	}
 	
 	public List<GraphTree<V, E, A>> neighbords() {
-		return tree.get(this.vertex).edge().targets.stream()
+		return tree.get(this.vertex).edge().targets().stream()
 				.map(v->GraphTree.of(tree, v))
 				.collect(Collectors.toList());
 	}
@@ -48,14 +48,14 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,A>, A> {
 		return tree.get(this.vertex).edge() == null;
 	}
 	
-	public static <V, E extends SimpleHyperEdge<V, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){
+	public static <V, E extends SimpleHyperEdge<V,E, A>, A> List<GraphTree<V, E, A>> nextLevel(List<GraphTree<V, E, A>> level){
 		return level.stream()
 				.filter(t->!t.isBaseCase())
 				.flatMap(t->t.neighbords().stream())
 				.collect(Collectors.toList());
 	}
 	
-	private static <V, E extends SimpleHyperEdge<V, A>, A> String string(GraphTree<V, E, A> tree) {
+	private static <V, E extends SimpleHyperEdge<V, E,A>, A> String string(GraphTree<V, E, A> tree) {
 		return String.format("(%s,%s,%.2f)",tree.vertex(),tree.action()==null?"_":tree.action(),tree.weight());
 	}
 	

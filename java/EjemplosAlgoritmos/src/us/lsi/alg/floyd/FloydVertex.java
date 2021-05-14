@@ -1,7 +1,5 @@
 package us.lsi.alg.floyd;
 
-
-
 import java.util.List;
 import java.util.Map;
 
@@ -16,82 +14,60 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath;
 
 
-public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydVertex.ActionFloyd>{
+public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyperVertex<FloydVertex,FloydEdge,Boolean>{
 
-	public static enum ActionFloyd{Yes, No};	
 	
-	public static FloydVertex of(Graph<Integer,SimpleEdge<Integer>> graph, Integer origen, Integer destino) {
-		FloydVertex.n = graph.vertexSet().size();
-		return new FloydVertex(graph,origen,destino);
+	public static FloydVertex initial(Integer i,Integer j) {	
+		return new FloydVertex(i,j,0);
 	}
 	
-	public Integer i;
-	public Integer j;
-	public Integer k;
-	public Graph<Integer,SimpleEdge<Integer>> graph;
-	private static Integer n;
-	
-	public FloydVertex(Graph<Integer,SimpleEdge<Integer>> graph,Integer origen, Integer destino) {
-		super();
-		this.graph = graph;
-		this.i = origen;
-		this.j = destino;
-		this.k = 0;
+	public static FloydVertex of(Integer i,Integer j,Integer k) {	
+		return new FloydVertex(i,j,k);
 	}
+
+	public static Graph<Integer,SimpleEdge<Integer>> graph;
+	public static Integer n;
 	
-	public FloydVertex(Integer i, Integer j, Integer k, Graph<Integer,SimpleEdge<Integer>> graph) {
-		super();
-		this.i = i;
-		this.j = j;
-		this.k = k;
-		this.graph = graph;
-	}
 	
 	public FloydVertex neigbord(Integer i, Integer j, Integer k){
-		return new FloydVertex(i,j,k,this.graph);
+		return new FloydVertex(i,j,k);
 	}
-
-	@Override
-	public String toString() {
-		return "(" + i + "," + j + "," + k + ")";
-	}
+	
 	@Override
 	public Boolean isValid() {
 		return true;
 	}
 	@Override
-	public List<ActionFloyd> actions() {
+	public List<Boolean> actions() {
 		if(this.isBaseCase()) return List.of();
-		return List.of(ActionFloyd.No,ActionFloyd.Yes);
+		return List.of(false,true);
 	}
 	
 	@Override
-	public List<FloydVertex> neighbors(ActionFloyd a) {
+	public List<FloydVertex> neighbors(Boolean a) {
 		List<FloydVertex> r=null;
-		switch(a){
-		case No : r = List.of(this.neigbord(i,j,k+1)); break;
-		case Yes : r = List.of(this.neigbord(i, k, k+1),this.neigbord(k, j, k+1)); break;
-		}
+		if(!a) r = List.of(this.neigbord(i,j,k+1)); 
+		else r = List.of(this.neigbord(i, k, k+1),this.neigbord(k, j, k+1)); 
 		return r;
 	}
 	
 	@Override
-	public FloydEdge edge(ActionFloyd a) {
+	public FloydEdge edge(Boolean a) {
 		return FloydEdge.of(this,this.neighbors(a), a);
 	}
 
 	
 	@Override
 	public Boolean isBaseCase() {
-		return this.graph.containsEdge(this.i,this.j)  ||  k == n;
+		return FloydVertex.graph.containsEdge(this.i,this.j)  ||  k == n;
 	}
 	
 	@Override
 	public Double baseCaseSolution() {
 		Double r = null;
-		if(this.graph.containsEdge(this.i, this.j)){
-			SimpleEdge<Integer> e = this.graph.getEdge(i, j);
-			Double w = this.graph.getEdgeWeight(e);
+		if(FloydVertex.graph.containsEdge(this.i, this.j)){
+			SimpleEdge<Integer> e = FloydVertex.graph.getEdge(i, j);
+			Double w = FloydVertex.graph.getEdgeWeight(e);
 			r = w;
 		}
 		return r;
@@ -105,14 +81,14 @@ public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydV
 		return j;
 	}
 
-	public static GraphWalk<Integer,SimpleEdge<Integer>> solution(GraphTree<FloydVertex,FloydEdge,ActionFloyd> tree){
+	public static GraphWalk<Integer,SimpleEdge<Integer>> solution(GraphTree<FloydVertex,FloydEdge,Boolean> tree){
 		GraphWalk<Integer,SimpleEdge<Integer>> gp = null;		
 		if(tree.isBaseCase()) {
 			Integer origen = tree.vertex().i;
 			Integer destino = tree.vertex().j;
 			List<Integer> ls = List2.of(origen,destino);
-			gp = new GraphWalk<>(tree.vertex().graph,ls,tree.weight());
-		} else if(tree.action() == ActionFloyd.No){
+			gp = new GraphWalk<>(FloydVertex.graph,ls,tree.weight());
+		} else if(!tree.action()){
 			gp = solution(tree.neighbords().get(0));
 		} else {
 			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree.neighbords().get(0));
@@ -129,12 +105,12 @@ public class FloydVertex extends VirtualHyperVertex<FloydVertex,FloydEdge,FloydV
 			Integer origen = vertex.i;
 			Integer destino = vertex.j;
 			List<Integer> ls = List2.of(origen,destino);
-			gp = new GraphWalk<>(vertex.graph,ls,s.weight());
-		} else if(s.edge().action == ActionFloyd.No){
-			gp = solution(tree,s.edge().targets.get(0));
+			gp = new GraphWalk<>(FloydVertex.graph,ls,s.weight());
+		} else if(!s.edge().action()){
+			gp = solution(tree,s.edge().targets().get(0));
 		} else {
-			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree,s.edge().targets.get(0));
-			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree,s.edge().targets.get(1));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree,s.edge().targets().get(0));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree,s.edge().targets().get(1));
 			gp = gp1.concat(gp2,g->EGraphPath.weight(g));
 		}
 		return gp;

@@ -173,7 +173,7 @@ public class List2 {
 	 * @param e Elemento a copiar
 	 * @return Devuelve una lista formada por n copias de e
 	 */
-	public static <T> List<T> copy(T e, int n){
+	public static <T> List<T> ofTam(T e, Integer n){
 	    List<T> v = new ArrayList<T>();
 	    for(int i=0;i<n;i++){
 	       v.add(e);

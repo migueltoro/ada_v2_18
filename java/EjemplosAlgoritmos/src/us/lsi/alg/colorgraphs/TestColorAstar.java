@@ -1,8 +1,5 @@
 package us.lsi.alg.colorgraphs;
 
-
-import java.util.function.Predicate;
-
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -35,11 +32,11 @@ public class TestColorAstar {
 		SimpleWeightedGraph<Ciudad, Carretera> g0 = leeGrafo("./ficheros/andalucia.txt");		
 //		System.out.println(g0);		
 		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(g0);	
-		Integer n = g2.vertexSet().size();
+//		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex e1 = ColorVertex.first();
-//		Predicate<ColorVertex> goal  = e->e.index() == n;
 		Integer m = ColorHeuristic.gredyPath(e1, ColorVertex.goal());
+		System.out.println("Voraz = "+m);
 		ColorVertex.data(m, g2);
 		
 		EGraph<ColorVertex, ColorEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.nc().doubleValue());		

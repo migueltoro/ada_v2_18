@@ -13,7 +13,7 @@ import us.lsi.common.String2;
 public class SubconjuntosHeuristic {
 
 	public static Double heuristic(SubconjuntosVertex v1, Predicate<SubconjuntosVertex> goal, SubconjuntosVertex v2) {
-		return heuristic1(v1, DatosSubconjuntos.NUM_SC);
+		return heuristic2(v1, DatosSubconjuntos.NUM_SC);
 	}
 	
 	public static Double voraz(SubconjuntosVertex vertice, Integer lastIndex) {
@@ -56,7 +56,9 @@ public class SubconjuntosHeuristic {
 		return ls;
 	}
 	
-	
+	public static Double heuristic0(SubconjuntosVertex vertice, Integer lastIndex) {
+		return 0.;
+	}
 
 	public static Double heuristic1(SubconjuntosVertex vertice, Integer lastIndex) {
 		if (vertice.cubreUniverso() || voraz(vertice,lastIndex) == 0.)  return 0.;

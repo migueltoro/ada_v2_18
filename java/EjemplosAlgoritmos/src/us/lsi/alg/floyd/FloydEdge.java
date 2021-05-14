@@ -1,28 +1,19 @@
 package us.lsi.alg.floyd;
 
 import java.util.List;
-import java.util.function.Function;
-
-import us.lsi.alg.floyd.FloydVertex.ActionFloyd;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 
-public class FloydEdge extends SimpleHyperEdge<FloydVertex,ActionFloyd>{
+public record FloydEdge(FloydVertex source,List<FloydVertex> targets,Boolean action) 
+        implements SimpleHyperEdge<FloydVertex,FloydEdge,Boolean>{
 	
-	public static FloydEdge of(FloydVertex source, List<FloydVertex> targets,
-			ActionFloyd action) {
-		return new FloydEdge(source, targets, action, null);
+	public static FloydEdge of(FloydVertex source, List<FloydVertex> targets, Boolean action) {
+		return new FloydEdge(source, targets, action);
 	}
 
-	private FloydEdge(FloydVertex source, List<FloydVertex> targets, ActionFloyd action, Double weight) {
-		super(source, targets, action, weight);
-	}
-
-	public Double getWeight(Function<FloydVertex,Double> sol) {
+	public Double weight(List<Double> solutions) {
 		Double weight = null;
-		switch(super.action) {
-		case No: weight = sol.apply(super.targets.get(0)); break;
-		case Yes: weight = sol.apply(super.targets.get(0))+sol.apply(super.targets.get(1));		
-		}
+		if(!action()) weight = solutions.get(0); 
+		else weight = solutions.get(0)+solutions.get(1);		
 		return weight;
 	}
 	

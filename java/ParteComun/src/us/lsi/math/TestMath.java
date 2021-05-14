@@ -28,7 +28,7 @@ public class TestMath {
 		}
 		System.out.println(m1);
 		List<Integer> r = new ArrayList<>();
-		List<Integer> max = List2.copy(4, 4);
+		List<Integer> max = List2.of(4, 4);
 		for(int i=0;i<12;i++){
 			r.add(Math2.getEnteroAleatorio(0, 2));
 		}

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import us.lsi.common.TriFunction;
@@ -39,6 +40,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	public Graph<V,E> outGraph;
 	public Optional<GraphPath<V,E>> optPath;
 	public Boolean withGraph = false;
+	public Function<E,Object> action;
 
 	DynamicProgrammingReduction(EGraph<V, E> g, Predicate<V> goal, V end, Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
@@ -60,9 +62,8 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {
 		Boolean r = false;
 		Double w = this.path.boundWeight(accumulateValue, actual, edge, goal, end, this.heuristic);
-		if (this.type == PDType.Max) r = w <= this.bestValue;
-		if (this.type == PDType.Min) r = w >= this.bestValue;
-//		System.out.printf("En forget = %s,%s,%.1f,%.1f\n",r,actual,w,this.bestValue);
+		if (this.type == PDType.Max) r = w < this.bestValue;
+		if (this.type == PDType.Min) r = w > this.bestValue;
 		return r;
 	}
 	
@@ -71,8 +72,6 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		   (this.type == PDType.Max && accumulateValue > this.bestValue) ||
 		   (this.type == PDType.Min && accumulateValue < this.bestValue)) {
 				this.bestValue = accumulateValue;
-//				this.optPath = Optional.of(pathFrom(this.startVertex));
-//				System.out.printf("En update = %.1f,%.1f\n",accumulateValue,this.bestValue);
 		}
 	}
 

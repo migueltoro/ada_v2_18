@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import us.lsi.hypergraphs.VirtualHyperVertex;
 
-public class MatrixVertex extends VirtualHyperVertex<MatrixVertex,MatrixEdge,Integer>{
+public record MatrixVertex(Integer i,Integer j) implements VirtualHyperVertex<MatrixVertex,MatrixEdge,Integer>{
 
 	
 	public static MatrixVertex of(Integer i, Integer j) {
@@ -20,14 +20,14 @@ public class MatrixVertex extends VirtualHyperVertex<MatrixVertex,MatrixEdge,Int
 	
 	public static List<MatrixInf> matrices;
 	public static Integer n;
-	public Integer i;
-	public Integer j;
-	
-	private MatrixVertex(Integer i, Integer j) {
-		super();
-		this.i = i;
-		this.j = j;
-	}
+//	public Integer i;
+//	public Integer j;
+//	
+//	private MatrixVertex(Integer i, Integer j) {
+//		super();
+//		this.i = i;
+//		this.j = j;
+//	}
 
 	@Override
 	public Boolean isValid() {
@@ -70,41 +70,41 @@ public class MatrixVertex extends VirtualHyperVertex<MatrixVertex,MatrixEdge,Int
 	
 	
 
-	@Override
-	public String toString() {
-		return "(" + i + "," + j + ")";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((i == null) ? 0 : i.hashCode());
-		result = prime * result + ((j == null) ? 0 : j.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MatrixVertex other = (MatrixVertex) obj;
-		if (i == null) {
-			if (other.i != null)
-				return false;
-		} else if (!i.equals(other.i))
-			return false;
-		if (j == null) {
-			if (other.j != null)
-				return false;
-		} else if (!j.equals(other.j))
-			return false;
-		return true;
-	}
-	
+//	@Override
+//	public String toString() {
+//		return "(" + i + "," + j + ")";
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((i == null) ? 0 : i.hashCode());
+//		result = prime * result + ((j == null) ? 0 : j.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		MatrixVertex other = (MatrixVertex) obj;
+//		if (i == null) {
+//			if (other.i != null)
+//				return false;
+//		} else if (!i.equals(other.i))
+//			return false;
+//		if (j == null) {
+//			if (other.j != null)
+//				return false;
+//		} else if (!j.equals(other.j))
+//			return false;
+//		return true;
+//	}
+//	
 	
 }
