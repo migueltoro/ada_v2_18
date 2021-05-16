@@ -2,6 +2,7 @@ package us.lsi.graphs;
 
 import java.io.Writer;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -124,16 +125,22 @@ public class Graphs2 {
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
 	
+	private static Map<String,Attribute> labelAttributeOfString(String label) {
+		Map<String,Attribute> m = new HashMap<>();
+		if(!label.equals("")) m = Map.of("label",DefaultAttribute.createAttribute(label));
+		return m;
+	}
+	
 	public static <V,E> void toDot(Graph<V,E> graph, String file) {		
 		DOTExporter<V,E> de = new DOTExporter<V,E>();
-		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(v.toString())));
+		de.setVertexAttributeProvider(v->labelAttributeOfString(v.toString()));
 		Writer f1 = Files2.getWriter(file);
 		de.exportGraph(graph, f1);
 	}
 	
 	public static <V,E> void toDot(Graph<V,E> graph, String file, Function<V,String> vertexLabel) {	
 		DOTExporter<V,E> de = new DOTExporter<V,E>();	
-		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))));
+		de.setVertexAttributeProvider(v->labelAttributeOfString(vertexLabel.apply(v)));
 		Writer f1 = Files2.getWriter(file);
 		de.exportGraph(graph, f1);
 	}
@@ -143,11 +150,13 @@ public class Graphs2 {
 			Function<V,String> vertexLabel,
 			Function<E,String> edgeLabel) {		
 		DOTExporter<V,E> de = new DOTExporter<V,E>();
-		de.setVertexAttributeProvider(v->Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))));
-		de.setEdgeAttributeProvider(e->Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))));		
+		de.setVertexAttributeProvider(v->labelAttributeOfString(vertexLabel.apply(v)));
+		de.setEdgeAttributeProvider(e->labelAttributeOfString(edgeLabel.apply(e)));		
 		Writer f1 = Files2.getWriter(file);
 		de.exportGraph(graph, f1);
 	}
+	
+	
 	
 	public static <V,E> void toDot(Graph<V,E> graph, String file, 
 			Function<V,String> vertexLabel,
@@ -156,10 +165,13 @@ public class Graphs2 {
 			Function<E,Map<String,Attribute>> edgeAttribute) {
 		
 		DOTExporter<V,E> de = new DOTExporter<V,E>();
+//Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v)))
+//Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e)))		
 		Function<V,Map<String,Attribute>> m1 = 
-			v->Map2.merge(Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v))),vertexAttribute.apply(v));
+			v->Map2.merge(labelAttributeOfString(vertexLabel.apply(v)),vertexAttribute.apply(v));
 		Function<E,Map<String,Attribute>> m2 = 
-			e->Map2.merge(Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e))),edgeAttribute.apply(e));
+			e->Map2.merge(labelAttributeOfString(edgeLabel.apply(e)),edgeAttribute.apply(e));
+		
 		de.setVertexAttributeProvider(m1);
 		de.setEdgeAttributeProvider(m2);
 		
@@ -167,6 +179,8 @@ public class Graphs2 {
 		Writer f1 = Files2.getWriter(file);
 		de.exportGraph(graph, f1);
 	}
+	
+	
 	
 	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
 			Function<E, Double> edgeWeight,

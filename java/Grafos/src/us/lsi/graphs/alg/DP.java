@@ -19,7 +19,7 @@ public interface DP<V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyper
 
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, E, A>, A> 
-		DP<V, E, A> dynamicProgrammingSearch(
+		DynamicProgramming<V, E, A> dynamicProgrammingSearch(
 			SimpleVirtualHyperGraph<V, E, A> graph, 
 			PDType type) {
 		return new DynamicProgramming<V, E, A>(graph, type);

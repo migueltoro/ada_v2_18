@@ -11,6 +11,7 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.DP;
+import us.lsi.graphs.alg.DynamicProgramming;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.hypergraphs.GraphTree;
@@ -47,8 +48,9 @@ public class TestFloyd {
 		SimpleVirtualHyperGraph<FloydVertex,FloydEdge,Boolean> graph3 = 
 				Graphs2.simpleVirtualHyperGraph(p);
 		
-		DP<FloydVertex,FloydEdge,Boolean> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
+		DynamicProgramming<FloydVertex, FloydEdge, Boolean> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
 		
+		a.withGraph = true;
 		a.search();
 		
 		GraphTree<FloydVertex, FloydEdge,Boolean> tree = a.searchTree(p);
@@ -57,6 +59,13 @@ public class TestFloyd {
 		List<Ciudad> lc = FloydVertex.solution(tree).getVertexList().stream()
 				.map(i->graph2.getVertex(i)).collect(Collectors.toList());
 		System.out.println(lc);
+		
+		System.out.println(tree.vertices());
+		
+		a.toDot("ficheros/floydPD.gv",
+				v->String.format("(%d,%d,%d)",v.i(),v.j(),v.k()),
+				e->e.action()?"Y":"N",
+				tree.vertices());
 	}
 
 }

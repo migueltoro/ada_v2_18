@@ -45,12 +45,14 @@ strict digraph G {
   16 -> 17 [ label="0" ];
   4 -> 16 [ label="1" ];
   18 -> 14 [ label="2" ];
+  18 -> 17 [ label="1" ];
   4 -> 18 [ label="0" ];
   3 -> 4 [ color="red" label="10" ];
   23 -> 24 [ label="0" ];
   22 -> 23 [ label="0" ];
   21 -> 22 [ label="0" ];
   20 -> 21 [ label="1" ];
+  25 -> 22 [ label="1" ];
   20 -> 25 [ label="0" ];
   19 -> 20 [ label="2" ];
   26 -> 21 [ label="2" ];

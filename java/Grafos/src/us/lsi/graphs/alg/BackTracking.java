@@ -78,12 +78,17 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		   (this.bestValue == null)||
 		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
 		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
+//				System.out.println("AC = "+state.getAccumulateValue());
+//				System.out.println("BV = "+this.bestValue);
 				this.bestValue = state.getAccumulateValue();
 				if (this.constraint.test(state.getActualVertex())) {
 					this.optimalPath = state.getPath();
 					S s = solution.apply(this.optimalPath);
 					this.solutions.add(s);
+//					System.out.println("Vertice = "+state.getActualVertex());
+//					System.out.println("Sol = "+s);
 				}
+				
 		}
 	}
 	

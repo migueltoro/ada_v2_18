@@ -5,7 +5,17 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+
+import us.lsi.colors.GraphColors;
+import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.SimpleEdge;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
@@ -23,6 +33,8 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	public Map<V,Sp<E>> solutionsTree;
 	private PDType type;
 	private V startVertex;
+	public Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> outGraph;
+	public Boolean withGraph = false;
 	
 	DynamicProgramming(
 			SimpleVirtualHyperGraph<V,E, A> graph, 
@@ -37,6 +49,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	
 	@Override
 	public Sp<E> search(){
+		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return search(this.startVertex);
 	}
 
@@ -53,7 +66,8 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			List<Sp<E>> sps = new ArrayList<>();
 			for (E edge : graph.edgesOf(actual)) {
 				List<Sp<E>> spNeighbors = new ArrayList<>();
-				for (V neighbor : edge.targets()) {
+				List<V> neighbords = edge.targets();
+				for (V neighbor : neighbords) {
 					Sp<E> nb = search(neighbor);
 					if (nb == null) {
 						spNeighbors = null;
@@ -67,12 +81,38 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 					spa = Sp.of(edge.weight(solutions), edge);
 				}
 				sps.add(spa);
+				if(this.withGraph) this.completeGraph(actual,edge,neighbords);
 			}
 			r = sps.stream().filter(s -> s != null).min(this.comparatorSp).orElse(null);
 			this.solutionsTree.put(actual, r);
+			
 		}
 		return r;
 	}
+	
+	private void completeGraph(V actual,E edge,List<V> neighbords) {
+		VertexGraph<V,E> vg = VertexGraph.ofVertex(actual);
+		outGraph.addVertex(vg);
+		VertexGraph<V,E> ve = VertexGraph.ofEdge(edge);
+		outGraph.addVertex(ve);
+	    outGraph.addEdge(vg,ve,SimpleEdge.of(vg,ve,1.));
+	    for (V neighbord:neighbords) {
+			VertexGraph<V, E> vn = VertexGraph.ofVertex(neighbord);
+			outGraph.addVertex(vn);
+			outGraph.addEdge(ve, vn, SimpleEdge.of(ve, vn, 1.));
+		}
+	}
+	
+	public void toDot(String file,Function<V,String> stringVertex, Function<E,String> stringEdge, Set<V> s) {
+		Graphs2.toDot(this.outGraph,
+				file,
+				v->v.toStringVertex(stringVertex),
+				e->VertexGraph.toStringEdge(this.outGraph,e,stringEdge),
+				v->v.shapeAndColorVertex(s),
+				e->VertexGraph.colorEdge(this.outGraph,e,s)
+				);
+	}
+	
 	@Override
 	public SimpleVirtualHyperGraph<V, E, A> getGraph() {
 		return graph;
@@ -103,4 +143,87 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 
 	}
 
+	public static record VertexGraph<V,E>(V vertex, E edge, DPTipoVertex tipo) {
+		public static enum DPTipoVertex{Vertex,Edge};
+		public static <V,E> VertexGraph<V,E> ofVertex(V v){
+			return new VertexGraph<>(v, null,DPTipoVertex.Vertex);
+		}
+		public static <V,E> VertexGraph<V,E> ofEdge(E e){
+			return new VertexGraph<>(null, e,DPTipoVertex.Edge);
+		}
+		
+		public String toStringVertex(Function<V,String> stringVertex) {
+			return switch(tipo()) {
+			case Vertex -> stringVertex.apply(vertex);
+			case Edge -> "";
+			};
+		}
+		
+		public static <V,E> String toStringEdge(Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> graph,
+				SimpleEdge<VertexGraph<V,E>> edge, Function<E,String> stringEdge) {
+			VertexGraph<V,E> source = graph.getEdgeSource(edge);
+			VertexGraph<V,E> target = graph.getEdgeTarget(edge);
+			String r = "";
+			if(source.tipo().equals(DPTipoVertex.Vertex)) {
+				r = stringEdge.apply(target.edge());
+			}
+			return r;
+		}
+		
+		private static <V,E> Boolean optimalEdge(Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> graph,
+				SimpleEdge<VertexGraph<V,E>> edge, Set<V> optimalVertex) {
+			VertexGraph<V, E> source = graph.getEdgeSource(edge);
+			VertexGraph<V, E> target = graph.getEdgeTarget(edge);
+			Boolean r = false;
+			if(source.tipo().equals(DPTipoVertex.Edge)) {				
+				r = graph.outgoingEdgesOf(source).stream()
+						.map(e->e.otherVertex(source).vertex())
+						.allMatch(v->optimalVertex.contains(v));
+			} 
+			if(source.tipo().equals(DPTipoVertex.Vertex)) {
+				List<SimpleEdge<VertexGraph<V, E>>> nb = graph.outgoingEdgesOf(target).stream().toList();
+				r = optimalVertex.contains(source.vertex()) && 
+						optimalVertex.contains(nb.get(0).otherVertex(target).vertex());
+			}
+			return r;
+		}
+		
+		public static <V,E> Map<String, Attribute> colorEdge(Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> graph,
+				SimpleEdge<VertexGraph<V,E>> edge, Set<V> optimalVertex) {
+			Map<String, Attribute> r = Map.of();	
+			if(optimalEdge(graph,edge,optimalVertex)) {
+				r = Map.of("color", DefaultAttribute.createAttribute(GraphColors.Color.red.name()),
+						   "style", DefaultAttribute.createAttribute(GraphColors.Style.bold.name()));				
+			}
+			return r;
+		}
+		
+		public Map<String, Attribute> shapeVertex(){
+			return switch(tipo()) {
+			case Vertex -> Map.of();
+			case Edge -> Map.of("shape", DefaultAttribute.createAttribute(GraphColors.Shape.point.name()));
+			};
+		}
+
+		
+		public Map<String, Attribute> colorVertex(Set<V> optimalVertex) {
+			return switch(tipo()) {
+			case Vertex -> optimalVertex.contains(this.vertex)? 
+					Map.of("color", DefaultAttribute.createAttribute(GraphColors.Color.red.name()),
+						   "style", DefaultAttribute.createAttribute(GraphColors.Style.bold.name())):
+					Map.of();
+			case Edge -> Map.of();
+			};
+		}
+	
+		public Map<String, Attribute> shapeAndColorVertex(Set<V> optimalVertex) {
+			Map<String, Attribute> shape = shapeVertex();
+			Map<String, Attribute> color = colorVertex(optimalVertex);
+			shape = new HashMap<>(shape);
+			shape.putAll(color);
+			return shape;
+		}
+			
+	}
+	
 }

@@ -1,7 +1,9 @@
 package us.lsi.hypergraphs;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import us.lsi.common.List2;
@@ -70,6 +72,18 @@ public class GraphTree<V, E extends SimpleHyperEdge<V,E,A>, A> {
 			children = nextLevel(children);			
 		}
 		return r;		
+	}
+	
+	public Set<V> vertices(){
+		Set<V> r = new HashSet<>();
+		r.add(this.vertex());
+		List<GraphTree<V, E, A>> children = nextLevel(List2.of(this));		
+		while(!children.isEmpty()) {
+			Set<V> sl = children.stream().map(t->t.vertex()).collect(Collectors.toSet());
+			r.addAll(sl);
+			children = nextLevel(children);			
+		}
+		return r;
 	}
 	
 }

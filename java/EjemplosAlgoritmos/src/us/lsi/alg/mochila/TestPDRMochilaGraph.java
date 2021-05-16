@@ -50,7 +50,7 @@ public class TestPDRMochilaGraph {
 		ms.search();
 		
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
-				v->v.toString(),
+				v->String.format("(%d,%d)",v.index(),v.capacidadRestante()),
 				e->e.action().toString(),
 				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
 				e->GraphColors.getColorIf(Color.red,ms.optPath.get().getEdgeList().contains(e))

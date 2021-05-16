@@ -12,8 +12,6 @@ import us.lsi.graphs.GraphsReader;
 
 public class GraphToDot {
 
-	
-	
 	public static void main(String[] args) {
 	
 		
