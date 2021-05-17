@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
@@ -52,8 +53,8 @@ public class TestPDRMochilaGraph {
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.capacidadRestante()),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
-				e->GraphColors.getColorIf(Color.red,ms.optPath.get().getEdgeList().contains(e))
+				v->GraphColors.getColorStyleIf(Color.red,Style.bold,ms.optPath.get().getVertexList().contains(v)),
+				e->GraphColors.getColorStyleIf(Color.red,Style.bold,ms.optPath.get().getEdgeList().contains(e))
 				);
 	}
 

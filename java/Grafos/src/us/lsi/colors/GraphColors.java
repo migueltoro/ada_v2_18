@@ -49,7 +49,15 @@ public class GraphColors {
 		return m;
 	}
 	
+	public static Map<String,Attribute> getColorStyleIf(Color yesColor, Style style, Boolean test) {		
+		Map<String,Attribute> m = new HashMap<>();
+		if(test) m = Map.of("color", DefaultAttribute.createAttribute(yesColor.toString()),
+				"style", DefaultAttribute.createAttribute(style.toString()));
+		return m;
+	}
+	
 	public static <E> Map<String, Attribute> getLabel(String label) {
+		if(label.equals("")) return new HashMap<>();
 		return Map.of("label", DefaultAttribute.createAttribute(label));
 	}
 	
