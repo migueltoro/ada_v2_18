@@ -174,18 +174,14 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 				SimpleEdge<VertexGraph<V,E>> edge, Set<V> optimalVertex) {
 			VertexGraph<V, E> source = graph.getEdgeSource(edge);
 			VertexGraph<V, E> target = graph.getEdgeTarget(edge);
-			Boolean r = false;
-			if(source.tipo().equals(DPTipoVertex.Edge)) {				
-				r = graph.outgoingEdgesOf(source).stream()
-						.map(e->e.otherVertex(source).vertex())
-						.allMatch(v->optimalVertex.contains(v));
-			} 
-			if(source.tipo().equals(DPTipoVertex.Vertex)) {
-				List<SimpleEdge<VertexGraph<V, E>>> nb = graph.outgoingEdgesOf(target).stream().toList();
-				r = optimalVertex.contains(source.vertex()) && 
-						optimalVertex.contains(nb.get(0).otherVertex(target).vertex());
-			}
-			return r;
+			VertexGraph<V, E> vv = null;;
+			if(source.tipo().equals(DPTipoVertex.Edge)) vv = source;				
+			if(source.tipo().equals(DPTipoVertex.Vertex)) vv = target;
+			final VertexGraph<V, E> vf = vv;
+			return graph.edgesOf(vf).stream()
+					.map(v->v.otherVertex(vf))
+					.map(v->v.vertex())
+					.allMatch(v->optimalVertex.contains(v));
 		}
 		
 		public static <V,E> Map<String, Attribute> colorEdge(Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> graph,

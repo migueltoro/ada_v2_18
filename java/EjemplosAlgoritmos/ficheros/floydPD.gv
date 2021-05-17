@@ -999,7 +999,7 @@ strict digraph G {
   179 -> 28 [ ];
   180 -> 181 [ color="red" style="bold" label="N" ];
   181 -> 170 [ color="red" style="bold" ];
-  180 -> 182 [ color="red" style="bold" label="Y" ];
+  180 -> 182 [ label="Y" ];
   182 -> 170 [ ];
   182 -> 32 [ ];
   183 -> 184 [ color="red" style="bold" label="N" ];
