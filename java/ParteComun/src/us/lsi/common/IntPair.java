@@ -1,14 +1,15 @@
 package us.lsi.common;
 
-public class IntPair extends Pair<Integer, Integer> {
+public record IntPair(Integer first,Integer second) {
 
 	
 	public static IntPair of(Integer a, Integer b) {
 		return new IntPair(a, b);
 	}
-
-	private IntPair(Integer a, Integer b) {
-		super(a, b);
+	
+	public static IntPair parse(String s) {
+		String[] partes = s.split("[(),]");
+		return new IntPair(Integer.parseInt(partes[0].trim()), Integer.parseInt(partes[1].trim()));
 	}
 
 	public IntPair add(IntPair p) {
