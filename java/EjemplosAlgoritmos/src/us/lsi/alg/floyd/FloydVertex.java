@@ -55,12 +55,6 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 	public FloydEdge edge(Boolean a) {
 		return FloydEdge.of(this,this.neighbors(a), a);
 	}
-
-	
-//	@Override
-//	public Boolean isBaseCase() {
-//		return FloydVertex.graph.containsEdge(this.i,this.j)  ||  k == n;
-//	}
 	
 	@Override
 	public Boolean isBaseCase() {

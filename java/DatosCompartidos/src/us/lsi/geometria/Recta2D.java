@@ -38,7 +38,7 @@ public class Recta2D {
 	private Double distanciaAlOrigenConSigno;
 		
 	private Recta2D() {
-		this(Punto2D.create(),Vector2D.createPolarEnRadianes(1.,0.));
+		this(Punto2D.getOrigen(),Vector2D.createPolarEnRadianes(1.,0.));
 	}
 	
 	private Recta2D(Punto2D p, Double angulo) {
@@ -46,13 +46,13 @@ public class Recta2D {
 	}
 
 	protected Recta2D(Punto2D p, Vector2D vector) {	
-		this.punto = Punto2D.create(p);
+		this.punto = Punto2D.of(p);
 		this.vector = Vector2D.create(vector);
 		this.angulo = Math.atan2(vector.getY(), vector.getX());
 		this.angulo = this.angulo <0 ? this.angulo+Math.PI : this.angulo;
 		this.a = this.vector.getY();
 		this.b = -this.vector.getX();
-		this.c = -(a*punto.getX()+b*punto.getY());
+		this.c = -(a*punto.x()+b*punto.y());
 		this.distanciaAlOrigenConSigno = getDistancia(Punto2D.getOrigen());
 	}
 
@@ -101,7 +101,7 @@ public class Recta2D {
 	}
 	
 	public Boolean contienePunto(Punto2D p) {
-		return a*p.getX()+b*p.getY()+c == 0.;
+		return a*p.x()+b*p.y()+c == 0.;
 	}
 
 	public Double getDistanciaAlOrigenConSigno() {
@@ -109,7 +109,7 @@ public class Recta2D {
 	}
 	
 	public Double getDistancia(Punto2D p) {
-		Double r = a*p.getX()+b*p.getY()+c;
+		Double r = a*p.x()+b*p.y()+c;
 		r = r/Math.hypot(a, b);
 		return r;
 	}
@@ -126,7 +126,7 @@ public class Recta2D {
 		Punto2D p = null;
 		Double d = this.a*r.b-r.a*this.b;
 		if(d!=0.){
-			p = Punto2D.create(this.b*r.c-r.b*this.c, r.a*this.c-this.a*r.c);
+			p = Punto2D.of(this.b*r.c-r.b*this.c, r.a*this.c-this.a*r.c);
 		}
 		return p;
 	}

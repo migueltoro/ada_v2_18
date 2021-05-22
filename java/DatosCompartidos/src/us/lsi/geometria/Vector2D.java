@@ -9,7 +9,7 @@ public class Vector2D {
 	}
 
 	public static Vector2D create(Punto2D p) {
-		return new Vector2D(p.getX(), p.getY());
+		return new Vector2D(p.x(), p.y());
 	}
 	
 	public static Vector2D create(Vector2D p) {

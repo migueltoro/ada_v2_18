@@ -43,7 +43,7 @@ public class EjemplosDeStreams {
 	 * @return Dada una lista de objetos de tipo Punto, devolver otra lista con la coordenada X de esos puntos
 	 */
 	public static List<Double> ejemploB(List<Punto2D> ls){
-		return ls.stream().map(x->x.getX()).collect(Collectors.toList());
+		return ls.stream().map(x->x.x()).collect(Collectors.toList());
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class EjemplosDeStreams {
 	 */
 	public static List<Punto2D> ejemploH(List<Punto2D> ls){
 		return ls.stream()
-				 .map(x->Punto2D.create(-x.getX(),x.getY()))
+				 .map(x->Punto2D.of(-x.x(),x.y()))
 				 .collect(Collectors.toList());
 	}
 	
@@ -106,7 +106,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Punto2D ejemploI(List<Punto2D> ls){
 		return ls.stream()
-				 .min(Comparator.comparing(Punto2D::getX)).get();
+				 .min(Comparator.comparing(Punto2D::x)).get();
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Long ejemploJ(List<Punto2D> ls){
 		return ls.stream()
-				 .filter(x->x.getX()>=0. && x.getY()>=0.)
+				 .filter(x->x.x()>=0. && x.y()>=0.)
 				 .count();	
 	}
 	
@@ -174,7 +174,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Stream<Punto2D> ejemploP(Integer limit){
 		return Stream.iterate(1L, x-> x<=limit, x->Math2.siguientePrimo(x))
-					 .<Punto2D>map(x->Punto2D.create((double)x, (double)x));
+					 .<Punto2D>map(x->Punto2D.of((double)x, (double)x));
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Map<Cuadrante,Double> ejemploU(Stream<Punto2D> st){
 		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante, 
-							Collectors.<Punto2D,Double>reducing(0.,x->x.getX(),(x,y)->x+y)));
+							Collectors.<Punto2D,Double>reducing(0.,x->x.x(),(x,y)->x+y)));
 	}
 		
 	/**

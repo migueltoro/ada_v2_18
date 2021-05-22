@@ -6,11 +6,11 @@ public class TestPunto {
 
 	
 	public static void main(String[] args) {
-		Punto2D p1 = Punto2D.create(0.,0.);
-		Punto2D p2 = Punto2D.create(1.,9.);
-		Punto2D p3 = Punto2D.create(0.,10.);
-		Punto2D p4 = Punto2D.create(0.,0.);
-		Punto2D p5 = Punto2D.create(0.,0.);
+		Punto2D p1 = Punto2D.of(0.,0.);
+		Punto2D p2 = Punto2D.of(1.,9.);
+		Punto2D p3 = Punto2D.of(0.,10.);
+		Punto2D p4 = Punto2D.of(0.,0.);
+		Punto2D p5 = Punto2D.of(0.,0.);
 		SortedSet<Punto2D> s = new TreeSet<Punto2D>();
 		Set<Punto2D> s2 = new HashSet<Punto2D>();
 		s.add(p1);

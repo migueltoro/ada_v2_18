@@ -18,7 +18,7 @@ public class TestMaximales {
 						s -> {
 							String[] ps = s.split(",");
 							Preconditions.checkArgument(ps.length == 2);
-							return Punto2D.create(Double.parseDouble(ps[0]),Double.parseDouble(ps[1]));
+							return Punto2D.of(Double.parseDouble(ps[0]),Double.parseDouble(ps[1]));
 						}).collect(Collectors.<Punto2D> toList());
 
 		Set<Punto2D> r1 = ListasDePuntos.puntosMaximales(lista);

@@ -33,10 +33,10 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 	
 	public static Poligono2D createRectangulo(Double xMin, Double xMax, Double yMin, Double yMax) {
 		Poligono2D r = Poligono2D.create();
-		r.addVertice(Punto2D.create(xMin, yMin));
-		r.addVertice(Punto2D.create(xMax, yMin));
-		r.addVertice(Punto2D.create(xMax, yMax));
-		r.addVertice(Punto2D.create(xMin, yMax));
+		r.addVertice(Punto2D.of(xMin, yMin));
+		r.addVertice(Punto2D.of(xMax, yMin));
+		r.addVertice(Punto2D.of(xMax, yMax));
+		r.addVertice(Punto2D.of(xMin, yMax));
 		return r;
 	}
 	private List<Punto2D> vertices;

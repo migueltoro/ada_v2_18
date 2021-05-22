@@ -59,15 +59,18 @@ public class FloydPD {
 		}
 		
 		public Boolean isBaseCase() {
-			return FloydPD.graph.containsEdge(this.i,this.j)  ||  k == n;
+			return this.i.equals(this.j) ||  k == n; //FloydVertex.graph.containsEdge(this.i,this.j) ;
 		}
 		
 		public Double baseCaseSolution() {
 			Double r = null;
-			if(FloydPD.graph.containsEdge(this.i, this.j)){
+			if(this.i.equals(this.j)) r = 0.;
+			else if(k ==n && FloydPD.graph.containsEdge(this.i, this.j)){
 				SimpleEdge<Integer> e = FloydPD.graph.getEdge(i, j);
 				Double w = FloydPD.graph.getEdgeWeight(e);
 				r = w;
+			} else if(k ==n && !FloydPD.graph.containsEdge(this.i, this.j)) {
+				r = null;
 			}
 			return r;
 		}

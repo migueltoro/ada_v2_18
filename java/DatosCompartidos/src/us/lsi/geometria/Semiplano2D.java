@@ -33,7 +33,7 @@ public class Semiplano2D extends Recta2D  {
 
 	private Semiplano2D(Punto2D p, Vector2D d, Punto2D pc) {
 		super(p, d);
-		if(getA()*pc.getX()+getB()*pc.getY()+getC() <=0. ){
+		if(getA()*pc.x()+getB()*pc.y()+getC() <=0. ){
 			a = getA();
 			b = getB();
 			c = getC();
@@ -49,7 +49,7 @@ public class Semiplano2D extends Recta2D  {
 	
 	private Semiplano2D(Recta2D r, Punto2D pc) {
 		super(r);
-		if(getA()*pc.getX()+getB()*pc.getY()+getC() <=0. ){
+		if(getA()*pc.x()+getB()*pc.y()+getC() <=0. ){
 			a = getA();
 			b = getB();
 			c = getC();
@@ -69,7 +69,7 @@ public class Semiplano2D extends Recta2D  {
 	}
 	
 	public Boolean contains(Punto2D p) {
-		return a*p.getX()+b*p.getY()+c <= 0.;
+		return a*p.x()+b*p.y()+c <= 0.;
 	}
 	
 	public Boolean contains(Poligono2D a) {

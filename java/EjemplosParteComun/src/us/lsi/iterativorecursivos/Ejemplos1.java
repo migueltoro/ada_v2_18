@@ -172,8 +172,8 @@ public class Ejemplos1 {
 	
 	public static <E> Integer index2(Iterator<E> it, E e) {
 		Stream<Enumerate<E>> s = StreamsS.enumerate(it);
-		Optional<Enumerate<E>> entry = s.filter(p->p.counter.equals(e)).findFirst();
-		return entry.isPresent()?entry.get().counter:-1;
+		Optional<Enumerate<E>> entry = s.filter(p->p.counter().equals(e)).findFirst();
+		return entry.isPresent()?entry.get().counter():-1;
 	}
 	
 	public static <T> Integer index8(Iterator<T> it, T e) {

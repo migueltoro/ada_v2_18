@@ -188,10 +188,10 @@ public class Matrix<E> {
 		E e = a.get(0, 0);
 		Matrix<E> r = Matrix.of(nf,nc,e);
 		View4<Matrix<E>> vr = r.views();
-		a.copy(vr.a);
-		b.copy(vr.b);
-		c.copy(vr.c);
-		d.copy(vr.d);
+		a.copy(vr.a());
+		b.copy(vr.b());
+		c.copy(vr.c());
+		d.copy(vr.d());
 		return r;
 	}
 	
@@ -240,10 +240,10 @@ public class Matrix<E> {
 		} else {
 			View4<Matrix<E>> v1 = m1.views();
 			View4<Matrix<E>> v2 = m2.views();
-			Matrix<E> a = Matrix.add(Matrix.multiply_r(v1.a,v2.a),Matrix.multiply_r(v1.b,v2.c));
-			Matrix<E> b = Matrix.add(Matrix.multiply_r(v1.a,v2.b),Matrix.multiply_r(v1.b,v2.d));
-			Matrix<E> c = Matrix.add(Matrix.multiply_r(v1.c,v2.a),Matrix.multiply_r(v1.d,v2.c));	
-			Matrix<E> d = Matrix.add(Matrix.multiply_r(v1.c,v2.b),Matrix.multiply_r(v1.d,v2.d));
+			Matrix<E> a = Matrix.add(Matrix.multiply_r(v1.a(),v2.a()),Matrix.multiply_r(v1.b(),v2.c()));
+			Matrix<E> b = Matrix.add(Matrix.multiply_r(v1.a(),v2.b()),Matrix.multiply_r(v1.b(),v2.d()));
+			Matrix<E> c = Matrix.add(Matrix.multiply_r(v1.c(),v2.a()),Matrix.multiply_r(v1.d(),v2.c()));	
+			Matrix<E> d = Matrix.add(Matrix.multiply_r(v1.c(),v2.b()),Matrix.multiply_r(v1.d(),v2.d()));
 			r = Matrix.compose(a, b, c, d);
 		}
 		return r;
@@ -270,10 +270,10 @@ public class Matrix<E> {
 		if(m1.nc > 1 && m1.nf > 1) {
 			View4<Matrix<E>> v1 = m1.views();
 			View4<Matrix<E>> v2 = m2.views();			
-			Matrix<E> a = Matrix.add_r(v1.a,v2.a);
-			Matrix<E> b = Matrix.add_r(v1.b,v2.b);
-			Matrix<E> c = Matrix.add_r(v1.c,v2.c);
-			Matrix<E> d = Matrix.add_r(v1.d,v2.d);
+			Matrix<E> a = Matrix.add_r(v1.a(),v2.a());
+			Matrix<E> b = Matrix.add_r(v1.b(),v2.b());
+			Matrix<E> c = Matrix.add_r(v1.c(),v2.c());
+			Matrix<E> d = Matrix.add_r(v1.d(),v2.d());
 			r = Matrix.compose(a, b, c, d);
 		} else {
 			r = Matrix.add(m1,m2);

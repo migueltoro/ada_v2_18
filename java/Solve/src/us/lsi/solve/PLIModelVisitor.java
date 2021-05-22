@@ -153,7 +153,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
 		Function<Integer,Stream<String>> sc = i ->Stream2.enumerate(cs.apply(i).stream().filter(ls->!ls.isEmpty()))
-				      .map(p->String.format("%s%d: %s",cn.apply(i),p.counter,p.value));
+				      .map(p->String.format("%s%d: %s",cn.apply(i),p.counter(),p.element()));
 		String lt1 = IntStream.range(0,n).boxed()
 				.flatMap(i ->sc.apply(i))
 				.collect(Collectors.joining("\n"));

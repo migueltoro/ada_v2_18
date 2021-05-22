@@ -18,7 +18,7 @@ public class ListasDePuntos {
 		Comparator<Punto2D> ord = new Comparator<Punto2D>(){
 			@Override
 			public int compare(Punto2D p1, Punto2D p2) {
-				return p1.getX().compareTo(p2.getX());
+				return p1.x().compareTo(p2.x());
 			}
 			
 		};
@@ -69,12 +69,12 @@ public class ListasDePuntos {
 		Double maxYD = Double.MIN_VALUE;
 		Set<Punto2D> r = Set2.of(sd);
 		for(Punto2D p:sd){
-			if(p.getY()>maxYD){
-				maxYD = p.getY();
+			if(p.y()>maxYD){
+				maxYD = p.y();
 			}
 		}
 		for(Punto2D p:si){
-			if(p.getY()> maxYD){
+			if(p.y()> maxYD){
 				r.add(p);
 			}
 		}
@@ -88,14 +88,14 @@ public class ListasDePuntos {
 		Comparator<Punto2D> ordX = new Comparator<Punto2D>(){
 			@Override
 			public int compare(Punto2D p1, Punto2D p2) {
-				return p1.getX().compareTo(p2.getX());
+				return p1.x().compareTo(p2.x());
 			}
 			
 		};
 		Comparator<Punto2D> ordY = 	new Comparator<Punto2D>(){
 			@Override
 			public int compare(Punto2D p1, Punto2D p2) {
-				return p1.getY().compareTo(p2.getY());
+				return p1.y().compareTo(p2.y());
 			}
 			
 		};
@@ -114,9 +114,9 @@ public class ListasDePuntos {
 		}else{
 			List<Punto2D> puntosYIzq = List2.empty();
 			List<Punto2D> puntosYDer = List2.empty();
-			Double xk = puntosX.get(k).getX();
+			Double xk = puntosX.get(k).x();
 			for(Punto2D p:puntosY){
-				if(p.getX() < xk){
+				if(p.x() < xk){
 					puntosYIzq.add(p);
 				}else{
 					puntosYDer.add(p);
@@ -127,7 +127,7 @@ public class ListasDePuntos {
 			r = Comparators.min(s1, s2,ordNatural);
 			List<Punto2D> yCentral = List2.empty();
 			for(Punto2D p: puntosY){
-				if(Math.abs(p.getX()- xk) < r.getDistancia()){
+				if(Math.abs(p.x()- xk) < r.getDistancia()){
 						yCentral.add(p);
 				}
 			}
@@ -192,7 +192,7 @@ public class ListasDePuntos {
 	public static List<Punto2D> getListaPuntosAleatoria(int n){
 		List<Punto2D> r = List2.empty();
 		for(int i=0; i < n; i++){
-			r.add(Punto2D.create(Math2.getDoubleAleatorio(-1000., 1000.),Math2.getDoubleAleatorio(-1000., 1000.)));
+			r.add(Punto2D.of(Math2.getDoubleAleatorio(-1000., 1000.),Math2.getDoubleAleatorio(-1000., 1000.)));
 		}
 		return r;
 	}
