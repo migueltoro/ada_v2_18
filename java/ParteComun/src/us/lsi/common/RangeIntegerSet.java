@@ -160,8 +160,8 @@ public class RangeIntegerSet implements Set<Integer> {
 	@Override
 	public boolean addAll(Collection<? extends Integer> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->change.value = this.add(x));
-		return change.value;
+		c.stream().forEach(x->{Boolean r = this.add(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 	
 	public boolean addAll(RangeIntegerSet c) {
@@ -188,8 +188,8 @@ public class RangeIntegerSet implements Set<Integer> {
 
 	public boolean addAll(Integer... elems) {
 		MutableType<Boolean> change = MutableType.of(false);
-		Arrays.stream(elems).forEach(x->change.value = this.add(x));
-		return change.value;
+		Arrays.stream(elems).forEach(x->{Boolean r = this.add(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 
 	@Override
@@ -197,8 +197,8 @@ public class RangeIntegerSet implements Set<Integer> {
 		MutableType<Boolean> change = MutableType.of(false);
 		RangeIntegerSet cp = this.copy();
 		cp.stream().filter(x->!c.contains(x))
-			.forEach(x->change.value = this.remove(x));
-		return change.value;
+			.forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 	
 	public boolean retainAll(RangeIntegerSet c) {
@@ -227,15 +227,15 @@ public class RangeIntegerSet implements Set<Integer> {
 		MutableType<Boolean> change = MutableType.of(false);		
 		IntStream.range(0,bits.length()).map(x->x+infLimit).boxed()
 			.filter(x->!this.contains(x))
-			.forEach(x->change.value = this.remove(x));
-		return change.value;
+			.forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->change.value = this.remove(x));
-		return change.value;
+		c.stream().forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 	
 	public boolean removeAll(RangeIntegerSet c) {
@@ -270,8 +270,8 @@ public class RangeIntegerSet implements Set<Integer> {
 	
 	public boolean removeAll(Integer... elems) {
 		MutableType<Boolean> change = MutableType.of(false);
-		Arrays.stream(elems).forEach(x->change.value = this.remove(x));
-		return change.value;
+		Arrays.stream(elems).forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		return change.value();
 	}
 
 	@Override

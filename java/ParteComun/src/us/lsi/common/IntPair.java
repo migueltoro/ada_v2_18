@@ -11,6 +11,11 @@ public record IntPair(Integer first,Integer second) {
 		String[] partes = s.split("[(),]");
 		return new IntPair(Integer.parseInt(partes[0].trim()), Integer.parseInt(partes[1].trim()));
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("(%d,%d)",this.first(),this.second());
+	}
 
 	public IntPair add(IntPair p) {
 		return IntPair.of(this.first()+p.first(), this.second()+p.second());

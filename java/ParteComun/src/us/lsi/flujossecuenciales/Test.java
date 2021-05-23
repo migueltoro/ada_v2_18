@@ -18,9 +18,9 @@ public class Test {
 		Iterator<Integer> h2 = IteratorFlatMap.of(h1,x->x.stream().iterator());
 		Iterator<Integer> h3 = IteratorWithSeeNext.of(h2);
 		MutableType<Integer> sum = MutableType.of(0);
-		h3.forEachRemaining(x->sum.newValue(sum.value+x));
+		h3.forEachRemaining(x->sum.newValue(sum.value()+x));
 		Integer sum2 = ls1.stream().flatMap(x->x.stream()).mapToInt(Integer::intValue).sum();
-		System.out.print("\n"+sum.value+","+sum2);
+		System.out.print("\n"+sum.value()+","+sum2);
 	}
 
 }

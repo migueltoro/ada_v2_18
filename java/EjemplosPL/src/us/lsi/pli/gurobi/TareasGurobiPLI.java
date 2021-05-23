@@ -74,7 +74,7 @@ public class TareasGurobiPLI {
 	public static void tareas_model() throws IOException {
 		Tarea.tareas = Tarea.datos("data/tareas.txt");
 		String ss = Stream2.enumerate(Tarea.tareas.stream())
-				.map(e -> String.format("%d == %s", e.counter(), e.element()))
+				.map(e -> String.format("%d == %s", e.counter(), e.value()))
 				.collect(Collectors.joining("\n"));
 		Tarea.n = Tarea.tareas.size();
 		AuxGrammar.generate(TareasGurobiPLI.class,"models/tareas.lsi","ficheros/tareas.lp");

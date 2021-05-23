@@ -13,7 +13,7 @@ public class MutableType<T> {
 		return new MutableType<T>(e);
 	}
 	
-	public T value;
+	private T value;
 	
 	private MutableType(T e) {
 		super();
@@ -24,6 +24,10 @@ public class MutableType<T> {
 		T old = this.value;
 		this.value = e;
 		return old;
+	}
+	
+	public T value() {
+		return value;
 	}
 	
 	@Override

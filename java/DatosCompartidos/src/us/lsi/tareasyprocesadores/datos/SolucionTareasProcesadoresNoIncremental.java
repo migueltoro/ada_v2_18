@@ -123,7 +123,7 @@ public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasPr
 	public String toString() {
 		var s = Stream2.enumerate(this.getTareasEnProcesador().stream());
 		return s.map(
-				x -> "    (" + x.counter() + "=" + x.element().toString() + "," + this.getCargaProcesador(x.counter()) + ")")
+				x -> "    (" + x.counter() + "=" + x.value().toString() + "," + this.getCargaProcesador(x.counter()) + ")")
 				.collect(Collectors.joining("\n", "Solucion, Objetivo = " + getObjetivo() + " {\n", "\n}\n"));
 	}
 

@@ -165,24 +165,24 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean add(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.forEach(e->r.value = this.add(e) || r.value);
-		return r.value;
+		elements.forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 	
 	
 	@Override
 	public boolean add(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.stream().forEach(e->r.value = this.add(e) || r.value);
-		return r.value;
+		elements.stream().forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 	
 	
 	@Override
 	public boolean add(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		Arrays.stream(elements).forEach(e->r.value = this.add(e) || r.value);
-		return r.value;
+		Arrays.stream(elements).forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 	
 	/**
@@ -246,24 +246,24 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean remove(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.forEach(e->r.value = this.remove(e) || r.value);
-		return r.value;
+		elements.forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 	
 	
 	@Override
 	public boolean remove(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.stream().forEach(e->r.value = this.remove(e) || r.value );
-		return r.value;
+		elements.stream().forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 
 	
 	@Override
 	public boolean remove(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		Arrays.stream(elements).forEach(e->r.value = this.remove(e) ||  r.value);
-		return r.value;
+		Arrays.stream(elements).forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		return r.value();
 	}
 
 	protected BinaryTree<E> remove(BinaryTree<E> tree, E element, Comparator<E> comparator) {
