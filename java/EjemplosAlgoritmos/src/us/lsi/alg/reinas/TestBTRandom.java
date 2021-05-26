@@ -11,7 +11,7 @@ import us.lsi.graphs.virtual.EGraph;
 public class TestBTRandom {
 
 	public static void main(String[] args) {
-			ReinasVertex.n = 100;
+			ReinasVertex.n = 110;
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
@@ -24,9 +24,12 @@ public class TestBTRandom {
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
 					BTType.One,
-					v->ReinasVertex.n-v.index());							
+					v->ReinasVertex.n-v.index());	
+			long startTime = System.nanoTime();
 			ms.search();
-			System.out.println(ms.iterations);
+			System.out.println("Iteraciones = "+ms.iterations);
+			long endTime = System.nanoTime() - startTime;
+			System.out.println("1 = "+endTime);
 			System.out.println(ms.getSolution());
 
 	}

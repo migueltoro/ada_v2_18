@@ -49,7 +49,7 @@ public class MatricesPD {
 		}
 		
 		public List<Integer> actions() {
-			return IntStream.range(i+1,j-1).boxed().collect(Collectors.toList());
+			return IntStream.range(i+1,j).boxed().collect(Collectors.toList());
 		}
 
 		public Boolean isBaseCase() {
