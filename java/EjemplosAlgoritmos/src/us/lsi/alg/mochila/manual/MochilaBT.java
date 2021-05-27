@@ -98,6 +98,7 @@ public class MochilaBT {
 	    startTime = System.nanoTime();
 		MochilaBT.btm(78,s.valor(),s);
 		long endTime2 = System.nanoTime() - startTime;
+		System.out.println("2 = "+endTime2);
 		System.out.println("2 = "+1.*endTime2/endTime);
 		System.out.println(MochilaBT.soluciones);
 

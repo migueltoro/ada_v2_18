@@ -1,5 +1,6 @@
 package us.lsi.alg.reinas.manual;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -8,35 +9,31 @@ import us.lsi.common.List2;
 
 public class ReinasBTRandom {
 	
-	public static record StateReinas(ReinasProblem vertice, List<Integer> acciones, List<ReinasProblem> vertices) {
-		public static StateReinas of(ReinasProblem vertex, List<Integer> acciones, List<ReinasProblem> vertices) {
-			List<Integer> accionesC = List.copyOf(acciones);
-			List<ReinasProblem> verticesC = List.copyOf(vertices);
-			return new StateReinas(vertex,accionesC,verticesC);
+	public static class StateReinas {
+		ReinasProblem vertice;
+		List<ReinasProblem> vertices;
+		
+		public StateReinas(ReinasProblem vertice, List<ReinasProblem> vertices) {
+			super();
+			this.vertice = vertice;
+			this.vertices = vertices;
+		}
+
+		void forward(Integer a) {
+			ReinasProblem nv = vertice.vecino(a);
+			this.vertices.add(nv);
+			this.vertice = nv;
 		}
 		
-		public static StateReinas of(ReinasProblem vertex) {
-			List<ReinasProblem> vt = List.of(vertex);
-			return new StateReinas(vertex,List.of(),vt);
-		}
-
-		StateReinas forward(Integer a) {
-			List<Integer> as = List2.addLast(this.acciones(), a);
-			ReinasProblem vcn = this.vertice().vecino(a);
-			List<ReinasProblem> vt = List2.addLast(this.vertices(), vcn);
-			return StateReinas.of(vcn, as, vt);
-		}
-
-		StateReinas back(Integer a) {
-			List<Integer> as = List2.removeLast(this.acciones());
-			List<ReinasProblem> vt = List2.removeLast(this.vertices());
-			ReinasProblem van = List2.last(vt);
-			return StateReinas.of(van, as, vt);
+		void back(Integer a) {
+			this.vertices.remove(this.vertices.size()-1);
+			this.vertice = this.vertices.get(this.vertices.size()-1);		
 		}
 		
 		SolucionReinas solucion() {
-			return SolucionReinas.of(this.vertice());
+			return SolucionReinas.of(this.vertice);
 		}
+		
 	}
 	
 	public static ReinasProblem start;
@@ -50,25 +47,28 @@ public class ReinasBTRandom {
 		ReinasBTRandom.iteraciones = 0;
 		do {
 			ReinasBTRandom.start = ReinasProblem.first();
-			ReinasBTRandom.estado = StateReinas.of(start);
+			List<ReinasProblem> va = new ArrayList<>();
+			va.add(ReinasBTRandom.start);
+			ReinasBTRandom.estado = new StateReinas(ReinasBTRandom.start,va);
 			ReinasBTRandom.soluciones = new HashSet<>();
-			btm();
+			ReinasBTRandom.btm();
 			ReinasBTRandom.iteraciones++;
 		}while(ReinasBTRandom.soluciones.size()==0);
 	}
 	
 	public static void btm() {
-		if(ReinasBTRandom.estado.vertice().index() == ReinasProblem.n) {
+		if(ReinasBTRandom.estado.vertice.index() == ReinasProblem.n) {
 			SolucionReinas s = ReinasBTRandom.estado.solucion();
 			if(s != null) ReinasBTRandom.soluciones.add(s);
 		} else {
-			List<Integer> alternativas = ReinasBTRandom.estado.vertice().acciones();
-			if(ReinasBTRandom.estado.vertice().size() > ReinasBTRandom.threshold)
+			List<Integer> alternativas = ReinasBTRandom.estado.vertice.acciones();
+			if(ReinasBTRandom.estado.vertice.size() > ReinasBTRandom.threshold) {
 				alternativas = List2.randomUnitary(alternativas);
+			}
 			for(Integer a:alternativas) {	
-				ReinasBTRandom.estado = ReinasBTRandom.estado.forward(a);
-				btm();  
-				ReinasBTRandom.estado = ReinasBTRandom.estado.back(a);
+				ReinasBTRandom.estado.forward(a);
+				ReinasBTRandom.btm();  
+				ReinasBTRandom.estado.back(a);
 			}
 		}
 	}
@@ -76,10 +76,10 @@ public class ReinasBTRandom {
 	public static SolucionReinas solucion() {
 		return ReinasBTRandom.soluciones.stream().findFirst().get();
 	}
-	
+
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		Integer n = 100;
+		Integer n = 120;
 		ReinasBTRandom.threshold = 15;
 		long startTime = System.nanoTime();
 		ReinasBTRandom.btm(n);	
@@ -87,13 +87,6 @@ public class ReinasBTRandom {
 		System.out.println("1 = "+endTime);
 		System.out.println("Iteraciones = "+ReinasBTRandom.iteraciones);
 		System.out.println(ReinasBTRandom.solucion());
-//		ReinasBTRandom.threshold = n;
-//	    startTime = System.nanoTime();
-//	    ReinasBTRandom.btm(n);
-//		long endTime2 = System.nanoTime() - startTime;
-//		System.out.println(String.format("2 = %.2f",(1.*endTime)/endTime2));
-//		System.out.println("Iteraciones = "+ReinasBTRandom.iteraciones);
-//		System.out.println(ReinasBTRandom.solucion());
 	}
 
 }
