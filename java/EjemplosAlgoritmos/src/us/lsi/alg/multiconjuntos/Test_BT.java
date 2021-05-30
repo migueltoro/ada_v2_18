@@ -2,7 +2,6 @@ package us.lsi.alg.multiconjuntos;
 
 import java.util.Locale;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
@@ -27,25 +26,29 @@ public class Test_BT {
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
-			Predicate<MulticonjuntoVertex> finalVertex = v -> MulticonjuntoVertex.goal(v);
+			Predicate<MulticonjuntoVertex> finalVertex = MulticonjuntoVertex.goal();
 
 			// Grafo
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 
 			System.out.println("\n\n#### Algoritmo BT ####");
-
+			
 			// Algoritmo BT
 			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
-					BT.backTrackingGoal(graph, finalVertex, 
-					MulticonjuntoHeuristic::heuristic,
-					MulticonjuntoVertex::getSolucion, MulticonjuntoVertex::copy, BTType.Min);
+					BT.backTracking(graph, 
+							finalVertex, 
+							null,
+							MulticonjuntoHeuristic::heuristic,
+							MulticonjuntoVertex::getSolucion, 
+							MulticonjuntoVertex::copy, 
+							BTType.Min);
 
 			bta.bestValue = (double)MulticonjuntoHeuristic.valEntero(start,DatosMulticonjunto.NUM_E);
 			bta.solutions.add(MulticonjuntoHeuristic.sol(start,DatosMulticonjunto.NUM_E));
 			bta.withGraph = true;
-
+			
 			bta.search();
 			System.out.println(bta.getSolution().get());
 			
@@ -55,7 +58,7 @@ public class Test_BT {
 			Graphs2.toDot(bta.outGraph, "ficheros/multiconjuntosBTGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
-					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal(v)),
+					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
 					e -> GraphColors.getColorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
 
 		}

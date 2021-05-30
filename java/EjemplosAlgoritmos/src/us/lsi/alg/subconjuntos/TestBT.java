@@ -36,8 +36,10 @@ public class TestBT {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = BT.backTrackingGoal(graph, 
-					SubconjuntosVertex.goal(), 
+			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
+				BT.backTracking(graph, 
+					SubconjuntosVertex.goal(),
+					null,
 					SubconjuntosHeuristic::heuristic,
 					SolucionSubconjuntos::of, 
 					SubconjuntosVertex::copy, 

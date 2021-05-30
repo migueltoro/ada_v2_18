@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,7 +9,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
 
-public class AsignacionGurobiPLI {
+public class AsignacionPLI {
 	
 	private static int n;
 	private static Integer m;
@@ -29,9 +29,9 @@ public class AsignacionGurobiPLI {
 	
 	public static void leeFichero(String f) {
 		List<String> lineas = Files2.linesFromFile(f);
-		AsignacionGurobiPLI.n = Integer.parseInt(lineas.get(0));
-		AsignacionGurobiPLI.m = Integer.parseInt(lineas.get(1));
-		AsignacionGurobiPLI.costes = new Double[n][m];
+		AsignacionPLI.n = Integer.parseInt(lineas.get(0));
+		AsignacionPLI.m = Integer.parseInt(lineas.get(1));
+		AsignacionPLI.costes = new Double[n][m];
 		String[] dat;
 		Integer i, j;
 		for (int k = 2; k < lineas.size(); k++) {
@@ -43,8 +43,8 @@ public class AsignacionGurobiPLI {
 	}
 	
 	public static void asignacion_model() throws IOException {
-		AsignacionGurobiPLI.leeFichero("data/asignacionDeTareas_2.txt");
-		AuxGrammar.generate(AsignacionGurobiPLI.class,"models/asignacion.lsi","ficheros/asignacion.lp");
+		AsignacionPLI.leeFichero("data/asignacionDeTareas_2.txt");
+		AuxGrammar.generate(AsignacionPLI.class,"models/asignacion.lsi","ficheros/asignacion.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/asignacion.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(solution.toString((s,d)->d>0.));

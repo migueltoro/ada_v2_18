@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.Collections;

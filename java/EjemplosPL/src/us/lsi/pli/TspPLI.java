@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 
 
@@ -16,7 +16,7 @@ import us.lsi.gurobi.GurobiSolution;
 import us.lsi.math.Math2;
 import us.lsi.solve.AuxGrammar;
 
-public class TspGurobi {
+public class TspPLI {
 	
 	public static Graph<Integer, SimpleEdge<Integer>> graph;
 	public static int n; //numero de vertices
@@ -43,24 +43,24 @@ public class TspGurobi {
 	}
 	
 	public static Double getEdgeWeight(Integer i, Integer j) {
-		SimpleEdge<Integer> e = TspGurobi.graph.getEdge(i,j); 
-		return TspGurobi.graph.getEdgeWeight(e);
+		SimpleEdge<Integer> e = TspPLI.graph.getEdge(i,j); 
+		return TspPLI.graph.getEdgeWeight(e);
 	}
 	
 	public static Boolean containsEdge(Integer i, Integer j) {
-		return TspGurobi.graph.containsEdge(i,j);
+		return TspPLI.graph.containsEdge(i,j);
 	}
 	
 	public static Integer getN() {
-		return TspGurobi.n;
+		return TspPLI.n;
 	}
 	
 	
 	public static void tsp_model_1() throws IOException {
-		TspGurobi.graph = graph(200,0.6);
-		TspGurobi.n = TspGurobi.graph.vertexSet().size();
-		System.out.println(TspGurobi.graph);
-		AuxGrammar.generate(TspGurobi.class,"models/tsp_1.lsi","ficheros/tsp_1.lp");
+		TspPLI.graph = graph(200,0.6);
+		TspPLI.n = TspPLI.graph.vertexSet().size();
+		System.out.println(TspPLI.graph);
+		AuxGrammar.generate(TspPLI.class,"models/tsp_1.lsi","ficheros/tsp_1.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/tsp_1.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(solution.toString((s,d)->d>0.));

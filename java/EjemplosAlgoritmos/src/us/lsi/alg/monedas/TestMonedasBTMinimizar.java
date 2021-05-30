@@ -2,7 +2,6 @@ package us.lsi.alg.monedas;
 
 	
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
 
 
@@ -27,9 +26,10 @@ import java.util.Locale;
 		
 			EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e3);
 
-			BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTrackingGoal(
+			BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTracking(
 					graph, 
 					v->v.index()==MonedaVertex.n,
+					null,
 					(v1,p,v2)->0., 
 					SolucionMonedas::of,
 					MonedaVertex::copy,

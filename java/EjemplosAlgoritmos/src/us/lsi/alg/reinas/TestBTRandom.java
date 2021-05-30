@@ -18,9 +18,10 @@ public class TestBTRandom {
 			EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.errores().doubleValue());		
 			
 			BackTrackingRandom<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
-					BT.<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,SolucionReinas>randomGoal(
+					BT.<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,SolucionReinas>random(
 					graph, 
 					v->v.index() == ReinasVertex.n, 
+					null,
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
 					BTType.One,

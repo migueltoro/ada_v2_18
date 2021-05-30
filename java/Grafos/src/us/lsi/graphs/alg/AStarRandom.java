@@ -20,7 +20,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 
 	public static Integer threshold;
 	protected Function<V,Integer> size;
-	public static Integer iterations;
+	public static Integer iterations = 0;
 
 	AStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
 			Predicate<V> constraint,
@@ -65,7 +65,7 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		return vertexActual;
 	}
 	
-	public Optional<GraphPath<V, E>> search() {
+	private Optional<GraphPath<V, E>> search_p() {
 		EGraphPath<V,E> ePath = graph.initialPath();
 		V startVertex = graph.startVertex();
 		if(this.goal.test(startVertex)) return Optional.of(ePath);
@@ -89,5 +89,13 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 		}
 	}
 	
-
+	public Optional<GraphPath<V, E>> search() {
+		Optional<GraphPath<V, E>> gp = null;
+		do {
+			gp = search_p();
+			AStarRandom.iterations++;
+		} while(!gp.isPresent());
+		return gp;
+	}
+	
 }

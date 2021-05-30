@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -10,7 +10,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
 
-public class BufeteGurobiPLI {
+public class BufetePLI {
 	
 	public static Integer getNumAbogados() {
 		return DatosAbogados.NUM_ABOGADOS;
@@ -35,7 +35,7 @@ public class BufeteGurobiPLI {
 	public static void test(String fichero) throws IOException {
 		Locale.setDefault(new Locale("es", "ES"));
 		DatosAbogados.iniDatos("ficheros/"+fichero);
-		AuxGrammar.generate(BufeteGurobiPLI.class,"models/bufete.lsi","ficheros/bufete.lp");
+		AuxGrammar.generate(BufetePLI.class,"models/bufete.lsi","ficheros/bufete.lp");
 		GurobiSolution gs = GurobiLp.gurobi("ficheros/bufete.lp");		
 		DatosAbogados.toConsole();
 		SolucionAbogados.create(gs.objVal, gs.values).toConsole();

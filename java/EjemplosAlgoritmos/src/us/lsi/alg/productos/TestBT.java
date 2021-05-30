@@ -36,7 +36,9 @@ public class TestBT {
 
 			// Algoritmo BT
 			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
-					BT.backTrackingGoal(graph, finalVertex, 
+					BT.backTracking(graph, 
+					finalVertex,
+					null,
 					ProductosHeuristic::heuristic,
 					ProductosVertex::getSolucion, 
 					ProductosVertex::copy, 

@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
 import us.lsi.solve.AuxGrammar;
 
-public class MochilaGurobiPLI {
+public class MochilaPLI {
 	public static Integer CI;
 	public static List<ObjetoMochila>  objetos;
 	public static int n;
@@ -37,7 +37,7 @@ public class MochilaGurobiPLI {
 		CI = DatosMochila.capacidadInicial;
 		objetos = DatosMochila.getObjetos();
 		n = objetos.size();
-		AuxGrammar.generate(MochilaGurobiPLI.class,"models/mochila.lsi","ficheros/mochila.lp");
+		AuxGrammar.generate(MochilaPLI.class,"models/mochila.lsi","ficheros/mochila.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/mochila.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(solution.toString((s,d)->d>0.));

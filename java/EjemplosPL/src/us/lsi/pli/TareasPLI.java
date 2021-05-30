@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -12,7 +12,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
 
-public class TareasGurobiPLI {
+public class TareasPLI {
 	
 	public static class Tarea {
 		
@@ -77,7 +77,7 @@ public class TareasGurobiPLI {
 				.map(e -> String.format("%d == %s", e.counter(), e.value()))
 				.collect(Collectors.joining("\n"));
 		Tarea.n = Tarea.tareas.size();
-		AuxGrammar.generate(TareasGurobiPLI.class,"models/tareas.lsi","ficheros/tareas.lp");
+		AuxGrammar.generate(TareasPLI.class,"models/tareas.lsi","ficheros/tareas.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/tareas.lp");
 		System.out.println(solution.toString((s, d) -> d > 0.));

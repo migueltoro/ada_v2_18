@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +10,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
 
-public class EstanteriaGurobiPLI {
+public class EstanteriaPLI {
 
 	public static class Libro {
 		
@@ -106,7 +106,7 @@ public class EstanteriaGurobiPLI {
 		System.out.println(Estante.anchura);
 		System.out.println(Libro.libros.size());
 		System.out.println(Estante.estantes.size());
-		AuxGrammar.generate(EstanteriaGurobiPLI.class,"models/estanteria.lsi","ficheros/estanteria.lp");
+		AuxGrammar.generate(EstanteriaPLI.class,"models/estanteria.lsi","ficheros/estanteria.lp");
 		Locale.setDefault(new Locale("en", "US"));
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/estanteria.lp");
 		System.out.println(solution.toString((s,d)->d>0.));

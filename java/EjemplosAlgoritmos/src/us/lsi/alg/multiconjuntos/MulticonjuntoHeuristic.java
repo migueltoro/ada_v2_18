@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-import org.jgrapht.GraphPath;
-
-import us.lsi.path.EGraphPath;
-
 
 public class MulticonjuntoHeuristic {
 

@@ -34,8 +34,9 @@ public class TestPD {
 			// Algoritmo PD
 			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
 			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
-					DPR.dynamicProgrammingReductionGoal(graph,
+					DPR.dynamicProgrammingReduction(graph,
 					finalVertex,
+					null,
 					(v1,p,v2)->0., 
 					PDType.Min);
 //			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);

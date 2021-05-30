@@ -29,7 +29,7 @@ public class Test_aS {
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
-			Predicate<MulticonjuntoVertex> finalVertex = v -> MulticonjuntoVertex.goal(v);
+			Predicate<MulticonjuntoVertex> finalVertex = MulticonjuntoVertex.goal();
 
 			// Grafo
 
@@ -59,7 +59,7 @@ public class Test_aS {
 			Graphs2.toDot(aStar.outGraph, "ficheros/multiconjuntosAStarGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
-					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal(v)),
+					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
 					e -> GraphColors.getColorIf(Color.red, gp.getEdgeList().contains(e)));
 		}
 	}

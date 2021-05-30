@@ -76,14 +76,6 @@ public record VertexPuzzle(IntPair blackPosition,Integer[][] datos)
 	public static Integer numFilas = 3;
 	public static Integer n = numFilas;
 
-//	public Integer[][] datos() {
-//		return datos;
-//	}
-//
-//	public IntPair blackPosition() {
-//		return blackPosition;
-//	}
-
 	private static boolean validDato(Integer d) {
 		return 0<=d && d < VertexPuzzle.numFilas*VertexPuzzle.numFilas;
 	}

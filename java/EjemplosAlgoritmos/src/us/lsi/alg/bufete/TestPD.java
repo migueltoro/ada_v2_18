@@ -48,8 +48,9 @@ public class TestPD {
 			
 			// Algoritmo PD
 			DynamicProgrammingReduction<BufeteVertex, BufeteEdge> pdr = 
-					DPR.dynamicProgrammingReductionGoal(graph,
+					DPR.dynamicProgrammingReduction(graph,
 					goal, 
+					null,
 					Heuristica::heuristic, 
 					PDType.Min);
 			

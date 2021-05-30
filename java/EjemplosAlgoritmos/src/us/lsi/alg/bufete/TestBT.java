@@ -48,8 +48,9 @@ public class TestBT {
 			System.out.println(bv);
 			
 			// Algoritmo BT
-			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BT.backTrackingGoal(graph, 
+			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BT.backTracking(graph, 
 					goal, 
+					null,
 					Heuristica::heuristic, 
 					SolucionBufete::of,
 					BufeteVertex::copy, 

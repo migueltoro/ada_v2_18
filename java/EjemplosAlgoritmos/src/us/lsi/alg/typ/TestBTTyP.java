@@ -35,9 +35,10 @@ public class TestBTTyP {
 		Double bv = path.getWeight();
 		System.out.println(bv);
 		
-		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTrackingGoal(
+		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTracking(
 						graph,
 						e->e.goal(),
+						null,
 						Heuristica::heuristic,
 						TyPVertex::getSolucion,
 						TyPVertex::copy,

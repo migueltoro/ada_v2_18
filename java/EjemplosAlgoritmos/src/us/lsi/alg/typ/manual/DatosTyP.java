@@ -35,11 +35,16 @@ public class DatosTyP {
 		DatosTyP.n = numeroDeTareas;
 		DatosTyP.m = np;
 	}
+	
+	public static void toConsole() {
+		System.out.println(tareas);
+		System.out.println(String.format("numTareas = %d, numProcesadores = %d",n,m));
+	}
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosTyP.datos("ficheros/tareas.txt",5);
-		System.out.println(tareas);
+		toConsole();
 	}
 
 }

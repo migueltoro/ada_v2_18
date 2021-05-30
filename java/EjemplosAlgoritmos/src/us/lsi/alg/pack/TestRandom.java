@@ -35,9 +35,10 @@ public class TestRandom {
 		
 		PackVertex.m = bv.intValue();
 		
-		BackTrackingRandom<PackVertex, PackEdge,SolucionPack> ms = BT.randomGoal(
+		BackTrackingRandom<PackVertex, PackEdge,SolucionPack> ms = BT.random(
 				graph,
 				goal,
+				null,
 				SolucionPack::of,
 				PackVertex::copy,
 				BTType.Min,

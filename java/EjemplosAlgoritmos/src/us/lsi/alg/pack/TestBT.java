@@ -37,9 +37,10 @@ public class TestBT {
 	
 		PackVertex.m = sp.nc();
 		
-		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BT.backTrackingGoal(
+		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BT.backTracking(
 				graph,
 				goal,
+				null,
 				Heuristica::heuristic,
 				SolucionPack::of,
 				PackVertex::copy,

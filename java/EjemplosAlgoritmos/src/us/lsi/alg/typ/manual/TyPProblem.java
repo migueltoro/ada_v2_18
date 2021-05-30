@@ -1,6 +1,5 @@
 package us.lsi.alg.typ.manual;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -10,7 +9,7 @@ import us.lsi.common.List2;
 public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,Integer npMax,Integer npMin) {
 
 	public static TyPProblem of(Integer index,List<Integer> cargas) {
-		List<Integer> cargasC = Collections.unmodifiableList(cargas);
+		List<Integer> cargasC = List.copyOf(cargas);
 		Integer npMax = IntStream.range(0,DatosTyP.m)
 				.boxed()
 				.max(Comparator.comparing(i->cargasC.get(i)))
@@ -24,7 +23,7 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	}
 	
 	public static TyPProblem first() {
-		return TyPProblem.of(0,List2.of(0,DatosTyP.m));
+		return TyPProblem.of(0,List2.ofTam(0,DatosTyP.m));
 	}
 	
 	public List<Integer> acciones() {

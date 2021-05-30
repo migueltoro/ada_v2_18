@@ -36,7 +36,8 @@ public class TestPDRMochila {
 		System.out.println("1 = "+bv);
 		
 		DynamicProgrammingReduction<MochilaVertex, MochilaEdge> ms = 
-				DPR.dynamicProgrammingReductionEnd(graph,
+				DPR.dynamicProgrammingReduction(graph,
+						v->v.goal(),
 						e2,
 						MochilaHeuristic::heuristic,
 						PDType.Max);

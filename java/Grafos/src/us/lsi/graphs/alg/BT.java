@@ -33,24 +33,15 @@ public interface BT<V, E, S extends Comparable<S>> {
 		return new BackTracking<V, E, S>(graph, goal, end, constraint,heuristic,solution, copy, type);
 	}
 	
-	public static <V, E, S extends Comparable<S>> BackTracking<V, E, S> backTrackingGoal(
+	public static <V, E, S extends Comparable<S>> BackTracking<V, E, S> backTracking(
 			EGraph<V, E> graph,
 			Predicate<V> goal,
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			Function<GraphPath<V, E>,S> solution, 
-			Function<V,V> copy, 
-			BTType type)  {
-		return new BackTracking<V, E, S>(graph, goal,null,v->true,heuristic,solution, copy, type);
-	}
-	
-	public static <V, E, S extends Comparable<S>> BackTracking<V, E, S> backTrackingEnd(
-			EGraph<V, E> graph,
 			V end,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			Function<GraphPath<V, E>,S> solution, 
 			Function<V,V> copy, 
 			BTType type)  {
-		return new BackTracking<V, E, S>(graph,e->e.equals(end), end,v->true,heuristic,solution, copy, type);
+		return new BackTracking<V, E, S>(graph, goal,end,v->true,heuristic,solution, copy, type);
 	}
 	
 	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> random(
@@ -65,24 +56,16 @@ public interface BT<V, E, S extends Comparable<S>> {
 		return new BackTrackingRandom<V, E, S>(graph, goal, end, constraint,solution, copy, type, size);
 	}
 	
-	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> randomGoal(
+	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> random(
 			EGraph<V, E> graph, 
 			Predicate<V> goal, 
+			V end,
 			Function<GraphPath<V, E>, S> solution, 
 			Function<V, V> copy, 
 			BTType type,
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph, goal,null, v->true,solution, copy, type, size);
+		return new BackTrackingRandom<V, E, S>(graph, goal,end, v->true,solution, copy, type, size);
 	}
-	
-	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> randomEnd(
-			EGraph<V, E> graph, 
-			V end,
-			Function<GraphPath<V, E>, S> solution, 
-			Function<V, V> copy,
-			BTType type,
-			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph,e->e.equals(end), end, v->true,solution, copy, type, size);
-	}
+
 
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.GreedySearchOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
@@ -36,8 +37,9 @@ public class TestBTMochila {
 		
 		Double bv = path.get().getWeight();
 		
-		var ms = BT.backTrackingEnd(
+		BackTracking<MochilaVertex, MochilaEdge,SolucionMochila> ms = BT.backTracking(
 				graph,
+				v->v.goal(),
 				e2,
 				MochilaHeuristic::heuristic,
 				MochilaVertex::getSolucion,

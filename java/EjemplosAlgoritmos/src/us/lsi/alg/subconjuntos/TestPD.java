@@ -39,8 +39,9 @@ public class TestPD {
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge> pdr = 
-					DPR.dynamicProgrammingReductionGoal(graph, 
-							SubconjuntosVertex.goal(), 
+					DPR.dynamicProgrammingReduction(graph, 
+							SubconjuntosVertex.goal(),
+							null,
 							SubconjuntosHeuristic::heuristic, 
 							PDType.Min);
 			pdr.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);

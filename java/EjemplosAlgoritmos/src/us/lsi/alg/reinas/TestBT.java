@@ -18,8 +18,13 @@ public class TestBT {
 
 		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphSum(e1);
 
-		BT<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = BT.backTrackingGoal(graph, goal, (v1, p, v2) -> 0.,
-				SolucionReinas::of, ReinasVertex::copy, BTType.All);
+		BT<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
+				BT.backTracking(graph, 
+				goal, null,
+				(v1, p, v2) -> 0.,
+				SolucionReinas::of, 
+				ReinasVertex::copy, 
+				BTType.All);
 
 		ms.search();
 		System.out.println(ms.getSolution());

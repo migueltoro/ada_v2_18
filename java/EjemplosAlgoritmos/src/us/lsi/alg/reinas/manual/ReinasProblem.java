@@ -7,18 +7,18 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
-import us.lsi.common.RangeIntegerSet;
+import us.lsi.common.IntegerSet;
 
-public record ReinasProblem(Integer index, List<Integer> fo, RangeIntegerSet dpo, RangeIntegerSet dso) {
+public record ReinasProblem(Integer index, List<Integer> fo, IntegerSet dpo, IntegerSet dso) {
 	
 	public static Integer n = 8;
 	
-	public static ReinasProblem of(Integer index, List<Integer> fo, RangeIntegerSet dpo, RangeIntegerSet dso) {
+	public static ReinasProblem of(Integer index, List<Integer> fo, IntegerSet dpo, IntegerSet dso) {
 		return new ReinasProblem(index, fo, dpo, dso);
 	}
 
 	public static ReinasProblem first() {
-		return new ReinasProblem(0,List2.empty(),RangeIntegerSet.empty(),RangeIntegerSet.empty(-n,10));
+		return new ReinasProblem(0,List2.empty(),IntegerSet.empty(),IntegerSet.empty(-n,10));
 	}
 
 	public static Predicate<ReinasProblem> goal() {
@@ -35,8 +35,8 @@ public record ReinasProblem(Integer index, List<Integer> fo, RangeIntegerSet dpo
 	public ReinasProblem vecino(Integer a) {
 		Integer index = this.index+1;
 		List<Integer> fo = new ArrayList<>(this.fo); fo.add(a);
-		RangeIntegerSet dpo = this.dpo.addNew(a+this.index);
-		RangeIntegerSet dso = this.dso.addNew(a-this.index);
+		IntegerSet dpo = this.dpo.addNew(a+this.index);
+		IntegerSet dso = this.dso.addNew(a-this.index);
 		return ReinasProblem.of(index, fo, dpo, dso);
 	}
 	

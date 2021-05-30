@@ -242,6 +242,24 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 				}
 			}
 			break;
+		case 4:
+			for (int i = limites.get(0).li; i < limites.get(0).ls; i++) {
+				AuxGrammar.values.put(indexNames.get(0), i);
+				for (int j = limites.get(1).li; j < limites.get(1).ls; j++) {
+					AuxGrammar.values.put(indexNames.get(1), j);
+					for (int k = limites.get(2).li; k < limites.get(2).ls; k++) {
+						AuxGrammar.values.put(indexNames.get(2), k);
+						for (int l = limites.get(3).li; l < limites.get(3).ls; l++) {
+							AuxGrammar.values.put(indexNames.get(3), l);
+							if (ctx.exp() == null || AuxGrammar.asBoolean(visit(ctx.exp()))) {
+								s = AuxGrammar.asString(visit(ctx.indexed_elem()));
+								r.add(s);
+							}
+						}
+					}
+				}
+			}
+			break;
 		default: 
 		}
 		return ListString.of(r);

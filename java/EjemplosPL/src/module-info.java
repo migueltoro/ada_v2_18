@@ -3,7 +3,7 @@
 
 
 module ejemplos_pl {
-	exports us.lsi.pli.gurobi;
+	exports us.lsi.pli;
 
 	requires transitive datos_compartidos;
 	requires transitive solve;

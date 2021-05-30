@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class TyPPD {
 
-public static record Sptp(Integer a,Integer weight) implements Comparable<Sptp> {
+	public static record Sptp(Integer a,Integer weight) implements Comparable<Sptp> {
 		
 		public static Sptp of(Integer a, Integer weight) {
 			return new Sptp(a, weight);
@@ -34,13 +34,12 @@ public static record Sptp(Integer a,Integer weight) implements Comparable<Sptp> 
 		return TyPPD.solucion();
 	}
 	
-	public static SolucionTyP pdr(Integer maxValue, SolucionTyP s) {
+	public static SolucionTyP pdr(Integer maxValue) {
 		TyPPD.minValue = maxValue;
 		TyPPD.start = TyPProblem.first();
 		TyPPD.memory = new HashMap<>();
 		pd(start,0,memory);
-		if(TyPPD.memory.get(start) == null) return s;
-		else return TyPPD.solucion();
+		return TyPPD.solucion();
 	}
 	
 	private static Sptp pd(TyPProblem vertex,Integer accumulateValue, Map<TyPProblem,Sptp> memory) {
@@ -86,6 +85,7 @@ public static record Sptp(Integer a,Integer weight) implements Comparable<Sptp> 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosTyP.datos("ficheros/tareas.txt",5);
+		DatosTyP.toConsole();
 		TyPProblem v1 = TyPProblem.first();
 		SolucionTyP s = Heuristica.solucionVoraz(v1);	
 		long startTime = System.nanoTime();
@@ -93,7 +93,7 @@ public static record Sptp(Integer a,Integer weight) implements Comparable<Sptp> 
 		long endTime = System.nanoTime() - startTime;
 		System.out.println("1 = "+endTime);
 		startTime = System.nanoTime();
-		System.out.println(TyPPD.pdr(s.maxCarga(),s));
+		System.out.println(TyPPD.pdr(s.maxCarga()));
 		long endTime2 = System.nanoTime() - startTime;
 		System.out.println("2 = "+1.*endTime2/endTime);
 	}

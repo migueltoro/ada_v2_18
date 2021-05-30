@@ -1,4 +1,4 @@
-package us.lsi.pli.gurobi;
+package us.lsi.pli;
 
 import java.io.IOException;
 import java.util.Set;
@@ -19,7 +19,7 @@ import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
 
-public class VertexEdgeCover {
+public class VertexEdgeCoverPLI {
 	
 	public static SimpleWeightedGraph<Ciudad,Carretera> graph;
 	public static IntegerVertexGraphView<Ciudad, Carretera> g;
@@ -44,7 +44,7 @@ public class VertexEdgeCover {
 	}
 	
 	public static void vertex_cover_model() throws IOException {
-		VertexEdgeCover.leeDatos("data/andalucia.txt");
+		VertexEdgeCoverPLI.leeDatos("data/andalucia.txt");
 		System.out.println(GraphData.graph);
 		AuxGrammar.generate(GraphData.class,"models/vertex_cover.lsi","ficheros/vertex_cover.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/vertex_cover.lp");
@@ -70,7 +70,7 @@ public class VertexEdgeCover {
 	}
 	
 	public static void edge_cover_model() throws IOException {
-		VertexEdgeCover.leeDatos("data/andalucia.txt");
+		VertexEdgeCoverPLI.leeDatos("data/andalucia.txt");
 		System.out.println(GraphData.graph);
 		AuxGrammar.generate(GraphData.class,"models/edge_cover.lsi","ficheros/edge_cover.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/edge_cover.lp");
