@@ -1,25 +1,42 @@
 package us.lsi.graphs.virtual;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public interface Action<V> {
 
-	/**
-	 * @pre isApplicable(a)
-	 * @param v Un vértice
-	 * @return El vecino tras tomar esa acción
-	 */
 	V neighbor(V v);
 
-	/**
-	 * @param v Un vértice
-	 * @return Si la acción es aplicable en este vértice
-	 * @post El vértice retornada debe ser distinto a v y válido
-	 */
 	boolean isApplicable(V v);
 
-	/**
-	 * @param v Un vertice 
-	 * @return El peso de la arista asociada a esta accion que parte de v 
-	 */
 	Double weight(V v);
+	
+	Integer id(); 
+	
+	String name();
+
+	public static <V> Action<V> of(Integer id, String name, Predicate<V> isApplicable, Function<V, V> neighbor,
+			Function<V, Double> weight) {
+		return new ActionI<V>(id, name, isApplicable, neighbor, weight);
+	}
+
+	public record ActionI<V> (Integer id, String name, Predicate<V> isApplicable, Function<V, V> neighbor,
+			Function<V, Double> weight) implements Action<V> {
+
+		@Override
+		public V neighbor(V v) {
+			return this.neighbor.apply(v);
+		}
+
+		@Override
+		public boolean isApplicable(V v) {
+			return this.isApplicable.test(v);
+		}
+
+		@Override
+		public Double weight(V v) {
+			return this.weight.apply(v);
+		}
+	}
 
 }

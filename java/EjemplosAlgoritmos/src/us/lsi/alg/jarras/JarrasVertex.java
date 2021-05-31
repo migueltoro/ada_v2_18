@@ -3,9 +3,10 @@ package us.lsi.alg.jarras;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import us.lsi.graphs.virtual.Action;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
-public record JarrasVertex(Integer c1,Integer c2) implements ActionVirtualVertex<JarrasVertex,JarrasEdge,JarrasAction> {
+public record JarrasVertex(Integer c1,Integer c2) implements ActionVirtualVertex<JarrasVertex,JarrasEdge,Action<JarrasVertex>> {
 
 	public static void data(
 			Integer cantidadFinalEnJarra1,
@@ -49,17 +50,17 @@ public record JarrasVertex(Integer c1,Integer c2) implements ActionVirtualVertex
 	}
 
 	@Override
-	public List<JarrasAction> actions() {
+	public List<Action<JarrasVertex>> actions() {
 		return JarrasAction.actions.stream().filter(a->a.isApplicable(this)).collect(Collectors.toList());
 	}
 
 	@Override
-	public JarrasVertex neighbor(JarrasAction a) {
+	public JarrasVertex neighbor(Action<JarrasVertex> a) {
 		return a.neighbor(this);
 	}
 
 	@Override
-	public JarrasEdge edge(JarrasAction a) {
+	public JarrasEdge edge(Action<JarrasVertex> a) {
 		return JarrasEdge.of(this,a.neighbor(this),a);
 	}
 	

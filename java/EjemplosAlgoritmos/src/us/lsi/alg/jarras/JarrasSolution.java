@@ -25,7 +25,7 @@ public class JarrasSolution {
 
 	@Override
 	public String toString() {
-		String s = this.edges.stream().map(e->e.toString()).collect(Collectors.joining("\n"));
+		String s = this.edges.stream().map(e->e.action().name().toString()).collect(Collectors.joining("\n"));
 		s = s +"\n"+List2.last(this.path.getVertexList());
 		return s;
 	}

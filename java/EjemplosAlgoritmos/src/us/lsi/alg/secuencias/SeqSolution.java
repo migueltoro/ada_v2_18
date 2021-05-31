@@ -11,7 +11,6 @@ public class SeqSolution {
 		return new SeqSolution(path);
 	}
 
-
 	List<SeqEdge> edges;
 
 
@@ -23,7 +22,10 @@ public class SeqSolution {
 
 	@Override
 	public String toString() {
-		return this.edges.stream().filter(e->!e.action().equals(SeqAction.actions.get(3))).map(e->e.toString()).collect(Collectors.joining(",","{","}"));
+		return this.edges.stream()
+				.filter(e->!e.action().equals(SeqAction.m))
+				.map(e->String.format("(%s,%d)",e.action(),e.source().index()))
+				.collect(Collectors.joining(",","{","}"));
 	}
 	
 

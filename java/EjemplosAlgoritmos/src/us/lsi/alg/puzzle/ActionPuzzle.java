@@ -3,9 +3,8 @@ package us.lsi.alg.puzzle;
 import java.util.List;
 
 import us.lsi.common.IntPair;
-import us.lsi.graphs.virtual.Action;
 
-public record ActionPuzzle(String name,IntPair direction)  implements Action<VertexPuzzle> {
+public record ActionPuzzle(String name,IntPair direction) {
 	
 	public static ActionPuzzle of(String name) {
 		Integer index = switch(name) {
@@ -26,17 +25,15 @@ public record ActionPuzzle(String name,IntPair direction)  implements Action<Ver
 			List.of(ActionPuzzle.of("Up",IntPair.of(-1,0)), ActionPuzzle.of("Down",IntPair.of(1,0)),
 					ActionPuzzle.of("Left",IntPair.of(0,-1)),ActionPuzzle.of("Right",IntPair.of(0,1)));
 	
-	@Override
+
 	public VertexPuzzle neighbor(VertexPuzzle v) {
 		return v.neighbor(this);
 	}
 
-	@Override
 	public boolean isApplicable(VertexPuzzle v) {
 		return v.validPosition(v.blackPosition().add(this.direction));
 	}
 
-	@Override
 	public Double weight(VertexPuzzle v) {
 		return 1.;
 	}

@@ -30,7 +30,7 @@ public class TestJarrasAstar {
 			
 			GraphPath<JarrasVertex, JarrasEdge> path = ms.search().orElse(null);
 			List<JarrasEdge> edges = path.getEdgeList();
-			System.out.println(edges);
+//			System.out.println(edges);
 			JarrasSolution s = JarrasSolution.of(path);
 			System.out.println(s);
 			
