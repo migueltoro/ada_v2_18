@@ -16,6 +16,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -47,6 +48,7 @@ public class GreedySearchOnGraph<V,E> implements GraphAlg<V,E>, Iterator<V>, Ite
 		this.path = this.graph.initialPath();
 		this.weight = path.getWeight();
 		this.hasNext = true;
+		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -63,6 +64,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		this.solution = solution;
 		if(this.type == BTType.Max) this.bestValue = -Double.MAX_VALUE;
 		if(this.type == BTType.Min) this.bestValue = Double.MAX_VALUE;
+		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 	}
 	
 	protected Boolean forget(State<V,E> state, E edge) {

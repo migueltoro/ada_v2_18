@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
@@ -46,7 +47,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
 		this.graph = g;
 		this.startVertex = graph.startVertex();
-		this.goal = goal == null ? v -> v.equals(v) : goal;
+		this.goal = goal;
 		this.end = end;
 		this.constraint = constraint;
 		this.heuristic = heuristic;
@@ -57,6 +58,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 		if (this.type == PDType.Max) this.bestValue = -Double.MAX_VALUE;
 		if (this.type == PDType.Min) this.bestValue = Double.MAX_VALUE;
 		this.path = graph.initialPath();
+		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 	}
 
 	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {

@@ -12,6 +12,7 @@ import org.jgrapht.Graphs;
 import org.jheaps.AddressableHeap.Handle;
 
 import us.lsi.common.List2;
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -22,11 +23,14 @@ public class AStarRandom<V, E> extends AStar<V, E>{
 	protected Function<V,Integer> size;
 	public static Integer iterations = 0;
 
-	AStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
+	AStarRandom(EGraph<V, E> graph, 
+			Predicate<V> goal, 
+			V end,
 			Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			Function<V,Integer> size) {
 		super(graph, goal, end, constraint, heuristic);
+		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 		this.size = size;
 	}
 	

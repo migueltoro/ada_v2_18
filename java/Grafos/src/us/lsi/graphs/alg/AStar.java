@@ -19,6 +19,7 @@ import org.jheaps.AddressableHeap;
 import org.jheaps.AddressableHeap.Handle;
 import org.jheaps.tree.FibonacciHeap;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
@@ -44,9 +45,10 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, Predicate<V> constraint,
 			TriFunction<V,Predicate<V>, V,Double> heuristic) {
 		super();
+		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
-		this.goal = goal==null?v->v.equals(end):goal;
+		this.goal = goal;
 		this.end = end;
 		this.constraint = constraint;
 		this.heuristic = heuristic;
