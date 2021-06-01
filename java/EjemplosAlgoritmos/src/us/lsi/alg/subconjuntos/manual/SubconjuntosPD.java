@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class SubconjuntosPD {
 	
-public static record Sps(Integer a,Double weight) implements Comparable<Sps> {
-		
+	public static record Sps(Integer a, Double weight) implements Comparable<Sps> {
+
 		public static Sps of(Integer a, Double weight) {
 			return new Sps(a, weight);
 		}
-		
+
 		@Override
 		public int compareTo(Sps sp) {
 			return this.weight.compareTo(sp.weight);
