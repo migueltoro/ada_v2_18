@@ -11,8 +11,6 @@ public interface Action<V> {
 
 	Double weight(V v);
 	
-	Integer id(); 
-	
 	String name();
 
 	public static <V> Action<V> of(Integer id, String name, Predicate<V> isApplicable, Function<V, V> neighbor,
