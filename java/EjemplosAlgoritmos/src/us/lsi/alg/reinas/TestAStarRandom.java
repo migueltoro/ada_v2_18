@@ -16,12 +16,11 @@ public class TestAStarRandom {
 		AStarRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
 		
-		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphSum(v1);			
+		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = 
+				Graphs2.simpleVirtualGraphSum(v1,ReinasVertex.goal(),null,ReinasVertex.constraint());			
 		
 		AStar<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> ms = GraphAlg.aStarRandom(
 				graph, 
-				ReinasVertex.goal(), 
-				ReinasVertex.last(),
 				(e1,e2,e3)->0.,
 				e->ReinasVertex.n-e.index());
 		
@@ -30,8 +29,6 @@ public class TestAStarRandom {
 		while(path == null) {
 			ms = GraphAlg.aStarRandom(
 					graph, 
-					ReinasVertex.goal(), 
-					ReinasVertex.last(),
 					(e1,e2,e3)->0.,
 					e->ReinasVertex.n-e.index());
 			path = ms.search().orElse(null);

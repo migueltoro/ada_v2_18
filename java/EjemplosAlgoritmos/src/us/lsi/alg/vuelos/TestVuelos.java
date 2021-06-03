@@ -29,12 +29,22 @@ public class TestVuelos {
 		Locale.setDefault(new Locale("en", "US"));
 		DirectedWeightedMultigraph<String,Vuelo> graph = leeGrafo("ficheros/vuelos.txt");
 		System.out.println(graph);
-		EGraph<String, Vuelo> g = Graphs2.eGraph(graph,"Sevilla",Vuelo::getDuracion,null,
-				(v,e1,e2)->Vuelo.getVertexPassWeight(v,e1,e2),PathType.Sum);
-		
 		String end = "Malaga";
 		
-		AStar<String,Vuelo> ms = GraphAlg.aStar(g,v->v.equals(end),end,(v1,p,v2)->0.);
+		EGraph<String, Vuelo> g = Graphs2.eGraph(
+				graph,
+				"Sevilla",
+				v->v.equals(end),
+				end,
+				v->true,
+				Vuelo::getDuracion,
+				null,
+				(v,e1,e2)->Vuelo.getVertexPassWeight(v,e1,e2),
+				PathType.Sum);
+		
+		
+		
+		AStar<String,Vuelo> ms = GraphAlg.aStar(g,(v1,p,v2)->0.);
 		
 		GraphPath<String,Vuelo> path = ms.search().orElse(null);
 		System.out.printf("Timepo de Recorrido = %.2f\n",path.getWeight());

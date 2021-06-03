@@ -30,7 +30,7 @@ public class TestPD {
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
-			Predicate<MulticonjuntoVertex> finalVertex = MulticonjuntoVertex.goal();
+			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
 
@@ -39,12 +39,10 @@ public class TestPD {
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start,goal,null,v->true,x -> x.weight());
 			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DPR
 					.dynamicProgrammingReduction(
 							graph, 
-							finalVertex, 
-							null,
 							MulticonjuntoHeuristic::heuristic, 
 							PDType.Min);
 			

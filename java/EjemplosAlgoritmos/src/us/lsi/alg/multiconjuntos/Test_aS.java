@@ -29,7 +29,7 @@ public class Test_aS {
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
-			Predicate<MulticonjuntoVertex> finalVertex = MulticonjuntoVertex.goal();
+			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
 
@@ -38,8 +38,8 @@ public class Test_aS {
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
-			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = GraphAlg.aStar(graph, finalVertex, null,
+			graph = Graphs2.simpleVirtualGraphSum(start,goal,null,v->true, x -> x.weight());
+			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = GraphAlg.aStar(graph,
 					MulticonjuntoHeuristic::heuristic);
 
 			aStar.withGraph = true;

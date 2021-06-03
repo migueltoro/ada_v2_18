@@ -4,6 +4,7 @@ package us.lsi.alg.monedas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,12 +32,12 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Actio
 		return new MonedaVertex(MonedaVertex.n,0);
 	}
 	
-	public Boolean goal() {
-		return this.index() == MonedaVertex.n;
+	public static Predicate<MonedaVertex> goal() {
+		return v->v.index() == MonedaVertex.n;
 	}
 	
-	public Boolean constraint() {
-		return this.valorRestante() == 0;
+	public static Predicate<MonedaVertex> constraint() {
+		return v->v.valorRestante() == 0;
 	}
 
 	public static Integer n;

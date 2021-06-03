@@ -1,6 +1,7 @@
 package us.lsi.graphs.virtual;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.jgrapht.Graph;
 
@@ -18,6 +19,12 @@ public interface EGraph<V, E> extends Graph<V,E> {
 	EGraphPath<V, E> initialPath();
 	
 	V startVertex();
+	
+	Predicate<V> goal();
+	
+	V endVertex();
+	
+	Predicate<V> constraint();
 	
 	PathType pathType(); 
 	

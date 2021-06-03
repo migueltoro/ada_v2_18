@@ -36,15 +36,15 @@ public class GreedySearchOnGraph<V,E> implements GraphAlg<V,E>, Iterator<V>, Ite
 	public Graph<V,E> outGraph;
 	public Boolean withGraph = false;
 	
-	GreedySearchOnGraph(EGraph<V, E> graph, Function<V,E> nextEdge, Predicate<V> goal, Predicate<V> constraint) {
+	GreedySearchOnGraph(EGraph<V, E> graph, Function<V,E> nextEdge) {
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
 		this.actualVertex = this.startVertex;		
 		this.edgeToOrigin = new HashMap<>();
 		this.edgeToOrigin.put(this.actualVertex,null);
 		this.nextEdge = nextEdge; 
-		this.goal = goal;
-		this.constraint = constraint;
+		this.goal = graph.goal();
+		this.constraint = graph.constraint();
 		this.path = this.graph.initialPath();
 		this.weight = path.getWeight();
 		this.hasNext = true;
@@ -59,7 +59,7 @@ public class GreedySearchOnGraph<V,E> implements GraphAlg<V,E>, Iterator<V>, Ite
 	
 	@Override
 	public GreedySearchOnGraph<V,E> copy() {
-		return GraphAlg.greedy(this.graph,this.nextEdge,this.goal, this.constraint);
+		return GraphAlg.greedy(this.graph,this.nextEdge);
 	}
 	
 	public Iterator<V> iterator() {

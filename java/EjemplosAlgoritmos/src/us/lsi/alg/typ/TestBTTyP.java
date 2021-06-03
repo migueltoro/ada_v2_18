@@ -23,12 +23,11 @@ public class TestBTTyP {
 		TyPVertex e1 = TyPVertex.first();
 		TyPVertex e2 = TyPVertex.last();
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());		
+				Graphs2.simpleVirtualGraphLast(e1,e->e.goal(),
+						null,v->true,v->v.maxCarga());		
 			
 		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
-				GraphAlg.greedy(graph,TyPVertex::greadyEdge,
-						e->e.goal(),
-						v->true);
+				GraphAlg.greedy(graph,TyPVertex::greadyEdge);
 		
 		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search().orElse(null);
 		SolucionTyP sm = TyPVertex.getSolucion(path);
@@ -37,8 +36,7 @@ public class TestBTTyP {
 		
 		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTracking(
 						graph,
-						e->e.goal(),
-						null,
+						
 						Heuristica::heuristic,
 						TyPVertex::getSolucion,
 						TyPVertex::copy,

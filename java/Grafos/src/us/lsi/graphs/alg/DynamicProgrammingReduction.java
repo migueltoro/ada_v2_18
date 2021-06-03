@@ -43,13 +43,13 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 	public Boolean withGraph = false;
 	public Function<E,Object> action;
 
-	DynamicProgrammingReduction(EGraph<V, E> g, Predicate<V> goal, V end, Predicate<V> constraint,
+	DynamicProgrammingReduction(EGraph<V, E> g,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
 		this.graph = g;
 		this.startVertex = graph.startVertex();
-		this.goal = goal;
-		this.end = end;
-		this.constraint = constraint;
+		this.goal = graph.goal();
+		this.end = graph.endVertex();
+		this.constraint = graph.constraint();
 		this.heuristic = heuristic;
 		this.type = type;
 		if (this.type == PDType.Min) this.comparatorEdges = Comparator.naturalOrder();

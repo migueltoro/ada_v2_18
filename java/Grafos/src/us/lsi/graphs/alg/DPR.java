@@ -17,21 +17,9 @@ public interface DPR<V, E> {
 	
 	public static <V, E> DynamicProgrammingReduction<V, E> dynamicProgrammingReduction(
 			EGraph<V, E> graph, 
-			Predicate<V> goal,
-			V end, 
-			Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			PDType type) {
-		return new DynamicProgrammingReduction<V, E>(graph, goal,end,constraint, heuristic, type);
-	}
-	
-	public static <V, E, S> DynamicProgrammingReduction<V, E> dynamicProgrammingReduction(
-			EGraph<V, E> graph, 
-			Predicate<V> goal,
-			V end,
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			PDType type) {
-		return new DynamicProgrammingReduction<V, E>(graph, goal,end,v->true,heuristic, type);
+		return new DynamicProgrammingReduction<V, E>(graph, heuristic, type);
 	}
 	
 	

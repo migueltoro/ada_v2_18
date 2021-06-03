@@ -1,7 +1,6 @@
 package us.lsi.alg.productos;
 
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
@@ -27,9 +26,10 @@ public class ProductosHeuristic {
 	
 	public static GraphPath<ProductosVertex, ProductosEdge> graphPathVoraz(ProductosVertex vertice,
 			Predicate<ProductosVertex> goal) {
-		EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(vertice, x -> x.weight());
-		GreedySearchOnGraph<ProductosVertex, ProductosEdge> rr = GraphAlg.greedy(graph, ProductosVertex::greedyEdge,
-				v -> ProductosVertex.goal(v), v -> true);
+		EGraph<ProductosVertex, ProductosEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(vertice, goal, null,v->true,x -> x.weight());
+		GreedySearchOnGraph<ProductosVertex, ProductosEdge> rr = 
+				GraphAlg.greedy(graph, ProductosVertex::greedyEdge);
 		GraphPath<ProductosVertex, ProductosEdge> p = rr.search().orElse(null);
 		return p;
 	}
@@ -61,7 +61,8 @@ public class ProductosHeuristic {
 
 			ProductosVertex start = ProductosVertex.initial();
 //			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
-			GraphPath<ProductosVertex,ProductosEdge> path = ProductosHeuristic.graphPathVoraz(start,v -> ProductosVertex.goal(v));
+			GraphPath<ProductosVertex,ProductosEdge> path = 
+					ProductosHeuristic.graphPathVoraz(start,ProductosVertex.goal());
 			List<Integer> la = path.getEdgeList().stream().map(e->e.action()).toList();
 			System.out.println(SolucionProductos.of(la).precioTotal());
 			System.out.println(heuristic2(start,DatosProductos.NUM_PRODUCTOS));

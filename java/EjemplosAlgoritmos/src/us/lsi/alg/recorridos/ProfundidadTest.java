@@ -28,7 +28,7 @@ public static void main(String[] args) {
 		
 		System.out.println(graph);
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"),null,null,v->true);
 		
 		DephtSearch<Ciudad, Carretera> ra = GraphAlg.depth(g,Ciudad.ofName("Sevilla"));
 		

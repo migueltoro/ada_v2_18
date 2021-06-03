@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
@@ -23,6 +24,10 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 
 	public static ProductosVertex initial() {
 		return ProductosVertex.of(0,Set2.of(DatosProductos.getFunciones()));
+	}
+	
+	public static Predicate<ProductosVertex> goal() {
+		return v->v.indice == DatosProductos.NUM_PRODUCTOS;
 	}
 
 	// Factorías con variables
@@ -44,10 +49,7 @@ public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, Pro
 
 	// Métodos para el grafo
 
-	public static Boolean goal(ProductosVertex v) {
-		return v.indice == DatosProductos.NUM_PRODUCTOS;
-
-	}
+	
 
 	@Override
 	public Boolean isValid() {

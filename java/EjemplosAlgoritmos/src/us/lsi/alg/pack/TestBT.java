@@ -24,13 +24,12 @@ public class TestBT {
 		PackVertex e1 = PackVertex.first();
 		Predicate<PackVertex> goal  = PackVertex.goal();
 		
-		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
+		EGraph<PackVertex,PackEdge> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
 		
 		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
 				graph,
-				PackVertex::greedyEdge,
-				goal,
-				v->true);
+				PackVertex::greedyEdge);
 	
 		GraphPath<PackVertex, PackEdge> path = rr.search().orElse(null);
 		SolucionPack sp = SolucionPack.of(path);
@@ -39,8 +38,6 @@ public class TestBT {
 		
 		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BT.backTracking(
 				graph,
-				goal,
-				null,
 				Heuristica::heuristic,
 				SolucionPack::of,
 				PackVertex::copy,

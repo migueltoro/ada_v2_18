@@ -39,12 +39,11 @@ public class TestColorAstar {
 		System.out.println("Voraz = "+m);
 		ColorVertex.data(m, g2);
 		
-		EGraph<ColorVertex, ColorEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.nc().doubleValue());		
+		EGraph<ColorVertex, ColorEdge> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,ColorVertex.goal(),null,v->true,v->v.nc().doubleValue());		
 		
 		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStar(
 				graph,
-				ColorVertex.goal(),
-				ColorVertex.last(),
 				ColorHeuristic::heuristic);
 		
 		GraphPath<ColorVertex, ColorEdge> path = ms.search().orElse(null);

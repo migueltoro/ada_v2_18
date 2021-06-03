@@ -15,7 +15,7 @@ public class Topological {
 		
 		System.out.println(graph);
 //		System.out.println(FlowVertex.vertices.get(4));
-		EGraph<FlowVertex, FlowEdge> g = Graphs2.eGraph(graph,FlowVertex.vertices.get(4));
+		EGraph<FlowVertex, FlowEdge> g = Graphs2.eGraphSum(graph,FlowVertex.vertices.get(4),null,null,v->true);
 		
 		TopologicalSearch<FlowVertex, FlowEdge> ra = GraphAlg.topological(g,FlowVertex.vertices.get(4));
 		

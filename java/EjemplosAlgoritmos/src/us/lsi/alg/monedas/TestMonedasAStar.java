@@ -23,10 +23,11 @@ public class TestMonedasAStar {
 		MonedaVertex e2 = MonedaVertex.last();
 		Predicate<MonedaVertex> constraint = v->v.valorRestante() == 0;
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->-x.weight());		
+		EGraph<MonedaVertex, MonedaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint(),x->-x.weight());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
-				GraphAlg.aStar(graph,v->v.goal(),e2,constraint,MonedasHeuristica::heuristic_negate);
+				GraphAlg.aStar(graph,MonedasHeuristica::heuristic_negate);
 		
 //		ms.stream().limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
 		
@@ -43,7 +44,7 @@ public class TestMonedasAStar {
 		Graphs2.toDot(ms.outGraph,"ficheros/MonedasAstarGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,v.goal()),
+				v->GraphColors.getColorIf(Color.red,MonedaVertex.goal().test(v)),
 				e->GraphColors.getColor(Color.black)
 				);
 	
@@ -54,9 +55,9 @@ public class TestMonedasAStar {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraphSum(e3,x->x.weight());		
+		graph = Graphs2.simpleVirtualGraphSum(e3,MonedaVertex.goal(),e2,MonedaVertex.constraint(),x->x.weight());		
 		
-	    ms = GraphAlg.aStar(graph,e->e.goal(),e4,constraint,MonedasHeuristica::heuristic);
+	    ms = GraphAlg.aStar(graph,MonedasHeuristica::heuristic);
 //	    ms.withGraph = true;
 		
 	    GraphPath<MonedaVertex,MonedaEdge> path2 = ms.search().orElse(null);

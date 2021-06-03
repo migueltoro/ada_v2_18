@@ -31,11 +31,14 @@ public class AStarTest {
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);		
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevila"));
 		
+		Ciudad start = Ciudad.ofName("Sevila");
 		Ciudad end = Ciudad.ofName("Almeria");
+		
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,start,c->c.equals(end),end,v->true);
+		
 				
-		AStar<Ciudad, Carretera> ra = GraphAlg.aStar(g,c->c.equals(end),end,c->true,(v1,p,v2)->0.);
+		AStar<Ciudad, Carretera> ra = GraphAlg.aStar(g,(v1,p,v2)->0.);
 		
 		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		

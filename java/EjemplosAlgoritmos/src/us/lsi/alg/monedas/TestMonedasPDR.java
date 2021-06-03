@@ -29,19 +29,16 @@ public class TestMonedasPDR {
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1);
+		EGraph<MonedaVertex, MonedaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
 
-		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
-				v->v.goal(), v->v.constraint());
+		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz);
 		
 
 		EGraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 		
 		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReduction(
 				graph, 
-				v->v.goal(),
-				e2,
-				v->v.constraint(),
 				MonedasHeuristica::heuristic, 
 				PDType.Max);
 
@@ -61,17 +58,14 @@ public class TestMonedasPDR {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraphSum(e3);
+		graph = Graphs2.simpleVirtualGraphSum(e3,MonedaVertex.goal(),e4,MonedaVertex.constraint());
 
-		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(),v->v.constraint());
+		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz);
 		
 		EGraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
 
 		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DPR.dynamicProgrammingReduction(
 				graph, 
-				v->v.goal(),
-				e4,
-				v->v.constraint(),
 				MonedasHeuristica::heuristic, 
 				PDType.Min);
 

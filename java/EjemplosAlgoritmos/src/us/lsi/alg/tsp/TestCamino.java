@@ -2,18 +2,13 @@ package us.lsi.alg.tsp;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
 import org.jgrapht.Graph;
-import org.jgrapht.Graphs;
-
-import us.lsi.common.IntPair;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestCamino {
@@ -34,7 +29,8 @@ public class TestCamino {
 		Collections.shuffle(camino);
 		
 		TravelVertex v1 = TravelVertex.of(camino);
-		EGraph<TravelVertex,TravelEdge> graph = Graphs2.simpleVirtualGraphLast(v1,v->v.weight());
+		EGraph<TravelVertex,TravelEdge> graph = 
+				Graphs2.simpleVirtualGraphLast(v1,null,null,v->true,v->v.weight());
 		
 		Double error = 0.1;
 		Double r;

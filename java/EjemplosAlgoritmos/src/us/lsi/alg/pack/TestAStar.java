@@ -20,13 +20,12 @@ public class TestAStar {
 		Data.m = Data.n;
 		PackVertex e1 = PackVertex.first();
 		
-		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
+		EGraph<PackVertex,PackEdge> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
 		
 		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
 				graph,
-				PackVertex::greedyEdge,
-				PackVertex.goal(),
-				v->true);
+				PackVertex::greedyEdge);
 	
 		GraphPath<PackVertex, PackEdge> p = rr.search().orElse(null);
 		SolucionPack sp = SolucionPack.of(p);
@@ -34,7 +33,7 @@ public class TestAStar {
 		PackVertex.m = sp.nc();
 		
 		AStar<PackVertex, PackEdge> ms = 
-				GraphAlg.aStar(graph,PackVertex.goal(),PackVertex.last(),(v1,pd,v2)->0.);
+				GraphAlg.aStar(graph,(v1,pd,v2)->0.);
 //		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,Heuristica::heuristic);
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);

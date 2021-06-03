@@ -25,18 +25,18 @@ public class TestPD {
 			
 
 			ProductosVertex start = ProductosVertex.initial();
-			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
+			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
-			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
+			EGraph<ProductosVertex, ProductosEdge> graph = 
+					Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start,goal,null,v->true,x -> x.weight());
+			
 			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
 					DPR.dynamicProgrammingReduction(graph,
-					finalVertex,
-					null,
 					(v1,p,v2)->0., 
 					PDType.Min);
 //			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
@@ -48,7 +48,7 @@ public class TestPD {
 			Graphs2.toDot(pdr.outGraph,"ficheros/productosPDRGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
-					v->GraphColors.getColorIf(Color.red,ProductosVertex.goal(v)),
+					v->GraphColors.getColorIf(Color.red,goal.test(v)),
 					e->GraphColors.getColorIf(Color.red,pdr.optPath.get().getEdgeList().contains(e))
 					);
 		}

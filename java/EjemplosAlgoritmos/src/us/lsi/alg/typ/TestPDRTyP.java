@@ -22,22 +22,20 @@ public class TestPDRTyP {
 		TyPVertex e2 = TyPVertex.last();
 		
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());	
+				Graphs2.simpleVirtualGraphLast(e1,e->e.goal(),
+						e2,
+						v->true,v->v.maxCarga());	
 		
 		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> rr = 
 				GraphAlg.greedy(graph,
-				TyPVertex::greadyEdge,
-				v->v.goal(),
-				v->true);
+				TyPVertex::greadyEdge);
 		
 		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> path = rr.search().orElse(null);
 		Double bv = path.getWeight();
 		
 		DynamicProgrammingReduction<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> ms = 
 				DPR.dynamicProgrammingReduction(graph,
-						e->e.goal(),
-						e2,
-						v->true,
+						
 						Heuristica::heuristic,
 						PDType.Min);
 		

@@ -27,10 +27,11 @@ public class TestGreadyMochila {
 		Double r2 = MochilaHeuristic.heuristic(v1,v->v.equals(v2),v2);
 		System.out.println(r2);
 		
-		EGraph<MochilaVertex,MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(v1);
+		EGraph<MochilaVertex,MochilaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(v1,MochilaVertex.goal(),v2,MochilaVertex.constraint());
 		
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = 
-				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,goal,v->true).search();
+				GraphAlg.greedy(graph,MochilaVertex::greedyEdge).search();
 		System.out.println(r.get().getWeight());
 //		System.out.println(r.getWeight());
 //		Double r3 = MochilaHeuristic.voraz(e1, e->e.equals(e2),e2);

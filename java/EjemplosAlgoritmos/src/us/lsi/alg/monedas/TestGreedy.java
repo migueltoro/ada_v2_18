@@ -25,17 +25,16 @@ public class TestGreedy {
 //		System.out.println("1 = "+e1);
 //		System.out.println("2 = "+e2);
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1);
+		EGraph<MonedaVertex, MonedaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
 		
 		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
 				graph,
-				MonedaVertex::accionVoraz,
-				v->v.goal(),
-				v->v.constraint());
+				MonedaVertex::accionVoraz);
 		
 		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
 		System.out.println("G "+path.get().getWeight());
-		System.out.println("H "+MonedasHeuristica.heuristic(e1,e->e.goal(),e2));
+		System.out.println("H "+MonedasHeuristica.heuristic(e1,MonedaVertex.goal(),e2));
 		
 		Collections.sort(Moneda.monedas,Comparator.comparing(m->m.pesoUnitario()));
 //		System.out.println(Moneda.monedas);
@@ -46,18 +45,16 @@ public class TestGreedy {
 //		System.out.println("3 = "+e1);
 //		System.out.println("4 = "+e2);
 		
-		graph = Graphs2.simpleVirtualGraphSum(e1);
+		graph = Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
 		
 		rr = GraphAlg.greedy(
 				graph,
-				MonedaVertex::accionVoraz,
-				e->e.goal(),
-				v->v.constraint());
+				MonedaVertex::accionVoraz);
 		
 		path = rr.search();
 //		System.out.println(path);
 		System.out.println("G "+path.get().getWeight());
-		System.out.println("H "+MonedasHeuristica.heuristic(e1,e->e.goal(),e3));
+		System.out.println("H "+MonedasHeuristica.heuristic(e1,MonedaVertex.goal(),e3));
 	}
 
 }

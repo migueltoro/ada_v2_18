@@ -18,6 +18,16 @@ public class PackVertex implements ActionVirtualVertex<PackVertex,PackEdge,Integ
 	public static PackVertex of(Integer index, List<Integer> as, Map<Integer, Integer> carga) {
 		return new PackVertex(index, as, carga);
 	}
+	
+	public static Predicate<PackVertex> goal() { 
+		return  v->v.index == n; 
+	}
+	public static PackVertex first() { 
+		return PackVertex.of(0, new ArrayList<>(), new HashMap<>()); 
+	}
+	public static PackVertex last() { 
+		return PackVertex.of(n, new ArrayList<>(), new HashMap<>()); 
+	}
 
 	public final Integer index;
 	public final List<Integer> as;
@@ -28,9 +38,7 @@ public class PackVertex implements ActionVirtualVertex<PackVertex,PackEdge,Integ
 	public final Integer nc;
 	public static Integer n = Data.n;
 	public static Integer m = Data.m;
-	public static Predicate<PackVertex> goal() { return  v->v.index == n; }
-	public static PackVertex first() { return PackVertex.of(0, new ArrayList<>(), new HashMap<>()); }
-	public static PackVertex last() { return PackVertex.of(n, new ArrayList<>(), new HashMap<>()); }
+	
 
 	private PackVertex(Integer index, List<Integer> as, Map<Integer, Integer> carga) {
 		super();

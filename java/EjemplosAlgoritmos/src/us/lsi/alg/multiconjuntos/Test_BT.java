@@ -26,7 +26,7 @@ public class Test_BT {
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
-			Predicate<MulticonjuntoVertex> finalVertex = MulticonjuntoVertex.goal();
+			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
 
@@ -35,11 +35,9 @@ public class Test_BT {
 			System.out.println("\n\n#### Algoritmo BT ####");
 			
 			// Algoritmo BT
-			graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
+			graph = Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
 					BT.backTracking(graph, 
-							finalVertex, 
-							null,
 							MulticonjuntoHeuristic::heuristic,
 							MulticonjuntoVertex::getSolucion, 
 							MulticonjuntoVertex::copy, 

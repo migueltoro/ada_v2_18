@@ -29,12 +29,12 @@ public class TestAStar {
 
 		// Grafo
 
-		EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = Graphs2.simpleVirtualGraphSum(start,x -> x.weight());
+		EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x-> x.weight());
 
 		System.out.println("\n\n#### PI-7 Ej3 Algoritmo Astar ####");
 		
 		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = GraphAlg.aStar(graph, 
-				SubconjuntosVertex.goal(), null,
 				SubconjuntosHeuristic::heuristic);
 		
 		List<Integer> gp_as = aStar.search().get().getEdgeList().stream().map(x -> x.action())

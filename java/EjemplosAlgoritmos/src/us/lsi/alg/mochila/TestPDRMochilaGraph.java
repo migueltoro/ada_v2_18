@@ -24,10 +24,11 @@ public class TestPDRMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->x.weight());	
+		EGraph<MochilaVertex, MochilaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,MochilaVertex.constraint(),x->x.weight());	
 		
 		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
-				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2), v->true);
+				GraphAlg.greedy(graph,MochilaVertex::greedyEdge);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();	
 		Double bv = path.get().getWeight();
 		
@@ -35,8 +36,6 @@ public class TestPDRMochilaGraph {
 		
 		DynamicProgrammingReduction<MochilaVertex, MochilaEdge> ms = 
 				DPR.dynamicProgrammingReduction(graph,
-						v->v.goal(),
-						e2,
 						MochilaHeuristic::heuristic,
 						PDType.Max);
 		

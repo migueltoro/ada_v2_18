@@ -28,12 +28,12 @@ public class TestAStar {
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
 			EGraph<BufeteVertex, BufeteEdge> graph = 
-					Graphs2.simpleVirtualGraphLast(start, v -> (double) v.maxCarga());
+					Graphs2.simpleVirtualGraphLast(start,goal, null,v->true, v -> (double) v.maxCarga());
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
 
-			AStar<BufeteVertex, BufeteEdge> aStar = GraphAlg.aStar(graph, goal, null, Heuristica::heuristic);
+			AStar<BufeteVertex, BufeteEdge> aStar = GraphAlg.aStar(graph, Heuristica::heuristic);
 			GraphPath<BufeteVertex, BufeteEdge> gp_as = aStar.search().get(); // getEdgeList();
 			
 			SolucionBufete s_as = SolucionBufete.of(gp_as);

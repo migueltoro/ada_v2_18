@@ -15,7 +15,8 @@ public class TestPackVertex {
 		PackVertex e1 = PackVertex.first();
 //		Predicate<PackVertex> goal  = PackVertex.goal;
 		
-		EGraph<PackVertex,PackEdge> graph = Graphs2.simpleVirtualGraphLast(e1,v->(double)v.nc);	
+		EGraph<PackVertex,PackEdge> graph = 
+				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
 		
 		System.out.println(graph.startVertex());
 		System.out.println(graph.startVertex().actions());

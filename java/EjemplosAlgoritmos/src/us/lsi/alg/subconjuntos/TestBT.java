@@ -31,15 +31,14 @@ public class TestBT {
 
 			// Grafo
 
-			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = Graphs2.simpleVirtualGraphSum(start,x -> x.weight());
+			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
+					Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x -> x.weight());
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
 			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
 				BT.backTracking(graph, 
-					SubconjuntosVertex.goal(),
-					null,
 					SubconjuntosHeuristic::heuristic,
 					SolucionSubconjuntos::of, 
 					SubconjuntosVertex::copy, 

@@ -2,7 +2,6 @@ package us.lsi.graphs.alg;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
@@ -17,14 +16,11 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	private static Boolean work = true;
 
 	BackTrackingRandom(EGraph<V, E> graph, 
-			Predicate<V> goal, 
-			V end, 
-			Predicate<V> constraint,
 			Function<GraphPath<V, E>, S> solution,
 			Function<V, V> copy,
 			BTType type,
 			Function<V,Integer> size) {
-		super(graph, goal, end, constraint,null, solution, copy, type);
+		super(graph,null, solution, copy, type);
 		this.size = size;
 		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 	}

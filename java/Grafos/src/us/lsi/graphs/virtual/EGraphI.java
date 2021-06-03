@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -24,17 +25,23 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private TriFunction<V,E,E,Double> vertexPassWeight= null;
 	private EGraphPath<V,E> path;
 	private V startVertex;
+	private Predicate<V> goal;
+	private V endVertex;	
+	private Predicate<V> constraint;
 	private PathType type;
 	
-	public EGraphI(G graph, V startVertex, PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight
-			,TriFunction<V, E, E, Double> vertexPassWeight) {
+	public EGraphI(G graph, V startVertex, Predicate<V> goal,V endVertex,Predicate<V> constraint,
+			PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
+			TriFunction<V, E, E, Double> vertexPassWeight) {
 		super();
 		this.graph = graph;
 		this.edgeWeight = edgeWeight;
 		this.vertexWeight = vertexWeight;
 		this.vertexPassWeight = vertexPassWeight;
-		this.type = PathType.Sum;
 		this.startVertex = startVertex;
+		this.goal = goal;
+		this.endVertex = endVertex;
+		this.constraint = constraint;
 		this.type = type;
 	}
 
@@ -204,5 +211,17 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	public PathType pathType() {
 		return type;
 	}
-	
+	@Override
+	public Predicate<V> goal() {
+		return goal;
+	}
+	@Override
+	public V endVertex() {
+		return endVertex;
+	}
+	@Override
+	public Predicate<V> constraint() {
+		return constraint;
+	}
+
 }

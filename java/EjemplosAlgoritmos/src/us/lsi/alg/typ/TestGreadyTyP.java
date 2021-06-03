@@ -20,13 +20,12 @@ public class TestGreadyTyP {
 		TyPVertex e1 = TyPVertex.first();
 //		TyPVertex e2 = TyPVertex.last();
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());
+				Graphs2.simpleVirtualGraphLast(e1,e->e.goal(),
+						null,v->true,v->v.maxCarga());
 		
 		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = 
 				GraphAlg.greedy(graph,
-						TyPVertex::greadyEdge,
-						v->v.goal(),
-						v->true);	
+						TyPVertex::greadyEdge);	
 		
 		var ms1 = ms.copy();
 		var ms2 = ms.copy();

@@ -15,7 +15,6 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath.PathType;
 
 public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	
@@ -105,7 +104,7 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 
 	@Override
 	public EGraph<V, E> getGraph() {
-		return Graphs2.eGraph(this.graph,startVertex(),PathType.Sum);
+		return Graphs2.eGraphSum(this.graph,startVertex());
 	}
 	
 	@Override

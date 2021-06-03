@@ -28,7 +28,7 @@ public class AnchuraTest {
 		System.out.println(graph);
 		System.out.println(graph.edgeSet());
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"),null,null,v->true);
 		
 		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Sevilla"));
 		

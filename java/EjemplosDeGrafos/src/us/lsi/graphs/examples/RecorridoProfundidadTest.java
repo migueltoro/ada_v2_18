@@ -26,7 +26,7 @@ public class RecorridoProfundidadTest {
 		
 		graph.addVertex(Ciudad.ofName("Londres"));
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"));
 		
 		DephtSearch<Ciudad, Carretera> rp = GraphAlg.depth(g,Ciudad.ofName("Sevilla"));
 		rp.withGraph = true;

@@ -24,14 +24,15 @@ public class TestMonedasBT {
 		MonedaVertex e1 = MonedaVertex.first();
 		MonedaVertex e2 = MonedaVertex.last();
 
-		EGraph<MonedaVertex, MonedaEdge> graph = Graphs2.simpleVirtualGraphSum(e1);
+		EGraph<MonedaVertex, MonedaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
 //
-		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,
-				v->v.goal(), v->true);
+		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = 
+				GraphAlg.greedy(graph, MonedaVertex::accionVoraz);
 //
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 		
-		Double bv = MonedasHeuristica.voraz(e1,e->e.goal(),e2).doubleValue();
+		Double bv = MonedasHeuristica.voraz(e1,MonedaVertex.goal(),e2).doubleValue();
 		
 //		System.out.println("1 = "+bv);
 		SolucionMonedas ss = SolucionMonedas.of(path1);
@@ -39,9 +40,6 @@ public class TestMonedasBT {
 
 		BackTracking<MonedaVertex,MonedaEdge,SolucionMonedas> ms1 = BT.backTracking(
 				graph, 
-				v->v.goal(),
-				e2,
-				v->v.constraint(),
 				MonedasHeuristica::heuristic, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,
@@ -68,12 +66,12 @@ public class TestMonedasBT {
 		MonedaVertex e3 = MonedaVertex.first();
 		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = Graphs2.simpleVirtualGraphSum(e3);
+		graph = Graphs2.simpleVirtualGraphSum(e3,MonedaVertex.goal(),e4,MonedaVertex.constraint());
 
-		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz,v->v.goal(), v->true);
+		rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.search().orElse(null);
-		bv = MonedasHeuristica.voraz(e3,e->e.goal(),e4).doubleValue();
+		bv = MonedasHeuristica.voraz(e3,MonedaVertex.goal(),e4).doubleValue();
 		
 //		System.out.println("3 = "+bv);
 		ss = SolucionMonedas.of(path2);
@@ -81,9 +79,6 @@ public class TestMonedasBT {
 
 		BackTracking<MonedaVertex, MonedaEdge,SolucionMonedas> ms2 = BT.backTracking(
 				graph, 
-				v->v.goal(),
-				e4,
-				v->v.constraint(),
 				MonedasHeuristica::heuristic, 
 				SolucionMonedas::of,
 				MonedaVertex::copy,

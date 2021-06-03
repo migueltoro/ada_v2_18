@@ -18,12 +18,10 @@ public class TestJarrasAstar {
 			JarrasVertex.data(3,5,0,0,3,7);;
 			JarrasVertex e1 = JarrasVertex.first();
 			JarrasVertex e2 = JarrasVertex.last();
-			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraphSum(e1);		
+			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraphSum(e1,v->v.equals(e2),e2,v->true);		
 			
 			AStar<JarrasVertex, JarrasEdge> ms = GraphAlg.aStar(
 					graph,
-					v->v.equals(e2),
-					e2,
 					(v1,p,v2)->0.);
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();

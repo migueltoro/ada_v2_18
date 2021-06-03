@@ -19,12 +19,10 @@ public class TestSeqAStar {
 		SeqVertex.data("cbrrrarreterb", "carretera");
 		SeqVertex e1 = SeqVertex.first();
 		SeqVertex e2 = SeqVertex.last();
-		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraphSum(e1);		
+		EGraph<SeqVertex, SeqEdge> graph = Graphs2.simpleVirtualGraphSum(e1,v->v.equals(e2),e2,v->true);		
 		
 		AStar<SeqVertex, SeqEdge> ms = GraphAlg.aStar(
 				graph,
-				v->v.equals(e2),
-				e2,
 				SeqHeuristic::heuristic);
 		
 		GraphPath<SeqVertex, SeqEdge> path = ms.search().orElse(null);

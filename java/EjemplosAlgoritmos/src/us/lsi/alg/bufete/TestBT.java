@@ -32,15 +32,13 @@ public class TestBT {
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
 			EGraph<BufeteVertex, BufeteEdge> graph = 
-					Graphs2.simpleVirtualGraphLast(start, v -> (double)v.maxCarga());
+					Graphs2.simpleVirtualGraphLast(start,goal,null,v->true,v -> (double)v.maxCarga());
 			
 			System.out.println("\n\n#### Algoritmo BT ####");
 			
 			GreedySearchOnGraph<BufeteVertex, BufeteEdge> rr = 
 					GraphAlg.greedy(graph,
-							BufeteVertex::greadyEdge,
-							goal,
-							v->true);
+							BufeteVertex::greadyEdge);
 			
 			GraphPath<BufeteVertex, BufeteEdge> path = rr.search().orElse(null);
 			SolucionBufete sm = SolucionBufete.of(path);
@@ -49,8 +47,6 @@ public class TestBT {
 			
 			// Algoritmo BT
 			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BT.backTracking(graph, 
-					goal, 
-					null,
 					Heuristica::heuristic, 
 					SolucionBufete::of,
 					BufeteVertex::copy, 

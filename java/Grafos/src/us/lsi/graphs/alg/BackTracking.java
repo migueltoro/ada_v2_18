@@ -45,18 +45,15 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	public Function<E,Object> action;
 	
 	BackTracking(EGraph<V, E> graph, 
-			Predicate<V> goal,
-			V end,
-			Predicate<V> constraint,
 			TriFunction<V, Predicate<V>, V, Double> heuristic,
 			Function<GraphPath<V,E>,S> solution,
 			Function<V,V> copy,
 			BTType type) {
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
-		this.goal = goal;
-		this.end = end;
-		this.constraint = constraint;
+		this.goal = graph.goal();
+		this.end = graph.endVertex();
+		this.constraint = graph.constraint();
 		this.heuristic = heuristic;
 		this.copy = copy;
 		this.type = type;

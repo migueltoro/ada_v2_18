@@ -27,7 +27,7 @@ public class RecorridoAnchuraTest {
 		
 		graph.addVertex(Ciudad.ofName("Londres"));
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraph(graph,Ciudad.ofName("Sevilla"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"));
 		
 		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Sevilla"));
 		ra.withGraph = true;

@@ -27,16 +27,12 @@ public interface GraphAlg<V,E>  {
 	 * @param <E> El tipo de las aristas
 	 * @param graph Un grafo 
 	 * @param nextEdge
-	 * @param goal El predicado que cumple el vértice final
-	 * @param constraint El predicado que debe cumplir el último vértice para que haya solución
 	 * @return Un algoritmo de b&uacute;squeda voraz siguiendo las aristas del grafo
 	 */
 	public static <V, E> GreedySearchOnGraph<V, E> greedy(
 			EGraph<V,E> graph,
-			Function<V,E> nextEdge,
-			Predicate<V> goal,
-			Predicate<V> constraint) {
-		return new GreedySearchOnGraph<V, E>(graph,nextEdge,goal, constraint);
+			Function<V,E> nextEdge) {
+		return new GreedySearchOnGraph<V, E>(graph,nextEdge);
 	}
 	
 	
@@ -97,30 +93,17 @@ public interface GraphAlg<V,E>  {
 	 * @param <V> El tipo de los v&eacute;rtices
 	 * @param <E> El tipo de las aristas 
 	 * @param graph Un grafo
-	 * @param end El v&eacute;rtice final
 	 * @param heuristic La heur&iacute;stica 
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
-	public static <V, E> AStar<V, E> aStar(EGraph<V, E> graph, Predicate<V> goal, V end, 
-			Predicate<V> constraint, TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		return new AStar<V, E>(graph, goal, end, constraint, heuristic);
-	}
-	
-	public static <V, E> AStar<V, E> aStar(EGraph<V, E> graph,Predicate<V> goal, V end, 
-	         TriFunction<V,Predicate<V>,V,Double> heuristic) {
-		return new AStar<V, E>(graph, goal, end,v->true, heuristic);
+	public static <V, E> AStar<V, E> aStar(EGraph<V, E> graph,TriFunction<V,Predicate<V>,V,Double> heuristic) {
+		return new AStar<V, E>(graph, heuristic);
 	}
 	
 	
-	public static <V, E> AStarRandom<V, E> aStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
-			Predicate<V> constraint,
+	public static <V, E> AStarRandom<V, E> aStarRandom(EGraph<V, E> graph,
 			TriFunction<V, Predicate<V>, V, Double> heuristic, Function<V, Integer> size) {
-		return new AStarRandom<V, E>(graph, goal, end, constraint, heuristic, size);
-	}
-	
-	public static <V, E> AStarRandom<V, E> aStarRandom(EGraph<V, E> graph, Predicate<V> goal, V end,
-			TriFunction<V, Predicate<V>, V, Double> heuristic, Function<V, Integer> size) {
-		return new AStarRandom<V, E>(graph, goal, end,v->true, heuristic, size);
+		return new AStarRandom<V, E>(graph, heuristic, size);
 	}
 
 	

@@ -42,15 +42,13 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V,E>> optPath;
 	
 
-	AStar(EGraph<V, E> graph, Predicate<V> goal, V end, Predicate<V> constraint,
-			TriFunction<V,Predicate<V>, V,Double> heuristic) {
+	AStar(EGraph<V, E> graph,TriFunction<V,Predicate<V>, V,Double> heuristic) {
 		super();
-		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 		this.graph = graph;
 		this.startVertex = graph.startVertex();
-		this.goal = goal;
-		this.end = end;
-		this.constraint = constraint;
+		this.goal = graph.goal();
+		this.end = graph.endVertex();
+		this.constraint = graph.constraint();
 		this.heuristic = heuristic;
 		this.tree = new HashMap<>();
 		this.ePath = graph.initialPath();
@@ -69,7 +67,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		
 	@Override
 	public AStar<V,E> copy(){
-		return new AStar<V,E>(this.graph, this.goal, this.end, this.constraint, this.heuristic);
+		return new AStar<V,E>(this.graph, this.heuristic);
 	}
 	
 	public Iterator<V> iterator() {

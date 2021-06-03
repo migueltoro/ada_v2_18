@@ -26,15 +26,14 @@ public class TestAS {
 			System.out.println("#### Algoritmo A* ####");
 
 			ProductosVertex start = ProductosVertex.initial();
-			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
+			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
-			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());	
+			EGraph<ProductosVertex, ProductosEdge> graph = 
+					Graphs2.simpleVirtualGraphSum(start,ProductosVertex.goal(),null,v->true, x -> x.weight());	
 
 			// Algoritmo A*
 			AStar<ProductosVertex, ProductosEdge> aStar = GraphAlg.aStar(
 					graph, 
-					finalVertex, 
-					null, 
 					ProductosHeuristic::heuristic);
 			aStar.withGraph = true;
 			GraphPath<ProductosVertex, ProductosEdge> gp = aStar.search().get();
@@ -46,7 +45,7 @@ public class TestAS {
 
 
 			Graphs2.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
-					e -> e.action().toString(), v -> GraphColors.getColorIf(Color.red, ProductosVertex.goal(v)),
+					e -> e.action().toString(), v -> GraphColors.getColorIf(Color.red, goal.test(v)),
 					e -> GraphColors.getColorIf(Color.red, gp.getEdgeList().contains(e)));
 
 		}

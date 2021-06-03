@@ -19,10 +19,11 @@ public class TestAStarMochilaGraph2 {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->-x.weight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,MochilaVertex.constraint(),x->-x.weight());		
 		
 		AStar<MochilaVertex, MochilaEdge> ms = 
-				GraphAlg.aStar(graph,v->v.equals(e2),e2,MochilaHeuristic::heuristic_negate);
+				GraphAlg.aStar(graph,MochilaHeuristic::heuristic_negate);
 		
 		ms.withGraph = true;
 		
@@ -33,7 +34,7 @@ public class TestAStarMochilaGraph2 {
 		Graphs2.toDot(ms.outGraph,"ficheros/MochilaAstarGraph.gv",
 				v->v.toString(),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,v.goal()),
+				v->GraphColors.getColorIf(Color.red,MochilaVertex.goal().test(v)),
 				e->GraphColors.getColorIf(Color.red,
 						ms.path(e1,Optional.of(e2)).get().getEdgeList().contains(e))
 				);

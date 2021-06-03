@@ -68,29 +68,28 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends ActionVirtualVertex<V, E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(V startVertex) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,null, null, null);
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
+			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, null, null, null);
 	}
-	
-	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
-			V startVertex,
-			Function<E, Double> edgeWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Sum,edgeWeight,null,null);
+
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
+			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, edgeWeight, null,
+				null);
 	}
-	
-	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
-			V startVertex,
-			Function<V, Double> vertexWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex,PathType.Last,null,vertexWeight,null);
+
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
+			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<V, Double> vertexWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Last, null, vertexWeight,
+				null);
 	}
-	
-	public static <V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> SimpleVirtualGraph<V, E> simpleVirtualGraph(
-			V startVertex,
-			Function<E, Double> edgeWeight, 
-			Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight,
-			PathType type) {
-		return new SimpleVirtualGraph<V, E>(startVertex,type,edgeWeight,vertexWeight,vertexPassWeight);
+
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraph(
+			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight,
+			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight, PathType type) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, type, edgeWeight, vertexWeight,
+				vertexPassWeight);
 	}
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V,E,A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
@@ -183,21 +182,31 @@ public class Graphs2 {
 	
 	
 	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
+			Predicate<V> goal,V endVertex,Predicate<V> constraint,
 			Function<E, Double> edgeWeight,
 			Function<V, Double> vertexWeight, 
 			TriFunction<V, E, E, Double> vertexPassWeight,
 			PathType type) {
-		return new EGraphI<V, E, G>(graph, startVertex, type,edgeWeight,vertexWeight,vertexPassWeight);
+		return new EGraphI<V, E, G>(graph, startVertex, goal,endVertex,constraint,type,edgeWeight,vertexWeight,vertexPassWeight);
 	}
 	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex, PathType type) {
-		return new EGraphI<V, E, G>(graph, startVertex, type, null, null, null);
-	}
-	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraph(G graph, V startVertex) {
-		return new EGraphI<V, E, G>(graph, startVertex,PathType.Sum, null, null, null);
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex) {
+		return new EGraphI<V, E, G>(graph, startVertex, null, null, null, PathType.Sum, null, null, null);
 	}
 
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex, Predicate<V> goal,
+			V endVertex, Predicate<V> constraint) {
+		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, PathType.Sum, null, null, null);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphLast(G graph, V startVertex) {
+		return new EGraphI<V, E, G>(graph, startVertex, null, null, null, PathType.Last, null, null, null);
+	}
+
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphLast(G graph, V startVertex, Predicate<V> goal,
+			V endVertex, Predicate<V> constraint) {
+		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, PathType.Last, null, null, null);
+	}
 	
 	public static <V, E> SimpleDirectedWeightedGraph<V, E> toDirectedWeightedGraph(SimpleWeightedGraph<V, E> graph,
 			Function<E, E> edgeReverse) {

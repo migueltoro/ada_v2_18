@@ -30,7 +30,8 @@ public class TestLocalSearchInteger {
 		
 		TravelVertexInteger e1 = TravelVertexInteger.of(camino);
 		
-		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = Graphs2.simpleVirtualGraphLast(e1,v->v.weight());
+		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
+				Graphs2.simpleVirtualGraphLast(e1,null,null,null,v->v.weight());
 		
 		LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = GraphAlg.local(graph2,v->v.geedyVertex(),10.);
 		
@@ -43,7 +44,7 @@ public class TestLocalSearchInteger {
 		while (i< 5) {
 			Collections.shuffle(camino.subList(1, camino.size() - 2));
 			e1 = TravelVertexInteger.of(camino);
-			graph2 = Graphs2.simpleVirtualGraphLast(e1, v -> v.weight());
+			graph2 = Graphs2.simpleVirtualGraphLast(e1,null,null,null, v -> v.weight());
 			m = GraphAlg.local(graph2, v -> v.geedyVertex(), 1.);
 			vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
 			//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());

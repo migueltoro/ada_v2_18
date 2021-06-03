@@ -27,10 +27,11 @@ public class TestBTMochilaGraph {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
-		EGraph<MochilaVertex, MochilaEdge> graph = Graphs2.simpleVirtualGraphSum(e1,x->x.weight());		
+		EGraph<MochilaVertex, MochilaEdge> graph = 
+				Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,MochilaVertex.constraint(),x->x.weight());		
 		
 		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
-				GraphAlg.greedy(graph,MochilaVertex::greedyEdge,e->e.equals(e2), v->true);
+				GraphAlg.greedy(graph,MochilaVertex::greedyEdge);
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> path = rr.search();
 		
 		SolucionMochila sm = MochilaVertex.getSolucion(path.get().getEdgeList());
@@ -39,8 +40,6 @@ public class TestBTMochilaGraph {
 		
 		BackTracking<MochilaVertex, MochilaEdge,SolucionMochila> ms = BT.backTracking(
 				graph,
-				v->v.goal(),
-				e2,
 				MochilaHeuristic::heuristic,
 				MochilaVertex::getSolucion,
 				MochilaVertex::copy,

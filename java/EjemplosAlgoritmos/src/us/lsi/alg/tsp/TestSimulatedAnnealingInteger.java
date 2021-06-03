@@ -46,7 +46,8 @@ public class TestSimulatedAnnealingInteger {
 		TravelVertexInteger e1 = TravelVertexInteger.of(camino);
 		System.out.println(e1);
 		
-		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = Graphs2.simpleVirtualGraphLast(e1,v->v.weight());	
+		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
+				Graphs2.simpleVirtualGraphLast(e1,null,null,null,v->v.weight());	
 		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
 				GraphAlg.simulatedAnnealing(graph2,e1,e->e.weight());
 		

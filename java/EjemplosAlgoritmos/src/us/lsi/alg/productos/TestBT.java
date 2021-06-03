@@ -25,11 +25,13 @@ public class TestBT {
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 
 			ProductosVertex start = ProductosVertex.initial();
-			Predicate<ProductosVertex> finalVertex = v -> ProductosVertex.goal(v);
+			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
-			EGraph<ProductosVertex, ProductosEdge> graph = Graphs2.simpleVirtualGraphSum(start, x -> x.weight());
+			EGraph<ProductosVertex, ProductosEdge> graph = 
+					Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
 
-			GraphPath<ProductosVertex, ProductosEdge> path = ProductosHeuristic.graphPathVoraz(start, finalVertex);
+			GraphPath<ProductosVertex, ProductosEdge> path = 
+					ProductosHeuristic.graphPathVoraz(start,goal);
 			List<Integer> la = path.getEdgeList().stream().map(e->e.action()).toList();
 			
 			System.out.println("\n\n#### Algoritmo BT ####");
@@ -37,8 +39,6 @@ public class TestBT {
 			// Algoritmo BT
 			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
 					BT.backTracking(graph, 
-					finalVertex,
-					null,
 					ProductosHeuristic::heuristic,
 					ProductosVertex::getSolucion, 
 					ProductosVertex::copy, 
@@ -56,7 +56,7 @@ public class TestBT {
 			Graphs2.toDot(bta.outGraph,"ficheros/productosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
-					v->GraphColors.getColorIf(Color.red,ProductosVertex.goal(v)),
+					v->GraphColors.getColorIf(Color.red,goal.test(v)),
 					e->GraphColors.getColorIf(Color.red,gp.getEdgeList().contains(e))
 					);
 

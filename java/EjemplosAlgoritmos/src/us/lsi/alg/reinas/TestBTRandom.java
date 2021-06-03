@@ -15,13 +15,12 @@ public class TestBTRandom {
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
-			EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = Graphs2.simpleVirtualGraphLast(e1,v->v.errores().doubleValue());		
+			EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = 
+					Graphs2.simpleVirtualGraphLast(e1,ReinasVertex.goal(),null,ReinasVertex.constraint(),v->v.errores().doubleValue());		
 			
 			BackTrackingRandom<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
 					BT.<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,SolucionReinas>random(
 					graph, 
-					v->v.index() == ReinasVertex.n, 
-					null,
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
 					BTType.One,

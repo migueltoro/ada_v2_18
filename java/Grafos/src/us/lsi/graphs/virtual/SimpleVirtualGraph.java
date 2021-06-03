@@ -2,6 +2,7 @@ package us.lsi.graphs.virtual;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -43,10 +44,13 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	private TriFunction<V,E,E,Double> vertexPassWeight= null;
 	private EGraphPath<V,E> path;
 	private V startVertex;
+	private Predicate<V> goal;
+	private V endVertex;	
+	private Predicate<V> constraint;
 	private PathType type;
 	
 	
-	public SimpleVirtualGraph(V startVertex, 
+	public SimpleVirtualGraph(V startVertex,Predicate<V> goal,V endVertex,Predicate<V> constraint,
 			PathType type,			
 			Function<E, Double> edgeWeight, 
 			Function<V, Double> vertexWeight,
@@ -60,6 +64,9 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 		this.vertexSet = new HashSet<V>();
 		this.vertexSet.add(this.startVertex);
 		this.type = type;
+		this.goal = goal;
+		this.endVertex = endVertex;
+		this.constraint = constraint;
 		this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
 	}
 
@@ -305,6 +312,19 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	@Override
 	public PathType pathType() {
 		return type;
+	}
+	
+	@Override
+	public Predicate<V> goal() {
+		return goal;
+	}
+	@Override
+	public V endVertex() {
+		return endVertex;
+	}
+	@Override
+	public Predicate<V> constraint() {
+		return constraint;
 	}
 	
 }

@@ -2,7 +2,6 @@ package us.lsi.alg.typ;
 
 
 import java.util.Locale;
-import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
@@ -21,13 +20,12 @@ public class TestAStarTyP {
 		TyPVertex e2 = TyPVertex.last();
 		
 		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,v->v.maxCarga());		
+				Graphs2.simpleVirtualGraphLast(e1,v->v.goal(),
+						e2,v->true,v->v.maxCarga());		
 		
 		
 		AStar<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>> ms = GraphAlg.aStar(
 				graph,
-				v->v.goal(),
-				e2,
 				Heuristica::heuristic);
 		
 //		ms.stream().forEach(v->System.out.println(v));

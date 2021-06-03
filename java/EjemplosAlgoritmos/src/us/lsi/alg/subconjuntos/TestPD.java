@@ -33,15 +33,14 @@ public class TestPD {
 
 			// Grafo
 
-			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = Graphs2.simpleVirtualGraphSum(start,x -> x.weight());
+			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
+					Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x -> x.weight());
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge> pdr = 
 					DPR.dynamicProgrammingReduction(graph, 
-							SubconjuntosVertex.goal(),
-							null,
 							SubconjuntosHeuristic::heuristic, 
 							PDType.Min);
 			pdr.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);
