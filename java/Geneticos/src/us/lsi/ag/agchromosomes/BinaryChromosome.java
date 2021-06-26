@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.math3.genetics.AbstractListChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
+import us.lsi.ag.BinaryData;
 import us.lsi.ag.Chromosome;
 import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInRangeData;
@@ -19,7 +20,7 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
  *
  */
 public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryChromosome implements
-                   ValuesInRangeData<Integer,Object>, Chromosome<List<Integer>> {
+                   BinaryData<Object>, Chromosome<List<Integer>> {
 	
 	/**
 	 * Dimensión del cromosoma
@@ -78,16 +79,6 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	@Override
 	public Integer size() {
 		return BinaryChromosome.data.size();
-	}
-
-	@Override
-	public Integer getMax(Integer i) {
-		return BinaryChromosome.data.getMax(i);
-	}
-
-	@Override
-	public Integer getMin(Integer i) {
-		return BinaryChromosome.data.getMin(i);
 	}
 
 	@Override
