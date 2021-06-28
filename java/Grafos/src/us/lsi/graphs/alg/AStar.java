@@ -2,6 +2,7 @@ package us.lsi.graphs.alg;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.jheaps.AddressableHeap;
 import org.jheaps.AddressableHeap.Handle;
 import org.jheaps.tree.FibonacciHeap;
 
-import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.flujossecuenciales.Iterators;
 import us.lsi.graphs.virtual.EGraph;
@@ -52,7 +52,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		this.heuristic = heuristic;
 		this.tree = new HashMap<>();
 		this.ePath = graph.initialPath();
-		this.heap = new FibonacciHeap<>();
+		this.heap = new FibonacciHeap<>(Comparator.naturalOrder());
 		Data<V,E> data = Data.of(startVertex,null,ePath.getWeight());	
 		Double d = ePath.estimatedWeightToEnd(data.distanceToOrigin,startVertex,goal,end,heuristic);
 		Handle<Double, Data<V, E>> h = this.heap.insert(d,data);
@@ -99,11 +99,19 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
 				tree.put(v, hv);
 			} else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {
-//				System.out.printf("%s,%s,%.2f,%.2f\n",vertexActual,v,newDistance,newDistanceToEnd);
 				Data<V, E> dv = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> hv = tree.get(v);
+				Double oldDistanceToEnd = hv.getKey();
+				Double oldDistanceToOrigen = tree.get(v).getValue().distanceToOrigin();
 				hv.setValue(dv);
-				hv.decreaseKey(newDistanceToEnd);
+				try {
+						hv.decreaseKey(newDistanceToEnd);
+				} catch (IllegalArgumentException e) {
+					System.out.println(e);
+					System.out.printf("%s,%s, Nueva distancia al origen = %.2f, Nueva distancia al al final = %.2f\n",vertexActual,v,newDistance,newDistanceToEnd);
+					System.out.printf("Antigua distancia al origen = %.2f, Antigua distancia al final = %.2f\n",oldDistanceToOrigen,oldDistanceToEnd);
+					System.out.println("______________________________");
+				}
 			}
 			if(this.withGraph) {
 				outGraph.addVertex(v);

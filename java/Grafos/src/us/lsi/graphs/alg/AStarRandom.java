@@ -12,7 +12,6 @@ import org.jgrapht.Graphs;
 import org.jheaps.AddressableHeap.Handle;
 
 import us.lsi.common.List2;
-import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;

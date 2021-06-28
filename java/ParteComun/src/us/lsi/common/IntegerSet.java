@@ -34,6 +34,13 @@ public class IntegerSet implements Set<Integer> {
 		return r;
 	}
 	
+	public static IntegerSet ofRange(Integer from, Integer to) {
+		IntegerSet r = IntegerSet.empty();
+		IntStream.range(from,to).boxed().toList();
+		r.addAll(IntStream.range(from,to).boxed().toList());
+		return r;
+	}
+	
 	public static IntegerSet copy(IntegerSet s) {
 		return new IntegerSet(s);
 	}
