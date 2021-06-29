@@ -45,22 +45,24 @@ public class Tests {
 		DynamicProgrammingReduction<EquipoVertex, EquipoEdge> alg_pdr = DPR.dynamicProgrammingReduction( 
 			grafo,
 		EquipoHeuristic::heuristica2,
-//			(v1,p,v2)->100.,
 			PDType.Max);
+		Double vr = EquipoHeuristic.voraz(EquipoVertex.first());
+		alg_pdr.bestValue = vr;
 		System.out.println(EquipoVertex.getSolucion(alg_pdr.search().get()));
 	}
 	
 	private static void testBT(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== BT ======================== ");
-		BackTracking<EquipoVertex, EquipoEdge,SolucionEquipo> alg_pdr = BT.backTracking(
+		BackTracking<EquipoVertex, EquipoEdge,SolucionEquipo> alg_bt = BT.backTracking(
 			grafo,
 			EquipoHeuristic::heuristica2,
-//			(v1,p,v2)->100.,
 			EquipoVertex::getSolucion,
-			EquipoVertex::copy,
+    		EquipoVertex::copy,
 			BTType.Max);
-		alg_pdr.search();
-		System.out.println(alg_pdr.getSolution());
+		Double vr = EquipoHeuristic.voraz(EquipoVertex.first());
+		alg_bt.bestValue = vr;
+		alg_bt.search();
+	    System.out.println(alg_bt.getSolution().get());
 	}
 
 	private static void testAStar(EGraph<EquipoVertex, EquipoEdge> grafo) {
@@ -68,7 +70,6 @@ public class Tests {
 		AStar<EquipoVertex, EquipoEdge> alg_star = GraphAlg.aStar(
 			grafo,
 			EquipoHeuristic::heuristica_neg
-//			(v1,p,v2)->-100.
 			);
 		System.out.println(EquipoVertex.getSolucion(alg_star.search().get()));
 	}

@@ -32,8 +32,8 @@ public class TestEquipoPL {
 	public static void main(String[] args) throws IOException {	
 		Locale.setDefault(new Locale("en", "US"));
 		equipo_model("ficheros/DatosEquipo1.txt");
-//		equipo_model("ficheros/DatosEquipo2.txt");
-//		equipo_model("ficheros/DatosEquipo3.txt");
+		equipo_model("ficheros/DatosEquipo2.txt");
+		equipo_model("ficheros/DatosEquipo3.txt");
 	}
 
 }

@@ -1,8 +1,11 @@
 package us.lsi.alg.equipo;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import us.lsi.common.List2;
 
 public class EquipoHeuristic {
 
@@ -31,11 +34,37 @@ public class EquipoHeuristic {
 		Double r = 0.;
 		while (p < DatosEquipo.M) {
 			Optional<Integer> a = v.mejorEnPosicion(p);
-			if(!a.isPresent()) {
-				break;
-			}
-			r += DatosEquipo.getR(a.get(), v.index());
-			System.out.println(r+","+v.index());
+			if(a.isPresent()) r += DatosEquipo.getR(a.get(), v.index());
+//			System.out.println(r+","+v.index());
+			else a = Optional.of(0);
+			v = v.neighbor(a.get());
+			p = v.index();
+		}
+		return r;
+	}
+	
+	public static List<Integer> solucionVoraz(EquipoVertex v) {
+		Integer p = v.index();
+		List<Integer> ls = List2.of();
+		while (p < DatosEquipo.M) {
+			Optional<Integer> a = v.mejorEnPosicion(p);
+			if(a.isPresent()) ls.add(a.get());
+//			System.out.println(r+","+v.index());
+			else a = Optional.of(0);
+			v = v.neighbor(a.get());
+			p = v.index();
+		}
+		return ls;
+	}
+	
+	public static Double vorazRandom(EquipoVertex v) {
+		Integer p = v.index();
+		Double r = 0.;
+		while (p < DatosEquipo.M) {
+			Optional<Integer> a = v.random(p);
+			if(a.isPresent()) r += DatosEquipo.getR(a.get(), v.index());
+//			System.out.println(r+","+v.index());
+			else a = v.randomSin(p);
 			v = v.neighbor(a.get());
 			p = v.index();
 		}

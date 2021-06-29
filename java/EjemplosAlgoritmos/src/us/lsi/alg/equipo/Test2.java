@@ -5,22 +5,18 @@ public class Test2 {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		DatosEquipo.iniDatos("ficheros/DatosEquipo1.txt");
+		DatosEquipo.iniDatos("ficheros/DatosEquipo3.txt");
 		
-		EquipoVertex v1 = EquipoVertex.first();
-		for(int i =0;i<DatosEquipo.M;i++) {
-			Integer m = v1.mejorEnPosicion(i).get();
-			System.out.println(i+" = " +m+" = "+DatosEquipo.getR(m,i));
-		}
 		EquipoVertex v = EquipoVertex.first();
-		System.out.println(DatosEquipo.getR(0,1));
-		System.out.println(EquipoHeuristic.voraz(EquipoVertex.first()));
-		System.out.println(EquipoHeuristic.heuristica2(v,EquipoVertex::goal,null));
-		System.out.println(EquipoHeuristic.heuristica_neg(v,EquipoVertex::goal,null));
-		v = v.neighbor(v.mejorEnPosicion(0).get());
-		System.out.println(EquipoHeuristic.heuristica2(v,EquipoVertex::goal,null));
-		System.out.println(EquipoHeuristic.heuristica_neg(v,EquipoVertex::goal,null));
-
+		
+		while (v.index()<DatosEquipo.M) {
+			Double vr = EquipoHeuristic.voraz(v);
+			Double h = EquipoHeuristic.heuristica2(v, EquipoVertex::goal, null);
+			SolucionEquipo s = SolucionEquipo.create(EquipoHeuristic.solucionVoraz(EquipoVertex.first()));
+			System.out.printf("%d,%6.2f,%6.2f\n",v.index(),vr,h);
+			System.out.printf("%s\n",s);
+			v = v.neighbor(v.mejorEnPosicion(v.index()).orElse(v.mejorEnPosicionSin(v.index()).get()));
+		}
 	}
 
 }

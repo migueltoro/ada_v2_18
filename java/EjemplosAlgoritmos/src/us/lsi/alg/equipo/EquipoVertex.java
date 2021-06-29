@@ -60,6 +60,25 @@ public record EquipoVertex(Integer index,IntegerSet players) implements ActionVi
 				.max(Comparator.comparing(i -> DatosEquipo.getR(i,p)));
 		return mejor;
 	}
+	
+	public Optional<Integer> random(Integer p) {
+		Optional<Integer> mejor = players.stream()
+				.filter(i -> DatosEquipo.getR(i,p) > 7)
+				.findAny();
+		return mejor;
+	}
+	
+	public Optional<Integer> randomSin(Integer p) {
+		Optional<Integer> mejor = players.stream()
+				.findAny();
+		return mejor;
+	}
+	
+	public Optional<Integer> mejorEnPosicionSin(Integer p) {
+		Optional<Integer> mejor = players.stream()
+				.max(Comparator.comparing(i -> DatosEquipo.getR(i,p)));
+		return mejor;
+	}
 
 	@Override
 	public Boolean isValid() {

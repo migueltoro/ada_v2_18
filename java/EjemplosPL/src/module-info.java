@@ -4,6 +4,7 @@
 
 module ejemplos_pl {
 	exports us.lsi.pli;
+	exports us.lsi.pli.equipo;
 
 	requires transitive datos_compartidos;
 	requires transitive solve;

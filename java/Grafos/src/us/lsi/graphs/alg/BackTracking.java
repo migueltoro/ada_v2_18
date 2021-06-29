@@ -75,8 +75,8 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	protected void update(State<V, E> state) {
 		if(this.type == BTType.All ||
 		   (this.bestValue == null)||
-		   (this.type == BTType.Max && state.getAccumulateValue() > this.bestValue) ||
-		   (this.type == BTType.Min && state.getAccumulateValue() < this.bestValue)) {
+		   (this.type == BTType.Max && state.getAccumulateValue() >= this.bestValue) ||
+		   (this.type == BTType.Min && state.getAccumulateValue() <= this.bestValue)) {
 //				System.out.println("AC = "+state.getAccumulateValue());
 //				System.out.println("BV = "+this.bestValue);
 				this.bestValue = state.getAccumulateValue();

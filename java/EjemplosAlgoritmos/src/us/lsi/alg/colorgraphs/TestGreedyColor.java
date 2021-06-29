@@ -34,7 +34,7 @@ public class TestGreedyColor {
 		
 		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(graph);
 		
-		Integer n = g2.vertexSet().size();
+//		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex v1 = ColorVertex.first();
 		

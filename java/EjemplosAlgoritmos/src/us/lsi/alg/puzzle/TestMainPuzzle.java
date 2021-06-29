@@ -20,8 +20,8 @@ public class TestMainPuzzle {
 		VertexPuzzle v2 = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
 		VertexPuzzle v3 = VertexPuzzle.of(1,2,3,4,6,5,8,7,0);
 		VertexPuzzle v4 = VertexPuzzle.of(1,2,3,4,5,6,7,8,0);
-		VertexPuzzle v5 =  VertexPuzzle.of(3, 1, 6, 0, 8, 2, 4, 5, 7);
-		VertexPuzzle v6 =VertexPuzzle.of(0,1,2,3,4,5,6,7,8);
+		VertexPuzzle v5 = VertexPuzzle.of(3,1,6,0,8,2,4,5,7);
+		VertexPuzzle v6 = VertexPuzzle.of(0,1,2,3,4,5,6,7,8);
 		VertexPuzzle v7 = VertexPuzzle.of(1,2,3,4,5,6,7,8,0);
 		VertexPuzzle v8 = VertexPuzzle.of(8,1,3,4,0,2,7,6,5);
 		
