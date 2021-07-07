@@ -34,14 +34,14 @@ public class TestAstar {
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
-		System.out.println(SolucionPlan.of(s1));
+		System.out.println(SolucionAsignaturas.of(s1));
 		
 		System.out.println("___________________");
 		
 		as = GraphAlg.aStar(grafoAStar,Heuristica::heuristic_negate);
 		
-		List<SolucionPlan> s3 = as.searchAll().stream()
-				.map(s->SolucionPlan.of(s))
+		List<SolucionAsignaturas> s3 = as.searchAll().stream()
+				.map(s->SolucionAsignaturas.of(s))
 				.sorted(Comparator.comparing(s->-s.mejora()))
 				.toList()
 				.subList(0, 5);

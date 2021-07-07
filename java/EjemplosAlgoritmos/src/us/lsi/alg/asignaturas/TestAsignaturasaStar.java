@@ -36,7 +36,7 @@ public class TestAsignaturasaStar {
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
-		System.out.println(SolucionPlan.of(s1));
+		System.out.println(SolucionAsignaturas.of(s1));
 		
 		System.out.println("___________________");
 		
@@ -49,17 +49,17 @@ public class TestAsignaturasaStar {
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s2 = pd.search().get();
 		
-		System.out.println(SolucionPlan.of(s2));
+		System.out.println(SolucionAsignaturas.of(s2));
 		
 		System.out.println("___________________");
 		
 		SimpleVirtualGraph<AsignaturasVertice,AsignaturasEdge> grafoBT = 
 				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->true,v->(double)v.getPeso());
 
-		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionPlan> bt = BT.backTracking(
+		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BT.backTracking(
 				grafoBT, 
 				Heuristica::heuristic, 
-				SolucionPlan::of,
+				SolucionAsignaturas::of,
 				AsignaturasVertice::copy,
 				BTType.Max);
 		bt.search();
