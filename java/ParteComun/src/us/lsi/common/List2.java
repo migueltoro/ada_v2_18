@@ -97,6 +97,7 @@ public class List2 {
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @param e Un elemento
+	 * @param index Un índice
 	 * @return Una copia de la lista con el elemento cambiado en la posicion index
 	 */
 	public static <E> List<E> setElement(List<E> ls, int index, E e){

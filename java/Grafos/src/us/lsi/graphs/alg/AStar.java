@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
@@ -168,6 +170,15 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 		return path(startVertex,last);
 	}
 	
+	public List<GraphPath<V, E>> searchAll() {
+		V startVertex = graph.startVertex();
+		if(this.goal.test(startVertex)) return List.of(ePath);
+		List<V> lasts = this.stream().filter(this.goal).toList();	
+		return lasts.stream().map(v->path(startVertex,Optional.of(v)))
+				.filter(p->p.isPresent())
+				.map(p->p.get())
+				.collect(Collectors.toList());
+	}
 	
 	public static record Data<V, E> (V vertex, E edge, Double distanceToOrigin) {
 
