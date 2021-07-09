@@ -3,13 +3,16 @@ package us.lsi.flujossecuenciales;
 import java.util.Iterator;
 import java.util.List;
 
-public class ListIterator<E> implements Iterator<E> {
-	private List<E> ls;
+public class ListIterator<E> implements Iterator<E>, Iterable<E> {
 	private Integer i;
+	private List<E> ls;
 	public ListIterator(List<E> ls) {
-		super();
-		this.ls = ls;
 		this.i = 0;
+		this.ls = ls;	
+	}	
+	@Override
+	public Iterator<E> iterator() {
+		return new ListIterator<>(ls);
 	}
 	@Override
 	public boolean hasNext() { 
@@ -17,9 +20,9 @@ public class ListIterator<E> implements Iterator<E> {
 	}
 	@Override
 	public E next() {
-		Integer old = i;
+		E e = ls.get(i);
 		i = i+1;
-		return ls.get(old);
+		return e;
 	}
 }
 

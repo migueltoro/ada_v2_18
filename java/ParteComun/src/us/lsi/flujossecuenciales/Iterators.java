@@ -105,7 +105,7 @@ public class Iterators {
 	 * @param iterable Un iterable
 	 * @return La vista como stream del iterable
 	 */
-	public static <T> Stream<T> asStream(Iterable<T> iterable) { 
+	public static <T> Stream<T> iterableAsStream(Iterable<T> iterable) { 
         Spliterator<T> spliterator = iterable.spliterator(); 
         return StreamSupport.stream(spliterator, false); 
     } 
