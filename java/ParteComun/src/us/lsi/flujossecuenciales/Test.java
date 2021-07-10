@@ -13,9 +13,12 @@ public class Test {
 		Iterator<Double> i1 = ls.stream().iterator();
 		Iterator<Double> i2 = IteratorFilter.of(i1,e->e<0.);
 		i2.forEachRemaining(x->System.out.print(x+","));
+		System.out.println(" __________ ");
 		List<Set<Integer>> ls1 = List.of(Set.of(23,45),Set.of(),Set.of(23,45),Set.of(23,45),Set.of(23,45));
 		Iterator<Set<Integer>> h1 = ls1.stream().iterator();
-		Iterator<Integer> h2 = IteratorFlatMap.of(h1,x->x.stream().iterator());
+		Iterator<Integer> h2 = IteratorFlatMap.of(h1,x->x);
+		h2.forEachRemaining(x->System.out.print(x+","));
+		System.out.println(" __________ ");
 		Iterator<Integer> h3 = IteratorWithSeeNext.of(h2);
 		MutableType<Integer> sum = MutableType.of(0);
 		h3.forEachRemaining(x->sum.newValue(sum.value()+x));

@@ -82,7 +82,7 @@ public class Iterators {
 		return IteratorFilter.of(r3,x->x.length() > 0) ;
 	}
 	
-	public static <E,R> Iterator<R> flatMap(Iterator<E> iterator, Function<E,Iterator<R>> fmap){
+	public static <E,R> Iterator<R> flatMap(Iterator<E> iterator, Function<E,Iterable<R>> fmap){
 		return new IteratorFlatMap<E,R>(iterator,fmap);
 	}
 	

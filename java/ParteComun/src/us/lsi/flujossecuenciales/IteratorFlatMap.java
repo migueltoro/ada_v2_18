@@ -5,18 +5,18 @@ import java.util.function.Function;
 
 public class IteratorFlatMap<E,R> implements Iterator<R>, Iterable<R> {
 	
-	private Iterator<Iterator<R>> iterator;
+	private Iterator<E> iterator;
+	private Function<E,Iterable<R>> fmap;
 	private Iterator<R> actual;
 	
-	public static <E,R> IteratorFlatMap<E,R> of(Iterator<E> iterator, Function<E,Iterator<R>> fmap){
+	public static <E,R> IteratorFlatMap<E,R> of(Iterator<E> iterator, Function<E,Iterable<R>> fmap){
 		return new IteratorFlatMap<>(iterator,fmap);
 	}
 	
-	IteratorFlatMap(Iterator<E> iterator, Function<E,Iterator<R>> fmap) {
-		super();
-		Iterator<Iterator<R>> tmp = IteratorMap.of(iterator, fmap);
-		this.iterator = IteratorFilter.of(tmp,it->it.hasNext());
-		this.actual = this.iterator.next();
+	IteratorFlatMap(Iterator<E> iterator, Function<E,Iterable<R>> fmap) {
+		this.iterator = IteratorFilter.of(iterator,e->fmap.apply(e).iterator().hasNext());
+		this.fmap = fmap;
+		this.actual = this.iterator.hasNext()? fmap.apply(this.iterator.next()).iterator(): null;
 	}
 
 	@Override
@@ -26,9 +26,12 @@ public class IteratorFlatMap<E,R> implements Iterator<R>, Iterable<R> {
 	
 	@Override
 	public R next() {
-		R old = this.actual.next();
-		if(!this.actual.hasNext() && this.iterator.hasNext()) this.actual = this.iterator.next();
-		return old;
+		if(!this.actual.hasNext()) {
+			do 
+				this.actual = fmap.apply(this.iterator.next()).iterator();
+			while(!this.actual.hasNext());
+		}
+		return this.actual.next();
 	}
 
 	@Override
