@@ -7,8 +7,8 @@ import us.lsi.common.Enumerate;
 
 public class IteratorEnumerate<E> implements Iterator<Enumerate<E>>,Iterable<Enumerate<E>>{
 	
-	public static <E> Iterator<Enumerate<E>> of(Iterator<E> iterator) {
-		return new IteratorEnumerate<E>(iterator);
+	public static <E> Iterable<Enumerate<E>> of(Iterable<E> iterator) {
+		return new IteratorEnumerate<E>(iterator.iterator());
 	}
 
 	private Iterator<E> iterator;

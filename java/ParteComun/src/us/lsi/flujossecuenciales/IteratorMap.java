@@ -8,8 +8,8 @@ public class IteratorMap<E,R> implements Iterator<R>, Iterable<R> {
 	private Iterator<E> iterator;
 	private Function<E,R> fmap;
 	
-	public static <E,R> IteratorMap<E,R> of(Iterator<E> iterator, Function<E, R> fmap) {
-		return new IteratorMap<>(iterator, fmap);
+	public static <E,R> IteratorMap<E,R> of(Iterable<E> iterator, Function<E, R> fmap) {
+		return new IteratorMap<>(iterator.iterator(), fmap);
 	}
 	
 	public IteratorMap(Iterator<E> iterator, Function<E, R> fmap) {

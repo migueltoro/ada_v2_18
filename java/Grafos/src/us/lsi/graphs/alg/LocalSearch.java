@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.graphs.virtual.EGraph;
 
 public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>{
@@ -49,7 +49,7 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 	
 	@Override
 	public Stream<V> stream() {
-		return Iterators.asStream(this.iterator());
+		return Iterables.asStream(this);
 	}
 	
 	public Iterator<V> iterator() {

@@ -6,13 +6,14 @@ import us.lsi.common.Pair;
 
 public class IteratorConsecutivePairs<E> implements Iterator<Pair<E,E>>,Iterable<Pair<E,E>>{
 
-	public static <E> Iterator<Pair<E,E>> of(Iterator<E> iterator) {
-		Iterator<Pair<E,E>> r = IteratorEmpty.of();
+	public static <E> Iterable<Pair<E,E>> of(Iterable<E> iterable) {
+		Iterable<Pair<E,E>> r = IteratorEmpty.of();
+		Iterator<E> it = iterable.iterator();
 		E last;
-		if(iterator.hasNext()) {
-			last = iterator.next();
-			if(iterator.hasNext()) {
-				r = new IteratorConsecutivePairs<E>(iterator, last);
+		if(it.hasNext()) {
+			last = it.next();
+			if(it.hasNext()) {
+				r = new IteratorConsecutivePairs<E>(it, last);
 			}			
 		}	
 		return r;

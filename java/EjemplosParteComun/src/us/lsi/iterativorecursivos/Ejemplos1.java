@@ -24,8 +24,8 @@ import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.flujossecuenciales.IteratorMap;
-import us.lsi.flujossecuenciales.IteratorOrdered;
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.IteratorFusionOrdered;
+import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.flujossecuenciales.Printers;
 import us.lsi.flujossecuenciales.StreamsS;
 import us.lsi.math.Math2;
@@ -41,13 +41,10 @@ public class Ejemplos1 {
 	}
 	
 	public static Integer sumaPrimos2(String file) {
-		Iterator<String> fileIt = Iterators.file(file);
+		Iterable<String> fileIt = Iterables.file(file);
 		Integer suma = 0;
-		while (fileIt.hasNext()) {
-			String linea = fileIt.next();
-			Iterator<String> lineaIt = Iterators.split(linea, "[ ,]");
-			while (lineaIt.hasNext()) {
-				String e = lineaIt.next();
+		for(String linea: fileIt) {		
+			for(String e: Iterables.split(linea, "[ ,]")) {
 				Integer en = Integer.parseInt(e);
 				if (Math2.esPrimo(en)) {
 					suma = suma + en;
@@ -65,13 +62,10 @@ public class Ejemplos1 {
 	}
 	
 	public static Map<Integer, List<Integer>> agrupaPorResto2(String file, Integer n) {
-		Iterator<String> fileIt = Iterators.file(file);
+		Iterable<String> fileIt = Iterables.file(file);
 		Map<Integer, List<Integer>> grupos = new HashMap<>();
-		while (fileIt.hasNext()) {
-			String linea = fileIt.next();
-			Iterator<String> lineaIt = Iterators.split(linea, "[ ,]");
-			while (lineaIt.hasNext()) {
-				String e = lineaIt.next();
+		for(String linea:fileIt) {
+			for(String e:Iterables.split(linea, "[ ,]")) {
 				Integer en = Integer.parseInt(e);
 				Integer key = en % n;
 				List<Integer> ls;
@@ -170,17 +164,18 @@ public class Ejemplos1 {
 		return r.isPresent()? r.get().k : -1;
 	}
 	
-	public static <E> Integer index2(Iterator<E> it, E e) {
+	public static <E> Integer index2(Iterable<E> it, E e) {
 		Stream<Enumerate<E>> s = StreamsS.enumerate(it);
 		Optional<Enumerate<E>> entry = s.filter(p->p.counter().equals(e)).findFirst();
 		return entry.isPresent()?entry.get().counter():-1;
 	}
 	
-	public static <T> Integer index8(Iterator<T> it, T e) {
+	public static <T> Integer index8(Iterable<T> it, T e) {
 		Integer i = 0;
 		Integer b = -1;
-		while(it.hasNext() && b == -1){
-		   T a = it.next();
+		Iterator<T> itt = it.iterator();
+		while(itt.hasNext() && b == -1){
+		   T a = itt.next();
 		   if(a.equals(e)) b = i;
 		   i = i +1;
 		}
@@ -280,12 +275,13 @@ public class Ejemplos1 {
 		return b;
 	}
 
-	public static Boolean esAritmetica3(Iterator<Integer> it) {
+	public static Boolean esAritmetica3(Iterable<Integer> it) {
 		Integer a1, a2;
-		if(it.hasNext()) a1 = it.next(); else return false;
-		if(it.hasNext()) a2 = it.next(); else return false;
+		Iterator<Integer> itt = it.iterator();
+		if(itt.hasNext()) a1 = itt.next(); else return false;
+		if(itt.hasNext()) a2 = itt.next(); else return false;
 		Integer rz = a2-a1;
-		Stream<Pair<Integer,Integer>> it2 = StreamsS.consecutivePairs(it);
+		Stream<Pair<Integer,Integer>> it2 = StreamsS.consecutivePairs(()->itt);
 		return it2.allMatch(p->(p.second()-p.first()) == rz);
 	}
 
@@ -430,22 +426,24 @@ public class Ejemplos1 {
 		return ls3;
 	}
 
-	public static <E>  void mezclaOrdenada(Iterator<E> it1, Iterator<E> it2, String fileOut, Comparator<E> cmp) {	
+	public static <E>  void mezclaOrdenada(Iterable<E> it1, Iterable<E> it2, String fileOut, Comparator<E> cmp) {
+		Iterator<E> itt1 = it1.iterator();
+		Iterator<E> itt2 = it2.iterator();
 		PrintStream f = Printers.file(fileOut);
 		E e1 = null;
-		if(it1.hasNext()) e1 = it1.next();
+		if(itt1.hasNext()) e1 = itt1.next();
 		E e2 = null;
-		if(it2.hasNext()) e2 = it2.next();
+		if(itt2.hasNext()) e2 = itt2.next();
 		while(e1 != null || e2 != null){
 			E e;
 			if(e2==null||e1!=null && Comparators.isLE(e1,e2,cmp)){
 				e = e1;
 				e1 = null;
-				if(it1.hasNext()) e1 = it1.next();
+				if(itt1.hasNext()) e1 = itt1.next();
 			} else {
 				e = e2;
 				e2 = null;
-				if(it2.hasNext()) e2 = it2.next();
+				if(itt2.hasNext()) e2 = itt2.next();
 			}		   
 			f.println(e.toString());
 		}
@@ -486,7 +484,7 @@ public class Ejemplos1 {
 				index7(ls1,e,Comparator.naturalOrder())));
 		Iterator<Integer> it1 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		Iterator<Integer> it2 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
-		System.out.println(String.format("1: %d, %d",index2(it1,e), index8(it2,e)));
+		System.out.println(String.format("1: %d, %d",index2(()->it1,e), index8(()->it2,e)));
 		List<Double> coeficientes = List2.of(0.,0.,0.,0.,1.);		
 		Double v1 = valorDePolinomio(coeficientes,2.);
 		Double v3 = valorDePolinomioHornerD(coeficientes,2.);
@@ -516,18 +514,18 @@ public class Ejemplos1 {
 		List<Integer> l2 = List2.of(0,2,4,10,19,21,23,45);
 		List<Integer> l3 = mezclaOrdenada(l2,l1, Comparator.naturalOrder());
 		System.out.println(String.format("5: %s",l3));
-		Iterator<String> f1 = Iterators.file("ficheros/numeros3.txt");
-		Iterator<Integer> f11 = IteratorMap.of(f1, x->Integer.parseInt(x));
-		Iterator<String> f2 = Iterators.file("ficheros/numeros4.txt");
-		Iterator<Integer> f22 = IteratorMap.of(f2, x->Integer.parseInt(x));
+		Iterable<String> f1 = Iterables.file("ficheros/numeros3.txt");
+		Iterable<Integer> f11 = IteratorMap.of(f1, x->Integer.parseInt(x));
+		Iterable<String> f2 = Iterables.file("ficheros/numeros4.txt");
+		Iterable<Integer> f22 = IteratorMap.of(f2, x->Integer.parseInt(x));
 		mezclaOrdenada(f11,f22,"ficheros/numeros5.txt",Comparator.naturalOrder());
-		f1 = Iterators.file("ficheros/numeros3.txt");
+		f1 = Iterables.file("ficheros/numeros3.txt");
 		f11 = IteratorMap.of(f1, x->Integer.parseInt(x));
-		f2 = Iterators.file("ficheros/numeros4.txt");
+		f2 = Iterables.file("ficheros/numeros4.txt");
 		f22 = IteratorMap.of(f2, x->Integer.parseInt(x));
-		Iterator<Integer> f3 = IteratorOrdered.of(f11,f22,Comparator.naturalOrder());
+		Iterable<Integer> f3 = IteratorFusionOrdered.of(f11,f22,Comparator.naturalOrder());
 		PrintStream p = Printers.file("ficheros/numeros6.txt");
-		while(f3.hasNext()) p.println(f3.next().toString());
+		for(Integer er:f3) p.println(er.toString());
 	}
 	
 	public static class P2 {

@@ -8,7 +8,7 @@ import us.lsi.common.Ranges.LongRange;
 import us.lsi.common.Matrix;
 import us.lsi.common.View1;
 import us.lsi.common.View2;
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.Iterables;
 
 
 public class ViewEjemplos {
@@ -113,11 +113,11 @@ public class ViewEjemplos {
 	}
 	
 	public static Integer sumIntegerOFile(String file) {
-		Iterator<String> it = Iterators.file(file);
+		Iterator<String> it = Iterables.file(file).iterator();
 		if(!it.hasNext()) return 0;	
 		Integer sum = 0;
 		while(it.hasNext()) {
-			View1<Iterator<String>,String> w = Iterators.view(it);
+			View1<Iterator<String>,String> w = Iterables.view(it);
 			Integer e = Integer.parseInt(w.element());
 			it = w.rest();
 			sum = sum + e;			

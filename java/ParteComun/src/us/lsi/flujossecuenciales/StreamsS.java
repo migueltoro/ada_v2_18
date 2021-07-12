@@ -20,40 +20,40 @@ public class StreamsS {
     }
 	
 	public static <E> Stream<Pair<E,E>> cartesianProduct(Iterable<E> iterableA) {
-		return Iterators.asStream(IteratorCartesianProduct.of(iterableA));
+		return Iterables.asStream(IteratorCartesianProduct.of(iterableA));
 	}
 	
-	public static <E> Stream<Pair<E,E>> consecutivePairs(Iterator<E> iterator) {
-		return Iterators.asStream(IteratorConsecutivePairs.of(iterator));
+	public static <E> Stream<Pair<E,E>> consecutivePairs(Iterable<E> iterator) {
+		return Iterables.asStream(IteratorConsecutivePairs.of(iterator));
 	}
 
-	public static <A, B> Stream<Pair<A, B>> zip(Iterator<A> iteratorA, Iterator<B> iteratorB){
-		return Iterators.asStream(IteratorZip.of(iteratorA, iteratorB));		
+	public static <A, B> Stream<Pair<A, B>> zip(Iterable<A> iteratorA, Iterable<B> iteratorB){
+		return Iterables.asStream(IteratorZip.of(iteratorA, iteratorB));		
 	}
 	
-	public static <E> Stream<Enumerate<E>> enumerate(Iterator<E> iterator) {
-		return Iterators.asStream(IteratorEnumerate.of(iterator));
+	public static <E> Stream<Enumerate<E>> enumerate(Iterable<E> iterator) {
+		return Iterables.asStream(IteratorEnumerate.of(iterator));
 	}
 	
-	public static <E> Stream<E> sorted(Iterator<E> iteratorA, Iterator<E> iteratorB, Comparator<E> cmp) {
-		return Iterators.asStream(IteratorOrdered.of(iteratorA,iteratorB,cmp));
+	public static <E> Stream<E> fusionSorted(Iterable<E> iteratorA, Iterable<E> iteratorB, Comparator<E> cmp) {
+		return Iterables.asStream(IteratorFusionOrdered.of(iteratorA,iteratorB,cmp));
 	}
 	
 	public static <E> Stream<Pair<E,E>> cartesianProduct(Stream<E> stream) {
 		List<E> ls = stream.collect(Collectors.toList());
-		return Iterators.asStream(IteratorCartesianProduct.of(ls));
+		return Iterables.asStream(IteratorCartesianProduct.of(ls));
 	}
 	
 	public static <E> Stream<Pair<E,E>> consecutivePairs(Stream<E> st) {
-		return Iterators.asStream(IteratorConsecutivePairs.of(st.iterator()));
+		return Iterables.asStream(IteratorConsecutivePairs.of(()->st.iterator()));
 	}
 
 	public static <A, B> Stream<Pair<A, B>> zip(Stream<A> sA, Stream<B> sB){
-		return Iterators.asStream(IteratorZip.of(sA.iterator(), sB.iterator()));		
+		return Iterables.asStream(IteratorZip.of(()->sA.iterator(), ()->sB.iterator()));		
 	}
 	
 	public static <E> Stream<E> sorted(Stream<E> sA, Stream<E> sB, Comparator<E> cmp) {
-		return Iterators.asStream(IteratorOrdered.of(sA.iterator(),sB.iterator(),cmp));
+		return Iterables.asStream(IteratorFusionOrdered.of(()->sA.iterator(),()->sB.iterator(),cmp));
 	}
 	
 	
@@ -73,7 +73,7 @@ public class StreamsS {
 				.filter(x-> x.length() > 0);
 	}
 	
-	public static <E> Iterator<E> empty() {
+	public static <E> Iterable<E> empty() {
 		return IteratorEmpty.of();
 	}
 	

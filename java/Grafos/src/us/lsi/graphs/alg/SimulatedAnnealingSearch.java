@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import us.lsi.common.List2;
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
@@ -73,7 +73,7 @@ public class SimulatedAnnealingSearch<V,E> implements GraphAlg<V,E>, Iterator<V>
 	
 	@Override
 	public Stream<V> stream() {
-		return Iterators.asStream(this.iterator());
+		return Iterables.asStream(this);
 	}
 	
 	@Override

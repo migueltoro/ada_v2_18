@@ -5,10 +5,10 @@ import java.util.Iterator;
 
 import us.lsi.common.Comparators;
 
-public class IteratorOrdered<E> implements Iterator<E>,Iterable<E> {
+public class IteratorFusionOrdered<E> implements Iterator<E>,Iterable<E> {
 	
-	public static <E> Iterator<E> of(Iterator<E> iteratorA, Iterator<E> iteratorB, Comparator<E> cmp) {
-		return new IteratorOrdered<>(iteratorA,iteratorB,cmp);
+	public static <E> Iterable<E> of(Iterable<E> iteratorA, Iterable<E> iteratorB, Comparator<E> cmp) {
+		return new IteratorFusionOrdered<>(iteratorA.iterator(),iteratorB.iterator(),cmp);
 	}
 	
 	private Iterator<E> it1;
@@ -17,7 +17,7 @@ public class IteratorOrdered<E> implements Iterator<E>,Iterable<E> {
 	private E e2;
 	private Comparator<E> cmp;
 	
-	private IteratorOrdered(Iterator<E> iteratorA, Iterator<E> iteratorB, Comparator<E> cmp) {
+	private IteratorFusionOrdered(Iterator<E> iteratorA, Iterator<E> iteratorB, Comparator<E> cmp) {
 		super();
 		this.it1 = iteratorA;
 		this.it2 = iteratorB;

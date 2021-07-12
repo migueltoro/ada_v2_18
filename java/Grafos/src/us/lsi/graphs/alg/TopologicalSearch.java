@@ -12,7 +12,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -45,7 +45,7 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 	@Override
 	public Stream<V> stream() {
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		return Iterators.asStream(this.iterator());
+		return Iterables.asStream(this);
 	}
 	
 	@Override

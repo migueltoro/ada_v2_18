@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +22,7 @@ import org.jheaps.AddressableHeap.Handle;
 import org.jheaps.tree.FibonacciHeap;
 
 import us.lsi.common.TriFunction;
-import us.lsi.flujossecuenciales.Iterators;
+import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
@@ -64,7 +63,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	@Override
 	public Stream<V> stream() {
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		return Iterators.asStream(this.iterator());
+		return Iterables.asStream(this);
 	}
 		
 	@Override

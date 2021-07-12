@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import us.lsi.common.MutableType;
-
 public class Test {
 
 	public static void main(String[] args) {
@@ -19,11 +17,6 @@ public class Test {
 		Iterator<Integer> h2 = IteratorFlatMap.of(h1,x->x);
 		h2.forEachRemaining(x->System.out.print(x+","));
 		System.out.println(" __________ ");
-		Iterator<Integer> h3 = IteratorWithSeeNext.of(h2);
-		MutableType<Integer> sum = MutableType.of(0);
-		h3.forEachRemaining(x->sum.newValue(sum.value()+x));
-		Integer sum2 = ls1.stream().flatMap(x->x.stream()).mapToInt(Integer::intValue).sum();
-		System.out.print("\n"+sum.value()+","+sum2);
 	}
 
 }

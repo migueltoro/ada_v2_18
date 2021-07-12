@@ -59,7 +59,7 @@ public class EjemplosDeStreams2 {
 						.map(t->t.second())
 						.reduce(1L,(x,y)->x*y);
 		System.out.println("4: ______");
-		var ss = StreamsS.enumerate(r2.stream().iterator());
+		var ss = StreamsS.enumerate(()->r2.stream().iterator());
 		var r3 = ss.map(t->t.toString()).collect(Collectors.joining(",","{","}"));
 		System.out.println(r3);
 		System.out.println("5: ______");
