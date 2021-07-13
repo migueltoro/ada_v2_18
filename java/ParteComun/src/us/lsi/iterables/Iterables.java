@@ -136,6 +136,19 @@ public class Iterables {
 		return Optional.ofNullable(b);
 	}
 	
+	public static <E,T> Optional<E> reduce(T t0, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BinaryOperator<E> op) {
+		T t = t0;
+		E b = null;
+		while(hn.test(t)) {
+			E e = nx1.apply(t);
+			t = nx2.apply(t);
+			if (b == null) b = e;	
+			else b = op.apply(b, e);
+		}
+		return Optional.ofNullable(b);
+	}
+	
 	public static <E> Optional<E> reduceRight(Iterable<E> iterator, BinaryOperator<E> op) {
 		Iterator<E> it = iterator.iterator();
 		E b = null;
@@ -154,12 +167,46 @@ public class Iterables {
 		}
 		return b;
 	}
+		
+	public static <E,T> Optional<E> reduceRight(T t0, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BinaryOperator<E> op) {
+		T t = t0;
+		E b = null;
+		b = reduceRight(t,b,hn,nx1,nx2,op);
+		return Optional.ofNullable(b);
+	}
+	
+	private static <E,T> E reduceRight(T t, E b, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BinaryOperator<E> op){
+		if(hn.test(t)) {
+			E e = nx1.apply(t);
+			t = nx2.apply(t);
+			b = reduceRight(t,b,hn,nx1,nx2,op);
+			if (b == null) b = e;	
+			else b = op.apply(b, e);
+		} else {
+			b = null;
+		}
+		return b;
+	}
 	
 	public static <E,B> B reduce(Iterable<E> iterator, BiFunction<B,E,B> op, B b0) {
 		Iterator<E> it = iterator.iterator();
 		B b = b0;
 		while(it.hasNext()) {
 			E e = it.next();
+			b = op.apply(b, e);
+		}
+		return b;
+	}
+	
+	public static <E,B,T> B reduce(T t0, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BiFunction<B,E,B> op, B b0) {
+		T t = t0;
+		B b = b0;
+		while(hn.test(t)) {
+			E e = nx1.apply(t);
+			t = nx2.apply(t);
 			b = op.apply(b, e);
 		}
 		return b;
@@ -182,6 +229,28 @@ public class Iterables {
 		}
 		return b;
 	}
+	
+	public static <E,B,T> B reduceRight(T t0, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BiFunction<B,E,B> op, B b0) {
+		T t = t0;
+		B b = reduceRight_p(t,hn,nx1,nx2,op,b0);
+		return b;
+	}
+	
+	private static <E,B,T> B reduceRight_p(T t, Predicate<T> hn, Function<T,E> nx1, UnaryOperator<T> nx2, 
+			BiFunction<B,E,B> op, B b0){
+		B b;
+		if(hn.test(t)) {
+			E e = nx1.apply(t);
+			t = nx2.apply(t);
+			b = reduceRight_p(t,hn,nx1,nx2,op,b0);
+			b = op.apply(b, e);
+		} else {
+			b = b0;
+		}
+		return b;
+	}
+	
 	
 	public static <E,B> B reduce(Iterable<E> iterator, BiConsumer<B,E> op, Supplier<B> b0) {
 		Iterator<E> it = iterator.iterator();
