@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 import us.lsi.common.IntegerSet;
 import us.lsi.common.Preconditions;
-import us.lsi.common.Stream2;
+import us.lsi.streams.Stream2;
 
 public class Sudoku {
 	

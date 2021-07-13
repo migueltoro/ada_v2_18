@@ -7,10 +7,10 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import us.lsi.common.Files2;
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.solve.AuxGrammar;
+import us.lsi.streams.Stream2;
 
 public class TareasPLI {
 	

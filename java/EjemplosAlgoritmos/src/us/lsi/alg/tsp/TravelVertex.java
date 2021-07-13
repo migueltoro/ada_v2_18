@@ -8,11 +8,11 @@ import org.jgrapht.Graph;
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.path.GraphPaths;
+import us.lsi.streams.Stream2;
 
 public record TravelVertex(List<Ciudad> camino) 
           implements ActionVirtualVertex<TravelVertex, TravelEdge, IntPair> {

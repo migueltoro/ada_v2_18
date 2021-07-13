@@ -11,12 +11,12 @@ import java.util.stream.Stream;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.model.PLIModelBaseVisitor;
 import us.lsi.model.PLIModelParser;
 import us.lsi.solve.AuxGrammar.Limits;
 import us.lsi.solve.AuxGrammar.ListString;
 import us.lsi.solve.AuxGrammar.Type;
+import us.lsi.streams.Stream2;
 
 
 public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{

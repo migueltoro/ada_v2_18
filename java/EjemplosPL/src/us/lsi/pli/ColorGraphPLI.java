@@ -6,13 +6,13 @@ import java.util.stream.IntStream;
 
 import org.jgrapht.Graph;
 
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.gurobi.GurobiLp;
 import us.lsi.gurobi.GurobiSolution;
 import us.lsi.math.Math2;
 import us.lsi.solve.AuxGrammar;
+import us.lsi.streams.Stream2;
 public class ColorGraphPLI {
 	
 	public static Graph<Integer, SimpleEdge<Integer>> graph;

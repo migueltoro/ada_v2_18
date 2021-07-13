@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.common.Stream2;
+import us.lsi.streams.Stream2;
 
 
 public class SolucionSudoku {

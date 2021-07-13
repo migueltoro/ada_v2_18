@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.SimulatedAnnealingSearch;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.GraphPaths;
+import us.lsi.streams.Stream2;
 
 public class TestSimulatedAnnealingInteger {
 	

@@ -1,11 +1,11 @@
 package us.lsi.alg.tsp;
 
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.LocalSearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.streams.Stream2;
 
 import java.util.ArrayList;
 import java.util.Collections;

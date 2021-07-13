@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import us.lsi.flujossecuenciales.Iterables;
+import us.lsi.streams.Stream2;
 
 public class Greedy<V> implements  Iterator<V>, Iterable<V> {
 	
@@ -27,7 +27,7 @@ public class Greedy<V> implements  Iterator<V>, Iterable<V> {
 	}
 
 	public Stream<V> stream() {
-		return Iterables.asStream(this);
+		return Stream2.asStream(this);
 	}
 	
 	public Greedy<V> copy() {

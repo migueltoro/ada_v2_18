@@ -12,9 +12,9 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import us.lsi.flujossecuenciales.Iterables;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.streams.Stream2;
 
 public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 
@@ -41,7 +41,7 @@ public class DephtSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V
 	@Override
 	public Stream<V> stream() {
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		return Iterables.asStream(this);
+		return Stream2.asStream(this);
 	}
 	
 	@Override

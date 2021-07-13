@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import us.lsi.streams.Stream2;
+
 public class Multiset<E>  {
 
 	/**

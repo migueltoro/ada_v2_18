@@ -8,7 +8,7 @@ import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
-import us.lsi.common.Stream2;
+import us.lsi.streams.Stream2;
 
 
 
@@ -32,14 +32,14 @@ public class DatosAnuncios {
 		todosLosAnunciosDisponibles = List2.empty();
 		Anuncio a;
 		for(String s : ls1){
-			String[] at = Stream2.fromString(s, ",").<String>toArray((int x)->new String[x]);
+			String[] at = Stream2.split(s, ",").<String>toArray((int x)->new String[x]);
 			Preconditions.checkArgument(at.length==3);
 			a = Anuncio.create(at);
 			todosLosAnunciosDisponibles.add(a);
 		}
 		restricciones = new HashSet<>();
 		for(String s : ls2){
-			String[] at = Stream2.fromString(s, ",").<String>toArray((int e)->new String[e]);
+			String[] at = Stream2.split(s, ",").<String>toArray((int e)->new String[e]);
 			Preconditions.checkArgument(at.length==2);
 			Integer n1 = Integer.parseInt(at[0]);
 			Integer n2 = Integer.parseInt(at[1]);

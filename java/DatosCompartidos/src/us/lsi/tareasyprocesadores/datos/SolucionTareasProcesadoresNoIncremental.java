@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
-import us.lsi.flujosparalelos.Stream2;
+import us.lsi.streams.Stream2;
 
 public class SolucionTareasProcesadoresNoIncremental implements SolucionTareasProcesadores  {
 

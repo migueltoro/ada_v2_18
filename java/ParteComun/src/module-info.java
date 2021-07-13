@@ -12,8 +12,8 @@ module partecomun {
 	exports us.lsi.tiposrecursivos;
 	exports us.lsi.tiposrecursivos.parsers;
 	exports us.lsi.tiposrecursivos.program;
-	exports us.lsi.flujossecuenciales;
-	exports us.lsi.flujosparalelos;
+	exports us.lsi.iterables;
+	exports us.lsi.streams;
 	exports us.lsi.math;
 	exports us.lsi.common;
 	

@@ -8,12 +8,12 @@ import java.util.Optional;
 
 import org.jgrapht.Graph;
 
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.streams.Stream2;
 
 public class TestLocalSearch {
 	

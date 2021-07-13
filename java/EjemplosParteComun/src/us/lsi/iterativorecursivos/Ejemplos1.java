@@ -23,22 +23,40 @@ import us.lsi.common.Enumerate;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
-import us.lsi.flujossecuenciales.IteratorMap;
-import us.lsi.flujossecuenciales.IteratorFusionOrdered;
-import us.lsi.flujossecuenciales.Iterables;
-import us.lsi.flujossecuenciales.Printers;
-import us.lsi.flujossecuenciales.StreamsS;
+import us.lsi.common.Printers;
+import us.lsi.streams.Stream2;
+import us.lsi.iterables.Iterables;
+import us.lsi.iterables.IteratorFusionOrdered;
+import us.lsi.iterables.IteratorMap;
 import us.lsi.math.Math2;
 
 public class Ejemplos1 {
 	
-	public static Integer sumaPrimos1(String file) {
-		return StreamsS.file(file)
-				.flatMap(e->StreamsS.split(e,"[ ,]"))
+	public static Integer sumaPrimos(String file) {
+		return Stream2.file(file)
+				.flatMap(e->Stream2.split(e,"[ ,]"))
 				.mapToInt(e->Integer.parseInt(e))
 				.filter(e->Math2.esPrimo(e))
 				.sum();
 	}
+	
+	public static Integer sumaPrimos1(String file) {
+		Iterator<String> fileIt = Iterables.file(file).iterator();
+		Integer suma = 0;
+		while(fileIt.hasNext()){
+			String linea = fileIt.next();
+			Iterator<String> lineaIt = Iterables.split(linea,"[ ,]").iterator();
+			while(lineaIt.hasNext()){
+	     		String p = lineaIt.next();
+				Integer e = Integer.parseInt(p);
+				if(Math2.esPrimo(e)){
+	 				suma = suma + e;
+				}
+	 		}
+		}
+	 	return suma;
+	}
+
 	
 	public static Integer sumaPrimos2(String file) {
 		Iterable<String> fileIt = Iterables.file(file);
@@ -53,10 +71,28 @@ public class Ejemplos1 {
 		}
 		return suma;
 	}
+	
+	public static Integer sumaPrimos3(String file) {
+		Iterable<String> fileIt = Iterables.file(file);
+		Iterable<String> ff = Iterables.flatMap(fileIt,linea->Iterables.split(linea,"[ ,]"));
+		return sumaPrimos3(ff.iterator(),0);
+	}
+	private static Integer sumaPrimos3(Iterator<String> ff, Integer b) {
+		if(ff.hasNext()) {
+			String p = ff.next();
+			Integer en = Integer.parseInt(p);
+			if (Math2.esPrimo(en)) {
+				b = b + en;
+			}
+			b = sumaPrimos3(ff,b);
+		}
+		return b;
+	}
+	
 
 	public static Map<Integer,List<Integer>> agrupaPorResto1(String file,Integer n) {
-		return StreamsS.file(file)
-				.flatMap(e->StreamsS.split(e,"[ ,]"))
+		return Stream2.file(file)
+				.flatMap(e->Stream2.split(e,"[ ,]"))
 				.map(e->Integer.parseInt(e))
 				.collect(Collectors.groupingBy(e->e%n));
 	}
@@ -143,29 +179,45 @@ public class Ejemplos1 {
 		}
 		return r;
 	}
+	
+	public static record  P2(Integer i, Integer j) {
+		public static P2 of(Integer i, Integer j) {
+			return new P2(i,j);
+		}
+	}
+
+	
+	public static record P3(Integer i, Integer j) {
+		public static P3 of(Integer i, Integer j) {
+			return new P3(i,j);
+		}
+		public Integer k() {
+			return (i+j)/2;
+		}
+	}
 
 	public static <T> Integer index6(List<T> ls, T elem, Comparator<T> cmp) {
 		P3 p = P3.of(0, ls.size());
-		while ((p.j - p.i) > 0 && !Comparators.isEQ(elem, ls.get(p.k), cmp)) {
-			if (Comparators.isLT(elem, ls.get(p.k), cmp))
-				p = P3.of(p.i, p.k);
+		while ((p.j - p.i) > 0 && !Comparators.isEQ(elem, ls.get(p.k()), cmp)) {
+			if (Comparators.isLT(elem, ls.get(p.k()), cmp))
+				p = P3.of(p.i(), p.k());
 			else
-				p = P3.of(p.k + 1, p.j);
+				p = P3.of(p.k() + 1, p.j);
 		}
-		return (p.j - p.i > 0 && Comparators.isEQ(elem, ls.get(p.k), cmp)) ? p.k : -1;
+		return (p.j() - p.i() > 0 && Comparators.isEQ(elem, ls.get(p.k()), cmp)) ? p.k() : -1;
 	}
 	
 	public static <T> Integer index7(List<T> ls, T elem, Comparator<T> cmp) {
-		Function<P3,P3> next = p-> {if (Comparators.isLT(elem, ls.get(p.k), cmp)) return P3.of(p.i, p.k); 
-									else return P3.of(p.k +1, p.j);};
-		Stream<P3> s = Stream.iterate(P3.of(0, ls.size()), p-> (p.j-p.i)>0, p-> next.apply(p));
+		Function<P3,P3> next = p-> {if (Comparators.isLT(elem, ls.get(p.k()), cmp)) return P3.of(p.i(), p.k()); 
+									else return P3.of(p.k() +1, p.j());};
+		Stream<P3> s = Stream.iterate(P3.of(0, ls.size()), p-> (p.j()-p.i())>0, p-> next.apply(p));
 		
-		Optional<P3> r = s.filter(p->Comparators.isEQ(elem, ls.get(p.k),cmp)).findFirst();
-		return r.isPresent()? r.get().k : -1;
+		Optional<P3> r = s.filter(p->Comparators.isEQ(elem, ls.get(p.k()),cmp)).findFirst();
+		return r.isPresent()? r.get().k() : -1;
 	}
 	
 	public static <E> Integer index2(Iterable<E> it, E e) {
-		Stream<Enumerate<E>> s = StreamsS.enumerate(it);
+		Stream<Enumerate<E>> s = Stream2.enumerate(Stream2.asStream(it));
 		Optional<Enumerate<E>> entry = s.filter(p->p.counter().equals(e)).findFirst();
 		return entry.isPresent()?entry.get().counter():-1;
 	}
@@ -281,7 +333,7 @@ public class Ejemplos1 {
 		if(itt.hasNext()) a1 = itt.next(); else return false;
 		if(itt.hasNext()) a2 = itt.next(); else return false;
 		Integer rz = a2-a1;
-		Stream<Pair<Integer,Integer>> it2 = StreamsS.consecutivePairs(()->itt);
+		Stream<Pair<Integer,Integer>> it2 = Stream2.consecutivePairs(Stream2.asStream(()->itt));
 		return it2.allMatch(p->(p.second()-p.first()) == rz);
 	}
 
@@ -499,7 +551,10 @@ public class Ejemplos1 {
 		System.out.println("Digitos I = "+ls);
 		System.out.println("Ceros = "+numeroDeCeros(n,a));
 		System.out.println("Entero = "+n+","+entero(ls,a));
-		System.out.println(String.format("3: %d, %d",sumaPrimos1("ficheros/numeros2.txt"),sumaPrimos2("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.0 %d",sumaPrimos("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.1 %d",sumaPrimos1("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.2 %d",sumaPrimos2("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.3 %d",sumaPrimos3("ficheros/numeros2.txt")));
 		var r1 = agrupaPorResto1("ficheros/numeros2.txt",5);
 		var r2 = agrupaPorResto2("ficheros/numeros2.txt",5);
 		System.out.println("4 \n "+r1);
@@ -528,30 +583,6 @@ public class Ejemplos1 {
 		for(Integer er:f3) p.println(er.toString());
 	}
 	
-	public static class P2 {
-		public Integer i, j;
-		public static P2 of(Integer i, Integer j) {
-			return new P2(i,j);
-		}
-		private P2(Integer i, Integer j) {
-			super();
-			this.i = i;
-			this.j = j;
-		}
-	}
-
 	
-	public static class P3 {
-		public Integer i, j, k;
-		public static P3 of(Integer i, Integer j) {
-			return new P3(i,j);
-		}
-		private P3(Integer i, Integer j) {
-			super();
-			this.i = i;
-			this.j = j;
-			this.k = (i+j)/2;
-		}
-	}
 
 }

@@ -5,10 +5,10 @@ import java.util.List;
 
 import us.lsi.common.Ranges.IntRange;
 import us.lsi.common.Ranges.LongRange;
+import us.lsi.iterables.Iterables;
 import us.lsi.common.Matrix;
 import us.lsi.common.View1;
 import us.lsi.common.View2;
-import us.lsi.flujossecuenciales.Iterables;
 
 
 public class ViewEjemplos {

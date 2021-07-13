@@ -11,7 +11,7 @@ import us.lsi.alg.puzzle.VertexPuzzle;
 import us.lsi.common.Arrays2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Stream2;
+import us.lsi.streams.Stream2;
 
 public record ProblemPuzzle(IntPair blackPosition,Integer[][] datos) {
 	

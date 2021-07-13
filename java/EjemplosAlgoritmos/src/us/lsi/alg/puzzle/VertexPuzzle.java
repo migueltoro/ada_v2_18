@@ -10,8 +10,8 @@ import java.util.stream.IntStream;
 import us.lsi.common.Arrays2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Preconditions;
-import us.lsi.flujosparalelos.Stream2;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.streams.Stream2;
 
 
 
