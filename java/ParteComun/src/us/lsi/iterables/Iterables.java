@@ -469,8 +469,8 @@ public class Iterables {
 		return Optional.ofNullable(b);
 	}
 	
-	public static <E> Boolean all(Iterable<E> iterator, Predicate<E> p){
-		Iterator<E> it = iterator.iterator();
+	public static <E> Boolean all(Iterable<E> iterable, Predicate<E> p){
+		Iterator<E> it = iterable.iterator();
 		Boolean b = true;
 		while(it.hasNext()&& b){	   
 		   E e = it.next();	
@@ -479,8 +479,8 @@ public class Iterables {
 		return b;
 	}
 	
-	public static <E> Boolean any(Iterable<E> iterator, Predicate<E> p){
-		Iterator<E> it = iterator.iterator();
+	public static <E> Boolean any(Iterable<E> iterable, Predicate<E> p){
+		Iterator<E> it = iterable.iterator();
 		Boolean b = false;
 		while(it.hasNext()&& !b){	   
 		   E e = it.next();	
@@ -489,8 +489,8 @@ public class Iterables {
 		return b;
 	}
 	
-	public static <E> Boolean none(Iterable<E> iterator, Predicate<E> p){
-		Iterator<E> it = iterator.iterator();
+	public static <E> Boolean none(Iterable<E> iterable, Predicate<E> p){
+		Iterator<E> it = iterable.iterator();
 		Boolean b = false;
 		while(it.hasNext()&& !b){	   
 		   E e = it.next();	
@@ -499,8 +499,8 @@ public class Iterables {
 		return !b;
 	}
 	
-	public static <E,R> Optional<R> sequentialAlg(Iterable<E> iterator, Predicate<E> p, Function<E,R> r){
-		Iterator<E> it = iterator.iterator();
+	public static <E,R> Optional<R> sequentialAlg(Iterable<E> iterable, Predicate<E> p, Function<E,R> r){
+		Iterator<E> it = iterable.iterator();
 		E b = null;
 		while(it.hasNext()&& b==null){	   
 		   E e = it.next();	
@@ -519,8 +519,8 @@ public class Iterables {
 		return b==null?Optional.empty():Optional.of(r.apply(t));
 	}
 	
-	public static <E> String joining(Iterable<String> iterator, String sp, String pf, String sf){
-		Iterator<String> it = iterator.iterator();
+	public static <E> String joining(Iterable<String> iterable, String sp, String pf, String sf){
+		Iterator<String> it = iterable.iterator();
 		String b = pf;
 		Boolean esPrimero = true;
 		while(it.hasNext()){	   
