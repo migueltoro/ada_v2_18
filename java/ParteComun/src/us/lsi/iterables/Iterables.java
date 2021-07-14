@@ -117,6 +117,14 @@ public class Iterables {
 		return new IteratorFilter<>(iterator.iterator(),p);
 	}
 	
+	public static <E,T> Iterable<E> explicit(T t0, Predicate<T> hn, Function<T, E> nx1, UnaryOperator<T> nx2){
+		return new IteratorExplicit<>(t0,hn,nx1,nx2);
+	}
+	
+	public static <E> Iterable<E> asIterable(Iterator<E> it) { 
+	    return ()->it;
+	}
+	
 	/**
 	 * @return Un iterador vacío
 	 */
@@ -194,6 +202,17 @@ public class Iterables {
 		Iterator<E> it = iterator.iterator();
 		B b = b0;
 		while(it.hasNext()) {
+			E e = it.next();
+			b = op.apply(b, e);
+		}
+		return b;
+	}
+	
+	
+	public static <E,B> B reduce(Iterable<E> iterator, BiFunction<B,E,B> op, B b0, Predicate<B> p) {
+		Iterator<E> it = iterator.iterator();
+		B b = b0;
+		while(it.hasNext() && !p.test(b)) {
 			E e = it.next();
 			b = op.apply(b, e);
 		}
@@ -431,8 +450,6 @@ public class Iterables {
 	public static <E,K> Map<K,E> groupingReduce(Iterable<E> iterator, Function<E,K> key, BinaryOperator<E> f){
 		return Iterables.reduce(iterator,CombineReduce.of(key,f),()->new HashMap<>());
 	}
-	
-	
 	
 	public static <E> Optional<E> findFirst(Iterable<E> iterator){
 		Iterator<E> it = iterator.iterator();
