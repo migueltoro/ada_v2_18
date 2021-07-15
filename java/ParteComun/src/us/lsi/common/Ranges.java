@@ -30,17 +30,17 @@ public class Ranges {
 			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,IntRange.of(a+c,b));
 		}
-		public View2<IntRange,Integer> view2(){
+		public View2E<IntRange,Integer> view2(){
 			Integer n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Integer central = (b+a)/(2*c)*c;
-			return View2.of(central,IntRange.of(a,central,c),IntRange.of(central,b,c));
+			return View2E.of(central,IntRange.of(a,central,c),IntRange.of(central,b,c));
 		}
-		public View2<IntRange,Integer> view2Overlapping(){
+		public View2E<IntRange,Integer> view2Overlapping(){
 			Integer n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Integer central = (b+a)/(2*c)*c;
-			return View2.of(central,IntRange.of(a,central+c,c),IntRange.of(central,b,c));
+			return View2E.of(central,IntRange.of(a,central+c,c),IntRange.of(central,b,c));
 		}	
 	}
 	
@@ -68,17 +68,17 @@ public class Ranges {
 			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,LongRange.of(a+c,b));
 		}
-		public View2<LongRange,Long> view2(){
+		public View2E<LongRange,Long> view2(){
 			Long n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Long central = (b+a)/(2*c)*c;
-			return View2.of(central,LongRange.of(a,central,c),LongRange.of(central,b,c));
+			return View2E.of(central,LongRange.of(a,central,c),LongRange.of(central,b,c));
 		}
-		public View2<LongRange,Long> view2Overlapping(){
+		public View2E<LongRange,Long> view2Overlapping(){
 			Long n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Long central = (b+a)/(2*c)*c;
-			return View2.of(central,LongRange.of(a,central+c,c),LongRange.of(central,b,c));
+			return View2E.of(central,LongRange.of(a,central+c,c),LongRange.of(central,b,c));
 		}
 	}
 	
@@ -105,17 +105,17 @@ public class Ranges {
 			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
 			return View1.of(this.a,DoubleRange.of(a+c,b));
 		}
-		public View2<DoubleRange,Double> view2(){
+		public View2E<DoubleRange,Double> view2(){
 			Integer n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Double central = (b+a)/2;
-			return View2.of(central,DoubleRange.of(a,central,c),DoubleRange.of(central,b,c));
+			return View2E.of(central,DoubleRange.of(a,central,c),DoubleRange.of(central,b,c));
 		}
-		public View2<DoubleRange,Double> view2Overlapping(){
+		public View2E<DoubleRange,Double> view2Overlapping(){
 			Integer n = this.size();
 			Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamaño mayor que 1 y es %d  ",n));
 			Double central = (b+a)/2;
-			return View2.of(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
+			return View2E.of(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
 		}
 	}
 	

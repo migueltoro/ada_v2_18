@@ -448,11 +448,11 @@ public class List2 {
 	 * @param ls Una lista
 	 * @return Una vista de tipo 2 sin solape
 	 */
-	public static <E> View2<List<E>,E> view2(List<E> ls){		
+	public static <E> View2E<List<E>,E> view2(List<E> ls){		
 		int n = ls.size();
 		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
 		int k = n/2;
-		return View2.of(ls.get(k),ls.subList(0, k), ls.subList(k,n));
+		return View2E.of(ls.get(k),ls.subList(0, k), ls.subList(k,n));
 	}
 	
 }
