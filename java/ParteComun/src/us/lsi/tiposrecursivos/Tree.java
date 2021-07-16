@@ -2,11 +2,14 @@ package us.lsi.tiposrecursivos;
 
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public interface Tree<E> {
+import us.lsi.common.ViewL;
+
+public interface Tree<E> extends Iterable<Tree<E>>{
 	
 public static Tree<Object> empty = new TreeImpl<Object>();
 	
@@ -150,5 +153,21 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	int hashCode();
 
 	boolean equals(Object obj);
-
+	
+	/**
+	 * @return Una vista de tipo L del árbol nario
+	 */
+	ViewL<Tree<E>,E> view();
+	
+	Iterator<TreeLevel<E>> byLevel();
+	
+	public static record TreeLevel<E>(Integer level, Tree<E> tree){
+		public static <R> TreeLevel<R> of(Integer level, Tree<R> tree){
+			return new TreeLevel<R>(level,tree);
+		}
+		@Override
+		public String toString() {
+			return String.format("(%d,%s)",this.level,this.tree);
+		}
+	}
 }

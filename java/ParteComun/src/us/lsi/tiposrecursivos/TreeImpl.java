@@ -3,7 +3,11 @@ package us.lsi.tiposrecursivos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,6 +18,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import us.lsi.common.Files2;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
+import us.lsi.common.ViewL;
+import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.parsers.TreeLexer;
 import us.lsi.tiposrecursivos.parsers.TreeParser;
 import us.lsi.tiposrecursivos.parsers.TreeVisitorC;
@@ -183,6 +189,25 @@ public class TreeImpl<E> implements MutableTree<E> {
 	@Override
 	public List<Tree<E>> getChildren() {
 		return elements.stream().map(x->x).collect(Collectors.toList());
+	}
+	
+	@Override
+	public ViewL<Tree<E>,E> view() {
+		Preconditions.checkArgument(!this.isEmpty(),String.format("El árbol no puede ser vacío y es %s",this));
+		return switch(this.type) {
+		case Nary -> ViewL.of(this.getLabel(),this.getChildren());
+		case Empty -> null;
+		case Leaf -> ViewL.of(this.getLabel(),List.of());
+		};		
+	}
+	
+	@Override
+	public Iterator<Tree<E>> iterator(){
+		return DepthPathTree.of(this);
+	}
+	
+	public Iterator<TreeLevel<E>> byLevel(){
+		return BreadthPathTree.of(this);
 	}
 
 	/* (non-Javadoc)
@@ -620,6 +645,88 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return true;
 	}
 	
+	public static class DepthPathTree<E> implements Iterator<Tree<E>>, Iterable<Tree<E>> {
+		
+		public static <E> DepthPathTree<E> of(Tree<E> tree){
+			return new DepthPathTree<E>(tree);
+		}
+
+		private Stack<Tree<E>> stack;
+		
+		public DepthPathTree(Tree<E> tree) {
+			super();
+			this.stack = new Stack<>();
+			this.stack.add(tree);
+		}
+
+		@Override
+		public Iterator<Tree<E>> iterator() {
+			return this;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return !this.stack.isEmpty();
+		}
+
+		@Override
+		public Tree<E> next() {
+			Tree<E> actual = stack.pop();
+			switch(actual.getType()) {
+			case Nary: 
+				for(Tree<E> v:List2.reverse(actual.getChildren())) {
+					stack.add(v);
+				}
+				break;
+			case Empty:break;
+			case Leaf:break;
+			}
+			return actual;
+		}
+		
+	}
+	
+	public static class BreadthPathTree<E> implements Iterator<TreeLevel<E>>, Iterable<TreeLevel<E>> {
+		
+		public static <E> BreadthPathTree<E> of(Tree<E> tree){
+			return new BreadthPathTree<E>(tree);
+		}
+
+		private Queue<TreeLevel<E>> queue;
+		
+		public BreadthPathTree(Tree<E> tree) {
+			super();
+			this.queue = new LinkedList<>();
+			this.queue.add(TreeLevel.of(0,tree));
+		}
+
+		@Override
+		public Iterator<TreeLevel<E>> iterator() {
+			return this;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return !this.queue.isEmpty();
+		}
+
+		@Override
+		public TreeLevel<E> next() {
+			TreeLevel<E> actual = queue.remove();
+			switch(actual.tree().getType()) {
+			case Nary: 
+				for(TreeLevel<E> v:actual.tree().getChildren().stream().map(t->TreeLevel.of(actual.level()+1,t)).toList()) {
+					queue.add(v);
+				}
+				break;
+			case Empty:break;
+			case Leaf:break;
+			}
+			return actual;
+		}
+		
+	}
+	
 	public static void test0() {
 		Tree<Integer> t1 = Tree.empty();
 		Tree<Integer> t2 = Tree.leaf(2);
@@ -675,10 +782,20 @@ public class TreeImpl<E> implements MutableTree<E> {
 		System.out.println(d);
 	}
 	
+	public static void test4() {
+		String ex = "39(2.,27(_,2,3,4),9(8.,_))";
+		Tree<String> t7 = Tree.parse(ex);		
+		System.out.println(t7);
+		Stream2.asStream(t7).forEach(t->System.out.println(t));
+		System.out.println("______________");
+		System.out.println(t7);
+		Stream2.asStream(()->t7.byLevel()).forEach(t->System.out.println(t));
+	}
+	
 	
 
 	public static void main(String[] args) {
-		test2();
+		test4();
 	}
 	
 }

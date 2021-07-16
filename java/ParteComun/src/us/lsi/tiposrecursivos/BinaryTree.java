@@ -1,15 +1,18 @@
 package us.lsi.tiposrecursivos;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
+import us.lsi.common.View2E;
 import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
 
 
-public interface BinaryTree<E> {
+public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
 	
 	public enum BinaryType{Empty,Leaf,Binary}
 	public enum ChildType{Left,Right,Root}
+	public enum PathType{Depth,ByLevel}
 	
 	/**
 	 * @post isEmpty()
@@ -200,5 +203,22 @@ public interface BinaryTree<E> {
 	 * @return Un árbol equilibrado con las mismas etiquetas
 	 */
 	BinaryTree<E> equilibrate();
+
+	/**
+	 * @return Una vista de tipo 2E del arbol binario
+	 */
+	View2E<BinaryTree<E>,E> view();
+	
+	Iterator<BinaryTreeLevel<E>> byLevel();
+	
+	public static record BinaryTreeLevel<E>(Integer level, BinaryTree<E> tree){
+		public static <R> BinaryTreeLevel<R> of(Integer level, BinaryTree<R> tree){
+			return new BinaryTreeLevel<R>(level,tree);
+		}
+		@Override
+		public String toString() {
+			return String.format("(%d,%s)",this.level,this.tree);
+		}
+	}
 
 }
