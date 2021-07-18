@@ -2,6 +2,34 @@ package us.lsi.tiposrecursivos;
 
 public interface MutableBinaryTree<E> extends BinaryTree<E> {
 	
+	/**
+	 * @post isEmpty()
+	 * @return Construye un árbol vacío
+	 */
+	public static <E> MutableBinaryTree<E> empty() {
+		return BinaryTreeImpl.empty();
+	}
+	
+	/**
+	 * @param label Una etiqueta
+	 * @post isLeaf()
+	 * @return Construye un árbol hoja
+	 */
+	public static <E> MutableBinaryTree<E> leaf(E label) {
+		return BinaryTreeImpl.leaf(label);
+	}
+	
+	/**
+	 * @param label Una etiqueta
+	 * @param left Un arbol
+	 * @param right Un arbol
+	 * @post isBinary()
+	 * @return Construye un árbol binario
+	 */
+	public static <E> MutableBinaryTree<E> binary(E label, MutableBinaryTree<E> left, MutableBinaryTree<E> right) {
+		return BinaryTreeImpl.binary(label, left, right);
+	}
+	
 	void setLabel(E label);
 
 	void setLeft(BinaryTree<E> left);

@@ -192,7 +192,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	@Override
-	public ViewL<Tree<E>,E> view() {
+	public ViewL<Tree<E>,E> viewL() {
 		Preconditions.checkArgument(!this.isEmpty(),String.format("El árbol no puede ser vacío y es %s",this));
 		return switch(this.type) {
 		case Nary -> ViewL.of(this.getLabel(),this.getChildren());
@@ -283,7 +283,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 			r = nTree;
 		} else {
 			r = this.getFather();
-			MutableTree<E> rm = r.mutableView();
+			MutableTree<E> rm = (MutableTree)r;
 			setFather(null);
 			for (int i = 0; i < this.getNumOfChildren(); i++) {
 				if (this.isChild(i)) {
@@ -299,21 +299,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getNumOfChildren(){
-		int r = 0;
-		switch(this.getType()) {
-		case Empty: r = 0; break;
-		case Leaf: r=0; break;
-		case Nary: r = elements.size(); break;
-		}
-		return r;
-	}
-	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#mutableView()
-	 */
-	@Override
-	public MutableTree<E> mutableView(){
-		return (MutableTree<E>) this;
+		return switch(this.getType()) {
+		case Empty->0;
+		case Leaf->0;
+		case Nary->elements.size();
+		};
 	}
 	
 	/* (non-Javadoc)
@@ -335,13 +325,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public int getHeight(){
-		Integer r=0;
-		switch(this.getType()) {
-		case Empty: r = -1; break;
-		case Leaf:  r = 0; break;
-		case Nary: r = 1+ elements.stream().mapToInt(x->x.getHeight()).max().getAsInt(); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty ->0;
+		case Leaf -> 0;
+		case Nary->1+ elements.stream().mapToInt(x->x.getHeight()).max().getAsInt(); 
+		};	
 	}
 	
 	/* (non-Javadoc)
@@ -349,16 +337,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 */
 	@Override
 	public Tree<E> copy(){
-		Tree<E> r= null;
-		switch(this.getType()) {
-		case Empty: r = Tree.empty(); break;
-		case Leaf:  r = Tree.leaf(label); break;
-		case Nary:
-			List<Tree<E>> nElements = elements.stream().map(x->x.copy()).collect(Collectors.toList());	
-			r = Tree.nary(label, nElements);
-			break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty -> Tree.empty(); 
+		case Leaf -> Tree.leaf(label);
+		case Nary -> Tree.nary(label,elements.stream().map(x->x.copy()).toList());
+		};
 	}
 	
 	

@@ -52,6 +52,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	public static BinaryTree<String> parse(String s){
 		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString(s));
@@ -66,6 +67,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		BinaryTree<String> tree = BinaryTreeImpl.parse(s);
 		return tree.map(f);
 	}
+	
 	
 
 	protected E label;
@@ -286,23 +288,17 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.BinaryTree#mutableView()
 	 */
-	@Override
-	public MutableBinaryTree<E> mutableView(){
-		return (MutableBinaryTree<E>) this;
-	}
 	
 	/* (non-Javadoc)
 	 * @see us.lsi.tiposrecursivos.BinaryTree#size()
 	 */
 	@Override
 	public int size() {
-		int r =0;
-		switch(this.getType()) {
-		case Empty: r = 0; break;
-		case Leaf:  r = 1; break;
-		case Binary: r = 1+this.getLeft().size()+ this.getRight().size(); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty-> 0; 
+		case Leaf -> 1; 
+		case Binary -> 1+this.getLeft().size()+ this.getRight().size(); 
+		};
 	}
 	
 	/* (non-Javadoc)
@@ -310,13 +306,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 */
 	@Override
 	public int getHeight() {
-		Integer r=0;
-		switch(this.getType()) {
-		case Empty: r = 0; break;
-		case Leaf:  r = 0; break;
-		case Binary: r = 1+ Math.max(this.getLeft().getHeight(),this.getRight().getHeight()); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty -> 0; 
+		case Leaf -> 0; 
+		case Binary -> 1+ Math.max(this.getLeft().getHeight(),this.getRight().getHeight()); 
+		};
 	}
 	
 	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls){
@@ -354,13 +348,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 */
 	@Override
 	public BinaryTree<E> copy() {
-		BinaryTree<E> r= null;
-		switch(this.getType()) {
-		case Empty: r = BinaryTree.empty(); break;
-		case Leaf:  r = BinaryTree.leaf(label); break;
-		case Binary: r = BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty -> BinaryTree.empty(); 
+		case Leaf -> BinaryTree.leaf(label); 
+		case Binary -> BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); 
+		};
 	}
 
 
@@ -369,13 +361,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 */
 	@Override
 	public BinaryTree<E> getReverse() {
-		BinaryTree<E> r= null;
-		switch(this.getType()) {
-		case Empty: r = BinaryTree.empty(); break;
-		case Leaf:  r = BinaryTree.leaf(label); break;
-		case Binary: r = BinaryTree.binary(label,this.getRight().copy(),this.getLeft().copy()); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty -> BinaryTree.empty(); 
+		case Leaf -> BinaryTree.leaf(label); 
+		case Binary -> BinaryTree.binary(label,this.getRight().copy(),this.getLeft().copy()); 
+		};
 	}
 	
 	/* (non-Javadoc)
@@ -383,13 +373,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 */
 	@Override
 	public <R> BinaryTree<R> map(Function<E,R> f){
-		BinaryTree<R> r = null;
-		switch(this.getType()) {	
-		case Empty: r = BinaryTree.empty(); break;
-		case Leaf: r = BinaryTree.leaf(f.apply(this.getLabel())); break;
-		case Binary: r = BinaryTree.binary(f.apply(this.getLabel()), this.getLeft().map(f), this.getRight().map(f)); break;
-		}
-		return r;
+		return switch(this.getType()) {	
+		case Empty -> BinaryTree.empty(); 
+		case Leaf -> BinaryTree.leaf(f.apply(this.getLabel())); 
+		case Binary -> BinaryTree.binary(f.apply(this.getLabel()), this.getLeft().map(f), this.getRight().map(f));
+		};
 	}	
 		
 	/* (non-Javadoc)
@@ -413,13 +401,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	 */
 	@Override
 	public String toString() {
-		String r = null;
-		switch (this.getType()) {
-		case Empty: r ="_"; break;
-		case Leaf: r = label.toString(); break;
-		case Binary: r = label.toString()+"("+this.getLeft().toString()+","+this.getRight().toString()+")";
-		}
-		return r;
+		return switch (this.getType()) {
+		case Empty -> "_"; 
+		case Leaf -> label.toString(); 
+		case Binary -> String.format("(%s,%s,%s)",label,this.getLeft(),this.getRight());
+		};
 	}
 	
 	/* (non-Javadoc)
@@ -630,6 +616,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		
 	}
+
 	
 	
 	public static void test1() {
@@ -657,7 +644,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		System.out.println(List2.reverse(List2.of(1,2,3,4,5,6,7,8,9)));
 		BinaryTree<String> t8 = t7.getReverse();
 		System.out.println(t8);
-		MutableBinaryTree<String> t = t8.mutableView();
+		MutableBinaryTree<String> t = (MutableBinaryTree)t8;
 		t.setLabel("578.");
 		t.setLeft(t8.getLeft().getLeft());
 		System.out.println(t8);
@@ -667,7 +654,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		System.out.println(t10);
 		System.out.println(t10.getFather().getRight() == t10);
 		System.out.println(t10.isRightChild());
-		MutableBinaryTree<String> mt10 = t10.mutableView();
+		MutableBinaryTree<String> mt10 = (MutableBinaryTree)t10;
 		mt10.changeFor(t8.getLeft());
 		System.out.println(t8);
 		System.out.println(t10);

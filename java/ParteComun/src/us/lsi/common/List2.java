@@ -446,13 +446,46 @@ public class List2 {
 	
 	/**
 	 * @param ls Una lista
-	 * @return Una vista de tipo 2 sin solape
+	 * @return Una vista de tipo 2e sin solape
 	 */
-	public static <E> View2E<List<E>,E> view2(List<E> ls){		
+	public static <E> View2E<List<E>,E> view2e(List<E> ls){		
 		int n = ls.size();
 		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
 		int k = n/2;
 		return View2E.of(ls.get(k),ls.subList(0, k), ls.subList(k,n));
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Una vista de tipo 2e con solape
+	 */
+	public static <E> View2E<List<E>,E> view2eOverlap(List<E> ls){		
+		int n = ls.size();
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		int k = n/2;
+		return View2E.of(ls.get(k),ls.subList(0, k+1), ls.subList(k,n));
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Una vista de tipo 2 sin solape
+	 */
+	public static <E> View2<List<E>> view2(List<E> ls){		
+		int n = ls.size();
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		int k = n/2;
+		return View2.of(ls.subList(0, k), ls.subList(k,n));
+	}
+	
+	/**
+	 * @param ls Una lista
+	 * @return Una vista de tipo 2 con solape
+	 */
+	public static <E> View2<List<E>> view2Overlap(List<E> ls){		
+		int n = ls.size();
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		int k = n/2;
+		return View2.of(ls.subList(0, k+1), ls.subList(k,n));
 	}
 	
 }

@@ -13,6 +13,7 @@ import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -295,4 +296,27 @@ public class Stream2 {
 	public static <E> Stream<E> asStream(Iterable<E> iterable){
 		return StreamSupport.stream(iterable.spliterator(), false);
 	}
+	
+	public static <E,B,R> R collect(Stream<E> flow, Collector<E,B,R> c) {
+		B b = collect(flow.spliterator(),c);
+		return c.finisher().apply(b);
+	}
+	
+	private static <E,B,R> B collect(Spliterator<E> flow, Collector<E,B,R> c) {		
+		B b;
+		Spliterator<E> f2 = flow.trySplit();
+		if(f2!=null) {
+				B b1 = collect(f2,c);
+				B b2 = collect(flow,c);
+				b = c.combiner().apply(b1,b2);
+		} else {
+			b = c.supplier().get();
+			Boolean r;
+			do {
+			   r = flow.tryAdvance(e->c.accumulator().accept(b,e));
+			}while(r);
+		}
+		return b;
+	}
+
 }

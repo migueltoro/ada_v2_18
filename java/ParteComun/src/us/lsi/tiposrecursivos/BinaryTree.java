@@ -124,11 +124,6 @@ public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
 	BinaryTree<E> getRight();
 
 	/**
-	 * @return Una vista mutable del árbol
-	 */
-	MutableBinaryTree<E> mutableView();
-
-	/**
 	 * @return El número de etiquetas del árbol
 	 */
 	int size();

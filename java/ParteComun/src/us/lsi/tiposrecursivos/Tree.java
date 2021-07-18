@@ -85,8 +85,6 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 
 	int getNumOfChildren();
 
-	MutableTree<E> mutableView();
-
 	int size();
 
 	int getHeight();
@@ -157,7 +155,7 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	/**
 	 * @return Una vista de tipo L del árbol nario
 	 */
-	ViewL<Tree<E>,E> view();
+	ViewL<Tree<E>,E> viewL();
 	
 	Iterator<TreeLevel<E>> byLevel();
 	
