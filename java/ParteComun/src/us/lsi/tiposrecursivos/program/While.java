@@ -1,17 +1,9 @@
 package us.lsi.tiposrecursivos.program;
 
-public class While extends Sentence {
+public record While(Exp guard, Block block) implements Sentence {
 	
 	public static While of(Exp guard, Block block) {
 		return new While(guard, block);
-	}
-	public final Exp guard;
-	public final Block block;
-	
-	private While(Exp guard, Block block) {
-		super();
-		this.guard = guard;
-		this.block = block;
 	}
 	
 	@Override

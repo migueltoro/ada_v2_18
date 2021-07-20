@@ -363,7 +363,7 @@ public class List2 {
 //		Preconditions.checkState(isOrdered(ls, cmp));
 		int i = 0;
 		while (i < ls.size()) {
-			if(Comparators.isGT(ls.get(i),e, cmp)) break;
+			if(Comparator2.isGT(ls.get(i),e, cmp)) break;
 			i++;
 		}
 		ls.add(i, e);

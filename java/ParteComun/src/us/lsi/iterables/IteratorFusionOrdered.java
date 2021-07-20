@@ -3,7 +3,7 @@ package us.lsi.iterables;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import us.lsi.common.Comparators;
+import us.lsi.common.Comparator2;
 
 public class IteratorFusionOrdered<E> implements Iterator<E>,Iterable<E> {
 	
@@ -41,7 +41,7 @@ public class IteratorFusionOrdered<E> implements Iterator<E>,Iterable<E> {
 	@Override
 	public E next() {
 		E e;
-		if(e2==null||e1!=null && Comparators.isLE(e1,e2,this.cmp)){
+		if(e2==null||e1!=null && Comparator2.isLE(e1,e2,this.cmp)){
 			e = e1;
 			e1 = null;
 				if(it1.hasNext()) e1 = it1.next();

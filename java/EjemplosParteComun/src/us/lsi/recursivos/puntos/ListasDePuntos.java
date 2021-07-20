@@ -2,7 +2,7 @@ package us.lsi.recursivos.puntos;
 
 import java.util.*;
 
-import us.lsi.common.Comparators;
+import us.lsi.common.Comparator2;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
@@ -100,8 +100,8 @@ public class ListasDePuntos {
 			
 		};
 		Comparator<ParDePuntos> ordNatural =  Comparator.naturalOrder();
-		puntosX = Comparators.sortedCopy(lista,ordX);
-		puntosY = Comparators.sortedCopy(lista,ordY);
+		puntosX = Comparator2.sortedCopy(lista,ordX);
+		puntosY = Comparator2.sortedCopy(lista,ordY);
 		p = masCercano(0,lista.size(),puntosX, puntosY,4,ordNatural);
 		return p;
 	}
@@ -124,7 +124,7 @@ public class ListasDePuntos {
 			}
 			ParDePuntos s1 = masCercano(i,k,puntosX, puntosYIzq,umbral,ordNatural);
 			ParDePuntos s2 = masCercano(k,j,puntosX, puntosYDer,umbral,ordNatural);
-			r = Comparators.min(s1, s2,ordNatural);
+			r = Comparator2.min(s1, s2,ordNatural);
 			List<Punto2D> yCentral = List2.empty();
 			for(Punto2D p: puntosY){
 				if(Math.abs(p.x()- xk) < r.getDistancia()){
@@ -153,7 +153,7 @@ public class ListasDePuntos {
 				if(r.getDistancia()>d){
 					break;
 				}
-				s = Comparators.min(s, r,ordNatural) ;
+				s = Comparator2.min(s, r,ordNatural) ;
 				d = s.getDistancia();
 			}
 			for(int j=i-1;j>=0;j--){
@@ -162,7 +162,7 @@ public class ListasDePuntos {
 				if(r.getDistancia()>d){
 					break;
 				}
-				s = Comparators.min(s, r,ordNatural) ;
+				s = Comparator2.min(s, r,ordNatural) ;
 				d = s.getDistancia();
 			}
 		}

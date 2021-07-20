@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import us.lsi.common.ViewL;
 
@@ -151,6 +152,8 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	int hashCode();
 
 	boolean equals(Object obj);
+	
+	Stream<Tree<E>> stream();
 	
 	/**
 	 * @return Una vista de tipo L del árbol nario

@@ -1,19 +1,9 @@
 package us.lsi.tiposrecursivos.program;
 
-public class Binary extends Exp {
+public record Binary(Exp left, Exp right, String op) implements Exp {
 	
-	public static Binary of(String op, Exp left, Exp right) {
-		return new Binary(op, left, right);
-	}
-	public final String op;
-	public final Exp left;
-	public final Exp right;
-	
-	private Binary(String op, Exp left, Exp right) {
-		super();
-		this.op = op;
-		this.left = left;
-		this.right = right;
+	public static Binary of(Exp left, Exp right, String op) {
+		return new Binary(left, right, op);
 	}
 	
 	@Override

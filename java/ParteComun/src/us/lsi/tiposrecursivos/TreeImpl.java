@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -17,6 +18,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import us.lsi.common.Files2;
 import us.lsi.common.List2;
+import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.ViewL;
 import us.lsi.streams.Stream2;
@@ -204,6 +206,11 @@ public class TreeImpl<E> implements MutableTree<E> {
 	@Override
 	public Iterator<Tree<E>> iterator(){
 		return DepthPathTree.of(this);
+	}
+	
+	@Override
+	public Stream<Tree<E>> stream(){
+		return Stream2.asStream(()->this.iterator());
 	}
 	
 	public Iterator<TreeLevel<E>> byLevel(){
@@ -766,13 +773,16 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	public static void test4() {
+		Function<TreeLevel<String>,String> f = t->t.tree().isEmpty()?"_":t.tree().getLabel().toString();
 		String ex = "39(2.,27(_,2,3,4),9(8.,_))";
 		Tree<String> t7 = Tree.parse(ex);		
 		System.out.println(t7);
-		Stream2.asStream(t7).forEach(t->System.out.println(t));
+		Stream2.asStream(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
 		System.out.println("______________");
 		System.out.println(t7);
-		Stream2.asStream(()->t7.byLevel()).forEach(t->System.out.println(t));
+		Stream2.asStream(()->t7.byLevel())
+			.map(t->Pair.of(t.level(),f.apply(t)))
+			.forEach(t->System.out.println(t));
 	}
 	
 	

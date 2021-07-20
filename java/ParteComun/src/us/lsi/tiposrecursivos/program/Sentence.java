@@ -1,5 +1,5 @@
 package us.lsi.tiposrecursivos.program;
 
-public abstract class Sentence {
+public interface Sentence {
 
 }

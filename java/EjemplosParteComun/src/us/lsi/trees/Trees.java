@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import us.lsi.tiposrecursivos.BinaryTree;
 import us.lsi.tiposrecursivos.Tree;
 import us.lsi.tiposrecursivos.Tree.TreeType;
 
@@ -22,6 +23,10 @@ public class Trees {
 		case Leaf -> 1; 
 		case Nary -> 1 + tree.getChildren().stream().mapToInt(x->size(x)).sum(); 
 		};	
+	}
+	
+	public static <E> Integer size2(Tree<E> tree) {
+		return (int)tree.stream().filter(t->!t.isEmpty()).count();
 	}
 
 	public static <E> E minLabel(Tree<E> tree, Comparator<E> cmp) {
@@ -37,6 +42,10 @@ public class Trees {
 		};
 	}
 	
+	public static <E> E minLabel2(Tree<E> tree, Comparator<E> cmp) {
+		return tree.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).min(cmp).get();
+	}
+	
 	
 	public static <E> Boolean containsLabel(Tree<E> tree, E label) {
 		TreeType type = tree.getType();
@@ -46,6 +55,10 @@ public class Trees {
 		case Nary -> tree.getLabel().equals(label)
 				|| tree.getChildren().stream().anyMatch(x -> containsLabel(x, label));
 		};
+	}
+	
+	public static <E> Boolean containsLabel2(Tree<E> tree, E label)  {
+		return tree.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).anyMatch(lb->lb.equals(label));
 	}
 	
 	public static <E> Boolean equals(Tree<E> t1, Tree<E> t2) {
@@ -102,6 +115,11 @@ public class Trees {
 		case Nary -> predicate.test(tree.getLabel()) ? tree.getLabel()
 				: 0 + tree.getChildren().stream().mapToInt(x -> sumIfPredicate(x, predicate)).sum();
 		};
+	}
+	
+	public static void main(String[] args) {
+		Tree<Double> t7 = Tree.parse("39(2.,27(_,2,3,4),9(8.,_))").map(e->Double.parseDouble(e));	
+		System.out.println(minLabel(t7,Comparator.naturalOrder())+"=="+minLabel2(t7,Comparator.naturalOrder()));
 	}
 
 }

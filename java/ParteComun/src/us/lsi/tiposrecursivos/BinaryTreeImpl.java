@@ -1,6 +1,7 @@
 package us.lsi.tiposrecursivos;
 
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -243,6 +245,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	@Override
 	public Iterator<BinaryTree<E>> iterator(){
 		return DepthPathBinaryTree.of(this);
+	}
+	
+	@Override
+	public Stream<BinaryTree<E>> stream(){
+		return Stream2.asStream(this);
 	}
 	
 	public Iterator<BinaryTreeLevel<E>> byLevel(){
@@ -690,7 +697,13 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 				.toList());
 	}
 	
+	public static void test4() {
+		String ex = "-43.7(2.1,56(-27.3(_,2),78.2(3,4)))";
+		BinaryTree<Double> t7 = BinaryTree.parse(ex).map(e->Double.parseDouble(e));	
+		System.out.println(t7.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).min(Comparator.naturalOrder()).get());
+	}
+	
 	public static void main(String[] args) {
-		test3();
+		test4();
 	}
 }

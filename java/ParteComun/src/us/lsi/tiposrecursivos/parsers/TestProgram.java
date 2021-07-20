@@ -10,9 +10,6 @@ import us.lsi.tiposrecursivos.program.Program;
 
 
 public class TestProgram {
-	
-	
-
 		
 		public static void main(String[] args) throws IOException {
 			ProgramLexer lexer = new ProgramLexer(CharStreams.fromFileName("ficheros/program.txt"));

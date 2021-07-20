@@ -5,8 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import us.lsi.common.Comparators;
+import us.lsi.common.Comparator2;
 import us.lsi.tiposrecursivos.BinaryTree;
+import us.lsi.tiposrecursivos.Tree;
 import us.lsi.tiposrecursivos.BinaryTree.BinaryType;
 
 
@@ -31,9 +32,13 @@ public class BinaryTrees {
 		case Binary -> {
 			E e1 = minLabel(tree.getLeft(), cmp);
 			E e2 = minLabel(tree.getRight(), cmp);
-			yield Comparators.min(tree.getLabel(), Comparators.min(e1, e2, cmp), cmp);
+			yield Comparator2.min(tree.getLabel(), Comparator2.min(e1, e2, cmp), cmp);
 		}
 		};
+	}
+	
+	public static <E> E minLabel2(Tree<E> tree, Comparator<E> cmp) {
+		return tree.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).min(cmp).get();
 	}
 	
 	public static <E> E minLabelOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
@@ -55,6 +60,10 @@ public class BinaryTrees {
 		};
 	}
 	
+	public static <E> Boolean containsLabel2(Tree<E> tree, E label)  {
+		return tree.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).anyMatch(lb->lb.equals(label));
+	}
+	
 	public static <E> Boolean containsLabelOrdered(BinaryTree<E> tree, E label, Comparator<E> cmp) {
 		BinaryType type = tree.getType();
 		return switch(type) {
@@ -62,9 +71,9 @@ public class BinaryTrees {
 		case Leaf -> tree.getLabel().equals(label); 
 		case Binary -> {
 			E nLabel = tree.getLabel();
-			yield Comparators.isEQ(label,nLabel,cmp) || 
-				(Comparators.isLT(label, nLabel, cmp) && containsLabelOrdered(tree.getLeft(),label,cmp)) ||	
-				(Comparators.isGT(label, nLabel, cmp) && containsLabelOrdered(tree.getRight(),label,cmp));
+			yield Comparator2.isEQ(label,nLabel,cmp) || 
+				(Comparator2.isLT(label, nLabel, cmp) && containsLabelOrdered(tree.getLeft(),label,cmp)) ||	
+				(Comparator2.isGT(label, nLabel, cmp) && containsLabelOrdered(tree.getRight(),label,cmp));
 		}	
 		};
 	}
@@ -124,7 +133,7 @@ public class BinaryTrees {
 		case Empty -> BinaryTree.leaf(label);
 		case Leaf -> {
 			E aLabel = tree.getLabel();
-			BinaryTree<E> r = switch (Comparators.compare(label, aLabel, cmp)) {
+			BinaryTree<E> r = switch (Comparator2.compare(label, aLabel, cmp)) {
 			case EQ -> tree;
 			case LT -> BinaryTree.binary(aLabel, BinaryTree.leaf(label), BinaryTree.empty());
 			case GT -> BinaryTree.binary(aLabel, BinaryTree.empty(), BinaryTree.leaf(label));
@@ -133,7 +142,7 @@ public class BinaryTrees {
 		}
 		case Binary -> {
 			E aLabel = tree.getLabel();
-			BinaryTree<E> r = switch (Comparators.compare(label, aLabel, cmp)) {
+			BinaryTree<E> r = switch (Comparator2.compare(label, aLabel, cmp)) {
 			case EQ -> tree;
 			case LT -> BinaryTree.binary(aLabel, addOrdered(tree.getLeft(), label, cmp), tree.getRight());
 			case GT -> BinaryTree.binary(aLabel, tree.getLeft(), addOrdered(tree.getRight(), label, cmp));
@@ -160,7 +169,7 @@ public class BinaryTrees {
 			break;
 		case Leaf:
 			E aLabel = tree.getLabel();
-			r = switch (Comparators.compare(label, aLabel, cmp)) {
+			r = switch (Comparator2.compare(label, aLabel, cmp)) {
 			case EQ -> BinaryTree.empty();
 			case LT -> tree;
 			case GT -> tree;
@@ -168,7 +177,7 @@ public class BinaryTrees {
 			break;
 		case Binary:
 			aLabel = tree.getLabel();
-			r = switch (Comparators.compare(label, aLabel, cmp)) {
+			r = switch (Comparator2.compare(label, aLabel, cmp)) {
 			case EQ -> {
 				if (!tree.getLeft().isEmpty()) {
 					E lLabel = tree.getLeft().getLabel();
@@ -193,10 +202,12 @@ public class BinaryTrees {
 		case Empty -> true;
 		case Leaf -> true;
 		case Binary -> {
-			E aLabel = tree.getLabel();
-			yield (tree.getLeft().isEmpty() || Comparators.isGT(aLabel, tree.getLeft().getLabel(), cmp))
-					&& (tree.getRight().isEmpty() || Comparators.isLT(aLabel, tree.getRight().getLabel(), cmp))
-					&& isOrdered(tree.getLeft(), cmp) && isOrdered(tree.getRight(), cmp);
+			E label = tree.getLabel();
+			E left = tree.getLeft().isEmpty() ? null : tree.getLeft().getLabel();
+			E right = tree.getRight().isEmpty() ? null : tree.getRight().getLabel();
+			Boolean r = (left == null || Comparator2.isGE(label, left, cmp))
+					&& (right == null || Comparator2.isLE(label, right, cmp));
+			yield r && isOrdered(tree.getLeft(),cmp) && isOrdered(tree.getRight(),cmp);
 		}
 		};
 	}
@@ -211,9 +222,15 @@ public class BinaryTrees {
 		};
 	}
 	
+	public static Integer sumIfPredicate2(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
+		return tree.stream().filter(t->!t.isEmpty())
+				.map(t->t.getLabel())
+				.filter(predicate)
+				.mapToInt(lb->lb)
+				.sum();
+	}
 	
-	
-	public static void main(String[] args) {
+	public static void test1() {
 		BinaryTree<Integer> tree = addOrdered(List.of(1,7,2,5,10,9,-1,14,67,67), Comparator.naturalOrder());
 		System.out.println(tree.toString());
 		System.out.println(isOrdered(tree,Comparator.naturalOrder()));
@@ -227,5 +244,13 @@ public class BinaryTrees {
 		BinaryTree<Integer> tree4 = copy(tree);
 		System.out.println(equals(tree,tree4));
 	}
+
+	public static void main(String[] args) {
+		BinaryTree<Integer> tree = addOrdered(List.of(1,7,2,5,10,9,-1,14,67,67), Comparator.naturalOrder());
+		System.out.println(tree.toString());
+		System.out.println(isOrdered(tree,Comparator.naturalOrder()));
+	}
+	
+	
 	
 }

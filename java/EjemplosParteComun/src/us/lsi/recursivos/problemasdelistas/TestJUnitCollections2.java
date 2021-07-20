@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import us.lsi.common.Comparators;
+import us.lsi.common.Comparator2;
 import us.lsi.common.List2;
 import us.lsi.math.Math2;
 import us.lsi.recursivos.problemasdelistas.ProblemasDeListas.SubSecuencia;
@@ -32,7 +32,7 @@ public class TestJUnitCollections2 {
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
 		ProblemasDeListas.sort(ls);
-		assertTrue(Comparators.isOrdered(ls));
+		assertTrue(Comparator2.isOrdered(ls));
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class TestJUnitCollections2 {
 			ls.add(Math2.getDoubleAleatorio(0., 1000.));
 		}
 		ProblemasDeListas.mergeSort(ls);
-		assertTrue(Comparators.isOrdered(ls));
+		assertTrue(Comparator2.isOrdered(ls));
 	}
 	
 	@Test

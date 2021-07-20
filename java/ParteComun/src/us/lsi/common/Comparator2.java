@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> El tipo de los elementos sobre los que se establece el orden
  */
-public interface Comparators<T> {
+public interface Comparator2<T> {
 	
 	public enum Type {EQ,LT,GT}
 	
@@ -40,6 +40,23 @@ public interface Comparators<T> {
 		return e1.compareTo(e2) < 0;
 	}
 	public static <T extends Comparable<? super T>> boolean isLE(T e1, T e2){
+		return e1.compareTo(e2) <= 0;
+	}
+	
+	public static <T extends Comparable<? super T>> boolean isGTNull(T e1, T e2){
+		if(e2==null) return true;
+		return e1.compareTo(e2) > 0;
+	}
+	public static <T extends Comparable<? super T>> boolean isGENull(T e1, T e2){
+		if(e2==null) return true;
+		return e1.compareTo(e2) >= 0;
+	}
+	public static <T extends Comparable<? super T>> boolean isLTNull(T e1, T e2){
+		if(e2==null) return true;
+		return e1.compareTo(e2) < 0;
+	}
+	public static <T extends Comparable<? super T>> boolean isLENull(T e1, T e2){
+		if(e2==null) return true;
 		return e1.compareTo(e2) <= 0;
 	}
 	public static <T> Type compare(T e1, T e2, Comparator<? super T> cmp){
@@ -68,6 +85,27 @@ public interface Comparators<T> {
 	public static <T> boolean isEQ(T e1, T e2, Comparator<? super T> cmp){
 		return cmp.compare(e1,e2) == 0;
 	}
+	
+	public static <T> boolean isGTNull(T e1, T e2, Comparator<? super T> cmp){
+		if(e2==null) return true;
+		return cmp.compare(e1,e2) > 0;
+	}
+	public static <T> boolean isGENull(T e1, T e2, Comparator<? super T> cmp){
+		if(e2==null) return true;
+		return cmp.compare(e1,e2) >= 0;
+	}
+	public static <T> boolean isLTNull(T e1, T e2, Comparator<? super T> cmp){
+		if(e2==null) return true;
+		return cmp.compare(e1,e2) < 0;
+	}
+	public static <T> boolean isLENull(T e1, T e2, Comparator<? super T> cmp){
+		if(e2==null) return true;
+		return cmp.compare(e1,e2) <= 0;
+	}
+	public static <T> boolean isEQNull(T e1, T e2, Comparator<? super T> cmp){
+		if(e2==null) return false;
+		return cmp.compare(e1,e2) == 0;
+	}
 	public static <T extends Comparable<? super T>> T max(T e1, T e2){
 		return isGE(e1,e2)?e1:e2;
 	}
@@ -92,7 +130,8 @@ public interface Comparators<T> {
 	public static <T extends Comparable<? super T>> T min(T... elements){
 		return Arrays.stream(elements).min(Comparator.naturalOrder()).get();
 	}
-	@SuppressWarnings("unchecked")
+	
+	@SafeVarargs
 	public static <T> T min(Comparator<? super T> cmp, T... elements){
 		return Arrays.stream(elements).min(cmp).get();
 	}
@@ -112,7 +151,7 @@ public interface Comparators<T> {
 	public static <T> boolean isOrdered(List<T> ls, Comparator<? super T> cmp){
 		boolean r = true;
 		 for (int j = 0; j < ls.size()-1; j++) {
-			r = Comparators.isLE(ls.get(j), ls.get(j + 1), cmp);
+			r = Comparator2.isLE(ls.get(j), ls.get(j + 1), cmp);
 			if(!r) break;
 		}
 		return r;

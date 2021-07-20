@@ -9,15 +9,14 @@ import us.lsi.tiposrecursivos.program.Assign;
 import us.lsi.tiposrecursivos.program.Binary;
 import us.lsi.tiposrecursivos.program.Block;
 import us.lsi.tiposrecursivos.program.CallFunction;
+import us.lsi.tiposrecursivos.program.Const;
 import us.lsi.tiposrecursivos.program.Declaration;
 import us.lsi.tiposrecursivos.program.Exp;
 import us.lsi.tiposrecursivos.program.FunDeclaration;
 import us.lsi.tiposrecursivos.program.Id;
-import us.lsi.tiposrecursivos.program.IdType;
+import us.lsi.tiposrecursivos.program.ParamDeclaration;
 import us.lsi.tiposrecursivos.program.IfThenElse;
-import us.lsi.tiposrecursivos.program.Int;
 import us.lsi.tiposrecursivos.program.Program;
-import us.lsi.tiposrecursivos.program.Real;
 import us.lsi.tiposrecursivos.program.Sentence;
 import us.lsi.tiposrecursivos.program.Type;
 import us.lsi.tiposrecursivos.program.Unary;
@@ -52,9 +51,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	public Declaration visitFunDeclarationSP(ProgramParser.FunDeclarationSPContext ctx) { 
 		String id = ctx.id.getText();
 		Type type = Type.valueOf(ctx.type.getText());
-		List<IdType> parameters = new ArrayList<>();
-		return FunDeclaration.of(id, type,parameters);
-		
+		return FunDeclaration.of(id,type,List.of());
 	}
 	
 	/**
@@ -68,9 +65,9 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	public Declaration visitFunDeclaration(ProgramParser.FunDeclarationContext ctx) { 
 		String id = ctx.id.getText();
 		Type type = Type.valueOf(ctx.type.getText());
-		List<IdType> parameters = new ArrayList<>();
-		if(ctx.formal_parameters() != null) parameters = (List<IdType>) visit(ctx.formal_parameters());
-		return FunDeclaration.of(id, type,parameters);
+		List<ParamDeclaration> parameters = new ArrayList<>();
+		if(ctx.formal_parameters() != null) parameters = (List<ParamDeclaration>) visit(ctx.formal_parameters());
+		return FunDeclaration.of(id,type,parameters);
 		
 	}
 	
@@ -86,7 +83,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		Type type = Type.valueOf(ctx.type.getText());
 		Exp value = null;
 		if(ctx.exp() != null) value = (Exp) visit(ctx.exp());
-		return VarDeclaration.of(id, type, value);
+		return VarDeclaration.of(id,type,value);
 	}
 
 	/**
@@ -96,10 +93,10 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override 
-	public List<IdType> visitFormal_parameters(ProgramParser.Formal_parametersContext ctx) { 
+	public List<ParamDeclaration> visitFormal_parameters(ProgramParser.Formal_parametersContext ctx) { 
 		Integer n = ctx.formal_parameter().size();
-		List<IdType> r = IntStream.range(0, n).boxed()
-				.map(i->(IdType)visit(ctx.formal_parameter(i)))
+		List<ParamDeclaration> r = IntStream.range(0, n).boxed()
+				.map(i->(ParamDeclaration)visit(ctx.formal_parameter(i)))
 				.collect(Collectors.toList());
 		return r;
 	}
@@ -110,10 +107,10 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public IdType visitFormal_parameter(ProgramParser.Formal_parameterContext ctx) { 
+	@Override public ParamDeclaration visitFormal_parameter(ProgramParser.Formal_parameterContext ctx) { 
 		String id = ctx.id.getText();
 		Type type = Type.valueOf(ctx.type.getText());
-		return IdType.of(id, type);
+		return ParamDeclaration.of(id, type);
     }
 	/**
 	 * {@inheritDoc}
@@ -177,7 +174,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	public Exp visitUnaryExpr(ProgramParser.UnaryExprContext ctx) { 
 		String op = ctx.op.getText();
 		Exp operand = (Exp) visit(ctx.right);
-		return Unary.of(op, operand); 
+		return Unary.of(operand,op); 
 	}
 	/**
 	 * {@inheritDoc}
@@ -186,7 +183,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Exp visitIntExpr(ProgramParser.IntExprContext ctx) { 
-		return Int.of(ctx.getText()); 
+		return Const.of(Type.Int,Integer.parseInt(ctx.getText())); 
 	}
 	/**
 	 * {@inheritDoc}
@@ -198,7 +195,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		String op = ctx.op.getText();
 		Exp left = (Exp) visit(ctx.left);
 		Exp right = (Exp) visit(ctx.right);
-		return Binary.of(op, left, right);
+		return Binary.of(left, right,op);
 	}
 	/**
 	 * {@inheritDoc}
@@ -230,7 +227,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Exp visitDoubleExp(ProgramParser.DoubleExpContext ctx) { 
-		return Real.of(ctx.getText()); 
+		return Const.of(Type.Double,Double.parseDouble(ctx.getText())); 
 	}
 	/**
 	 * {@inheritDoc}

@@ -3,6 +3,7 @@ package us.lsi.tiposrecursivos;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import us.lsi.common.View2E;
 import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
@@ -198,6 +199,8 @@ public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
 	 * @return Un árbol equilibrado con las mismas etiquetas
 	 */
 	BinaryTree<E> equilibrate();
+	
+	Stream<BinaryTree<E>> stream();
 
 	/**
 	 * @return Una vista de tipo 2E del arbol binario

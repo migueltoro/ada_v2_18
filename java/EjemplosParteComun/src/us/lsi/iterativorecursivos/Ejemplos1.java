@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import us.lsi.common.Comparators;
+import us.lsi.common.Comparator2;
 import us.lsi.common.Enumerate;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
@@ -155,8 +155,8 @@ public class Ejemplos1 {
 		Integer r = -1;
 		Integer k = (j+i)/2;
 		if(j-i > 0){
-		   if (Comparators.isEQ(ls.get(k),elem,cmp)) r = k;
-		   else if (Comparators.isLT(elem,ls.get(k),cmp)) r = index4(ls,elem,i,k,cmp);
+		   if (Comparator2.isEQ(ls.get(k),elem,cmp)) r = k;
+		   else if (Comparator2.isLT(elem,ls.get(k),cmp)) r = index4(ls,elem,i,k,cmp);
 		   else r = index4(ls,elem,k+1,j,cmp);
 		}
 		return r;
@@ -198,21 +198,21 @@ public class Ejemplos1 {
 
 	public static <T> Integer index6(List<T> ls, T elem, Comparator<T> cmp) {
 		P3 p = P3.of(0, ls.size());
-		while ((p.j - p.i) > 0 && !Comparators.isEQ(elem, ls.get(p.k()), cmp)) {
-			if (Comparators.isLT(elem, ls.get(p.k()), cmp))
+		while ((p.j - p.i) > 0 && !Comparator2.isEQ(elem, ls.get(p.k()), cmp)) {
+			if (Comparator2.isLT(elem, ls.get(p.k()), cmp))
 				p = P3.of(p.i(), p.k());
 			else
 				p = P3.of(p.k() + 1, p.j);
 		}
-		return (p.j() - p.i() > 0 && Comparators.isEQ(elem, ls.get(p.k()), cmp)) ? p.k() : -1;
+		return (p.j() - p.i() > 0 && Comparator2.isEQ(elem, ls.get(p.k()), cmp)) ? p.k() : -1;
 	}
 	
 	public static <T> Integer index7(List<T> ls, T elem, Comparator<T> cmp) {
-		Function<P3,P3> next = p-> {if (Comparators.isLT(elem, ls.get(p.k()), cmp)) return P3.of(p.i(), p.k()); 
+		Function<P3,P3> next = p-> {if (Comparator2.isLT(elem, ls.get(p.k()), cmp)) return P3.of(p.i(), p.k()); 
 									else return P3.of(p.k() +1, p.j());};
 		Stream<P3> s = Stream.iterate(P3.of(0, ls.size()), p-> (p.j()-p.i())>0, p-> next.apply(p));
 		
-		Optional<P3> r = s.filter(p->Comparators.isEQ(elem, ls.get(p.k()),cmp)).findFirst();
+		Optional<P3> r = s.filter(p->Comparator2.isEQ(elem, ls.get(p.k()),cmp)).findFirst();
 		return r.isPresent()? r.get().k() : -1;
 	}
 	
@@ -464,7 +464,7 @@ public class Ejemplos1 {
 		i3 = 0;
 		while (n1 + n2 - i3 > 0) {
 			E e;
-			if (i2 >= n2 || i1 < n1 && Comparators.isLE(ls1.get(i1), ls2.get(i2), cmp)) {
+			if (i2 >= n2 || i1 < n1 && Comparator2.isLE(ls1.get(i1), ls2.get(i2), cmp)) {
 				e = ls1.get(i1);
 				i1 = i1 + 1;
 				i3 = i3 + 1;
@@ -488,7 +488,7 @@ public class Ejemplos1 {
 		if(itt2.hasNext()) e2 = itt2.next();
 		while(e1 != null || e2 != null){
 			E e;
-			if(e2==null||e1!=null && Comparators.isLE(e1,e2,cmp)){
+			if(e2==null||e1!=null && Comparator2.isLE(e1,e2,cmp)){
 				e = e1;
 				e1 = null;
 				if(itt1.hasNext()) e1 = itt1.next();
