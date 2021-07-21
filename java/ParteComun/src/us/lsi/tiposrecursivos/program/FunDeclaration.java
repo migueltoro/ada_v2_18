@@ -11,7 +11,7 @@ public record FunDeclaration(String id,Type resultType,List<ParamDeclaration> pa
 	
 	@Override
 	public String toString() {
-		String d = this.parameters.stream().map(x->x.toString()).collect(Collectors.joining(""));
+		String d = this.parameters.stream().map(x->x.toString()).collect(Collectors.joining(","));
 		return String.format("%s(%s):%s",this.id,d,this.resultType);
 	}
 

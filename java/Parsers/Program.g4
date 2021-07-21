@@ -26,18 +26,25 @@ exp : op='(int)' right=exp #unaryExpr
 	| left=exp op=('&&'|'||') right=exp #binaryExpr 
 	| '(' exp ')' #parenExpr 
 	| name=ID '(' real_parameters? ')' #callExpr 
-	| id=ID #idExpr | DOUBLE #doubleExp 
-	| INT #intExpr ; 
+	| id=ID #idExpr 
+	| DOUBLE #doubleExp 
+	| INT #intExpr 
+	| STR #strExpr
+	| BOOL #boolExpr
+	;	
 	
 real_parameters : exp (',' exp )* ; 
 
-TYPE : 'Int' | 'Double' | 'String' 'Boolean' ; 
+BOOL : 'true' | 'false';
 
-ID : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ; 
+TYPE : 'Int' | 'Double' | 'String'| 'Boolean' ; 
 
 INT : ('0'..'9')+ ; 
 
 DOUBLE : INT '.' INT? ; 
 
-WS : [ \t\r\n]+ -> skip ; 
+ID : ('a'..'z' | 'A'..'Z' | '_')  ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*; 
 
+STR : '"' ('a'..'z' | 'A'..'Z' | '_' | | ' ' | '0'..'9')* '"';
+
+WS : [ \t\r\n]+ -> skip ; 

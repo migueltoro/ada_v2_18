@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import us.lsi.tiposrecursivos.parsers.ProgramLexer;
 import us.lsi.tiposrecursivos.parsers.ProgramParser;
-import us.lsi.tiposrecursivos.parsers.ProgramVisitorC;
 
 public record Program(List<Declaration> declarations, Block block) {
 	
@@ -29,7 +28,10 @@ public record Program(List<Declaration> declarations, Block block) {
 
 	@Override
 	public String toString() {
-		String s = this.declarations().stream().map(x->x.toString()).collect(Collectors.joining("\n"));
-		return String.format("Declaraciones\n%s\nCodigo\n%s",s,this.block());
+		String s = this.declarations()!=null?
+				this.declarations().stream().filter(x->x!=null).map(x->x.toString()).collect(Collectors.joining("\n"))
+				:"";
+		String b = this.block()!=null?this.block().toString():"";
+		return String.format("Declaraciones\n%s\nCodigo\n%s",s,b);
 	}
 }

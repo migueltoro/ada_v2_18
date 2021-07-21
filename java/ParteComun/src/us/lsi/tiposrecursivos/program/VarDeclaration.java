@@ -1,8 +1,8 @@
 package us.lsi.tiposrecursivos.program;
 
-public record VarDeclaration(String id, Type type, Exp value) implements Declaration {
+public record VarDeclaration(String id, Type type, Object value) implements Declaration {
 	
-	public static VarDeclaration of(String id, Type type, Exp value) {
+	public static VarDeclaration of(String id, Type type, Object value) {
 		return new VarDeclaration(id, type, value);
 	}
 	

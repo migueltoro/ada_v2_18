@@ -30,6 +30,10 @@ public interface MutableBinaryTree<E> extends BinaryTree<E> {
 		return BinaryTreeImpl.binary(label, left, right);
 	}
 	
+	public static <E> MutableBinaryTree<E> mutable(BinaryTree<E> tree) {
+		return (MutableBinaryTree<E>) tree;
+	}
+	
 	void setLabel(E label);
 
 	void setLeft(BinaryTree<E> left);

@@ -4,13 +4,16 @@ r : Int
 a : Int = 1 
 b : Int = 2
 c : Double
+d : String = "Antonio"
+e : Boolean = true
 min ( a : Double , b : Double ) : Double
-abs () : Double
+ab (a :Double) : Double
+sqrt (a: Double) : Double
 
 Codigo  { 
  if ( a >= b ) { 
-	  r = a + b + c -2 
+	  r = a + b + ab(c - 2)
   } else {
-	  r = a - b - sqrt(23.,c)
+	  r = a - b - sqrt(23.)
   }
 }

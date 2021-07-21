@@ -24,7 +24,6 @@ import us.lsi.common.ViewL;
 import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.parsers.TreeLexer;
 import us.lsi.tiposrecursivos.parsers.TreeParser;
-import us.lsi.tiposrecursivos.parsers.TreeVisitorC;
 
 import java.io.PrintWriter;
 
@@ -284,13 +283,14 @@ public class TreeImpl<E> implements MutableTree<E> {
 	 * @param nTree Un árbol 
 	 * @return Si this no es raiz devuelve el arbol padre con el hijo this cambiado por nTree. Si this es raiz devuelve nTree
 	 */
+	
 	public Tree<E> changeFor(Tree<E> nTree) {
 		Tree<E> r;
 		if(this.isRoot()) {
 			r = nTree;
 		} else {
 			r = this.getFather();
-			MutableTree<E> rm = (MutableTree)r;
+			MutableTree<E> rm = (MutableTree<E>)r;
 			setFather(null);
 			for (int i = 0; i < this.getNumOfChildren(); i++) {
 				if (this.isChild(i)) {

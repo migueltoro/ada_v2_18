@@ -1,29 +1,20 @@
-package us.lsi.tiposrecursivos.parsers;
+package us.lsi.tiposrecursivos.program;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.tiposrecursivos.program.Assign;
-import us.lsi.tiposrecursivos.program.Binary;
-import us.lsi.tiposrecursivos.program.Block;
-import us.lsi.tiposrecursivos.program.CallFunction;
-import us.lsi.tiposrecursivos.program.Const;
-import us.lsi.tiposrecursivos.program.Declaration;
-import us.lsi.tiposrecursivos.program.Exp;
-import us.lsi.tiposrecursivos.program.FunDeclaration;
-import us.lsi.tiposrecursivos.program.Id;
-import us.lsi.tiposrecursivos.program.ParamDeclaration;
-import us.lsi.tiposrecursivos.program.IfThenElse;
-import us.lsi.tiposrecursivos.program.Program;
-import us.lsi.tiposrecursivos.program.Sentence;
-import us.lsi.tiposrecursivos.program.Type;
-import us.lsi.tiposrecursivos.program.Unary;
-import us.lsi.tiposrecursivos.program.VarDeclaration;
-import us.lsi.tiposrecursivos.program.While;
+import us.lsi.common.Preconditions;
+import us.lsi.tiposrecursivos.parsers.ProgramBaseVisitor;
+import us.lsi.tiposrecursivos.parsers.ProgramParser;
+
 
 public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
+	
+	public static Map<String,Var> symbolTable = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -81,9 +72,13 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	@Override public Declaration visitVarDeclaration(ProgramParser.VarDeclarationContext ctx) { 
 		String id = ctx.id.getText();
 		Type type = Type.valueOf(ctx.type.getText());
-		Exp value = null;
-		if(ctx.exp() != null) value = (Exp) visit(ctx.exp());
-		return VarDeclaration.of(id,type,value);
+		Object value = null;
+		if(ctx.exp() != null) value = ((Exp)visit(ctx.exp())).value();
+		VarDeclaration r = VarDeclaration.of(id,type,value);
+		Preconditions.checkState(!ProgramVisitorC.symbolTable.containsKey(id),
+				String.format("La variable %s ya ha sido declarada",id));
+		ProgramVisitorC.symbolTable.put(id,Var.of(id, value, type));
+		return r;
 	}
 
 	/**
@@ -121,7 +116,10 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	
 	@Override 
 	public Sentence visitAsignSentence(ProgramParser.AsignSentenceContext ctx) { 
-		Exp id = Id.of(ctx.id.getText());
+		String idText =ctx.id.getText();
+		Preconditions.checkState(ProgramVisitorC.symbolTable.containsKey(idText), 
+				String.format("La variable %s no ha sido declarada",idText));
+		Exp id = ProgramVisitorC.symbolTable.get(idText);
 		Exp exp = (Exp) visit(ctx.exp());
 		return Assign.of(id,exp); 
 	}
@@ -229,6 +227,18 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	@Override public Exp visitDoubleExp(ProgramParser.DoubleExpContext ctx) { 
 		return Const.of(Type.Double,Double.parseDouble(ctx.getText())); 
 	}
+	
+	@Override public Exp visitStrExpr(ProgramParser.StrExprContext ctx) { 
+		String text = ctx.getText();
+		text = text.substring(1,text.length()-1);
+		return Const.of(Type.String,text); 
+	}
+	
+	
+	@Override public Exp visitBoolExpr(ProgramParser.BoolExprContext ctx) { 
+		return Const.of(Type.Boolean,ctx.getText().equals("true")?true:false); 
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 *
@@ -237,7 +247,11 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	 */
 	@Override 
 	public Exp visitIdExpr(ProgramParser.IdExprContext ctx) { 
-		return Id.of(ctx.getText()); 
+		String idText = ctx.id.getText();
+		Preconditions.checkState(ProgramVisitorC.symbolTable.containsKey(idText), 
+				String.format("La variable %s no ha sido declarada",idText));
+		Exp id = ProgramVisitorC.symbolTable.get(idText);
+		return id;
 	}
 	/**
 	 * {@inheritDoc}

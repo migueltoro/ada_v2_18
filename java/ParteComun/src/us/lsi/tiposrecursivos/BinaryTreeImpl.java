@@ -1,7 +1,5 @@
 package us.lsi.tiposrecursivos;
 
-
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +14,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import us.lsi.common.List2;
-import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Files2;
 import us.lsi.common.String2;
@@ -25,23 +22,21 @@ import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeLexer;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeParser;
-import us.lsi.tiposrecursivos.parsers.BinaryTreeVisitorC;
 
 
 public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
-	
+
 	private static BinaryTreeImpl<Object> empty = new BinaryTreeImpl<Object>();
-	
-			
+
 	@SuppressWarnings("unchecked")
 	public static <E> BinaryTreeImpl<E> empty() {
 		return (BinaryTreeImpl<E>) empty;
 	}
-	
+
 	public static <E> BinaryTreeImpl<E> leaf(E label) {
 		return new BinaryTreeImpl<E>(label);
 	}
-	
+
 	public static <E> BinaryTreeImpl<E> binary(E label, BinaryTree<E> left, BinaryTree<E> right) {
 		BinaryTreeImpl<E> r = null;
 		Preconditions.checkNotNull(left);
@@ -49,35 +44,31 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		if (left.isEmpty() && right.isEmpty()) {
 			r = new BinaryTreeImpl<E>(label);
 		} else {
-			r = new BinaryTreeImpl<E>(label, (BinaryTreeImpl<E>)left, (BinaryTreeImpl<E>)right);
+			r = new BinaryTreeImpl<E>(label, (BinaryTreeImpl<E>) left, (BinaryTreeImpl<E>) right);
 		}
 		return r;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	public static BinaryTree<String> parse(String s){
+	public static BinaryTree<String> parse(String s) {
 		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString(s));
 		BinaryTreeParser parser = new BinaryTreeParser(new CommonTokenStream(lexer));
-	    ParseTree parseTree = parser.binary_tree();
-	    BinaryTree<String> tree =  (BinaryTree<String>) parseTree.accept(new BinaryTreeVisitorC());
-	    return tree;
+		ParseTree parseTree = parser.binary_tree();
+		BinaryTree<String> tree = (BinaryTree<String>) parseTree.accept(new BinaryTreeVisitorC());
+		return tree;
 	}
-	
-	public static <E> BinaryTree<E> parse(String s, Function<String,E> f) {
+
+	public static <E> BinaryTree<E> parse(String s, Function<String, E> f) {
 		Preconditions.checkNotNull(s);
 		BinaryTree<String> tree = BinaryTreeImpl.parse(s);
 		return tree.map(f);
 	}
-	
-	
 
 	protected E label;
 	protected BinaryTreeImpl<E> left;
 	protected BinaryTreeImpl<E> right;
 	protected BinaryTreeImpl<E> father;
 	private final BinaryType type;
-	
 
 	protected BinaryTreeImpl() {
 		super();
@@ -88,97 +79,79 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		this.father = null;
 	}
 
-	
 	protected BinaryTreeImpl(E label) {
 		super();
 		this.label = label;
 		this.left = null;
-		this.right = null;		
+		this.right = null;
 		this.type = BinaryType.Leaf;
 		this.father = null;
 	}
-	
+
 	protected BinaryTreeImpl(E label, BinaryTreeImpl<E> left, BinaryTreeImpl<E> right) {
 		super();
 		this.label = label;
 		this.left = left;
 		this.right = right;
-		this.type = BinaryType.Binary;	
+		this.type = BinaryType.Binary;
 		this.father = null;
 		this.left.father = this;
 		this.right.father = this;
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() {
 		return type.equals(BinaryType.Empty);
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isLeaf()
-	 */
+	
 	@Override
 	public boolean isLeaf() {
 		return type.equals(BinaryType.Leaf);
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isBinary()
-	 */
+	
 	@Override
 	public boolean isBinary() {
 		return type.equals(BinaryType.Binary);
-	}	
-	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getType()
-	 */
+	}
+
+
 	@Override
 	public BinaryType getType() {
 		return type;
 	}
-	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.IBinaryTree#getFather()
-	 */
+
+
 	@Override
 	public BinaryTree<E> getFather() {
 		return this.father;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isRoot()
-	 */
 	@Override
 	public boolean isRoot() {
 		return this.father == null;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isLeftChild()
-	 */
 	@Override
 	public Boolean isLeftChild() {
 		Boolean r;
-		if(isRoot()) {
+		if (isRoot()) {
 			r = false;
 		} else {
 			r = getFather().getLeft() == this;
 		}
 		return r;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#isRightChild()
-	 */
 	@Override
 	public Boolean isRightChild() {
 		Boolean r;
-		if(isRoot()) {
+		if (isRoot()) {
 			r = false;
 		} else {
 			r = getFather().getRight() == this;
@@ -186,76 +159,43 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getChildType()
-	 */
+	
 	@Override
 	public ChildType getChildType() {
 		ChildType r = null;
-		if(isRoot()) {
+		if (isRoot()) {
 			r = ChildType.Root;
-		} else if(this.getFather().getLeft() == this) {
+		} else if (this.getFather().getLeft() == this) {
 			r = ChildType.Left;
-		} else if(this.getFather().getRight() == this) {
+		} else if (this.getFather().getRight() == this) {
 			r = ChildType.Right;
 		} else {
 			Preconditions.checkState(false, "Fallo interno");
 		}
 		return r;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getLabel()
-	 */
 	@Override
 	public E getLabel() {
 		Preconditions.checkState(!isEmpty(), String.format("El árbol es vacío"));
 		return this.label;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getLeft()
-	 */
 	@Override
-	public BinaryTreeImpl<E> getLeft(){
+	public BinaryTreeImpl<E> getLeft() {
 		Preconditions.checkState(isBinary(), String.format("El árbol no es binario"));
 		return this.left;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getRight()
-	 */
+	
 	@Override
-	public BinaryTreeImpl<E> getRight(){
+	public BinaryTreeImpl<E> getRight() {
 		Preconditions.checkState(isBinary(), String.format("El árbol no es binario"));
 		return this.right;
 	}
-	
-	
-	@Override
-	public View2E<BinaryTree<E>,E> view() {
-		Preconditions.checkArgument(!this.isEmpty(),String.format("El árbol no puede ser vacío y es %s",this));
-		return switch(this.type) {
-		case Binary -> View2E.of(this.getLabel(),(BinaryTree<E>)this.getLeft(),(BinaryTree<E>)this.getRight());
-		case Empty -> null;
-		case Leaf -> View2E.of(this.getLabel(),BinaryTree.empty(),BinaryTree.empty());
-		};		
-	}
-	
-	@Override
-	public Iterator<BinaryTree<E>> iterator(){
-		return DepthPathBinaryTree.of(this);
-	}
-	
-	@Override
-	public Stream<BinaryTree<E>> stream(){
-		return Stream2.asStream(this);
-	}
-	
-	public Iterator<BinaryTreeLevel<E>> byLevel(){
-		return BreadthPathBinaryTree.of(this);
-	}
-	
+
 	public void setLabel(E label) {
 		this.label = label;
 	}
@@ -265,74 +205,94 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		this.left = tt;
 		tt.father = this;
 	}
-	
+
 	public void setRight(BinaryTree<E> right) {
 		BinaryTreeImpl<E> tt = (BinaryTreeImpl<E>) right;
 		this.right = tt;
 		tt.father = this;
 	}
-	
+
 	public void setFather(BinaryTree<E> father) {
 		BinaryTreeImpl<E> tt = (BinaryTreeImpl<E>) father;
 		this.father = tt;
 	}
-	
+
 	/**
-	 * @post this pasa a ser un arbol raiz si no lo era antes. nTree pasa a ocupar el lugar de this. El padre de nTree
-	 * es el antiguo padre de this
+	 * @post this pasa a ser un arbol raiz si no lo era antes. nTree pasa a ocupar
+	 *       el lugar de this. El padre de nTree es el antiguo padre de this
 	 * @param nTree Un árbol binario
-	 * @return  Devuelve nTree
+	 * @return Devuelve nTree
 	 */
 	public BinaryTree<E> changeFor(BinaryTree<E> nTree) {
 		BinaryTreeImpl<E> tt = (BinaryTreeImpl<E>) nTree;
-		switch(this.getChildType()) {
-		case Root: break;
-		case Left: this.father.left = tt; break;
-		case Right: this.father.right = tt ; break;
+		switch (this.getChildType()) {
+		case Root:
+			break;
+		case Left:
+			this.father.left = tt;
+			break;
+		case Right:
+			this.father.right = tt;
+			break;
 		}
 		return tt;
 	}
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#mutableView()
-	 */
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#size()
-	 */
 	@Override
 	public int size() {
-		return switch(this.getType()) {
-		case Empty-> 0; 
-		case Leaf -> 1; 
-		case Binary -> 1+this.getLeft().size()+ this.getRight().size(); 
-		};
+		int r = 0;
+		switch (this.getType()) {
+		case Empty:
+			r = 0;
+			break;
+		case Leaf:
+			r = 1;
+			break;
+		case Binary:
+			r = 1 + this.getLeft().size() + this.getRight().size();
+			break;
+		}
+		return r;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getHeight()
-	 */
 	@Override
 	public int getHeight() {
-		return switch(this.getType()) {
-		case Empty -> 0; 
-		case Leaf -> 0; 
-		case Binary -> 1+ Math.max(this.getLeft().getHeight(),this.getRight().getHeight()); 
-		};
+		Integer r = 0;
+		switch (this.getType()) {
+		case Empty:
+			r = 0;
+			break;
+		case Leaf:
+			r = 0;
+			break;
+		case Binary:
+			r = 1 + Math.max(this.getLeft().getHeight(), this.getRight().getHeight());
+			break;
+		}
+		return r;
 	}
-	
-	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls){
+
+	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls) {
 		List<BinaryTree<E>> r = List2.empty();
-		for(BinaryTree<E> tree: ls) {
-			switch(tree.getType()) {			
-			case Empty: break;
-			case Leaf: r.add(BinaryTree.empty()); r.add(BinaryTree.empty()); break;
-			case Binary: r.add(tree.getLeft()); r.add(tree.getRight()); break;
+		for (BinaryTree<E> tree : ls) {
+			switch (tree.getType()) {
+			case Empty:
+				break;
+			case Leaf:
+				r.add(BinaryTree.empty());
+				r.add(BinaryTree.empty());
+				break;
+			case Binary:
+				r.add(tree.getLeft());
+				r.add(tree.getRight());
+				break;
 			}
 		}
 		return r;
 	}
-	
-	
+
 	@Override
 	public List<BinaryTree<E>> getLevel(int n){
 		List<BinaryTree<E>> r = List2.of(this);
@@ -341,83 +301,75 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		return r;
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getHeights(int)
-	 */
 	@Override
 	public List<Integer> getHeights(int n){
 		return this.getLevel(n).stream().map(x->x.getHeight()).collect(Collectors.toList());
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#copy()
-	 */
+	
 	@Override
 	public BinaryTree<E> copy() {
-		return switch(this.getType()) {
-		case Empty -> BinaryTree.empty(); 
-		case Leaf -> BinaryTree.leaf(label); 
-		case Binary -> BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); 
-		};
+		BinaryTree<E> r= null;
+		switch(this.getType()) {
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf:  r = BinaryTree.leaf(label); break;
+		case Binary: r = BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); break;
+		}
+		return r;
 	}
 
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getReverse()
-	 */
+	
 	@Override
 	public BinaryTree<E> getReverse() {
-		return switch(this.getType()) {
-		case Empty -> BinaryTree.empty(); 
-		case Leaf -> BinaryTree.leaf(label); 
-		case Binary -> BinaryTree.binary(label,this.getRight().copy(),this.getLeft().copy()); 
-		};
+		BinaryTree<E> r= null;
+		switch(this.getType()) {
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf:  r = BinaryTree.leaf(label); break;
+		case Binary: r = BinaryTree.binary(label,this.getRight().copy(),this.getLeft().copy()); break;
+		}
+		return r;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#map(java.util.function.Function)
-	 */
+	
 	@Override
 	public <R> BinaryTree<R> map(Function<E,R> f){
-		return switch(this.getType()) {	
-		case Empty -> BinaryTree.empty(); 
-		case Leaf -> BinaryTree.leaf(f.apply(this.getLabel())); 
-		case Binary -> BinaryTree.binary(f.apply(this.getLabel()), this.getLeft().map(f), this.getRight().map(f));
-		};
+		BinaryTree<R> r = null;
+		switch(this.getType()) {	
+		case Empty: r = BinaryTree.empty(); break;
+		case Leaf: r = BinaryTree.leaf(f.apply(this.getLabel())); break;
+		case Binary: r = BinaryTree.binary(f.apply(this.getLabel()), this.getLeft().map(f), this.getRight().map(f)); break;
+		}
+		return r;
 	}	
 		
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#transform(us.lsi.tiposrecursivos.BinaryPattern, us.lsi.tiposrecursivos.BinaryPattern)
-	 */
+	
 	@Override
 	public BinaryTree<E> transform(BinaryPattern<E> pattern, BinaryPattern<E> result){
 		return BinaryPattern.transform(this, pattern, result);
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#match(us.lsi.tiposrecursivos.BinaryPattern)
-	 */
+	
 	@Override
 	public Matches<E> match(BinaryPattern<E> pt) {
 		return BinaryPattern.match(this, pt);
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#toString()
-	 */
+	
 	@Override
 	public String toString() {
-		return switch (this.getType()) {
-		case Empty -> "_"; 
-		case Leaf -> label.toString(); 
-		case Binary -> String.format("(%s,%s,%s)",label,this.getLeft(),this.getRight());
-		};
+		String r = null;
+		switch (this.getType()) {
+		case Empty: r ="_"; break;
+		case Leaf: r = label.toString(); break;
+		case Binary: r = label.toString()+"("+this.getLeft().toString()+","+this.getRight().toString()+")";
+		}
+		return r;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getPreOrder()
-	 */
+	
 	@Override
 	public List<E> getPreOrder() {
 		List<E> r = null;
@@ -432,9 +384,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getPostOrder()
-	 */
+	
 	@Override
 	public List<E> getPostOrder() {
 		List<E> r = null;
@@ -449,9 +399,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.BinaryTree#getInOrder()
-	 */
+	
 	@Override
 	public List<E> getInOrder() {
 		List<E> r = null;
@@ -539,6 +487,26 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	    
 	}
 	
+	@Override
+	public Stream<BinaryTree<E>> stream() {
+		return Stream2.asStream(()->this.iterator());
+	}
+
+	@Override
+	public View2E<BinaryTree<E>, E> view() {
+		Preconditions.checkArgument(!this.isEmpty(),"El arbol no puede estar vació");
+		return View2E.of(this.getLabel(),this.getLeft(),this.getRight());
+	}
+
+	@Override
+	public Iterator<BinaryTreeLevel<E>> byLevel() {
+		return null;
+	}
+
+	@Override
+	public Iterator<BinaryTree<E>> iterator() {
+		return DepthPathBinaryTree.of(this);
+	}
 	
 	public static class DepthPathBinaryTree<E> implements Iterator<BinaryTree<E>>, Iterable<BinaryTree<E>> {
 		
@@ -569,7 +537,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 			BinaryTree<E> actual = stack.pop();
 			switch(actual.getType()) {
 			case Binary: 
-				for(BinaryTree<E> v:List.<BinaryTree<E>>of(actual.getRight(),actual.getLeft())) {
+				for(BinaryTree<E> v:List.of(actual.getLeft(),actual.getRight())) {
 					stack.add(v);
 				}
 				break;
@@ -580,7 +548,6 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		
 	}
-	
 	
 	public static class BreadthPathBinaryTree<E> implements Iterator<BinaryTreeLevel<E>>, Iterable<BinaryTreeLevel<E>> {
 		
@@ -611,7 +578,8 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 			BinaryTreeLevel<E> actual = queue.remove();
 			switch(actual.tree().getType()) {
 			case Binary: 
-				for(BinaryTreeLevel<E> v:List.of(actual.tree().getRight(),actual.tree().getLeft()).stream()
+				for(BinaryTreeLevel<E> v:
+					List.of(actual.tree().getLeft(),actual.tree().getRight()).stream()
 						.map(t->BinaryTreeLevel.of(actual.level()+1,t)).toList()) {
 					queue.add(v);
 				}
@@ -623,8 +591,6 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		
 	}
-
-	
 	
 	public static void test1() {
 		List<String> filas = Files2.streamFromFile("ficheros/test2.txt").collect(Collectors.toList());
@@ -634,76 +600,57 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 			System.out.println(tree);
 		}
 	}
-	
-	public static void test2() {
+
+	public static void main(String[] args) {
 		BinaryTree<Integer> t1 = BinaryTree.empty();
 		BinaryTree<Integer> t2 = BinaryTree.leaf(2);
 		BinaryTree<Integer> t3 = BinaryTree.leaf(3);
 		BinaryTree<Integer> t4 = BinaryTree.leaf(4);
-		BinaryTree<Integer> t5 = BinaryTree.binary(27,BinaryTree.binary(42,t1,t2),BinaryTree.binary(59,t3,t4));
-		BinaryTree<Integer> t6 = BinaryTree.binary(39, t2,t5);
+		BinaryTree<Integer> t5 = BinaryTree.binary(27, BinaryTree.binary(42, t1, t2), BinaryTree.binary(59, t3, t4));
+		BinaryTree<Integer> t6 = BinaryTree.binary(39, t2, t5);
 		System.out.println(t1);
 		System.out.println(t2);
-		System.out.println(t6);		
+		System.out.println(t6);
 		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
 		BinaryTree<String> t7 = BinaryTree.parse(ex);
 		System.out.println(t7);
-		System.out.println(List2.reverse(List2.of(1,2,3,4,5,6,7,8,9)));
+		System.out.println(List2.reverse(List2.of(1, 2, 3, 4, 5, 6, 7, 8, 9)));
 		BinaryTree<String> t8 = t7.getReverse();
 		System.out.println(t8);
-		MutableBinaryTree<String> t = (MutableBinaryTree)t8;
+		MutableBinaryTree<String> t = MutableBinaryTree.mutable(t8);
 		t.setLabel("578.");
 		t.setLeft(t8.getLeft().getLeft());
 		System.out.println(t8);
-		String2.toConsole(t8.getLevel(3).stream().map(x->x.getHeight()).collect(Collectors.toList()).toString());
+		String2.toConsole(t8.getLevel(3).stream().map(x -> x.getHeight()).collect(Collectors.toList()).toString());
 		BinaryTree<String> t10 = t8.getRight();
 		System.out.println(t8);
 		System.out.println(t10);
 		System.out.println(t10.getFather().getRight() == t10);
 		System.out.println(t10.isRightChild());
-		MutableBinaryTree<String> mt10 = (MutableBinaryTree)t10;
+		MutableBinaryTree<String> mt10 = MutableBinaryTree.mutable(t10);
 		mt10.changeFor(t8.getLeft());
 		System.out.println(t8);
 		System.out.println(t10);
 		System.out.println(t8.isRoot());
 		System.out.println(t10.isRoot());
 		test1();
-		BinaryTree<Double> tree1 = BinaryTree.parse("54.5(39.2(20.1,50.5(40.2,51.0)),78.9)",x->Double.parseDouble(x));
-		BinaryTree<Double> tree2 = BinaryTree.parse("54.5(39.2,20.1(50.5(40.2,51.0),78.9))",x->Double.parseDouble(x));
-        BinaryTree<Double> tree3 = BinaryTree.parse("54.5(39.2(20.1(50.5,40.2),51.0),78.9)",x->Double.parseDouble(x));
-        BinaryTree<Double> tree4 = BinaryTree.parse("54.5(39.2,20.1(50.5,40.2(51.0,78.9)))",x->Double.parseDouble(x));
-        var tree1r = tree1.equilibrate();
-		System.out.println("Aqui 1 = "+tree1r);
+		BinaryTree<Double> tree1 = BinaryTree.parse("54.5(39.2(20.1,50.5(40.2,51.0)),78.9)",
+				x -> Double.parseDouble(x));
+		BinaryTree<Double> tree2 = BinaryTree.parse("54.5(39.2,20.1(50.5(40.2,51.0),78.9))",
+				x -> Double.parseDouble(x));
+		BinaryTree<Double> tree3 = BinaryTree.parse("54.5(39.2(20.1(50.5,40.2),51.0),78.9)",
+				x -> Double.parseDouble(x));
+		BinaryTree<Double> tree4 = BinaryTree.parse("54.5(39.2,20.1(50.5,40.2(51.0,78.9)))",
+				x -> Double.parseDouble(x));
+		var tree1r = tree1.equilibrate();
+		System.out.println("Aqui 1 = " + tree1r);
 		var tree2r = tree2.equilibrate();
-		System.out.println("Aqui 2 = "+tree2r);
+		System.out.println("Aqui 2 = " + tree2r);
 		var tree3r = tree3.equilibrate();
-		System.out.println("Aqui 3 = "+tree3r);
+		System.out.println("Aqui 3 = " + tree3r);
 		var tree4r = tree4.equilibrate();
-		System.out.println("Aqui 4 = "+tree4r);
+		System.out.println("Aqui 4 = " + tree4r);
 	}
-	
-	public static void test3() {
-		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
-		BinaryTree<String> t7 = BinaryTree.parse(ex);		
-		System.out.println(t7.getPreOrder());
-		System.out.println(Stream2.asStream(t7).filter(t->!t.isEmpty()).map(t->t.getLabel()).toList());
-		System.out.println(Stream2.asStream(t7).filter(t->!t.isEmpty()).map(t->t.getLabel()).toList());
-		System.out.println("______________");
-		System.out.println(t7);
-//		Stream2.asStream(()->t7.byLevel()).forEach(t->System.out.println(t));
-		System.out.println(Stream2.asStream(()->t7.byLevel())
-				.filter(t->!t.tree().isEmpty())
-				.map(t->Pair.of(t.level(),t.tree().getLabel()))
-				.toList());
-	}
-	
-	public static void test4() {
-		String ex = "-43.7(2.1,56(-27.3(_,2),78.2(3,4)))";
-		BinaryTree<Double> t7 = BinaryTree.parse(ex).map(e->Double.parseDouble(e));	
-		System.out.println(t7.stream().filter(t->!t.isEmpty()).map(t->t.getLabel()).min(Comparator.naturalOrder()).get());
-	}
-	
-	public static void main(String[] args) {
-		test4();
-	}
+
 }
+
