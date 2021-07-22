@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import us.lsi.common.List2;
+import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Files2;
 import us.lsi.common.String2;
@@ -500,7 +501,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 
 	@Override
 	public Iterator<BinaryTreeLevel<E>> byLevel() {
-		return null;
+		return BreadthPathBinaryTree.of(this);
 	}
 
 	@Override
@@ -601,7 +602,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void test2() {
 		BinaryTree<Integer> t1 = BinaryTree.empty();
 		BinaryTree<Integer> t2 = BinaryTree.leaf(2);
 		BinaryTree<Integer> t3 = BinaryTree.leaf(3);
@@ -651,6 +652,26 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		var tree4r = tree4.equilibrate();
 		System.out.println("Aqui 4 = " + tree4r);
 	}
+	
+	public static void test3() {
+		Function<BinaryTreeLevel<String>,String> f = t->t.tree().isEmpty()?"_":t.tree().getLabel().toString();
+		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
+		BinaryTree<String> t7 = BinaryTree.parse(ex);		
+		System.out.println(t7);
+		Stream2.asStream(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
+		System.out.println("______________");
+		System.out.println(t7);
+		Stream2.asStream(()->t7.byLevel())
+			.map(t->Pair.of(t.level(),f.apply(t)))
+			.forEach(t->System.out.println(t));
+	}
+	
+	
+	public static void main(String[] args) {
+		test2();
+	}
+	
+	
 
 }
 

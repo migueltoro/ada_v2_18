@@ -15,5 +15,6 @@ Codigo  {
 	  r = a + b + ab(c - 2)
   } else {
 	  r = a - b - sqrt(23.)
+	  r = min(a+b,c-a,2*b)
   }
 }

@@ -6,8 +6,10 @@ public class TestProgram {
 
 	public static void main(String[] args) throws IOException {
 		Program p = Program.parse("ficheros/program.txt");
-		if(p!=null)
+		if(p!=null) {
 			System.out.println(p);
+			p.toDot("ficheros/program.gv");
+		}
+		
 	}
-
 }

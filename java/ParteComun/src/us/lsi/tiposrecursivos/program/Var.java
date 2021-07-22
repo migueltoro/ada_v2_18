@@ -1,6 +1,9 @@
 package us.lsi.tiposrecursivos.program;
 
-public class Var implements Exp {
+import java.io.PrintStream;
+import java.util.Map;
+
+public final class Var implements Exp {
 	
 	private String id;
 	private Object value;
@@ -36,6 +39,16 @@ public class Var implements Exp {
 	@Override
 	public String toString() {
 		return String.format("%s",this.id());
+	}
+	
+	@Override
+	public String label() {
+		return String.format("%s=%s",this.id(),this.value());
+	}
+	
+	@Override
+	public void toDot(PrintStream file, Map<Object, Integer> map) {
+		Program.getIndex(this,map,this.label(),file);
 	}
 
 }
