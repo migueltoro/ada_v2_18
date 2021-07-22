@@ -162,6 +162,8 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	
 	Iterator<TreeLevel<E>> byLevel();
 	
+	void toDot(String file);
+	
 	public static record TreeLevel<E>(Integer level, Tree<E> tree){
 		public static <R> TreeLevel<R> of(Integer level, Tree<R> tree){
 			return new TreeLevel<R>(level,tree);

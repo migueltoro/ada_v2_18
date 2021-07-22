@@ -200,6 +200,10 @@ public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
 	 */
 	BinaryTree<E> equilibrate();
 	
+	/**
+	 * @return Un flujo de datos en preorden
+	 */
+	
 	Stream<BinaryTree<E>> stream();
 
 	/**
@@ -207,7 +211,16 @@ public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
 	 */
 	View2E<BinaryTree<E>,E> view();
 	
+	/**
+	 * @return Un iterador por niveles
+	 */
+	
 	Iterator<BinaryTreeLevel<E>> byLevel();
+	/**
+	 *  Genera un fichero en formato gv
+	 */
+	
+	void toDot(String file);
 	
 	public static record BinaryTreeLevel<E>(Integer level, BinaryTree<E> tree){
 		public static <R> BinaryTreeLevel<R> of(Integer level, BinaryTree<R> tree){

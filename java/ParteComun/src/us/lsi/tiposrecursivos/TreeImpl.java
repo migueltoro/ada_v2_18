@@ -3,9 +3,11 @@ package us.lsi.tiposrecursivos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Function;
@@ -20,11 +22,13 @@ import us.lsi.common.Files2;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
+import us.lsi.common.Printers;
 import us.lsi.common.ViewL;
 import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.parsers.TreeLexer;
 import us.lsi.tiposrecursivos.parsers.TreeParser;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
@@ -301,9 +305,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return r;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getNumOfChildren()
-	 */
+	
 	@Override
 	public int getNumOfChildren(){
 		return switch(this.getType()) {
@@ -313,9 +315,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		};
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#size()
-	 */
+	
 	@Override
 	public int size(){
 		int r =0;
@@ -327,9 +327,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return r;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getHeight()
-	 */
+	
 	@Override
 	public int getHeight(){
 		return switch(this.getType()) {
@@ -339,9 +337,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		};	
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#copy()
-	 */
+	
 	@Override
 	public Tree<E> copy(){
 		return switch(this.getType()) {
@@ -352,9 +348,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#copy(java.util.function.Function)
-	 */
+	
 	@Override
 	public <R> Tree<R> map(Function<E,R> f){
 		Tree<R> r = null;
@@ -369,9 +363,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getReverse()
-	 */
+	
 	@Override
 	public Tree<E> getReverse() {
 		Tree<E> r = null;
@@ -414,9 +406,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		file.println(String.format(s,id,((TreeImpl<E>)getChild(index)).id,index));
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#toDOT(java.lang.String, java.lang.String)
-	 */
+	
 	@Override
 	public void toDOT(String file, String titulo) {
 		nId = 0;
@@ -443,9 +433,6 @@ public class TreeImpl<E> implements MutableTree<E> {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getPreOrder()
-	 */
 	@Override
 	public List<E> getPreOrder() {
 		List<E> r = null;
@@ -461,9 +448,6 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getPostOrder()
-	 */
 	@Override
 	public List<E> getPostOrder() {
 		List<E> r = null;
@@ -477,9 +461,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return r;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getInOrder(int)
-	 */
+	
 	@Override
 	public List<E> getInOrder(int k){
 		List<E> r = null;
@@ -496,9 +478,8 @@ public class TreeImpl<E> implements MutableTree<E> {
 		}
 		return r;
 	}
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getByLevel()
-	 */
+	
+	
 	@Override
 	public List<Tree<E>> getByLevel(){
 		List<Tree<E>> r = List2.of(this);
@@ -510,9 +491,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return r;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getLabelByLevel()
-	 */
+	
 	@Override
 	public List<E> getLabelByLevel(){
 		return getByLevel().stream()
@@ -521,9 +500,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 				.collect(Collectors.toList());
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getNextLevel(java.util.List)
-	 */
+	
 	@Override
 	public List<Tree<E>> getNextLevel(List<Tree<E>> level) {
 		List<Tree<E>> nLevel;
@@ -538,9 +515,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return nLevel;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getLevel(java.lang.Integer)
-	 */
+	
 	@Override
 	public List<Tree<E>> getLevel(Integer n) {
 		Preconditions.checkArgument(n>=0,String.format("El nivel debe ser mayor o igual a cero y es %d",n));
@@ -551,9 +526,6 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return level;
 	}
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#getDepth(us.lsi.tiposrecursivos.Tree)
-	 */
 	@Override
 	public int getDepth(Tree<E> root){
 		List<Tree<E>> level = List2.of(root);
@@ -571,9 +543,67 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#toString()
-	 */
+	private static Integer getIndex(Object e, Map<Object,Integer> map, String label, PrintStream file) {
+		Integer r;
+		if(map.containsKey(e)) r = map.get(e);
+		else {
+			r = map.get("maxValue")+1;
+			map.put("maxValue",r);
+			map.put(e, r);
+			vertex(r,label,file);
+		}
+		return r;
+	}
+	
+	private static void vertex(Integer n, String text, PrintStream file) {
+		String txt = String.format("\"%s\" [label=\"%s\"];",n,text);
+		file.println(txt);
+	}
+	
+	private static void edge(Integer v1, Integer v2, PrintStream file) {
+		edge(v1,v2,null,file);
+	}
+	
+	private static void edge(Integer v1, Integer v2, String text, PrintStream file) {
+		String txt;
+		if (text!=null) 
+			txt = String.format("\"%s\" -> \"%s\" [label=\"%s\"];", v1, v2, text);
+		else
+			txt = String.format("\"%s\" -> \"%s\";", v1, v2);
+		file.println(txt);
+	}
+	
+	public void toDot(String file) {
+		PrintStream p = Printers.file(file);
+		Map<Object,Integer> map = new HashMap<>();
+		map.put("maxValue",0);
+		String txt = "digraph Tree { \n \n"; 
+		p.println(txt);
+		toDot(p,map);
+		p.println("}");
+		p.close();
+	}
+	
+	private void toDot(PrintStream p, Map<Object, Integer> map) {
+		switch(this.getType()) {
+		case Nary:
+			Integer n = getIndex(this,map,this.getLabel().toString(),p);
+			for(Tree<E> t:this.getChildren()) {
+				Integer nt = getIndex(t,map,t.isEmpty()?"_":t.getLabel().toString(),p);
+				edge(n,nt,p);
+				((TreeImpl<E>)t).toDot(p,map);
+			}
+			break;
+		case Empty:
+			getIndex(this,map,"_",p);
+			break;
+		case Leaf:
+			getIndex(this,map,this.getLabel().toString(),p);
+			break;
+		}
+	}
+	
+
 	@Override
 	public String toString(){		
 		String r = null;
@@ -589,11 +619,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return r;
 	}
 
-	
-	
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#hashCode()
-	 */
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -605,9 +631,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see us.lsi.tiposrecursivos.Tree#equals(java.lang.Object)
-	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -785,10 +809,15 @@ public class TreeImpl<E> implements MutableTree<E> {
 			.forEach(t->System.out.println(t));
 	}
 	
-	
+	public static void test5() {
+		String ex = "39(2.,27(_,2,3,4),9(8.,_))";
+		Tree<String> t7 = Tree.parse(ex);		
+		System.out.println(t7);
+		t7.toDot("ficheros/tree.gv");
+	}
 
 	public static void main(String[] args) {
-		test4();
+		test5();
 	}
 	
 }

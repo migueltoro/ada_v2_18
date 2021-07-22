@@ -1,8 +1,11 @@
 package us.lsi.tiposrecursivos;
 
+import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Function;
@@ -16,6 +19,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
+import us.lsi.common.Printers;
 import us.lsi.common.Files2;
 import us.lsi.common.String2;
 import us.lsi.common.View2E;
@@ -24,14 +28,12 @@ import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeLexer;
 import us.lsi.tiposrecursivos.parsers.BinaryTreeParser;
 
-
 public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 
-	private static BinaryTreeImpl<Object> empty = new BinaryTreeImpl<Object>();
+//	private static BinaryTreeImpl<Object> empty = new BinaryTreeImpl<Object>();
 
-	@SuppressWarnings("unchecked")
 	public static <E> BinaryTreeImpl<E> empty() {
-		return (BinaryTreeImpl<E>) empty;
+		return new BinaryTreeImpl<E>();
 	}
 
 	public static <E> BinaryTreeImpl<E> leaf(E label) {
@@ -242,37 +244,21 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public int size() {
-		int r = 0;
-		switch (this.getType()) {
-		case Empty:
-			r = 0;
-			break;
-		case Leaf:
-			r = 1;
-			break;
-		case Binary:
-			r = 1 + this.getLeft().size() + this.getRight().size();
-			break;
-		}
-		return r;
+		return switch (this.getType()) {
+		case Empty->0;
+		case Leaf->1;
+		case Binary->1 + this.getLeft().size() + this.getRight().size();
+		};
 	}
 
 	
 	@Override
 	public int getHeight() {
-		Integer r = 0;
-		switch (this.getType()) {
-		case Empty:
-			r = 0;
-			break;
-		case Leaf:
-			r = 0;
-			break;
-		case Binary:
-			r = 1 + Math.max(this.getLeft().getHeight(), this.getRight().getHeight());
-			break;
-		}
-		return r;
+		return switch (this.getType()) {
+		case Empty ->0;
+		case Leaf->0;
+		case Binary->1 + Math.max(this.getLeft().getHeight(), this.getRight().getHeight());
+		};
 	}
 
 	private static <E> List<BinaryTree<E>> nextLevel(List<BinaryTree<E>> ls) {
@@ -302,13 +288,37 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		}
 		return r;
 	}
+	
+	private static <E> List<BinaryTree<E>> nextExtendedLevel(List<BinaryTree<E>> ls) {
+		List<BinaryTree<E>> r = List2.empty();
+		for (BinaryTree<E> tree : ls) {
+			switch (tree.getType()) {
+			case Empty: 
+			case Leaf:
+				r.add(BinaryTree.empty());
+				r.add(BinaryTree.empty());
+				break;
+			case Binary:
+				r.add(tree.getLeft());
+				r.add(tree.getRight());
+				break;
+			}
+		}
+		return r;
+	}
 
+	public List<BinaryTree<E>> getExtendedLevel(int n){
+		List<BinaryTree<E>> r = List2.of(this);
+		for(int i=0; i < n ; i++) {
+			r = nextExtendedLevel(r);
+		}
+		return r;
+	}
 	
 	@Override
 	public List<Integer> getHeights(int n){
-		return this.getLevel(n).stream().map(x->x.getHeight()).collect(Collectors.toList());
+		return this.getExtendedLevel(n).stream().map(x->x.getHeight()).collect(Collectors.toList());
 	}
-	
 	
 	@Override
 	public BinaryTree<E> copy() {
@@ -415,10 +425,75 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		return r;
 	}
 	
+	
+	
+	private static Integer getIndex(Object e, Map<Object,Integer> map, String label, PrintStream file) {
+		Integer r;
+		if(map.containsKey(e)) r = map.get(e);
+		else {
+			r = map.get("maxValue")+1;
+			map.put("maxValue",r);
+			map.put(e, r);
+			vertex(r,label,file);
+		}
+		return r;
+	}
+	
+	private static void vertex(Integer n, String text, PrintStream file) {
+		String txt = String.format("\"%s\" [label=\"%s\"];",n,text);
+		file.println(txt);
+	}
+	
+	private static void edge(Integer v1, Integer v2, PrintStream file) {
+		edge(v1,v2,null,file);
+	}
+	
+	private static void edge(Integer v1, Integer v2, String text, PrintStream file) {
+		String txt;
+		if (text!=null) 
+			txt = String.format("\"%s\" -> \"%s\" [label=\"%s\"];", v1, v2, text);
+		else
+			txt = String.format("\"%s\" -> \"%s\";", v1, v2);
+		file.println(txt);
+	}
+	
+	public void toDot(String file) {
+		PrintStream p = Printers.file(file);
+		Map<Object,Integer> map = new HashMap<>();
+		map.put("maxValue",0);
+		String txt = "digraph BinaryTree { \n \n"; 
+		p.println(txt);
+		toDot(p,map);
+		p.println("}");
+		p.close();
+	}
+	
+	private void toDot(PrintStream p, Map<Object, Integer> map) {
+		switch(this.getType()) {
+		case Binary:
+			Integer n = getIndex(this,map,this.getLabel().toString(),p);
+			Integer left = getIndex(this.getLeft(),map,
+					this.getLeft().isEmpty()?"_":this.getLeft().getLabel().toString(),p);
+			Integer right = getIndex(this.getRight(),map,
+					this.getRight().isEmpty()?"_":this.getRight().getLabel().toString(),p);
+			edge(n,left,p);
+			edge(n,right,p);
+			this.getLeft().toDot(p,map);
+			this.getRight().toDot(p,map);
+			break;
+		case Empty:
+			getIndex(this,map,"_",p);
+			break;
+		case Leaf:
+			getIndex(this,map,this.getLabel().toString(),p);
+			break;
+		}
+	}
+	
 	public BinaryTree<E> equilibrate() {
 		return equilibrate(this);
 	}
-	
+
 	public static <E> BinaryTree<E> equilibrate(BinaryTree<E> tree) {
 		Patterns<E> pt = Patterns.of();
 		BinaryTree<E> r = null;
@@ -435,13 +510,14 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
 	
 	public static <E> TypeEquilibrate getTypeEquilibrate(BinaryTree<E> tree) {
+		
 		TypeEquilibrate r = null;
 		List<Integer> n1 = tree.getHeights(1);
 		List<Integer> n2 = tree.getHeights(2);
 		int left = n1.get(0);
 		int right = n1.get(1);
 		int leftleft = n2.get(0);
-		int leftright = n2.get(1);
+		int leftright = n2.get(1);	
 		int rightleft = n2.get(2);
 		int rightright = n2.get(3);
 		if (Math.abs(left - right) < 2) {
@@ -666,11 +742,45 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 			.forEach(t->System.out.println(t));
 	}
 	
-	
-	public static void main(String[] args) {
-		test2();
+	public static void test4() {
+		String ex = "-43.7(2.1,56.7(-27.3(_,2),78.2(3,4)))";
+		String ex2 = "-43.7(2.1,5(_,8.(3.,5.)))";
+		BinaryTree<String> t7 = BinaryTree.parse(ex);	
+		BinaryTree<String> t8 = BinaryTree.parse(ex2);	
+		System.out.println(t7);
+		System.out.println(t8);
+		t7.toDot("ficheros/binary_tree.gv");
+		BinaryTree<String> t9 = t7.equilibrate();
+		BinaryTree<String> t10 = t8.equilibrate();
+		t9.toDot("ficheros/binary_tree_equilibrate.gv");
+		System.out.println(t9);
+		System.out.println(t10);
 	}
 	
+	public static void test5() {
+		String ex = "-43.7(2.1,56.7(-27.3(_,2),78.2(3,4)))";
+		String ex2 = "-43.7";
+		String ex3 = "0(_,1(_,2(_,3)))";
+		BinaryTree<String> t7 = BinaryTree.parse(ex);	
+		BinaryTree<String> t8 = BinaryTree.parse(ex2);
+		BinaryTree<String> t9 = BinaryTree.parse(ex3);	
+		System.out.println(t7);
+		System.out.println(t7.getHeights(0));
+		System.out.println(t7.getHeights(1));
+		System.out.println(t7.getHeights(2));
+		System.out.println(t8);
+		System.out.println(t8.getHeights(0));
+		System.out.println(t8.getHeights(1));
+		System.out.println(t8.getHeights(2));
+		System.out.println(t9);
+		System.out.println(t9.getHeights(0));
+		System.out.println(t9.getHeights(1));
+		System.out.println(t9.getHeights(2));
+	}
+	
+	public static void main(String[] args) {
+		test5();
+	}
 	
 
 }

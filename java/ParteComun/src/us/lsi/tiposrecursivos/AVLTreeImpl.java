@@ -324,7 +324,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 		return tree.toString();
 	}
 	
-	public static void main(String[] args) {
+	public static void test1() {
 		AVLTree<Integer> tree = AVLTree.of();
 //		Strings2.toConsole(String.format("%d,%s",tree.getHeight(), tree.toString()));
 		for (int i = 0; i < 500 ; i++) {
@@ -344,6 +344,18 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 		
 		String2.toConsole(String.format("%d,%d,%d", tree.first(),tree.last(), tree.getTree().getHeight()));
 		String2.toConsole(String.format("%s", tree.getTree().toString()));
+	}
+	
+	public static void test2() {
+		AVLTree<Integer> tree = AVLTree.of();
+		for (int i = 0; i < 500 ; i++) {
+			tree.add(i);
+		}
+		tree.getTree().toDot("ficheros/avl_tree.gv");
+	}
+	
+	public static void main(String[] args) {
+		test2();
 	}
 
 }
