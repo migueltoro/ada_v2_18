@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.Map;
@@ -21,12 +21,12 @@ public record While(Exp guard, Block block) implements Sentence {
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Program.getIndex(this,map,this.label(),file);
-		Integer guard = Program.getIndex(this.guard(),map,this.guard().label(),file);
-		Integer block = Program.getIndex(this.block().sentences().get(0),map,
+		Integer n = Ast.getIndex(this,map,this.label(),file);
+		Integer guard = Ast.getIndex(this.guard(),map,this.guard().label(),file);
+		Integer block = Ast.getIndex(this.block().sentences().get(0),map,
 				this.block().sentences().get(0).label(),file);
-		Program.edge(n,guard, file);
-		Program.edge(n,block, file);
+		Ast.edge(n,guard, file);
+		Ast.edge(n,block, file);
 		this.guard().toDot(file, map);
 		this.block().toDot(file, map);
 	}

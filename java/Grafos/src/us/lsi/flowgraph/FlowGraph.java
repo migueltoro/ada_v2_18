@@ -136,7 +136,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 		if(this.integerGraph == null) {
 			this.integerGraph = IntegerVertexGraphView.of(this);;
 		}
-		return this.integerGraph.index.get(v);
+		return this.integerGraph.index(v);
 	}
 	
 	public Double maxEdge(Integer i, Integer j) {

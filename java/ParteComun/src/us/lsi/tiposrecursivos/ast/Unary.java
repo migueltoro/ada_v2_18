@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.Map;
@@ -30,9 +30,9 @@ public record Unary(Exp operand, String op) implements Exp {
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Program.getIndex(this,map,this.label(),file);
-		Integer operand = Program.getIndex(this.operand(),map,this.operand().label(),file);
-		Program.edge(n,operand, file);
+		Integer n = Ast.getIndex(this,map,this.label(),file);
+		Integer operand = Ast.getIndex(this.operand(),map,this.operand().label(),file);
+		Ast.edge(n,operand, file);
 		this.operand().toDot(file, map);
 	}
 }

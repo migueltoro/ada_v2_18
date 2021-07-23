@@ -181,7 +181,7 @@ public class FloydPD {
 		
 		List<Integer> ciudades = a.search();
 		
-		System.out.println(ciudades.stream().map(i->g2.vertices.get(i).getNombre()).toList());
+		System.out.println(ciudades.stream().map(i->g2.vertex(i).getNombre()).toList());
 	}
 
 }

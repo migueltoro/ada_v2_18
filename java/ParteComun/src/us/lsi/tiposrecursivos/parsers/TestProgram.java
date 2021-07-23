@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import us.lsi.tiposrecursivos.program.Program;
-import us.lsi.tiposrecursivos.program.ProgramVisitorC;
+import us.lsi.tiposrecursivos.ast.Ast;
+import us.lsi.tiposrecursivos.ast.AstVisitorC;
 
 
 public class TestProgram {
@@ -16,7 +16,7 @@ public class TestProgram {
 			ProgramLexer lexer = new ProgramLexer(CharStreams.fromFileName("ficheros/program.txt"));
 			ProgramParser parser = new ProgramParser(new CommonTokenStream(lexer));
 		    ParseTree parseTree = parser.program();
-		    Program program =  (Program) parseTree.accept(new ProgramVisitorC());
+		    Ast program =  (Ast) parseTree.accept(new AstVisitorC());
 		    System.out.println(program);
 		}
 

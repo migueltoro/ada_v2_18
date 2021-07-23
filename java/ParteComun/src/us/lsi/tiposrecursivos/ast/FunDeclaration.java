@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -26,7 +26,7 @@ public record FunDeclaration(String id,Type resultType,List<ParamDeclaration> pa
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Program.getIndex(this,map,this.label(),file);
+		Ast.getIndex(this,map,this.label(),file);
 	}
 
 }

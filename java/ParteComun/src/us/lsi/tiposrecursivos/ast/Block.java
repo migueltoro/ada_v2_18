@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -26,10 +26,10 @@ public record Block(List<Sentence> sentences, Map<String,Object> symbolTable) im
 	@Override
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
 		List<Sentence> dc = this.sentences();
-		Integer d0n = Program.getIndex(dc.get(0),map,dc.get(0).label(),file);
+		Integer d0n = Ast.getIndex(dc.get(0),map,dc.get(0).label(),file);
 		for(int i=1;i<dc.size();i++) {
-			Integer dn = Program.getIndex(dc.get(i),map,dc.get(i).label(),file);
-			Program.edgeColor(d0n, dn, "next","red",file);
+			Integer dn = Ast.getIndex(dc.get(i),map,dc.get(i).label(),file);
+			Ast.edgeColor(d0n, dn, "next","red",file);
 			d0n = dn;
 		}
 		for(Sentence s:dc)

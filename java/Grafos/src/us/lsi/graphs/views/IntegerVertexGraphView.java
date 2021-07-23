@@ -19,8 +19,8 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		return new IntegerVertexGraphView<V, E>(graph);
 	}
 
-	public final Map<V,Integer> index;
-	public final List<V> vertices;
+	private final Map<V,Integer> index;
+	private final List<V> vertices;
 	public final Integer n;
 	private Graph<V,E> graph;
 	
@@ -213,6 +213,13 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		return String.format("(%s,%s)",this.vertexSet(),this.edgeSet());
 	}	
 	
+	public Integer index(V v) {
+		return this.index(v);
+	}
+	
+	public V vertex(Integer i) {
+		return this.vertices.get(i);
+	}
 
 }
 

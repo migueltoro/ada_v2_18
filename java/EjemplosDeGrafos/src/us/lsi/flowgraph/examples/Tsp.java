@@ -54,8 +54,8 @@ public class Tsp {
 		GraphData.n = graph3.vertexSet().size();
 		Ciudad origin = Ciudad.ofName("Sevilla");
 		Ciudad target = Ciudad.ofName("Almeria");
-		GraphData.origin= graph3.index.get(origin);
-		GraphData.target= graph3.index.get(target);
+		GraphData.origin= graph3.index(origin);
+		GraphData.target= graph3.index(target);
 		AuxGrammar.generate(GraphData.class,"models/shortest_path.lsi","ficheros/shortest_path.lp");
 		GurobiSolution solution = GurobiLp.gurobi("ficheros/shortest_path.lp");
 		System.out.println(solution.toString((s,d)->s.startsWith("x_0") || d > 0.));		

@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -32,10 +32,10 @@ public record CallFunction(String id,List<Exp> parameters, FunDeclaration funDec
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
-		Integer pn = Program.getIndex(this,map,this.label(), file);
+		Integer pn = Ast.getIndex(this,map,this.label(), file);
 		for(Exp e:this.parameters()) {
-			Integer dn = Program.getIndex(e,map,e.label(),file);
-			Program.edge(pn, dn, file);
+			Integer dn = Ast.getIndex(e,map,e.label(),file);
+			Ast.edge(pn, dn, file);
 			e.toDot(file, map);
 		}
 	}

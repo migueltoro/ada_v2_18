@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -13,17 +13,17 @@ import us.lsi.common.Printers;
 import us.lsi.tiposrecursivos.parsers.ProgramLexer;
 import us.lsi.tiposrecursivos.parsers.ProgramParser;
 
-public record Program(Block block) {
+public record Ast(Block block) {
 	
-	public static Program of(Block block) {
-		return new Program(block);
+	public static Ast of(Block block) {
+		return new Ast(block);
 	}
 	
-	public static Program parse(String file) throws IOException {
+	public static Ast parse(String file) throws IOException {
 		ProgramLexer lexer = new ProgramLexer(CharStreams.fromFileName("ficheros/program.txt"));
 		ProgramParser parser = new ProgramParser(new CommonTokenStream(lexer));
 	    ParseTree parseTree = parser.program();
-	    Program program =  (Program) parseTree.accept(new ProgramVisitorC());
+	    Ast program =  (Ast) parseTree.accept(new AstVisitorC());
 	    return program;
 	}
 	
@@ -34,7 +34,7 @@ public record Program(Block block) {
 			r = map.get("maxValue")+1;
 			map.put("maxValue",r);
 			map.put(e, r);
-			Program.vertex(r,label,file);
+			Ast.vertex(r,label,file);
 		}
 		return r;
 	}
@@ -92,10 +92,10 @@ public record Program(Block block) {
 	}
 	
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
-		Integer pn = Program.getIndex(this,map,"Program", file);
+		Integer pn = Ast.getIndex(this,map,"Program", file);
 		Block b = this.block();	
-		Integer bn = Program.getIndex(b.sentences().get(0),map,b.sentences().get(0).label(), file);
-		Program.edgeColor(pn, bn,"next","red",file);
+		Integer bn = Ast.getIndex(b.sentences().get(0),map,b.sentences().get(0).label(), file);
+		Ast.edgeColor(pn, bn,"next","red",file);
 		b.toDot(file,map);
 	}
 

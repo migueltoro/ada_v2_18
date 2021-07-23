@@ -196,5 +196,13 @@ public class IntegerMappingGraphView<V,E> implements Graph<Integer,E>{
 	public String toString() {
 		return String.format("%s === %s",this.vertexSet(),this.edgeSet());
 	}
+	
+	public Integer index(V v) {
+		return this.index(v);
+	}
+	
+	public V vertex(Integer i) {
+		return this.vertices.get(i);
+	}
 
 }

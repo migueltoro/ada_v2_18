@@ -33,7 +33,7 @@ public class VertexEdgeCoverPLI {
 		g = IntegerVertexGraphView.of(graph);
 		GraphData.n = g.vertexSet().size();
 		GraphData.vertexWeight = g.vertexSet().stream()
-				.collect(Collectors.toMap(x->x,x->1./g.vertices.get(x).getHabitantes()));
+				.collect(Collectors.toMap(x->x,x->1./g.vertex(x).getHabitantes()));
 		GraphData.graph = g;
 	}
 	

@@ -64,7 +64,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 
 	@Override
 	public List<Ciudad> getSolucion(List<Integer> cr) {
-		return cr.stream().map(i->graph.vertices.get(i)).collect(Collectors.toList());
+		return cr.stream().map(i->graph.vertex(i)).collect(Collectors.toList());
 	}
 
 }

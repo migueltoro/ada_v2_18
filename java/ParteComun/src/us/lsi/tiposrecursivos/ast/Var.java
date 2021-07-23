@@ -1,9 +1,9 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.Map;
 
-public final class Var implements Exp {
+public final class Var implements Exp, Declaration {
 	
 	private String id;
 	private Object value;
@@ -35,10 +35,6 @@ public final class Var implements Exp {
 	public static Var of(String id, Type type, Object value) {
 		return new Var(id,type,value);
 	}
-	
-	public static Var of(VarDeclaration d) {
-		return new Var(d.id(),d.type(),d.value());
-	}
 
 	@Override
 	public String toString() {
@@ -52,7 +48,7 @@ public final class Var implements Exp {
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Program.getIndex(this,map,this.label(),file);
+		Ast.getIndex(this,map,this.label(),file);
 	}
 
 }

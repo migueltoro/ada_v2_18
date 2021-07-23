@@ -1,4 +1,4 @@
-package us.lsi.tiposrecursivos.program;
+package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.Map;
@@ -21,11 +21,11 @@ public record Assign(Exp id, Exp exp) implements Sentence {
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Program.getIndex(this,map,this.label(),file);
-		Integer id = Program.getIndex(this.id(),map,this.id.label(),file);
-		Integer exp = Program.getIndex(this.exp(),map,this.exp().label(),file);
-		Program.edge(n,id,"left",file);
-		Program.edge(n,exp,"right",file);
+		Integer n = Ast.getIndex(this,map,this.label(),file);
+		Integer id = Ast.getIndex(this.id(),map,this.id.label(),file);
+		Integer exp = Ast.getIndex(this.exp(),map,this.exp().label(),file);
+		Ast.edge(n,id,"left",file);
+		Ast.edge(n,exp,"right",file);
 		this.id().toDot(file, map);
 		this.exp().toDot(file, map);
 	}
