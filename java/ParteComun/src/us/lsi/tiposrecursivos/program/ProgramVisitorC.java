@@ -14,7 +14,7 @@ import us.lsi.tiposrecursivos.parsers.ProgramParser;
 
 public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	
-	public static Map<String,Var> symbolTable = new HashMap<>();
+	public static Map<String,Object> symbolTable = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -25,11 +25,12 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	@Override 
 	public Program visitProgram(ProgramParser.ProgramContext ctx) { 
 		Integer n = ctx.declaration().size();
-		List<Declaration> declarations = IntStream.range(0,n).boxed()
+		IntStream.range(0,n).boxed()
 				.map(i->(Declaration)visit(ctx.declaration(i)))
 				.collect(Collectors.toList());
 		Block block = (Block) visit(ctx.block());
-		return Program.of(declarations, block);
+		block = Block.of(block.sentences(),symbolTable);
+		return Program.of(block);
 	}
 	
 	/**
@@ -42,7 +43,11 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 	public Declaration visitFunDeclarationSP(ProgramParser.FunDeclarationSPContext ctx) { 
 		String id = ctx.id.getText();
 		Type type = Type.valueOf(ctx.type.getText());
-		return FunDeclaration.of(id,type,List.of());
+		FunDeclaration d = FunDeclaration.of(id,type,List.of());
+		Preconditions.checkState(!ProgramVisitorC.symbolTable.containsKey(id),
+				String.format("La variable %s ya ha sido declarada",id));
+		ProgramVisitorC.symbolTable.put(id,d);
+		return d;
 	}
 	
 	/**
@@ -58,8 +63,11 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		Type type = Type.valueOf(ctx.type.getText());
 		List<ParamDeclaration> parameters = new ArrayList<>();
 		if(ctx.formal_parameters() != null) parameters = (List<ParamDeclaration>) visit(ctx.formal_parameters());
-		return FunDeclaration.of(id,type,parameters);
-		
+		FunDeclaration d = FunDeclaration.of(id,type,parameters);	
+		Preconditions.checkState(!ProgramVisitorC.symbolTable.containsKey(id),
+				String.format("La variable %s ya ha sido declarada",id));
+		ProgramVisitorC.symbolTable.put(id,d);
+		return d;
 	}
 	
 	
@@ -74,11 +82,11 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		Type type = Type.valueOf(ctx.type.getText());
 		Object value = null;
 		if(ctx.exp() != null) value = ((Exp)visit(ctx.exp())).value();
-		VarDeclaration r = VarDeclaration.of(id,type,value);
+		Var r = Var.of(id,type,value);
 		Preconditions.checkState(!ProgramVisitorC.symbolTable.containsKey(id),
 				String.format("La variable %s ya ha sido declarada",id));
-		ProgramVisitorC.symbolTable.put(id,Var.of(id, value, type));
-		return r;
+		ProgramVisitorC.symbolTable.put(id,r);
+		return VarDeclaration.of(r.id(), r.type(), r.value());
 	}
 
 	/**
@@ -119,7 +127,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		String idText =ctx.id.getText();
 		Preconditions.checkState(ProgramVisitorC.symbolTable.containsKey(idText), 
 				String.format("La variable %s no ha sido declarada",idText));
-		Exp id = ProgramVisitorC.symbolTable.get(idText);
+		Var id = (Var)ProgramVisitorC.symbolTable.get(idText);
 		Exp exp = (Exp) visit(ctx.exp());
 		return Assign.of(id,exp); 
 	}
@@ -160,7 +168,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		List<Sentence> sentences = IntStream.range(0,n).boxed()
 				.map(i->(Sentence)visit(ctx.sentence(i)))
 				.collect(Collectors.toList());
-		return Block.of(sentences);
+		return Block.of(sentences,Map.of());
 	}
 	/**
 	 * {@inheritDoc}
@@ -206,7 +214,10 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		String id = ctx.ID().getText();
 		List<Exp> parameters = new ArrayList<>();
 		if(ctx.real_parameters() != null) parameters = (List<Exp>) visit(ctx.real_parameters());
-		return CallFunction.of(id, parameters);
+		Preconditions.checkState(ProgramVisitorC.symbolTable.containsKey(id), 
+				String.format("La función %s no ha sido declarada",id));
+		FunDeclaration d = (FunDeclaration)ProgramVisitorC.symbolTable.get(id);
+		return CallFunction.of(id,parameters,d);
 	}
 	/**
 	 * {@inheritDoc}
@@ -250,7 +261,7 @@ public class ProgramVisitorC extends ProgramBaseVisitor<Object> {
 		String idText = ctx.id.getText();
 		Preconditions.checkState(ProgramVisitorC.symbolTable.containsKey(idText), 
 				String.format("La variable %s no ha sido declarada",idText));
-		Exp id = ProgramVisitorC.symbolTable.get(idText);
+		Var id = (Var)ProgramVisitorC.symbolTable.get(idText);
 		return id;
 	}
 	/**

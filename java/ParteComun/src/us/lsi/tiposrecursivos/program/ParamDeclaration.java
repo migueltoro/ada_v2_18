@@ -8,7 +8,7 @@ public record ParamDeclaration(String id, Type type) {
 	
 	@Override
 	public String toString() {
-		return String.format("%s : %s", this.id,this.type);
+		return String.format("%s:%s", this.id,this.type);
 	}
 
 }

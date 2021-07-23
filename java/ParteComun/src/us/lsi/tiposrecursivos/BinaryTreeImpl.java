@@ -778,8 +778,14 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		System.out.println(t9.getHeights(2));
 	}
 	
+	public static void test6() {
+		String ex = "-43.7(2.1,56(_e0(_,2), _T0))";
+		BinaryTree<String> t7 = BinaryTree.parse(ex);
+		t7.toDot("ficheros/binaryPattern.gv");
+	}
+	
 	public static void main(String[] args) {
-		test5();
+		test6();
 	}
 	
 

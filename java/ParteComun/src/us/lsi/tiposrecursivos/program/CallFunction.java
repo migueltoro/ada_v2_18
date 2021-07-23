@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public record CallFunction(String id,List<Exp> parameters) implements Exp {
+public record CallFunction(String id,List<Exp> parameters, FunDeclaration funDeclaration) implements Exp {
 	
-	public static CallFunction of(String id, List<Exp> parameters) {
-		return new CallFunction(id, parameters);
+	public static CallFunction of(String id, List<Exp> parameters,FunDeclaration funDeclaration) {
+		return new CallFunction(id, parameters,funDeclaration);
 	}
 	
 	public Object value() {

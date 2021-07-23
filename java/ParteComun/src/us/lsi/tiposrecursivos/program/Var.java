@@ -9,7 +9,7 @@ public final class Var implements Exp {
 	private Object value;
 	private Type type;
 
-	private Var(String id, Object value, Type type) {
+	private Var(String id, Type type, Object value) {
 		super();
 		this.id = id;
 		this.value = value;
@@ -32,8 +32,12 @@ public final class Var implements Exp {
 	public Type type() {
 		return type;
 	}
-	public static Var of(String id, Object value, Type type) {
-		return new Var(id,value,type);
+	public static Var of(String id, Type type, Object value) {
+		return new Var(id,type,value);
+	}
+	
+	public static Var of(VarDeclaration d) {
+		return new Var(d.id(),d.type(),d.value());
 	}
 
 	@Override

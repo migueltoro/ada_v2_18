@@ -15,7 +15,7 @@ public record VarDeclaration(String id, Type type, Object value) implements Decl
 	
 	@Override
 	public String toString() {
-		return String.format("%s : %s%s", this.id,this.type,this.value==null?"":"="+this.value.toString());
+		return String.format("%s:%s%s",this.id,this.type,this.value==null?"":"="+this.value.toString());
 	}
 
 	@Override

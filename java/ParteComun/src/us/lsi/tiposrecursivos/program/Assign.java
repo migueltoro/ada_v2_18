@@ -11,7 +11,7 @@ public record Assign(Exp id, Exp exp) implements Sentence {
 	
 	@Override
 	public String toString() {
-		return String.format("%s = %s\n", this.id, this.exp);
+		return String.format("%s = %s", this.id, this.exp);
 	}
 
 	@Override

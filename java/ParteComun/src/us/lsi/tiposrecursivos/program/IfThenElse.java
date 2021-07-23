@@ -28,8 +28,8 @@ public record IfThenElse(Exp guard,Block trueBlock,Block falseBlock) implements 
 		Integer falseBlock = Program.getIndex(this.falseBlock().sentences().get(0),map,
 				this.falseBlock().sentences().get(0).label(),file);
 		Program.edge(n,guard,"Guarda",file);
-		Program.edge(n,trueBlock,"True",file);
-		Program.edge(n,falseBlock,"False",file);
+		Program.edgeColor(n,trueBlock,"nextTrue","red",file);
+		Program.edgeColor(n,falseBlock,"nextFalse","red",file);
 		this.guard().toDot(file,map);
 		this.trueBlock().toDot(file,map);
 		this.falseBlock().toDot(file,map);
