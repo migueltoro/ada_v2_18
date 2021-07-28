@@ -7,6 +7,10 @@ public record IntPair(Integer first,Integer second) {
 		return new IntPair(a, b);
 	}
 	
+	public static IntPair of(Pair<Integer,Integer> p) {
+		return new IntPair(p.first(), p.second());
+	}
+	
 	public static IntPair parse(String s) {
 		String[] partes = s.split("[(),]");
 		return new IntPair(Integer.parseInt(partes[0].trim()), Integer.parseInt(partes[1].trim()));

@@ -11,7 +11,6 @@ module ejemplos_parte_comun {
 	exports us.lsi.recursivos.problemasdelistas;
 	exports us.lsi.trees;
 	exports us.lsi.java8ejemplos;
-	exports us.lsi.iterativos;
 	exports us.lsi.ejemplos_stream;
 	exports us.lsi.recursivos.puntos;
 

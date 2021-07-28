@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 import us.lsi.common.Comparator2;
 import us.lsi.common.Enumerate;
 import us.lsi.common.List2;
+import us.lsi.common.LongPair;
 import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Printers;
@@ -30,7 +32,11 @@ import us.lsi.iterables.IteratorFusionOrdered;
 import us.lsi.iterables.IteratorMap;
 import us.lsi.math.Math2;
 
-public class Ejemplos1 {
+public class EjemplosIterativosRecursivos {
+	
+	public static Stream<Long> divisores(Long n){
+		return Stream.iterate(2L, x-> x <= (long) Math.sqrt(n), x -> x+1).filter(x->n%x==0);
+	}
 	
 	public static Integer sumaPrimos(String file) {
 		return Stream2.file(file)
@@ -71,6 +77,8 @@ public class Ejemplos1 {
 		}
 		return suma;
 	}
+	
+	
 	
 	public static Integer sumaPrimos3(String file) {
 		Iterable<String> fileIt = Iterables.file(file);
@@ -116,6 +124,8 @@ public class Ejemplos1 {
 		}
 		return grupos;
 	}
+	
+	
 
 	public static <E> Integer index0(List<E> ls, E elem) {
 		Optional<Integer> r = IntStream.range(0,ls.size()).boxed()
@@ -309,44 +319,23 @@ public class Ejemplos1 {
 
 	public static Boolean esAritmetica1(List<Integer> ls) {
 		Integer n = ls.size();
-		if(n<3) return true;
+		if(n<2) return true;
 		Integer rz = ls.get(1)-ls.get(0);
 		return IntStream.range(0,n-1)
 	 		.allMatch(i->(ls.get(i+1)-ls.get(i)) == rz);
 	}
 
-	public Boolean esAritmetica2(List<Integer> list) {
+	public static Boolean esAritmetica2(List<Integer> list) {
 		Integer n = list.size();
-		if(n<3) return true;
+		if(n<2) return true;
 		Integer i = 0;
 		Boolean b = true;
 		Integer rz = list.get(1)-list.get(0);
 		while(i<n-1  && b){
-		   b = (list.get(i+1)-list.get(i)) == rz;
-		}
-		return b;
-	}
-
-	public static Boolean esAritmetica3(Iterable<Integer> it) {
-		Integer a1, a2;
-		Iterator<Integer> itt = it.iterator();
-		if(itt.hasNext()) a1 = itt.next(); else return false;
-		if(itt.hasNext()) a2 = itt.next(); else return false;
-		Integer rz = a2-a1;
-		Stream<Pair<Integer,Integer>> it2 = Stream2.consecutivePairs(Stream2.asStream(()->itt));
-		return it2.allMatch(p->(p.second()-p.first()) == rz);
-	}
-
-	public static Boolean esAritmetica4(Iterator<Integer> it) {
-		Integer a1, a2;
-		if(it.hasNext()) a1 = it.next(); else return false;
-		if(it.hasNext()) a2 = it.next(); else return false;
-		Boolean b = true;
-		Integer rz = a2-a1;
-		while(it.hasNext()  && b){
-		   b =  (a2-a1) == rz;
-		   a1 = a2;
-		   a2 = it.next();
+		   Integer e2 =list.get(i+1);
+		   Integer e1 = list.get(i);
+		   i++;
+		   b = e2-e1 == rz;
 		}
 		return b;
 	}
@@ -522,10 +511,80 @@ public class Ejemplos1 {
 		}
 		return u;
 	}
+	
+	/**
+	 * @param n Un entero
+	 * @param k Un entero
+	 * @return Valor del número combinatorio n sobre k calculado de forma iterativa
+	 */
+	public static int binom(int n, int k) {
+		List<Integer> lsa = Arrays.asList(1);
+		int i = 1;
+		while (i <= n) {
+			List<Integer> ls = List2.empty();
+			for (int s = 0; s <= i; s++) {
+				if (s == 0 || s == i) {
+					ls.add(1);
+				} else if (s == 1 || s == i - 1) {
+					ls.add(i);
+				} else {
+					ls.add(lsa.get(s - 1) + lsa.get(s));
+				}
+			}
+			i = i + 1;
+			lsa = List2.ofCollection(ls);
+		}
+		return lsa.get(k);
+	}
+	
+	
+	
+	/**
+	 * Adaptación del algoritmo anterior pot(b,n) para el cálculo de los número de Fibonacci
+	 * 
+	 * @param n Término
+	 * @return Valor del n-esimo número de Fibonacci calculado de forma iterativa
+	 */
+	public static long fib(int n){
+			int i = 0;
+		    int a = 1;
+			int b = 0;
+			while(i < n){
+				i = i+1;
+				int a0 = a;
+				a = a0+b;
+				b = a0;
+			}
+			return b;
+	}
+	
+	public static List<LongPair> primosPar(Long m, Long n, Integer k) {
+		Stream<Long> r = Stream.iterate(Math2.siguientePrimo(m - 1), x -> x < n, x -> Math2.siguientePrimo(x));
+		List<LongPair> r2 = 
+				Stream2.consecutivePairs(r)
+				.map(p->LongPair.of(p))
+				.filter(t -> t.second() - t.first() == k)
+				.toList();
+		return r2;
+	}
 
 
+	public static List<LongPair> primosPar2(Long m, Long n, Integer k) {
+		List<LongPair> r = new ArrayList<>();
+		Long e1 = null;
+		Long e2 = Math2.siguientePrimo(m - 1);		
+		while(e2<n) {
+			LongPair p = LongPair.of(e1, e2);
+			e1 = e2;
+			e2 = Math2.siguientePrimo(e2);
+			if(p.first() != null && p.second() - p.first() == k) {
+				r.add(p);
+			}			
+		}
+		return r;
+	}
 
-	public static void main(String[] args) throws IOException {
+	public static void test1() throws IOException {
 		List<Integer> ls1 = List2.of(-1,3,5,5,7,9,13,15,15,17,19);
 		Integer e = 13;
 		System.out.println(String.format("0: %d, %d, %d, %d, %d, %d, %d",
@@ -551,20 +610,7 @@ public class Ejemplos1 {
 		System.out.println("Digitos I = "+ls);
 		System.out.println("Ceros = "+numeroDeCeros(n,a));
 		System.out.println("Entero = "+n+","+entero(ls,a));
-		System.out.println(String.format("3.0 %d",sumaPrimos("ficheros/numeros2.txt")));
-		System.out.println(String.format("3.1 %d",sumaPrimos1("ficheros/numeros2.txt")));
-		System.out.println(String.format("3.2 %d",sumaPrimos2("ficheros/numeros2.txt")));
-		System.out.println(String.format("3.3 %d",sumaPrimos3("ficheros/numeros2.txt")));
-		var r1 = agrupaPorResto1("ficheros/numeros2.txt",5);
-		var r2 = agrupaPorResto2("ficheros/numeros2.txt",5);
-		System.out.println("4 \n "+r1);
-		System.out.println("5 \n "+r2);
-		String text = "reordenanedroer";
-		String text2 = "reordenanefroer";
-		System.out.println(String.format("4: %b, %b, %b, %b",
-				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text)));
-		System.out.println(String.format("4: %b, %b, %b, %b",
-				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2)));
+		
 		List<Integer> l1 = List2.of(1,3,5,7,9,11);
 		List<Integer> l2 = List2.of(0,2,4,10,19,21,23,45);
 		List<Integer> l3 = mezclaOrdenada(l2,l1, Comparator.naturalOrder());
@@ -581,6 +627,40 @@ public class Ejemplos1 {
 		Iterable<Integer> f3 = IteratorFusionOrdered.of(f11,f22,Comparator.naturalOrder());
 		PrintStream p = Printers.file("ficheros/numeros6.txt");
 		for(Integer er:f3) p.println(er.toString());
+	}
+	
+	public static void test2() {
+		System.out.println(primosPar(30L,100L,2));
+		System.out.println(primosPar2(30L,100L,2));
+	}
+	
+	public static void test3() {
+		System.out.println(esAritmetica1(List.of(4,6,8,11,12)));
+		System.out.println(esAritmetica2(List.of(4,6,8,11,12)));
+	}
+	
+	public static void test4() {
+		String text = "reordenanedroer";
+		String text2 = "reordenanefroer";
+		System.out.println(String.format("4: %b, %b, %b, %b",
+				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text)));
+		System.out.println(String.format("4: %b, %b, %b, %b",
+				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2)));
+	}
+	
+	public static void test5() {
+		System.out.println(String.format("3.0 %d",sumaPrimos("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.1 %d",sumaPrimos1("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.2 %d",sumaPrimos2("ficheros/numeros2.txt")));
+		System.out.println(String.format("3.3 %d",sumaPrimos3("ficheros/numeros2.txt")));
+		var r1 = agrupaPorResto1("ficheros/numeros2.txt",5);
+		var r2 = agrupaPorResto2("ficheros/numeros2.txt",5);
+		System.out.println("4 \n "+r1);
+		System.out.println("5 \n "+r2);
+	}
+
+	public static void main(String[] args) throws IOException {
+		test5();
 	}
 	
 	

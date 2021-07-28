@@ -126,19 +126,21 @@ public class ViewEjemplos {
 	}
 	
 	public static void matrix() {
-			Integer[][] a = {{1,2,3,5,6},{3,4,5,-2,3},{5,6,7,5,6},{5,6,7,5,6},{5,6,7,5,6}};
-			Matrix<Integer> m7 = Matrix.of(a);
-			m7.print("m7");
-			Matrix<Integer> m8 = m7.view(2);
-			m8.print("m8");
-			System.out.println(String.format("%d,%d",m7.nf(),m7.nc()));
-			System.out.println(String.format("%d,%d",m8.nf(),m8.nc()));
-			System.out.println(String.format("%s,%s,%s,%s",
-					m8.get(0,0),
-					m8.get(0,m8.nc()-1),
-					m8.get(m8.nf()-1,0),
-					m8.get(m8.nf()-1,m8.nc()-1)));
+		Integer[][] a = {{1,2,3,5,6},{3,4,5,-2,3},{5,6,7,5,6},{5,6,7,5,6},{5,6,7,5,6}};
+		Matrix<Integer> m7 = Matrix.of(a);
+		m7.print("m7");
+		Matrix<Integer> m8 = m7.view(2);
+		m8.print("m8");
+		System.out.println(String.format("%d,%d",m7.nf(),m7.nc()));
+		System.out.println(String.format("%d,%d",m8.nf(),m8.nc()));
+		System.out.println(String.format("%s,%s,%s,%s",
+				m8.get(0,0),
+				m8.get(0,m8.nc()-1),
+				m8.get(m8.nf()-1,0),
+				m8.get(m8.nf()-1,m8.nc()-1)));
 	}
+	
+	
 	
 	public static void main(String[] args) {
 //		System.out.println(sum(List.of(1,3,7,9,31,54,91,102)));
