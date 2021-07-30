@@ -1,5 +1,10 @@
 package us.lsi.common;
 
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+
 /**
  * @author migueltoro
  *
@@ -24,6 +29,13 @@ public class Ranges {
 		}
 		public Integer size() {
 			return (b-a)/c;
+		}
+		public Integer get(Integer i) {
+			Preconditions.checkElementIndex(0,this.size());
+			return this.a()+i*this.c();
+		}
+		public Stream<Integer> stream(){
+			return IntStream.of(a,b,c).boxed();
 		}
 		public View1<IntRange,Integer> view1(){
 			Integer n = this.size();
@@ -63,6 +75,13 @@ public class Ranges {
 		public Long size() {
 			return (b-a)/c;
 		}
+		public Long get(Integer i) {
+			Preconditions.checkElementIndex(0,this.size().intValue());
+			return this.a()+i*this.c();
+		}
+		public Stream<Long> stream(){
+			return LongStream.of(a,b,c).boxed();
+		}
 		public View1<LongRange,Long> view1(){
 			Long n = this.size();
 			Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
@@ -82,7 +101,6 @@ public class Ranges {
 		}
 	}
 	
-	
 	public static record DoubleRange(Double a,Double b, Double c) {
 		
 		public static DoubleRange of(Double a, Double b, Double c) {
@@ -99,6 +117,13 @@ public class Ranges {
 		}
 		public Integer size() {
 			return (int) ((b-a)/c);
+		}
+		public Double get(Integer i) {
+			Preconditions.checkElementIndex(0,this.size());
+			return this.a()+i*this.c();
+		}
+		public Stream<Double> stream(){
+			return DoubleStream.of(a,b,c).boxed();
 		}
 		public View1<DoubleRange,Double> view1(){
 			Integer n = this.size();
@@ -118,7 +143,4 @@ public class Ranges {
 			return View2E.of(central,DoubleRange.of(a,central+c,c),DoubleRange.of(central,b,c));
 		}
 	}
-	
-	
-	
 }

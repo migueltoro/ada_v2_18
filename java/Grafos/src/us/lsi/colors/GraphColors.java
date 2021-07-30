@@ -30,6 +30,8 @@ public class GraphColors {
 		return m;
 	}
 	
+	
+	
 	public static Map<String,Attribute> getColor(Integer c) {
 		return getColor(Color.values()[c]);
 	}
@@ -79,5 +81,7 @@ public class GraphColors {
 		if(!test) m = Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
 		return m;
 	}
+	
+	
 	
 }

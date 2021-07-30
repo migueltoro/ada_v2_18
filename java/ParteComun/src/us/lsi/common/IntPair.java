@@ -44,4 +44,22 @@ public record IntPair(Integer first,Integer second) {
 	public Integer manhattan(IntPair p) {
 		return this.minus(p).sumAbs();
 	}
+	
+	public Integer size() {
+		return this.second()-this.first();
+	}
+	
+	public View1<IntPair,Integer> view1() {
+		return View1.of(this.first(),IntPair.of(this.first()+1,this.second()));
+	}
+	
+	public View2E<IntPair,Integer> view2e() {
+		Integer k = (this.second()+this.first())/2;
+		return View2E.of(k,IntPair.of(this.first(),k),IntPair.of(k,this.second()));
+	}
+	
+	public View2E<IntPair,Integer> view2eOverlap() {
+		Integer k = (this.second()+this.first())/2;
+		return View2E.of(k,IntPair.of(this.first(),k+1),IntPair.of(k,this.second()));
+	}
 }

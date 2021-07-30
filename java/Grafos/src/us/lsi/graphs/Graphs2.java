@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -165,7 +166,8 @@ public class Graphs2 {
 		
 		DOTExporter<V,E> de = new DOTExporter<V,E>();
 //Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v)))
-//Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e)))		
+//Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e)))	
+		
 		Function<V,Map<String,Attribute>> m1 = 
 			v->Map2.merge(labelAttributeOfString(vertexLabel.apply(v)),vertexAttribute.apply(v));
 		Function<E,Map<String,Attribute>> m2 = 

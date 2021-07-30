@@ -44,4 +44,22 @@ public record LongPair(Long first,Long second) {
 	public Long manhattan(LongPair p) {
 		return this.minus(p).sumAbs();
 	}
+	
+	public Long size() {
+		return this.second()-this.first();
+	}
+	
+	public View1<LongPair,Long> view1() {
+		return View1.of(this.first(),LongPair.of(this.first()+1,this.second()));
+	}
+	
+	public View2E<LongPair,Long> view2e() {
+		Long k = (this.second()+this.first())/2;
+		return View2E.of(k,LongPair.of(this.first(),k),LongPair.of(k,this.second()));
+	}
+	
+	public View2E<LongPair,Long> view2eOverlap() {
+		Long k = (this.second()+this.first())/2;
+		return View2E.of(k,LongPair.of(this.first(),k+1),LongPair.of(k,this.second()));
+	}
 }

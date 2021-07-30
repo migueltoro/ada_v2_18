@@ -265,9 +265,7 @@ public class List2 {
 	 */
 	@SafeVarargs
 	public static <E> List<E> of(E... elements){
-		List<E> r = new ArrayList<E>();
-		r.addAll(Arrays.stream(elements).collect(Collectors.toList()));
-		return r;
+		return Arrays.asList(elements);
 	}
 	
 	/**
