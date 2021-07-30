@@ -10,6 +10,7 @@ import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 
+
 public class GraphTree<V, E extends SimpleHyperEdge<V,E,A>, A> {
 	
 	public static <V, E extends SimpleHyperEdge<V, E, A>, A> GraphTree<V, E, A> of(Map<V, Sp<E>> tree,V vertex) {

@@ -13,6 +13,7 @@ import org.jgrapht.nio.dot.DOTExporter;
 import us.lsi.common.Files2;
 import us.lsi.common.Map2;
 
+
 public class GraphColors {
 	
 	public enum Color {
@@ -94,13 +95,6 @@ public class GraphColors {
 		for(Map<String, Attribute> f:properties)
 			r.putAll(f);
 		return r;
-	}
-	
-	public static Map<String,Attribute> getColorStyleIf2(Color yesColor, Style style, Boolean test) {		
-		Map<String,Attribute> m = new HashMap<>();
-		if(test) m = Map.of("color", DefaultAttribute.createAttribute(yesColor.toString()),
-				"style", DefaultAttribute.createAttribute(style.toString()));
-		return m;
 	}
 
 	public static <V,E> void toDot(Graph<V,E> graph, String file) {		
