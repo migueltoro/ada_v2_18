@@ -56,11 +56,11 @@ public class Test_aS {
 			System.out.println(s_as);
 			System.out.println(gp_as);
 
-			Graphs2.toDot(aStar.outGraph, "ficheros/multiconjuntosAStarGraph.gv", 
+			GraphColors.toDot(aStar.outGraph, "ficheros/multiconjuntosAStarGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
-					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
-					e -> GraphColors.getColorIf(Color.red, gp.getEdgeList().contains(e)));
+					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
+					e -> GraphColors.colorIf(Color.red, gp.getEdgeList().contains(e)));
 		}
 	}
 

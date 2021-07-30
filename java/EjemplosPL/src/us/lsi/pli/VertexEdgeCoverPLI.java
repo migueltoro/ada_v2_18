@@ -53,12 +53,12 @@ public class VertexEdgeCoverPLI {
 				.filter(s->solution.values.get(s)>0)
 				.map(s->ciudad(s))
 				.collect(Collectors.toSet());
-		Graphs2.toDot(graph,
+		GraphColors.toDot(graph,
 				"ficheros/vertex_cover.gv", 
 				v->v.getNombre(), 
 				e->e.getNombre(), 
-				v->GraphColors.getColorIf(Color.red,Color.black,ciudades.contains(v)),
-				e->GraphColors.getStyle(Style.solid));
+				v->GraphColors.colorIf(Color.red,Color.black,ciudades.contains(v)),
+				e->GraphColors.style(Style.solid));
 	}
 	
 	public static Carretera carretera(String s) {
@@ -79,12 +79,12 @@ public class VertexEdgeCoverPLI {
 				.filter(s->solution.values.get(s)>0)
 				.map(s->carretera(s))
 				.collect(Collectors.toSet());
-		Graphs2.toDot(graph,
+		GraphColors.toDot(graph,
 				"ficheros/edge_cover.gv", 
 				v->v.getNombre(), 
 				e->e.getNombre(), 
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getColorIf(Color.red,Color.black,carreteras.contains(e)));
+				v->GraphColors.color(Color.black),
+				e->GraphColors.colorIf(Color.red,Color.black,carreteras.contains(e)));
 		
 	}
 	

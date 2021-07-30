@@ -43,13 +43,13 @@ public class CaminoMinimo {
 						e->gp.getEdgeList().contains(e),
 						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));
 		
-		Graphs2.toDot(graph,"ficheros/caminoMinimoAndalucia1.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		GraphColors.toDot(graph,"ficheros/caminoMinimoAndalucia1.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		Graphs2.toDot(graph2,"ficheros/caminoMinimoAndalucia2.gv",
+		GraphColors.toDot(graph2,"ficheros/caminoMinimoAndalucia2.gv",
 				x->x.getNombre(),
 				x->x.getNombre()+"--"+x.getKm(),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyle(Style.bold));
+				v->GraphColors.color(Color.black),
+				e->GraphColors.style(Style.bold));
 		
 		
 	}

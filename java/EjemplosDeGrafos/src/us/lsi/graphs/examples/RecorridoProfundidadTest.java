@@ -4,6 +4,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+
+import us.lsi.colors.GraphColors;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -35,9 +37,9 @@ public class RecorridoProfundidadTest {
 //		ra.stream().forEach(v->System.out.println(v.getNombre()));
 		Set<Carretera> carreteras = rp.edges();
 		
-		Graphs2.toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		GraphColors.toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		Graphs2.toDot(rp.outGraph,"ficheros/andaluciaProfundidad.gv",
+		GraphColors.toDot(rp.outGraph,"ficheros/andaluciaProfundidad.gv",
 				x->String.format("%s",x.getNombre()+rp.position.get(x)),
 				x->String.format("%.2f",x.getKm()));
 		

@@ -62,11 +62,11 @@ public class TestPD {
 
 			System.out.println(s_pdr);
 			
-			Graphs2.toDot(pdr.outGraph,"ficheros/subconjuntosPDGraph.gv",
+			GraphColors.toDot(pdr.outGraph,"ficheros/subconjuntosPDGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
-					v->GraphColors.getColorIf(Color.red,SubconjuntosVertex.goal().test(v)),
-					e->GraphColors.getColorIf(Color.red,(gp.isPresent()?gp.get().getEdgeList():le).contains(e))
+					v->GraphColors.colorIf(Color.red,SubconjuntosVertex.goal().test(v)),
+					e->GraphColors.colorIf(Color.red,(gp.isPresent()?gp.get().getEdgeList():le).contains(e))
 					);
 		}
 	}

@@ -39,11 +39,11 @@ public class SubGraphsAndViews {
 			
 		String2.toConsole(r.getEdgeList(), "Camino");	
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
 				x->String.format("%s",x.getNombre()),
 				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyleIf(Style.bold,r.getEdgeList().contains(e)));
+				v->GraphColors.color(Color.black),
+				e->GraphColors.styleIf(Style.bold,r.getEdgeList().contains(e)));
 		
 	}
 

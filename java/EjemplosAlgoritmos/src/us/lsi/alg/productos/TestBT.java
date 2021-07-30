@@ -53,11 +53,11 @@ public class TestBT {
 			
 			System.out.println(bta.getSolution());
 					
-			Graphs2.toDot(bta.outGraph,"ficheros/productosBTGraph.gv",
+			GraphColors.toDot(bta.outGraph,"ficheros/productosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
-					v->GraphColors.getColorIf(Color.red,goal.test(v)),
-					e->GraphColors.getColorIf(Color.red,gp.getEdgeList().contains(e))
+					v->GraphColors.colorIf(Color.red,goal.test(v)),
+					e->GraphColors.colorIf(Color.red,gp.getEdgeList().contains(e))
 					);
 
 		}

@@ -54,11 +54,11 @@ public class TestBTMochilaGraph {
 		
 		SolucionMochila s = ms.getSolution().orElse(null);
 		GraphPath<MochilaVertex, MochilaEdge> sp = ms.optimalPath;
-		Graphs2.toDot(ms.outGraph,"ficheros/MochilaBTGraph2.gv",
+		GraphColors.toDot(ms.outGraph,"ficheros/MochilaBTGraph2.gv",
 				v->v.toString(),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,v.equals(e2)),
-				e->GraphColors.getColorIf(Color.red,sp.getEdgeList().contains(e))
+				v->GraphColors.colorIf(Color.red,v.equals(e2)),
+				e->GraphColors.colorIf(Color.red,sp.getEdgeList().contains(e))
 				);
 		System.out.println(s);
 		System.out.println(ms.getSolutions().stream().max(Comparator.comparing(x->x.getValor())).get());

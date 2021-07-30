@@ -41,11 +41,11 @@ public class TestMonedasAStar {
 		} else {
 			System.out.println("No hay solucion");
 		}
-		Graphs2.toDot(ms.outGraph,"ficheros/MonedasAstarGraph.gv",
+		GraphColors.toDot(ms.outGraph,"ficheros/MonedasAstarGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.valorRestante()),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,MonedaVertex.goal().test(v)),
-				e->GraphColors.getColor(Color.black)
+				v->GraphColors.colorIf(Color.red,MonedaVertex.goal().test(v)),
+				e->GraphColors.color(Color.black)
 				);
 	
 		System.out.println("_________________________________");

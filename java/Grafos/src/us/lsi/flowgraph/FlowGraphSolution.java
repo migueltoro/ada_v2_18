@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.graphs.Graphs2;
 import us.lsi.gurobi.GurobiSolution;
 
 public class FlowGraphSolution {
@@ -58,18 +57,18 @@ public class FlowGraphSolution {
 	public final Set<FlowVertex> saturatedVertices;
 	
 	public void toDot(String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(this.graph, file, 
+		GraphColors.<FlowVertex, FlowEdge>toDot(this.graph, file, 
 				v->v.name+"="+this.flowVertices.get(v).toString(), 
 	    		e->e.name+"="+this.flowEdges.get(e).toString(),
-		        v->GraphColors.getColorIf(Color.red,Color.values()[v.getColor()],this.saturatedVertices.contains(v)),
-		        e->GraphColors.getStyleIf(Style.bold,this.saturatedEdges.contains(e)));
+		        v->GraphColors.colorIf(Color.red,this.saturatedVertices.contains(v)),
+		        e->GraphColors.styleIf(Style.bold,this.saturatedEdges.contains(e)));
 	}
 	
 	public void toDotIndex(String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(this.graph, file, 
+		GraphColors.<FlowVertex, FlowEdge>toDot(this.graph, file, 
 				v->this.graph.vertexIndex(v).toString()+"="+this.flowVertices.get(v).toString(), 
 	    		e->e.name+"="+this.flowEdges.get(e).toString(),
-		        v->GraphColors.getColorIf(Color.red,Color.values()[v.getColor()],this.saturatedVertices.contains(v)),
-		        e->GraphColors.getStyleIf(Style.bold,this.saturatedEdges.contains(e)));
+		        v->GraphColors.colorIf(Color.red,this.saturatedVertices.contains(v)),
+		        e->GraphColors.styleIf(Style.bold,this.saturatedEdges.contains(e)));
 	}
 }

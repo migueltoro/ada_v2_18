@@ -53,11 +53,11 @@ public class Test_BT {
 //			System.out.println(bta.path.getEdgeList().stream().map(x -> x.action())
 //					.collect(Collectors.toList()));
 			
-			Graphs2.toDot(bta.outGraph, "ficheros/multiconjuntosBTGraph.gv", 
+			GraphColors.toDot(bta.outGraph, "ficheros/multiconjuntosBTGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
-					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
-					e -> GraphColors.getColorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
+					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
+					e -> GraphColors.colorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
 
 		}
 	}

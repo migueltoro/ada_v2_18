@@ -50,17 +50,17 @@ public class RecubrimientoMinimo {
 		VertexCover<Ciudad> r2 = vc.getVertexCover();
 		
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
 				x->String.format("%s",x.getNombre()),
 				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyleIf(Style.bold,r.getEdges().contains(e)));
+				v->GraphColors.color(Color.black),
+				e->GraphColors.styleIf(Style.bold,r.getEdges().contains(e)));
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaVertexCover.gv",
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaVertexCover.gv",
 				x->String.format("%s",x.getNombre()),
 				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColorIf(Color.green,Color.blue,r2.contains(v)),
-				e->GraphColors.getStyle(Style.solid));
+				v->GraphColors.colorIf(Color.green,Color.blue,r2.contains(v)),
+				e->GraphColors.style(Style.solid));
 		
 	}
 

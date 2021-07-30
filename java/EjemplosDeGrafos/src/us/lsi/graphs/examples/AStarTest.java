@@ -43,13 +43,13 @@ public class AStarTest {
 		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
 		
-		Graphs2.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaAStar.gv",
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaAStar.gv",
 				x->String.format("%s",x.getNombre()),
 				x->String.format("%.sf",x.getKm()),
-				v->GraphColors.getColor(Color.black),
-				e->GraphColors.getStyleIf(Style.bold,carreteras.contains(e)));
+				v->GraphColors.color(Color.black),
+				e->GraphColors.styleIf(Style.bold,carreteras.contains(e)));
 		
 		
 		System.out.println(carreteras);

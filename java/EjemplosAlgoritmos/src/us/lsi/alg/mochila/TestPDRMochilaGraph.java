@@ -2,10 +2,12 @@ package us.lsi.alg.mochila;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
+import static us.lsi.colors.GraphColors.*;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
@@ -50,11 +52,14 @@ public class TestPDRMochilaGraph {
 		ms.withGraph = true;
 		ms.search();
 		
-		Graphs2.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
+		Predicate<MochilaVertex> pv = v->ms.optPath.get().getVertexList().contains(v);
+		Predicate<MochilaEdge> pe= e->ms.optPath.get().getEdgeList().contains(e);
+		
+		GraphColors.toDot(ms.outGraph,"ficheros/MochilaPDRGraph.gv",
 				v->String.format("(%d,%d)",v.index(),v.capacidadRestante()),
 				e->e.action().toString(),
-				v->GraphColors.getColorStyleIf(Color.red,Style.bold,ms.optPath.get().getVertexList().contains(v)),
-				e->GraphColors.getColorStyleIf(Color.red,Style.bold,ms.optPath.get().getEdgeList().contains(e))
+				v->all(colorIf(Color.red,pv.test(v)),styleIf(Style.bold,pv.test(v))),
+				e->all(colorIf(Color.red,pe.test(e)),styleIf(Style.bold,pe.test(e)))
 				);
 	}
 

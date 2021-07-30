@@ -14,7 +14,6 @@ import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.DefaultAttribute;
 
 import us.lsi.colors.GraphColors;
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleHyperEdge;
@@ -104,7 +103,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	}
 	
 	public void toDot(String file,Function<V,String> stringVertex, Function<E,String> stringEdge, Set<V> s) {
-		Graphs2.toDot(this.outGraph,
+		GraphColors.toDot(this.outGraph,
 				file,
 				v->v.toStringVertex(stringVertex),
 				e->VertexGraph.toStringEdge(this.outGraph,e,stringEdge),

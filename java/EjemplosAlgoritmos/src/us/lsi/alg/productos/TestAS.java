@@ -44,9 +44,9 @@ public class TestAS {
 			System.out.println(s_as);
 
 
-			Graphs2.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
-					e -> e.action().toString(), v -> GraphColors.getColorIf(Color.red, goal.test(v)),
-					e -> GraphColors.getColorIf(Color.red, gp.getEdgeList().contains(e)));
+			GraphColors.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
+					e -> e.action().toString(), v -> GraphColors.colorIf(Color.red, goal.test(v)),
+					e -> GraphColors.colorIf(Color.red, gp.getEdgeList().contains(e)));
 
 		}
 

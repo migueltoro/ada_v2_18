@@ -70,11 +70,11 @@ public class TestPD {
 			System.out.println(s_pdr);
 			
 			
-			Graphs2.toDot(pdr.outGraph, "ficheros/multiconjuntosPDRGraph.gv", 
+			GraphColors.toDot(pdr.outGraph, "ficheros/multiconjuntosPDRGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
-					v -> GraphColors.getColorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
-					e -> GraphColors.getColorIf(Color.red, gp.isPresent()?gp.get().getEdgeList().contains(e):false));
+					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
+					e -> GraphColors.colorIf(Color.red, gp.isPresent()?gp.get().getEdgeList().contains(e):false));
 
 		}
 	}

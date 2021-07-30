@@ -1,11 +1,8 @@
 package us.lsi.graphs;
 
-import java.io.Writer;
+
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -20,12 +17,6 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import org.jgrapht.nio.Attribute;
-import org.jgrapht.nio.DefaultAttribute;
-import org.jgrapht.nio.dot.DOTExporter;
-
-import us.lsi.common.Files2;
-import us.lsi.common.Map2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -125,61 +116,6 @@ public class Graphs2 {
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
 	
-	private static Map<String,Attribute> labelAttributeOfString(String label) {
-		Map<String,Attribute> m = new HashMap<>();
-		if(!label.equals("")) m = Map.of("label",DefaultAttribute.createAttribute(label));
-		return m;
-	}
-	
-	public static <V,E> void toDot(Graph<V,E> graph, String file) {		
-		DOTExporter<V,E> de = new DOTExporter<V,E>();
-		de.setVertexAttributeProvider(v->labelAttributeOfString(v.toString()));
-		Writer f1 = Files2.getWriter(file);
-		de.exportGraph(graph, f1);
-	}
-	
-	public static <V,E> void toDot(Graph<V,E> graph, String file, Function<V,String> vertexLabel) {	
-		DOTExporter<V,E> de = new DOTExporter<V,E>();	
-		de.setVertexAttributeProvider(v->labelAttributeOfString(vertexLabel.apply(v)));
-		Writer f1 = Files2.getWriter(file);
-		de.exportGraph(graph, f1);
-	}
-	
-	
-	public static <V,E> void toDot(Graph<V,E> graph, String file, 
-			Function<V,String> vertexLabel,
-			Function<E,String> edgeLabel) {		
-		DOTExporter<V,E> de = new DOTExporter<V,E>();
-		de.setVertexAttributeProvider(v->labelAttributeOfString(vertexLabel.apply(v)));
-		de.setEdgeAttributeProvider(e->labelAttributeOfString(edgeLabel.apply(e)));		
-		Writer f1 = Files2.getWriter(file);
-		de.exportGraph(graph, f1);
-	}
-	
-	
-	
-	public static <V,E> void toDot(Graph<V,E> graph, String file, 
-			Function<V,String> vertexLabel,
-			Function<E,String> edgeLabel,
-			Function<V,Map<String,Attribute>> vertexAttribute,
-			Function<E,Map<String,Attribute>> edgeAttribute) {
-		
-		DOTExporter<V,E> de = new DOTExporter<V,E>();
-//Map.of("label",DefaultAttribute.createAttribute(vertexLabel.apply(v)))
-//Map.of("label",DefaultAttribute.createAttribute(edgeLabel.apply(e)))	
-		
-		Function<V,Map<String,Attribute>> m1 = 
-			v->Map2.merge(labelAttributeOfString(vertexLabel.apply(v)),vertexAttribute.apply(v));
-		Function<E,Map<String,Attribute>> m2 = 
-			e->Map2.merge(labelAttributeOfString(edgeLabel.apply(e)),edgeAttribute.apply(e));
-		
-		de.setVertexAttributeProvider(m1);
-		de.setEdgeAttributeProvider(m2);
-		
-		
-		Writer f1 = Files2.getWriter(file);
-		de.exportGraph(graph, f1);
-	}
 	
 	
 	

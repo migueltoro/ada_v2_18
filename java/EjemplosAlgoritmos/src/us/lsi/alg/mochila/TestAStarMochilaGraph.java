@@ -40,11 +40,11 @@ public class TestAStarMochilaGraph {
 		System.out.println(s);
 		System.out.println(ms.heap.isEmpty());
 		System.out.println(ms.heap.size());
-		Graphs2.toDot(ms.outGraph,"ficheros/MochilaAstarGraph.gv",
+		GraphColors.toDot(ms.outGraph,"ficheros/MochilaAstarGraph.gv",
 				v->v.toString(),
 				e->e.action().toString(),
-				v->GraphColors.getColorIf(Color.red,MochilaVertex.goal().test(v)),
-				e->GraphColors.getColorIf(Color.red,path.getEdgeList().contains(e))
+				v->GraphColors.colorIf(Color.red,MochilaVertex.goal().test(v)),
+				e->GraphColors.colorIf(Color.red,path.getEdgeList().contains(e))
 				);
 	}
 

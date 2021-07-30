@@ -45,11 +45,11 @@ public class TestPD {
 					.collect(Collectors.toList()); // getEdgeList();
 			SolucionProductos s_pdr = SolucionProductos.of(gp_pdr);
 			System.out.println(s_pdr);
-			Graphs2.toDot(pdr.outGraph,"ficheros/productosPDRGraph.gv",
+			GraphColors.toDot(pdr.outGraph,"ficheros/productosPDRGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
-					v->GraphColors.getColorIf(Color.red,goal.test(v)),
-					e->GraphColors.getColorIf(Color.red,pdr.optPath.get().getEdgeList().contains(e))
+					v->GraphColors.colorIf(Color.red,goal.test(v)),
+					e->GraphColors.colorIf(Color.red,pdr.optPath.get().getEdgeList().contains(e))
 					);
 		}
 	}

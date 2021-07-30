@@ -5,7 +5,6 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 
@@ -96,19 +95,19 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 	
 	
 	public void toDot(String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(this, file, 
+		GraphColors.<FlowVertex, FlowEdge>toDot(this, file, 
 				v->v.name,
 				e->e.name,
-				v->GraphColors.getColor(v.getColor()), 
-				e->GraphColors.getStyle(Style.solid));
+				v->GraphColors.color(v.getColor()), 
+				e->GraphColors.style(Style.solid));
 	}
 	
 	public void toDotIndex(String file) {
-		Graphs2.<FlowVertex, FlowEdge>toDot(this, file, 
+		GraphColors.<FlowVertex, FlowEdge>toDot(this, file, 
 				v->this.vertexIndex(v).toString(),
 				e->e.name,
-				v->GraphColors.getColor(v.getColor()), 
-				e->GraphColors.getStyle(Style.solid));
+				v->GraphColors.color(v.getColor()), 
+				e->GraphColors.style(Style.solid));
 	}
 	
 	public IntegerVertexGraphView<FlowVertex, FlowEdge> integerGraph() {

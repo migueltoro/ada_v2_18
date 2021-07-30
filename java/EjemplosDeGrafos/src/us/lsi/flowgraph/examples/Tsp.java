@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
+import us.lsi.colors.GraphColors;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.GraphData;
@@ -46,7 +47,7 @@ public class Tsp {
 						Carretera::getKm);
 		System.out.println(graph);	
 		IntegerVertexGraphView<Ciudad,Carretera> graph3 = IntegerVertexGraphView.of(graph);
-		Graphs2.toDot(graph3,"ficheros/andaluciaIndex.gv",v->v.toString(),e->e.toString());
+		GraphColors.toDot(graph3,"ficheros/andaluciaIndex.gv",v->v.toString(),e->e.toString());
 		System.out.println(graph3);	
 		System.out.println("============   "+graph3.containsEdge(4, 6));
 		System.out.println("============   "+graph3.containsEdge(6, 4));

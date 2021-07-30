@@ -36,9 +36,9 @@ public class ColoreadoDeGrafos {
 		Map<Ciudad,Integer> colorDeCiudad = vc.getColors();
 		System.out.println(vc.getNumberColors());
 		
-		Graphs2.toDot(graph,"ficheros/coloresAndalucia.gv",x->x.getNombre(),x->x.getNombre(),
-				x->GraphColors.getColor(colorDeCiudad.get(x)),
-				e->GraphColors.getStyle(Style.solid));
+		GraphColors.toDot(graph,"ficheros/coloresAndalucia.gv",x->x.getNombre(),x->x.getNombre(),
+				x->GraphColors.color(colorDeCiudad.get(x)),
+				e->GraphColors.style(Style.solid));
 
 	}
 
