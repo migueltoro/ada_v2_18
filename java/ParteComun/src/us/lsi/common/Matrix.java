@@ -9,8 +9,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.MathArithmeticException;
-import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.fraction.Fraction;
 
 
@@ -21,16 +20,26 @@ import org.apache.commons.math3.fraction.Fraction;
  */
 public class Matrix<E> {
 	
+	
+	public static <E> Matrix<E> of(E[] datos, Integer nf, Integer nc) {
+		Preconditions.checkArgument(datos.length == nf * nc, "Datos no válidos");
+		@SuppressWarnings("unchecked")
+		E[][] dd = (E[][]) Array.newInstance(datos[0].getClass(), nf, nc);
+		for (int f = 0; f < nf; f++) {
+			for (int c = 0; c < nc; c++) {
+				Integer i = f * nc + c;
+				dd[f][c] = datos[i];
+			}
+		}
+		Matrix<E> r = Matrix.of(dd);
+		return r;
+	}
+	
 	public static <E> Matrix<E> of(E[][] datos) {
 		return new Matrix<E>(datos);
 	}
 	
-	public static <E> Matrix<E> of(Integer nf, Integer nc, Class<E> cls) {
-		@SuppressWarnings("unchecked")
-		E[][] datos = (E[][]) Array.newInstance(cls,nf,nc);
-		Matrix<E> r = Matrix.of(datos);
-		return r;
-	}
+	
 	
 	
 	public static <E> Matrix<E> of(Integer nf, Integer nc, E value) {
@@ -154,6 +163,16 @@ public class Matrix<E> {
 
 	}
 	
+	@Override
+	public String toString() {
+		Function<Integer, String> f = i -> IntStream.range(0, this.nc).boxed()
+				.map(j -> this.get(i, j).toString())
+				.collect(Collectors.joining(", ", "[", "]"));
+		String s = IntStream.range(0, this.nf).boxed()
+				.map(i -> f.apply(i)).collect(Collectors.joining(",\n", "[", "]"));
+		return s;
+	}
+	
 	public Matrix<E> copy(){
 		return new Matrix<>(this.datos, this.nf, this.nc, this.iv,this.jv);
 	}
@@ -211,6 +230,38 @@ public class Matrix<E> {
 	
 	public static <E extends FieldElement<E>> Matrix<E> one(Integer nf, Integer nc, Field<E> f) {
 		return Matrix.of(nf,nc,f.getOne());		
+	}
+	
+	public static <E extends FieldElement<E>> Matrix<E> unity(Integer n, Field<E> f) {
+		Matrix<E> r = Matrix.zero(n, n, f);
+		for(int i=0;i<n;i++) {
+			r.set(i, i,f.getOne());
+		}
+		return r;
+	}
+	
+	public static  Matrix<Fraction> zero(Integer nf, Integer nc) {
+		return Matrix.zero(nf,nc,Fraction.ONE.getField());			
+	}
+	
+	public static  Matrix<Fraction> one(Integer nf, Integer nc) {
+		return Matrix.one(nf,nc,Fraction.ONE.getField());	
+	}
+	
+	public static Matrix<Fraction> unity(Integer n) {
+		return Matrix.unity(n,Fraction.ONE.getField());
+	}
+	
+	public static  Matrix<BigFraction> zeroBig(Integer nf, Integer nc) {
+		return Matrix.zero(nf,nc,BigFraction.ONE.getField());			
+	}
+	
+	public static  Matrix<BigFraction> oneBig(Integer nf, Integer nc) {
+		return Matrix.one(nf,nc,BigFraction.ONE.getField());	
+	}
+	
+	public static Matrix<BigFraction> unityBig(Integer n) {
+		return Matrix.unity(n,BigFraction.ONE.getField());
 	}
 
 	public static <E extends FieldElement<E>> Matrix<E> multiply(Matrix<E> in1, Matrix<E> in2){
@@ -281,83 +332,41 @@ public class Matrix<E> {
 		return r;
 	}
 	
-	public static class IntegerField implements Field<IntegerField>, FieldElement<IntegerField> {
-
-		public static IntegerField of(Integer number) {
-			return new IntegerField(number);
+	/**
+	 * 
+	 * @param base Base
+	 * @param n Exponente
+	 * @return Valor de base^n de forma iterativa
+	 */
+//	public static Long pot(Long base, Integer n){
+//		Long r = base;
+//		Long u = 1L;
+//		while( n > 0){
+//	       if(n%2==1){
+//			     u = u * r;
+//		   }
+//		   r = r * r;
+//		   n = n/2;
+//		}
+//		return u;
+//	}
+	
+	public static <E extends FieldElement<E>> Matrix<E> pow(Matrix<E> m, Integer n) {
+		Matrix<E> r = m;
+		Matrix<E> u = Matrix.unity(m.nf(),m.get(0, 0).getField());
+		while (n > 0) {
+			if (n % 2 == 1) {
+				u = Matrix.multiply(u, r);
+			}
+			r = Matrix.multiply(r, r);
+			n = n / 2;
 		}
-
-		public Integer number;
-
-		public IntegerField(Integer number) {
-			super();
-			this.number = number;
-		}
-
-		@Override
-		public String toString() {
-			return number.toString();
-		}
-
-		@Override
-		public IntegerField add(IntegerField n) throws NullArgumentException {
-			return of(this.number + n.number);
-		}
-
-		@Override
-		public IntegerField divide(IntegerField number) throws NullArgumentException, MathArithmeticException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public IntegerField getField() {
-			return of(0);
-		}
-
-		@Override
-		public IntegerField multiply(IntegerField n) {
-			return of(this.number * n.number);
-		}
-
-		@Override
-		public IntegerField multiply(int number) {
-			return of(this.number * number);
-		}
-
-		@Override
-		public IntegerField negate() {
-			return of(-this.number);
-		}
-
-		@Override
-		public IntegerField reciprocal() throws MathArithmeticException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public IntegerField subtract(IntegerField n) throws NullArgumentException {
-			return of(this.number - n.number);
-		}
-
-		@Override
-		public IntegerField getOne() {
-			return of(1);
-		}
-
-		@Override
-		public Class<? extends IntegerField> getRuntimeClass() {
-			return IntegerField.class;
-		}
-
-		@Override
-		public IntegerField getZero() {
-			return of(0);
-		}
-
+		return u;
 	}
 	
 	
-	public static void main(String[] args) {
+	
+	public static void test1() {
 		Function<Integer, Character> f = e-> (char) (e + 'A' - 10);
 		Matrix<Fraction> m1 = Matrix.of(7,7,new Fraction(7));
 		m1.print("m1");
@@ -375,18 +384,18 @@ public class Matrix<E> {
 		Integer[][] a = {{1,2,3},{3,4,5},{5,6,7}};
 		Matrix<Integer> m7 = Matrix.of(a);
 		m7.print("m7");
-		Matrix<IntegerField> m8 = Matrix.of(7,7,IntegerField.of(7));
+		Matrix<Fraction> m8 = Matrix.of(7,7,7).map(e->new Fraction(e));
 		m8.print("m8");
-		Matrix<IntegerField> m9 = Matrix.of(7, 7, IntegerField.of(-4));
+		Matrix<Fraction> m9 = Matrix.of(7, 7, -4).map(e->new Fraction(e));
 		m9.print("m9");
 		m9.view(0).print("view");
-		Matrix<IntegerField> m10 = Matrix.add(m8,m9);
+		Matrix<Fraction> m10 = Matrix.add(m8,m9);
 		m10.print("m10");
-		Matrix<IntegerField> m11 = Matrix.add_r(m8,m9);
+		Matrix<Fraction> m11 = Matrix.add_r(m8,m9);
 		m11.print("m11");
-		Matrix<IntegerField> m12 = Matrix.multiply(m8,m9);
+		Matrix<Fraction> m12 = Matrix.multiply(m8,m9);
 		m12.print("m12");
-		Matrix<IntegerField> m13 = Matrix.multiply_r(m8,m9);
+		Matrix<Fraction> m13 = Matrix.multiply_r(m8,m9);
 		m13.print("m13");
 		m13.view(0).print("view");
 		System.out.println(m13.corners());
@@ -402,5 +411,28 @@ public class Matrix<E> {
 		System.out.println(m14.view(0).center());
 		Matrix<Character> m15 = Matrix.random(17, 29, 0, 60).map(f);
 		m15.print("Chracter");
+	}
+	
+	public static void test2() {
+		Integer[] col = {1,1,1};
+		Integer[] cu = {1,1,1,0,1,0,0,0,1};
+		Matrix<Fraction> m1 = Matrix.of(col,3,1).map(e->new Fraction(e));
+		Matrix<Fraction> m2 = Matrix.of(cu,3,3).map(e->new Fraction(e));
+		String2.toConsole(m1.toString());
+		String2.toConsole(m2.toString());
+		String2.toConsole(multiply(m2,m1).toString());
+	}
+	
+	
+	public static void test3() {
+		Integer [] d = {1,2,3,4,5,6,7,8,9};
+		Matrix<Fraction> m = Matrix.of(d,3,3).map(e->new Fraction(e));
+		String2.toConsole(m.toString());
+//		String2.toConsole(Matrix.multiply(m,Matrix.unity(m.nc(),m.get(0,0).getField())).toString());
+		String2.toConsole(Matrix.pow(m,3).toString());
+	}
+	
+	public static void main(String[] args) {
+		test3();
 	}
 }

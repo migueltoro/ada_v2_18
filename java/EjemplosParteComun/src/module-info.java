@@ -17,4 +17,5 @@ module ejemplos_parte_comun {
 	requires transitive datos_compartidos;
 	requires junit;
 	requires transitive partecomun;
+	requires transitive commons.math3;
 }

@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -18,12 +19,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import us.lsi.common.Comparator2;
-import us.lsi.common.DoublePair;
 import us.lsi.common.Enumerate;
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.LongPair;
-import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Printers;
 import us.lsi.common.String2;
@@ -395,15 +394,30 @@ public class EjemplosIterativosRecursivos {
 	    	.allMatch(p->p.second()-p.first()==r);		
 	}
 	
-	
-	public static Double polf(List<Double> c, Double v){
+	// Coeficientes de menor a mayor
+	public static Double polF(List<Double> c, Double v){
 		return Stream2.zip(c.stream(),Stream.iterate(1.,e->e*v),(e1,e2)->e1*e2)
 				.mapToDouble(x->x).sum();
 	}
-
 	
-	public static Double polI(List<Double> c, Double v){
+	// Coeficientes de menor a mayor
+	public static Double polP(List<Double> c, Double v) {
 		Double b = 0.;
+		Integer i = 0;
+		Double p = 1.;
+		Integer n = c.size();
+		while (i < n) {
+			Double cf = p * c.get(i);
+			i = i + 1;
+			p = p * v;
+			b = b + cf;
+		}
+		return b;
+	}
+	
+	// Coeficientes de menor a mayor
+	public static Double prodI(List<Double> c, Double v){
+		Double b = 1.;
 		Integer i = 0;
 		Double p = 1.;
 		Integer n = c.size();
@@ -411,10 +425,11 @@ public class EjemplosIterativosRecursivos {
 			Double cf = p*c.get(i);
 			i = i+1;
 			p = p*v;
-			b = b + cf;
+			b = b * cf;
 		} 
 		return b;	
 	}
+
 
 	
 	// Coeficientes de mayor a menor
@@ -446,6 +461,39 @@ public class EjemplosIterativosRecursivos {
 	}
 	
 	
+	
+	
+	public static Integer ml1(Integer x, Integer y){
+		Integer r = 0;
+		if(y > 0) {
+			r = 2*ml1(x,y/2)+(y % 2 == 0? 0: x);
+		} 
+		return r;
+	}
+	
+	public static Integer ml2(Integer x, Integer y){
+		Integer b = 0;
+		Integer p = 1;
+		while(y>0) {
+			Integer cf = y % 2 == 0? 0: x;
+			p = p*2;
+			b = b + cf;
+		} 
+		return b;	
+	}
+	
+	
+	public static Double exp(Double x, Double eps){
+		Double r = 0.;
+		Integer i = 0;
+		Double t = 1.;
+		while(t>eps) {	
+			i = i+1;
+			t = t*x/i;
+			r = r + t;
+		}
+		return r;
+	}
 
 	public static List<Integer> digitos(Integer n, Integer a){
 		List<Integer> r;
@@ -457,7 +505,17 @@ public class EjemplosIterativosRecursivos {
 			r = new ArrayList<>();
 		}
 		return r;	
-	}	
+	}
+	
+	public static List<Integer> digitosI(Integer n, Integer a){
+		List<Integer> b = new ArrayList<>(); 
+		while(n>0) {
+			Integer d = n%a;
+		    b.add(0,d);
+			n = n/a;
+		}  
+		return b;	
+	}
 
 	public static Integer numeroDeCeros(Integer n, Integer a){
 		Integer b = 0;
@@ -471,18 +529,6 @@ public class EjemplosIterativosRecursivos {
 		return b;	
 	}
 	
-	
-
-	
-	public static List<Integer> digitosI(Integer n, Integer a){
-		List<Integer> b = new ArrayList<>(); 
-		while(n>0) {
-			Integer d = n%a;
-		    b.add(0,d);
-			n = n/a;
-		}  
-		return b;	
-	}
 	
 	public static Long entero(List<Integer> digitos,Integer a){
 		Long b = 0L;
@@ -555,7 +601,7 @@ public class EjemplosIterativosRecursivos {
 	 * @param n Exponente
 	 * @return Valor de base^n de forma iterativa
 	 */
-	public static Long pot2(Long base, Integer n){
+	public static Long pot(Long base, Integer n){
 		Long r = base;
 		Long u = 1L;
 		while( n > 0){
@@ -649,6 +695,7 @@ public class EjemplosIterativosRecursivos {
 		System.out.println("Digitos I = "+ls);
 		System.out.println("Ceros = "+numeroDeCeros(n,a));
 		System.out.println("Entero = "+n+","+entero(ls,a));
+		System.out.println("Entero = "+n+","+inverso(n,a));
 	}
 	
 	public static void test2() {
@@ -724,13 +771,18 @@ public class EjemplosIterativosRecursivos {
 	}
 	
 	public static void test9() {
+		Locale.setDefault(new Locale("en", "us"));
 		List<Double> c = List2.of(0.,0.,0.,0.,1.);		
-		Double v1 = polI(c,2.);
-		Double v2 = polHD(c,2.);
+		Double v1 = polHD(c,2.);
+		Double v2 = polF(c,2.);
+		Double v3 = polP(c,2.);
 		List<Double> d = List2.reverse(c);
-		Double v3 = polHI(d,2.);	
-		Double v4 = polf(c,2.);
+		Double v4 = polHI(d,2.);	
+		
 		System.out.printf("2: = %.2f,%.2f,%.2f,%.2f\n",v1,v2,v3,v4);
+		List<Double> c2 = List2.of(1.,1.,1.);		
+		Double v5 = prodI(c2,2.);
+		System.out.printf("3: = %.2f\n",v5);
 	}
 	
 	public static void test10() {
@@ -738,10 +790,21 @@ public class EjemplosIterativosRecursivos {
 //		List<Integer> l2 = List2.of(0,2,4,10,19,21,23,45);
 		System.out.println(String.format("5: %s, %s",cercano(l1,11),cercano2(l1,11)));
 	}
+	
+	public static void test11() {
+		Integer x = 1234;
+		Integer y = 456;
+		System.out.printf("%d,%d\n",x*y,ml1(x,y));
+		System.out.printf("%d,%d\n",x*y,ml2(x,y));
+	}
+	
+	public static void test12() {
+		Locale.setDefault(new Locale("en", "us"));
+		System.out.printf("%.4f,%.4f\n",Math.exp(0.567),1+EjemplosIterativosRecursivos.exp(0.567,0.0001));
+	}
 
 	public static void main(String[] args) throws IOException {
-		test9();
-		
+		test1();
 	}
 	
 	
