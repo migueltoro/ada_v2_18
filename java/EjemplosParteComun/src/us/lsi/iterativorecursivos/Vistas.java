@@ -2,16 +2,22 @@ package us.lsi.iterativorecursivos;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import us.lsi.common.Ranges.IntRange;
 import us.lsi.common.Ranges.LongRange;
+import us.lsi.common.String2;
 import us.lsi.iterables.Iterables;
+import us.lsi.streams.Stream2;
 import us.lsi.common.Matrix;
+import us.lsi.common.Pair;
+import us.lsi.common.IntPair;
 import us.lsi.common.View1;
 import us.lsi.common.View2E;
 
 
-public class ViewEjemplos {
+public class Vistas {
 	
 	public static Integer sum(List<Integer>ls) {
 		if(ls.isEmpty()) return 0;
@@ -142,6 +148,8 @@ public class ViewEjemplos {
 	
 	
 	
+	
+	
 	public static void main(String[] args) {
 //		System.out.println(sum(List.of(1,3,7,9,31,54,91,102)));
 //		System.out.println(sqrtLong(101L));
@@ -149,7 +157,16 @@ public class ViewEjemplos {
 //		System.out.println(masCercano(List.of(1,3,7,9,31,54,91,102),103));
 //		System.out.println(masCercano2(List.of(1,3,7,9,31,54,91,102),90));
 //		System.out.println(sumIntegerOFile("ficheros/numeros.txt"));
-		matrix();
+//		matrix();
+		Integer[] m =   {1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,1, 0, 1, 0, 1};
+		Matrix<Integer> mt = Matrix.of(m,5,5);
+		String2.toConsole("%s",mt);
+		String2.toConsole("_________________");
+		String2.toConsole("%s",mt.view(1,1,3,3));
+		String2.toConsole("_________________");
+		String2.toConsole("%s",mt.view(1,1,3,3).view(1,1,2,2));
+		String2.toConsole("_________________");
+		String2.toConsole("%s",mt.view(1,1,3,3).view(1,1,2,2).get(0,1));
 	}
 
 }

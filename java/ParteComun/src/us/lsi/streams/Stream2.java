@@ -22,6 +22,7 @@ import java.util.stream.StreamSupport;
 
 import us.lsi.common.Enumerate;
 import us.lsi.common.IntPair;
+import us.lsi.common.IntQuartet;
 import us.lsi.common.IntTrio;
 import us.lsi.common.Multiset;
 import us.lsi.common.MutableType;
@@ -124,17 +125,39 @@ public class Stream2 {
 		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.newValue(e), e)).filter(p->p.first()!=null);
 		return r;
 	}
+	
+	public static Stream<IntPair> allPairs(Integer n, Integer m){
+		return allPairs(0,n,0,m);
+	}
 			
 	public static Stream<IntPair> allPairs(Integer n1, Integer n2, Integer m1, Integer m2){
 		return IntStream.range(n1, n2).boxed()
 				.flatMap(x->IntStream.range(m1, m2).boxed().map(y->IntPair.of(x,y)));
 	}
 	
-	public static Stream<IntTrio> allPairs(Integer n1, Integer n2, Integer m1, Integer m2, Integer r1, Integer r2) {
+	public static Stream<IntTrio> allTrios(Integer n1, Integer n2, Integer m1, Integer m2, Integer r1, Integer r2) {
 		return IntStream.range(n1, n2).boxed()
 				.flatMap(i -> IntStream.range(m1, m2).boxed()
 						            .flatMap(j->IntStream.range(r1, r2).boxed().map(k -> IntTrio.of(i, j, k))));
 	}
+	
+	public static Stream<IntTrio> allTrios(Integer n, Integer m, Integer r) {
+		return allTrios(0,n,0,m,0,r);
+	}
+	
+	public static Stream<IntQuartet> allQuartets(Integer n, Integer m, Integer r, Integer s) {
+		return allQuartets(0, n, 0, m, 0, r,0, s);
+	}
+	
+	public static Stream<IntQuartet> allQuartets(Integer n1, Integer n2, Integer m1, Integer m2, Integer r1, Integer r2,
+			Integer s1, Integer s2) {
+		return IntStream.range(n1, n2).boxed()
+				.flatMap(i -> IntStream.range(m1, m2).boxed()
+						.flatMap(j -> IntStream.range(r1, r2).boxed()
+								.flatMap(k -> IntStream.range(s1, s2).boxed().map(s -> IntQuartet.of(i, j, k, s)))));
+	}
+	
+	
 	
 	/**
 	 * @param s Una secuencia de streams

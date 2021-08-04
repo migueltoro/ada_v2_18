@@ -4,13 +4,17 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.fraction.Fraction;
+
+import us.lsi.streams.Stream2;
 
 
 /**
@@ -40,7 +44,9 @@ public class Matrix<E> {
 	}
 	
 	
-	
+	public static <E> Matrix<E> empty() {
+		return new Matrix<>(null,0,0,0,0);
+	}
 	
 	public static <E> Matrix<E> of(Integer nf, Integer nc, E value) {
 		@SuppressWarnings("unchecked")
@@ -76,11 +82,11 @@ public class Matrix<E> {
 		return r;
 	}
 	
-	protected E[][] datos;
+	public E[][] datos;
 	protected int nf;
 	protected int nc;
-	protected int iv;	
-	protected int jv;
+	protected int fv;	
+	protected int cv;
 	
 
 	protected Matrix(E[][] datos) {
@@ -88,25 +94,33 @@ public class Matrix<E> {
 		this.datos = datos;		
 		this.nf = datos.length;
 		this.nc = datos[0].length;
-		this.iv = 0;
-		this.jv = 0;
+		this.fv = 0;
+		this.cv = 0;
 	}
 
-	private Matrix(E[][] datos, Integer nf, Integer nc, Integer iv, Integer jv) {
+	private Matrix(E[][] datos, Integer nf, Integer nc, Integer fv, Integer cv) {
 		super();
 		this.datos = datos;
 		this.nf = nf;
 		this.nc = nc;
-		this.iv = iv;
-		this.jv = jv;
+		this.fv = fv;
+		this.cv = cv;
 	}
 
-	public E get(Integer i, Integer j) {
-		return this.datos[this.iv+i][this.jv+j];
+	public E get(Integer f, Integer c) {
+		return this.datos[this.fv+f][this.cv+c];
 	}
 	
-	public void set(Integer i, Integer j, E value) {
-		this.datos[this.iv+i][this.jv+j] = value;
+	public E get(IntPair p) {
+		return this.get(p.first(),p.second());
+	}
+	
+	public void set(Integer f, Integer c, E value) {
+		this.datos[this.fv+f][this.cv+c] = value;
+	}
+	
+	public void set(IntPair p, E value) {
+		this.set(p.first(),p.second(),value);
 	}
 	
 	public Integer nf() {
@@ -117,21 +131,49 @@ public class Matrix<E> {
 		return this.nc;
 	}
 	
-	public <R> Matrix<R> map(Function<E,R> f){
-		R v = f.apply(this.get(0, 0));
+	public Integer area() {
+		return this.nf()*this.nc();
+	}
+	
+	public static <E> Integer area(Matrix<E> m) {
+		return m.area();
+	}
+	
+	public List<E> corners() {
+		return List.of(this.get(0, 0),this.get(0, this.nc()-1),this.get(this.nf()-1, 0),this.get(this.nf()-1, this.nc()-1));
+	}
+	
+	public E center() {
+		int nf = this.nf/2;
+		int nc = this.nc/2;
+		return this.get(nf, nc);
+	}
+	
+	public IntPair centerIntPair() {
+		int nf = this.nf/2;
+		int nc = this.nc/2;
+		return IntPair.of(nf, nc);
+	}
+	
+	public <R> Matrix<R> map(Function<E,R> ft){
+		R v = ft.apply(this.get(0, 0));
 		@SuppressWarnings("unchecked")
 		R[][] datos = (R[][]) Array.newInstance(v.getClass(),this.nf,this.nc);
 		Matrix<R> r = Matrix.of(datos);
-		for (int i = 0; i < this.nf; i++) {
-			for (int j = 0; j < this.nc; j++)
-				r.set(i,j,f.apply(this.get(i, j)));
+		for (int f = 0; f < this.nf; f++) {
+			for (int c = 0; c < this.nc; c++)
+				r.set(f,c,ft.apply(this.get(f, c)));
 		}
 		return r;
 	}
 	
-	public Matrix<E> view(Integer nf, Integer nc, Integer iv, Integer jv){
+	public Matrix<E> view(IntPair origin, IntPair tam){
+		return view(origin.first(),origin.second(),tam.first(),tam.second());
+	}
+	
+	public Matrix<E> view(Integer fMin, Integer cMin, Integer nf, Integer nc){
 		Matrix<E> r = of(this.datos);
-		r.iv = this.iv +iv; r.nf = nf; r.jv = this.jv +jv; r.nc = nc;
+		r.fv = this.fv +fMin; r.nf = nf; r.cv = this.cv +cMin; r.nc = nc;
 		return r;
 	}
 	
@@ -142,18 +184,44 @@ public class Matrix<E> {
 		int nc = this.nc/2;
 		Matrix<E> r = of(this.datos);
 		switch(nv){
-		case 0:  r = view(nf,nc,0,0); break;
-		case 1:  r = view(nf,this.nc-nc,0,nc); break;
-		case 2:  r = view(this.nf-nf,nc,nf,0); break;
-		case 3:  r = view(this.nf-nf,this.nc-nc,nf,nc); break;
+		case 0:  r = view(0,0,nf,nc); break;
+		case 1:  r = view(0,nc,nf,this.nc-nc); break;
+		case 2:  r = view(nf,0,this.nf-nf,nc); break;
+		case 3:  r = view(nf,nc,this.nf-nf,this.nc-nc); break;
 		default: Preconditions.checkArgument(false, "Opción no válida");
 		}
 		return r;
 	}
 	
+	public Stream<Matrix<E>> allSubMatrix(){
+		return Matrix.allSubMatrix(this);
+	}
+	
+	public boolean allElements(Predicate<E> pd) {
+		return Matrix.allElements(this, pd);
+	}
+	
+	public boolean anyElements(Predicate<E> pd) {
+		return Matrix.anyElements(this, pd);
+	}
+	
+	public static <E> Stream<Matrix<E>> allSubMatrix(Matrix<E> m){
+		return Stream2.allQuartets(0,m.nf(),0,m.nc(),1,m.nf(),1,m.nc())
+				.filter(q->q.third()<=m.nf()-q.first() && q.fourth()<=m.nc()-q.second())
+				.map(q->m.view(q.first(),q.second(),q.third(),q.fourth()));
+	}
+	
+	public static <E> Boolean allElements(Matrix<E> m, Predicate<E> pd) {
+		return Stream2.allPairs(m.nf(),m.nc()).map(p->m.get(p)).allMatch(pd);
+	}
+	
+	public static <E> Boolean anyElements(Matrix<E> m, Predicate<E> pd) {
+		return Stream2.allPairs(m.nf(),m.nc()).map(p->m.get(p)).anyMatch(pd);
+	}
+	
 	public void print(String title) {
-		System.out.println(String.format("\n%s = (nf = %d, nc = %d, iv = %d, , jv = %d)\n", title, this.nf, this.nc,
-				this.iv, this.jv));
+		System.out.println(String.format("\n%s = (nf = %d, nc = %d, fv = %d, cv = %d)\n", title, this.nf, this.nc,
+				this.fv, this.cv));
 		Function<Integer, String> f = i -> IntStream.range(0, this.nc).boxed()
 				.map(j -> this.get(i, j).toString())
 				.collect(Collectors.joining(", ", "[", "]"));
@@ -169,12 +237,12 @@ public class Matrix<E> {
 				.map(j -> this.get(i, j).toString())
 				.collect(Collectors.joining(", ", "[", "]"));
 		String s = IntStream.range(0, this.nf).boxed()
-				.map(i -> f.apply(i)).collect(Collectors.joining(",\n", "[", "]"));
+				.map(i -> f.apply(i)).collect(Collectors.joining(",\n ", "[", "]"));
 		return s;
 	}
 	
 	public Matrix<E> copy(){
-		return new Matrix<>(this.datos, this.nf, this.nc, this.iv,this.jv);
+		return new Matrix<>(this.datos, this.nf, this.nc, this.fv,this.cv);
 	}
 	
 	public void copy(Matrix<E> r){
@@ -214,15 +282,7 @@ public class Matrix<E> {
 		return r;
 	}
 	
-	public List<E> corners() {
-		return List.of(this.get(0, 0),this.get(0, this.nc()-1),this.get(this.nf()-1, 0),this.get(this.nf()-1, this.nc()-1));
-	}
 	
-	public E center() {
-		int nf = this.nf/2;
-		int nc = this.nc/2;
-		return this.get(nf, nc);
-	}
 	
 	public static <E extends FieldElement<E>> Matrix<E> zero(Integer nf, Integer nc, Field<E> f) {
 		return Matrix.of(nf,nc,f.getZero());		
@@ -332,25 +392,6 @@ public class Matrix<E> {
 		return r;
 	}
 	
-	/**
-	 * 
-	 * @param base Base
-	 * @param n Exponente
-	 * @return Valor de base^n de forma iterativa
-	 */
-//	public static Long pot(Long base, Integer n){
-//		Long r = base;
-//		Long u = 1L;
-//		while( n > 0){
-//	       if(n%2==1){
-//			     u = u * r;
-//		   }
-//		   r = r * r;
-//		   n = n/2;
-//		}
-//		return u;
-//	}
-	
 	public static <E extends FieldElement<E>> Matrix<E> pow(Matrix<E> m, Integer n) {
 		Matrix<E> r = m;
 		Matrix<E> u = Matrix.unity(m.nf(),m.get(0, 0).getField());
@@ -421,6 +462,7 @@ public class Matrix<E> {
 		String2.toConsole(m1.toString());
 		String2.toConsole(m2.toString());
 		String2.toConsole(multiply(m2,m1).toString());
+		String2.toConsole(String.format("Indices no posibles f = %d,c = %d,nf = %d,nc = %d",0,0,m1.nf(),m1.nc()));
 	}
 	
 	
@@ -428,11 +470,12 @@ public class Matrix<E> {
 		Integer [] d = {1,2,3,4,5,6,7,8,9};
 		Matrix<Fraction> m = Matrix.of(d,3,3).map(e->new Fraction(e));
 		String2.toConsole(m.toString());
-//		String2.toConsole(Matrix.multiply(m,Matrix.unity(m.nc(),m.get(0,0).getField())).toString());
-		String2.toConsole(Matrix.pow(m,3).toString());
+		String2.toConsole(Matrix.multiply(m,Matrix.unity(m.nc(),m.get(0,0).getField())).toString());
+		String2.toConsole(Matrix.pow(m,0).toString());
+		String2.toConsole(String.format("Indices no posibles f = %d,c = %d,nf = %d,nc = %d",0,0,m.nf(),m.nc()));
 	}
 	
 	public static void main(String[] args) {
-		test3();
+		test1();
 	}
 }

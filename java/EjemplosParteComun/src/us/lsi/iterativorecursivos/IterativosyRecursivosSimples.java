@@ -33,7 +33,7 @@ import us.lsi.iterables.IteratorFusionOrdered;
 import us.lsi.iterables.IteratorMap;
 import us.lsi.math.Math2;
 
-public class EjemplosIterativosRecursivos {
+public class IterativosyRecursivosSimples {
 	
 	public static Stream<Long> divisores(Long n){
 		return Stream.iterate(2L, x-> x <= (long) Math.sqrt(n), x -> x+1).filter(x->n%x==0);
@@ -483,7 +483,13 @@ public class EjemplosIterativosRecursivos {
 	}
 	
 	
-	public static Double exp(Double x, Double eps){
+	
+	/**
+	 * @param x Numero real entre 0 y 1
+	 * @param eps Error
+	 * @return e^x-1
+	 */
+	public static Double exponential(Double x, Double eps){
 		Double r = 0.;
 		Integer i = 0;
 		Double t = 1.;
@@ -614,51 +620,6 @@ public class EjemplosIterativosRecursivos {
 		return u;
 	}
 	
-	/**
-	 * @param n Un entero
-	 * @param k Un entero
-	 * @return Valor del número combinatorio n sobre k calculado de forma iterativa
-	 */
-	public static int binom(int n, int k) {
-		List<Integer> lsa = Arrays.asList(1);
-		int i = 1;
-		while (i <= n) {
-			List<Integer> ls = List2.empty();
-			for (int s = 0; s <= i; s++) {
-				if (s == 0 || s == i) {
-					ls.add(1);
-				} else if (s == 1 || s == i - 1) {
-					ls.add(i);
-				} else {
-					ls.add(lsa.get(s - 1) + lsa.get(s));
-				}
-			}
-			i = i + 1;
-			lsa = List2.ofCollection(ls);
-		}
-		return lsa.get(k);
-	}
-	
-	
-	
-	/**
-	 * Adaptación del algoritmo anterior pot(b,n) para el cálculo de los número de Fibonacci
-	 * 
-	 * @param n Término
-	 * @return Valor del n-esimo número de Fibonacci calculado de forma iterativa
-	 */
-	public static long fib(int n){
-			int i = 0;
-		    int a = 1;
-			int b = 0;
-			while(i < n){
-				i = i+1;
-				int a0 = a;
-				a = a0+b;
-				b = a0;
-			}
-			return b;
-	}
 	
 	public static List<LongPair> primosPar(Long m, Long n, Integer k) {
 		Stream<Long> r = Stream.iterate(Math2.siguientePrimo(m - 1), x -> x < n, x -> Math2.siguientePrimo(x));
@@ -800,7 +761,7 @@ public class EjemplosIterativosRecursivos {
 	
 	public static void test12() {
 		Locale.setDefault(new Locale("en", "us"));
-		System.out.printf("%.4f,%.4f\n",Math.exp(0.567),1+EjemplosIterativosRecursivos.exp(0.567,0.0001));
+		System.out.printf("%.4f,%.4f\n",Math.exp(0.567),1+IterativosyRecursivosSimples.exponential(0.567,0.0001));
 	}
 
 	public static void main(String[] args) throws IOException {
