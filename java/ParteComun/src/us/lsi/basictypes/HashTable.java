@@ -36,8 +36,8 @@ public class HashTable<K, V> {
 		this.size = 0;
 		this.groupsNumber = groupsNumber;
 		this.capacityData = (int)(this.groupsNumber*loadFactorReference+1);
-		this.groups = AList.create(this.groupsNumber);
-		this.data = AList.create(this.capacityData);						
+		this.groups = AList.of(this.groupsNumber);
+		this.data = AList.of(this.capacityData);						
 		for(int i = 0; i < groupsNumber; i++){
 			groups.add(-1);
 		}

@@ -32,13 +32,13 @@ public class LList<E> {
 	}
 	
 	public E get(int index){
-		return entryInPos(index).getElement();
+		return entryInPos(index).key();
 	}
 	
 	public E set(int index, E e){
 		Entry<E> e1 = entryInPos(index);
-		E r = e1.getElement();
-		e1.setElement(e);
+		E r = e1.key();
+		e1.setKey(e);
 		return r;
 	}
 	
@@ -55,9 +55,7 @@ public class LList<E> {
 		return true;
 	}
 	
-	
-	
-	public void add(int index, E e){
+	public boolean add(int index, E e){
 		Preconditions.checkPositionIndex(index, size);
 		Entry<E> ne = new Entry<E>(e);
 		if(index==size){
@@ -67,17 +65,18 @@ public class LList<E> {
 			first = ne;
 		} else {
 			Entry<E> pe = entryInPos(index-1);
-			ne.setNext(pe.getNext());
+			ne.setNext(pe.next());
 			pe.setNext(ne);
 		}
 		size++;
+		return true;
 	}
 	
 	private Entry<E> entryInPos(int index){
 		Preconditions.checkElementIndex(index, size);
 	    Entry<E> pe = first;
 	    for(int p = 0 ; p < index; p++){
-	    	pe = pe.getNext();
+	    	pe = pe.next();
 	    }
 		return pe;
 	}
@@ -88,15 +87,15 @@ public class LList<E> {
 		E element;
 		if(index==0){
 			e = first;
-			first = first.getNext();
-			element = e.getElement();
+			first = first.next();
+			element = e.key();
 		} else {
 			Entry<E> pe = entryInPos(index-1);
-			element = pe.getNext().getElement();
+			element = pe.next().key();
 			if(index == size-1){
 				last = pe;
 			}else{
-				pe.setNext(pe.getNext().getNext());
+				pe.setNext(pe.next().next());
 			}
 		}
 		size--;
@@ -108,12 +107,12 @@ public class LList<E> {
 	public String toString(){
 		String s = "{";
 		boolean prim = true;
-		for(Entry<E> e = first;e!=null;e = e.getNext()){
+		for(Entry<E> e = first;e!=null;e = e.next()){
 			if(prim){
 				prim = false;
-				s = s+e.getElement();
+				s = s+e.key();
 			}else{
-				s = s+","+e.getElement();
+				s = s+","+e.key();
 			}
 		}
 		s = s+"}";
@@ -121,25 +120,25 @@ public class LList<E> {
 	}
 	
 	public class Entry<F> {
-		private F element;
+		private F key;
 		private Entry<F> next;
 		public Entry(F element, Entry<F> next) {
 			super();
-			this.element = element;
+			this.key = element;
 			this.next = next;
 		}
 		public Entry(F element) {
 			super();
-			this.element = element;
+			this.key = element;
 			this.next = null;
 		}
-		public F getElement() {
-			return element;
+		public F key() {
+			return key;
 		}
-		public void setElement(F element) {
-			this.element = element;
+		public void setKey(F key) {
+			this.key = key;
 		}
-		public Entry<F> getNext() {
+		public Entry<F> next() {
 			return next;
 		}
 		public void setNext(Entry<F> next) {
