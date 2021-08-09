@@ -49,6 +49,10 @@ public record DoublePair(Double first,Double second) {
 		return this.second()-this.first();
 	}
 	
+	public Double center() {
+		return (this.second()+this.first())/2;
+	}
+	
 	public View2E<DoublePair,Double> view2e() {
 		Double k = (this.second()+this.first())/2;
 		return View2E.of(k,DoublePair.of(this.first(),k),DoublePair.of(k,this.second()));

@@ -26,6 +26,8 @@ public class Matrix<E> {
 	
 	
 	public static <E> Matrix<E> of(E[] datos, Integer nf, Integer nc) {
+		Preconditions.checkArgument(nf>=0 && nc >=0,
+				String.format("Numero de filas menor que cero nf = %d, nc = %d",nf,nc));
 		Preconditions.checkArgument(datos.length == nf * nc, "Datos no válidos");
 		@SuppressWarnings("unchecked")
 		E[][] dd = (E[][]) Array.newInstance(datos[0].getClass(), nf, nc);
@@ -49,6 +51,8 @@ public class Matrix<E> {
 	}
 	
 	public static <E> Matrix<E> of(Integer nf, Integer nc, E value) {
+		Preconditions.checkArgument(nf>=0 && nc >=0,
+				String.format("Numero de filas menor que cero nf = %d, nc = %d",nf,nc));
 		@SuppressWarnings("unchecked")
 		E[][] datos = (E[][]) Array.newInstance(value.getClass(),nf,nc);
 		Matrix<E> r = Matrix.of(datos);
@@ -59,7 +63,9 @@ public class Matrix<E> {
 		return r;
 	}
 	
-	public static  Matrix<Integer> random(Integer nf, Integer nc, Integer a, Integer b){	
+	public static  Matrix<Integer> random(Integer nf, Integer nc, Integer a, Integer b){
+		Preconditions.checkArgument(nf>=0 && nc >=0,
+				String.format("Numero de filas menor que cero nf = %d, nc = %d",nf,nc));
 		Integer[][] datos = new Integer[nf][nc];
 		Matrix<Integer> r = Matrix.of(datos);
 		Random rr = new Random(System.nanoTime());
@@ -72,6 +78,8 @@ public class Matrix<E> {
 	}
 	
 	public static <E> Matrix<E> of(Integer nf, E value) {
+		Preconditions.checkArgument(nf>=0,
+				String.format("Numero de filas menor que cero nf = %d",nf));
 		@SuppressWarnings("unchecked")
 		E[][] datos = (E[][]) Array.newInstance(value.getClass(),nf,nf);
 		Matrix<E> r = Matrix.of(datos);
@@ -101,6 +109,8 @@ public class Matrix<E> {
 	private Matrix(E[][] datos, Integer nf, Integer nc, Integer fv, Integer cv) {
 		super();
 		this.datos = datos;
+		Preconditions.checkArgument(nf>=0 && nc >=0,
+				String.format("Numero de filas menor que cero nf = %d, nc = %d",nf,nc));
 		this.nf = nf;
 		this.nc = nc;
 		this.fv = fv;
@@ -172,8 +182,10 @@ public class Matrix<E> {
 	}
 	
 	public Matrix<E> view(Integer fMin, Integer cMin, Integer nf, Integer nc){
+		Preconditions.checkArgument(nf>=0 && nc >=0,
+				String.format("Numero de filas menor que cero nf = %d, nc = %d",nf,nc));
 		Matrix<E> r = of(this.datos);
-		r.fv = this.fv +fMin; r.nf = nf; r.cv = this.cv +cMin; r.nc = nc;
+		r.fv = this.fv+fMin; r.nf = nf; r.cv = this.cv +cMin; r.nc = nc;
 		return r;
 	}
 	
@@ -265,8 +277,16 @@ public class Matrix<E> {
 	    }
 	}
 	
-	public View4<Matrix<E>> views() {
+	public View4<Matrix<E>> views4() {
 		return View4.of(this.view(0),this.view(1),this.view(2),this.view(3));
+	}
+	
+	public View2<Matrix<E>> views2C() {
+		return View2.of(this.view(0,0,this.nf(),this.nc()/2),this.view(0,this.nc()/2,this.nf(),this.nc()-this.nc()/2));
+	}
+	
+	public View2<Matrix<E>> views2F() {
+		return View2.of(this.view(0,0,this.nf()/2,this.nc()),this.view(this.nf()/2,0,this.nf()-this.nf()/2,this.nc()));
 	}
 	
 	public static <E> Matrix<E> compose(Matrix<E> a, Matrix<E> b, Matrix<E> c, Matrix<E> d) {
@@ -274,15 +294,13 @@ public class Matrix<E> {
 		int nc = a.nc+ b.nc;
 		E e = a.get(0, 0);
 		Matrix<E> r = Matrix.of(nf,nc,e);
-		View4<Matrix<E>> vr = r.views();
+		View4<Matrix<E>> vr = r.views4();
 		a.copy(vr.a());
 		b.copy(vr.b());
 		c.copy(vr.c());
 		d.copy(vr.d());
 		return r;
 	}
-	
-	
 	
 	public static <E extends FieldElement<E>> Matrix<E> zero(Integer nf, Integer nc, Field<E> f) {
 		return Matrix.of(nf,nc,f.getZero());		
@@ -349,8 +367,8 @@ public class Matrix<E> {
 		if(m1.nc < 2 || m1.nf < 2 || m2.nf < 2 || m2.nc < 2) {
 			r = Matrix.multiply(m1,m2);
 		} else {
-			View4<Matrix<E>> v1 = m1.views();
-			View4<Matrix<E>> v2 = m2.views();
+			View4<Matrix<E>> v1 = m1.views4();
+			View4<Matrix<E>> v2 = m2.views4();
 			Matrix<E> a = Matrix.add(Matrix.multiply_r(v1.a(),v2.a()),Matrix.multiply_r(v1.b(),v2.c()));
 			Matrix<E> b = Matrix.add(Matrix.multiply_r(v1.a(),v2.b()),Matrix.multiply_r(v1.b(),v2.d()));
 			Matrix<E> c = Matrix.add(Matrix.multiply_r(v1.c(),v2.a()),Matrix.multiply_r(v1.d(),v2.c()));	
@@ -379,8 +397,8 @@ public class Matrix<E> {
 		Preconditions.checkArgument(ch, "No se cumplen condiciones de suma");
 		Matrix<E> r; 
 		if(m1.nc > 1 && m1.nf > 1) {
-			View4<Matrix<E>> v1 = m1.views();
-			View4<Matrix<E>> v2 = m2.views();			
+			View4<Matrix<E>> v1 = m1.views4();
+			View4<Matrix<E>> v2 = m2.views4();			
 			Matrix<E> a = Matrix.add_r(v1.a(),v2.a());
 			Matrix<E> b = Matrix.add_r(v1.b(),v2.b());
 			Matrix<E> c = Matrix.add_r(v1.c(),v2.c());

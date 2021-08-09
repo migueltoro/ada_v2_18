@@ -49,6 +49,10 @@ public record IntPair(Integer first,Integer second) {
 		return this.second()-this.first();
 	}
 	
+	public Integer center() {
+		return (this.second()+this.first())/2;
+	}
+	
 	public View1<IntPair,Integer> view1() {
 		return View1.of(this.first(),IntPair.of(this.first()+1,this.second()));
 	}

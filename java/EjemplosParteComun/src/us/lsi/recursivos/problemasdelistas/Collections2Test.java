@@ -24,7 +24,7 @@ public class Collections2Test {
 	@Test
 	public void testBinarySearchList() {
 		List<Double> lista = Math2.getListDoubleAleatoria(50, -20., 20.);
-		Double key = Math2.getDoubleAleatorio(-20.,20.);
+		Double key = lista.get(4);
 		ProblemasDeListas.sort(lista);
 		int r1 = ProblemasDeListas.binarySearch(lista, key);
 		int r2 = Collections.binarySearch(lista, key);
@@ -74,6 +74,6 @@ public class Collections2Test {
 			lista.add(e);
 		}
 		SubSecuencia s = ProblemasDeListas.getSubSecuenciaMaxima(lista);
-		assertTrue(new SubSecuencia(lista,2,5).equals(s));
+		assertTrue(SubSecuencia.of(2,5,lista).equals(s));
 	}
 }

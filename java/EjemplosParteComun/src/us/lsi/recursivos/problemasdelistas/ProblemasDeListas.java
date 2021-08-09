@@ -6,13 +6,41 @@ import java.util.stream.*;
 
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
+import us.lsi.common.Multiset;
+import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.math.*;
+import us.lsi.streams.Stream2;
 
 
 
 public class ProblemasDeListas {
 	
+	public static <E> E masDeLaMitad(List<E> ls) {
+		Integer n = ls.size();
+		Multiset<E> ms = Stream2.toMultiSet(ls.stream());
+		return ms.elementSet().stream().map(e->Pair.of(e,ms.count(e)))
+				.filter(p->p.second()>=n/2)
+				.findFirst()
+				.map(p->p.first())
+				.orElse(null);
+	}
+	
+	public static <E> E masDeLaMitad2(List<E> ls,Comparator<? super E> cmp) {
+		IntPair p = masDeLaMitad2R(ls,cmp);
+		return p==null?null:ls.get(p.first());
+	}
+	
+	private static <E> IntPair masDeLaMitad2R(List<E> ls,Comparator<? super E> cmp) {
+		Integer n = ls.size();
+		IntPair r;
+		IntPair p = banderaHolandesa(ls,cmp);
+		if(p.size() >= n/2) r = p;
+		else if(p.first() >=n/2) r = masDeLaMitad2R(ls.subList(0,p.first()),cmp);
+		else if(n-p.second() >=n/2) r = masDeLaMitad2R(ls.subList(p.second(),n),cmp);
+		else r = null;
+		return r;
+	}
 	
 	public static <E extends Comparable<? super E>> int binarySearch(List<E> lista, E key){
 		Comparator<E> ord = Comparator.naturalOrder();
@@ -52,19 +80,25 @@ public class ProblemasDeListas {
 		quickSort(lista,0,lista.size(),cmp);	
 	}
 	
-	public static <T> IntPair banderaHolandesa(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){
+	public static <E> IntPair banderaHolandesa(List<E> ls, Comparator<? super E> cmp){
+		Integer n = ls.size();
+		E pivote = escogePivote(ls,0,n);
+		return banderaHolandesa(ls,pivote,0,n,cmp);
+	}
+	
+	public static <E> IntPair banderaHolandesa(List<E> ls, E pivote, Integer i, Integer j,  Comparator<? super E> cmp){
 		int a, b, c;
 		a = i;	
 		b = i;	
 		c = j;	
 		while (c-b>0) {
-		    T elem =  lista.get(b);
+		    E elem =  ls.get(b);
 		    if (cmp.compare(elem, pivote)<0) {
-		    	List2.intercambia(lista, a,b);
+		    	List2.intercambia(ls, a,b);
 				a++;
 				b++;
 		    } else if (cmp.compare(elem, pivote)>0) {
-		    	List2.intercambia(lista,b,c-1);
+		    	List2.intercambia(ls,b,c-1);
 				c--;	
 		    } else {
 		    	b++;
@@ -99,6 +133,16 @@ public class ProblemasDeListas {
 			IntPair p = banderaHolandesa(lista, pivote, i, j, ord);
 			quickSort(lista,i,p.first(),ord);
 			quickSort(lista,p.second(),j,ord);			
+		}
+	}
+	
+	public static <T> void ordenaBase(List<T> lista, Integer inf, Integer sup, Comparator<? super T> ord) {		
+		for (int i = inf; i < sup; i++) {
+		      for(int j = i+1; j < sup; j++){
+		    	  if(ord.compare(lista.get(i),lista.get(j))>0){
+		    		  List2.intercambia(lista, i, j);
+		    	  }
+		      }
 		}
 	}
 
@@ -194,137 +238,62 @@ public class ProblemasDeListas {
 	}	
 	
 	public static SubSecuencia getSubSecuenciaMaxima(List<Double> lista){
-		Comparator<SubSecuencia> ord = Comparator.naturalOrder();
-		return getSubSecuenciaMaxima(lista,0,lista.size(),ord);
+		return subSecuenciaMaxima(lista,0,lista.size());
 	}
 	
-	private static SubSecuencia getSubSecuenciaMaxima(List<Double> lista, int i, int j, Comparator<SubSecuencia> ord){
+	private static SubSecuencia subSecuenciaMaxima(List<Double> ls, int i, int j){
 		SubSecuencia r = null;	
 		if(j-i <= 1){
-			r = new SubSecuencia(lista,i,j);
+			r = SubSecuencia.of(i,j,ls.get(i),ls);
 		}else{
 			int k = (i+j)/2;
-			SubSecuencia s1 = getSubSecuenciaMaxima(lista, i, k, ord);
-			SubSecuencia s2 = getSubSecuenciaMaxima(lista, k, j, ord);
-			SubSecuencia s3 = getSubSecuenciaMaximaCentrada(lista,i,j,k);
-			r = Stream.of(s1, s2, s3).max(ord).get();
+			SubSecuencia s1 = subSecuenciaMaxima(ls, i, k);
+			SubSecuencia s2 = subSecuenciaMaxima(ls, k, j);
+			SubSecuencia s3 = subSecuenciaMaximaCentrada(ls,i,j,k);
+			r = Stream.of(s1, s2, s3).max(Comparator.naturalOrder()).get();
 		}
 		return r;
 	}	
 	
-	private static SubSecuencia getSubSecuenciaMaximaCentrada(List<Double> lista, int i, int j, int k){
-		Double sumaMaxima = Double.MIN_VALUE;
+	private static SubSecuencia subSecuenciaMaximaCentrada(List<Double> ls, int i, int j, int k){
 		Double suma = 0.;
-		int i1 = k;
-		int j1 = k;
-		int from = i1;
-		int to = j1;
-		for(i1 = k-1;i1 >= i; i1--){
-			suma = suma + lista.get(i1);  
-			if(suma > sumaMaxima){
-				sumaMaxima = suma;
-				from = i1;
-			}
+		SubSecuencia smax = SubSecuencia.of(k,k,0., ls);
+		for(Integer i1 = k-1;i1>=i;i1--) {
+			suma = suma + ls.get(i1);  
+			SubSecuencia s = SubSecuencia.of(i1,k,suma, ls);
+			if(s.compareTo(smax) >0) smax = s;
 		}
-		suma = sumaMaxima;
-		for(j1=k;j1<j;j1++){
-			suma = suma + lista.get(j1);  
-			if(suma > sumaMaxima){
-				sumaMaxima = suma;
-				to = j1+1;
-			}
+		suma = smax.suma();
+		Integer i1 = smax.from();
+		for(Integer j1 = k;j1<j;j1++) {
+			suma = suma + ls.get(j1);  
+			SubSecuencia s = SubSecuencia.of(i1,j1+1,suma,ls);
+			if(s.compareTo(smax) >0) smax = s;
 		}
-		SubSecuencia sm = new SubSecuencia(lista,from,to);
-		return sm;
+		return smax;
 	}
 	
-	public static class SubSecuencia implements Comparable<SubSecuencia>{
-		private List<Double> lista;
-		private Integer from;
-		private Integer to;
+	public static record SubSecuencia(Integer from, Integer to, Double suma, List<Double> ls) implements Comparable<SubSecuencia>{
 		
+		public static SubSecuencia of(Integer from, Integer to, Double suma, List<Double> ls) {
+			return new SubSecuencia(from,to,suma, ls);
+		}
 		
-		public SubSecuencia(List<Double> lista, Integer from, Integer to) {
-			super();
-			this.lista = lista;
-			this.from = from;
-			this.to = to;
-		}
-
-		public Integer getFrom() {
-			return from;
-		}
-
-		public Integer getTo() {
-			return to;
-		}
-
-		public Double getSuma() {
-			Double suma = 0.;
-			for(int i= from; i<to;i++){
-				suma = suma+lista.get(i);
-			}
-			return suma;
+		public static SubSecuencia of(Integer from, Integer to, List<Double> ls) {
+			Double suma = IntStream.range(from,to).mapToDouble(i->ls.get(i)).sum();
+			return new SubSecuencia(from,to,suma, ls);
 		}
 
 		@Override
 		public int compareTo(SubSecuencia s) {
-			// TODO Auto-generated method stub
-			return this.getSuma().compareTo(s.getSuma());
+			return this.suma().compareTo(s.suma());
 		}
 
 		@Override
 		public String toString() {
-			return "SubSecuencia [from=" + from + ", to=" + to + ", getSuma()="
-					+ getSuma() + "]";
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((from == null) ? 0 : from.hashCode());
-			result = prime * result + ((lista == null) ? 0 : lista.hashCode());
-			result = prime * result + ((to == null) ? 0 : to.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			SubSecuencia other = (SubSecuencia) obj;
-			if (from == null) {
-				if (other.from != null)
-					return false;
-			} else if (!from.equals(other.from))
-				return false;
-			if (lista == null) {
-				if (other.lista != null)
-					return false;
-			} else if (!lista.equals(other.lista))
-				return false;
-			if (to == null) {
-				if (other.to != null)
-					return false;
-			} else if (!to.equals(other.to))
-				return false;
-			return true;
-		}
-		
-	}
-
-	public static <T> void ordenaBase(List<T> lista, Integer inf, Integer sup, Comparator<? super T> ord) {		
-		for (int i = inf; i < sup; i++) {
-		      for(int j = i+1; j < sup; j++){
-		    	  if(ord.compare(lista.get(i),lista.get(j))>0){
-		    		  List2.intercambia(lista, i, j);
-		    	  }
-		      }
+			return String.format("(%d,%d,%s)",from,to,suma());
 		}
 	}
+
+	
 }

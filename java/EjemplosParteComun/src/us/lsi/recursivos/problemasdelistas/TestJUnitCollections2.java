@@ -72,7 +72,7 @@ public class TestJUnitCollections2 {
 			ls.add(Math2.getDoubleAleatorio(-1000., 0.));
 		}
 		SubSecuencia s = ProblemasDeListas.getSubSecuenciaMaxima(ls);
-		assertTrue(s.getFrom()==a && s.getTo()==b);
+		assertTrue(s.from()==a && s.to()==b);
 	}
 
 }

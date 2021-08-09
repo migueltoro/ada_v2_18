@@ -49,6 +49,10 @@ public record LongPair(Long first,Long second) {
 		return this.second()-this.first();
 	}
 	
+	public Long center() {
+		return (this.second()+this.first())/2;
+	}
+	
 	public View1<LongPair,Long> view1() {
 		return View1.of(this.first(),LongPair.of(this.first()+1,this.second()));
 	}
