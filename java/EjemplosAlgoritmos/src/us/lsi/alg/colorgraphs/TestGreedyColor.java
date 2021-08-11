@@ -9,7 +9,6 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 
 public class TestGreedyColor {
@@ -32,7 +31,7 @@ public class TestGreedyColor {
 		
 		System.out.println(graph);
 		
-		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(graph);
+		Graph<Integer,Double> g2 = IntegerVertexGraphView.of(graph);
 		
 //		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	

@@ -9,7 +9,6 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.views.IntegerVertexGraphView;
@@ -31,7 +30,7 @@ public class TestColorAstar {
 
 		SimpleWeightedGraph<Ciudad, Carretera> g0 = leeGrafo("./ficheros/andalucia.txt");		
 //		System.out.println(g0);		
-		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(g0);	
+		Graph<Integer,Double> g2 = IntegerVertexGraphView.of(g0);	
 //		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex e1 = ColorVertex.first();

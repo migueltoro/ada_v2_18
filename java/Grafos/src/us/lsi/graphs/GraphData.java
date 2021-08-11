@@ -7,7 +7,7 @@ import org.jgrapht.Graph;
 
 public class GraphData {
 	
-	public static Graph<Integer,SimpleEdge<Integer>> graph;
+	public static Graph<Integer,Double> graph;
 	public static Map<Integer,Double> vertexWeight;
 	public static Integer n;
 	public static Integer m;
@@ -19,7 +19,7 @@ public class GraphData {
 	}
 	
 	public static Double edgeWeight(Integer i, Integer j) {
-		return graph.getEdge(i,j).weight();
+		return graph.getEdge(i,j);
 	}
 	
 	public static Boolean containsVertex(Integer i) {

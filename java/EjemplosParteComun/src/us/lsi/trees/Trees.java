@@ -4,13 +4,16 @@ package us.lsi.trees;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import us.lsi.tiposrecursivos.BinaryTree;
+import us.lsi.common.String2;
+import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.Tree;
+import us.lsi.tiposrecursivos.Tree.TreeLevel;
 import us.lsi.tiposrecursivos.Tree.TreeType;
 
 
@@ -117,9 +120,33 @@ public class Trees {
 		};
 	}
 	
+	public static <E> List<Boolean> niveles(Tree<E> tree, Predicate<Tree<E>> pd) {
+		Map<Integer,Boolean> m = Stream2.asStream(()->tree.byLevel())
+				.collect(Collectors.groupingBy(p->p.level(),
+						Collectors.collectingAndThen(Collectors.mapping(p->p.tree(),Collectors.toList()),
+								ls->ls.stream().allMatch(pd))));
+		return m.entrySet()
+				.stream().sorted(Comparator.comparing(e->e.getKey()))
+				.map(e->e.getValue()).toList();
+	}
+	
+	public static <E> Map<Integer,List<E>> parDeHijos(Tree<E> tree, Predicate<Tree<E>> pd) {
+		return Stream2.asStream(()->tree.byLevel())
+				.filter(t->!t.tree().isEmpty())
+				.filter(t->t.tree().getNumOfChildren()%2==0)
+				.collect(Collectors.groupingBy(p->p.level(),
+						Collectors.mapping(p->p.tree().getLabel(),Collectors.toList())));
+	}
+	
+	public static <E> Map<Integer,List<Tree<E>>> parNumeroDeHijos(Tree<E> tree) {
+		return tree.stream().collect(Collectors.groupingBy(t->t.getNumOfChildren()));
+	}
+	
 	public static void main(String[] args) {
-		Tree<Double> t7 = Tree.parse("39(2.,27(_,2,3,4),9(8.,_))").map(e->Double.parseDouble(e));	
+		Tree<Integer> t7 = Tree.parse("40(2,27(_,2,3,4),9(8,_))").map(e->Integer.parseInt(e));	
 		System.out.println(minLabel(t7,Comparator.naturalOrder())+"=="+minLabel2(t7,Comparator.naturalOrder()));
+		Predicate<Tree<Integer>> pd = t->t.isEmpty() || t.getLabel()%2==0;
+		String2.toConsole("%s",niveles(t7,pd));
 	}
 
 }

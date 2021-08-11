@@ -28,7 +28,7 @@ public class Tsp {
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);	
-		Graph<Integer,SimpleEdge<Integer>> graph3 = IntegerVertexGraphView.of(graph);
+		Graph<Integer,Double> graph3 = IntegerVertexGraphView.of(graph);
 		GraphData.graph = graph3;
 		GraphData.n = graph3.vertexSet().size();
 		AuxGrammar.generate(GraphData.class,"models/tsp.lsi","ficheros/tsp.lp");

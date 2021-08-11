@@ -322,13 +322,11 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public BinaryTree<E> copy() {
-		BinaryTree<E> r= null;
-		switch(this.getType()) {
-		case Empty: r = BinaryTree.empty(); break;
-		case Leaf:  r = BinaryTree.leaf(label); break;
-		case Binary: r = BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); break;
-		}
-		return r;
+		return switch(this.getType()) {
+		case Empty -> BinaryTree.empty(); 
+		case Leaf -> BinaryTree.leaf(label); 
+		case Binary ->BinaryTree.binary(label,this.getLeft().copy(),this.getRight().copy()); 
+		};
 	}
 
 

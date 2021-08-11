@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 
 import us.lsi.common.List2;
-import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.virtual.ActionVirtualVertex;
 
 
@@ -35,7 +34,7 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 	}
 
 	
-	public static void data(Integer m, Graph<Integer,SimpleEdge<Integer>> graph) {
+	public static void data(Integer m, Graph<Integer,Double> graph) {
 		ColorVertex.m = m;; 
 		ColorVertex.n = graph.vertexSet().size(); 
 		ColorVertex.graph = graph;
@@ -68,7 +67,7 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 //	final Set<Integer> cv; //derivada, colores asignados a los vecinos de index que ya tienen color
 	public static Integer m; // número maximo de colores, obtenido previamente mediante un camino voraz
 	public static Integer n; // número de vértices
-	public static Graph<Integer,SimpleEdge<Integer>> graph;
+	public static Graph<Integer,Double> graph;
 	public static List<Integer> colors;
 	
 	

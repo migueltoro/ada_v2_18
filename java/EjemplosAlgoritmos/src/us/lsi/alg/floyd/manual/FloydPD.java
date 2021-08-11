@@ -14,7 +14,6 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 
 public class FloydPD {
@@ -66,8 +65,7 @@ public class FloydPD {
 			Double r = null;
 			if(this.i.equals(this.j)) r = 0.;
 			else if(k ==n && FloydPD.graph.containsEdge(this.i, this.j)){
-				SimpleEdge<Integer> e = FloydPD.graph.getEdge(i, j);
-				Double w = FloydPD.graph.getEdgeWeight(e);
+				Double w = FloydPD.graph.getEdge(i, j);
 				r = w;
 			} else if(k ==n && !FloydPD.graph.containsEdge(this.i, this.j)) {
 				r = null;
@@ -85,7 +83,7 @@ public class FloydPD {
 		return graph;
 	}
 	
-	public static Graph<Integer,SimpleEdge<Integer>> graph;
+	public static Graph<Integer,Double> graph;
 	public static Integer n;
 	public Map<FloydProblem,Spf> solutionsTree;
 	public static FloydProblem startVertex;

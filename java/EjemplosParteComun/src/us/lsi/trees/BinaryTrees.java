@@ -1,6 +1,7 @@
 package us.lsi.trees;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -196,6 +197,8 @@ public class BinaryTrees {
 		return r;
 	}
 	
+	
+	
 	public static <E> Boolean isOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
 		BinaryType type = tree.getType();
 		return switch (type) {
@@ -207,10 +210,12 @@ public class BinaryTrees {
 			E right = tree.getRight().isEmpty() ? null : tree.getRight().getLabel();
 			Boolean r = (left == null || Comparator2.isGE(label, left, cmp))
 					&& (right == null || Comparator2.isLE(label, right, cmp));
-			yield r && isOrdered(tree.getLeft(),cmp) && isOrdered(tree.getRight(),cmp);
+			yield r && isOrdered(tree.getLeft(), cmp) && isOrdered(tree.getRight(), cmp);
 		}
 		};
 	}
+	
+	
 	
 	public static Integer sumIfPredicate(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
 		BinaryType type = tree.getType();
@@ -228,6 +233,23 @@ public class BinaryTrees {
 				.filter(predicate)
 				.mapToInt(lb->lb)
 				.sum();
+	}
+	
+	public static Boolean sumaEtiquetas(BinaryTree<Integer> tree) {
+		return tree.stream().filter(t->!t.isEmpty())
+				.filter(t->!t.getLeft().isEmpty()&&!t.getRight().isEmpty())
+				.allMatch(t->t.getLabel().equals(t.getLeft().getLabel()+t.getRight().getLabel()));
+	}
+	
+	public static Boolean existeLista(BinaryTree<Character> tree, List<Character> ls) {
+		BinaryType type = tree.getType();
+		Integer n = ls.size();
+		return switch (type) {
+		case Empty -> ls.isEmpty();
+		case Leaf -> !ls.isEmpty() && ls.get(0).equals(tree.getLabel());
+		case Binary -> !ls.isEmpty() && ls.get(0).equals(tree.getLabel()) && 
+				(existeLista(tree.getLeft(),ls.subList(1,n)) || existeLista(tree.getRight(),ls.subList(1,n)));
+		};
 	}
 	
 	public static void test1() {

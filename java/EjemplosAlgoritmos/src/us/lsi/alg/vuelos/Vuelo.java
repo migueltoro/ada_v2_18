@@ -9,8 +9,8 @@ public class Vuelo {
 	private double duracion;
 	public static Integer n = 0;
 	
-	public static  Vuelo ofFormat(String from, String to, String[] s) {
-		return new Vuelo(from, to, Double.parseDouble(s[2]),Double.parseDouble(s[3]));
+	public static  Vuelo ofFormat(String[] s) {
+		return new Vuelo(s[0],s[1], Double.parseDouble(s[2]),Double.parseDouble(s[3]));
 	}
 	
 	public static Vuelo of(String from, String to, double timeSalida,double duracion) {

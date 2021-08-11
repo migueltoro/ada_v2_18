@@ -12,8 +12,8 @@ public class Carretera {
 		return new Carretera(c1,c2);
 	}
 
-	public static Carretera ofFormat(Ciudad c1, Ciudad c2, String[] formato) {
-		return new Carretera(c1,c2,formato);
+	public static Carretera ofFormat(String[] formato) {
+		return new Carretera(formato);
 	}
 
 	public static Carretera ofWeight(Ciudad c1, Ciudad c2, Double km) {
@@ -57,9 +57,7 @@ public class Carretera {
 		num++;
 	}
 
-	private Carretera(Ciudad c1, Ciudad c2, String[] nombre) {
-		this.source = c1;
-		this.target = c2;
+	private Carretera(String[] nombre) {
 		this.km = Double.parseDouble(nombre[3]);
 		this.nombre = nombre[2];		
 		this.id = num;
@@ -96,7 +94,7 @@ public class Carretera {
 	@Override
 	public String toString() {
 		String nn = this.nombre==null?"":this.nombre+",";
-		return "("+getSource()+","+getTarget()+","+nn+this.km+")";
+		return nn+this.km+")";
 	}
 
 	@Override

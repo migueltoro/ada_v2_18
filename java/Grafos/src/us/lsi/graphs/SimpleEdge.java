@@ -13,6 +13,16 @@ public interface SimpleEdge<V> {
 		return new SimpleEdgeR<V>(v1, v2, weight);
 	}
 	
+	/**
+	 * @param v1 Un vértice
+	 * @param v2 Un segundo vértice
+	 * @param <V> el tipo de los vértices
+	 * @return Una arista entre ambos vértices
+	 */
+	public static <V> SimpleEdge<V> of(V v1, V v2) {
+		return new SimpleEdgeR<V>(v1, v2,1.);
+	}
+	
 	V source();
 	V target();
 	Double weight();

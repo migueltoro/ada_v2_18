@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
 
-import us.lsi.common.TriFunction;
-
 /**
  * <p>
  * Clase adecuada para construir un grafo a partir de la información en un fichero
@@ -68,7 +66,7 @@ public class GraphsReader {
 	public static <V, E, G extends Graph<V,E>> G newGraph(
 			String file,
 			Function<String[],V> vf, 
-			TriFunction<V,V,String[],E> ef,
+			Function<String[],E> ef,
 			Supplier<G> creator) {
 		return newGraph(file,vf,ef,creator,null);	
 	}
@@ -91,7 +89,7 @@ public class GraphsReader {
 	public static <V, E, G extends Graph<V,E>> G newGraph(
 			String file,
 			Function<String[],V> vf, 
-			TriFunction<V,V,String[],E> ef,
+			Function<String[],E> ef,
 			Supplier<G> creator,
 			Function<E,Double> ew) {
 
@@ -136,8 +134,7 @@ public class GraphsReader {
 					throw new IllegalArgumentException("El número de vértices de la arista no es correcto");
 
 				if (arista.length >= 2) {
-					E edge = ef.apply(idVertices.get(arista[0]),
-							idVertices.get(arista[1]), arista);
+					E edge = ef.apply(arista);
 					ret.addEdge(idVertices.get(arista[0]),
 							idVertices.get(arista[1]), edge);
 					if(ew!= null) {

@@ -15,9 +15,6 @@ import us.lsi.common.Preconditions;
 public class FlowEdge {
 	
 	public static List<FlowEdge> edges = List2.empty();
-	
-	public final FlowVertex source;
-	public final FlowVertex target;
 	public final Double min;
 	public final Double max;
 	public final Double cost;
@@ -26,8 +23,8 @@ public class FlowEdge {
 	
 	private static Integer nId = 0;
 	
-	public static FlowEdge create(FlowVertex v1, FlowVertex v2, String[] formato) {
-		FlowEdge r = new FlowEdge(v1,v2,formato);
+	public static FlowEdge create(String[] formato) {
+		FlowEdge r = new FlowEdge(formato);
 		FlowEdge.edges.add(r);
 		return r;
 	}
@@ -49,25 +46,19 @@ public class FlowEdge {
 		return r;
 	}
 	
-	private FlowEdge(FlowVertex from, FlowVertex to,String[] formato) {
+	private FlowEdge(String[] formato) {
 		super();
 		if(formato.length == 2) {
-			this.source=from;
-			this.target =to;
 			this.min = 0.;
 			this.max = FlowVertex.maxDouble;
 			this.cost = 0.;
 			this.name = "";
 		} else if(formato.length == 5) {
-			this.source=from;
-			this.target =to;
 			this.min = convert(formato[2]);
 			this.max = convert(formato[3]);
 			this.cost = convert(formato[4]);
 			this.name = "";
 		} else if(formato.length == 6) {
-			this.source=from;
-			this.target =to;
 			this.min = convert(formato[2]);
 			this.max = convert(formato[3]);
 			this.cost = convert(formato[4]);
@@ -85,8 +76,7 @@ public class FlowEdge {
 	
 	@Override
 	public String toString() {
-		return source.toString() + "--" + target.toString()
-		+(name.equals("")?"":" = "+name);
+		return (name.equals("")?"":" = "+name);
 	}
 	
 	public String toStringLong() {

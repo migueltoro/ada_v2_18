@@ -2,6 +2,7 @@ package us.lsi.flowgraph.examples;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.function.Function;
 
 import org.jgrapht.Graph;
 
@@ -17,21 +18,20 @@ import us.lsi.solve.AuxGrammar;
 public class Caminos {
 
 	
-	public static TriFunction<Integer,Integer,String[],SimpleEdge<Integer>> edge = 
-			(v1,v2,f) -> SimpleEdge.of(v1,v2,(double)Integer.parseInt(f[2]));
+	public static Function<String[],Double> edge = f ->(double)Integer.parseInt(f[2]);
 
-	public static Graph<Integer,SimpleEdge<Integer>> leeGrafo(String fichero){
-		Graph<Integer,SimpleEdge<Integer>> graph = GraphsReader.newGraph(fichero, 
+	public static Graph<Integer,Double> leeGrafo(String fichero){
+		Graph<Integer,Double> graph = GraphsReader.newGraph(fichero, 
 				e->Integer.parseInt(e[0]), 
 				edge,
 				Graphs2::simpleDirectedWeightedGraph,
 //				Graphs2::simpleWeightedGraph,
-				e->e.weight());
+				e->e);
 		return graph;
 	}
 	
 	public static void caminos_model(String model) throws IOException {
-		Graph<Integer,SimpleEdge<Integer>>  graph = leeGrafo("data/ruta_tren.txt");
+		Graph<Integer,Double>  graph = leeGrafo("data/ruta_tren.txt");
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(graph);	
 		GraphData.graph = graph;
