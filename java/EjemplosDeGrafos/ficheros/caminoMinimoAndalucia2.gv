@@ -1,14 +1,14 @@
 strict graph G {
-  1 [ label="Sevilla" ];
-  2 [ label="Almeria" ];
-  3 [ label="Granada" ];
-  4 [ label="Algeciras" ];
-  5 [ label="Cadiz" ];
-  6 [ label="Malaga" ];
-  7 [ label="Jaen" ];
-  8 [ label="Antequera" ];
-  9 [ label="Cordoba" ];
-  1 -- 8 [ label="A-92--159.947" style="bold" ];
-  8 -- 6 [ label="A-45--51.523" style="bold" ];
-  6 -- 2 [ label="A-7--201.029" style="bold" ];
+  1 [ color="black" label="Sevilla" ];
+  2 [ color="black" label="Almeria" ];
+  3 [ color="black" label="Granada" ];
+  4 [ color="black" label="Algeciras" ];
+  5 [ color="black" label="Cadiz" ];
+  6 [ color="black" label="Malaga" ];
+  7 [ color="black" label="Jaen" ];
+  8 [ color="black" label="Antequera" ];
+  9 [ color="black" label="Cordoba" ];
+  1 -- 8 [ style="bold" label="A-92--159.947" ];
+  8 -- 6 [ style="bold" label="A-45--51.523" ];
+  6 -- 2 [ style="bold" label="A-7--201.029" ];
 }

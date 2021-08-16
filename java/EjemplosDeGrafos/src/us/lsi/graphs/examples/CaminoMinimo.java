@@ -30,12 +30,14 @@ public class CaminoMinimo {
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
 						Carretera::getKm);
+		System.out.println(graph);
 		ShortestPathAlgorithm<Ciudad,Carretera> a = new DijkstraShortestPath<Ciudad,Carretera>(graph);
 		Ciudad from = Ciudad.ofName("Sevilla");
 		Ciudad to = Ciudad.ofName("Almeria");
 		GraphPath<Ciudad,Carretera> gp =  a.getPath(from,to);
 		System.out.println(gp);
 		System.out.println(gp.getVertexList());	
+		System.out.println(gp.getWeight());
 		
 		SimpleWeightedGraph<Ciudad,Carretera> graph2 = 
 				Graphs2.subGraph(graph, 

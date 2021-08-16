@@ -476,47 +476,14 @@ public class AuxGrammar {
 		return r;
 	}
 	
-	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
-		DataMochila.iniMochila();
-		AuxGrammar.dataClass = DataMochila.class;
-		System.out.println(asDouble(Double.parseDouble("2.3")));
-		System.out.println(asInteger(Integer.parseInt("23")));
-		System.out.println(asInteger(Integer.parseInt("27")));
-		System.out.println(asDouble(Double.parseDouble("23.5")));
-		System.out.println(castInteger(Double.parseDouble("23.5")));
-		System.out.println(asString("23."));
-		System.out.println(asListString(ListString.of(Arrays.asList("Antonio","Pepe","Juan"))));
-		System.out.println(div(3,2.));		
-		Method m1 = DataMochila.class.getDeclaredMethod("s",Integer.class,Integer.class,Integer.class);
-		AuxGrammar.functions.put("s",m1);
-		Method m2 = DataMochila.class.getDeclaredMethod("getN");
-		AuxGrammar.functions.put("getN",m2);
-		System.out.println(AuxGrammar.functions);
-		Type types1[] = {Type.INT,Type.INT,Type.INT};
-		AuxGrammar.parametersType.put("s",types1);
-		Type types2[] = {};
-		AuxGrammar.parametersType.put("getN",types2);
-		System.out.println(AuxGrammar.parametersType.entrySet().stream()
-				.map(e->String.format("%s = %s",e.getKey(),AuxGrammar.toString(e.getValue())))
-				.collect(Collectors.joining(",","[","]")));
-		Object p1[] = {3,4,5};
-		Object r1 = AuxGrammar.result("s",p1);
-		System.out.println(r1);
-		Object p2[] = {};
-		Object r2 = AuxGrammar.result("getN",p2);
-		System.out.println(r2);
-		System.out.println(toString(partes("x_0 + -23.567")));
-	}
-
 	public static void generate(Class<?> dataClass, String model, String outFile) throws IOException {
 		AuxGrammar.dataClass = dataClass;
 	    PLIModelLexer lexer = new PLIModelLexer(CharStreams.fromFileName(model));
 	    PLIModelParser parser = new PLIModelParser(new CommonTokenStream(lexer));
 	    ParseTree tree = parser.model();
-	    String answer = asString(tree.accept(new PLIModelVisitor()));
+	    String answer = asString(tree.accept(new PLIModelVisitorC()));
 	    Files2.toFile(answer,outFile);
 	}
-	
 	
 
 }

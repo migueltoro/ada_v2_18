@@ -8,7 +8,7 @@ Integer getPeso(Integer i)
 Integer getNMU(Integer i)
 Integer CI = getCI()
 Integer n = getN()
-Integer p = getValor(2)
+
 
 goal section
 
@@ -22,10 +22,7 @@ bounds section
 
 x[i] <= getNMU(i), i in 0 .. n
 
-bin
-
 int  
 
 x[i], i in 0 .. n 
 
-free

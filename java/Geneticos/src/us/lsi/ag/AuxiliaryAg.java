@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -100,6 +101,16 @@ public class AuxiliaryAg {
 				IntStream.range(0,n-1).boxed().allMatch(i->graph.containsEdge(vertices.get(i),vertices.get(i+1)));
 	}
 	
+	public static <V,E> Boolean isSimpleOpenPathVertices(Integer n, Function<Integer,V> f, Graph<V,E> g) {
+		return IntStream.range(0,n-1).boxed()
+	 	 .allMatch(i->g.containsEdge(f.apply(i),f.apply(i+1)));
+	}
+	
+	public static <V,E> Boolean isSimpleClosedPathVertices(Integer n, Function<Integer,V> f, Graph<V,E> g) {
+		return IntStream.range(0,n).boxed()
+	 	 .allMatch(i->g.containsEdge(f.apply(i),f.apply((i+1)%n)));
+	}
+	
 	public static <V,E> Boolean isSimpleOpenPathEdges(Graph<V,E> graph, List<E> edges){		
 		return isSimpleOpenPathVertices(graph,vertices(graph,edges));
 	}
@@ -118,9 +129,9 @@ public class AuxiliaryAg {
 	public static <V,E> Double distanceToSimpleOpenPathVertices(Graph<V,E> graph, List<V> vertices){
 		Integer n = vertices.size();
 		Double d1 = distanceToAllDifferents(vertices);
-		Double d2 =	(double) vertices.stream().filter(v->graph.containsVertex(v)).count();
+		Double d2 =	(double) vertices.stream().filter(v->!graph.containsVertex(v)).count();
 		Double d3 =	(double) IntStream.range(0,n-1).boxed()
-				.filter(i->graph.containsEdge(vertices.get(i),vertices.get((i+1))))
+				.filter(i->!graph.containsEdge(vertices.get(i),vertices.get((i+1))))
 				.count();
 		return d1+(n-d2)*(n-d2)+(n-1-d3)*(n-1-d3);
 	}
@@ -128,9 +139,9 @@ public class AuxiliaryAg {
 	public static <V,E> Double distanceToSimpleClosedPathVertices(Graph<V,E> graph, List<V> vertices){
 		Integer n = vertices.size();
 		Double d1 = distanceToAllDifferents(vertices);
-		Double d2 =	(double) vertices.stream().filter(v->graph.containsVertex(v)).count();
+		Double d2 =	(double) vertices.stream().filter(v->!graph.containsVertex(v)).count();
 		Double d3 =	(double) IntStream.range(0,n).boxed()
-				.filter(i->graph.containsEdge(vertices.get(i),vertices.get((i+1)%n)))
+				.filter(i->!graph.containsEdge(vertices.get(i),vertices.get((i+1)%n)))
 				.count();
 		return d1+(n-d2)*(n-d2)+(n-d3)*(n-d3);
 	}

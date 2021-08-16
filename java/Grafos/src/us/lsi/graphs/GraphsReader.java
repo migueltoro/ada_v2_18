@@ -135,8 +135,7 @@ public class GraphsReader {
 
 				if (arista.length >= 2) {
 					E edge = ef.apply(arista);
-					ret.addEdge(idVertices.get(arista[0]),
-							idVertices.get(arista[1]), edge);
+					ret.addEdge(idVertices.get(arista[0]),idVertices.get(arista[1]), edge);
 					if(ew!= null) {
 						ret.setEdgeWeight(edge, ew.apply(edge));
 					}

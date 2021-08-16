@@ -265,7 +265,7 @@ public class List2 {
 	 */
 	@SafeVarargs
 	public static <E> List<E> of(E... elements){
-		return Arrays.asList(elements);
+		return new ArrayList<>(Arrays.asList(elements));
 	}
 	
 	/**

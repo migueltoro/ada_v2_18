@@ -1,7 +1,7 @@
 package us.lsi.graphs.examples;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 import us.lsi.common.String2;
 import us.lsi.graphs.Graphs2;
@@ -30,7 +30,8 @@ public class LeerFichero {
 	}
 	
 	public static Graph<CV, CE> leeGrafo(String file) {
-		SimpleGraph<CV, CE> graph = GraphsReader.newGraph(file, CV::of, CE::of,Graphs2::simpleGraph);
+		SimpleWeightedGraph<CV, CE> graph = GraphsReader.newGraph(file, CV::of, CE::of,
+				Graphs2::simpleWeightedGraph,e->1.5);
 		return graph;
 	}
 	

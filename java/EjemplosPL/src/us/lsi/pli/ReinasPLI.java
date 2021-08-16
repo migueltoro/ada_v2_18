@@ -9,8 +9,6 @@ import us.lsi.solve.AuxGrammar;
 public class ReinasPLI {
 	
 	public static int n = 100;
-
-	
 	
 	public static void reinas_model_2() throws IOException {
 		AuxGrammar.generate(ReinasPLI.class,"models/reinas_2.lsi","ficheros/reinas_2.lp");

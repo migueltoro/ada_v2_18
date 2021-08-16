@@ -2,10 +2,12 @@ package us.lsi.ejemplos_stream;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.*;
 import java.util.stream.Stream;
 import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 import us.lsi.common.List2;
@@ -99,6 +101,41 @@ public class OtrosEjemplos {
 	public static void ejemplo9() {
 		Stream.<Integer>iterate(0, x -> x <= 1000, x -> x + 4)
 				.forEach(imprimeEnConsola());
+	}
+	
+	public static <E> Set<E> union(Integer n, Predicate<Integer> pd, Function<Integer,Set<E>> f){
+		return IntStream.range(0, n).boxed().filter(pd).map(f).reduce((s1,s2)->Set2.union(s1,s2)).get();
+	}
+	
+	public static <E> Set<E> intersection(Integer n, Predicate<Integer> pd, Function<Integer,Set<E>> f){
+		return IntStream.range(0, n).boxed().filter(pd).map(f).reduce((s1,s2)->Set2.intersection(s1,s2)).get();
+	}
+	
+	public static Boolean allDifferents(Integer n, Predicate<Integer> pd, Function<Integer,Integer> f){
+		Integer n1 = IntStream.range(0, n).boxed().filter(pd).map(f).collect(Collectors.toSet()).size();
+		Integer n2 = (int)IntStream.range(0, n).boxed().filter(pd).count();
+		return n1.equals(n2);
+	}
+	
+	public static <E> Map<Integer,List<E>> grouping(Integer n, Function<Integer,Integer> key, Function<Integer,E> f){
+		  return IntStream.range(0,n).boxed().collect(Collectors.groupingBy(key,
+			 		Collectors.mapping(f,Collectors.toList()))); 
+	}
+	
+	public static <E> Map<E,Integer> frecuencias(Integer n, Function<Integer,E> f){
+		  return IntStream.range(0,n).boxed().collect(Collectors.groupingBy(f,
+			 		Collectors.collectingAndThen(Collectors.counting(),r->r.intValue()))); 
+	}
+	
+	public static <E> Map<Integer, E> groupingReduce(Integer n, Function<Integer, Integer> key, Function<Integer, E> f,
+			BinaryOperator<E> bo) {
+		return IntStream.range(0, n).boxed().collect(Collectors.groupingBy(key,
+				Collectors.collectingAndThen(Collectors.mapping(f, Collectors.reducing(bo)), r -> r.get())));
+	}
+	
+	
+	public static <E> Boolean esPermutacion(Integer n, Function<Integer,E> f, Function<Integer,E> v){
+		  return frecuencias(n,f).equals(frecuencias(n, v));
 	}
 
 	public static void main(String[] args) {

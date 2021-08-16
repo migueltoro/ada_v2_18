@@ -1,4 +1,4 @@
-package us.lsi.solve;
+package us.lsi.solve_test;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,18 +8,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.antlr.v4.runtime.misc.NotNull;
-
 import us.lsi.common.Preconditions;
-import us.lsi.model.PLIModelBaseVisitor;
-import us.lsi.model.PLIModelParser;
+import us.lsi.model_test.PLIModelBaseVisitor;
+import us.lsi.model_test.PLIModelParser;
+import us.lsi.solve.AuxGrammar;
 import us.lsi.solve.AuxGrammar.Limits;
 import us.lsi.solve.AuxGrammar.ListString;
 import us.lsi.solve.AuxGrammar.Type;
 import us.lsi.streams.Stream2;
 
 
-public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
+public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	
 	/**
 	 * {@inheritDoc}
@@ -435,7 +434,7 @@ public class PLIModelVisitor extends PLIModelBaseVisitor<Object>{
 	 * @return the visitor result
 	 */
 	
-	@Override public Object visitIndex_var_id(@NotNull PLIModelParser.Index_var_idContext ctx) {
+	@Override public Object visitIndex_var_id(PLIModelParser.Index_var_idContext ctx) {
 		Integer n = ctx.exp().size();
 		if(n == 0) return null;
 		List<String>  r = IntStream.range(0,n).boxed()

@@ -13,6 +13,7 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath;
 
 
+
 public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyperVertex<FloydVertex,FloydEdge,Boolean>{
 
 	

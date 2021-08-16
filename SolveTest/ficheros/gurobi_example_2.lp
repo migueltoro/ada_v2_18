@@ -5,7 +5,7 @@ Minimize
 
 Subject To
   
-  sc0: x0 - x1 - r0 = 0
+  sc0: x0 - x1 + r0 = 0
   sc1: x0 - x2 - r1 = 0
   sc2: x1 - x2 - r2 = 0
   sc3: x0 - x3 - r3 = 0
@@ -34,10 +34,16 @@ Bounds
   av0 >= 0.1
   av1 >= 0.1
   av2 >= 0.1
+  r0 free
+  
   
 Generals
  
   x0 x1 x2 x3
+  
+Semi-continuous
+
+  ar0
 
 General Constraints
   

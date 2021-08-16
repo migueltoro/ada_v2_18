@@ -1,9 +1,10 @@
-package us.lsi.solve;
+package us.lsi.mochila_test;
 
 import java.util.List;
 
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.ObjetoMochila;
+import us.lsi.solve.AuxGrammar;
 
 public class DataMochila {
 	
