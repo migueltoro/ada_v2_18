@@ -3,16 +3,15 @@
 Maximize
  
 Subject To
- b0: x_0 + x_1 + x_2 >= 10
+ z0: 2 x_0 - x_1 = -1
  z1: x_0 + x_1 - x_2 = 0
  z6: - x_2 + 2 x$_7 + 3 x$_8 = 0
- z7: x$_6 + x$_7 + x$_8 = 1
 Bounds
  x_0 free
  x_1 free
  x_2 free
 Binaries
- x$_6 x$_7 x$_8
+ x$_7 x$_8
 Generals
  x_0 x_1 x_2
 End

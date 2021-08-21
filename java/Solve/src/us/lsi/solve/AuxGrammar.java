@@ -24,9 +24,9 @@ import us.lsi.common.Preconditions;
 import us.lsi.model.PLIModelLexer;
 import us.lsi.model.PLIModelParser;
 
+
 public class AuxGrammar {
 
-	
 	public static enum Type{INT,DOUBLE,BOOLEAN};
 	
 	public static Boolean isInteger(Object d) {

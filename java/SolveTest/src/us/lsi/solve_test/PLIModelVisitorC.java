@@ -782,8 +782,17 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitAbsConstraint(PLIModelParser.AbsConstraintContext ctx) { 
 		String resultant =  AuxGrammar.asString(visit(ctx.left));
 		String right =  AuxGrammar.asString(visit(ctx.right));
-		String r = String.format("%s = ABS ( %s )" ,resultant, right);
+		Integer nf = AuxGrammar.nFrees;
+		String var_id = String.format("z$%d",nf);
+		AuxGrammar.bounds.add(String.format("%s free",var_id));
+		String r = String.format("%s = ABS ( %s )" ,resultant,var_id);
+		Pair<String,Integer> p = reorderGenExp(right);
+		String c;
+		if(p.first().trim() == "") c = String.format("- %s = %d,",var_id,p.second());
+		else c = String.format("- %s + %s = %d",var_id,p.first(),p.second());
+		AuxGrammar.constraints.add(c);
 		AuxGrammar.generalConstraints.add(r);
+		AuxGrammar.nFrees++;
 		return "";
 	}
 	

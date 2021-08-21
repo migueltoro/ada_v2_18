@@ -36,8 +36,8 @@ constraint : generate_exp rel_op exp #atomConstraint
 		| left=var_id '=' 'MIN' '(' vars=list ')' #minConstraint 
 		| left=var_id '=' 'OR' '(' vars=list ')' #orBinConstraint 
 		| left=var_id '=' 'AND' '(' vars=list ')' #andBinConstraint 
-		| left=var_id '=' 'ABS' '(' right=list ')' #absConstraint 
-		| left=var_id '=' 'PWL' '(' right=list ')'  ':' data= pair+ #piecewiseConstraint 
+		| left=var_id '=' 'ABS' '(' right=generate_exp ')' #absConstraint 
+		| left=var_id '=' 'PWL' '(' right=var_id ')'  ':' data= pair+ #piecewiseConstraint 
 		; 
 						
 pair : '(' INT ',' INT ')' ;	

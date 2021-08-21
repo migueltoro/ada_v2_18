@@ -1033,12 +1033,12 @@ public class PLIModelParser extends Parser {
 	}
 	public static class AbsConstraintContext extends ConstraintContext {
 		public Var_idContext left;
-		public ListContext right;
+		public Generate_expContext right;
 		public Var_idContext var_id() {
 			return getRuleContext(Var_idContext.class,0);
 		}
-		public ListContext list() {
-			return getRuleContext(ListContext.class,0);
+		public Generate_expContext generate_exp() {
+			return getRuleContext(Generate_expContext.class,0);
 		}
 		public AbsConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
@@ -1100,13 +1100,13 @@ public class PLIModelParser extends Parser {
 	}
 	public static class PiecewiseConstraintContext extends ConstraintContext {
 		public Var_idContext left;
-		public ListContext right;
+		public Var_idContext right;
 		public PairContext data;
-		public Var_idContext var_id() {
-			return getRuleContext(Var_idContext.class,0);
+		public List<Var_idContext> var_id() {
+			return getRuleContexts(Var_idContext.class);
 		}
-		public ListContext list() {
-			return getRuleContext(ListContext.class,0);
+		public Var_idContext var_id(int i) {
+			return getRuleContext(Var_idContext.class,i);
 		}
 		public List<PairContext> pair() {
 			return getRuleContexts(PairContext.class);
@@ -1392,7 +1392,7 @@ public class PLIModelParser extends Parser {
 				setState(233);
 				match(T__2);
 				setState(234);
-				((AbsConstraintContext)_localctx).right = list();
+				((AbsConstraintContext)_localctx).right = generate_exp();
 				setState(235);
 				match(T__3);
 				}
@@ -1411,7 +1411,7 @@ public class PLIModelParser extends Parser {
 				setState(240);
 				match(T__2);
 				setState(241);
-				((PiecewiseConstraintContext)_localctx).right = list();
+				((PiecewiseConstraintContext)_localctx).right = var_id();
 				setState(242);
 				match(T__3);
 				setState(243);
@@ -3062,12 +3062,12 @@ public class PLIModelParser extends Parser {
 		"\2\2\2\u00e1\u00e2\5$\23\2\u00e2\u00e3\7\4\2\2\u00e3\u00e4\7\32\2\2\u00e4"+
 		"\u00e5\7\5\2\2\u00e5\u00e6\5\22\n\2\u00e6\u00e7\7\6\2\2\u00e7\u00fc\3"+
 		"\2\2\2\u00e8\u00e9\5$\23\2\u00e9\u00ea\7\4\2\2\u00ea\u00eb\7\33\2\2\u00eb"+
-		"\u00ec\7\5\2\2\u00ec\u00ed\5\22\n\2\u00ed\u00ee\7\6\2\2\u00ee\u00fc\3"+
+		"\u00ec\7\5\2\2\u00ec\u00ed\5\34\17\2\u00ed\u00ee\7\6\2\2\u00ee\u00fc\3"+
 		"\2\2\2\u00ef\u00f0\5$\23\2\u00f0\u00f1\7\4\2\2\u00f1\u00f2\7\34\2\2\u00f2"+
-		"\u00f3\7\5\2\2\u00f3\u00f4\5\22\n\2\u00f4\u00f5\7\6\2\2\u00f5\u00f7\7"+
-		"\35\2\2\u00f6\u00f8\5\32\16\2\u00f7\u00f6\3\2\2\2\u00f8\u00f9\3\2\2\2"+
-		"\u00f9\u00f7\3\2\2\2\u00f9\u00fa\3\2\2\2\u00fa\u00fc\3\2\2\2\u00fb\u0099"+
-		"\3\2\2\2\u00fb\u009e\3\2\2\2\u00fb\u00a4\3\2\2\2\u00fb\u00aa\3\2\2\2\u00fb"+
+		"\u00f3\7\5\2\2\u00f3\u00f4\5$\23\2\u00f4\u00f5\7\6\2\2\u00f5\u00f7\7\35"+
+		"\2\2\u00f6\u00f8\5\32\16\2\u00f7\u00f6\3\2\2\2\u00f8\u00f9\3\2\2\2\u00f9"+
+		"\u00f7\3\2\2\2\u00f9\u00fa\3\2\2\2\u00fa\u00fc\3\2\2\2\u00fb\u0099\3\2"+
+		"\2\2\u00fb\u009e\3\2\2\2\u00fb\u00a4\3\2\2\2\u00fb\u00aa\3\2\2\2\u00fb"+
 		"\u00b8\3\2\2\2\u00fb\u00bc\3\2\2\2\u00fb\u00c1\3\2\2\2\u00fb\u00c8\3\2"+
 		"\2\2\u00fb\u00cc\3\2\2\2\u00fb\u00d3\3\2\2\2\u00fb\u00da\3\2\2\2\u00fb"+
 		"\u00e1\3\2\2\2\u00fb\u00e8\3\2\2\2\u00fb\u00ef\3\2\2\2\u00fc\u0102\3\2"+

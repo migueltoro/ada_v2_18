@@ -42,7 +42,7 @@ public class TestAllInValues {
 	}
 
 	public static void main(String[] args) throws IOException {
-		test1("prueba_2");
+		test1("prueba_5");
 	}
 
 }
