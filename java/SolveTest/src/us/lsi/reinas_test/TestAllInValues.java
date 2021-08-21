@@ -26,9 +26,9 @@ public class TestAllInValues {
 				.collect(Collectors.joining("\n")));
 	}
 	
-	public static void test1() throws IOException {
-		AuxGrammar2.generate(DataMochila.class,"ficheros/allInValues_2.lsi","ficheros/allInValues_2.lp");
-		GurobiSolution s = GurobiLp.solveSolution("ficheros/allInValues_2.lp");
+	public static void test1(String file) throws IOException {
+		AuxGrammar2.generate(DataMochila.class,"ficheros/"+file+".lsi","ficheros/"+file+".lp");
+		GurobiSolution s = GurobiLp.solveSolution("ficheros/"+file+".lp");
 		System.out.println("\n\n\n\n");
 		System.out.println(String.format("Objetivo : %.2f",s.objVal));
 		System.out.println("\n\n");
@@ -42,7 +42,7 @@ public class TestAllInValues {
 	}
 
 	public static void main(String[] args) throws IOException {
-		test1();
+		test1("prueba_2");
 	}
 
 }

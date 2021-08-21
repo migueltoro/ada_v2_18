@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +26,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	
 	public static String negative(String s) {
 		s = s.trim();
+		if(s=="") return s;
 		if(Character.isAlphabetic(s.charAt(0))) s = " + "+s;
 		String r = "";
 		for(int i =0; i<s.length();i++) {
@@ -61,7 +61,6 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		while(m.find()) {
 			String g = m.group();
 			g = removeLast(g);
-//			String2.toConsole(g);
 			r -= Integer.parseInt(g);
 		}
 		m = p.matcher(s);
@@ -88,7 +87,9 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		Pair<String,Integer> p2 = PLIModelVisitorC.reorderGenExp(exp2);
 		String nExp2 = negative(p2.first());
 		Integer r = AuxGrammar.nContinous;
-		String c1 = String.format("%s%s - y$_%d = %d",p1.first(),nExp2,r,p1.second()-p2.second());
+		String c1;
+		if (nExp2.trim()=="") 	c1 = String.format("%s - y$_%d = %d", p1.first(), r, p1.second() - p2.second());
+		else c1 = String.format("%s%s - y$_%d = %d", p1.first(), nExp2, r, p1.second() - p2.second());
 //		String2.toConsole("1===%s,%s,%s,%s,%s,%s",exp1,exp2,p1.toString(),p2.toString(),nExp2,c1);
 		String s = String.format("y$_%d free",r);
 		AuxGrammar.bounds.add(s);
@@ -247,8 +248,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return "";
 	}
 	
-	
-	@Override public Object visitList(PLIModelParser.ListContext ctx) { 
+	@Override public Object visitC_list(PLIModelParser.C_listContext ctx) { 
 		Integer n = ctx.indx().size();
 		List<Limits> limites = new ArrayList<>(); 
 		List<String> indexNames = new ArrayList<>();
@@ -345,6 +345,16 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return ListString.of(r);
 	}
 	
+	@Override public Object visitGenerate_exps(PLIModelParser.Generate_expsContext ctx) {  
+		List<String> r = new ArrayList<>();
+		Integer n = ctx.generate_exp().size();
+		for(int i = 0; i<n;i++) {
+			String e = visit(ctx.generate_exp(i)).toString();
+			r.add(e);
+		}
+		return ListString.of(r);
+	}
+	
 	@Override public Object visitIndx(PLIModelParser.IndxContext ctx) { 
 		return visitChildren(ctx); 
 	}
@@ -356,7 +366,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	
 	
 	@Override public Object visitAllDifferentValuesConstraint(PLIModelParser.AllDifferentValuesConstraintContext ctx) { 
-		List<String>  ls = AuxGrammar.asListString(visit(ctx.g_list()));
+		List<String>  ls = AuxGrammar.asListString(visit(ctx.list()));
 		Integer n = ls.size();		
 		for(int i = 0; i< n;i++) {
 			for(int j=i+1; j<n;j++) {
@@ -647,7 +657,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitMaxConstraint(PLIModelParser.MaxConstraintContext ctx) { 
 		String resultant = AuxGrammar.asString(visit(ctx.left));
 		String p = String.format("%s = MAX ( " ,resultant);
-		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		List<String> param = AuxGrammar.asListString(visit(ctx.list())); //AuxGrammar.asListString(visit(ctx.list()));
 		String s = IntStream.range(0,param.size()).boxed()
 				.map(i->param.get(i))
 				.collect(Collectors.joining(" , ",p," )"));
@@ -658,7 +668,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitMinConstraint(PLIModelParser.MinConstraintContext ctx) { 
 		String resultant =  AuxGrammar.asString(visit(ctx.left));
 		String p = String.format("%s = MIN ( " ,resultant);
-		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		List<String> param = AuxGrammar.asListString(visit(ctx.list())); //AuxGrammar.asListString(visit(ctx.list()));
 		String s = IntStream.range(0,param.size()).boxed()
 				.map(i->param.get(i))
 				.collect(Collectors.joining(" , ",p," )"));
@@ -669,7 +679,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitOrBinConstraint(PLIModelParser.OrBinConstraintContext ctx) { 
 		String resultant =  AuxGrammar.asString(visit(ctx.left));
 		String p = String.format("%s = OR ( " ,resultant);
-		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		List<String> param = AuxGrammar.asListString(visit(ctx.list())); //AuxGrammar.asListString(visit(ctx.list()));
 		String s = IntStream.range(0,param.size()).boxed()
 				.map(i->param.get(i))
 				.collect(Collectors.joining(" , ",p," )"));
@@ -680,7 +690,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitAndBinConstraint(PLIModelParser.AndBinConstraintContext ctx) { 
 		String resultant =  AuxGrammar.asString(visit(ctx.left));
 		String p = String.format("%s = AND ( " ,resultant);
-		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		List<String> param = AuxGrammar.asListString(visit(ctx.list())); //AuxGrammar.asListString(visit(ctx.list()));
 		String s = IntStream.range(0,param.size()).boxed()
 				.map(i->param.get(i))
 				.collect(Collectors.joining(" , ",p," )"));
@@ -731,12 +741,22 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	}
 	
 	@Override public Object visitEqualsConstraint(PLIModelParser.EqualsConstraintContext ctx) { 
-		String  var_id = AuxGrammar.asString(visit(ctx.var_id()));
-		String  g_exp = AuxGrammar.asString(visit(ctx.generate_exp()));
-		Pair<String,Integer> p = reorderGenExp(g_exp);
-		String2.toConsole("%s",p);
-		String c = String.format("- %s + %s = %d",var_id,p.first(),p.second());
-		AuxGrammar.constraints.add(c);
+		List<String>  left = AuxGrammar.asListString(visit(ctx.left));
+		List<String>  right = AuxGrammar.asListString(visit(ctx.right));
+		Integer n = left.size();
+		Integer m = right.size();
+		Preconditions.checkArgument(n == m, 
+				String.format("La parte derecha e izquierda deben ser del mismo tamaño y sus tamaño es left =%d, right=%d", n,m));
+		for (int i = 0; i < n; i++) {
+			Pair<String, Integer> pLeft = reorderGenExp(left.get(i));
+			Pair<String, Integer> pRight = reorderGenExp(right.get(i));
+			String neg = negative(pLeft.first());
+//			String2.toConsole("%s, %s, %s", pLeft, pRight, neg);
+			String c;
+			if (pRight.first().trim() == "") c = String.format("%s = %d", neg, pRight.second() - pLeft.second());			
+			else c = String.format("%s + %s = %d", neg, pRight.first(), pRight.second() - pLeft.second());
+			AuxGrammar.constraints.add(c);
+		}
 		return "";
 	}
 	

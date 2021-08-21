@@ -63,17 +63,17 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConstraints(PLIModelParser.ConstraintsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#c_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitC_list(PLIModelParser.C_listContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitList(PLIModelParser.ListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PLIModelParser#g_list}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitG_list(PLIModelParser.G_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#indx}.
 	 * @param ctx the parse tree
@@ -211,6 +211,12 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSumGenerateExp(PLIModelParser.SumGenerateExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#generate_exps}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGenerate_exps(PLIModelParser.Generate_expsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code plusFactor}
 	 * labeled alternative in {@link PLIModelParser#s_factor}.

@@ -15,9 +15,9 @@ goal : 'goal section' obj=('min'|'max') generate_exp #goalSection ;
 
 constraints : 'constraints section' list+ ;
 
-list : indexed_elem (',' indx)* ('|' exp)? ; 
+c_list : indexed_elem (',' indx)* ('|' exp)? ; 
 
-g_list: list | var_ids | exps;
+list : c_list | var_ids | exps | generate_exps;
 
 indx : index_name=ID 'in' li=exp '..' ls=exp ; 
 
@@ -25,25 +25,27 @@ indexed_elem : constraint | bound | generate_exp  ;
 
 constraint : generate_exp rel_op exp #atomConstraint 
 		| var_id '=' values=INT '->' constraint #indicatorConstraint 
-		| var_id '==' generate_exp #equalsConstraint 
+		| '(' left=list '==' right=list ')' #equalsConstraint 
 		| 'or' '(' rel_op n=INT ',' constraint ('|' constraint )+ ')' #orConstraint 
 		| left=constraint '=>' right=constraint #implyConstraint 
 		| left=var_id '!=' right=var_id #differentValueConstraint 
-		| 'allDifferent' '(' vars=g_list ')' #allDifferentValuesConstraint 
-		| 'allDifferentInValues' '(' vars=g_list ';' values=g_list ')' #allInValuesConstraint 
+		| 'allDifferent' '(' vars=list')' #allDifferentValuesConstraint 
+		| 'allDifferentInValues' '(' vars=list ';' values=list ')' #allInValuesConstraint 
 		| var=var_id 'in' values=list #valueInValuesConstraint 
-		| left=var_id '=' 'MAX' '(' vars=var_ids ')' #maxConstraint 
-		| left=var_id '=' 'MIN' '(' vars=var_ids ')' #minConstraint 
-		| left=var_id '=' 'OR' '(' vars=var_ids ')' #orBinConstraint 
-		| left=var_id '=' 'AND' '(' vars=var_ids ')' #andBinConstraint 
-		| left=var_id '=' 'ABS' '(' right=var_id ')' #absConstraint 
-		| left=var_id '=' 'PWL' '(' right=var_id ')'  ':' data= pair+ #piecewiseConstraint 
+		| left=var_id '=' 'MAX' '(' vars=list ')' #maxConstraint 
+		| left=var_id '=' 'MIN' '(' vars=list ')' #minConstraint 
+		| left=var_id '=' 'OR' '(' vars=list ')' #orBinConstraint 
+		| left=var_id '=' 'AND' '(' vars=list ')' #andBinConstraint 
+		| left=var_id '=' 'ABS' '(' right=list ')' #absConstraint 
+		| left=var_id '=' 'PWL' '(' right=list ')'  ':' data= pair+ #piecewiseConstraint 
 		; 
 						
 pair : '(' INT ',' INT ')' ;	
 
 generate_exp : factor s_factor* #factorGenerateExp 
   		| 'sum' '(' list ')' s_factor* #sumGenerateExp ; 
+  		
+generate_exps : generate_exp (',' generate_exp)	;	 
   		
 s_factor : '+' factor #plusFactor 
 		| '-' factor #minusFactor 
