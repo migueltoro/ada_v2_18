@@ -1,0 +1,13 @@
+\ Model _copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Maximize
+ 
+Subject To
+ b0: x_0 + x_1 = 10
+ z0: - x_0 + 2 x_1 = 1
+Bounds
+ x_0 free
+ x_1 free
+Generals
+ x_0 x_1
+End

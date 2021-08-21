@@ -69,6 +69,12 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitList(PLIModelParser.ListContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#g_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitG_list(PLIModelParser.G_listContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#indx}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -116,6 +122,27 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMinConstraint(PLIModelParser.MinConstraintContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code equalsConstraint}
+	 * labeled alternative in {@link PLIModelParser#constraint}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqualsConstraint(PLIModelParser.EqualsConstraintContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code valueInValuesConstraint}
+	 * labeled alternative in {@link PLIModelParser#constraint}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueInValuesConstraint(PLIModelParser.ValueInValuesConstraintContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code allInValuesConstraint}
+	 * labeled alternative in {@link PLIModelParser#constraint}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAllInValuesConstraint(PLIModelParser.AllInValuesConstraintContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code allDifferentValuesConstraint}
 	 * labeled alternative in {@link PLIModelParser#constraint}.
 	 * @param ctx the parse tree
@@ -129,13 +156,6 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAbsConstraint(PLIModelParser.AbsConstraintContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code allDifferentInValuesConstraint}
-	 * labeled alternative in {@link PLIModelParser#constraint}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAllDifferentInValuesConstraint(PLIModelParser.AllDifferentInValuesConstraintContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code indicatorConstraint}
 	 * labeled alternative in {@link PLIModelParser#constraint}.
@@ -199,6 +219,13 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPlusFactor(PLIModelParser.PlusFactorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code minusFactor}
+	 * labeled alternative in {@link PLIModelParser#s_factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinusFactor(PLIModelParser.MinusFactorContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code plusSum}
 	 * labeled alternative in {@link PLIModelParser#s_factor}.
 	 * @param ctx the parse tree
@@ -213,13 +240,6 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMinusSum(PLIModelParser.MinusSumContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code minusFactor}
-	 * labeled alternative in {@link PLIModelParser#s_factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMinusFactor(PLIModelParser.MinusFactorContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code varFactor}
 	 * labeled alternative in {@link PLIModelParser#factor}.
 	 * @param ctx the parse tree
@@ -227,11 +247,31 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarFactor(PLIModelParser.VarFactorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code expFactor}
+	 * labeled alternative in {@link PLIModelParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpFactor(PLIModelParser.ExpFactorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code varIdFactor}
+	 * labeled alternative in {@link PLIModelParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarIdFactor(PLIModelParser.VarIdFactorContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#var_id}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVar_id(PLIModelParser.Var_idContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PLIModelParser#var_ids}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVar_ids(PLIModelParser.Var_idsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#index_var_id}.
 	 * @param ctx the parse tree
@@ -338,11 +378,11 @@ public interface PLIModelVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCall_function(PLIModelParser.Call_functionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PLIModelParser#real_parameters}.
+	 * Visit a parse tree produced by {@link PLIModelParser#exps}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReal_parameters(PLIModelParser.Real_parametersContext ctx);
+	T visitExps(PLIModelParser.ExpsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PLIModelParser#rel_op}.
 	 * @param ctx the parse tree

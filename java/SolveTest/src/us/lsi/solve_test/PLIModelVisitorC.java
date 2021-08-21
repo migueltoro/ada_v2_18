@@ -7,8 +7,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
+import us.lsi.common.String2;
 import us.lsi.model_test.PLIModelBaseVisitor;
 import us.lsi.model_test.PLIModelParser;
 import us.lsi.solve.AuxGrammar;
@@ -20,12 +25,103 @@ import us.lsi.streams.Stream2;
 
 public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	public static String negative(String s) {
+		s = s.trim();
+		if(Character.isAlphabetic(s.charAt(0))) s = " + "+s;
+		String r = "";
+		for(int i =0; i<s.length();i++) {
+			if(s.charAt(i) == '+') r = r + '-';
+			else if (s.charAt(i) == '-') r = r + '+';
+			else r = r + s.charAt(i);
+		}
+		return r;
+	}
+	
+	public static String removeLast(String s) {
+		s = s.replace(" ","");
+		while(!Character.isDigit(s.charAt(s.length()-1))) 
+			s = s.substring(0,s.length()-1);
+		return s;
+	}
+	
+	public static String manteinLast(String s) {
+		String r = " ";
+		for(int i = s.length()-1; i>=0; i--) {
+		   if(Character.isDigit(s.charAt(i))) break;
+		   r = r+s.charAt(i);
+		}   
+		return r;
+	}
+	
+	
+	public static Pair<String,Integer> reorderGenExp(String s) {
+		Pattern p = Pattern.compile(" *(\\+|-|^) *[0-9]+( *([\\+-])|$)");
+		Matcher m = p.matcher(s);
+		Integer r = 0;
+		while(m.find()) {
+			String g = m.group();
+			g = removeLast(g);
+//			String2.toConsole(g);
+			r -= Integer.parseInt(g);
+		}
+		m = p.matcher(s);
+		String left = m.replaceAll(ss->manteinLast(ss.group()));
+		return Pair.of(left,r);
+	}
+	
+	public static String implicitBins() {
+		String r = IntStream.range(0,AuxGrammar.nBinarys).boxed()
+				.map(i->String.format("x$_%d",i))
+				.collect(Collectors.joining(" "));
+		r += AuxGrammar.dBinaries.stream().collect(Collectors.joining(" "));
+		return r;
+	}
+	
+	public static String implicitInts() {
+		return IntStream.range(0,AuxGrammar.nInts).boxed()
+				.map(i->String.format("y$_%d",i))
+				.collect(Collectors.joining(" "," ",""));
+	}
+	
+	public void differentValue(String exp1, String exp2) {
+		Pair<String,Integer> p1 = PLIModelVisitorC.reorderGenExp(exp1);
+		Pair<String,Integer> p2 = PLIModelVisitorC.reorderGenExp(exp2);
+		String nExp2 = negative(p2.first());
+		Integer r = AuxGrammar.nContinous;
+		String c1 = String.format("%s%s - y$_%d = %d",p1.first(),nExp2,r,p1.second()-p2.second());
+//		String2.toConsole("1===%s,%s,%s,%s,%s,%s",exp1,exp2,p1.toString(),p2.toString(),nExp2,c1);
+		String s = String.format("y$_%d free",r);
+		AuxGrammar.bounds.add(s);
+		String abs = String.format("y$_%d =  ABS ( y$_%d )",r+1,r);
+		String c2 = String.format("y$_%d >= 1",r+1);
+		AuxGrammar.nContinous += 2;
+		AuxGrammar.constraints.add(c1);
+		AuxGrammar.constraints.add(c2);
+		AuxGrammar.generalConstraints.add(abs);
+	}
+	
+	public static String generalConstrainsts() {
+		Integer m = AuxGrammar.generalConstraints.size();
+		String lt2 = IntStream.range(0,m).boxed()
+				.map(i ->String.format("gc%d: %s", i, AuxGrammar.generalConstraints.get(i)))
+				.collect(Collectors.joining("\n","\n",""));
+		return lt2;
+	}
+	
+	public void orConstraint(String op, Integer n, List<String> constraints) {
+		Integer nc = constraints.size();
+		Integer r = AuxGrammar.nBinarys;
+		List<String> lc = IntStream.range(0,nc).boxed()
+				.map(i->String.format("x$_%d = 1 -> %s",r+i,constraints.get(i)))
+				.collect(Collectors.toList());		
+		AuxGrammar.nBinarys += nc;
+		String s = IntStream.range(0,nc).boxed()
+				.map(i->String.format("x$_%d",r+i))
+				.collect(Collectors.joining(" + ",""," "+op+" "+n));
+		lc.add(s);
+		AuxGrammar.constraints.addAll(lc);
+	}
+	
 	@Override public Object visitModel(PLIModelParser.ModelContext ctx) { 
 		if(ctx.head()!=null) visit(ctx.head());
 		System.out.println(AuxGrammar.functions.entrySet().stream()
@@ -39,6 +135,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 				.collect(Collectors.joining(",")));
 		String goal = AuxGrammar.asString(visit(ctx.goal()));
 		String constraints = String.format("\nSubject To\n\n%s\n",AuxGrammar.asString(visit(ctx.constraints())));
+		String generalConstraints = "";
+		if(AuxGrammar.generalConstraints.size()>0)	generalConstraints += String.format("\nGeneral Constraints\n\n%s\n",generalConstrainsts());
 		String bounds = "";
 	    if(ctx.bounds()!=null) bounds = String.format("\nBounds\n\n%s\n",AuxGrammar.asString(visit(ctx.bounds())));
 	    if(ctx.free_vars()!=null) bounds += AuxGrammar.asString(visit(ctx.free_vars()));
@@ -48,23 +146,18 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	    String bins = implicitBins();
 	    if(ctx.bin_vars()!=null) bins += AuxGrammar.asString(visit(ctx.bin_vars()));
 	    bins = AuxGrammar.allSpaces(bins)? bins:String.format("\nBinary\n\n%s\n",bins);
-		return String.format("%s\n%s\n%s\n%s\n%s\nEnd",goal,constraints,bounds,bins,ints);
+	    String semiContinous = "";
+	    if(ctx.semi_continuous_vars()!=null) semiContinous += AuxGrammar.asString(visit(ctx.semi_continuous_vars()));
+	    semiContinous = AuxGrammar.allSpaces(semiContinous)? semiContinous:String.format("\nSemi-continuous\n\n%s\n",semiContinous);
+		return String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\nEnd",goal,constraints,bounds,bins,ints,semiContinous,generalConstraints);
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitHead(PLIModelParser.HeadContext ctx) { 
 		return visitChildren(ctx); 
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitVarDeclar(PLIModelParser.VarDeclarContext ctx) { 
 		String name = ctx.name.getText();
 		String type = ctx.type.getText();		
@@ -82,12 +175,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		AuxGrammar.values.put(name,val);
 		return name; 	
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	    
 	@Override public Object visitFunDeclar(PLIModelParser.FunDeclarContext ctx) { 
 		String name = ctx.name.getText();
@@ -104,12 +193,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		AuxGrammar.resultType.put(name,rt);
 		return ""; 
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitGoalSection(PLIModelParser.GoalSectionContext ctx) { 
 		String goal = null;
 		switch(ctx.obj.getText()) {
@@ -121,12 +206,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return r;
 	}
 		
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitUnaryOpExpr(PLIModelParser.UnaryOpExprContext ctx) { 
 		Object r = this.visit(ctx.right);	
 		Preconditions.checkArgument(AuxGrammar.isInteger(r) | AuxGrammar.isDouble(r),
@@ -140,12 +221,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 			} 
 		return r;  
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override
 	public Object visitConstraints(PLIModelParser.ConstraintsContext ctx) {
 		Function<Integer,String> cn = i->AuxGrammar.constraintName[i];
@@ -163,30 +240,14 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return lt1+lt2;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	private void differentValue(String v1, String v2) {
-		String s1 = String.format("%s - %s >= 1",v1,v2);
-		String s2 = String.format("%s - %s >= 1",v2,v1);
-		this.orConstraint("=",1,List.of(s1,s2));	
-	}
-	
 	@Override public Object visitDifferentValueConstraint(PLIModelParser.DifferentValueConstraintContext ctx) { 
 		String left = AuxGrammar.asString(visit(ctx.left));
 		String right = AuxGrammar.asString(visit(ctx.right));
 		differentValue(left,right);
 		return "";
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitList(PLIModelParser.ListContext ctx) { 
 		Integer n = ctx.indx().size();
 		List<Limits> limites = new ArrayList<>(); 
@@ -264,59 +325,48 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return ListString.of(r);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	@Override public Object visitExps(PLIModelParser.ExpsContext ctx) { 
+		List<String> r = new ArrayList<>();
+		Integer n = ctx.exp().size();
+		for(int i = 0; i<n;i++) {
+			String e = visit(ctx.exp(i)).toString();
+			r.add(e);
+		}
+		return ListString.of(r);
+	}
+	
+	@Override public Object visitVar_ids(PLIModelParser.Var_idsContext ctx) { 
+		List<String> r = new ArrayList<>();
+		Integer n = ctx.var_id().size();
+		for(int i = 0; i<n;i++) {
+			String e = visit(ctx.var_id(i)).toString();
+			r.add(e);
+		}
+		return ListString.of(r);
+	}
+	
 	@Override public Object visitIndx(PLIModelParser.IndxContext ctx) { 
 		return visitChildren(ctx); 
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitIndexed_elem(PLIModelParser.Indexed_elemContext ctx) { 
 		return visitChildren(ctx); 
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitAllDifferentValuesConstraint(PLIModelParser.AllDifferentValuesConstraintContext ctx) { 
-		List<String>  ls = AuxGrammar.asListString(visit(ctx.list()));
+		List<String>  ls = AuxGrammar.asListString(visit(ctx.g_list()));
 		Integer n = ls.size();		
-		Integer r = AuxGrammar.nContinous;
-		String s ;
-		for(int i = 0; i<n; i++) {
-			String p[] = AuxGrammar.partes(ls.get(i));
-			s = String.format("%s - y$%d = %s",p[0],r+i,p[1]);
-			AuxGrammar.constraints.add(s);
-		}
-		for(int i = 0; i<n; i++) {
-			s = String.format("y$%d free",r+i);
-			AuxGrammar.bounds.add(s);
-		}
-		AuxGrammar.nContinous += n;
-		for(int i = 0; i<n; i++) {
-			for(int j = i+1; j<n; j++) {				
-				this.differentValue(String.format("y$%d",r+i),String.format("y$%d",r+j));
+		for(int i = 0; i< n;i++) {
+			for(int j=i+1; j<n;j++) {
+				differentValue(ls.get(i),ls.get(j));
 			}
 		}
 		return "";
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitAtomConstraint(PLIModelParser.AtomConstraintContext ctx) { 
 		String ge = AuxGrammar.asString(visit(ctx.generate_exp()));
 		String op = ctx.rel_op().getText();
@@ -324,25 +374,17 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		String r = String.format("%s %s %s",ge,op,e);
 		return r;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitIndicatorConstraint(PLIModelParser.IndicatorConstraintContext ctx) { 
 		String ge = AuxGrammar.asString(visit(ctx.var_id()));
+		String n = ctx.values.getText();
+		Preconditions.checkArgument(n=="0" | n=="1",String.format("El valor debe ser 0 0 1 y es %s",n));
 		String c = AuxGrammar.asString(visit(ctx.constraint()));
-		return String.format("%s = 1 -> %s",ge,c);
+		return String.format("%s = %s -> %s",ge,n,c);
 	}
 	
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public Object visitFactorGenerateExp(PLIModelParser.FactorGenerateExpContext ctx) { 
 		Integer n = ctx.s_factor().size();
 		String factor = AuxGrammar.asString(visit(ctx.factor()));
@@ -353,12 +395,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return r;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+
 	@Override public Object visitSumGenerateExp(PLIModelParser.SumGenerateExpContext ctx) { 
 		List<String> ls = AuxGrammar.asListString(visit(ctx.list()));
 		String r1 = ls.stream().collect(Collectors.joining(" + "));
@@ -370,12 +407,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return r2;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitTwoSideBound(PLIModelParser.TwoSideBoundContext ctx) { 
 		String name = AuxGrammar.asString(this.visit(ctx.name));		
 		Object li =  this.visit(ctx.li); 
@@ -383,91 +415,61 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return String.format("%s <= %s <= %s",li.toString(),name,ls.toString());
 	}
 	
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+
 	@Override public Object visitVarFactor(PLIModelParser.VarFactorContext ctx) {
-		String e = AuxGrammar.asString(visit(ctx.var_id()));
-		if(ctx.exp() != null) {
-			Object c = visit(ctx.exp());
-			e = String.format("%s %s",c.toString(),e);
-		}
-		return e;
+		String id = AuxGrammar.asString(visit(ctx.var_id()));
+		String c = String.format("%s",visit(ctx.exp()).toString());
+		return String.format("%s %s",c,id);
 	}
-//	/**
-//	 * {@inheritDoc}
-//	 *
-//	 * <p>The default implementation returns the result of calling
-//	 * {@link #visitChildren} on {@code ctx}.</p>
-//	 */
-//	@Override public Object visitNumFactor(PLIModelParser.NumFactorContext ctx) { 
-//		return visit(ctx.exp()).toString();	
-//	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	@Override public Object visitVarIdFactor(PLIModelParser.VarIdFactorContext ctx) {
+		return AuxGrammar.asString(visit(ctx.var_id()));
+	}
+	
+	@Override public Object visitExpFactor(PLIModelParser.ExpFactorContext ctx) {
+		return String.format("%s",visit(ctx.exp()).toString());
+	}
+	
+	
 	@Override
 	public Object visitVar_id(PLIModelParser.Var_idContext ctx) {
 		String name = ctx.name.getText();
-		List<String> ls = AuxGrammar.asListString(visit(ctx.index_var_id()));
-		if (ls != null) {
-			Integer n = ls.size();
-			name = IntStream.range(0, n).boxed()
-					.map(i -> ls.get(i))
-					.collect(Collectors.joining("_",name+"_", ""));
-		}
-		return name;
+		String s;
+		if(ctx.index_var_id() == null) s = "";
+		else s = AuxGrammar.asString(visit(ctx.index_var_id()));
+		return name+s;
 	}
 	
-	
-	/**
-	 * Visit a parse tree produced by {@link PLIModelParser#index_var_id}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
 	
 	@Override public Object visitIndex_var_id(PLIModelParser.Index_var_idContext ctx) {
 		Integer n = ctx.exp().size();
-		if(n == 0) return null;
-		List<String>  r = IntStream.range(0,n).boxed()
+		String r;
+		if(n == 0) {
+				r = "";
+				String2.toConsole("n = %s",n);
+		}else {
+			r = IntStream.range(0,n).boxed()
 				.map(i->AuxGrammar.asInteger(visit(ctx.exp(i))))
 				.map(e->e.toString())
-			    .collect(Collectors.toList());
-		return ListString.of(r);
+				.collect(Collectors.joining("_","_",""));
+		}
+		return r;
 	}
 	
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+
 	@Override public Object visitCall_function(PLIModelParser.Call_functionContext ctx) { 
 		Integer n = 0;
-		if(ctx.real_parameters() != null) n = ctx.real_parameters().exp().size();
+		if(ctx.exps() != null) n = ctx.exps().exp().size();
 		String name = ctx.name.getText();
 		Object parameters[] = IntStream.range(0,n).boxed()
-				.map(i->visit(ctx.real_parameters().exp(i)))
+				.map(i->visit(ctx.exps().exp(i)))
 				.collect(Collectors.toList())
 				.toArray(new Object[n]);
 //		System.out.println(String.format("En Visit Call %s,%d,%s",name,parameters.length,AuxGrammar.toString(parameters)));		
 		return AuxGrammar.result(name, parameters);	
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitBounds(PLIModelParser.BoundsContext ctx) { 
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
@@ -483,33 +485,19 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return lt1+lt2;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitIntExpr(PLIModelParser.IntExprContext ctx) { 
 		return Integer.parseInt(ctx.getText());
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitOneSideBound(PLIModelParser.OneSideBoundContext ctx) { 
 		String name = AuxGrammar.asString(this.visit(ctx.name));
 		String op = ctx.op.getText();		
 		Object val =  this.visit(ctx.exp()); 
 		return String.format("%s %s %s",name,op,val.toString());
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override
 	public Object visitOpExpr(PLIModelParser.OpExprContext ctx) {	
 		String op = ctx.op.getText();
@@ -544,26 +532,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		return r;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	
-	private void orConstraint(String op, Integer n, List<String> constraints) {
-		Integer nc = constraints.size();
-		Integer r = AuxGrammar.nBinarys;
-		List<String> lc = IntStream.range(0,nc).boxed()
-				.map(i->String.format("x$_%d = 1 -> %s",r+i,constraints.get(i)))
-				.collect(Collectors.toList());		
-		AuxGrammar.nBinarys += nc;
-		String s = IntStream.range(0,nc).boxed()
-				.map(i->String.format("x$_%d",r+i))
-				.collect(Collectors.joining(" + ",""," "+op+" "+n));
-		lc.add(s);
-		AuxGrammar.constraints.addAll(lc);
-	}
 	
 	@Override public Object visitOrConstraint(PLIModelParser.OrConstraintContext ctx) { 
 		Integer n = Integer.parseInt(ctx.n.getText());
@@ -576,40 +545,21 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	}
 	
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitFunExpr(PLIModelParser.FunExprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitParenExpr(PLIModelParser.ParenExprContext ctx) { 
 		return this.visit(ctx.exp());
     }
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitPlusFactor(PLIModelParser.PlusFactorContext ctx) { 
+//		String2.toConsole("Plus Factor factor = %s",ctx.factor());
 		String r = String.format(" + %s",AuxGrammar.asString(visit(ctx.factor())));
 		return r;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitPlusSum(PLIModelParser.PlusSumContext ctx) { 
 		List<String> ls = AuxGrammar.asListString(visit(ctx.list()));
 		String r = ls.stream().collect(Collectors.joining(" + "));
@@ -617,56 +567,31 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	}
 	
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitMinusSum(PLIModelParser.MinusSumContext ctx) { 
 		List<String> ls = AuxGrammar.asListString(visit(ctx.list()));
 		String r = ls.stream().collect(Collectors.joining(" - "));
 		return String.format(" - %s",r);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitMinusFactor(PLIModelParser.MinusFactorContext ctx) { 
 		String r = String.format(" - %s",AuxGrammar.asString(visit(ctx.factor())));
 		return r;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitDoubleExp(PLIModelParser.DoubleExpContext ctx) { 
 		return Double.parseDouble(ctx.getText());
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitIdExpr(PLIModelParser.IdExprContext ctx) {
 		Preconditions.checkArgument(AuxGrammar.values.keySet().contains(ctx.getText()), 
 				String.format("Variable no declarada %s",ctx.getText()));
 	    return AuxGrammar.values.get(ctx.getText());
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
 	@Override public Object visitImplyConstraint(PLIModelParser.ImplyConstraintContext ctx) { 
 		String left = AuxGrammar.asString(visit(ctx.left));
 		String right = AuxGrammar.asString(visit(ctx.right));
@@ -679,17 +604,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		AuxGrammar.constraints.addAll(ls);
 		return "";
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	public static String implicitBins() {
-		return IntStream.range(0,AuxGrammar.nBinarys).boxed()
-				.map(i->String.format("x$_%d",i))
-				.collect(Collectors.joining(" ","",""));
-	}
+	
+	
 	
 	@Override public Object visitBin_vars(PLIModelParser.Bin_varsContext ctx) { 
 		Integer n = ctx.list().size();
@@ -700,18 +616,9 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 				.collect(Collectors.joining(" "));
 		return lt1;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	
-	public static String implicitInts() {
-		return IntStream.range(0,AuxGrammar.nInts).boxed()
-				.map(i->String.format("y$_%d",i))
-				.collect(Collectors.joining(" "," ",""));
-	}
+	
+	
 	
 	@Override public Object visitInt_vars(PLIModelParser.Int_varsContext ctx) { 
 		Integer n = ctx.list().size();
@@ -722,12 +629,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 				.collect(Collectors.joining(" "));
 		return lt1;
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	
+	
 	@Override public Object visitFree_vars(PLIModelParser.Free_varsContext ctx) { 
 		Integer n = ctx.list().size();
 		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
@@ -736,17 +639,160 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 				.flatMap(i ->sc.apply(i))
 				.map(v->String.format("%s free",v))
 				.collect(Collectors.joining("\n"));
-//		String lt2 = IntStream.range(0,AuxGrammar.nFrees).boxed()
-//				.map(i->String.format("z$_%d free",i))
-//				.collect(Collectors.joining("\n","",""));
 		return String.format("%s",lt1);
 	}
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Object visitRel_op(PLIModelParser.Rel_opContext ctx) { return visitChildren(ctx); }
 	
+	@Override public Object visitRel_op(PLIModelParser.Rel_opContext ctx) { return visitChildren(ctx); }
+		
+	@Override public Object visitMaxConstraint(PLIModelParser.MaxConstraintContext ctx) { 
+		String resultant = AuxGrammar.asString(visit(ctx.left));
+		String p = String.format("%s = MAX ( " ,resultant);
+		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		String s = IntStream.range(0,param.size()).boxed()
+				.map(i->param.get(i))
+				.collect(Collectors.joining(" , ",p," )"));
+		AuxGrammar.generalConstraints.add(s);
+		return "";
+	}
+	
+	@Override public Object visitMinConstraint(PLIModelParser.MinConstraintContext ctx) { 
+		String resultant =  AuxGrammar.asString(visit(ctx.left));
+		String p = String.format("%s = MIN ( " ,resultant);
+		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		String s = IntStream.range(0,param.size()).boxed()
+				.map(i->param.get(i))
+				.collect(Collectors.joining(" , ",p," )"));
+		AuxGrammar.generalConstraints.add(s);
+		return "";
+	}
+	
+	@Override public Object visitOrBinConstraint(PLIModelParser.OrBinConstraintContext ctx) { 
+		String resultant =  AuxGrammar.asString(visit(ctx.left));
+		String p = String.format("%s = OR ( " ,resultant);
+		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		String s = IntStream.range(0,param.size()).boxed()
+				.map(i->param.get(i))
+				.collect(Collectors.joining(" , ",p," )"));
+		AuxGrammar.generalConstraints.add(s);
+		return "";
+	}
+	
+	@Override public Object visitAndBinConstraint(PLIModelParser.AndBinConstraintContext ctx) { 
+		String resultant =  AuxGrammar.asString(visit(ctx.left));
+		String p = String.format("%s = AND ( " ,resultant);
+		List<String> param = AuxGrammar.asListString(visit(ctx.var_ids())); //AuxGrammar.asListString(visit(ctx.list()));
+		String s = IntStream.range(0,param.size()).boxed()
+				.map(i->param.get(i))
+				.collect(Collectors.joining(" , ",p," )"));
+		AuxGrammar.generalConstraints.add(s);
+		return "";
+	}
+	
+	
+	
+	@Override public Object visitAllInValuesConstraint(PLIModelParser.AllInValuesConstraintContext ctx) { 
+		List<String>  vars = AuxGrammar.asListString(visit(ctx.vars));
+		List<String>  values = AuxGrammar.asListString(visit(ctx.values));
+		Integer nVars = vars.size();
+		Integer nValues = values.size();
+		Integer k = AuxGrammar.nDBinarys;
+		Preconditions.checkArgument(nVars<=nValues,
+				String.format("El numero de variables debe ser menor o igual al de valores y son nVars=%d, nValues=%d",nVars,nValues));		
+		for(int i = 0; i<nVars;i++) {
+			Pair<String,Integer> p = reorderGenExp(vars.get(i));
+			String v = negative(p.first());
+			String factor_bin = String.format("%s x$_%d_%d",values.get(0).toString(),k+i,0);
+			for(int j =1; j<nValues;j++) {
+				factor_bin = factor_bin+" "+ String.format(" + %s x$_%d_%d",values.get(j).toString(),k+i,j);
+			}
+			String c1 = String.format("%s + %s = %d",v,factor_bin,p.second());
+			AuxGrammar.constraints.add(c1);
+		}
+		for(int i = 0; i<nValues;i++) {
+			String bin = String.format("x$_%d_%d",k+i,0);
+			AuxGrammar.dBinaries.add(String.format("x$_%d_%d",k+i,0));
+			for(int j = 1; j<nValues;j++) {
+				AuxGrammar.dBinaries.add(String.format("x$_%d_%d",k+i,j));
+				bin = bin+" "+ String.format(" + x$_%d_%d",k+i,j);
+			}
+			String c2 = String.format("%s = 1",bin);
+			AuxGrammar.constraints.add(c2);
+		}
+		for(int j = 0; j<nValues;j++) {
+			String bin = String.format("x$_%d_%d",k+0,j);
+			for(int i = 1; i<nValues;i++) {
+				bin = bin+" "+ String.format(" + x$_%d_%d",k+i,j);
+			}
+			String c2 = String.format("%s = 1",bin);
+			AuxGrammar.constraints.add(c2);
+		}
+		AuxGrammar.nDBinarys += nVars;		
+		return ""; 
+	}
+	
+	@Override public Object visitEqualsConstraint(PLIModelParser.EqualsConstraintContext ctx) { 
+		String  var_id = AuxGrammar.asString(visit(ctx.var_id()));
+		String  g_exp = AuxGrammar.asString(visit(ctx.generate_exp()));
+		Pair<String,Integer> p = reorderGenExp(g_exp);
+		String2.toConsole("%s",p);
+		String c = String.format("- %s + %s = %d",var_id,p.first(),p.second());
+		AuxGrammar.constraints.add(c);
+		return "";
+	}
+	
+	@Override public Object visitValueInValuesConstraint(PLIModelParser.ValueInValuesConstraintContext ctx) { 
+		String  var_id = AuxGrammar.asString(visit(ctx.var_id()));
+		List<String>  values = AuxGrammar.asListString(visit(ctx.values));
+		Integer nValues = values.size();
+		Integer nb = AuxGrammar.nBinarys;
+		String factor_bin = String.format("- %s + %s x$_%d",var_id,values.get(0),nb);
+		String bin = String.format("x$_%d",nb);
+		for(int j = 1; j<nValues;j++) {
+			bin += " "+ String.format(" + x$_%d",nb+j);
+			factor_bin += String.format(" + %s x$_%d",values.get(j),nb+j); 
+		}
+		String c1 = String.format("%s = 0",factor_bin);
+		String c2 = String.format("%s = 1",bin);
+		AuxGrammar.constraints.add(c1);
+		AuxGrammar.constraints.add(c2);
+		AuxGrammar.nBinarys += nValues;
+		return "";
+	}
+	
+	@Override public Object visitAbsConstraint(PLIModelParser.AbsConstraintContext ctx) { 
+		String resultant =  AuxGrammar.asString(visit(ctx.left));
+		String right =  AuxGrammar.asString(visit(ctx.right));
+		String r = String.format("%s = ABS ( %s )" ,resultant, right);
+		AuxGrammar.generalConstraints.add(r);
+		return "";
+	}
+	
+	@Override public Object visitPair(PLIModelParser.PairContext ctx) { 
+		String p1 = ctx.INT(0).getText();
+		String p2 = ctx.INT(1).getText();
+		String r = String.format("( %s , %s )", p1,p2);
+		return r;
+	}
+	
+	@Override public Object visitPiecewiseConstraint(PLIModelParser.PiecewiseConstraintContext ctx) { 
+		String resultant =  AuxGrammar.asString(visit(ctx.left));
+		String right =  AuxGrammar.asString(visit(ctx.right));
+		Integer n = ctx.pair().size();
+		String s = IntStream.range(0, n).boxed()
+				.map(i->AuxGrammar.asString(visit(ctx.pair(i))))
+				.collect(Collectors.joining(" "));
+		String r = String.format("%s = PWL ( %s ) : %s" ,resultant,right,s);
+		AuxGrammar.generalConstraints.add(r);
+		return "";
+	}
+	
+	@Override public Object visitSemi_continuous_vars(PLIModelParser.Semi_continuous_varsContext ctx) { 
+		Integer n = ctx.list().size();
+		Function<Integer,List<String>> cs = i->AuxGrammar.asListString(visit(ctx.list(i))); 
+		Function<Integer,Stream<String>> sc = i ->cs.apply(i).stream().map(p->String.format("%s",p));
+		String lt1 = IntStream.range(0,n).boxed()
+				.flatMap(i ->sc.apply(i))
+				.collect(Collectors.joining(" "));
+		return lt1; 
+	}
 }

@@ -16,6 +16,7 @@ import us.lsi.common.Map2;
 
 public class GraphColors {
 	
+	
 	public enum Color {
 		blank, red, yellow, gray, cyan, orange, magenta, blue, black, green
 	}

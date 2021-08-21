@@ -25,6 +25,7 @@ import us.lsi.model.PLIModelLexer;
 import us.lsi.model.PLIModelParser;
 
 public class AuxGrammar {
+
 	
 	public static enum Type{INT,DOUBLE,BOOLEAN};
 	
@@ -320,13 +321,21 @@ public class AuxGrammar {
 	
 	public static List<String> constraints = new ArrayList<>();
 	
+	public static List<String> generalConstraints = new ArrayList<>();
+	
 	public static List<String> bounds = new ArrayList<>();
+	
+	public static List<String> dBinaries = new ArrayList<>();
 	
 	public static Integer nInts = 0;
 	
 	public static Integer nBinarys = 0;
 	
+	public static Integer nDBinarys = 0;
+	
 	public static Integer nFrees = 0;
+	
+	public static Integer nSemicontinous = 0;
 	
 	public static Integer nContinous = 0;
 	

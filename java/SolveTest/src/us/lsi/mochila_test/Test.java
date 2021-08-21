@@ -20,7 +20,7 @@ public class Test {
 		DataMochila.iniMochila();
 		AuxGrammar2.generate(DataMochila.class,"ficheros/mochila.lsi","ficheros/mochila.lp");
 		GurobiSolution s = GurobiLp.solveSolution("ficheros/mochila.lp");
-		String2.toConsole(s.toString((k,v)->true));
+		String2.toConsole(s.toString((k,v)->v>0));
 	}
 	
 	public static void example() throws IOException {
