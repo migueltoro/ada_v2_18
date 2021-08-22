@@ -50,8 +50,8 @@ public class PLIModelParser extends Parser {
 		return new String[] {
 			null, "'head section'", "'='", "'('", "')'", "','", "'goal section'", 
 			"'min'", "'max'", "'constraints section'", "'|'", "'in'", "'..'", "'->'", 
-			"'=='", "'or'", "'=>'", "'!='", "'allDifferent'", "'allDifferentInValues'", 
-			"';'", "'MAX'", "'MIN'", "'OR'", "'AND'", "'ABS'", "'PWL'", "':'", "'sum'", 
+			"'=='", "'or'", "'=>'", "'!='", "'allDifferent'", "'permutation'", "';'", 
+			"'MAX'", "'MIN'", "'OR'", "'AND'", "'ABS'", "'PWL'", "':'", "'sum'", 
 			"'+'", "'-'", "'['", "']'", "'<='", "'bounds section'", "'bin'", "'int'", 
 			"'free'", "'semi-continuous'", "'(int)'", "'(double)'", "'!'", "'*'", 
 			"'/'", "'%'", "'<'", "'>='", "'>'", "'&&'", "'||'"

@@ -69,7 +69,7 @@ WS=53
 '=>'=16
 '!='=17
 'allDifferent'=18
-'allDifferentInValues'=19
+'permutation'=19
 ';'=20
 'MAX'=21
 'MIN'=22

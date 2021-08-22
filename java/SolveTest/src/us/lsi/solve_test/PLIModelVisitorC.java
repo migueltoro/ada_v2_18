@@ -86,7 +86,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		Pair<String,Integer> p1 = PLIModelVisitorC.reorderGenExp(exp1);
 		Pair<String,Integer> p2 = PLIModelVisitorC.reorderGenExp(exp2);
 		String nExp2 = negative(p2.first());
-		Integer r = AuxGrammar.nContinous;
+		Integer r = AuxGrammar.nFrees;
 		String c1;
 		if (nExp2.trim()=="") 	c1 = String.format("%s - y$_%d = %d", p1.first(), r, p1.second() - p2.second());
 		else c1 = String.format("%s%s - y$_%d = %d", p1.first(), nExp2, r, p1.second() - p2.second());
@@ -95,7 +95,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		AuxGrammar.bounds.add(s);
 		String abs = String.format("y$_%d =  ABS ( y$_%d )",r+1,r);
 		String c2 = String.format("y$_%d >= 1",r+1);
-		AuxGrammar.nContinous += 2;
+		AuxGrammar.nFrees += 2;
 		AuxGrammar.constraints.add(c1);
 		AuxGrammar.constraints.add(c2);
 		AuxGrammar.generalConstraints.add(abs);
@@ -139,7 +139,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		String generalConstraints = "";
 		if(AuxGrammar.generalConstraints.size()>0)	generalConstraints += String.format("\nGeneral Constraints\n\n%s\n",generalConstrainsts());
 		String bounds = "";
-	    if(ctx.bounds()!=null) bounds = String.format("\nBounds\n\n%s\n",AuxGrammar.asString(visit(ctx.bounds())));
+	    if(ctx.bounds()!=null || ctx.free_vars()!=null) bounds = String.format("\nBounds\n\n");
+	    if(ctx.bounds()!=null) bounds += String.format("\n%s\n",AuxGrammar.asString(visit(ctx.bounds())));
 	    if(ctx.free_vars()!=null) bounds += AuxGrammar.asString(visit(ctx.free_vars()));
 	    String ints = implicitInts();	    
 	    if(ctx.int_vars()!=null) ints += AuxGrammar.asString(visit(ctx.int_vars()));
@@ -706,18 +707,24 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		Integer nVars = vars.size();
 		Integer nValues = values.size();
 		Integer k = AuxGrammar.nDBinarys;
+		Integer r = AuxGrammar.nFrees;
 		Preconditions.checkArgument(nVars<=nValues,
 				String.format("El numero de variables debe ser menor o igual al de valores y son nVars=%d, nValues=%d",nVars,nValues));		
 		for(int i = 0; i<nVars;i++) {
 			Pair<String,Integer> p = reorderGenExp(vars.get(i));
 			String v = negative(p.first());
+			String vFree = String.format("y$%d",r+i);
+			AuxGrammar.bounds.add(String.format("%s free",vFree));
+			String c = String.format(String.format("%s + %s = %d",v,vFree,-p.second()));
+			AuxGrammar.constraints.add(c);
 			String factor_bin = String.format("%s x$_%d_%d",values.get(0).toString(),k+i,0);
 			for(int j =1; j<nValues;j++) {
 				factor_bin = factor_bin+" "+ String.format(" + %s x$_%d_%d",values.get(j).toString(),k+i,j);
 			}
-			String c1 = String.format("%s + %s = %d",v,factor_bin,p.second());
+			String c1 = String.format("- %s + %s = 0",vFree,factor_bin);
 			AuxGrammar.constraints.add(c1);
 		}
+		
 		for(int i = 0; i<nValues;i++) {
 			String bin = String.format("x$_%d_%d",k+i,0);
 			AuxGrammar.dBinaries.add(String.format("x$_%d_%d",k+i,0));
@@ -736,7 +743,8 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 			String c2 = String.format("%s = 1",bin);
 			AuxGrammar.constraints.add(c2);
 		}
-		AuxGrammar.nDBinarys += nVars;		
+		AuxGrammar.nFrees += nVars;
+		AuxGrammar.nDBinarys += nValues;		
 		return ""; 
 	}
 	
@@ -783,7 +791,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 		String resultant =  AuxGrammar.asString(visit(ctx.left));
 		String right =  AuxGrammar.asString(visit(ctx.right));
 		Integer nf = AuxGrammar.nFrees;
-		String var_id = String.format("z$%d",nf);
+		String var_id = String.format("y$%d",nf);
 		AuxGrammar.bounds.add(String.format("%s free",var_id));
 		String r = String.format("%s = ABS ( %s )" ,resultant,var_id);
 		Pair<String,Integer> p = reorderGenExp(right);

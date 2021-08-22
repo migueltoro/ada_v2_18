@@ -30,7 +30,7 @@ constraint : generate_exp rel_op exp #atomConstraint
 		| left=constraint '=>' right=constraint #implyConstraint 
 		| left=var_id '!=' right=var_id #differentValueConstraint 
 		| 'allDifferent' '(' vars=list')' #allDifferentValuesConstraint 
-		| 'allDifferentInValues' '(' vars=list ';' values=list ')' #allInValuesConstraint 
+		| 'permutation' '(' vars=list ';' values=list ')' #allInValuesConstraint 
 		| var=var_id 'in' values=list #valueInValuesConstraint 
 		| left=var_id '=' 'MAX' '(' vars=list ')' #maxConstraint 
 		| left=var_id '=' 'MIN' '(' vars=list ')' #minConstraint 

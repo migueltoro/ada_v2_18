@@ -21,7 +21,7 @@ public class TestReinas {
 		System.out.println(s.values.keySet()
 				.stream()
 				.filter(e->!e.contains("$"))
-				.filter(e->s.values.get(e)>0)
+//				.filter(e->s.values.get(e)>0)
 				.map(e->String.format("%s == %.0f == %.1f == %.0f",e,s.values.get(e),s.values.get(e)+1,s.values.get(e)-1))
 				.collect(Collectors.joining("\n")));
 	}
@@ -29,7 +29,7 @@ public class TestReinas {
 	public static void main(String[] args) throws IOException {
 		Locale.setDefault(new Locale("en", "US"));
 		Long a = System.nanoTime();
-		reinas("ficheros/reinas_3.lsi");
+		reinas("ficheros/reinas_2.lsi");
 		Long b = System.nanoTime();
 		String2.toConsole("%d",b-a);
 	}
