@@ -1,11 +1,13 @@
 package us.lsi.expression;
 
 
+import java.util.Locale;
+
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
-import us.lsi.ag.agchromosomes.ExpressionChromosome;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
+import us.lsi.common.String2;
 import us.lsi.tiposrecursivos.ast.Exp;
 
 
@@ -13,13 +15,14 @@ public class TestExpression {
 
 	
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
 		
 		AlgoritmoAG.ELITISM_RATE  = 0.30;
 		AlgoritmoAG.CROSSOVER_RATE = 0.8;
 		AlgoritmoAG.MUTATION_RATE = 0.7;
 		AlgoritmoAG.POPULATION_SIZE = 50;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 50000;
+		StoppingConditionFactory.NUM_GENERATIONS = 50;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionType.SolutionsNumber;
 		StoppingConditionFactory.FITNESS_MIN = -1.;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
@@ -30,9 +33,10 @@ public class TestExpression {
 		AlgoritmoAG<Exp,Exp> ap = AlgoritmoAG.of(d);
 		ap.ejecuta();
 
-		System.out.println("================================");
-		System.out.println(ap.bestSolution()+","+(ap.getBestChromosome().fitness()));
-		System.out.println("================================");
+		String2.toConsole("================================");
+		String2.toConsole("%.2f",ap.getBestChromosome().fitness());
+		String2.toConsole("%s",d.getSolucion(ap.getBestChromosome().decode()));
+		String2.toConsole("================================");
 //		for(int i=0;i<d.numConstants();i++){
 //			System.out.println(String.format("%s = %f",d.getConstant(i).getName(),d.getConstant(i).getValue()));
 //		}

@@ -12,7 +12,7 @@ public record Const(String name, Type type, Object value) implements Exp, Operat
 		return new Const("",type,value);
 	}
 	
-	public static Const of(String name,Object value, Type type) {
+	public static Const of(String name,Object value,Type type) {
 		return new Const(name,type,value);
 	}
 
@@ -37,16 +37,23 @@ public record Const(String name, Type type, Object value) implements Exp, Operat
 	}
 
 	@Override
-	public void setValue(Map<String, Object> values) {}
-
-	@Override
 	public OperatorId id() {
-		return OperatorId.of0("",type);
+		return OperatorId.of0(this.name());
 	}
 
 	@Override
 	public Type resultType() {
 		return type;
+	}
+	
+	@Override
+	public Boolean isConst() {
+		return true;
+	}
+
+	@Override
+	public Const simplify() {
+		return this;
 	}
 	
 }

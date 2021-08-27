@@ -6,6 +6,7 @@ import java.util.Set;
 
 import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
+import us.lsi.common.String2;
 
 public record Binary(Exp left, Exp right, String name) implements Exp {
 	
@@ -18,7 +19,7 @@ public record Binary(Exp left, Exp right, String name) implements Exp {
 		Type t2 = right.type();
 		OperatorId id = OperatorId.of2(name,t1,t2);
 		Operator op = Operators.operators.get(id);
-		Preconditions.checkArgument(op != null,String.format("No existe el operador %s%s%s",op,t1,t2));
+		Preconditions.checkArgument(op != null,String.format("No existe el operador %s",id));
 		return op;
 	}
 	
@@ -51,11 +52,17 @@ public record Binary(Exp left, Exp right, String name) implements Exp {
 	public Set<Var> vars() {
 		return Set2.union(this.left().vars(),this.right().vars());
 	}
-	
+
 	@Override
-	public void setValue(Map<String, Object> values) {
-		this.left().setValue(values);
-		this.right().setValue(values);
+	public Boolean isConst() {
+		return this.left().isConst() && this.right().isConst();
 	}
 
+	@Override
+	public Exp simplify() {
+		Exp r;
+		if(this.isConst()) r = Const.of(this.value(),this.type());
+		else r = this;
+		return r;
+	}
 }

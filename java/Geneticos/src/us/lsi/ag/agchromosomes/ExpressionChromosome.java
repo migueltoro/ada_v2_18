@@ -14,9 +14,10 @@ import us.lsi.ag.ExpressionData;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.String2;
+import us.lsi.tiposrecursivos.ast.Const;
 import us.lsi.tiposrecursivos.ast.Exp;
-import us.lsi.tiposrecursivos.ast.Nary;
 import us.lsi.tiposrecursivos.ast.Operator;
+import us.lsi.tiposrecursivos.ast.Operators;
 import us.lsi.tiposrecursivos.ast.Type;
 import us.lsi.tiposrecursivos.ast.Var;
 
@@ -61,12 +62,6 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 	 * Las contantes están ubicadas después de los genes
 	 */
 	private static Integer constantsIndex;
-	
-	/**
-	 * El indice de la primera variable en la lista allOperators
-	 */
-
-//	private static Integer variableIndex;
 		
 	/**
 	 * El rango de valores que puede tomar cada casilla del cromosoma.
@@ -80,9 +75,9 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 	private static List<Var> variables;
 	
 	/**
-	 * Las constantes disponibles
+	 * Las variables disponibles
 	 */
-	private static List<Var> constants;
+	private static List<Const> constants;
 	
 	/**
 	 * Operadores disponibles
@@ -108,9 +103,7 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 		ExpressionChromosome.data =  data;
 		ExpressionChromosome.operators = data.operators();
 		constantsIndex = data.numGenes()*data.numItemsPorGen();
-//		variableIndex = data.numConstants();
 		maxRanges = IntStream.range(0,data.size()).map(i->getMax(i)).boxed().collect(Collectors.toList());
-		constants = getConstants(data.numConstants());
 		variables = getVariables(data.numVariables());
 	}
 	
@@ -141,24 +134,26 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 		return ls;
 	}
 	
-	private static List<Var> getConstants(int num){
-		List<Var> ls = List2.empty();
-		for(int i=0; i<num;i++){
-			ls.add(Var.of(nombresDeConstantes.get(i),Type.Double));
-		}
-		return ls;
-	}
-	
 	public static Var getVariable(int i) {
 		return variables.get(i);
 	}
 	
-	public static Var getConstant(int i) {
+	public static Const getConstant(int i) {
 		return constants.get(i);
 	}
 	
+	public static Const getConstant(int i, Object value) {
+		value = switch(data.constType()) {
+		case Boolean -> null;
+		case Double -> Operators.toDouble(value);
+		case Int -> Operators.toInt(value);
+		case String -> null;
+		};
+		return Const.of(nombresDeConstantes.get(i),value,data.constType());
+	}
+	
 	public Double getConstantValue(int i) {
-		return scaleDouble(super.getRepresentation().get(constantsIndex+i),data.maxValueConstant());
+		return super.getRepresentation().get(constantsIndex+i)*data.maxValueConstant();
 	}
 	
 	public static Operator getOperator(int i) {
@@ -166,7 +161,6 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 	}
 	
 	public static Operator operatorOfInt(int i) {
-//		String2.toConsole("index = %d, %d, %d",i,constantsIndex,constantsIndex+variableIndex);
 		Operator op;
 		if(i<data.numConstants()) op = getConstant(i);
 		else if(i<data.numConstants()+data.numVariables()) op = getVariable(i-data.numConstants());
@@ -188,7 +182,6 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 		Integer a = r.get(level).stream().mapToInt(op -> op.id().arity()).sum();
 		while (a >0 && index < g.size()) {
 			a = r.get(level).stream().mapToInt(op -> op.id().arity()).sum();
-			String2.toConsole("g=%d,index=%d,a=%d", g.size(), index, a);
 			List<Operator> lv = new ArrayList<>();
 			Integer i = index;
 			while (a > 0 && i < index + a) {
@@ -223,30 +216,20 @@ public class ExpressionChromosome extends RandomKey<Integer> implements us.lsi.a
 		return (int) (maxRanges.get(i)*e);
 	}
 	
-	private static Double scaleDouble(Double e, Integer i) {
-		return maxRanges.get(i)*e;
-	}
-	
 	@Override
 	public Exp decode() {
 		List<Double> ls = super.getRepresentation();
 		List<Integer> items = IntStream.range(0,ls.size()).boxed().map(i->scale(ls.get(i),i)).toList();
-		String2.toConsole("items = %s",items);
-		for(int i=0; i<data.numConstants();i++){
-			getConstant(i).setValue(getConstantValue(i));
-		}
-		String2.toConsole("constants = %s",constants);
-		String2.toConsole("variables = %s",variables);
+		constants = IntStream.range(0,data.numConstants()).boxed()
+				.map(i->getConstant(i,getConstantValue(i))).toList();
 		List<Exp> exps = new ArrayList<>();
 		for(int i=0; i<data.numGenes();i++){
-			String2.toConsole("%d, items = %s",i,gen(items,i));
 			List<Integer> g = gen(items,i);
 			List<List<Operator>> levels = levelsOfGen(g);
 			exps.add(Exp.ofOperatorsInLevels(levels).get(0));
 		}
 		Exp r = Exp.of(exps,data.nAryOperator());
-		String2.toConsole("exp = %s",r);
-		return r;
+		return r.simplify();
 	}
 	
 	@Override

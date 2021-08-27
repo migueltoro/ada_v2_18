@@ -4,6 +4,7 @@ import java.util.List;
 
 import us.lsi.tiposrecursivos.ast.Exp;
 import us.lsi.tiposrecursivos.ast.Operator;
+import us.lsi.tiposrecursivos.ast.Type;
 
 public interface ExpressionData extends ChromosomeData<Exp,Exp>{
 	
@@ -31,6 +32,11 @@ public interface ExpressionData extends ChromosomeData<Exp,Exp>{
 	 * @return El rango máximo del valor de cada constante. Cada constante tendrá un valor en el rango 0..getMaxValueConstant()-1
 	 */
 	Integer maxValueConstant();
+	
+	/**
+	 * @return Tipo de las constantes
+	 */
+	Type constType();
 	
 	/**
 	 * @return Operadores disponibles

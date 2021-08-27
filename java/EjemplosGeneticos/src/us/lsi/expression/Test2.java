@@ -1,7 +1,6 @@
 package us.lsi.expression;
 
 import org.apache.commons.math3.genetics.ListPopulation;
-import org.apache.commons.math3.genetics.Population;
 
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;

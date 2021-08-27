@@ -18,7 +18,7 @@ public record FunDeclaration(String id,Type resultType,List<ParamDeclaration> pa
 	}
 	
 	@Override
-	public String label() {
+	public String name() {
 		return String.format("%s(%s):%s",this.id(),
 				this.parameters.stream().map(p->p.type().toString()).collect(Collectors.joining(",")), 
 				this.resultType());
@@ -26,7 +26,7 @@ public record FunDeclaration(String id,Type resultType,List<ParamDeclaration> pa
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Ast.getIndex(this,map,this.label(),file);
+		Ast.getIndex(this,map,this.name(),file);
 	}
 
 }

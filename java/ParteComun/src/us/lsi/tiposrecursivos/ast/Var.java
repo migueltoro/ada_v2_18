@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Map;
 import java.util.Set;
 
+import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
 
 public final class Var implements Exp, Declaration, Operator {
@@ -22,12 +23,16 @@ public final class Var implements Exp, Declaration, Operator {
 	public static Var of(String name,Type type) {
 		return new Var(name,type,null);
 	}
+	
 	public String name() {
 		return name;
 	}
+	
 	public Object value() {
+		Preconditions.checkNotNull(this.value,String.format("Valor nulo de %s",this.name()));
 		return value;
 	}
+	
 	public void setValue(Object value) {
 		this.value = value;
 	}
@@ -44,13 +49,8 @@ public final class Var implements Exp, Declaration, Operator {
 	}
 	
 	@Override
-	public String label() {
-		return String.format("%s=%s",this.id(),this.value());
-	}
-	
-	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Ast.getIndex(this,map,this.label(),file);
+		Ast.getIndex(this,map,this.name(),file);
 	}
 
 	@Override
@@ -64,13 +64,8 @@ public final class Var implements Exp, Declaration, Operator {
 	}
 
 	@Override
-	public void setValue(Map<String, Object> values) {
-		this.setValue(values.get(this.name()));
-	}
-
-	@Override
 	public OperatorId id() {
-		return OperatorId.of0(name, type);
+		return OperatorId.of0(name);
 	}
 
 	@Override
@@ -78,4 +73,13 @@ public final class Var implements Exp, Declaration, Operator {
 		return this.type();
 	}
 
+	@Override
+	public Boolean isConst() {
+		return false;
+	}
+
+	@Override
+	public Var simplify() {
+		return this;
+	}
 }

@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import us.lsi.common.Preconditions;
-
 public record Nary(List<Exp> operands, String name) implements Exp {
 
 	public static Nary of(List<Exp> operands, String op) {
@@ -16,7 +14,6 @@ public record Nary(List<Exp> operands, String name) implements Exp {
 	
 	public Operator operator() {
 		List<Type> t = operands.stream().map(op->op.type()).toList();
-		Preconditions.checkArgument(t.stream().allMatch(x->x.equals(t.get(0))));
 		OperatorId id = OperatorId.ofN(name,t.get(0));
 		return Operators.operators.get(id);
 	}
@@ -39,7 +36,7 @@ public record Nary(List<Exp> operands, String name) implements Exp {
 	@Override
 	public String toString() {
 		return String.format("%s(%s)", this.name(), this.operands().stream()
-				.map(e->e.name()).collect(Collectors.joining("")));
+				.map(e->e.toString()).collect(Collectors.joining(",")));
 	}
 	
 	@Override
@@ -48,7 +45,15 @@ public record Nary(List<Exp> operands, String name) implements Exp {
 	}
 
 	@Override
-	public void setValue(Map<String, Object> values) {
-		this.operands().stream().forEach(e->e.setValue(values));
+	public Boolean isConst() {
+		return this.operands().stream().allMatch(p->p.isConst());
+	}
+
+	@Override
+	public Exp simplify() {
+		Exp r;
+		if(this.isConst()) r = Const.of(this.value(),this.type());
+		else r = Nary.of(operands.stream().map(op->op.simplify()).toList(),this.name());
+		return r;
 	}
 }

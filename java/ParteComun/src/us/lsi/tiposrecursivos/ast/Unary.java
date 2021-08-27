@@ -17,11 +17,12 @@ public record Unary(Exp operand, String name) implements Exp {
 		Type t1 = operand.type();
 		OperatorId id = OperatorId.of1(name,t1);
 		Operator op = Operators.operators.get(id);
-		Preconditions.checkArgument(op != null,String.format("No existe el operador %s%s",op,t1));
+		Preconditions.checkArgument(op != null,String.format("No existe el operador %s",id));
 		return op;
 	}
 	
 	public Object value() {
+		Preconditions.checkNotNull(operand.value(),String.format("Valor nulo de %s",this.name()));
 		Operator.Unary op = (Operator.Unary) this.operator();
 		return op.function().apply(operand.value());
 	}
@@ -50,7 +51,15 @@ public record Unary(Exp operand, String name) implements Exp {
 	}
 	
 	@Override
-	public void setValue(Map<String, Object> values) {
-		this.operand.setValue(values);
+	public Boolean isConst() {
+		return this.operand().isConst();
+	}
+
+	@Override
+	public Exp simplify() {
+		Exp r;
+		if(this.isConst()) r = Const.of(this.value(),this.type());
+		else r = this;
+		return r;
 	}
 }

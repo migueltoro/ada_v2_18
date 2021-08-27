@@ -2,6 +2,8 @@ package us.lsi.tiposrecursivos.ast;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import us.lsi.common.List2;
 import us.lsi.common.Map2;
@@ -21,8 +23,18 @@ public class TestExp {
 		Unary ue2 = Unary.of(ue1,"sqrt");
 		String2.toConsole("%s",ue2.type());
 		String2.toConsole("%s",ue2.vars());
-		ue2.setValue(Map2.of("a",34,"b",65));
-		String2.toConsole("%s",ue2.value());
+		Set<Var> vars =ue2.vars();
+		Map<String,Object> values = Map2.of("a",33,"b",45);
+		vars.stream().forEach(v->v.setValue(values.get(v.name())));
+		vars.stream().forEach(v->String2.toConsole(String.format("%s,%s,%s",v.name(),v.value(),v.value().getClass())));
+		String2.toConsole("%s",ue2);
+		String2.toConsole("1 %s",a.value());
+		String2.toConsole("2 %s",b.value());
+		String2.toConsole("3 %s",c.value());
+		String2.toConsole("4 %s",be1.value());
+		String2.toConsole("5 %s",be2.value());
+		String2.toConsole("6 %s",ue1.value());
+		String2.toConsole("7 %s",ue2.value());
 	}
 	
 	public static void test2() {
@@ -30,13 +42,13 @@ public class TestExp {
 		Operator a = Var.of("a",Type.Double);
 		Operator b = Const.of(3.45,Type.Double);
 		List<Operator> lv2 = List2.of(a,b,a);
-		List<Operator> lv1 = List2.of(Operators.get("+",Type.Double,Type.Double),Operators.get("sqrt",Type.Double));
-		List<Operator> lv0 = List2.of(Operators.get("+",Type.Double,Type.Double));
+		List<Operator> lv1 = List2.of(Operators.get2("+",Type.Double,Type.Double),Operators.get1("sqrt",Type.Double));
+		List<Operator> lv0 = List2.of(Operators.get2("+",Type.Double,Type.Double));
 		String2.toConsole("%s",Exp.ofOperatorsInLevels(List.of(lv0,lv1,lv2)));
 	}
 	
 	public static void main(String[] args) throws IOException {
-		test2();
+		test1();
 	}
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.CrossoverPolicy;
 import org.apache.commons.math3.genetics.ElitisticListPopulation;
 import org.apache.commons.math3.genetics.GeneticAlgorithm;
@@ -174,7 +173,7 @@ public class AlgoritmoAG<E,S> {
 	
 	@SuppressWarnings("unchecked")
 	public ChromosomeData<E,S> getBestChromosomeData() {
-		return (ChromosomeData<E,S>)bestFinal;
+		return (ChromosomeData<E, S>)bestFinal;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -183,8 +182,6 @@ public class AlgoritmoAG<E,S> {
 				.map(x->(Chromosome<E>)x)
 				.collect(Collectors.toList());
 	}
-	
-	
 
 	/**
 	 * @return Población final

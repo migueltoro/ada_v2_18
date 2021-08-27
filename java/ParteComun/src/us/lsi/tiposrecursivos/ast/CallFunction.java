@@ -46,10 +46,17 @@ public record CallFunction(String name,List<Exp> parameters, FunDeclaration funD
 	public Set<Var> vars() {
 		return this.parameters().stream().flatMap(e->e.vars().stream()).collect(Collectors.toSet());
 	}
-
+	
+	@Override
+	public Boolean isConst() {
+		return this.parameters().stream().allMatch(p->p.isConst());
+	}
 
 	@Override
-	public void setValue(Map<String, Object> values) {
-		this.parameters().stream().forEach(e->e.setValue(values));
+	public Exp simplify() {
+		Exp r;
+		if(this.isConst()) r = Const.of(this.value(),this.type());
+		else r = this;
+		return r;
 	}
 }

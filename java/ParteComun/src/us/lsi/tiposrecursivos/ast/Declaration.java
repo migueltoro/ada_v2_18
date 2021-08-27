@@ -4,6 +4,6 @@ import java.io.PrintStream;
 import java.util.Map;
 
 public sealed interface Declaration permits Var, FunDeclaration  {
-	String label();
+	String name();
 	void toDot(PrintStream file, Map<Object,Integer> map);
 }

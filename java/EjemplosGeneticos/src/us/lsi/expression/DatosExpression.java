@@ -37,16 +37,16 @@ public class DatosExpression implements ExpressionData {
 
 	@Override
 	public Integer maxValueConstant() {
-		return 4;
+		return 5;
 	}
 
 	@Override
 	public List<Operator> operators() {		
-		Operator plus = Operators.get("+", Type.Double, Type.Double);
-		Operator multiply = Operators.get("*", Type.Double, Type.Double);
-		Operator  sqrt = Operators.get("sqrt", Type.Double);
-		Operator pot2 = Operators.get("^2", Type.Double);
-		Operator pot3 = Operators.get("^3", Type.Double);
+		Operator plus = Operators.get2("+", Type.Double, Type.Double);
+		Operator multiply = Operators.get2("*", Type.Double, Type.Double);
+		Operator  sqrt = Operators.get1("sqrt", Type.Double);
+		Operator pot2 = Operators.get1("^2", Type.Double);
+		Operator pot3 = Operators.get1("^3", Type.Double);
 		List<Operator> exp = Arrays.asList(plus,multiply,pot2,pot3,sqrt);
 		return exp;
 	}
@@ -58,7 +58,7 @@ public class DatosExpression implements ExpressionData {
 		Double r =0.;
 		Double r2;
 		for(int i=0;i<lsx.size();i++){
-			vars.get(0).setValue(lsx.get(i));
+			if (!exp.isConst()) vars.get(0).setValue(lsx.get(i));
 			r2 = Operators.toDouble(exp.value())-lsv.get(i);
 			r = r + r2*r2;			
 		}
@@ -90,5 +90,9 @@ public class DatosExpression implements ExpressionData {
 		return (Nary) Operators.getN("+",Type.Double);
 	}
 
+	@Override
+	public Type constType() {
+		return Type.Int;
+	}
 
 }
