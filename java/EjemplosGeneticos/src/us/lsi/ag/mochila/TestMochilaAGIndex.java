@@ -6,6 +6,7 @@ import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 
 public class TestMochilaAGIndex {
 	
@@ -24,7 +25,7 @@ public static void main(String[] args) {
 		DatosMochila.capacidadInicial = 78;
 		DatosMochilaIndex p = new DatosMochilaIndex("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
+		AlgoritmoAG<List<Integer>,SolucionMochila> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
@@ -32,7 +33,7 @@ public static void main(String[] args) {
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);
-		System.out.println(p.getSolucion(dc));
+		System.out.println(ap.bestSolution());
 		System.out.println("================================");
 		System.out.println(SolutionsNumber.numeroDeGeneraciones);
 	}

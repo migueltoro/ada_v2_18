@@ -42,7 +42,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Permutation;
 	}
 	

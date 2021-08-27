@@ -7,7 +7,6 @@ import org.apache.commons.math3.genetics.BinaryChromosome;
 import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
@@ -43,9 +42,8 @@ public class IndexSubListChromosome extends BinaryChromosome
 	
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		IndexSubListChromosome.data = (SeqNormalData<Object>) data; 
+	public static void iniValues(SeqNormalData<Object> data){
+		IndexSubListChromosome.data =  data; 
 		IndexSubListChromosome.normalSequence = IndexSubListChromosome.data.getNormalSequence();
 		IndexSubListChromosome.DIMENSION = IndexSubListChromosome.normalSequence.size();
 	}
@@ -110,7 +108,7 @@ public class IndexSubListChromosome extends BinaryChromosome
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.IndexSubList;
 	}
 

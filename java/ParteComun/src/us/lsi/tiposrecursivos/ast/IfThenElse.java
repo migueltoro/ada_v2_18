@@ -15,18 +15,18 @@ public record IfThenElse(Exp guard,Block trueBlock,Block falseBlock) implements 
 	}
 	
 	@Override
-	public String label() {
+	public String name() {
 		return "ifThenElse";
 	}
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Ast.getIndex(this,map,this.label(),file);
-		Integer guard = Ast.getIndex(this.guard(),map,this.guard().label(),file);
+		Integer n = Ast.getIndex(this,map,this.name(),file);
+		Integer guard = Ast.getIndex(this.guard(),map,this.guard().name(),file);
 		Integer trueBlock = Ast.getIndex(this.trueBlock().sentences().get(0),map,
-				this.trueBlock().sentences().get(0).label(),file);
+				this.trueBlock().sentences().get(0).name(),file);
 		Integer falseBlock = Ast.getIndex(this.falseBlock().sentences().get(0),map,
-				this.falseBlock().sentences().get(0).label(),file);
+				this.falseBlock().sentences().get(0).name(),file);
 		Ast.edge(n,guard,"Guarda",file);
 		Ast.edgeColor(n,trueBlock,"nextTrue","red",file);
 		Ast.edgeColor(n,falseBlock,"nextFalse","red",file);

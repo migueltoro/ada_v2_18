@@ -19,16 +19,16 @@ public record Block(List<Sentence> sentences, Map<String,Object> symbolTable) im
 	}
 	
 	@Override
-	public String label() {
+	public String name() {
 		return "Bloque";
 	}
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
 		List<Sentence> dc = this.sentences();
-		Integer d0n = Ast.getIndex(dc.get(0),map,dc.get(0).label(),file);
+		Integer d0n = Ast.getIndex(dc.get(0),map,dc.get(0).name(),file);
 		for(int i=1;i<dc.size();i++) {
-			Integer dn = Ast.getIndex(dc.get(i),map,dc.get(i).label(),file);
+			Integer dn = Ast.getIndex(dc.get(i),map,dc.get(i).name(),file);
 			Ast.edgeColor(d0n, dn, "next","red",file);
 			d0n = dn;
 		}

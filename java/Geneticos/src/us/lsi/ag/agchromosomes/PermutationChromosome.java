@@ -7,7 +7,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
@@ -41,9 +40,8 @@ public class PermutationChromosome extends RandomKey<Integer>
 	
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		PermutationChromosome.data = (SeqNormalData<Object>) data; 
+	public static void iniValues(SeqNormalData<Object> data){
+		PermutationChromosome.data = data; 
 		PermutationChromosome.normalSequence = PermutationChromosome.data.getNormalSequence();
 		PermutationChromosome.DIMENSION = PermutationChromosome.normalSequence.size();
 	}
@@ -92,7 +90,7 @@ public class PermutationChromosome extends RandomKey<Integer>
 
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.Permutation;
 	}
 

@@ -43,7 +43,7 @@ public class RecubrimientoMinimo {
 		
 		System.out.println(r);	
 		
-		Map<Ciudad,Double> habitantes = Map2.newHashMap(x->1/x.getHabitantes());
+		Map<Ciudad,Double> habitantes = Map2.of(x->1/x.getHabitantes());
 		
 		VertexCoverAlgorithm<Ciudad> vc = new RecursiveExactVCImpl<>(graph,habitantes);
 		

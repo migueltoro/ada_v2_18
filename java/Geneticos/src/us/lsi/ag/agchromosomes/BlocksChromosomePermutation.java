@@ -13,7 +13,6 @@ import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.BlocksData;
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
 public class BlocksChromosomePermutation extends RandomKey<Integer> 
@@ -22,9 +21,8 @@ public class BlocksChromosomePermutation extends RandomKey<Integer>
 	public static BlocksData<Object> data;
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		BlocksChromosomePermutation.data = (BlocksData<Object>) data; 
+	public static void iniValues(BlocksData<Object> data){
+		BlocksChromosomePermutation.data = data; 
 		BlocksChromosomePermutation.DIMENSION = BlocksChromosomePermutation.data.size();
 	}
 	
@@ -108,8 +106,8 @@ public class BlocksChromosomePermutation extends RandomKey<Integer>
 	}
 
 	@Override
-	public ChromosomeType getType() {
-		return BlocksChromosomePermutation.data.getType();
+	public ChromosomeType type() {
+		return BlocksChromosomePermutation.data.type();
 	}
 
 

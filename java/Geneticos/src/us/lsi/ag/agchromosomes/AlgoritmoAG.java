@@ -2,6 +2,7 @@ package us.lsi.ag.agchromosomes;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 //import org.apache.commons.math3.genetics.Chromosome;
@@ -15,7 +16,7 @@ import org.apache.commons.math3.genetics.StoppingCondition;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
+import us.lsi.ag.ChromosomeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.common.Preconditions;
@@ -27,7 +28,7 @@ import us.lsi.common.Preconditions;
  * @author Miguel Toro
  *
  */
-public class AlgoritmoAG<E> {
+public class AlgoritmoAG<E,S> {
 	
 	/**
 	 * @param <C> Tipo del cromosoma
@@ -35,8 +36,8 @@ public class AlgoritmoAG<E> {
 	 * @return AlgoritmoAG
 	 */
 	
-	public static <E> AlgoritmoAG<E> of(Data data) {
-		return new AlgoritmoAG<E>(data);
+	public static <E,S> AlgoritmoAG<E,S> of(ChromosomeData<E,S> data) {
+		return new AlgoritmoAG<E,S>(data);
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class AlgoritmoAG<E> {
 	public static long INITIAL_TIME;
 	
 	
-	public static Data  data;
+	public ChromosomeData<E,S>  data;
 	public static ChromosomeType tipo;
 	public static CrossoverPolicy crossOverPolicy;
 	public static MutationPolicy mutationPolicy;
@@ -108,13 +109,13 @@ public class AlgoritmoAG<E> {
 	/**
 	 * @param problema Problema a resolver
 	 */
-	public AlgoritmoAG(Data data) {
+	public AlgoritmoAG(ChromosomeData<E,S> data) {
 		super();
 		random = new JDKRandomGenerator();		
 		random.setSeed((int)System.currentTimeMillis());
 		GeneticAlgorithm.setRandomGenerator(random);
-		AlgoritmoAG.data = data;
-		AlgoritmoAG.tipo = data.getType();				
+		this.data = data;
+		AlgoritmoAG.tipo = data.type();				
 		AlgoritmoAG.selectionPolicy =  ChromosomeFactory.getSelectionPolicy();
 		AlgoritmoAG.mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo);
 		AlgoritmoAG.crossOverPolicy = ChromosomeFactory.getCrossoverPolicy(tipo);
@@ -149,8 +150,7 @@ public class AlgoritmoAG<E> {
 				CROSSOVER_RATE,
 				mutationPolicy, 
 				MUTATION_RATE, 
-				selectionPolicy);
-		
+				selectionPolicy);	
 		
 		AlgoritmoAG.finalPopulation = ga.evolve(AlgoritmoAG.initialPopulation, AlgoritmoAG.stopCond);		
 		Preconditions.checkNotNull(AlgoritmoAG.finalPopulation);
@@ -171,6 +171,11 @@ public class AlgoritmoAG<E> {
 	public Chromosome<E> getBestChromosome() {
 		return (Chromosome<E>)bestFinal;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public ChromosomeData<E,S> getBestChromosomeData() {
+		return (ChromosomeData<E,S>)bestFinal;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Chromosome<E>> getBestChromosomes(){
@@ -178,6 +183,8 @@ public class AlgoritmoAG<E> {
 				.map(x->(Chromosome<E>)x)
 				.collect(Collectors.toList());
 	}
+	
+	
 
 	/**
 	 * @return Población final
@@ -185,5 +192,14 @@ public class AlgoritmoAG<E> {
 	public Population getFinalPopulation() {
 		return finalPopulation;
 	}	
+	
+	public S bestSolution() {
+		return this.getBestChromosomeData().getSolucion(this.getBestChromosome().decode());
+	}
+	
+	public Set<S> bestSolutions() {
+		ChromosomeData<E,S> d = this.getBestChromosomeData();
+		return this.getBestChromosomes().stream().map(c->d.getSolucion(c.decode())).collect(Collectors.toSet());
+	}
 	
 }

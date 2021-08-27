@@ -8,7 +8,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
@@ -41,9 +40,8 @@ public class DoubleChromosome extends RandomKey<Double>
 	
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		DoubleChromosome.data = (ValuesInRangeData<Double,Object>) data; 
+	public static void iniValues(ValuesInRangeData<Double,Object> data){
+		DoubleChromosome.data = data; 
 		DoubleChromosome.DIMENSION = DoubleChromosome.data.size();
 	}
 	
@@ -102,7 +100,7 @@ public class DoubleChromosome extends RandomKey<Double>
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.Real;
 	}
 

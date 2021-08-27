@@ -15,15 +15,15 @@ public record Assign(Exp id, Exp exp) implements Sentence {
 	}
 
 	@Override
-	public String label() {
+	public String name() {
 		return "<==";
 	}
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Ast.getIndex(this,map,this.label(),file);
-		Integer id = Ast.getIndex(this.id(),map,this.id.label(),file);
-		Integer exp = Ast.getIndex(this.exp(),map,this.exp().label(),file);
+		Integer n = Ast.getIndex(this,map,this.name(),file);
+		Integer id = Ast.getIndex(this.id(),map,this.id.name(),file);
+		Integer exp = Ast.getIndex(this.exp(),map,this.exp().name(),file);
 		Ast.edge(n,id,"left",file);
 		Ast.edge(n,exp,"right",file);
 		this.id().toDot(file, map);

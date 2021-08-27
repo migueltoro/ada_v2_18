@@ -48,7 +48,7 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Permutation;
 	}
 

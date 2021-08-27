@@ -15,16 +15,16 @@ public record While(Exp guard, Block block) implements Sentence {
 	}
 
 	@Override
-	public String label() {
+	public String name() {
 		return "while";
 	}
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Integer n = Ast.getIndex(this,map,this.label(),file);
-		Integer guard = Ast.getIndex(this.guard(),map,this.guard().label(),file);
+		Integer n = Ast.getIndex(this,map,this.name(),file);
+		Integer guard = Ast.getIndex(this.guard(),map,this.guard().name(),file);
 		Integer block = Ast.getIndex(this.block().sentences().get(0),map,
-				this.block().sentences().get(0).label(),file);
+				this.block().sentences().get(0).name(),file);
 		Ast.edge(n,guard, file);
 		Ast.edge(n,block, file);
 		this.guard().toDot(file, map);

@@ -10,30 +10,30 @@ import java.util.stream.Collectors;
 
 public class Map2 {
 		
-	public static <K,V> Entry<K,V> newEntry(K key,V value){	
+	public static <K,V> Entry<K,V> entry(K key,V value){	
 		return new SimpleEntry<>(key,value);
 	}
-	public static <K,V> Map<K,V> newHashMap(){
+	public static <K,V> Map<K,V> empty(){
 		return new HashMap<>();
 	}
-	public static <K,V> Map<K,V> newHashMap(Map<K,V> r){
+	public static <K,V> Map<K,V> of(Map<K,V> r){
 		return new HashMap<>(r);
 	}
 	
-	public static <K,V> Map<K,V> newHashMap(K key,V value){
+	public static <K,V> Map<K,V> of(K key,V value){
 		Map<K,V> m = new HashMap<>();
 		m.put(key,value);
 		return m;
 	}
 	
-	public static <K,V> Map<K,V> newHashMap(K key1,V value1,K key2,V value2){
+	public static <K,V> Map<K,V> of(K key1,V value1,K key2,V value2){
 		Map<K,V> m = new HashMap<>();
 		m.put(key1,value1);
 		m.put(key2,value2);
 		return m;
 	}
 	
-	public static <K,V> Map<K,V> newHashMap(K key1,V value1,K key2,V value2,K key3,V value3){
+	public static <K,V> Map<K,V> of(K key1,V value1,K key2,V value2,K key3,V value3){
 		Map<K,V> m = new HashMap<>();
 		m.put(key1,value1);
 		m.put(key2,value2);
@@ -50,7 +50,7 @@ public class Map2 {
 	 */
 	public static <K,V,U extends Collection<V>> Map<V,K> reverseHashMap(Map<K,U> m){
 		return m.keySet().stream()
-				.<Entry<K,V>>flatMap(x->m.get(x).stream().map(y->Map2.newEntry(x,y)))
+				.<Entry<K,V>>flatMap(x->m.get(x).stream().map(y->Map2.entry(x,y)))
 				.collect(Collectors.toMap(z->z.getValue(), z->z.getKey()));
 	}
 	
@@ -64,9 +64,9 @@ public class Map2 {
 	 * @param m Un Map
 	 * @return Un map cambiando los valores imagen aplicandole una función
 	 */
-	public static <K,V,R> Map<K,R> newHashMap(Map<K,V> m,Function<V,R> f){
+	public static <K,V,R> Map<K,R> of(Map<K,V> m,Function<V,R> f){
 		return m.entrySet().stream()
-				.map(x->Map2.newEntry(x.getKey(), f.apply(x.getValue())))
+				.map(x->Map2.entry(x.getKey(), f.apply(x.getValue())))
 				.collect(Collectors.toMap(x->x.getKey(), x->x.getValue()));
 	}
 	
@@ -77,7 +77,7 @@ public class Map2 {
 	 * @return Un Map construido con esas claves
 	 */
 	@SuppressWarnings("unchecked")
-	public static <K, V> Map<K, V> newHashMap(Entry<? extends K, ? extends V>... entries) {
+	public static <K, V> Map<K, V> of(Entry<? extends K, ? extends V>... entries) {
         Map<K, V> result = new HashMap<>(entries.length);
 
         for (Entry<? extends K, ? extends V> entry : entries)
@@ -99,7 +99,7 @@ public class Map2 {
 	 * @param f Una función
 	 * @return Un Map cuyo dominio y valores son los de la función. Este Map sólo tiene disponible el método get.
 	 */
-	public static <K,V> Map<K, V> newHashMap(Function<K,V> f){
+	public static <K,V> Map<K, V> of(Function<K,V> f){
 		MapOfFunction<K,V> r = new Map2.MapOfFunction<>(f);
 		return r;
 		

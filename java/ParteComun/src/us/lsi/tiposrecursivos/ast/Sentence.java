@@ -5,7 +5,7 @@ import java.util.Map;
 
 public sealed interface Sentence permits IfThenElse, Assign, While, Block {
 	
-	String label();
+	String name();
 	void toDot(PrintStream file, Map<Object,Integer> map);
 
 }

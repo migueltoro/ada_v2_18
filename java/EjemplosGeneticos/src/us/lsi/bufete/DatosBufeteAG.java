@@ -23,7 +23,7 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 	}	
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Range;
 	}
 

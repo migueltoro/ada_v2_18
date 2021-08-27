@@ -8,6 +8,7 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 import us.lsi.sudoku.datos.DatosSudoku;
+import us.lsi.sudoku.datos.SolucionSudoku;
 
 public class TestInsetSudokuAG {
 	
@@ -44,7 +45,7 @@ public class TestInsetSudokuAG {
 		
 		InSetDatosSudokuAG p = new InSetDatosSudokuAG();
 		
-		AlgoritmoAG<List<Integer>> a = null;
+		AlgoritmoAG<List<Integer>,SolucionSudoku> a = null;
 		List<Integer> values = null;
 		Double fitnessMax = -100.;
 		

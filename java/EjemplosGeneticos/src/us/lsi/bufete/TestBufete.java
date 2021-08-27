@@ -13,10 +13,9 @@ public class TestBufete {
 	
 	private static void test(String fichero) {		
 		DatosBufeteAG prob = DatosBufeteAG.create("ficheros/"+fichero);
-		AlgoritmoAG<List<Integer>> alg = AlgoritmoAG.of(prob);
+		AlgoritmoAG<List<Integer>, SolucionAbogados> alg = AlgoritmoAG.of(prob);
 		alg.ejecuta();
-		Chromosome<List<Integer>> cr = (Chromosome<List<Integer>>)alg.getBestChromosome();
-		System.out.println(SolucionAbogados.create(cr.decode()));		
+		System.out.println(alg.bestSolution());		
 	}	
 
 	public static void main(String[] args) {

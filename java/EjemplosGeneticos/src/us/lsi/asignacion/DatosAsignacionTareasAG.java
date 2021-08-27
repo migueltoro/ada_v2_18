@@ -38,7 +38,7 @@ public class DatosAsignacionTareasAG implements SeqNormalData<List<Integer>> {
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Permutation;
 	}
 

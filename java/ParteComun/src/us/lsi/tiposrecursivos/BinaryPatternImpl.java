@@ -173,7 +173,7 @@ public class BinaryPatternImpl<E> implements BinaryPattern<E> {
 		switch(pt.getType()) {
 		case Empty: break;
 		case Leaf:  r.match = tree.isLeaf() && pt.getLabel().equals(tree.getLabel()); break;
-		case Variable: r.treeMatches = Map2.newHashMap(pt.getVariable_Name(), tree); break;
+		case Variable: r.treeMatches = Map2.of(pt.getVariable_Name(), tree); break;
 		case Binary: 
 			r.match = tree.isBinary() && pt.getLabel().equals(tree.getLabel());
 			if(r.match) r = match(tree.getLeft(), pt.getLeft()); else break;
@@ -182,7 +182,7 @@ public class BinaryPatternImpl<E> implements BinaryPattern<E> {
 		case Binary_Variable: 
 			r.match = tree.isBinary(); 
 			if(r.match) r = match(tree.getLeft(), pt.getLeft()); else break;
-			Matches<E> ml = Matches.ofLabels(Map2.newHashMap(pt.getVariable_Name(), tree.getLabel()));		
+			Matches<E> ml = Matches.ofLabels(Map2.of(pt.getVariable_Name(), tree.getLabel()));		
 			r.add(ml);
 			if(r.match) r.add(match(tree.getRight(), pt.getRight()));
 			break;		 

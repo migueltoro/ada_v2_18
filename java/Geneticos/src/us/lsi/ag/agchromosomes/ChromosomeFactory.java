@@ -1,5 +1,7 @@
 package us.lsi.ag.agchromosomes;
 
+import java.util.List;
+
 import org.apache.commons.math3.genetics.BinaryMutation;
 //import org.apache.commons.math3.genetics.Chromosome;
 import org.apache.commons.math3.genetics.CrossoverPolicy;
@@ -15,7 +17,8 @@ import org.apache.commons.math3.genetics.UniformCrossover;
 
 import us.lsi.ag.BlocksData;
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
+import us.lsi.ag.ChromosomeData;
+import us.lsi.ag.ExpressionData;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.ValuesInSetData;
@@ -36,7 +39,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,Range,Real,InSet,IndexSubList,Permutation,PermutationSubList,Blocks}
+	public enum ChromosomeType {Binary,Range,Real,InSet,IndexSubList,Permutation,PermutationSubList,Blocks, Expression}
 	
 //	public static ChromosomeType tipo;
 
@@ -55,6 +58,7 @@ public class ChromosomeFactory {
 		case Real: chromosome = DoubleChromosome.getInitialChromosome(); break;
 		case InSet: chromosome = ValuesInSetChromosomeC.getInitialChromosome(); break;
 		case Blocks: chromosome = BlocksChromosomePermutation.getInitialChromosome(); break;
+		case Expression: chromosome = ExpressionChromosome.getInitialChromosome(); break;
 		}
 		return chromosome;
 	}
@@ -120,6 +124,7 @@ public class ChromosomeFactory {
 		case Real: crossOverPolicy = crossOverPolicyKey; break;
 		case InSet: crossOverPolicy = crossOverPolicyKey; break;	
 		case Blocks: crossOverPolicy = crossOverPolicyKey; break;
+		case Expression: crossOverPolicy = crossOverPolicyKey; break;
 		}
 		Preconditions.checkState(crossOverPolicy!=null);
 		return crossOverPolicy;
@@ -141,6 +146,7 @@ public class ChromosomeFactory {
 		case Real: mutationPolicy = new RandomKeyMutation();	; break;
 		case InSet: mutationPolicy = new RandomKeyMutation(); break;
 		case Blocks: mutationPolicy = new RandomKeyMutation(); break;
+		case Expression: mutationPolicy = new RandomKeyMutation(); break;
 		}
 		Preconditions.checkState(mutationPolicy!=null);
 		return mutationPolicy;
@@ -174,16 +180,18 @@ public class ChromosomeFactory {
 	 * @param problema El problema a resolver 
 	 * @post El método inicializa los parámetros relevantes de la clase que implementa el tipo indicado de cromosoma
 	 */
-	public static void iniValues(Data data, ChromosomeType tipo){
+	@SuppressWarnings("unchecked")
+	public static <E,S> void iniValues(ChromosomeData<E,S> data, ChromosomeType tipo){
 		switch(tipo){
-		case Binary: BinaryChromosome.iniValues(data);break;
-		case IndexSubList: IndexSubListChromosome.iniValues(data);break;
-		case Range: RangeChromosome.iniValues(data); break;
-		case Permutation: PermutationChromosome.iniValues(data);break;
-		case PermutationSubList: PermutationSubListChromosome.iniValues(data);break;
-		case Real: DoubleChromosome.iniValues(data);break;
-		case InSet: ValuesInSetChromosomeC.iniValues(data); break;
-		case Blocks: BlocksChromosomePermutation.iniValues(data); break;
+		case Binary: BinaryChromosome.iniValues((ChromosomeData<List<Integer>, Object>) data);break;
+		case IndexSubList: IndexSubListChromosome.iniValues((SeqNormalData<Object>) data);break;
+		case Range: RangeChromosome.iniValues((ValuesInRangeData<Integer, Object>) data); break;
+		case Permutation: PermutationChromosome.iniValues((SeqNormalData<Object>) data);break;
+		case PermutationSubList: PermutationSubListChromosome.iniValues((SeqNormalData<Object>) data);break;
+		case Real: DoubleChromosome.iniValues((ValuesInRangeData<Double, Object>) data);break;
+		case InSet: ValuesInSetChromosomeC.iniValues((ValuesInSetData<Object>) data); break;
+		case Blocks: BlocksChromosomePermutation.iniValues((BlocksData<Object>) data); break;
+		case Expression: ExpressionChromosome.iniValues((ExpressionData) data); break;
 		}
 	}
 	

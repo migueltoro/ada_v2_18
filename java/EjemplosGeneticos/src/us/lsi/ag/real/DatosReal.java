@@ -48,7 +48,7 @@ public class DatosReal implements ValuesInRangeData<Double,List<Double>> {
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Real;
 	}
 }

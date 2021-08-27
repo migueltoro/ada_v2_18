@@ -47,7 +47,7 @@ public class TestBlocksSudokuAG {
 //		BlocksDatosSudokuAG p = new BlocksDatosSudokuAG();
 		BlocksDatosSudokuSubCuadroAG p = new BlocksDatosSudokuSubCuadroAG();
 		
-		AlgoritmoAG<List<Integer>> a = null;
+		AlgoritmoAG<List<Integer>,SolucionSudoku> a = null;
 		List<Integer> values = null;
 		Double fitnessMax = -100.;
 		

@@ -86,7 +86,7 @@ public class AstVisitorC extends ProgramBaseVisitor<Object> {
 		Preconditions.checkState(!AstVisitorC.symbolTable.containsKey(id),
 				String.format("La variable %s ya ha sido declarada",id));
 		AstVisitorC.symbolTable.put(id,r);
-		return Var.of(r.id(), r.type(), r.value());
+		return Var.of(r.name(), r.type(), r.value());
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class AstVisitorC extends ProgramBaseVisitor<Object> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Exp visitIntExpr(ProgramParser.IntExprContext ctx) { 
-		return Const.of(Type.Int,Integer.parseInt(ctx.getText())); 
+		return Const.of(Integer.parseInt(ctx.getText()),Type.Int); 
 	}
 	/**
 	 * {@inheritDoc}
@@ -236,18 +236,18 @@ public class AstVisitorC extends ProgramBaseVisitor<Object> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Exp visitDoubleExp(ProgramParser.DoubleExpContext ctx) { 
-		return Const.of(Type.Double,Double.parseDouble(ctx.getText())); 
+		return Const.of(Double.parseDouble(ctx.getText()),Type.Double); 
 	}
 	
 	@Override public Exp visitStrExpr(ProgramParser.StrExprContext ctx) { 
 		String text = ctx.getText();
 		text = text.substring(1,text.length()-1);
-		return Const.of(Type.String,text); 
+		return Const.of(text,Type.String); 
 	}
 	
 	
 	@Override public Exp visitBoolExpr(ProgramParser.BoolExprContext ctx) { 
-		return Const.of(Type.Boolean,ctx.getText().equals("true")?true:false); 
+		return Const.of(ctx.getText().equals("true")?true:false,Type.Boolean); 
 	}
 	
 	/**

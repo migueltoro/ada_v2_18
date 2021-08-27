@@ -24,7 +24,7 @@ import us.lsi.common.Preconditions;
  * es un multiconjunto o una lista, posiblemente con repetición, de los objetos dados. </p>
  */
 
-public interface SeqNormalData<S> extends Data {	
+public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {	
 		
 		
 		/**
@@ -38,19 +38,6 @@ public interface SeqNormalData<S> extends Data {
 			Preconditions.checkElementIndex(index, this.size());
 			return 1;
 		}
-		
-		/**
-		 * @param cr Un cromosoma
-		 * @return La función de fitnes del cromosoma
-		 */
-		Double fitnessFunction(List<Integer> cr);
-		
-		/**
-		 * @param cr Un cromosoma
-		 * @return La solución definida por el cromosoma
-		 */
-		S getSolucion(List<Integer> cr);
-		
 		
 		
 	    /**

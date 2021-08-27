@@ -9,7 +9,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInSetData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
@@ -25,9 +24,9 @@ public class ValuesInSetChromosomeC extends RandomKey<Integer>
 	
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		ValuesInSetChromosomeC.data = (ValuesInSetData<Object>) data; 
+
+	public static void iniValues(ValuesInSetData<Object> data){
+		ValuesInSetChromosomeC.data =  data; 
 		ValuesInSetChromosomeC.DIMENSION = ValuesInSetChromosomeC.data.size();
 	}
 	
@@ -83,7 +82,7 @@ public class ValuesInSetChromosomeC extends RandomKey<Integer>
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.InSet;
 	}
 

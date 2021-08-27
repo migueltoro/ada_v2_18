@@ -61,7 +61,7 @@ public class DatosMochilaAGRange implements ValuesInRangeData<Integer,SolucionMo
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Range;
 	}
 }

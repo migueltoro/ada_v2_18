@@ -42,7 +42,7 @@ public class DatosAnunciosAG extends DatosAnuncios implements SeqNormalData<Solu
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Permutation;
 	}
 	

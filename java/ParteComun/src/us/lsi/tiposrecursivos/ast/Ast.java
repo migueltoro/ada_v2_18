@@ -94,7 +94,7 @@ public record Ast(Block block) {
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
 		Integer pn = Ast.getIndex(this,map,"Program", file);
 		Block b = this.block();	
-		Integer bn = Ast.getIndex(b.sentences().get(0),map,b.sentences().get(0).label(), file);
+		Integer bn = Ast.getIndex(b.sentences().get(0),map,b.sentences().get(0).name(), file);
 		Ast.edgeColor(pn, bn,"next","red",file);
 		b.toDot(file,map);
 	}

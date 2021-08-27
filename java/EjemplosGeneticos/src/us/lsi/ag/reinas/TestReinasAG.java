@@ -35,7 +35,7 @@ public class TestReinasAG {
 		
 		DatosReinasAG.numeroDeReinas = 40;
 		SeqNormalData<List<Reina>> p = DatosReinasAG.create();
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
+		AlgoritmoAG<List<Integer>,List<Reina>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		System.out.println("================================");
 		
@@ -43,7 +43,7 @@ public class TestReinasAG {
 
 		Chromosome<List<Integer>> cr = ap.getBestChromosome();
 		System.out.println(cr.fitness());
-		System.out.println(p.getSolucion(cr.decode()));
+		System.out.println(ap.bestSolution());
 		List<Integer> ls = cr.decode();
 		Set<Integer> dp = Set2.empty();
 		Set<Integer> ds = Set2.empty();

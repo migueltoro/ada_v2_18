@@ -8,7 +8,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
@@ -40,9 +39,9 @@ public class RangeChromosome extends RandomKey<Integer>
 	
 	public static int DIMENSION;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		RangeChromosome.data = (ValuesInRangeData<Integer,Object>) data; 
+
+	public static void iniValues(ValuesInRangeData<Integer,Object> data){
+		RangeChromosome.data = data; 
 		RangeChromosome.DIMENSION = RangeChromosome.data.size();
 	}
 	
@@ -98,7 +97,7 @@ public class RangeChromosome extends RandomKey<Integer>
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.Range;
 	}
 

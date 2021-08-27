@@ -20,7 +20,7 @@ public class DatosMochilaIndex implements SeqNormalData<SolucionMochila> {
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.IndexSubList;
 	}
 	

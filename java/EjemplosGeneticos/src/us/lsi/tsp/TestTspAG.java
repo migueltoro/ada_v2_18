@@ -6,6 +6,7 @@ import java.util.List;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agstopping.SolutionsNumber;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
+import us.lsi.grafos.datos.Ciudad;
 
 public class TestTspAG {
 
@@ -22,14 +23,14 @@ public class TestTspAG {
 		
 		DatosTspAG p = new DatosTspAG("ficheros/objetosmochila.txt");
 		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
+		AlgoritmoAG<List<Integer>, List<Ciudad>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);
 		System.out.println(ap.getBestChromosome().fitness());
-		System.out.println(p.getSolucion(dc));
+		System.out.println(ap.bestSolution());
 		System.out.println("================================");
 		System.out.println(SolutionsNumber.numeroDeGeneraciones);
 	}

@@ -2,13 +2,8 @@ package us.lsi.ag;
 
 import java.util.List;
 
-public interface ValuesInRangeData<E,S> extends Data {
+public interface ValuesInRangeData<E,S> extends ChromosomeData<List<E>,S> {
 
-	/**
-	 * @return Numero de casillas del cromosoma
-	 */
-	Integer size();
-	
 	/**
 	 * @pre 0 &le; i &lt; getVariableNumber()
 	 * @param i Un entero 
@@ -21,17 +16,5 @@ public interface ValuesInRangeData<E,S> extends Data {
 	 * @return El mínimo valor del rango de valores de la variable i
 	 */
 	E getMin(Integer i);
-	
-	/**
-	 * @param cr Un cromosoma
-	 * @return La función de fitness del cromosoma
-	 */
-	
-	Double fitnessFunction(List<E> cr);
-	
-	/**
-	 * @param cr Un cromosoma
-	 * @return La solución definida por el cromosoma
-	 */
-	S getSolucion(List<E> cr);
+
 }

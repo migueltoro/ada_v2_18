@@ -4,7 +4,7 @@ package us.lsi.sa;
 import org.apache.commons.math3.genetics.MutationPolicy;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
+import us.lsi.ag.ChromosomeData;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agchromosomes.ChromosomeFactory;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
@@ -15,7 +15,7 @@ public class StateSaChromosome implements StateSa  {
 		return new StateSaChromosome(chromosome);
 	}
 	
-	public static StateSaChromosome random(Data data, ChromosomeType tipo) {	
+	public static StateSaChromosome random(ChromosomeData data, ChromosomeType tipo) {	
 		ChromosomeFactory.iniValues(data,tipo);
 		MutationPolicy mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo);
 		AlgoritmoAG.mutationPolicy = mutationPolicy;

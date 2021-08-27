@@ -10,7 +10,6 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 import org.apache.commons.math3.genetics.RandomKey;
 
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
 import us.lsi.ag.SeqNormalData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.common.Preconditions;
@@ -53,10 +52,9 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	
 	protected static int DIMENSION;
 	
-	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		PermutationSubListChromosome.data = (SeqNormalData<Object>) data; 
+
+	public static void iniValues(SeqNormalData<Object> data){
+		PermutationSubListChromosome.data =  data; 
 		PermutationSubListChromosome.normalSequence = PermutationSubListChromosome.data.getNormalSequence();
 		PermutationSubListChromosome.DIMENSION = PermutationSubListChromosome.normalSequence.size();
 	}
@@ -119,7 +117,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.PermutationSubList;
 	}
 

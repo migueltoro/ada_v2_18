@@ -7,8 +7,7 @@ import org.apache.commons.math3.genetics.InvalidRepresentationException;
 
 import us.lsi.ag.BinaryData;
 import us.lsi.ag.Chromosome;
-import us.lsi.ag.Data;
-import us.lsi.ag.ValuesInRangeData;
+import us.lsi.ag.ChromosomeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 
 /**
@@ -26,13 +25,12 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	 * Dimensión del cromosoma
 	 */
 	
-	protected static int DIMENSION;
-	protected static ValuesInRangeData<Integer,Object> data;
+	protected static Integer DIMENSION;
+	protected static ChromosomeData<List<Integer>,Object> data;
 	
-	@SuppressWarnings("unchecked")
-	public static void iniValues(Data data){
-		BinaryChromosome.data = (ValuesInRangeData<Integer,Object>) data;
-		BinaryChromosome.DIMENSION = BinaryChromosome.data.size();
+	public static void iniValues(ChromosomeData<List<Integer>,Object> data){
+		BinaryChromosome.data = data;
+		BinaryChromosome.DIMENSION = data.size();
 	}
 
 	public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {
@@ -72,7 +70,7 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.Binary;
 	}
 

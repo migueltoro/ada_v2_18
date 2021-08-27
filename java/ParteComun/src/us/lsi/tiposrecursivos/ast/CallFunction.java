@@ -3,9 +3,11 @@ package us.lsi.tiposrecursivos.ast;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public record CallFunction(String id,List<Exp> parameters, FunDeclaration funDeclaration) implements Exp {
+
+public record CallFunction(String name,List<Exp> parameters, FunDeclaration funDeclaration) implements Exp {
 	
 	public static CallFunction of(String id, List<Exp> parameters,FunDeclaration funDeclaration) {
 		return new CallFunction(id, parameters,funDeclaration);
@@ -22,22 +24,32 @@ public record CallFunction(String id,List<Exp> parameters, FunDeclaration funDec
 	@Override
 	public String toString() {
 		String d = this.parameters.stream().map(x->x.toString()).collect(Collectors.joining(","));
-		return String.format("%s(%s)",this.id,d);
-	}
-
-	@Override
-	public String label() {
-		return this.id();
+		return String.format("%s(%s)",this.name,d);
 	}
 	
 	@Override
 	public void toDot(PrintStream file, Map<Object,Integer> map) {
-		Integer pn = Ast.getIndex(this,map,this.label(), file);
+		Integer pn = Ast.getIndex(this,map,this.name(), file);
 		for(Exp e:this.parameters()) {
-			Integer dn = Ast.getIndex(e,map,e.label(),file);
+			Integer dn = Ast.getIndex(e,map,e.name(),file);
 			Ast.edge(pn, dn, file);
 			e.toDot(file, map);
 		}
 	}
 
+	@Override
+	public Operator operator() {
+		return null;
+	}
+	
+	@Override
+	public Set<Var> vars() {
+		return this.parameters().stream().flatMap(e->e.vars().stream()).collect(Collectors.toSet());
+	}
+
+
+	@Override
+	public void setValue(Map<String, Object> values) {
+		this.parameters().stream().forEach(e->e.setValue(values));
+	}
 }

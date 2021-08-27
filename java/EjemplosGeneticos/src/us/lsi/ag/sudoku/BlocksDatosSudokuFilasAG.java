@@ -53,7 +53,7 @@ public class BlocksDatosSudokuFilasAG implements BlocksData<SolucionSudoku>{
 	}
 
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeFactory.ChromosomeType.Blocks;
 	}
 

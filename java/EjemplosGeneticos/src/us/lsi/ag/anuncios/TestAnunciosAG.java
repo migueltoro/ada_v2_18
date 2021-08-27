@@ -29,12 +29,12 @@ public class TestAnunciosAG {
 		DatosAnuncios.tiempoTotal = 30;
 		System.out.println("ficheros/anuncios.txt");
 		SeqNormalData<SolucionAnuncios> p = new DatosAnunciosAG("ficheros/anuncios.txt");		
-		AlgoritmoAG<List<Integer>> ap = AlgoritmoAG.of(p);
+		AlgoritmoAG<List<Integer>,SolucionAnuncios> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println("================================");
-		System.out.println(p.getSolucion(ap.getBestChromosome().decode()));
+		System.out.println(ap.bestSolution());
 		System.out.println("================================");		
 	}	
 

@@ -55,7 +55,7 @@ public class InSetDatosSudokuAG implements ValuesInSetData<SolucionSudoku> {
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.InSet;
 	}
 

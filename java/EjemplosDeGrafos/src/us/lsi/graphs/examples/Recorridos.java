@@ -31,7 +31,7 @@ public class Recorridos {
 						Carretera::getKm);
 		
 		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
-		Map<Ciudad,Integer> m = Map2.newHashMap();
+		Map<Ciudad,Integer> m = Map2.empty();
 		Integer n = 0;
 		while(rp.hasNext()){
 			m.put(rp.next(), n);

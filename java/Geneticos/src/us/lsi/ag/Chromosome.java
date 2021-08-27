@@ -3,7 +3,7 @@ package us.lsi.ag;
 /**
  * @author Miguel Toro
  *
- * @param <E> El tipo de la solución asociada al cromosoma
+ * @param <E> El tipo de los valores del cromosoma
  * 
  * <p> El tipo de un cromosoma </p>
  */

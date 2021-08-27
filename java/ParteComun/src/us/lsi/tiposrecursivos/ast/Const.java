@@ -2,11 +2,18 @@ package us.lsi.tiposrecursivos.ast;
 
 import java.io.PrintStream;
 import java.util.Map;
+import java.util.Set;
 
-public record Const(Type type, Object value) implements Exp {
+import us.lsi.common.Set2;
 
-	public static Const of(Type type, Object value) {
-		return new Const(type,value);
+public record Const(String name, Type type, Object value) implements Exp, Operator {
+
+	public static Const of(Object value, Type type) {
+		return new Const("",type,value);
+	}
+	
+	public static Const of(String name,Object value, Type type) {
+		return new Const(name,type,value);
 	}
 
 	@Override
@@ -15,13 +22,31 @@ public record Const(Type type, Object value) implements Exp {
 	}
 	
 	@Override
-	public String label() {
-		return this.value.toString();
+	public void toDot(PrintStream file, Map<Object, Integer> map) {
+		Ast.getIndex(this,map,this.name(),file);
 	}
 	
 	@Override
-	public void toDot(PrintStream file, Map<Object, Integer> map) {
-		Ast.getIndex(this,map,this.label(),file);
+	public Operator operator() {
+		return this;
+	}
+	
+	@Override
+	public Set<Var> vars() {
+		return Set2.empty();
+	}
+
+	@Override
+	public void setValue(Map<String, Object> values) {}
+
+	@Override
+	public OperatorId id() {
+		return OperatorId.of0("",type);
+	}
+
+	@Override
+	public Type resultType() {
+		return type;
 	}
 	
 }

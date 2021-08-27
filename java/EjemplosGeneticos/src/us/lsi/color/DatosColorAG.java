@@ -83,7 +83,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	}
 	
 	@Override
-	public ChromosomeType getType() {
+	public ChromosomeType type() {
 		return ChromosomeType.Range;
 	}
 }

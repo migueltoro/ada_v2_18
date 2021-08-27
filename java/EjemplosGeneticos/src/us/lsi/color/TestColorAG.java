@@ -18,13 +18,13 @@ public class TestColorAG {
 		setConstantes();
 		
 		ValuesInRangeData<Integer,Map<Ciudad,Integer>> problem = new DatosColorAG("./ficheros/Andalucia.txt");
-		AlgoritmoAG<List<Integer>> alg = AlgoritmoAG.of(problem);
+		AlgoritmoAG<List<Integer>, Map<Ciudad, Integer>> alg = AlgoritmoAG.of(problem);
 		alg.ejecuta();
 		
 	    Chromosome<List<Integer>> mejorSolucion = alg.getBestChromosome();
 		System.out.println("================================");
 		System.out.println("Numero de colores: "+-problem.fitnessFunction(mejorSolucion.decode()));
-		String2.toConsole(problem.getSolucion(mejorSolucion.decode()).entrySet(),"Coloreado obtenido");
+		String2.toConsole(alg.bestSolution().entrySet(),"Coloreado obtenido");
 		System.out.println("================================");
 	}
 

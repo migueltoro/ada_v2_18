@@ -22,14 +22,14 @@ public class TestReal {
 		StoppingConditionFactory.NUM_GENERATIONS = 100;
 		
 		ValuesInRangeData<Double,List<Double>> p = new DatosReal();
-		AlgoritmoAG<List<Double>> ap = AlgoritmoAG.of(p);
+		AlgoritmoAG<List<Double>,List<Double>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		
 		Locale.setDefault(new Locale("en", "US"));
 		Chromosome<List<Double>> cr = ap.getBestChromosome();
 		System.out.println("================================");
-		System.out.println(p.getSolucion(cr.decode())+","+(cr.fitness()));
+		System.out.println(ap.bestSolution()+","+(cr.fitness()));
 		System.out.println("================================");
 		
 	}	
