@@ -21,7 +21,7 @@ public class DatosMochilaIndex implements SeqNormalData<SolucionMochila> {
 
 	@Override
 	public ChromosomeType type() {
-		return ChromosomeType.IndexSubList;
+		return ChromosomeType.SubList;
 	}
 	
 	private Double valor;
@@ -54,9 +54,12 @@ public class DatosMochilaIndex implements SeqNormalData<SolucionMochila> {
 	}
 	
 	@Override
-	public Integer getMaxMultiplicity(int index) {
+	public Integer maxMultiplicity(int index) {
 		return DatosMochila.getObjetos().get(index).getNumMaxDeUnidades();
 	}
-	
 
+	@Override
+	public Integer itemsNumber() {
+		return DatosMochila.getObjetos().size();
+	}
 }

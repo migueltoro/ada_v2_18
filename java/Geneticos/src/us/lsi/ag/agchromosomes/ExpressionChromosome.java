@@ -13,7 +13,6 @@ import org.apache.commons.math3.genetics.RandomKey;
 import us.lsi.ag.ExpressionData;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.common.String2;
 import us.lsi.tiposrecursivos.ast.Const;
 import us.lsi.tiposrecursivos.ast.Exp;
 import us.lsi.tiposrecursivos.ast.Operator;

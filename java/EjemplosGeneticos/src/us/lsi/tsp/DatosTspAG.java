@@ -37,7 +37,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 	}
 
 	@Override
-	public Integer size() {
+	public Integer itemsNumber() {
 		return DatosTspAG.n;
 	}
 

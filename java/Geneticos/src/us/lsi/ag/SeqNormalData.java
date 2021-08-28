@@ -26,7 +26,8 @@ import us.lsi.common.Preconditions;
 
 public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {	
 		
-		
+		Integer itemsNumber();
+	
 		/**
 		 * @pre <code> 0 &le; index &lt; getObjetos().size() </code>
 		 * @param index Indice en la lista de objetos disponibles
@@ -34,7 +35,7 @@ public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {
 		 * La multiplicidad máxima del objeto <code> i </code> estará en el rango <code> 0..getMax(i) </code>
 		 */
 		
-		default Integer getMaxMultiplicity(int index){
+		default Integer maxMultiplicity(int index){
 			Preconditions.checkElementIndex(index, this.size());
 			return 1;
 		}
@@ -45,12 +46,16 @@ public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {
 	     * <code> n </code> sublistas <code> L(i) </code>. Cada <code> L(i) </code> está formada por <code> getMax(i) </code> copias del entero <code> i </code>.
 	     * con <code> i </code> en el rango <code> 0..n-1 </code>.
 	     */
-	    default List<Integer> getNormalSequence() {
-			List<Integer> r = IntStream.range(0,size())
+	    default List<Integer> normalSequence() {
+			List<Integer> r = IntStream.range(0,itemsNumber())
 					.boxed()
-					.flatMap(x->List2.of(x,getMaxMultiplicity(x)).stream())
+					.flatMap(x->List2.of(x,maxMultiplicity(x)).stream())
 					.collect(Collectors.toList());
 			return r;
 		}
+	    
+	    default Integer size() {
+	    	return normalSequence().size();
+	    }
 	
 }

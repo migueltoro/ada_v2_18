@@ -33,7 +33,7 @@ public class DatosAsignacionTareasAG implements SeqNormalData<List<Integer>> {
 
 
 	@Override
-	public Integer size() {
+	public Integer itemsNumber() {
 		return a.getN();
 	}
 	

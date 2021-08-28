@@ -37,7 +37,7 @@ public class DatosAnunciosAG extends DatosAnuncios implements SeqNormalData<Solu
 	}
 
 	@Override
-	public Integer size() {
+	public Integer itemsNumber() {
 		return DatosAnuncios.todosLosAnunciosDisponibles.size();
 	}
 

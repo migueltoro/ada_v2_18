@@ -29,7 +29,7 @@ import us.lsi.common.List2;
  * Es un cromosoma adecuado para codificar problemas de multiconjuntos.
  **/
 
-public class IndexSubListChromosome extends BinaryChromosome 
+public class SubListChromosome extends BinaryChromosome 
 		implements SeqNormalData<Object>, Chromosome<List<Integer>> {
 
 	
@@ -43,18 +43,18 @@ public class IndexSubListChromosome extends BinaryChromosome
 	public static int DIMENSION;
 	
 	public static void iniValues(SeqNormalData<Object> data){
-		IndexSubListChromosome.data =  data; 
-		IndexSubListChromosome.normalSequence = IndexSubListChromosome.data.getNormalSequence();
-		IndexSubListChromosome.DIMENSION = IndexSubListChromosome.normalSequence.size();
+		SubListChromosome.data =  data; 
+		SubListChromosome.normalSequence = SubListChromosome.data.normalSequence();
+		SubListChromosome.DIMENSION = SubListChromosome.normalSequence.size();
 	}
 	
-	public IndexSubListChromosome(List<Integer> representation)
+	public SubListChromosome(List<Integer> representation)
 			throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
 	}
 
-	public IndexSubListChromosome(Integer[] representation)
+	public SubListChromosome(Integer[] representation)
 			throws InvalidRepresentationException {
 		super(representation);
 		this.ft = this.calculateFt();
@@ -62,7 +62,7 @@ public class IndexSubListChromosome extends BinaryChromosome
 
 	@Override
 	public AbstractListChromosome<Integer> newFixedLengthChromosome(List<Integer> ls) {
-		return new IndexSubListChromosome(ls);
+		return new SubListChromosome(ls);
 	}
 
 	/**
@@ -82,9 +82,9 @@ public class IndexSubListChromosome extends BinaryChromosome
 		return r;
 	}
 	
-	public static IndexSubListChromosome getInitialChromosome() {
-		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(IndexSubListChromosome.DIMENSION);
-		return new IndexSubListChromosome(ls);
+	public static SubListChromosome getInitialChromosome() {
+		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(SubListChromosome.DIMENSION);
+		return new SubListChromosome(ls);
 	}
 
 	@Override
@@ -95,36 +95,41 @@ public class IndexSubListChromosome extends BinaryChromosome
 	private Double ft = null;
 	
 	private double calculateFt(){
-		return IndexSubListChromosome.data.fitnessFunction(this.decode());
+		return SubListChromosome.data.fitnessFunction(this.decode());
 	}
 
 
 	public Integer getObjectsNumber() {
-		return IndexSubListChromosome.data.size();
+		return SubListChromosome.data.size();
 	}
 
 	public Integer getMax(Integer i) {
-		return IndexSubListChromosome.data.getMaxMultiplicity(i);
+		return SubListChromosome.data.maxMultiplicity(i);
 	}
 
 	@Override
 	public ChromosomeType type() {
-		return ChromosomeFactory.ChromosomeType.IndexSubList;
+		return ChromosomeFactory.ChromosomeType.SubList;
 	}
 
 	@Override
 	public Integer size() {
-		return IndexSubListChromosome.data.size();
+		return SubListChromosome.data.size();
 	}
 
 	@Override
 	public Double fitnessFunction(List<Integer> dc) {
-		return IndexSubListChromosome.data.fitnessFunction(dc);
+		return SubListChromosome.data.fitnessFunction(dc);
 	}
 
 	@Override
 	public Object getSolucion(List<Integer> dc) {
-		return IndexSubListChromosome.data.getSolucion(dc);
+		return SubListChromosome.data.getSolucion(dc);
+	}
+
+	@Override
+	public Integer itemsNumber() {
+		return SubListChromosome.data.itemsNumber();
 	}	
 	
 }

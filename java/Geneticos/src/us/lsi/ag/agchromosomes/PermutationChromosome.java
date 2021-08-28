@@ -42,7 +42,7 @@ public class PermutationChromosome extends RandomKey<Integer>
 	
 	public static void iniValues(SeqNormalData<Object> data){
 		PermutationChromosome.data = data; 
-		PermutationChromosome.normalSequence = PermutationChromosome.data.getNormalSequence();
+		PermutationChromosome.normalSequence = PermutationChromosome.data.normalSequence();
 		PermutationChromosome.DIMENSION = PermutationChromosome.normalSequence.size();
 	}
 
@@ -112,6 +112,9 @@ public class PermutationChromosome extends RandomKey<Integer>
 		return PermutationChromosome.data.getSolucion(dc);
 	}
 
-	
+	@Override
+	public Integer itemsNumber() {
+		return PermutationChromosome.data.itemsNumber();
+	}
 	
 }

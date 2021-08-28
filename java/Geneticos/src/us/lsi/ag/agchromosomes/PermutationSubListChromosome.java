@@ -55,7 +55,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 
 	public static void iniValues(SeqNormalData<Object> data){
 		PermutationSubListChromosome.data =  data; 
-		PermutationSubListChromosome.normalSequence = PermutationSubListChromosome.data.getNormalSequence();
+		PermutationSubListChromosome.normalSequence = PermutationSubListChromosome.data.normalSequence();
 		PermutationSubListChromosome.DIMENSION = PermutationSubListChromosome.normalSequence.size();
 	}
 	
@@ -113,7 +113,7 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	}
 
 	public Integer getMax(int i) {
-		return PermutationSubListChromosome.data.getMaxMultiplicity(i);
+		return PermutationSubListChromosome.data.maxMultiplicity(i);
 	}
 	
 	@Override
@@ -124,6 +124,11 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	@Override
 	public Integer size() {
 		return PermutationSubListChromosome.data.size();
+	}
+	
+	@Override
+	public Integer itemsNumber() {
+		return PermutationSubListChromosome.data.itemsNumber();
 	}
 
 	@Override
@@ -281,6 +286,10 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 		public AbstractListChromosome<Double> newFixedLengthChromosome(List<Double> ls) {
 			return new RandomKey2(ls);
 		}
+		
+		
 	}
+
+	
 	
 }

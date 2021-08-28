@@ -43,7 +43,7 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 	}
 
 	@Override
-	public Integer size() {
+	public Integer itemsNumber() {
 		return  numeroDeReinas;
 	}
 	

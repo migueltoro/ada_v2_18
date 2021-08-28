@@ -39,7 +39,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,Range,Real,InSet,IndexSubList,Permutation,PermutationSubList,Blocks, Expression}
+	public enum ChromosomeType {Binary,Range,Real,InSet,SubList,Permutation,PermutationSubList,Blocks,Expression}
 	
 //	public static ChromosomeType tipo;
 
@@ -51,7 +51,7 @@ public class ChromosomeFactory {
 		Chromosome<?> chromosome = null;
 		switch(tipo){
 		case Binary: chromosome = BinaryChromosome.getInitialChromosome(); break;
-		case IndexSubList: chromosome = IndexSubListChromosome.getInitialChromosome(); break;
+		case SubList: chromosome = SubListChromosome.getInitialChromosome(); break;
 		case Range: chromosome = RangeChromosome.getInitialChromosome(); break;
 		case Permutation: chromosome = PermutationChromosome.getInitialChromosome(); break;
 		case PermutationSubList: chromosome = PermutationSubListChromosome.getInitialChromosome(); break;
@@ -117,7 +117,7 @@ public class ChromosomeFactory {
 		CrossoverPolicy crossOverPolicy = null;	
 		switch(tipo){
 		case Binary: crossOverPolicy = crossOverPolicyBin; break;
-		case IndexSubList: crossOverPolicy = crossOverPolicyBin; break;
+		case SubList: crossOverPolicy = crossOverPolicyBin; break;
 		case Range: crossOverPolicy = crossOverPolicyKey; break;
 		case Permutation: crossOverPolicy = crossOverPolicyKey; break;
 		case PermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
@@ -139,7 +139,7 @@ public class ChromosomeFactory {
 		MutationPolicy mutationPolicy = null;
 		switch(tipo){
 		case Binary:  mutationPolicy = new BinaryMutation()	; break;
-		case IndexSubList: mutationPolicy = new BinaryMutation(); break;
+		case SubList: mutationPolicy = new BinaryMutation(); break;
 		case Range: mutationPolicy = new RandomKeyMutation();	; break;
 		case Permutation: mutationPolicy = new RandomKeyMutation(); break;
 		case PermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
@@ -184,7 +184,7 @@ public class ChromosomeFactory {
 	public static <E,S> void iniValues(ChromosomeData<E,S> data, ChromosomeType tipo){
 		switch(tipo){
 		case Binary: BinaryChromosome.iniValues((ChromosomeData<List<Integer>, Object>) data);break;
-		case IndexSubList: IndexSubListChromosome.iniValues((SeqNormalData<Object>) data);break;
+		case SubList: SubListChromosome.iniValues((SeqNormalData<Object>) data);break;
 		case Range: RangeChromosome.iniValues((ValuesInRangeData<Integer, Object>) data); break;
 		case Permutation: PermutationChromosome.iniValues((SeqNormalData<Object>) data);break;
 		case PermutationSubList: PermutationSubListChromosome.iniValues((SeqNormalData<Object>) data);break;
