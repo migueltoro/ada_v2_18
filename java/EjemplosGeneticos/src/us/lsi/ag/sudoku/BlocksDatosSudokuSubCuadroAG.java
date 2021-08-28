@@ -60,11 +60,6 @@ public class BlocksDatosSudokuSubCuadroAG implements BlocksData<SolucionSudoku> 
 	}
 
 	@Override
-	public ChromosomeType type() {
-		return ChromosomeFactory.ChromosomeType.Blocks;
-	}
-
-	@Override
 	public Double fitnessFunction(List<Integer> cr) {
 		Integer n = cr.size();
 		for(int i=0; i<n;i++) {
@@ -77,7 +72,7 @@ public class BlocksDatosSudokuSubCuadroAG implements BlocksData<SolucionSudoku> 
 	}
 
 	@Override
-	public SolucionSudoku getSolucion(List<Integer> cr) {
+	public SolucionSudoku solucion(List<Integer> cr) {
 		Integer n = cr.size();
 		for(int i=0; i<n;i++) {
 			Integer v = cr.get(i);

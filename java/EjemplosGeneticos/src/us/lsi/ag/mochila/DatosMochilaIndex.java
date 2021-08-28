@@ -45,7 +45,7 @@ public class DatosMochilaIndex implements SeqNormalData<SolucionMochila> {
 	}
 
 	@Override
-	public SolucionMochila getSolucion(List<Integer> cr) {
+	public SolucionMochila solucion(List<Integer> cr) {
 		SolucionMochila s = SolucionMochila.empty();
 		for (int i=0; i< cr.size();i++) {
 			s.add(DatosMochila.getObjeto(cr.get(i)),1);

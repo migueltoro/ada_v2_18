@@ -12,18 +12,18 @@ public class DatosReal implements ValuesInRangeData<Double,List<Double>> {
 	}
 
 	@Override
-	public List<Double> getSolucion(List<Double> dc) {
+	public List<Double> solucion(List<Double> dc) {
 		return dc;
 	}
 	
 	@Override
-	public Double getMax(Integer i) {		
+	public Double max(Integer i) {		
 		Double[] r = {15.,15.};
 		return r[i];
 	}
 
 	@Override
-	public Double getMin(Integer i) {
+	public Double min(Integer i) {
 		Double[] r = {0.,-15.};
 		return r[i];
 	}

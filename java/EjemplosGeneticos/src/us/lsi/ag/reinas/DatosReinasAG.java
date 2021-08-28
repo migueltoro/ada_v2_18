@@ -23,7 +23,7 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 	}
 
 	@Override
-	public List<Reina> getSolucion(List<Integer> ls) {
+	public List<Reina> solucion(List<Integer> ls) {
 		List<Reina> r = List2.empty();
 		for (int i = 0; i < ls.size(); i++) {
 			r.add(Reina.create(i, ls.get(i)));

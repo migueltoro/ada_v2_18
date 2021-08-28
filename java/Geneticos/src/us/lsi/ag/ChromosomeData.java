@@ -18,12 +18,12 @@ public interface ChromosomeData<E,S> {
 	 * @param cr Valores del cromosoma
 	 * @return La función de fitnes del cromosoma
 	 */
-	Double fitnessFunction(E values);
+	Double fitnessFunction(E value);
 	
 	/**
 	 * @param cr Valores del cromosoma
 	 * @return La solución definida por el cromosoma
 	 */
-	S getSolucion(E values);
+	S solucion(E value);
 
 }

@@ -17,7 +17,7 @@ public class DatosAnunciosAG extends DatosAnuncios implements SeqNormalData<Solu
 	}	
 	
 	@Override
-	public SolucionAnuncios getSolucion(List<Integer> dc) {		
+	public SolucionAnuncios solucion(List<Integer> dc) {		
 		return  SolucionAnuncios.of(dc);
 	}
 	

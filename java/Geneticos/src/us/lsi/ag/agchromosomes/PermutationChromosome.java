@@ -108,8 +108,8 @@ public class PermutationChromosome extends RandomKey<Integer>
 
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return PermutationChromosome.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return PermutationChromosome.data.solucion(dc);
 	}
 
 	@Override

@@ -123,8 +123,8 @@ public class SubListChromosome extends BinaryChromosome
 	}
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return SubListChromosome.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return SubListChromosome.data.solucion(dc);
 	}
 
 	@Override

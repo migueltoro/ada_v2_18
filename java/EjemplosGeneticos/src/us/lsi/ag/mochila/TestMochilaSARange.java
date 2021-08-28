@@ -29,7 +29,7 @@ public class TestMochilaSARange {
 		StateSaChromosome s = (StateSaChromosome) a.mejorSolucionEncontrada;
 		@SuppressWarnings("unchecked")
 		List<Integer> d = (List<Integer>) s.decode();
-		System.out.println(p.getSolucion(d));
+		System.out.println(p.solucion(d));
 	}
 
 }

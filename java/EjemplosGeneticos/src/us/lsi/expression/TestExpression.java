@@ -35,7 +35,7 @@ public class TestExpression {
 
 		String2.toConsole("================================");
 		String2.toConsole("%.2f",ap.getBestChromosome().fitness());
-		String2.toConsole("%s",d.getSolucion(ap.getBestChromosome().decode()));
+		String2.toConsole("%s",d.solucion(ap.getBestChromosome().decode()));
 		String2.toConsole("================================");
 //		for(int i=0;i<d.numConstants();i++){
 //			System.out.println(String.format("%s = %f",d.getConstant(i).getName(),d.getConstant(i).getValue()));

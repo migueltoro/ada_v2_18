@@ -102,7 +102,7 @@ public class ValuesInSetChromosomeC extends RandomKey<Integer>
 	}
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return ValuesInSetChromosomeC.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return ValuesInSetChromosomeC.data.solucion(dc);
 	}
 }

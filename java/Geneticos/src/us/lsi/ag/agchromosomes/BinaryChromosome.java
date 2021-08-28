@@ -85,8 +85,8 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	}
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return BinaryChromosome.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return BinaryChromosome.data.solucion(dc);
 	}
 
 }

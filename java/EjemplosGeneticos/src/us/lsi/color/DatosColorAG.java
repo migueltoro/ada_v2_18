@@ -42,17 +42,17 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	}
 	
 	@Override	
-    public Integer getMax(Integer index){
+    public Integer max(Integer index){
 		return 5;		
 	}
 
 	@Override	
-    public Integer getMin(Integer index){
+    public Integer min(Integer index){
 		return 0;		
 	}
 
 	@Override
-	public Map<Ciudad,Integer> getSolucion(List<Integer> solucion) {
+	public Map<Ciudad,Integer> solucion(List<Integer> solucion) {
 		Map<Ciudad,Integer> res = IntStream.range(0, solucion.size()).boxed()
 				.collect(Collectors.toMap(i->ciudades.get(i),i->solucion.get(i)));
 		return res;		
@@ -60,7 +60,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	
 	@Override
 	public Double fitnessFunction(List<Integer> solucion) {
-		Map<Ciudad,Integer> m = getSolucion(solucion);			
+		Map<Ciudad,Integer> m = solucion(solucion);			
   		Integer N = ciudades.size();
   		Long numAristasIlegales = grafo.edgeSet().stream()
 				.filter(c -> m.get(c.getSource())== m.get(c.getTarget()))
@@ -74,7 +74,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	}
 
 	public Set<Set<Ciudad>> getComponentes(List<Integer> solucion) {
-		Map<Ciudad,Integer> m = getSolucion(solucion);
+		Map<Ciudad,Integer> m = solucion(solucion);
 			
 		return m.entrySet().stream()
 				   .collect(Collectors.groupingBy(e -> e.getValue(),Collectors.mapping(e->e.getKey(),Collectors.toSet())))

@@ -66,7 +66,7 @@ public class DatosExpression implements ExpressionData {
 	}
 
 	@Override
-	public Exp getSolucion(Exp e) {
+	public Exp solucion(Exp e) {
 		return e;
 	}
 
@@ -78,11 +78,6 @@ public class DatosExpression implements ExpressionData {
 	@Override
 	public Integer headLength() {
 		return 3;
-	}
-
-	@Override
-	public ChromosomeType type() {
-		return ChromosomeType.Expression;
 	}
 
 	@Override

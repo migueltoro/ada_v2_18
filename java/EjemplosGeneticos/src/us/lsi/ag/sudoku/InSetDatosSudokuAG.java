@@ -39,7 +39,7 @@ public class InSetDatosSudokuAG implements ValuesInSetData<SolucionSudoku> {
 
 	@Override
 	public Double fitnessFunction(List<Integer> cr) {
-		SolucionSudoku s = getSolucion(cr);
+		SolucionSudoku s = solucion(cr);
 		return -(double)s.getErrores();
 	}
 
@@ -48,15 +48,10 @@ public class InSetDatosSudokuAG implements ValuesInSetData<SolucionSudoku> {
 	}
 	
 	@Override
-	public SolucionSudoku getSolucion(List<Integer> dc) {
+	public SolucionSudoku solucion(List<Integer> dc) {
 		IntStream.range(0,n).forEach(i->setValorEnCasilla(i,dc.get(i)));	
 		SolucionSudoku s = SolucionSudoku.of();
 		return s;
-	}
-	
-	@Override
-	public ChromosomeType type() {
-		return ChromosomeType.InSet;
 	}
 
 }

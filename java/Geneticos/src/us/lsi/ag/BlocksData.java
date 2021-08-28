@@ -2,6 +2,8 @@ package us.lsi.ag;
 
 import java.util.List;
 
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+
 public interface BlocksData<S> extends ChromosomeData<List<Integer>,S> {
 	
 	/**
@@ -15,5 +17,9 @@ public interface BlocksData<S> extends ChromosomeData<List<Integer>,S> {
 	 * Los valores del cromosoma serán permutaciones de los valores dentro de cada bloque
 	 */
 	List<Integer> initialValues();
+	
+	default ChromosomeType type() {
+		return ChromosomeType.Blocks;
+	}
 
 }

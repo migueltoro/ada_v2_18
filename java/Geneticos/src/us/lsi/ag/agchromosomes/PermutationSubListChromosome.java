@@ -137,8 +137,8 @@ public class PermutationSubListChromosome extends org.apache.commons.math3.genet
 	}
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return PermutationSubListChromosome.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return PermutationSubListChromosome.data.solucion(dc);
 	}
 
 	

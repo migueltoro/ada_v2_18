@@ -18,7 +18,7 @@ public class DatosAsignacionTareasAG implements SeqNormalData<List<Integer>> {
 	}
 
 	@Override
-	public List<Integer> getSolucion(List<Integer> dc) {
+	public List<Integer> solucion(List<Integer> dc) {
 		return dc;
 	}
 

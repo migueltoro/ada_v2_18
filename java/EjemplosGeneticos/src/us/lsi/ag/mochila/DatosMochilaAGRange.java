@@ -17,7 +17,7 @@ public class DatosMochilaAGRange implements ValuesInRangeData<Integer,SolucionMo
 	}	
 
 	@Override
-	public SolucionMochila getSolucion(List<Integer> dc) {
+	public SolucionMochila solucion(List<Integer> dc) {
 		SolucionMochila s = SolucionMochila.empty();
 		for (int i=0; i< this.size();i++) {
 			s.add(DatosMochila.getObjeto(i),dc.get(i));
@@ -51,12 +51,12 @@ public class DatosMochilaAGRange implements ValuesInRangeData<Integer,SolucionMo
 	}
 
 	@Override
-	public Integer getMax(Integer i) {
+	public Integer max(Integer i) {
 		return DatosMochila.getObjetos().get(i).getNumMaxDeUnidades()+1;
 	}
 
 	@Override
-	public Integer getMin(Integer i) {
+	public Integer min(Integer i) {
 		return 0;
 	}
 	

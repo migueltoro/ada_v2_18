@@ -36,7 +36,7 @@ public class TestAsignacionTareasAG {
 
 		Chromosome<List<Integer>> cr = ap.getBestChromosome();
 		System.out.println(cr.fitness());
-		System.out.println(p.getSolucion(cr.decode()));
+		System.out.println(p.solucion(cr.decode()));
 		System.out.println("Asignacion de tareas: " );
 
 		List<Integer> ls = cr.decode();

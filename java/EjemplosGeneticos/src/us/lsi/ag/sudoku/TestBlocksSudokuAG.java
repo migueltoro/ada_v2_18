@@ -61,7 +61,7 @@ public class TestBlocksSudokuAG {
 				values = a.getBestChromosome().decode();
 			}	
 		}
-		System.out.println(p.getSolucion(values));
+		System.out.println(p.solucion(values));
 		for(int y = 8; y >=0; y--) {
 			var d = DatosSudoku.getValoresOcupadosEnFila(y);
 			System.out.printf("Fila %d, %d,%s\n",y,d.size(),d);

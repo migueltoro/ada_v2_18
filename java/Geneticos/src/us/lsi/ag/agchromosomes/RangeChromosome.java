@@ -62,7 +62,7 @@ public class RangeChromosome extends RandomKey<Integer>
 	
 	private Integer convert(Double e, Integer i) {
 //		System.out.printf("%.2f,%d,%d,%d,%d\n",e,i,RangeChromosome.DIMENSION,this.getMin(i),this.getMax(i));
-		return (int) (this.getMin(i) + (this.getMax(i)-this.getMin(i))*e);
+		return (int) (this.min(i) + (this.max(i)-this.min(i))*e);
 	}
 	
 	public List<Integer> decode() {
@@ -87,13 +87,13 @@ public class RangeChromosome extends RandomKey<Integer>
 	}
 
 	@Override
-	public Integer getMax(Integer i) {
-		return RangeChromosome.data.getMax(i);
+	public Integer max(Integer i) {
+		return RangeChromosome.data.max(i);
 	}
 
 	@Override
-	public Integer getMin(Integer i) {
-		return RangeChromosome.data.getMin(i);
+	public Integer min(Integer i) {
+		return RangeChromosome.data.min(i);
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class RangeChromosome extends RandomKey<Integer>
 	}
 
 	@Override
-	public Object getSolucion(List<Integer> dc) {
-		return RangeChromosome.data.getSolucion(dc);
+	public Object solucion(List<Integer> dc) {
+		return RangeChromosome.data.solucion(dc);
 	}
 
 	

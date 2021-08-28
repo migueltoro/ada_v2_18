@@ -61,7 +61,7 @@ public class DoubleChromosome extends RandomKey<Double>
 	}
 	
 	private Double convert(Double e, Integer i) {
-		return (this.getMin(i) + (this.getMax(i)-this.getMin(i))*e);
+		return (this.min(i) + (this.max(i)-this.min(i))*e);
 	}
 	
 	public List<Double> decode() {
@@ -90,13 +90,13 @@ public class DoubleChromosome extends RandomKey<Double>
 	}
 
 	@Override
-	public Double getMax(Integer i) {
-		return DoubleChromosome.data.getMax(i);
+	public Double max(Integer i) {
+		return DoubleChromosome.data.max(i);
 	}
 
 	@Override
-	public Double getMin(Integer i) {
-		return DoubleChromosome.data.getMin(i);
+	public Double min(Integer i) {
+		return DoubleChromosome.data.min(i);
 	}
 
 	@Override
@@ -115,8 +115,8 @@ public class DoubleChromosome extends RandomKey<Double>
 	}
 
 	@Override
-	public Object getSolucion(List<Double> dc) {
-		return DoubleChromosome.data.getSolucion(dc);
+	public Object solucion(List<Double> dc) {
+		return DoubleChromosome.data.solucion(dc);
 	}
 
 	

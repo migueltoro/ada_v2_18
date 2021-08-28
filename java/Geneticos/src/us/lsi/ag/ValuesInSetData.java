@@ -2,6 +2,8 @@ package us.lsi.ag;
 
 import java.util.List;
 
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+
 
 /**
  * @author Miguel Toro
@@ -16,5 +18,9 @@ public interface ValuesInSetData<S> extends ChromosomeData<List<Integer>,S> {
 	 * @return El conjunto de valores de la variable i
 	 */
 	List<Integer> values(Integer i);
+	
+	default ChromosomeType type() {
+		return ChromosomeType.InSet;
+	}
 
 }

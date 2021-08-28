@@ -33,12 +33,12 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 	}
 
 	@Override
-	public Integer getMax(Integer i) {
+	public Integer max(Integer i) {
 		return DatosAbogados.NUM_ABOGADOS;
 	}
 
 	@Override
-	public Integer getMin(Integer i) {
+	public Integer min(Integer i) {
 		return 0;
 	}	
 
@@ -65,7 +65,7 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 	}
 
 	@Override
-	public SolucionAbogados getSolucion(List<Integer> cr) {
+	public SolucionAbogados solucion(List<Integer> cr) {
 		return SolucionAbogados.create(cr);
 	}
 	

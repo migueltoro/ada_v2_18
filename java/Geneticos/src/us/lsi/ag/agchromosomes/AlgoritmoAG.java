@@ -191,12 +191,12 @@ public class AlgoritmoAG<E,S> {
 	}	
 	
 	public S bestSolution() {
-		return this.getBestChromosomeData().getSolucion(this.getBestChromosome().decode());
+		return this.getBestChromosomeData().solucion(this.getBestChromosome().decode());
 	}
 	
 	public Set<S> bestSolutions() {
 		ChromosomeData<E,S> d = this.getBestChromosomeData();
-		return this.getBestChromosomes().stream().map(c->d.getSolucion(c.decode())).collect(Collectors.toSet());
+		return this.getBestChromosomes().stream().map(c->d.solucion(c.decode())).collect(Collectors.toSet());
 	}
 	
 }

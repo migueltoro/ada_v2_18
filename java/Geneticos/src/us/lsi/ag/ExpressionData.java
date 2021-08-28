@@ -2,6 +2,7 @@ package us.lsi.ag;
 
 import java.util.List;
 
+import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.tiposrecursivos.ast.Exp;
 import us.lsi.tiposrecursivos.ast.Operator;
 import us.lsi.tiposrecursivos.ast.Type;
@@ -62,5 +63,9 @@ public interface ExpressionData extends ChromosomeData<Exp,Exp>{
 	
 	default Integer size() {
 		return numItemsPorGen()*numGenes() + numConstants();
+	}
+	
+	default ChromosomeType type() {
+		return ChromosomeType.Expression;
 	}
 }
