@@ -12,7 +12,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
 
 import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph;
 
 public class TestAstar {
 
@@ -25,7 +25,7 @@ public class TestAstar {
 		AsignaturasVertice ini = AsignaturasVertice.inicial();
 		Predicate<AsignaturasVertice> predicado = t ->AsignaturasVertice.goal(t);
 		
-		SimpleVirtualGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
+		EGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
 				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->v.constraint(),v->-(double)v.getPeso());
 	
 		

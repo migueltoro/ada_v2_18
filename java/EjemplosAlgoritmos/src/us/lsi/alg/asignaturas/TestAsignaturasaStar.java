@@ -14,7 +14,7 @@ import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.BackTracking.BTType;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph;
 
 public class TestAsignaturasaStar {
 
@@ -27,7 +27,7 @@ public class TestAsignaturasaStar {
 		AsignaturasVertice ini = AsignaturasVertice.inicial();
 		Predicate<AsignaturasVertice> predicado = t ->AsignaturasVertice.goal(t);
 		
-		SimpleVirtualGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
+		EGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
 				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->v.constraint(),v->-(double)v.getPeso());
 	
 		
@@ -40,7 +40,7 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 		
-		SimpleVirtualGraph<AsignaturasVertice,AsignaturasEdge> grafoPDR = 
+		EGraph<AsignaturasVertice,AsignaturasEdge> grafoPDR = 
 				Graphs2.simpleVirtualGraphLast(ini, predicado,null,v->true,v->(double)v.getPeso());
 
 		DynamicProgrammingReduction<AsignaturasVertice, AsignaturasEdge> pd = DPR
@@ -53,7 +53,7 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 		
-		SimpleVirtualGraph<AsignaturasVertice,AsignaturasEdge> grafoBT = 
+		EGraph<AsignaturasVertice,AsignaturasEdge> grafoBT = 
 				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->true,v->(double)v.getPeso());
 
 		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BT.backTracking(

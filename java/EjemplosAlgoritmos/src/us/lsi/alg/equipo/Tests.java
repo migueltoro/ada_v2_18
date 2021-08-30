@@ -25,13 +25,13 @@ public class Tests {
 	private static void tests(String fichero) {
 		DatosEquipo.iniDatos(fichero);
 		
-		SimpleVirtualGraph<EquipoVertex, EquipoEdge> grafoPDR = 
+		EGraph<EquipoVertex, EquipoEdge> grafoPDR = 
 		Graphs2.simpleVirtualGraphSum(EquipoVertex.first(),EquipoVertex::goal, null,v->true, e-> e.weight());
 		
-		SimpleVirtualGraph<EquipoVertex, EquipoEdge> grafoBT = 
+		EGraph<EquipoVertex, EquipoEdge> grafoBT = 
 				Graphs2.simpleVirtualGraphSum(EquipoVertex.first(),EquipoVertex::goal, null,v->true, e-> e.weight());
 		
-		SimpleVirtualGraph<EquipoVertex, EquipoEdge> grafoAStar = 
+		EGraph<EquipoVertex, EquipoEdge> grafoAStar = 
 		Graphs2.simpleVirtualGraphSum(EquipoVertex.first(), EquipoVertex::goal, null,v->true, e-> -e.weight());
 		
 		testPDR(grafoPDR);

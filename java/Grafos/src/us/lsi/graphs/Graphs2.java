@@ -60,24 +60,24 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphSum(
 			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint) {
 		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, null, null, null);
 	}
 
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphSum(
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphSum(
 			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, edgeWeight, null,
 				null);
 	}
 
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraphLast(
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphLast(
 			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<V, Double> vertexWeight) {
 		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Last, null, vertexWeight,
 				null);
 	}
 
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> SimpleVirtualGraph<V, E> simpleVirtualGraph(
+	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraph(
 			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight,
 			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight, PathType type) {
 		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, type, edgeWeight, vertexWeight,
@@ -115,9 +115,6 @@ public class Graphs2 {
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
-	
-	
-	
 	
 	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
 			Predicate<V> goal,V endVertex,Predicate<V> constraint,
