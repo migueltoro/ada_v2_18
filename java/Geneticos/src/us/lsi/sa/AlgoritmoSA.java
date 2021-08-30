@@ -124,7 +124,6 @@ public class AlgoritmoSA {
 
 	private double nexTemperatura(int numeroDeIteraciones) {
 		return alfa * temperatura;
-//		return temperaturaInicial/Math.log(2+3*numeroDeIteraciones);
 	}
 
 	private boolean aceptaCambio(double incr) {

@@ -19,10 +19,10 @@ public class TestMochilaSARange {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		
-		AlgoritmoSA.alfa = 0.994;
-		AlgoritmoSA.numeroDeIteracionesPorIntento = 300;
+		AlgoritmoSA.alfa = 0.9999;
+		AlgoritmoSA.numeroDeIteracionesPorIntento = 100000;
 		AlgoritmoSA.numeroDeIntentos = 30;
-		AlgoritmoSA.numeroDeIteracionesALaMismaTemperatura = 20;
+		AlgoritmoSA.numeroDeIteracionesALaMismaTemperatura = 1;
 		AlgoritmoSA.temperaturaInicial = 627651.60;
 		
 		DatosMochila.capacidadInicial = 78;
