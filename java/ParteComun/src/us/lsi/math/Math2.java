@@ -253,7 +253,7 @@ public class Math2 {
 		if(increment <= 0.){
 			r = 1.;
 		} else {
-			r = Math.exp(-increment/t);
+			r = Math.exp(1-increment/t);
 		}
 		return r;
 	}

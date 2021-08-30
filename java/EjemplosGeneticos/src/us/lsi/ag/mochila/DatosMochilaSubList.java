@@ -8,9 +8,9 @@ import us.lsi.ag.AuxiliaryAg;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
-public class DatosMochilaIndex implements SeqNormalData<SolucionMochila> {
+public class DatosMochilaSubList implements SeqNormalData<SolucionMochila> {
 
-	public DatosMochilaIndex(String fichero) {
+	public DatosMochilaSubList(String fichero) {
 		DatosMochila.iniDatos(fichero);
 	}
 	

@@ -11,6 +11,7 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 import us.lsi.common.Set2;
+import us.lsi.common.String2;
 import us.lsi.reinas.datos.Reina;
 
 
@@ -33,7 +34,7 @@ public class TestReinasAG {
 		
 		ChromosomeFactory.crossoverType = CrossoverType.OnePoint;
 		
-		DatosReinasAG.numeroDeReinas = 40;
+		DatosReinasAG.numeroDeReinas = 10;
 		SeqNormalData<List<Reina>> p = DatosReinasAG.create();
 		AlgoritmoAG<List<Integer>,List<Reina>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
@@ -52,7 +53,7 @@ public class TestReinasAG {
 			ds.add(ls.get(i)+i);
 		}
 		System.out.println(DatosReinasAG.numeroDeReinas+","+dp.size()+","+ds.size());
-	}	
+		}	
 
 }
 

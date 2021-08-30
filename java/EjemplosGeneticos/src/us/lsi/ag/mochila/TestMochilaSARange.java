@@ -3,9 +3,13 @@ package us.lsi.ag.mochila;
 
 
 import java.util.List;
+import java.util.Locale;
 
+import us.lsi.ag.ChromosomeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
+import us.lsi.common.String2;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.sa.AlgoritmoSA;
 import us.lsi.sa.StateSaChromosome;
 
@@ -13,21 +17,22 @@ public class TestMochilaSARange {
 	
 
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("en", "US"));
 		
-		AlgoritmoSA.alfa = 0.995;
-		AlgoritmoSA.numeroDeIteracionesPorIntento = 2500;
-		AlgoritmoSA.numeroDeIntentos = 20;
-		AlgoritmoSA.numeroDeIteracionesALaMismaTemperatura = 10;
-		AlgoritmoSA.temperaturaInicial = 500.;
+		AlgoritmoSA.alfa = 0.994;
+		AlgoritmoSA.numeroDeIteracionesPorIntento = 300;
+		AlgoritmoSA.numeroDeIntentos = 30;
+		AlgoritmoSA.numeroDeIteracionesALaMismaTemperatura = 20;
+		AlgoritmoSA.temperaturaInicial = 627651.60;
 		
 		DatosMochila.capacidadInicial = 78;
-		DatosMochilaAGRange p = new DatosMochilaAGRange("ficheros/objetosmochila.txt");
+		
+		ChromosomeData<List<Integer>, SolucionMochila> p = new DatosMochilaAGRange("ficheros/objetosmochila.txt");
 		StateSaChromosome c = StateSaChromosome.random(p,ChromosomeType.Range);
 		AlgoritmoSA a = AlgoritmoSA.of(c);
-		
+		String2.toConsole("%.2f",a.averageIncrement(20));
 		a.ejecuta();		
 		StateSaChromosome s = (StateSaChromosome) a.mejorSolucionEncontrada;
-		@SuppressWarnings("unchecked")
 		List<Integer> d = (List<Integer>) s.decode();
 		System.out.println(p.solucion(d));
 	}

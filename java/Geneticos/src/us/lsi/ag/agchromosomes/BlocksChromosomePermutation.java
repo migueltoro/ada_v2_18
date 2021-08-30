@@ -21,7 +21,7 @@ public class BlocksChromosomePermutation extends RandomKey<Integer>
 	public static BlocksData<Object> data;
 	public static int DIMENSION;
 	
-	public static void iniValues(BlocksData<Object> data){
+	public static <S> void iniValues(BlocksData<Object> data){
 		BlocksChromosomePermutation.data = data; 
 		BlocksChromosomePermutation.DIMENSION = BlocksChromosomePermutation.data.size();
 	}

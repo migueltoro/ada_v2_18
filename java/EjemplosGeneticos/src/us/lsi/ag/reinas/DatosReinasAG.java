@@ -2,6 +2,7 @@ package us.lsi.ag.reinas;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import us.lsi.ag.AuxiliaryAg;
 import us.lsi.ag.SeqNormalData;
@@ -51,6 +52,14 @@ public class DatosReinasAG implements SeqNormalData<List<Reina>> {
 	public ChromosomeType type() {
 		return ChromosomeType.Permutation;
 	}
-
-
+	
+//	@Override
+//	public List<Integer> normalSequence() {
+//		return IntStream.range(0,numeroDeReinas).boxed().toList();
+//	}
+//	
+//	@Override
+//	public Integer size() {
+//		return numeroDeReinas;
+//	}
 }

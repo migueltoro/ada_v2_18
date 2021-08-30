@@ -15,10 +15,11 @@ public class StateSaChromosome implements StateSa  {
 		return new StateSaChromosome(chromosome);
 	}
 	
-	public static StateSaChromosome random(ChromosomeData data, ChromosomeType tipo) {	
+	public static <E,S> StateSaChromosome random(ChromosomeData<E,S> data, ChromosomeType tipo) {	
 		ChromosomeFactory.iniValues(data,tipo);
 		MutationPolicy mutationPolicy = ChromosomeFactory.getMutationPolicy(tipo);
 		AlgoritmoAG.mutationPolicy = mutationPolicy;
+		AlgoritmoAG.tipo = data.type();
 		Chromosome<?> chr = ChromosomeFactory.randomChromosome(tipo);
 		return new StateSaChromosome(chr);
 	}

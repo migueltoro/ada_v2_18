@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
-import us.lsi.common.Preconditions;
+import us.lsi.common.String2;
 
 /**
  * @author Miguel Toro
@@ -35,10 +35,7 @@ public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {
 		 * La multiplicidad máxima del objeto <code> i </code> estará en el rango <code> 0..getMax(i) </code>
 		 */
 		
-		default Integer maxMultiplicity(int index){
-			Preconditions.checkElementIndex(index, this.size());
-			return 1;
-		}
+		default Integer maxMultiplicity(int index){ return 1; }
 		
 		
 	    /**
@@ -51,6 +48,7 @@ public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {
 					.boxed()
 					.flatMap(x->List2.of(x,maxMultiplicity(x)).stream())
 					.collect(Collectors.toList());
+			String2.toConsole("r = %s",r);
 			return r;
 		}
 	    

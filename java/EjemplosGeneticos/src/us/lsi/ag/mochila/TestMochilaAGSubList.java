@@ -8,7 +8,7 @@ import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
-public class TestMochilaAGIndex {
+public class TestMochilaAGSubList {
 	
 public static void main(String[] args) {
 		
@@ -17,19 +17,18 @@ public static void main(String[] args) {
 		AlgoritmoAG.MUTATION_RATE = 0.7;
 		AlgoritmoAG.POPULATION_SIZE = 50;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 5000;
+		StoppingConditionFactory.NUM_GENERATIONS = 10000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 623;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionFactory.StoppingConditionType.SolutionsNumber;
 		
 		DatosMochila.capacidadInicial = 78;
-		DatosMochilaIndex p = new DatosMochilaIndex("ficheros/objetosmochila.txt");
+		DatosMochilaSubList p = new DatosMochilaSubList("ficheros/objetosmochila.txt");
 		
 		AlgoritmoAG<List<Integer>,SolucionMochila> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
-//		System.out.println(RangeChromosome.bitsNumber);
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);

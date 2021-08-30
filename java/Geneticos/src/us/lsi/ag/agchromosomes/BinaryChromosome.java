@@ -18,15 +18,20 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
  * La implementación es una adaptación de la clase {@link org.apache.commons.math3.genetics.Chromosome Chromosome} de Apache. </p>
  *
  */
-public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryChromosome implements
-                   BinaryData<Object>, Chromosome<List<Integer>> {
+public class BinaryChromosome<S> extends org.apache.commons.math3.genetics.BinaryChromosome implements
+                   BinaryData<S>, Chromosome<List<Integer>> {
 	
 	/**
 	 * Dimensión del cromosoma
 	 */
 	
 	protected static Integer DIMENSION;
-	protected static ChromosomeData<List<Integer>,Object> data;
+	protected static ChromosomeData<List<Integer>,Object>  data;
+	
+	@SuppressWarnings("unchecked")
+	public static <S> ChromosomeData<List<Integer>,S> data() {
+		return (ChromosomeData<List<Integer>,S>) data;
+	}
 	
 	public static void iniValues(ChromosomeData<List<Integer>,Object> data){
 		BinaryChromosome.data = data;
@@ -61,12 +66,12 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 
 	@Override
 	public AbstractListChromosome<Integer> newFixedLengthChromosome(List<Integer> ar) {
-		return new BinaryChromosome(ar);
+		return new BinaryChromosome<>(ar);
 	}
 	
-	public static BinaryChromosome getInitialChromosome() {
+	public static <S> BinaryChromosome<S> getInitialChromosome() {
 		List<Integer> ls = BinaryChromosome.randomBinaryRepresentation(BinaryChromosome.DIMENSION);
-		return new BinaryChromosome(ls);
+		return new BinaryChromosome<>(ls);
 	}
 
 	@Override
@@ -85,8 +90,8 @@ public class BinaryChromosome extends org.apache.commons.math3.genetics.BinaryCh
 	}
 
 	@Override
-	public Object solucion(List<Integer> dc) {
-		return BinaryChromosome.data.solucion(dc);
+	public S solucion(List<Integer> dc) {
+		return BinaryChromosome.<S>data().solucion(dc);
 	}
 
 }

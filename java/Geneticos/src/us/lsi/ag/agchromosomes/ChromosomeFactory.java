@@ -47,18 +47,19 @@ public class ChromosomeFactory {
 	 * @param tipo El tipo de cromosoma
 	 * @return Un cromosoma aleatorio del tipo indicado
 	 */
-	public static Chromosome<?> randomChromosome(ChromosomeType tipo){
-		Chromosome<?> chromosome = null;
+	@SuppressWarnings("unchecked")
+	public static <E> Chromosome<E> randomChromosome(ChromosomeType tipo){
+		Chromosome<E> chromosome = null;
 		switch(tipo){
-		case Binary: chromosome = BinaryChromosome.getInitialChromosome(); break;
-		case SubList: chromosome = SubListChromosome.getInitialChromosome(); break;
-		case Range: chromosome = RangeChromosome.getInitialChromosome(); break;
-		case Permutation: chromosome = PermutationChromosome.getInitialChromosome(); break;
-		case PermutationSubList: chromosome = PermutationSubListChromosome.getInitialChromosome(); break;
-		case Real: chromosome = DoubleChromosome.getInitialChromosome(); break;
-		case InSet: chromosome = ValuesInSetChromosomeC.getInitialChromosome(); break;
-		case Blocks: chromosome = BlocksChromosomePermutation.getInitialChromosome(); break;
-		case Expression: chromosome = ExpressionChromosome.getInitialChromosome(); break;
+		case Binary: chromosome = (Chromosome<E>) BinaryChromosome.getInitialChromosome(); break;
+		case SubList: chromosome = (Chromosome<E>) SubListChromosome.getInitialChromosome(); break;
+		case Range: chromosome = (Chromosome<E>) RangeChromosome.getInitialChromosome(); break;
+		case Permutation: chromosome = (Chromosome<E>) PermutationChromosome.getInitialChromosome(); break;
+		case PermutationSubList: chromosome = (Chromosome<E>) PermutationSubListChromosome.getInitialChromosome(); break;
+		case Real: chromosome = (Chromosome<E>) DoubleChromosome.getInitialChromosome(); break;
+		case InSet: chromosome = (Chromosome<E>) ValuesInSetChromosomeC.getInitialChromosome(); break;
+		case Blocks: chromosome = (Chromosome<E>) BlocksChromosomePermutation.getInitialChromosome(); break;
+		case Expression: chromosome = (Chromosome<E>) ExpressionChromosome.getInitialChromosome(); break;
 		}
 		return chromosome;
 	}
@@ -193,61 +194,5 @@ public class ChromosomeFactory {
 		case Blocks: BlocksChromosomePermutation.iniValues((BlocksData<Object>) data); break;
 		case Expression: ExpressionChromosome.iniValues((ExpressionData) data); break;
 		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static <E> Chromosome<E> asChromosome(Chromosome<?> cr){
-		Preconditions.checkArgument(cr instanceof Chromosome);
-		return (Chromosome<E>) cr;
-	}
-	
-	/**
-	 * @param <E> El tipo de los elementos del cromosoma
-	 * @pre Es un ValuesInRangeChromosome
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo ValuesInRangeChromosome
-	 */
-	@SuppressWarnings("unchecked")
-	public static <E,S> ValuesInRangeData<E,S> asValuesInRange(Chromosome<?> cr){
-		Preconditions.checkArgument(cr instanceof ValuesInRangeData);
-		return (ValuesInRangeData<E,S>) cr;
-	}
-	
-	/**
-	 * @pre Es un IndexChromosome
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo IndexChromosome
-	 */
-	@SuppressWarnings("unchecked")
-	public static <S> SeqNormalData<S> asSeqNormalChromosome(Chromosome<?> cr){
-		Preconditions.checkArgument(cr instanceof SeqNormalData);
-		return (SeqNormalData<S>) cr;
-	}
-	
-	
-	/**
-	 * @pre Es un ValuesInSetChromosome
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo ValuesInSetChromosome
-	 */
-	
-	
-	@SuppressWarnings("unchecked")
-	public static <S> ValuesInSetData<S> asValuesInSetChromosome(Chromosome<?> cr) {
-		Preconditions.checkArgument(cr instanceof ValuesInSetData);
-		return (ValuesInSetData<S>) cr;
-	}
-	
-	/**
-	 * @pre Es un ValuesInSetChromosome
-	 * @param cr Un cromosoma instancia de la clase Chromosome de Apache.
-	 * @return Un cromosoma de tipo ValuesInSetChromosome
-	 */
-	
-	
-	@SuppressWarnings("unchecked")
-	public static <S> BlocksData<S> asBlocksChromosome(Chromosome<?> cr) {
-		Preconditions.checkArgument(cr instanceof BlocksData);
-		return (BlocksData<S>) cr;
 	}
 }

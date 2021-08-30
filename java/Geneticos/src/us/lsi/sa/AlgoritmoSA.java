@@ -52,7 +52,7 @@ public class AlgoritmoSA {
 	/**
 	 * El número iteraciones por intento. Los designaremos por n.
 	 */
-	public static Integer numeroDeIteracionesPorIntento = 200;
+	public static Integer numeroDeIteracionesPorIntento = 300;
 	/**
 	 * El número iteraciones a la misma temperatura. Lo designaremos por m.
 	 */
@@ -61,40 +61,10 @@ public class AlgoritmoSA {
 	 * La temperatura fijada inicialmente. Lo designaremos por t0.
 	 */
 	public static double temperaturaInicial = 1000;
-	/**
-	 * 
-	 * <p>
-	 * La temperatura disminuye en ese factor en cada iteración: t = &alpha;&#42;t.
-	 * Por lo que t = t0&#42;&alpha; &#94; i.
-	 * </p>
-	 * <p>
-	 * El número total de iteraciones es m&#42;n. Este número es una medida del
-	 * tiempo de ejecución del algoritmo.
-	 * </p>
-	 * <p>
-	 * La probabilidad p de aceptar un cambio de estado de tamaño &Delta; depende de
-	 * la temperatura en la forma p = e &#94; (-&Delta;/(t0&#42;&alpha; &#94; i))
-	 * con 0 &lt; i &lt; = n.
-	 * </p>
-	 * <p>
-	 * Sea p0 la probabilidad de aceptar un cambio en i = 0 y pf la probabilidad de
-	 * aceptarlo en i = n.
-	 * </p>
-	 * <p>
-	 * Escogiendo t0 = 100*&Delta; tenemos p0 = e &#94; (-&Delta;/t0) =e &#94;
-	 * (-/100) = 0.99 Y a partir de pf = e &#94; (-1/(100*&alpha; &#94; n) o &alpha;
-	 * &#94; n = -1/(100&#42;ln(pf)) obtenemos valores para n, &alpha;, pf. Un caso
-	 * típico &alpha; = 0.97, n = 200, pf = 0.01
-	 * </p>
-	 * 
-	 * @constraint p = e &#94; (-&Delta;/(t0&#42;&alpha; &#94; i)) con 0 &lt; i &lt;
-	 *             = n.
-	 * @constraint 0 &lt; &alpha; &lt; 1
-	 */
-	public static double alfa = 0.97;
+	
+	public static double alfa = 0.99;
 
 	private double temperatura;
-//	private boolean parar = false;
 	private StateSa estado;
 	private StateSa nextEstado;
 
@@ -106,6 +76,20 @@ public class AlgoritmoSA {
 		JDKRandomGenerator random = new JDKRandomGenerator();
 		random.setSeed((int) System.currentTimeMillis());
 		Math2.rnd = random;
+	}
+	
+	public Double averageIncrement(int n) {
+		Double s = 0.;
+		Integer r = 0;
+		Double f = this.estado.fitness();
+		for(int i=0; i<n;i++) {
+			StateSa e = this.estado.random();
+			if(e.fitness() > f) {
+				r++;
+				s = e.fitness()-f;
+			}
+		}
+		return s/r;
 	}
 
 	/**
