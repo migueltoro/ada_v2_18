@@ -27,7 +27,7 @@ public class TestPDRMochila {
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,MochilaVertex.constraint(),x->x.weight());	
+				Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,v->true,x->x.weight());	
 		
 		GreedySearchOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge);

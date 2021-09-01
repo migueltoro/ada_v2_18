@@ -24,7 +24,7 @@ public class TestAStarMochila {
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-			Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,MochilaVertex.constraint(),v->-v.weight());		
+			Graphs2.simpleVirtualGraphSum(e1,MochilaVertex.goal(),e2,v->true,v->-v.weight());		
 		
 		AStar<MochilaVertex, MochilaEdge> ms = 
 				GraphAlg.aStar(graph,MochilaHeuristic::heuristic_negate);

@@ -38,5 +38,16 @@ public class MochilaHeuristic {
 		}
 		return r;
 	}	
+	
+	public static Double voraz(MochilaVertex v, MochilaVertex lastVertex) {
+		Integer lastIndex = lastVertex.index();
+		Double r = 0.;		
+		while (v.capacidadRestante()> 0 && v.index() < lastIndex) {
+			Integer a = v.greedyEdge().action();
+			r = r + a * DatosMochila.getValor(v.index());
+			v = v.neighbor(a);
+		}
+		return r;
+	}
 
 }

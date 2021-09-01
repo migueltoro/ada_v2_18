@@ -119,7 +119,7 @@ public class GraphWalkLast<V, E> extends GraphWalk<V,E> implements EGraphPath<V,
 	}
 
 	@Override
-	public Double boundWeight(Double accumulateValue,V vertexActual,E edge,Predicate<V> goal, V end, 
+	public Double boundaryFunction(Double accumulateValue,V vertexActual,E edge,Predicate<V> goal, V end, 
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
 		V target = Graphs.getOppositeVertex(super.graph,edge,vertexActual);	

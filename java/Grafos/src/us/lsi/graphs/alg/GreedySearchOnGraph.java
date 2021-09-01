@@ -66,7 +66,6 @@ public class GreedySearchOnGraph<V,E> implements GraphAlg<V,E>, Iterator<V>, Ite
 		return this;
 	}
 
-
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
 	}

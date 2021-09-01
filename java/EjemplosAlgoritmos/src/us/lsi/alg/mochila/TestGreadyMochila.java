@@ -28,7 +28,7 @@ public class TestGreadyMochila {
 		System.out.println(r2);
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(v1,MochilaVertex.goal(),v2,MochilaVertex.constraint());
+				Graphs2.simpleVirtualGraphSum(v1,MochilaVertex.goal(),v2,v->true);
 		
 		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = 
 				GraphAlg.greedy(graph,MochilaVertex::greedyEdge).search();

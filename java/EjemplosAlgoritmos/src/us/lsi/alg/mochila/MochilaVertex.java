@@ -36,10 +36,6 @@ public record MochilaVertex(Integer index, Integer capacidadRestante)
 	public static Predicate<MochilaVertex> goal() {
 		return v->v.index == MochilaVertex.n;
 	}
-	
-	public static Predicate<MochilaVertex> constraint() {
-		return v->v.capacidadRestante == 0;
-	}
 
 	public static Integer n = DatosMochila.numeroDeObjetos;
 	public static Integer capacidadInicial;
@@ -91,9 +87,8 @@ public record MochilaVertex(Integer index, Integer capacidadRestante)
 	@Override
 	public MochilaVertex neighbor(Integer a) {
 		MochilaVertex r;
-		if (this.capacidadRestante == 0.) return MochilaVertex.of(n, 0);
 		Integer cr = capacidadRestante - a * DatosMochila.getPeso(index);
-		if (this.index == MochilaVertex.n - 1) r = MochilaVertex.of(index + 1, 0);
+		if (this.index == MochilaVertex.n - 1 || this.capacidadRestante == 0.) r = MochilaVertex.of(index + 1, cr);
 		else r = MochilaVertex.of(index + 1, cr);
 		return r;
 	}

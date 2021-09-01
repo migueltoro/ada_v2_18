@@ -63,7 +63,7 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 
 	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {
 		Boolean r = false;
-		Double w = this.path.boundWeight(accumulateValue, actual, edge, goal, end, this.heuristic);
+		Double w = this.path.boundaryFunction(accumulateValue, actual, edge, goal, end, this.heuristic);
 		if (this.type == PDType.Max) r = w < this.bestValue;
 		if (this.type == PDType.Min) r = w > this.bestValue;
 		return r;

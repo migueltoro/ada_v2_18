@@ -66,7 +66,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.getPath().boundWeight(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
+		Double w = state.getPath().boundaryFunction(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
 		if(this.bestValue != null && this.type == BTType.Max) r = w < this.bestValue;
 		if(this.bestValue != null && this.type == BTType.Min) r = w > this.bestValue;
 		return r;
@@ -104,7 +104,7 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		if(this.withGraph) outGraph.addVertex(actual);
 		if (goal.test(actual)) {
 //			System.out.println(state);
-			update(state);
+			this.update(state);
 		}
 		else {
 			for (E edge : graph.edgesListOf(actual)) {	
