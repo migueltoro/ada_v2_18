@@ -19,11 +19,10 @@ public class TestBTRandom {
 					Graphs2.simpleVirtualGraphLast(e1,ReinasVertex.goal(),null,ReinasVertex.constraint(),v->v.errores().doubleValue());		
 			
 			BackTrackingRandom<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
-					BT.<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,SolucionReinas>random(
+					BT.random(
 					graph, 
 					SolucionReinas::of, 
 					ReinasVertex::copy, 
-					BTType.One,
 					v->ReinasVertex.n-v.index());	
 			long startTime = System.nanoTime();
 			ms.search();

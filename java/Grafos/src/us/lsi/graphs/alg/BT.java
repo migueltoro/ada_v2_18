@@ -34,9 +34,8 @@ public interface BT<V, E, S extends Comparable<S>> {
 			EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution, 
 			Function<V, V> copy, 
-			BTType type,
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph,solution, copy, type, size);
+		return new BackTrackingRandom<V, E, S>(graph,solution, copy, size);
 	}
 
 

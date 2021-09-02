@@ -26,7 +26,6 @@ public class TestSudokuBTRandom {
 				graph,
 				SudokuVertex::solucion,
 				SudokuVertex::copy,
-				BTType.Min,
 				v->DatosSudoku.numeroDeCasillas-v.index());
 		
 		BackTrackingRandom.threshold = 15;

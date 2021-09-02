@@ -38,7 +38,6 @@ public class TestRandom {
 				graph,
 				SolucionPack::of,
 				PackVertex::copy,
-				BTType.Min,
 				v->v.index);	
 		
 		BackTrackingRandom.threshold = 12;

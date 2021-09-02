@@ -18,9 +18,8 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	BackTrackingRandom(EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution,
 			Function<V, V> copy,
-			BTType type,
 			Function<V,Integer> size) {
-		super(graph,null, solution, copy, type);
+		super(graph,null, solution, copy, BTType.All);
 		this.size = size;
 		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
 	}
