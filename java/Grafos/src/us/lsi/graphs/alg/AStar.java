@@ -119,7 +119,7 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 				outGraph.addEdge(vertexActual,v,backEdge);
 			}
 		}
-		if(this.goal.test(vertexActual)) this.optPath = this.path(startVertex,Optional.of(vertexActual));
+//		if(this.goal.test(vertexActual)) this.optPath = this.path(startVertex,Optional.of(vertexActual));
 		return vertexActual;
 	}
 
@@ -165,14 +165,14 @@ public class AStar<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> search() {
 		V startVertex = graph.startVertex();
 		if(this.goal.test(startVertex)) return Optional.of(ePath);
-		Optional<V> last = this.stream().filter(this.goal).findFirst();	
+		Optional<V> last = this.stream().filter(this.goal.and(this.constraint)).findFirst();	
 		return path(startVertex,last);
 	}
 	
 	public List<GraphPath<V, E>> searchAll() {
 		V startVertex = graph.startVertex();
 		if(this.goal.test(startVertex)) return List.of(ePath);
-		List<V> lasts = this.stream().filter(this.goal).toList();	
+		List<V> lasts = this.stream().filter(this.goal.and(this.constraint)).toList();	
 		return lasts.stream().map(v->path(startVertex,Optional.of(v)))
 				.filter(p->p.isPresent())
 				.map(p->p.get())

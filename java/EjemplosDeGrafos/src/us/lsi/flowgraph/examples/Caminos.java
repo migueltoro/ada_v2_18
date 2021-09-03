@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 import org.jgrapht.Graph;
 
-import us.lsi.common.TriFunction;
 import us.lsi.graphs.GraphData;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
@@ -18,20 +17,20 @@ import us.lsi.solve.AuxGrammar;
 public class Caminos {
 
 	
-	public static Function<String[],Double> edge = f ->(double)Integer.parseInt(f[2]);
+	public static Function<String[],SimpleEdge<Integer>> edge = 
+			f ->SimpleEdge.of(Integer.parseInt(f[0]),Integer.parseInt(f[1]),Double.parseDouble(f[2]));
 
-	public static Graph<Integer,Double> leeGrafo(String fichero){
-		Graph<Integer,Double> graph = GraphsReader.newGraph(fichero, 
+	public static Graph<Integer,SimpleEdge<Integer>> leeGrafo(String fichero){
+		Graph<Integer,SimpleEdge<Integer>> graph = GraphsReader.newGraph(fichero, 
 				e->Integer.parseInt(e[0]), 
 				edge,
 				Graphs2::simpleDirectedWeightedGraph,
-//				Graphs2::simpleWeightedGraph,
-				e->e);
+				e->e.weight());
 		return graph;
 	}
 	
 	public static void caminos_model(String model) throws IOException {
-		Graph<Integer,Double>  graph = leeGrafo("data/ruta_tren.txt");
+		Graph<Integer,SimpleEdge<Integer>>  graph = leeGrafo("data/ruta_tren.txt");
 		Locale.setDefault(new Locale("en", "US"));
 		System.out.println(graph);	
 		GraphData.graph = graph;

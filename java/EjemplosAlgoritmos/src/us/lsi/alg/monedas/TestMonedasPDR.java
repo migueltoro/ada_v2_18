@@ -34,7 +34,6 @@ public class TestMonedasPDR {
 
 		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(graph, MonedaVertex::accionVoraz);
 		
-
 		EGraphPath<MonedaVertex, MonedaEdge> path1 = rr.search().orElse(null);
 		
 		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DPR.dynamicProgrammingReduction(

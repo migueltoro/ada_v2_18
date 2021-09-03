@@ -7,6 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.common.List2;
+import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.VirtualHyperVertex;
@@ -25,7 +26,7 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 		return new FloydVertex(i,j,k);
 	}
 
-	public static Graph<Integer,Double> graph;
+	public static Graph<Integer,SimpleEdge<Integer>> graph;
 	public static Integer n;
 	
 	
@@ -66,7 +67,7 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 		Double r = null;
 		if(this.i.equals(this.j)) r = 0.;
 		else if(k ==n && FloydVertex.graph.containsEdge(this.i, this.j)){
-			Double w = FloydVertex.graph.getEdge(i, j);
+			Double w = FloydVertex.graph.getEdge(i, j).weight();
 			r = w;
 		} else if(k ==n && !FloydVertex.graph.containsEdge(this.i, this.j)) {
 			r = null;
@@ -82,8 +83,8 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 		return j;
 	}
 
-	public static GraphWalk<Integer,Double> solution(GraphTree<FloydVertex,FloydEdge,Boolean> tree){
-		GraphWalk<Integer,Double> gp = null;		
+	public static GraphWalk<Integer,SimpleEdge<Integer>> solution(GraphTree<FloydVertex,FloydEdge,Boolean> tree){
+		GraphWalk<Integer,SimpleEdge<Integer>> gp = null;		
 		if(tree.isBaseCase()) {
 			Integer origen = tree.vertex().i;
 			Integer destino = tree.vertex().j;
@@ -92,15 +93,15 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 		} else if(!tree.action()){
 			gp = solution(tree.neighbords().get(0));
 		} else {
-			GraphWalk<Integer,Double> gp1 = solution(tree.neighbords().get(0));
-			GraphWalk<Integer,Double> gp2 = solution(tree.neighbords().get(1));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree.neighbords().get(0));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree.neighbords().get(1));
 			gp = gp1.concat(gp2,g->EGraphPath.weight(g));
 		}
 		return gp;
 	}
 	
-	public static GraphWalk<Integer,Double> solution(Map<FloydVertex, Sp<FloydEdge>> tree,FloydVertex vertex){
-		GraphWalk<Integer,Double> gp = null;
+	public static GraphWalk<Integer,SimpleEdge<Integer>> solution(Map<FloydVertex, Sp<FloydEdge>> tree,FloydVertex vertex){
+		GraphWalk<Integer,SimpleEdge<Integer>> gp = null;
 		Sp<FloydEdge> s = tree.get(vertex);
 		if(s.edge() == null) {
 			Integer origen = vertex.i;
@@ -110,8 +111,8 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 		} else if(!s.edge().action()){
 			gp = solution(tree,s.edge().targets().get(0));
 		} else {
-			GraphWalk<Integer,Double> gp1 = solution(tree,s.edge().targets().get(0));
-			GraphWalk<Integer,Double> gp2 = solution(tree,s.edge().targets().get(1));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp1 = solution(tree,s.edge().targets().get(0));
+			GraphWalk<Integer,SimpleEdge<Integer>> gp2 = solution(tree,s.edge().targets().get(1));
 			gp = gp1.concat(gp2,g->EGraphPath.weight(g));
 		}
 		return gp;

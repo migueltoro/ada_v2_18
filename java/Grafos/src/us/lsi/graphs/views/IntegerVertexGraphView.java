@@ -11,7 +11,9 @@ import java.util.stream.IntStream;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 
-public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
+import us.lsi.graphs.SimpleEdge;
+
+public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Integer>>{
 	
 	public static <V, E> IntegerVertexGraphView<V, E> of(Graph<V, E> graph) {
 		return new IntegerVertexGraphView<V, E>(graph);
@@ -32,12 +34,12 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public Double addEdge(Integer arg0, Integer arg1) {
+	public SimpleEdge<Integer> addEdge(Integer arg0, Integer arg1) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override
-	public boolean addEdge(Integer arg0, Integer arg1, Double arg2) {
+	public boolean addEdge(Integer arg0, Integer arg1, SimpleEdge<Integer> arg2) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
@@ -52,7 +54,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public boolean containsEdge(Double e) {
+	public boolean containsEdge(SimpleEdge<Integer> e) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
@@ -72,46 +74,49 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public Set<Double> edgeSet() {
-		return graph.edgeSet().stream().map(e ->graph.getEdgeWeight(e)).collect(Collectors.toSet());
+	public Set<SimpleEdge<Integer>> edgeSet() {
+		return graph.edgeSet().stream()
+				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public Set<Double> edgesOf(Integer v) {
+	public Set<SimpleEdge<Integer>> edgesOf(Integer v) {
 		return graph.edgesOf(vertices.get(v)).stream()
-				.map(e -> graph.getEdgeWeight(e)).collect(Collectors.toSet());
+				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public Set<Double> getAllEdges(Integer v1, Integer v2) {
+	public Set<SimpleEdge<Integer>> getAllEdges(Integer v1, Integer v2) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override
-	public Double getEdge(Integer v1, Integer v2) {
+	public SimpleEdge<Integer> getEdge(Integer v1, Integer v2) {
 		E edge = graph.getEdge(vertices.get(v1), vertices.get(v2));
 		Double w = graph.getEdgeWeight(edge);
-		return w;
+		return SimpleEdge.of(v1,v2, w);
 	}
 
 	@Override
-	public Integer getEdgeSource(Double e) {
+	public Integer getEdgeSource(SimpleEdge<Integer> e) {
+		return e.source();
+	}
+
+	@Override
+	public Supplier<SimpleEdge<Integer>> getEdgeSupplier() {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override
-	public Supplier<Double> getEdgeSupplier() {
-		throw new IllegalArgumentException("Metodo no permitido");
+	public Integer getEdgeTarget(SimpleEdge<Integer> e) {
+		return e.target();
 	}
 
 	@Override
-	public Integer getEdgeTarget(Double e) {
-		throw new IllegalArgumentException("Metodo no permitido");
-	}
-
-	@Override
-	public double getEdgeWeight(Double e) {
-		return e;
+	public double getEdgeWeight(SimpleEdge<Integer> e) {
+		return e.weight();
 	}
 	
 	public double getEdgeWeight(int i, int j) {
@@ -143,9 +148,10 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public Set<Double> incomingEdgesOf(Integer v) {
+	public Set<SimpleEdge<Integer>> incomingEdgesOf(Integer v) {
 		return graph.incomingEdgesOf(vertices.get(v))
-				.stream().map(e->graph.getEdgeWeight(e))
+				.stream()
+				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
@@ -155,19 +161,20 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public Set<Double> outgoingEdgesOf(Integer v) {
+	public Set<SimpleEdge<Integer>> outgoingEdgesOf(Integer v) {
 		return graph.outgoingEdgesOf(vertices.get(v))
-				.stream().map(e->graph.getEdgeWeight(e))
+				.stream()
+				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean removeAllEdges(Collection<? extends Double> arg0) {
+	public boolean removeAllEdges(Collection<? extends SimpleEdge<Integer>> arg0) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override
-	public Set<Double> removeAllEdges(Integer arg0, Integer arg1) {
+	public Set<SimpleEdge<Integer>> removeAllEdges(Integer arg0, Integer arg1) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
@@ -177,12 +184,12 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public boolean removeEdge(Double arg0) {
+	public boolean removeEdge(SimpleEdge<Integer> arg0) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
 	@Override
-	public Double removeEdge(Integer arg0, Integer arg1) {
+	public SimpleEdge<Integer> removeEdge(Integer arg0, Integer arg1) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 
@@ -192,7 +199,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,Double>{
 	}
 
 	@Override
-	public void setEdgeWeight(Double e, double w) {
+	public void setEdgeWeight(SimpleEdge<Integer> e, double w) {
 		throw new IllegalArgumentException("Metodo no permitido");
 	}
 

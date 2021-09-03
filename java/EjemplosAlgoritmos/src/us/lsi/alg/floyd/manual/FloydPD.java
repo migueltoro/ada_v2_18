@@ -14,13 +14,14 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
+import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 
 public class FloydPD {
 	
-	public static record Spf(ActionFloyd a,Double weight) implements Comparable<Spf> {
+	public static record Spf(Boolean a,Double weight) implements Comparable<Spf> {
 		
-		public static Spf of(ActionFloyd a, Double weight) {
+		public static Spf of(Boolean a, Double weight) {
 			return new Spf(a, weight);
 		}
 		
@@ -30,7 +31,7 @@ public class FloydPD {
 		}
 	}
 	
-	public static enum ActionFloyd{Yes, No};
+//	public static enum ActionFloyd{Yes, No};
 	
 	public static record FloydProblem(Integer i,Integer j,Integer k) {
 		
@@ -42,18 +43,16 @@ public class FloydPD {
 			return new FloydProblem(i,j,k);
 		}
 		
-		public List<ActionFloyd> actions() {
+		public List<Boolean> actions() {
 			if(this.isBaseCase()) return List.of();
-			return List.of(ActionFloyd.No,ActionFloyd.Yes);
+			return List.of(false,true);
 		}
 		
 		
-		public List<FloydProblem> neighbors(ActionFloyd a) {
+		public List<FloydProblem> neighbors(Boolean a) {
 			List<FloydProblem> r=null;
-			switch(a){
-			case No : r = List.of(FloydProblem.of(i,j,k+1)); break;
-			case Yes : r = List.of(FloydProblem.of(i,k,k+1),FloydProblem.of(k, j, k+1)); break;
-			}
+			if(!a) r = List.of(FloydProblem.of(i,j,k+1)); 
+			else r = List.of(FloydProblem.of(i,k,k+1),FloydProblem.of(k, j, k+1)); 
 			return r;
 		}
 		
@@ -65,7 +64,7 @@ public class FloydPD {
 			Double r = null;
 			if(this.i.equals(this.j)) r = 0.;
 			else if(k ==n && FloydPD.graph.containsEdge(this.i, this.j)){
-				Double w = FloydPD.graph.getEdge(i, j);
+				Double w = FloydPD.graph.getEdge(i, j).weight();
 				r = w;
 			} else if(k ==n && !FloydPD.graph.containsEdge(this.i, this.j)) {
 				r = null;
@@ -83,7 +82,7 @@ public class FloydPD {
 		return graph;
 	}
 	
-	public static Graph<Integer,Double> graph;
+	public static Graph<Integer,SimpleEdge<Integer>> graph;
 	public static Integer n;
 	public Map<FloydProblem,Spf> solutionsTree;
 	public static FloydProblem startVertex;
@@ -114,7 +113,7 @@ public class FloydPD {
 			this.solutionsTree.put(actual, r);
 		} else {
 			List<Spf> sps = new ArrayList<>();
-			for (ActionFloyd a:actual.actions()) {
+			for (Boolean a:actual.actions()) {
 				List<Spf> spNeighbors = new ArrayList<>();
 				Double s = 0.;
 				for (FloydProblem neighbor : actual.neighbors(a)) {
@@ -146,9 +145,7 @@ public class FloydPD {
 		else {
 			List<FloydProblem> vc = p.neighbors(s.a());
 			List<Integer> ls0 = solucion(vc.get(0));
-			switch(s.a()) {
-			case No: break;
-			case Yes:
+			if(s.a()) {
 				List<Integer> ls1 = solucion(vc.get(1));
 				ls0.remove(ls0.size() - 1);
 				ls0.addAll(ls1);

@@ -106,11 +106,8 @@ public class DynamicProgrammingReduction<V, E> implements DPR<V, E> {
 			if (this.constraint.test(actual)) {
 				update(accumulateValue);
 				r = Sp.of(this.path.goalBaseSolution(actual), null);
-			} else {
-				r = null;
-			}
+			} else r = null;
 			this.solutionsTree.put(actual, r);
-			return r;
 		} else {
 			if(this.withGraph) outGraph.addVertex(actual);
 			List<Sp<E>> rs = new ArrayList<>();			
