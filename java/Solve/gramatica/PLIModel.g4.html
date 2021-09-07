@@ -125,7 +125,7 @@ footer {
 </head>
 <body>
 <h1><a href="PLIModel.g4.html" name="top">PLIModel</a></h1>
-<p class="gdoc">Define a grammar called PLIModel</p>
+<p class="gdoc"></p>
 <div class="container">
 <div id="index">
 <h2>Rules</h2>
@@ -137,23 +137,28 @@ footer {
   <li><a href="#formal_parameter">formal_parameter</a></li>
   <li><a href="#goal">goal</a></li>
   <li><a href="#constraints">constraints</a></li>
+  <li><a href="#c_list">c_list</a></li>
   <li><a href="#list">list</a></li>
   <li><a href="#indx">indx</a></li>
   <li><a href="#indexed_elem">indexed_elem</a></li>
   <li><a href="#constraint">constraint</a></li>
+  <li><a href="#pair">pair</a></li>
   <li><a href="#generate_exp">generate_exp</a></li>
+  <li><a href="#generate_exps">generate_exps</a></li>
   <li><a href="#s_factor">s_factor</a></li>
   <li><a href="#factor">factor</a></li>
   <li><a href="#var_id">var_id</a></li>
+  <li><a href="#var_ids">var_ids</a></li>
   <li><a href="#index_var_id">index_var_id</a></li>
   <li><a href="#bound">bound</a></li>
   <li><a href="#bounds">bounds</a></li>
   <li><a href="#bin_vars">bin_vars</a></li>
   <li><a href="#int_vars">int_vars</a></li>
   <li><a href="#free_vars">free_vars</a></li>
+  <li><a href="#semi_continuous_vars">semi_continuous_vars</a></li>
   <li><a href="#exp">exp</a></li>
   <li><a href="#call_function">call_function</a></li>
-  <li><a href="#real_parameters">real_parameters</a></li>
+  <li><a href="#exps">exps</a></li>
   <li><a href="#rel_op">rel_op</a></li>
   <li><a href="#ID">ID</a></li>
   <li><a href="#INT">INT</a></li>
@@ -173,7 +178,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">model</span> :  <a href="#head" class="rule">head</a><span class="operator">?</span> <a href="#goal" class="rule">goal</a> <a href="#constraints" class="rule">constraints</a> <a href="#bounds" class="rule">bounds</a><span class="operator">?</span> <a href="#bin_vars" class="rule">bin_vars</a><span class="operator">?</span> <a href="#int_vars" class="rule">int_vars</a><span class="operator">?</span> <a href="#free_vars" class="rule">free_vars</a><span class="operator">?</span> ;
+    <span class="rule">model</span> :  <a href="#head" class="rule">head</a><span class="operator">?</span> <a href="#goal" class="rule">goal</a> <a href="#constraints" class="rule">constraints</a> <a href="#bounds" class="rule">bounds</a><span class="operator">?</span> <a href="#bin_vars" class="rule">bin_vars</a><span class="operator">?</span> <a href="#int_vars" class="rule">int_vars</a><span class="operator">?</span> <a href="#free_vars" class="rule">free_vars</a><span class="operator">?</span> <a href="#semi_continuous_vars" class="rule">semi_continuous_vars</a><span class="operator">?</span> ;
   </div>
   </div>
   <div class="railroad">
@@ -283,6 +288,23 @@ footer {
   <img border="0" src="images/constraints.png" />
   </div>
   </li>
+  <li class="rule" id="c_list">
+  <h3>c_list <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">c_list</span> :  <a href="#indexed_elem" class="rule">indexed_elem</a> <span class="operator">(</span><span class="literal">','</span> <a href="#indx" class="rule">indx</a><span class="operator">)</span><span class="operator">*</span> <span class="operator">(</span><span class="literal">'|'</span> <a href="#exp" class="rule">exp</a><span class="operator">)</span><span class="operator">?</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/c_list.png" />
+  </div>
+  </li>
   <li class="rule" id="list">
   <h3>list <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
   <div class="doc">
@@ -292,7 +314,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">list</span> :  <a href="#indexed_elem" class="rule">indexed_elem</a> <span class="operator">(</span><span class="literal">','</span> <a href="#indx" class="rule">indx</a><span class="operator">)</span><span class="operator">*</span> <span class="operator">(</span><span class="literal">'|'</span> <a href="#exp" class="rule">exp</a><span class="operator">)</span><span class="operator">?</span> ;
+    <span class="rule">list</span> :  <a href="#c_list" class="rule">c_list</a> <span class="operator">|</span> <a href="#var_ids" class="rule">var_ids</a> <span class="operator">|</span> <a href="#exps" class="rule">exps</a> <span class="operator">|</span> <a href="#generate_exps" class="rule">generate_exps</a> ;
   </div>
   </div>
   <div class="railroad">
@@ -343,12 +365,29 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">constraint</span> :  <a href="#generate_exp" class="rule">generate_exp</a> <a href="#rel_op" class="rule">rel_op</a> <a href="#exp" class="rule">exp</a> <span class="operator">#</span><a href="#atomConstraint" class="rule">atomConstraint</a> <span class="operator">|</span> <a href="#var_id" class="rule">var_id</a> <span class="literal">'->'</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">#</span><a href="#indicatorConstraint" class="rule">indicatorConstraint</a> <span class="operator">|</span> <span class="literal">'or'</span> <span class="literal">'('</span> <a href="#rel_op" class="rule">rel_op</a> <a href="#n" class="rule">n</a><span class="operator">=</span><a href="#INT" class="token">INT</a> <span class="literal">','</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">(</span><span class="literal">'|'</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">)</span><span class="operator">+</span> <span class="literal">')'</span> <span class="operator">#</span><a href="#orConstraint" class="rule">orConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#constraint" class="rule">constraint</a> <span class="literal">'=>'</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#constraint" class="rule">constraint</a> <span class="operator">#</span><a href="#implyConstraint" class="rule">implyConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'!='</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#differentValueConstraint" class="rule">differentValueConstraint</a> <span class="operator">|</span> <span class="literal">'allDifferent'</span> <span class="literal">'('</span> <a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#allDifferentValuesConstraint" class="rule">allDifferentValuesConstraint</a> ;
+    <span class="rule">constraint</span> :  <a href="#generate_exp" class="rule">generate_exp</a> <a href="#rel_op" class="rule">rel_op</a> <a href="#exp" class="rule">exp</a> <span class="operator">#</span><a href="#atomConstraint" class="rule">atomConstraint</a> <span class="operator">|</span> <a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <a href="#values" class="rule">values</a><span class="operator">=</span><a href="#INT" class="token">INT</a> <span class="literal">'->'</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">#</span><a href="#indicatorConstraint" class="rule">indicatorConstraint</a> <span class="operator">|</span> <span class="literal">'('</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">'=='</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#equalsConstraint" class="rule">equalsConstraint</a> <span class="operator">|</span> <span class="literal">'or'</span> <span class="literal">'('</span> <a href="#rel_op" class="rule">rel_op</a> <a href="#n" class="rule">n</a><span class="operator">=</span><a href="#INT" class="token">INT</a> <span class="literal">','</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">(</span><span class="literal">'|'</span> <a href="#constraint" class="rule">constraint</a> <span class="operator">)</span><span class="operator">+</span> <span class="literal">')'</span> <span class="operator">#</span><a href="#orConstraint" class="rule">orConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#constraint" class="rule">constraint</a> <span class="literal">'=>'</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#constraint" class="rule">constraint</a> <span class="operator">#</span><a href="#implyConstraint" class="rule">implyConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'!='</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#differentValueConstraint" class="rule">differentValueConstraint</a> <span class="operator">|</span> <span class="literal">'allDifferent'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a><span class="literal">')'</span> <span class="operator">#</span><a href="#allDifferentValuesConstraint" class="rule">allDifferentValuesConstraint</a> <span class="operator">|</span> <span class="literal">'permutation'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">';'</span> <a href="#values" class="rule">values</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#allInValuesConstraint" class="rule">allInValuesConstraint</a> <span class="operator">|</span> <a href="#var" class="rule">var</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'in'</span> <a href="#values" class="rule">values</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="operator">#</span><a href="#valueInValuesConstraint" class="rule">valueInValuesConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'MAX'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#maxConstraint" class="rule">maxConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'MIN'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#minConstraint" class="rule">minConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'OR'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#orBinConstraint" class="rule">orBinConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'AND'</span> <span class="literal">'('</span> <a href="#vars" class="rule">vars</a><span class="operator">=</span><a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#andBinConstraint" class="rule">andBinConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'ABS'</span> <span class="literal">'('</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#generate_exp" class="rule">generate_exp</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#absConstraint" class="rule">absConstraint</a> <span class="operator">|</span> <a href="#left" class="rule">left</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">'='</span> <span class="literal">'PWL'</span> <span class="literal">'('</span> <a href="#right" class="rule">right</a><span class="operator">=</span><a href="#var_id" class="rule">var_id</a> <span class="literal">')'</span> <span class="literal">':'</span> <a href="#data" class="rule">data</a><span class="operator">=</span> <a href="#pair" class="rule">pair</a><span class="operator">+</span> <span class="operator">#</span><a href="#piecewiseConstraint" class="rule">piecewiseConstraint</a> ;
   </div>
   </div>
   <div class="railroad">
   <h4>Visual notation:</h4>
   <img border="0" src="images/constraint.png" />
+  </div>
+  </li>
+  <li class="rule" id="pair">
+  <h3>pair <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">pair</span> :  <span class="literal">'('</span> <a href="#INT" class="token">INT</a> <span class="literal">','</span> <a href="#INT" class="token">INT</a> <span class="literal">')'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/pair.png" />
   </div>
   </li>
   <li class="rule" id="generate_exp">
@@ -368,6 +407,23 @@ footer {
   <img border="0" src="images/generate_exp.png" />
   </div>
   </li>
+  <li class="rule" id="generate_exps">
+  <h3>generate_exps <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">generate_exps</span> :  <a href="#generate_exp" class="rule">generate_exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#generate_exp" class="rule">generate_exp</a><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/generate_exps.png" />
+  </div>
+  </li>
   <li class="rule" id="s_factor">
   <h3>s_factor <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
   <div class="doc">
@@ -377,7 +433,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">s_factor</span> :  <span class="literal">'+'</span> <a href="#factor" class="rule">factor</a> <span class="operator">#</span><a href="#plusFactor" class="rule">plusFactor</a> <span class="operator">|</span> <span class="literal">'+'</span> <span class="literal">'sum'</span> <span class="literal">'('</span> <a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#plusSum" class="rule">plusSum</a> <span class="operator">|</span> <span class="literal">'-'</span> <span class="literal">'sum'</span> <span class="literal">'('</span> <a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#minusSum" class="rule">minusSum</a> <span class="operator">|</span> <span class="literal">'-'</span> <a href="#factor" class="rule">factor</a> <span class="operator">#</span><a href="#minusFactor" class="rule">minusFactor</a> ;
+    <span class="rule">s_factor</span> :  <span class="literal">'+'</span> <a href="#factor" class="rule">factor</a> <span class="operator">#</span><a href="#plusFactor" class="rule">plusFactor</a> <span class="operator">|</span> <span class="literal">'-'</span> <a href="#factor" class="rule">factor</a> <span class="operator">#</span><a href="#minusFactor" class="rule">minusFactor</a> <span class="operator">|</span> <span class="literal">'+'</span> <span class="literal">'sum'</span> <span class="literal">'('</span> <a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#plusSum" class="rule">plusSum</a> <span class="operator">|</span> <span class="literal">'-'</span> <span class="literal">'sum'</span> <span class="literal">'('</span> <a href="#list" class="rule">list</a> <span class="literal">')'</span> <span class="operator">#</span><a href="#minusSum" class="rule">minusSum</a> ;
   </div>
   </div>
   <div class="railroad">
@@ -394,7 +450,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">factor</span> :  <a href="#exp" class="rule">exp</a><span class="operator">?</span> <a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#varFactor" class="rule">varFactor</a> ;
+    <span class="rule">factor</span> :  <a href="#exp" class="rule">exp</a> <a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#varFactor" class="rule">varFactor</a> <span class="operator">|</span> <a href="#exp" class="rule">exp</a> <span class="operator">#</span><a href="#expFactor" class="rule">expFactor</a> <span class="operator">|</span> <a href="#var_id" class="rule">var_id</a> <span class="operator">#</span><a href="#varIdFactor" class="rule">varIdFactor</a> ;
   </div>
   </div>
   <div class="railroad">
@@ -411,12 +467,29 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">var_id</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <a href="#index_var_id" class="rule">index_var_id</a> ;
+    <span class="rule">var_id</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <span class="literal">'['</span> <a href="#index_var_id" class="rule">index_var_id</a><span class="operator">?</span> <span class="literal">']'</span> ;
   </div>
   </div>
   <div class="railroad">
   <h4>Visual notation:</h4>
   <img border="0" src="images/var_id.png" />
+  </div>
+  </li>
+  <li class="rule" id="var_ids">
+  <h3>var_ids <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">var_ids</span> :  <a href="#var_id" class="rule">var_id</a> <span class="operator">(</span><span class="literal">','</span> <a href="#var_id" class="rule">var_id</a><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/var_ids.png" />
   </div>
   </li>
   <li class="rule" id="index_var_id">
@@ -428,7 +501,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">index_var_id</span> :  <span class="operator">(</span><span class="literal">'['</span> <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> <span class="literal">']'</span><span class="operator">)</span><span class="operator">?</span> ;
+    <span class="rule">index_var_id</span> :  <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> ;
   </div>
   </div>
   <div class="railroad">
@@ -521,6 +594,23 @@ footer {
   <img border="0" src="images/free_vars.png" />
   </div>
   </li>
+  <li class="rule" id="semi_continuous_vars">
+  <h3>semi_continuous_vars <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">semi_continuous_vars</span> :  <span class="literal">'semi-continuous'</span> <a href="#list" class="rule">list</a><span class="operator">+</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/semi_continuous_vars.png" />
+  </div>
+  </li>
   <li class="rule" id="exp">
   <h3>exp <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
   <div class="doc">
@@ -547,7 +637,7 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">call_function</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <span class="literal">'('</span> <a href="#real_parameters" class="rule">real_parameters</a><span class="operator">?</span> <span class="literal">')'</span> ;
+    <span class="rule">call_function</span> :  <a href="#name" class="rule">name</a><span class="operator">=</span><a href="#ID" class="token">ID</a> <span class="literal">'('</span> <a href="#exps" class="rule">exps</a><span class="operator">?</span> <span class="literal">')'</span> ;
   </div>
   </div>
   <div class="railroad">
@@ -555,8 +645,8 @@ footer {
   <img border="0" src="images/call_function.png" />
   </div>
   </li>
-  <li class="rule" id="real_parameters">
-  <h3>real_parameters <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <li class="rule" id="exps">
+  <h3>exps <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
   <div class="doc">
     <p>
     </p>
@@ -564,12 +654,12 @@ footer {
   <div class="ebnf">
   <h4>Text notation:</h4>
   <div>
-    <span class="rule">real_parameters</span> :  <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> ;
+    <span class="rule">exps</span> :  <a href="#exp" class="rule">exp</a> <span class="operator">(</span><span class="literal">','</span> <a href="#exp" class="rule">exp</a> <span class="operator">)</span><span class="operator">*</span> ;
   </div>
   </div>
   <div class="railroad">
   <h4>Visual notation:</h4>
-  <img border="0" src="images/real_parameters.png" />
+  <img border="0" src="images/exps.png" />
   </div>
   </li>
   <li class="rule" id="rel_op">
