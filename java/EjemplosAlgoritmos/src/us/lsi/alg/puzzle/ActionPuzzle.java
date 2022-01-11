@@ -36,9 +36,4 @@ public record ActionPuzzle(String name,IntPair direction) implements Action<Vert
 		return v.validPosition(v.blackPosition().add(this.direction));
 	}
 
-	@Override
-	public Double weight(VertexPuzzle v) {
-		return 1.;
-	}
-
 }

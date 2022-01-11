@@ -5,6 +5,8 @@
  * @author migueltoro
  *
  */
+
+
 module grafos {
 	exports us.lsi.graphs;
 	exports us.lsi.graphs.views;
@@ -12,6 +14,7 @@ module grafos {
 	exports us.lsi.colors;
 	exports us.lsi.flowgraph;
 	exports us.lsi.hypergraphs;
+	exports us.lsi.hypergraphs2;
 	exports us.lsi.path;
 	exports us.lsi.graphs.alg;
 	exports us.lsi.graphs.tour;

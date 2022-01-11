@@ -47,6 +47,8 @@ public class TestExp {
 		String2.toConsole("%s",Exp.ofOperatorsInLevels(List.of(lv0,lv1,lv2)));
 	}
 	
+	
+	
 	public static void main(String[] args) throws IOException {
 		test1();
 	}

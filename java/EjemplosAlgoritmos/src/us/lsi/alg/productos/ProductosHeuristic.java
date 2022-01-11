@@ -8,10 +8,9 @@ import java.util.stream.IntStream;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class ProductosHeuristic {
 
@@ -27,10 +26,10 @@ public class ProductosHeuristic {
 	public static GraphPath<ProductosVertex, ProductosEdge> graphPathVoraz(ProductosVertex vertice,
 			Predicate<ProductosVertex> goal) {
 		EGraph<ProductosVertex, ProductosEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(vertice, goal, null,v->true,x -> x.weight());
-		GreedySearchOnGraph<ProductosVertex, ProductosEdge> rr = 
-				GraphAlg.greedy(graph, ProductosVertex::greedyEdge);
-		GraphPath<ProductosVertex, ProductosEdge> p = rr.search().orElse(null);
+				SimpleVirtualGraph.sum(vertice, goal,x -> x.weight());
+		GreedyOnGraph<ProductosVertex, ProductosEdge> rr = 
+				GreedyOnGraph.of(graph, ProductosVertex::greedyEdge);
+		GraphPath<ProductosVertex, ProductosEdge> p = rr.path();
 		return p;
 	}
 	

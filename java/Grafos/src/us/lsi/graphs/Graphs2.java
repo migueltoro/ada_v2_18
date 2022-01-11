@@ -19,14 +19,8 @@ import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraphI;
-import us.lsi.hypergraphs.SimpleHyperEdge;
-import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
-import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath.PathType;
 
 
@@ -60,34 +54,6 @@ public class Graphs2 {
 				.get();
 	}
 	
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphSum(
-			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, null, null, null);
-	}
-
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphSum(
-			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Sum, edgeWeight, null,
-				null);
-	}
-
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraphLast(
-			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<V, Double> vertexWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, PathType.Last, null, vertexWeight,
-				null);
-	}
-
-	public static <V extends ActionVirtualVertex<V, E, A>, E extends ActionSimpleEdge<V, A>, A> EGraph<V, E> simpleVirtualGraph(
-			V startVertex, Predicate<V> goal, V endVertex, Predicate<V> constraint, Function<E, Double> edgeWeight,
-			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight, PathType type) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, endVertex, constraint, type, edgeWeight, vertexWeight,
-				vertexPassWeight);
-	}
-	
-	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V,E,A>, A> SimpleVirtualHyperGraph<V, E, A> simpleVirtualHyperGraph(V start) {
-		return new SimpleVirtualHyperGraph<V, E, A>(start);
-	}
-	
 	public static <V,E> SimpleGraph<V, E> simpleGraph() {
 		return new SimpleGraph<V,E>(null,null,false);
 	}
@@ -99,10 +65,15 @@ public class Graphs2 {
     public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph() {
 		return new SimpleWeightedGraph<>(null,null);
 	}
+    
 
     public static <V,E> SimpleWeightedGraph<V, E> simpleWeightedGraph(Supplier<V> vs, Supplier<E> es) {
         return new SimpleWeightedGraph<>(vs, es);
     }
+    
+    public static <V,E> SimpleDirectedGraph<V, E> simpleDirectedGraph() {
+		return new SimpleDirectedGraph<>(null,null,false);
+	}
     
     public static <V,E> SimpleDirectedWeightedGraph<V, E> simpleDirectedWeightedGraph() {
 		return new SimpleDirectedWeightedGraph<>(null,null);
@@ -116,32 +87,46 @@ public class Graphs2 {
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
 	
+	public static Object constraintG = (Predicate<Object>) v->true;
+	public static Object endVertexG = null;
+	public static Object vertexPassWeightG = null;
+	
+	@SuppressWarnings("unchecked")
 	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
-			Predicate<V> goal,V endVertex,Predicate<V> constraint,
+			Predicate<V> goal,
 			Function<E, Double> edgeWeight,
 			Function<V, Double> vertexWeight, 
-			TriFunction<V, E, E, Double> vertexPassWeight,
 			PathType type) {
-		return new EGraphI<V, E, G>(graph, startVertex, goal,endVertex,constraint,type,edgeWeight,vertexWeight,vertexPassWeight);
+		return new EGraphI<V, E, G>(graph, 
+				startVertex, goal,
+				(V)endVertexG,
+				(Predicate<V>)constraintG,
+				type,edgeWeight,vertexWeight,
+				(TriFunction<V,E,E,Double>)vertexPassWeightG);
 	}
 	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex) {
-		return new EGraphI<V, E, G>(graph, startVertex, null, null, null, PathType.Sum, null, null, null);
-	}
-
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex, Predicate<V> goal,
-			V endVertex, Predicate<V> constraint) {
-		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, PathType.Sum, null, null, null);
-	}
-	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphLast(G graph, V startVertex) {
-		return new EGraphI<V, E, G>(graph, startVertex, null, null, null, PathType.Last, null, null, null);
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex, Predicate<V> goal,Function<E, Double> edgeWeight) {
+		return eGraph(graph, startVertex, goal,  edgeWeight, null, PathType.Sum);
 	}
 
 	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphLast(G graph, V startVertex, Predicate<V> goal,
-			V endVertex, Predicate<V> constraint) {
-		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, PathType.Last, null, null, null);
+			Function<V, Double> vertexWeight) {
+		return eGraph(graph, startVertex, goal,null,vertexWeight, PathType.Last);
 	}
+	
+	public static <V, E> SimpleDirectedGraph<V, E> inversedDirectedGraph(SimpleDirectedGraph<V, E> graph){
+		SimpleDirectedGraph<V, E> gs = Graphs2.simpleDirectedGraph();
+		for (V v : graph.vertexSet()) {
+			gs.addVertex(v);
+		}
+		for (E e : graph.edgeSet()) {
+			V s = graph.getEdgeSource(e);
+			V t = graph.getEdgeTarget(e);
+			gs.addEdge(t, s, e);
+		}
+		return gs;
+	}
+	
 	
 	public static <V, E> SimpleDirectedWeightedGraph<V, E> toDirectedWeightedGraph(SimpleWeightedGraph<V, E> graph,
 			Function<E, E> edgeReverse) {
@@ -214,7 +199,7 @@ public class Graphs2 {
 			G graph, 
 			Double weight,
 			Supplier<G> creator, 
-			TriFunction<V,V,Double,E> edgeCreator,
+			Supplier<E> edgeCreator,
 			Function<E,Double> edgeWeight) {
 
 		G r = creator.get();
@@ -226,7 +211,7 @@ public class Graphs2 {
 			for (V v2 : graph.vertexSet()) {
 				if (!v1.equals(v2)) {
 					if (!graph.containsEdge(v1, v2)) {
-						E e = edgeCreator.apply(v1,v2,weight);
+						E e = edgeCreator.get();
 						r.addEdge(v1, v2, e);
 					}
 				}

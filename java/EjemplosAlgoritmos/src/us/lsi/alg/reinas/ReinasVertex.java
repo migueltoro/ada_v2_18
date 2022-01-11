@@ -8,11 +8,11 @@ import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
 import us.lsi.common.IntegerSet;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, IntegerSet dso)
-                   implements ActionVirtualVertex<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>,Integer> {
+                   implements VirtualVertex<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>,Integer> {
 	
 	public static ReinasVertex copy(ReinasVertex reinas) {
 		return new ReinasVertex(reinas.index,List2.copy(reinas.fo),IntegerSet.copy(reinas.dpo),IntegerSet.copy(reinas.dso));
@@ -74,8 +74,8 @@ public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, Inte
 	}
 
 	@Override
-	public ActionSimpleEdge<ReinasVertex, Integer> edge(Integer a) {
-		return ActionSimpleEdge.of(this,this.neighbor(a), a, 1.);
+	public SimpleEdgeAction<ReinasVertex, Integer> edge(Integer a) {
+		return SimpleEdgeAction.of(this,this.neighbor(a), a, 1.);
 	}
 
 }

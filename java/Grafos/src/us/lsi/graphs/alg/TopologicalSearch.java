@@ -16,7 +16,19 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.streams.Stream2;
 
-public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
+public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
+	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en orden topologico
+	 */
+	public static <V, E> TopologicalSearch<V, E> topological(Graph<V, E> g, V startVertex) {
+		return new TopologicalSearch<V, E>(g, startVertex);
+	}
+
 	
 	protected Map<V,E> edgeToOrigin;
 	public Graph<V,E> graph;
@@ -42,15 +54,13 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 //		this.i = 0;
 	}
 	
-	@Override
 	public Stream<V> stream() {
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		return Stream2.asStream(this);
+		return Stream2.of(this);
 	}
 	
-	@Override
 	public DephtSearch<V, E> copy() {
-		return GraphAlg.depth(this.graph, this.startVertex);
+		return DephtSearch.of(this.graph, this.startVertex);
 	}
 	
 	public Iterator<V> iterator() {
@@ -102,16 +112,14 @@ public class TopologicalSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iter
 		return this.edgeToOrigin.get(v);
 	}
 
-	@Override
+
 	public EGraph<V, E> getGraph() {
-		return Graphs2.eGraphSum(this.graph,startVertex());
+		return Graphs2.eGraphSum(this.graph,startVertex(),null,null);
 	}
 	
-	@Override
 	public V startVertex() {
 		return this.startVertex;
 	}
-
 	
 
 }

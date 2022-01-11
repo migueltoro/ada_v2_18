@@ -10,12 +10,12 @@ import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.grafos.datos.Carretera;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
-import us.lsi.path.GraphPaths;
+import us.lsi.graphs.virtual.VirtualVertex;
+import us.lsi.path.GraphPath2;
 import us.lsi.streams.Stream2;
 
 public record TravelVertex(List<Ciudad> camino) 
-          implements ActionVirtualVertex<TravelVertex, TravelEdge, IntPair> {
+          implements VirtualVertex<TravelVertex, TravelEdge, IntPair> {
 	
 	public static TravelVertex of(List<Ciudad> camino) {
 		return new TravelVertex(List2.copy(camino));
@@ -43,8 +43,8 @@ public record TravelVertex(List<Ciudad> camino)
 	@Override
 	public List<IntPair> actions() {
 		Integer n = this.camino().size();
-		return Stream2.allPairs(0,n,0,n)
-				.filter(p->p.second() > p.first())
+		return Stream2.allPairs(1,n-1,1,n-1)
+				.filter(p->p.second() > p.first()+2)
 				.collect(Collectors.toList());
 	}
 
@@ -66,7 +66,7 @@ public record TravelVertex(List<Ciudad> camino)
 	}
 	
 	public Double weight() {
-		return GraphPaths.of(TravelVertex.graph,this.camino()).getWeight();
+		return GraphPath2.ofVertices(TravelVertex.graph,this.camino()).getWeight();
 	}
 
 }

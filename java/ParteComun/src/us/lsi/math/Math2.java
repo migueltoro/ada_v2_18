@@ -353,21 +353,15 @@ public class Math2 {
 	 */
 	
 	public static Integer siguientePrimo(Integer a){
-		Integer r = 2;
-		if(a>=2) {
-			a = (a+1)%2==0?a+2:a+1;
-			r = Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
-		}
-		return r;
+		if(a<2) return 2;
+		a = (a+1)%2==0?a+2:a+1;
+		return Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
 	}
 	
 	public static Long siguientePrimo(Long a){
-		Long r = 2L;
-		if(a>=2) {
-			a = (a+1)%2==0?a+2:a+1;
-			r = Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
-		}
-		return r;
+		if(a<2) return 2L;
+		a = (a+1)%2==0?a+2:a+1;
+		return Stream.iterate(a, x->x+2).filter(x->Math2.esPrimo(x)).findFirst().get();
 	}
 	
 	public static BigInteger siguientePrimo(BigInteger a){

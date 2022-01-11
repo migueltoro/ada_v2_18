@@ -12,9 +12,9 @@ import org.jgrapht.GraphPath;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public class ProductosVertex implements ActionVirtualVertex<ProductosVertex, ProductosEdge, Integer> {
+public class ProductosVertex implements VirtualVertex<ProductosVertex, ProductosEdge, Integer> {
 
 	// Variables
 	public Integer indice;

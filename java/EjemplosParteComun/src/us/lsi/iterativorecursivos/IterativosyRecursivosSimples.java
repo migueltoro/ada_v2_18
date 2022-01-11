@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,6 +24,8 @@ import us.lsi.common.Enumerate;
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.LongPair;
+import us.lsi.common.MutableType;
+import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Printers;
 import us.lsi.common.String2;
@@ -34,6 +37,21 @@ import us.lsi.iterables.IteratorMap;
 import us.lsi.math.Math2;
 
 public class IterativosyRecursivosSimples {
+	
+	
+	
+	public static record Cr(Integer c, Integer r) {}
+	
+	public static Cr cr(Integer a, Integer b) {
+		return cr(a,b,0,a);
+	}
+	public static Cr cr(Integer a, Integer b, Integer c, Integer r) {
+		Cr s = new Cr(c,r);
+		if(r-b>0){
+			s = cr(a,b,c+1,r-b);
+		}
+		return s;
+	}
 	
 	public static Stream<Long> divisores(Long n){
 		return Stream.iterate(2L, x-> x <= (long) Math.sqrt(n), x -> x+1).filter(x->n%x==0);
@@ -78,9 +96,7 @@ public class IterativosyRecursivosSimples {
 		}
 		return suma;
 	}
-	
-	
-	
+
 	public static Integer sumaPrimos3(String file) {
 		Iterable<String> fileIt = Iterables.file(file);
 		Iterable<String> ff = Iterables.flatMap(fileIt,linea->Iterables.split(linea,"[ ,]"));
@@ -101,6 +117,7 @@ public class IterativosyRecursivosSimples {
 
 	public static Map<Integer,List<Integer>> agrupaPorResto1(String file,Integer n) {
 		return Stream2.file(file)
+				.filter(ln->!ln.isEmpty())
 				.flatMap(e->Stream2.split(e,"[ ,]"))
 				.map(e->Integer.parseInt(e))
 				.collect(Collectors.groupingBy(e->e%n));
@@ -126,7 +143,62 @@ public class IterativosyRecursivosSimples {
 		return grupos;
 	}
 	
+	public static Map<Integer, List<Integer>> agrupaPorResto3(String file, Integer n) {
+		Iterator<String> fileIt = Iterables.file(file).iterator();
+		Map<Integer, List<Integer>> grupos = new HashMap<>();
+		while(fileIt.hasNext()) {
+			String linea = fileIt.next();
+			Iterator<String> lineaIt = Iterables.split(linea, "[ ,]").iterator();
+			while(lineaIt.hasNext()) {
+				String e = lineaIt.next();
+				Integer en = Integer.parseInt(e);
+				Integer key = en % n;
+				List<Integer> ls;
+				if (grupos.containsKey(key)) {
+					ls = grupos.get(key);
+				} else {
+					ls = new ArrayList<>();
+					grupos.put(key, ls);
+				}
+				ls.add(en);
+			}
+		}
+		return grupos;
+	}
 	
+	public static Map<Integer, List<Integer>> agrupaPorResto4(String file, Integer n) {
+		Iterator<String> fileIt = Iterables.file(file).iterator();
+		String linea = fileIt.next();
+		Iterator<String> lineaIt = Iterables.split(linea, "[ ,]").iterator();
+		Map<Integer, List<Integer>> grupos = new HashMap<>();
+		Map<Integer, List<Integer>> r = agrupaPorResto4(file, n, fileIt,lineaIt, grupos);
+		return r;
+	}
+	
+	public static Map<Integer, List<Integer>> agrupaPorResto4(String file, Integer n, Iterator<String> fileIt,
+			Iterator<String> lineaIt, Map<Integer, List<Integer>> grupos) {
+		Map<Integer, List<Integer>> r = grupos;
+		if (fileIt.hasNext() || lineaIt.hasNext()) {
+			if (lineaIt.hasNext()) {
+				String e = lineaIt.next();
+				Integer en = Integer.parseInt(e);
+				Integer key = en % n;
+				List<Integer> ls;
+				if (grupos.containsKey(key)) {
+					ls = grupos.get(key);
+				} else {
+					ls = new ArrayList<>();
+					grupos.put(key, ls);
+				}
+				ls.add(en);
+			} else {
+				String linea = fileIt.next();
+				lineaIt = Iterables.split(linea, "[ ,]").iterator();
+			}
+			r = agrupaPorResto4(file, n, fileIt, lineaIt, grupos);
+		}
+		return r;
+	}
 
 	public static <E> Integer index0(List<E> ls, E elem) {
 		Optional<Integer> r = IntStream.range(0,ls.size()).boxed()
@@ -151,10 +223,10 @@ public class IterativosyRecursivosSimples {
 	public static <E> Integer index3(List<E> ls, E elem) {
 		return index3(0,ls,elem);
 	}
-	private static <E> Integer index3( Integer i, List<E> ls, E elem) {
+	private static <E> Integer index3(Integer i, List<E> ls, E elem) {
 		Integer b = -1;
 		Integer n = ls.size();
-		if(n-i > 0){
+		if(n-i> 0){
 			if (ls.get(i).equals(elem)) b = i;
 		    else b = index3(i+1,ls,elem);
 		}
@@ -165,11 +237,13 @@ public class IterativosyRecursivosSimples {
 		return index4(0,ls.size(),ls,elem,cmp);
 	}
 	private static <E> Integer index4(Integer i, Integer j, List<E> ls,E elem, Comparator<E> cmp) {
-		Integer r = -1;	
-		if(j-i>0){
+		Integer r = -1;
+		if(j-i==1) {
+			r = cmp.compare(elem,ls.get(i)) == 0 ? i:-1;
+		} else if(j-i>1){
 		   Integer k = (j+i)/2;
-		   if (Comparator2.isEQ(ls.get(k),elem,cmp)) r = k;
-		   else if (Comparator2.isLT(elem,ls.get(k),cmp)) r = index4(i,k,ls,elem,cmp);
+		   if (cmp.compare(elem,ls.get(k)) == 0) r = k;
+		   else if (cmp.compare(elem,ls.get(k)) < 0) r = index4(i,k,ls,elem,cmp);
 		   else r = index4(k+1,j,ls,elem,cmp);
 		}
 		return r;
@@ -180,12 +254,13 @@ public class IterativosyRecursivosSimples {
 		Integer b = -1;
 		Integer i = 0;
 		Integer j = ls.size();	
-		while(j-i>0 && b==-1){
+		while(j-i>1 && b==-1){
 		   Integer k = (j+i)/2;
 		   if (Comparator2.isEQ(ls.get(k),elem,cmp)) b = k;
 		   else if (Comparator2.isLT(ls.get(k),elem,cmp)) i = k;
 		   else j = k;		   
 		}
+		if(j-i==1) b = cmp.compare(elem,ls.get(i)) == 0 ? i:-1;
 		return b;
 	}
 
@@ -196,7 +271,6 @@ public class IterativosyRecursivosSimples {
 		}
 	}
 
-	
 	public static record P3(Integer i, Integer j) {
 		public static P3 of(Integer i, Integer j) {
 			return new P3(i,j);
@@ -218,7 +292,7 @@ public class IterativosyRecursivosSimples {
 	}
 	
 	public static <E> Integer index2(Iterable<E> it, E e) {
-		Stream<Enumerate<E>> s = Stream2.enumerate(Stream2.asStream(it));
+		Stream<Enumerate<E>> s = Stream2.enumerate(Stream2.of(it));
 		Optional<Enumerate<E>> entry = s.filter(p->p.value().equals(e)).findFirst();
 		return entry.isPresent()?entry.get().counter():-1;
 	}
@@ -270,11 +344,8 @@ public class IterativosyRecursivosSimples {
 	}
 	public static Integer masCercano(Integer e, Integer e1, Integer e2){
 	 	Integer r;
-		if(Math.abs(e-e1) <= Math.abs(e-e2)){
-	 		r = e1;
-	 	} else {
-	 		r = e2;
-	 	}
+		if(Math.abs(e-e1) <= Math.abs(e-e2)) r = e1;
+	 	else r = e2;
 	 	return r;
 	}
 	
@@ -283,12 +354,12 @@ public class IterativosyRecursivosSimples {
 		Integer r = null;
 		if(n<1) Preconditions.checkArgument(!ls.isEmpty());
 		else if (n == 1) r = ls.get(0);
-		else if (n == 2) r = masCercano(ls.get(0), ls.get(1), e);
+		else if (n == 2) r = masCercano(e, ls.get(0), ls.get(1));
 		else if (n > 2) {
-			View2E<List<Integer>, Integer> w = List2.view2e(ls);
+			View2E<List<Integer>, Integer> w = List2.view2eOverlap(ls);
 			if (e == w.e()) r = w.e();
-			else if (e < w.e()) r = cercano(w.left(), e);
-			else r = cercano(w.right(), e);
+			else if (e < w.e()) r = cercano2(w.left(), e);
+			else r = cercano2(w.right(), e);
 		}
 		return r;
 	}
@@ -297,46 +368,58 @@ public class IterativosyRecursivosSimples {
 	
 	public static boolean esPalindromo1(String st) {
 		UnaryOperator<IntPair> next = p -> IntPair.of(p.first()+1, p.second()-1);
-		Stream<IntPair> s = Stream.iterate(IntPair.of(0,st.length()-1),p->(p.second()-p.first())>=0, next);
-		return s.allMatch(p->st.charAt(p.first()) == st.charAt(p.second()));
+		Stream<IntPair> s = Stream.iterate(IntPair.of(0,st.length()),p->(p.second()-p.first())> 1, next);
+		return s.allMatch(p->st.charAt(p.first()) == st.charAt(p.second()-1));
 	}
 	
 	public static boolean esPalindromo2(String p) {
 		int i = 0;
-		int j= p.length()-1;
+		int j= p.length();
 		Boolean b = true;
-		while(j - i >= 0 && b) {	
+		while(j - i > 1 && b) {	
 			i = i + 1;
 			j = j - 1;
-			b = p.charAt(i) == p.charAt(j);
+			b = p.charAt(i) == p.charAt(j-1);
 		}
 		return b;
 	}
 	
 	public static boolean esPalindromo3(String p) {
-		return esPalindromo3(p,0,p.length()-1,true);
+		return esPalindromo3(p,0,p.length(),true);
 	}
 	private static boolean esPalindromo3(String p, int i, int j, Boolean b) {
-		if (j - i >= 0 & b) {
-			b = esPalindromo3(p, i + 1, j - 1, p.charAt(i) == p.charAt(j));
+		if (j - i > 1 & b) {
+			b = esPalindromo3(p, i + 1, j - 1, p.charAt(i) == p.charAt(j-1));
 		}
 		return b;
 	}
 	
 	public static boolean esPalindromo4(String p) {
-		return esPalindromo4(0,p.length()-1,p);
+		return esPalindromo4(0,p.length(),p);
 	}
 	private static boolean esPalindromo4(int i, int j, String p) {
 		boolean b = true;
-		if (j - i >= 0) {
-			b = p.charAt(i) == p.charAt(j) && esPalindromo4(i + 1, j - 1, p);
+		if (j - i > 1) {
+			b = p.charAt(i) == p.charAt(j-1)  && esPalindromo4(i + 1, j - 1, p);
+		}
+		return b;
+	}
+	
+	public static boolean esPalindromo5(String p) {
+		return esPalindromo5(0,p.length(),p);
+	}
+	private static boolean esPalindromo5(int i, int j, String p) {
+		boolean b = true;
+		if (j - i > 1) {
+			if(b = p.charAt(i) != p.charAt(j-1)) b = false;
+			else b = esPalindromo5(i + 1, j - 1, p);
 		}
 		return b;
 	}
 
 	public static Boolean esAritmetica1(List<Integer> ls) {
 		Integer n = ls.size();
-		if(n<2) return true;
+		if(n<=2) return true;
 		Integer r = ls.get(1)-ls.get(0);
 		return IntStream.range(0,n-1)
 	 		.allMatch(i->(ls.get(i+1)-ls.get(i)) == r);
@@ -344,12 +427,12 @@ public class IterativosyRecursivosSimples {
 
 	public static Boolean esAritmetica2(List<Integer> ls) {
 		Integer n = ls.size();
+		if(n <=2) return true;
 		Integer i = 0;
 		Boolean b = true;
 		Integer r = ls.get(1)-ls.get(0);
 		while(n-i>1  && b){
-		   Integer e2 = ls.get(i+1);
-		   Integer e1 = ls.get(i);
+		   Integer e1 = ls.get(i), e2 = ls.get(i+1);
 		   i++;
 		   b = e2-e1 == r;
 		}
@@ -358,30 +441,31 @@ public class IterativosyRecursivosSimples {
 	
 	public static Boolean esAritmetica3(List<Integer> ls) {
 		Integer n = ls.size();
+		if(n <=2) return true;
 		Integer r = ls.get(1)-ls.get(0);
 		return esAritmetica3(0,ls,r,n);
 	}
 	private static Boolean esAritmetica3(Integer i, List<Integer> ls, Integer r, Integer n) {
-		Boolean s = true;
-		if(n-i>=2) {
-			s = ls.get(i+1)-ls.get(i) == r && esAritmetica3(i+1,ls,r,n);
+		Boolean b = true;
+		if(n-i>1) {
+			b = ls.get(i+1)-ls.get(i) == r && esAritmetica3(i+1,ls,r,n);
 		}
-		return s;
+		return b;
 	}
 	
 	public static Boolean esAritmetica4(Iterable<Integer> iterable) {
-		Iterator<Integer> it = iterable.iterator();
-		Integer a1, a2;
-		if(it.hasNext()) 	a1 = it.next(); else return true;
-		if(it.hasNext()) 	a2 = it.next(); else return true;
-		Boolean b = true;
-		Integer r = a2-a1;
-		while(it.hasNext()  && b){
-			b = a2-a1 == r;
-			a1 = a2;
-			a2 = it.next();
-		}
-		return b;
+			Iterator<Integer> it = iterable.iterator();
+			Integer last,e;
+			if(it.hasNext()) e = it.next(); else return true;
+			Boolean b = true;
+			Integer r =null;
+			while(it.hasNext()  && b){
+				last = e;
+				e = it.next();
+				if(r == null) r = e-last;
+				b = e-last == r;	
+			}
+			return b;
 	}
 	
 	public static Boolean esAritmetica5(Iterable<Integer> iterable) {
@@ -390,9 +474,15 @@ public class IterativosyRecursivosSimples {
 		if(it.hasNext()) 	a1 = it.next(); else return true;
 		if(it.hasNext()) 	a2 = it.next(); else return true;
 		Integer r = a2-a1;
-	    return Stream2.consecutivePairs(Stream2.asStream(()->it))
+	    return Stream2.consecutivePairs(Stream2.of(()->it))
 	    	.allMatch(p->p.second()-p.first()==r);		
 	}
+	
+	public static Boolean esAritmetica6(Stream<Integer> st) {	
+		Stream<Integer> stc = Stream2.consecutivePairs(st).map(p->p.second()-p.first());
+	    return Stream2.allEquals(stc);		
+	}
+
 	
 	// Coeficientes de menor a mayor
 	public static Double polF(List<Double> c, Double v){
@@ -648,7 +738,7 @@ public class IterativosyRecursivosSimples {
 	}
 
 	public static void test1() throws IOException {
-		Integer n = 1002030789;
+		Integer n = 2345789;
 		Integer a = 10;
 		List<Integer> ls = digitos(n,a);
 		System.out.println("Digitos = "+ls);
@@ -665,20 +755,23 @@ public class IterativosyRecursivosSimples {
 	}
 	
 	public static void test3() {
-		System.out.println(esAritmetica1(List.of(4,6,8,10,12)));
-		System.out.println(esAritmetica2(List.of(4,6,8,10,12)));
-		System.out.println(esAritmetica3(List.of(4,6,8,10,12)));
-		System.out.println(esAritmetica4(List.of(4,6,8,10,12)));
-		System.out.println(esAritmetica5(List.of(4,6,8,10,12)));
+//		List<Integer> ls = List.of(4,6,8,11,12);
+		List<Integer> ls = List.of(4,6);
+		System.out.println(esAritmetica1(ls));
+		System.out.println(esAritmetica2(ls));
+		System.out.println(esAritmetica3(ls));
+		System.out.println(esAritmetica4(ls));
+		System.out.println(esAritmetica5(ls));
+		System.out.println(esAritmetica6(ls.stream()));
 	}
 	
 	public static void test4() {
 		String text = "reordenanedroer";
 		String text2 = "reordenanefroer";
-		System.out.println(String.format("4: %b, %b, %b, %b",
-				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text)));
-		System.out.println(String.format("4: %b, %b, %b, %b",
-				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2)));
+		System.out.println(String.format("4: %b, %b, %b, %b, %b",
+				esPalindromo1(text),esPalindromo2(text),esPalindromo3(text),esPalindromo4(text),esPalindromo3(text),esPalindromo5(text)));
+		System.out.println(String.format("5: %b, %b, %b, %b, %b",
+				esPalindromo1(text2),esPalindromo2(text2),esPalindromo3(text2),esPalindromo4(text2),esPalindromo5(text2)));
 	}
 	
 	public static void test5() throws IOException {
@@ -688,17 +781,21 @@ public class IterativosyRecursivosSimples {
 		System.out.println(String.format("3.3 %d",sumaPrimos3("ficheros/numeros2.txt")));
 		var r1 = agrupaPorResto1("ficheros/numeros2.txt",5);
 		var r2 = agrupaPorResto2("ficheros/numeros2.txt",5);
-		System.out.println("4 \n "+r1);
-		System.out.println("5 \n "+r2);
+		var r3 = agrupaPorResto3("ficheros/numeros2.txt",5);
+		var r4 = agrupaPorResto4("ficheros/numeros2.txt",5);
+		System.out.println("4 "+r1);
+		System.out.println("5 "+r2);
+		System.out.println("6 "+r3);
+		System.out.println("7 "+r4);
 		
 	}
 	
 	public static void test6() throws IOException {
 		List<Integer> ls1 = List2.of(-1,3,5,5,7,9,13,15,15,17,19);
-		System.out.println(index1(ls1,13));
-		System.out.println(index4(ls1,13,Comparator.naturalOrder()));
-		System.out.println(index5(ls1,13,Comparator.naturalOrder()));
-		System.out.println(index9(ls1,13,Comparator.naturalOrder()));
+		System.out.println(index1(ls1,11));
+		System.out.println(index4(ls1,11,Comparator.naturalOrder()));
+		System.out.println(index5(ls1,11,Comparator.naturalOrder()));
+		System.out.println(index9(ls1,11,Comparator.naturalOrder()));
 		Integer e = 13;
 		Iterator<Integer> it1 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
 		Iterator<Integer> it2 = Files.lines(Path.of("ficheros/numeros.txt")).map(x->Integer.parseInt(x)).iterator();
@@ -748,8 +845,9 @@ public class IterativosyRecursivosSimples {
 	
 	public static void test10() {
 		List<Integer> l1 = List2.of(1,3,5,7,9,12);
-//		List<Integer> l2 = List2.of(0,2,4,10,19,21,23,45);
+		List<Integer> l2 = List2.of(0,2,4,10,19,21,23,45);
 		System.out.println(String.format("5: %s, %s",cercano(l1,11),cercano2(l1,11)));
+		System.out.println(String.format("6: %s, %s",cercano(l2,11),cercano2(l2,11)));
 	}
 	
 	public static void test11() {
@@ -763,8 +861,122 @@ public class IterativosyRecursivosSimples {
 		Locale.setDefault(new Locale("en", "us"));
 		System.out.printf("%.4f,%.4f\n",Math.exp(0.567),1+IterativosyRecursivosSimples.exponential(0.567,0.0001));
 	}
+	
+	public static void test13() {
+		Cr s = cr(100,37);
+		String2.toConsole("%s,%s",s,37*s.c()+s.r());
+	}
+	
+	public static String ts(List<String> ls) {
+		return ls.stream().collect(Collectors.reducing("",s->s.substring(0, 1),(x,y)->x+y));
+	}
+	
+	public static void test14() {
+		String2.toConsole(ts(List.of("Juan","Pedro","Antonio")));
+	}
+	
+	public static Optional<Integer> mayorEntre(Integer m) {
+		Integer b = null;
+		Integer np = 2;
+		while(np<m){
+			b = np;	
+		   	np = Math2.siguientePrimo(np);			      	   
+		}
+		return Optional.ofNullable(b);
+	}
+
+	
+	public static void test15() {
+		Optional<Integer> p1 = Stream2.findLast(Stream.iterate(2,e->e<32,e->Math2.siguientePrimo(e)));
+		Optional<Integer> p2 = mayorEntre(32);
+		String2.toConsole("%d,%d",p1.get(),p2.get());
+	}
+	
+	public static <E,K> Map<K,Integer> groupsSize(Stream<E> st, Function<E,K> key) {
+	 	return st.collect(
+		   Collectors.groupingBy(key,
+		      Collectors.collectingAndThen(
+		          Collectors.counting(),Long::intValue)));
+	}
+	
+	
+
+	record Ciudad(String nombre, String provincia) {
+		public static Ciudad of(String nombre, String provincia) {
+			return new Ciudad(nombre, provincia);
+		}
+	}
+	
+	public static void test16() {
+		List<Ciudad> ls = List.of(Ciudad.of("A1","PA"),Ciudad.of("A2","PB"),Ciudad.of("A3","PC"),Ciudad.of("A4","PA"),
+				Ciudad.of("A","PC"));
+		Map<String,Integer> m =groupsSize(ls.stream(),c->c.provincia());
+		String2.toConsole("%s",m);
+	}
+
+	public static <E,K,R> Map<K,R> groupingReduce(
+			Stream<E> st, 
+			Function<E,K> key, 
+			Function<E,R> f,
+			BinaryOperator<R> op){
+	 	return st.collect(Collectors.groupingBy(key,
+	             Collectors.mapping(f,
+	            		 Collectors.collectingAndThen(
+	            				 Collectors.reducing(op),g->g.get()))));
+	}
+	
+	public static <E,K,R> Map<K,R> groupingReduce2(Stream<E> st, Function<E,K> key,
+	 		Function<E,R> f,BinaryOperator<R> op){
+		Iterator<E> it = st.iterator();
+		Map<K,R> b = new HashMap<>();
+		while(it.hasNext()){	   
+		   E e = it.next();
+		   K k = key.apply(e);
+		   R r = f.apply(e);
+		   if(b.containsKey(k))
+			b.put(k,op.apply(b.get(k),r));
+	       else 
+		 	b.put(k,r);
+		}
+		return b;
+	}
+
+
+	public static record Persona(String nombre, Integer edad) {
+		public static Persona of(String nombre, Integer edad) {
+			return new Persona(nombre,edad);
+		}
+	}
+	
+	public static void test17() {
+		List<Persona> ls = List.of(Persona.of("A1",32),Persona.of("A2",64),Persona.of("A3",31),Persona.of("A1",45),
+				Persona.of("A2",33));
+		Map<String,Integer> m1 = groupingReduce(ls.stream(),p->p.nombre(),p->p.edad(),
+				BinaryOperator.maxBy(Comparator.naturalOrder()));
+		Map<String,Integer> m2 = groupingReduce2(ls.stream(),p->p.nombre(),p->p.edad(),
+				BinaryOperator.maxBy(Comparator.naturalOrder()));
+		String2.toConsole("%s",m1);
+		String2.toConsole("%s",m2);
+	}
+	
+	public static List<Long> primos(Long n) {
+		return Stream.iterate(2L,e->e<n,e->Math2.siguientePrimo(e))
+	 	.toList();
+	}
+	
+	public static List<Long> primos2(Long n) {
+		Long e = 2L;
+		List<Long> r = new ArrayList<>();
+		while(e<n) {
+			r.add(e);
+			e = Math2.siguientePrimo(e);
+		}
+		return r;
+	}
+
 
 	public static void main(String[] args) throws IOException {
+//		String2.toConsole("%s,%s",primos(100L),primos2(100L));
 		test1();
 	}
 	

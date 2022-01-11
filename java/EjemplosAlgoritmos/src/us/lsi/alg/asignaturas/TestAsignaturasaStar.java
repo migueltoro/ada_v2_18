@@ -5,16 +5,15 @@ import java.util.Locale;
 import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
+
 
 public class TestAsignaturasaStar {
 
@@ -27,12 +26,15 @@ public class TestAsignaturasaStar {
 		AsignaturasVertice ini = AsignaturasVertice.inicial();
 		Predicate<AsignaturasVertice> predicado = t ->AsignaturasVertice.goal(t);
 		
+		
+		SimpleVirtualGraph.constraintG =  AsignaturasVertice.constraint();
+		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
-				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->v.constraint(),v->-(double)v.getPeso());
+				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso());
 	
 		
-		AStar<AsignaturasVertice, AsignaturasEdge> as = GraphAlg
-				.aStar(grafoAStar,Heuristica::heuristic_negate);
+		AStar<AsignaturasVertice, AsignaturasEdge> as = AStar
+				.of(grafoAStar,Heuristica::heuristic, AStarType.Max);
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
@@ -41,10 +43,10 @@ public class TestAsignaturasaStar {
 		System.out.println("___________________");
 		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoPDR = 
-				Graphs2.simpleVirtualGraphLast(ini, predicado,null,v->true,v->(double)v.getPeso());
+				SimpleVirtualGraph.last(ini, predicado,v->(double)v.getPeso());
 
-		DynamicProgrammingReduction<AsignaturasVertice, AsignaturasEdge> pd = DPR
-						.dynamicProgrammingReduction(grafoPDR, Heuristica::heuristic, PDType.Max);
+		DynamicProgrammingReduction<AsignaturasVertice, AsignaturasEdge> pd = DynamicProgrammingReduction
+						.of(grafoPDR, Heuristica::heuristic, PDType.Max);
 
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s2 = pd.search().get();
@@ -54,13 +56,12 @@ public class TestAsignaturasaStar {
 		System.out.println("___________________");
 		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoBT = 
-				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->true,v->(double)v.getPeso());
+				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso());
 
-		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BT.backTracking(
+		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BackTracking.of(
 				grafoBT, 
 				Heuristica::heuristic, 
 				SolucionAsignaturas::of,
-				AsignaturasVertice::copy,
 				BTType.Max);
 		bt.search();
 		System.out.println(bt.getSolution().get());

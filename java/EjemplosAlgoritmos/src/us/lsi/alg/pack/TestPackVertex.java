@@ -3,8 +3,8 @@ package us.lsi.alg.pack;
 import java.util.Arrays;
 import java.util.Locale;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPackVertex {
 
@@ -16,7 +16,7 @@ public class TestPackVertex {
 //		Predicate<PackVertex> goal  = PackVertex.goal;
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
 		
 		System.out.println(graph.startVertex());
 		System.out.println(graph.startVertex().actions());

@@ -1,12 +1,14 @@
 package us.lsi.trees;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import us.lsi.common.Comparator2;
+import us.lsi.common.List2;
+import us.lsi.common.String2;
 import us.lsi.tiposrecursivos.BinaryTree;
 import us.lsi.tiposrecursivos.Tree;
 import us.lsi.tiposrecursivos.BinaryTree.BinaryType;
@@ -33,7 +35,7 @@ public class BinaryTrees {
 		case Binary -> {
 			E e1 = minLabel(tree.getLeft(), cmp);
 			E e2 = minLabel(tree.getRight(), cmp);
-			yield Comparator2.min(tree.getLabel(), Comparator2.min(e1, e2, cmp), cmp);
+			yield Stream.of(tree.getLabel(),e1, e2).filter(e->e!=null).min(cmp).get();
 		}
 		};
 	}
@@ -197,8 +199,6 @@ public class BinaryTrees {
 		return r;
 	}
 	
-	
-	
 	public static <E> Boolean isOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
 		BinaryType type = tree.getType();
 		return switch (type) {
@@ -208,14 +208,12 @@ public class BinaryTrees {
 			E label = tree.getLabel();
 			E left = tree.getLeft().isEmpty() ? null : tree.getLeft().getLabel();
 			E right = tree.getRight().isEmpty() ? null : tree.getRight().getLabel();
-			Boolean r = (left == null || Comparator2.isGE(label, left, cmp))
-					&& (right == null || Comparator2.isLE(label, right, cmp));
+			Boolean r = (left == null || cmp.compare(label, left) >= 0)
+					&& (right == null || cmp.compare(label, right) <=0);
 			yield r && isOrdered(tree.getLeft(), cmp) && isOrdered(tree.getRight(), cmp);
 		}
 		};
 	}
-	
-	
 	
 	public static Integer sumIfPredicate(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
 		BinaryType type = tree.getType();
@@ -228,7 +226,8 @@ public class BinaryTrees {
 	}
 	
 	public static Integer sumIfPredicate2(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
-		return tree.stream().filter(t->!t.isEmpty())
+		return tree.stream()
+				.filter(t->!t.isEmpty())
 				.map(t->t.getLabel())
 				.filter(predicate)
 				.mapToInt(lb->lb)
@@ -266,11 +265,46 @@ public class BinaryTrees {
 		BinaryTree<Integer> tree4 = copy(tree);
 		System.out.println(equals(tree,tree4));
 	}
+	
+	public static record TT(Integer p, List<Integer> ls) {
+		public static TT of(List<Integer> ls) {
+			Integer p = ls.stream().reduce(1,(x,y)->x*y);
+			return new TT(p,ls);
+		}
+	}
+	
+	public static TT maxCamino(BinaryTree<Integer> tree) {
+		return maxCamino(tree,List.of());
+	}
+	
+	public static TT maxCamino(BinaryTree<Integer> tree, List<Integer> camino) {
+		BinaryType type = tree.getType();
+		return switch(type) {	
+		case Empty -> null;
+		case Leaf -> {
+			Integer label = tree.getLabel();
+			camino = List2.addLast(camino,label);
+			yield TT.of(camino);
+		}
+		case Binary -> {
+			Integer label = tree.getLabel();
+			camino = List2.addLast(camino,label);
+			TT left = maxCamino(tree.getLeft(),camino);
+			TT right = maxCamino(tree.getRight(),camino);
+			yield Stream.of(left,right).filter(x->x!=null).max(Comparator.comparing(t->t.p())).orElse(null);
+		}
+		};
+	}
+	
+	public static void test2() {
+		BinaryTree<Integer> tree =  BinaryTree.parse("1(2(-1,-4(3,_)),10(-5(7(_,-2),4),-6))")
+				.map(label->Integer.parseInt(label));
+		tree.toDot("ficheros/tree.gv");
+		String2.toConsole("%s",maxCamino(tree));	
+	}
 
 	public static void main(String[] args) {
-		BinaryTree<Integer> tree = addOrdered(List.of(1,7,2,5,10,9,-1,14,67,67), Comparator.naturalOrder());
-		System.out.println(tree.toString());
-		System.out.println(isOrdered(tree,Comparator.naturalOrder()));
+		test2();
 	}
 	
 	

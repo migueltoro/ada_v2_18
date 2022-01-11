@@ -6,13 +6,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
-
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAS {
 
@@ -29,13 +26,14 @@ public class TestAS {
 			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
 			EGraph<ProductosVertex, ProductosEdge> graph = 
-					Graphs2.simpleVirtualGraphSum(start,ProductosVertex.goal(),null,v->true, x -> x.weight());	
+					SimpleVirtualGraph.sum(start,ProductosVertex.goal(), x -> x.weight());	
 
 			// Algoritmo A*
-			AStar<ProductosVertex, ProductosEdge> aStar = GraphAlg.aStar(
+			AStar<ProductosVertex, ProductosEdge> aStar = AStar.of(
 					graph, 
-					ProductosHeuristic::heuristic);
-			aStar.withGraph = true;
+					ProductosHeuristic::heuristic,
+					AStarType.Min);
+			
 			GraphPath<ProductosVertex, ProductosEdge> gp = aStar.search().get();
 
 			List<Integer> gp_as = gp.getEdgeList().stream().map(x -> x.action()).collect(Collectors.toList()); // getEdgeList();
@@ -44,9 +42,9 @@ public class TestAS {
 			System.out.println(s_as);
 
 
-			GraphColors.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
-					e -> e.action().toString(), v -> GraphColors.colorIf(Color.red, goal.test(v)),
-					e -> GraphColors.colorIf(Color.red, gp.getEdgeList().contains(e)));
+//			GraphColors.toDot(aStar.outGraph, "ficheros/productosAStarGraph.gv", v -> v.toGraph(),
+//					e -> e.action().toString(), v -> GraphColors.colorIf(Color.red, goal.test(v)),
+//					e -> GraphColors.colorIf(Color.red, gp.getEdgeList().contains(e)));
 
 		}
 

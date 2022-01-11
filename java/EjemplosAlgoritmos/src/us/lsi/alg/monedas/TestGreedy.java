@@ -3,13 +3,12 @@ package us.lsi.alg.monedas;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
-import java.util.Optional;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import org.jgrapht.GraphPath;
+
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.EGraphPath;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestGreedy {
 
@@ -25,15 +24,16 @@ public class TestGreedy {
 //		System.out.println("1 = "+e1);
 //		System.out.println("2 = "+e2);
 		
+		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
+		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
+				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight());
 		
-		GreedySearchOnGraph<MonedaVertex, MonedaEdge> rr = GraphAlg.greedy(
-				graph,
-				MonedaVertex::accionVoraz);
+		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph,MonedaVertex::aristaVoraz);
 		
-		Optional<EGraphPath<MonedaVertex, MonedaEdge>> path = rr.search();
-		System.out.println("G "+path.get().getWeight());
+		GraphPath<MonedaVertex, MonedaEdge> path = rr.path();
+		System.out.println(rr.isSolution(path));
+		System.out.println("G "+path.getWeight());
 		System.out.println("H "+MonedasHeuristica.heuristic(e1,MonedaVertex.goal(),e2));
 		
 		Collections.sort(Moneda.monedas,Comparator.comparing(m->m.pesoUnitario()));
@@ -45,15 +45,14 @@ public class TestGreedy {
 //		System.out.println("3 = "+e1);
 //		System.out.println("4 = "+e2);
 		
-		graph = Graphs2.simpleVirtualGraphSum(e1,MonedaVertex.goal(),e2,MonedaVertex.constraint());
+		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
+		graph = SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight());
 		
-		rr = GraphAlg.greedy(
-				graph,
-				MonedaVertex::accionVoraz);
+		rr = GreedyOnGraph.of(graph,MonedaVertex::aristaVoraz);
 		
-		path = rr.search();
-//		System.out.println(path);
-		System.out.println("G "+path.get().getWeight());
+		path = rr.path();
+		System.out.println(rr.isSolution(path));
+		System.out.println("G "+path.getWeight());
 		System.out.println("H "+MonedasHeuristica.heuristic(e1,MonedaVertex.goal(),e3));
 	}
 

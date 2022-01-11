@@ -15,7 +15,6 @@ import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.common.Set2;
-import us.lsi.common.TriFunction;
 
 public class ShortestTour<V, E, G extends Graph<V, E>> {
 	
@@ -31,15 +30,15 @@ public class ShortestTour<V, E, G extends Graph<V, E>> {
 	public static <V, E, G extends Graph<V, E>> ShortestTour<V, E, G> of(
 			G graph, 
 			Supplier<G> creator,
-			TriFunction<V, V, Double, E> edgeCreator) {
+			Supplier<E> edgeCreator) {
 		return new ShortestTour<V, E, G>(graph, creator, edgeCreator);
 	}
 	
 	private G graph;
 	private Supplier<G> creator;
-	private TriFunction<V, V, Double, E> edgeCreator;
+	private Supplier<E> edgeCreator;
 
-	private ShortestTour(G graph, Supplier<G> creator, TriFunction<V, V, Double, E> edgeCreator) {
+	private ShortestTour(G graph, Supplier<G> creator, Supplier<E> edgeCreator) {
 		super();
 		this.graph = graph;
 		this.creator = creator;
@@ -96,10 +95,10 @@ public class ShortestTour<V, E, G extends Graph<V, E>> {
 					if (!r.containsEdge(v1, v2)) {					
 						GraphPath<V,E> gp = a.getPath(v1, v2);
 						shortestPath.put(VerticesPar.of(v1,v2), gp);
-						Double weight = gp.getWeight();	
-						if(!closed && VerticesPar.of(v1,v2).equals(VerticesPar.of(startVertex,endVertex))) 
-							weight = 0.;;
-						E e = edgeCreator.apply(v1,v2,weight);
+//						Double weight = gp.getWeight();	
+//						if(!closed && VerticesPar.of(v1,v2).equals(VerticesPar.of(startVertex,endVertex))) 
+//							weight = 0.;;
+						E e = edgeCreator.get();
 						r.addEdge(v1, v2, e);
 					}
 				}

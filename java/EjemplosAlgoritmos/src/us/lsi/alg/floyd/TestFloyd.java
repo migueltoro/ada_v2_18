@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.alg.DP;
 import us.lsi.graphs.alg.DynamicProgramming;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.views.IntegerVertexGraphView;
@@ -19,12 +19,16 @@ import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 
 public class TestFloyd {
 	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
+	
 	public static SimpleWeightedGraph<Ciudad, Carretera> leeDatos(String fichero) {
 		SimpleWeightedGraph<Ciudad, Carretera> graph = GraphsReader.newGraph(fichero, 
 				Ciudad::ofFormat, 
 				Carretera::ofFormat,
 				Graphs2::simpleWeightedGraph, 
-				Carretera::getKm);
+				Carretera::km);
 		return graph;
 	}
 	
@@ -38,17 +42,17 @@ public class TestFloyd {
 		System.out.println(graph);
 		System.out.println(graph2);
 		
-		Integer origen = graph2.getIndex(Ciudad.ofName("Sevilla"));
-		Integer destino = graph2.getIndex(Ciudad.ofName("Almeria"));
+		Integer origen = graph2.getIndex(ciudad(graph,"Sevilla"));
+		Integer destino = graph2.getIndex(ciudad(graph,"Almeria"));
 		
 		FloydVertex.graph = graph2;
 		FloydVertex.n = graph2.vertexSet().size();
 		FloydVertex p = FloydVertex.initial(origen,destino);
 		
 		SimpleVirtualHyperGraph<FloydVertex,FloydEdge,Boolean> graph3 = 
-				Graphs2.simpleVirtualHyperGraph(p);
+				SimpleVirtualHyperGraph.simpleVirtualHyperGraph(p);
 		
-		DynamicProgramming<FloydVertex, FloydEdge, Boolean> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
+		DynamicProgramming<FloydVertex, FloydEdge, Boolean> a = DynamicProgramming.dynamicProgrammingSearch(graph3,PDType.Min);
 		
 		a.withGraph = true;
 		a.search();

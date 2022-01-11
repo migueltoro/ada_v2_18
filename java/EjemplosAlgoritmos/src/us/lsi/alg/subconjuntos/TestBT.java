@@ -5,11 +5,10 @@ import java.util.Locale;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -32,16 +31,15 @@ public class TestBT {
 			// Grafo
 
 			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-					Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x -> x.weight());
+					SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x -> x.weight());
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
 			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
-				BT.backTracking(graph, 
+				BackTracking.of(graph, 
 					SubconjuntosHeuristic::heuristic,
 					SolucionSubconjuntos::of, 
-					SubconjuntosVertex::copy, 
 					BTType.Min);
 
 			bta.withGraph = true;
@@ -50,13 +48,12 @@ public class TestBT {
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
 			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
 			System.out.println("Sv = "+sv);
-			bta.action = e->e.action();
 			bta.search();
 			
 			System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
 			List<SubconjuntosEdge> ls = bta.optimalPath != null?bta.optimalPath.getEdgeList():null;
 			
-			GraphColors.toDot(bta.outGraph,"ficheros/subconjuntosBTGraph.gv",
+			GraphColors.toDot(bta.graph(),"ficheros/subconjuntosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.colorIf(Color.red,SubconjuntosVertex.goal().test(v)),

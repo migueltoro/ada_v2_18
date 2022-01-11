@@ -1,10 +1,10 @@
 package us.lsi.alg.reinas;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
+
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.EGraph;
 
 
@@ -15,21 +15,24 @@ public class TestBTRandom {
 			BackTrackingRandom.threshold = 15;
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
-			EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = 
-					Graphs2.simpleVirtualGraphLast(e1,ReinasVertex.goal(),null,ReinasVertex.constraint(),v->v.errores().doubleValue());		
 			
-			BackTrackingRandom<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>, SolucionReinas> ms = 
-					BT.random(
+			SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
+			EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
+					SimpleVirtualGraph.last(e1,ReinasVertex.goal(),v->v.errores().doubleValue());		
+			
+			BackTrackingRandom<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
+					BackTrackingRandom.of(
 					graph, 
 					SolucionReinas::of, 
-					ReinasVertex::copy, 
+					BTType.One, 
 					v->ReinasVertex.n-v.index());	
+			
 			long startTime = System.nanoTime();
 			ms.search();
 			System.out.println("Iteraciones = "+ms.iterations);
 			long endTime = System.nanoTime() - startTime;
 			System.out.println("1 = "+endTime);
-			System.out.println(ms.getSolution());
+			System.out.println(ms.getSolution().get());
 
 	}
 

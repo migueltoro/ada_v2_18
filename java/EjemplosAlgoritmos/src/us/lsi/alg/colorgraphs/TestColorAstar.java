@@ -11,9 +11,11 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.GreedyOnGraph;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestColorAstar {
 
@@ -23,7 +25,7 @@ public class TestColorAstar {
 				Ciudad::ofFormat, 
 				Carretera::ofFormat,
 				Graphs2::simpleWeightedGraph, 
-				Carretera::getKm);
+				Carretera::km);
 		return graph;
 	}
 
@@ -35,18 +37,23 @@ public class TestColorAstar {
 //		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex e1 = ColorVertex.first();
-		Integer m = ColorHeuristic.gredyPath(e1, ColorVertex.goal());
-		System.out.println("Voraz = "+m);
-		ColorVertex.data(m, g2);
+					
+		
 		
 		EGraph<ColorVertex, ColorEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,ColorVertex.goal(),null,v->true,v->v.nc().doubleValue());		
+				SimpleVirtualGraph.last(e1,ColorVertex.goal(),v->v.nc().doubleValue());	
 		
-		AStar<ColorVertex, ColorEdge> ms = GraphAlg.aStar(
+		Integer m = GreedyOnGraph.of(graph,v->v.greedyEdge()).last().get().nc();
+		System.out.println("Voraz = "+m);
+		
+		ColorVertex.data(m, g2);
+		
+		AStar<ColorVertex, ColorEdge> ms = AStar.of(
 				graph,
-				ColorHeuristic::heuristic);
+				(v1,p,v2)->(double) v1.nc(),
+				AStarType.Min);
 		
-		GraphPath<ColorVertex, ColorEdge> path = ms.search().orElse(null);
+		GraphPath<ColorVertex, ColorEdge> path = ms.search().get();
 		ColorVertex lv = List2.last(path.getVertexList());
 		System.out.println("Numero de Colores = "+lv.nc());
 		System.out.println(lv.cav());

@@ -2,18 +2,15 @@ package us.lsi.alg.pack;
 
 
 import java.util.Locale;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
-
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -22,29 +19,27 @@ public class TestBT {
 		Data.data("ficheros/pack.txt",15);
 		Data.m = Data.n;
 		PackVertex e1 = PackVertex.first();
-		Predicate<PackVertex> goal  = PackVertex.goal();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
 		
-		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
+		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
 				PackVertex::greedyEdge);
 	
-		GraphPath<PackVertex, PackEdge> path = rr.search().orElse(null);
+		GraphPath<PackVertex, PackEdge> path = rr.path();
 		SolucionPack sp = SolucionPack.of(path);
 	
 		PackVertex.m = sp.nc();
 		
-		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BT.backTracking(
+		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BackTracking.of(
 				graph,
 				Heuristica::heuristic,
 				SolucionPack::of,
-				PackVertex::copy,
 				BTType.Min);	
 		
 		ms.bestValue = PackVertex.m.doubleValue();
-		ms.solutions.add(sp);
+		ms.optimalPath = path;
 		
 		ms.search();
 

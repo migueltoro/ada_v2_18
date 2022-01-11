@@ -10,12 +10,12 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.common.IntPair;
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.tareasyprocesadores.datos.Tarea;
 
 public record TyPVertex(Integer index, List<Double> cargas) 
-      implements ActionVirtualVertex<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>, Integer>{
+      implements VirtualVertex<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>, Integer>{
 
 	
 	public static Integer numeroDeProcesadores;
@@ -92,7 +92,7 @@ public record TyPVertex(Integer index, List<Double> cargas)
 				.get();
 	}
 	
-	public  ActionSimpleEdge<TyPVertex, Integer> greadyEdge() {
+	public  SimpleEdgeAction<TyPVertex, Integer> greadyEdge() {
 		return this.edge(this.greadyAction());
 	}
 
@@ -102,8 +102,8 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	}
 	
 	@Override
-	public ActionSimpleEdge<TyPVertex, Integer> edge(Integer a) {
-		return ActionSimpleEdge.of(this,this.neighbor(a), a, 1.);
+	public SimpleEdgeAction<TyPVertex, Integer> edge(Integer a) {
+		return SimpleEdgeAction.of(this,this.neighbor(a), a, 1.);
 	}
 	
 	public static TyPVertex copy(TyPVertex vertex) {
@@ -111,7 +111,7 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	}
 	
 	
-	public static SolucionTyP getSolucion(GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path){	
+	public static SolucionTyP getSolucion(GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> path){	
 		Map<Integer,List<Tarea>> carga = path.getEdgeList().stream()
 				.map(e->IntPair.of(e.action(),e.source().index()))
 				.collect(Collectors.groupingBy(p->p.first(),Collectors.mapping(p->Tarea.getTarea(p.second()), Collectors.toList())));

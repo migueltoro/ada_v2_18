@@ -10,11 +10,10 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -39,9 +38,9 @@ public class TestPD {
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraphSum(start,goal,null,v->true,x -> x.weight());
-			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DPR
-					.dynamicProgrammingReduction(
+			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
+			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DynamicProgrammingReduction
+					.of(
 							graph, 
 							MulticonjuntoHeuristic::heuristic, 
 							PDType.Min);

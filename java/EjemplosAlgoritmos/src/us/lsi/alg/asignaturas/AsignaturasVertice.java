@@ -3,12 +3,13 @@ package us.lsi.alg.asignaturas;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record AsignaturasVertice(Integer index,List<Integer>diasAsignatura,Integer lastAsignatura) implements ActionVirtualVertex<AsignaturasVertice,AsignaturasEdge,Integer> {
+public record AsignaturasVertice(Integer index,List<Integer>diasAsignatura,Integer lastAsignatura) implements VirtualVertex<AsignaturasVertice,AsignaturasEdge,Integer> {
 
 	public static AsignaturasVertice inicial() {
 		return new AsignaturasVertice(0,List2.ofTam(0,DatosAsignaturas.NA),null);
@@ -27,8 +28,8 @@ public record AsignaturasVertice(Integer index,List<Integer>diasAsignatura,Integ
 		return this.index>=0 &&this.index<=DatosAsignaturas.ND;
 	}
 	
-	public Boolean constraint() {
-		return this.diasAsignatura.stream().allMatch(da->da>=1 && da<=4);
+	public static Predicate<AsignaturasVertice> constraint() {
+		return x->x.diasAsignatura.stream().allMatch(da->da>=1 && da<=4);
 	}
 	
 	public Optional<Integer> mejor() {

@@ -16,9 +16,6 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 
-
-
-
 public class Ciclos {
 	
 
@@ -29,15 +26,15 @@ public class Ciclos {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
 		SimpleWeightedGraph<Ciudad, Carretera> gc = 
 				Graphs2.explicitCompleteGraph(
 						graph,
 						200000.,
-						()-> new SimpleWeightedGraph<>(Ciudad::of,Carretera::of),
-						Carretera::ofWeight,
-						Carretera::getKm);
+						Graphs2::simpleWeightedGraph,
+						()->Carretera.of(10000.),
+						Carretera::km);
 		
 		TwoApproxMetricTSP<Ciudad, Carretera> tsp = new  TwoApproxMetricTSP<>();
 		List<Ciudad> r3 = tsp.getTour(gc).getVertexList();

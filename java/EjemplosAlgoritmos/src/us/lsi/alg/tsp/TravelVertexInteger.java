@@ -10,12 +10,11 @@ import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
-//import us.lsi.path.GraphPaths;
-import us.lsi.path.GraphPaths;
+import us.lsi.graphs.virtual.VirtualVertex;
+import us.lsi.path.GraphPath2;
 import us.lsi.streams.Stream2;
 
-public record TravelVertexInteger(List<Integer> camino) implements ActionVirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
+public record TravelVertexInteger(List<Integer> camino) implements VirtualVertex<TravelVertexInteger, TravelEdgeInteger, IntPair> {
 	
 	public static TravelVertexInteger of(List<Integer> camino) {
 		return new TravelVertexInteger(List2.copy(camino));
@@ -43,8 +42,8 @@ public record TravelVertexInteger(List<Integer> camino) implements ActionVirtual
 	@Override
 	public List<IntPair> actions() {
 		Integer n = camino.size()-1;
-		return Stream2.allPairs(1,n,0,n-1)
-				.filter(p->p.second() > p.first() +2)
+		return Stream2.allPairs(1,n-1,1,n-1)
+				.filter(p->p.second()-p.first()>2)
 				.collect(Collectors.toList());
 	}
 
@@ -66,7 +65,7 @@ public record TravelVertexInteger(List<Integer> camino) implements ActionVirtual
 	}
 	
 	public Double weight() {
-		return GraphPaths.of(TravelVertexInteger.graph,this.camino()).getWeight();
+		return GraphPath2.ofVertices(TravelVertexInteger.graph,this.camino()).getWeight();
 	}
 
 }

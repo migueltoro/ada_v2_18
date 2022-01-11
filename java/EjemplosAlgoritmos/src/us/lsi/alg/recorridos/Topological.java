@@ -4,7 +4,6 @@ import us.lsi.flowgraph.FlowEdge;
 import us.lsi.flowgraph.FlowGraph;
 import us.lsi.flowgraph.FlowVertex;
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.TopologicalSearch;
 import us.lsi.graphs.virtual.EGraph;
 
@@ -15,9 +14,9 @@ public class Topological {
 		
 		System.out.println(graph);
 //		System.out.println(FlowVertex.vertices.get(4));
-		EGraph<FlowVertex, FlowEdge> g = Graphs2.eGraphSum(graph,FlowVertex.vertices.get(4),null,null,v->true);
+		EGraph<FlowVertex, FlowEdge> g = Graphs2.eGraphSum(graph,FlowVertex.vertices.get(4),null,null);
 		
-		TopologicalSearch<FlowVertex, FlowEdge> ra = GraphAlg.topological(g,FlowVertex.vertices.get(4));
+		TopologicalSearch<FlowVertex, FlowEdge> ra = TopologicalSearch.topological(g,FlowVertex.vertices.get(4));
 		
 		ra.stream().forEach(c->System.out.println(c));;
 	}

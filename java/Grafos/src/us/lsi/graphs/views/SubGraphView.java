@@ -74,7 +74,7 @@ public class SubGraphView<V, E, G extends Graph<V,E>> implements Graph<V, E> {
 	}
 
 	public int degreeOf(V v) {
-		return graph.degreeOf(v);
+		return graph.edgesOf(v).size();
 	}
 
 	public Set<E> edgeSet() {

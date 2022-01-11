@@ -10,7 +10,10 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.views.IntegerVertexGraphView;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestGreedyColor {
 	
@@ -19,7 +22,7 @@ public class TestGreedyColor {
 				Ciudad::ofFormat, 
 				Carretera::ofFormat,
 				Graphs2::simpleWeightedGraph, 
-				Carretera::getKm);
+				Carretera::km);
 		return graph;
 	}
 
@@ -28,19 +31,21 @@ public class TestGreedyColor {
 		
 		Locale.setDefault(new Locale("en", "US"));
 		
-		SimpleWeightedGraph<Ciudad, Carretera> graph = leeGrafo("./ficheros/andalucia.txt");
+		SimpleWeightedGraph<Ciudad, Carretera> g0 = leeGrafo("./ficheros/andalucia.txt");
 		
-		System.out.println(graph);
+		System.out.println(g0);
 		
-		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(graph);
+		Graph<Integer,SimpleEdge<Integer>> g2 = IntegerVertexGraphView.of(g0);
 		
 //		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
 		ColorVertex v1 = ColorVertex.first();
 		
-		Integer nc = ColorHeuristic.gredyPath(v1,ColorVertex.goal());
+		EGraph<ColorVertex, ColorEdge> graph = 
+				SimpleVirtualGraph.last(v1,ColorVertex.goal(),v->v.nc().doubleValue());	
 		
-		System.out.println(nc);
+		Integer m2 = GreedyOnGraph.of(graph,v->v.greedyEdge()).last().get().nc();
+		System.out.println("Voraz = "+m2);
 	}
 
 }

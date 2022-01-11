@@ -19,9 +19,16 @@ public abstract class Test extends us.lsi.basictypes.Test {
 		List<Double> ls = List.of(-1.,6.,-2.,5.,-1.,4.,3.,-4.,3.);
 		String2.toConsole("%s",ProblemasDeListas.getSubSecuenciaMaxima(ls));
 	}
+	
+	public static void test3() {
+		List<Double> ls1 = Arrays.asList(-1.,6.,-2.,5.,-1.,4.,3.,-4.,3.);
+		List<Double> ls2 = new ArrayList<>(ls1);
+		String2.toConsole("%s == %s",ProblemasDeListas.banderaHolandesa(ls1,ls1.get(0),Comparator.naturalOrder()),ls1);
+		String2.toConsole("%s == %s",ProblemasDeListas.banderaHolandesaF(ls2,ls2.get(0),Comparator.naturalOrder()),ls2);
+	}
 
 	public static void main(String[] args) {
-		test2();
+		test3();
 	}
 
 }

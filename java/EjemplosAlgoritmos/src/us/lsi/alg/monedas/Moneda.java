@@ -32,6 +32,8 @@ public record Moneda(Integer valor,Integer peso) {
 
 	public static List<Moneda> monedas;
 	
+	public static Integer n;
+	
 	public static Moneda get(Integer i) {
 		return Moneda.monedas.get(i);
 	}
@@ -49,6 +51,7 @@ public record Moneda(Integer valor,Integer peso) {
 				.map(ln->Moneda.parse(ln))
 				.sorted(Comparator.comparing(m->-m.pesoUnitario()))
 				.collect(Collectors.toList());
+		n = monedas.size();
 	}
 	
 }

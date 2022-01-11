@@ -34,7 +34,8 @@ public class ProblemasDeListas {
 	private static <E> IntPair masDeLaMitad2R(List<E> ls,Comparator<? super E> cmp) {
 		Integer n = ls.size();
 		IntPair r;
-		IntPair p = banderaHolandesa(ls,cmp);
+		E pivote = escogePivote(ls,0,n);
+		IntPair p = banderaHolandesa(ls,pivote,cmp);
 		if(p.size() >= n/2) r = p;
 		else if(p.first() >=n/2) r = masDeLaMitad2R(ls.subList(0,p.first()),cmp);
 		else if(n-p.second() >=n/2) r = masDeLaMitad2R(ls.subList(p.second(),n),cmp);
@@ -80,21 +81,17 @@ public class ProblemasDeListas {
 		quickSort(lista,0,lista.size(),cmp);	
 	}
 	
-	public static <E> IntPair banderaHolandesa(List<E> ls, Comparator<? super E> cmp){
+	public static <E> IntPair banderaHolandesa(List<E> ls, E pivote, Comparator<? super E> cmp){
 		Integer n = ls.size();
-		E pivote = escogePivote(ls,0,n);
 		return banderaHolandesa(ls,pivote,0,n,cmp);
 	}
 	
 	public static <E> IntPair banderaHolandesa(List<E> ls, E pivote, Integer i, Integer j,  Comparator<? super E> cmp){
-		int a, b, c;
-		a = i;	
-		b = i;	
-		c = j;	
+		Integer a=i, b=i, c=j;
 		while (c-b>0) {
 		    E elem =  ls.get(b);
 		    if (cmp.compare(elem, pivote)<0) {
-		    	List2.intercambia(ls, a,b);
+		    	List2.intercambia(ls,a,b);
 				a++;
 				b++;
 		    } else if (cmp.compare(elem, pivote)>0) {
@@ -105,6 +102,40 @@ public class ProblemasDeListas {
 		    }
 		}
 		return IntPair.of(a, b);
+	}
+	
+	
+	
+	public static record Rbh<E>(Integer a, Integer b, Integer c, List<E> ls, E pivote, Comparator<? super E> cmp) {
+		public static <E> Rbh<E> of(Integer a, Integer b, Integer c, List<E> ls, E pivote, Comparator<? super E> cmp){
+			return new Rbh<>(a, b, c, ls, pivote, cmp);
+		}
+		public static <E> Rbh<E> of(List<E> ls, E pivote, Comparator<? super E> cmp){
+			return new Rbh<>(0, 0, ls.size(), ls, pivote, cmp);
+		}
+		public Rbh<E> next(){
+			Integer a1 = a(),b1 = b(),c1 = c();
+			E elem =  ls.get(b1);
+		    if (cmp.compare(elem, pivote)<0) {
+		    	List2.intercambia(ls,a1,b1);
+				a1++;
+				b1++;
+		    } else if (cmp.compare(elem, pivote)>0) {
+		    	List2.intercambia(ls,b1,c1-1);
+				c1--;	
+		    } else {
+		    	b1++;
+		    }
+		    return Rbh.of(a1, b1, c1, ls, pivote, cmp);
+		}
+	}
+	
+	public static <E> IntPair banderaHolandesaF(List<E> ls, E pivote, Comparator<? super E> cmp){
+		Rbh<E> s = Stream.iterate(Rbh.of(ls, pivote, cmp),Rbh::next)
+				.filter(r->r.b()-r.c()==0)
+				.findFirst()
+				.get();
+		return 	IntPair.of(s.a(),s.b());
 	}
 
 	public static <T> Integer reordenaSobrePivote(List<T> lista, T pivote, Integer i, Integer j,  Comparator<? super T> cmp){

@@ -7,11 +7,11 @@ import java.util.stream.IntStream;
 import org.jgrapht.GraphPath;
 
 import us.lsi.alg.sudoku.DatosSudoku.SolucionSudoku;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 public record SudokuVertex(Integer index, Sudoku sudoku) 
-		implements ActionVirtualVertex<SudokuVertex,ActionSimpleEdge<SudokuVertex,Integer>,Integer>{
+		implements VirtualVertex<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,Integer>{
 
 	public static SudokuVertex of(Integer index, Sudoku sudoku) {
 		SudokuVertex sp = new SudokuVertex(index, sudoku);
@@ -43,7 +43,7 @@ public record SudokuVertex(Integer index, Sudoku sudoku)
 		return SudokuVertex.of(this.index(),this.sudoku());
 	}
 	
-	public static SolucionSudoku solucion(GraphPath<SudokuVertex,ActionSimpleEdge<SudokuVertex,Integer>> path) {
+	public static SolucionSudoku solucion(GraphPath<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> path) {
 		return new SolucionSudoku(path.getVertexList().get(path.getVertexList().size()-1).sudoku());
 	}
 	
@@ -68,8 +68,8 @@ public record SudokuVertex(Integer index, Sudoku sudoku)
 	}
 
 	@Override
-	public ActionSimpleEdge<SudokuVertex, Integer> edge(Integer a) {
-		return ActionSimpleEdge.of(this,this.neighbor(a),a,1.);
+	public SimpleEdgeAction<SudokuVertex, Integer> edge(Integer a) {
+		return SimpleEdgeAction.of(this,this.neighbor(a),a,1.);
 	}
 	
 	

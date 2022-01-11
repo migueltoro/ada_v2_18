@@ -2,25 +2,19 @@ package us.lsi.iterativorecursivos;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import us.lsi.common.IntPair;
-import us.lsi.common.IntQuartet;
-import us.lsi.common.List2;
 import us.lsi.common.Matrix;
-import us.lsi.common.Pair;
 import us.lsi.common.Preconditions;
 import us.lsi.common.String2;
 import us.lsi.common.View2;
 import us.lsi.common.View4;
-import us.lsi.streams.Stream2;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
@@ -117,12 +111,13 @@ public class RecursivosMultiples {
 		return r;
 	}
 	
+	public static BigInteger ofInteger(Integer n) {
+		return new BigInteger(n.toString());
+	}
+	
 	public static BigInteger fblin(Integer n,Integer a, Integer b, Integer d1,Integer d0){
 		Map<Integer,BigInteger> m = new HashMap<>();
-		BigInteger aa = new BigInteger(a.toString());
-		BigInteger bb = new BigInteger(b.toString());
-		BigInteger dd1 = new BigInteger(d1.toString());
-		BigInteger dd0 = new BigInteger(d0.toString());
+		BigInteger aa = ofInteger(a), bb = ofInteger(b), dd1 = ofInteger(d1), dd0 = ofInteger(d0);
 		for(int i = 0;i<=n;i++) {
 			BigInteger r;
 			if(i==0) r = dd0;
@@ -151,8 +146,19 @@ public class RecursivosMultiples {
 			return new Bn(a,b);
 		}
 	}
-		
+	
 	public static BigInteger binom(Long n, Long k) {
+		BigInteger r;
+		if(k==0 || n-k ==0) r = BigInteger.ONE;
+		else if(k==1 || n-k ==1) r = new BigInteger(n.toString());
+		else {
+			r = binom(n-1, k-1).add(binom(n-1, k-1));
+		}
+		return r;
+	}
+	
+		
+	public static BigInteger binomI(Long n, Long k) {
 		Map<Bn,BigInteger> m = new HashMap<>();
 		for(Long i=0L; i<=n; i++) {
 			for(Long j=0L; j<=i;j++) {
@@ -494,7 +500,7 @@ public class RecursivosMultiples {
 	public static void test5() {
 		Predicate<Integer> pd = e->e.equals(1);
 		Integer[] d = {0,1,1,0,1,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1,0,1,0,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0};
-		Integer[] d2 = {0,1,1,0,1,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,1,1,1,0,1,0,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0};
+//		Integer[] d2 = {0,1,1,0,1,1,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,1,1,1,0,1,0,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0};
 		Matrix<Integer> r = Matrix.of(d,12,5);
 		Matrix<Integer> s = r.view(1,0,4,5);
 		String2.toConsole("______________\n%s\n",r);

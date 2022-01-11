@@ -6,7 +6,7 @@ import org.jgrapht.Graphs;
 
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.Graphs2;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.alg.BackTracking.State;
 import us.lsi.graphs.alg.BackTracking.StatePath;
 
@@ -20,8 +20,9 @@ public class TestState {
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 		MochilaVertex v2 = MochilaVertex.lastVertex();
 		
+		SimpleVirtualGraph.endVertexG = v2;
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(v1,MochilaVertex.goal(),v2,v->true,x->x.weight());
+				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
 		State<MochilaVertex,MochilaEdge> initialState = StatePath.of(graph, e->e.equals(v2), v2);
 		System.out.println(initialState);
 		MochilaEdge e1 = initialState.getActualVertex().edge(2);

@@ -51,8 +51,9 @@ public class MonedaPD {
 			List<Spm> soluciones = new ArrayList<>();
 			for(Integer a:vertex.acciones()) {	
 				Double cota = accumulateValue + MonedasHeuristica.cota(vertex,a);
-				if(cota < MonedaPD.maxValue) continue;				
-				Spm s = pd(vertex.vecino(a),accumulateValue+a*Moneda.valor(vertex.index()),memory);
+				if(cota < MonedaPD.maxValue) continue;	
+				Integer ac = accumulateValue+a*Moneda.valor(vertex.index());
+				Spm s = pd(vertex.vecino(a),ac,memory);
 				if(s!=null) {
 					Spm sp = Spm.of(a,s.weight()+a*Moneda.valor(vertex.index()));
 					soluciones.add(sp);

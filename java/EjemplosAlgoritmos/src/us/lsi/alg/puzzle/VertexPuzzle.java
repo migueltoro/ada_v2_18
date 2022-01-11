@@ -10,13 +10,13 @@ import java.util.stream.IntStream;
 import us.lsi.common.Arrays2;
 import us.lsi.common.IntPair;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.streams.Stream2;
 
 
 
 public record VertexPuzzle(IntPair blackPosition,Integer[][] datos)
-         implements ActionVirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
+         implements VirtualVertex<VertexPuzzle, EdgePuzzle, ActionPuzzle> {
 	
 	
 	public static VertexPuzzle copy(VertexPuzzle m) {

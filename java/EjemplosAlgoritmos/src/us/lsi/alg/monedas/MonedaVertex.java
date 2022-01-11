@@ -8,9 +8,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record MonedaVertex(Integer index,Integer valorRestante) implements ActionVirtualVertex<MonedaVertex, MonedaEdge, Integer>{
+public record MonedaVertex(Integer index,Integer valorRestante) implements VirtualVertex<MonedaVertex, MonedaEdge, Integer>{
 	
 	
 	public static void datosIniciales(String fichero, Integer valorInicial) {
@@ -57,14 +57,8 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Actio
 		return this.index() >=0 && this.index() <= MonedaVertex.n && this.valorRestante() >=0;
 	}
 
-	public MonedaEdge accionVoraz() {
+	public MonedaEdge aristaVoraz() {
 		Integer a = this.valorRestante()/Moneda.valor(this.index());
-		return MonedaEdge.of(this,this.neighbor(a),a);
-	}
-	
-	public MonedaEdge accionHeuristica() {
-		Integer a = this.valorRestante()/Moneda.valor(this.index());
-		if(a>0) a = a+1;
 		return MonedaEdge.of(this,this.neighbor(a),a);
 	}
 	
@@ -73,7 +67,7 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Actio
 		List<Integer> r;
 		if(this.index() == MonedaVertex.n) r = new ArrayList<>();
 		else if(this.index() == MonedaVertex.n-1 && this.valorRestante%Moneda.valor(this.index) == 0) {
-			r = List.of(this.accionVoraz().action());
+			r = List.of(this.aristaVoraz().action());
 		} else if(this.index() == MonedaVertex.n-1 && this.valorRestante%Moneda.valor(this.index) != 0) {
 		    r = new ArrayList<>();
 		} else {

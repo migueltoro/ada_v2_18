@@ -43,7 +43,7 @@ public class IteratorRangeInteger implements Iterator<Integer>, Iterable<Integer
 	}
 	
 	public static void main(String[] args) {
-		Stream<Integer> s = Stream2.asStream((Iterable<Integer>)IteratorRangeInteger.of(100, 35,-7));
+		Stream<Integer> s = Stream2.of((Iterable<Integer>)IteratorRangeInteger.of(100, 35,-7));
 		System.out.println(s.toList());
 	}
 

@@ -2,6 +2,7 @@ package us.lsi.alg.recorridos;
 
 import java.util.Optional;
 
+import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import us.lsi.grafos.datos.Carretera;
@@ -9,10 +10,13 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.BreadthSearch;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
 
 public class AnchuraTest {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 
 	public static void main(String[] args) {
 		
@@ -21,20 +25,20 @@ public class AnchuraTest {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
-		graph.addVertex(Ciudad.ofName("Londres"));
+		graph.addVertex(Ciudad.of("Londres",20000000));
 		
 		System.out.println(graph);
 		System.out.println(graph.edgeSet());
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"),null,null,v->true);
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
 		
-		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Sevilla"));
+		BreadthSearch<Ciudad, Carretera> ra = BreadthSearch.of(g,ciudad(graph,"Sevilla"));
 		
 //		GraphPath<Ciudad, Carretera> carreteras = ra.pathTo(Ciudad.ofName("Almeria")).get();
 		
-		Optional<Ciudad> ciudad = ra.stream().filter(v->v.equals(Ciudad.ofName("Londres"))).findFirst();
+		Optional<Ciudad> ciudad = ra.stream().filter(v->v.equals(ciudad(graph,"Londres"))).findFirst();
 		
 		System.out.println(ciudad.isPresent());
 

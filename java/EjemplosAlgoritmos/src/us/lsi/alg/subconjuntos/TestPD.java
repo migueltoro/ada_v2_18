@@ -9,11 +9,10 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -34,13 +33,13 @@ public class TestPD {
 			// Grafo
 
 			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-					Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x -> x.weight());
+					SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x -> x.weight());
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge> pdr = 
-					DPR.dynamicProgrammingReduction(graph, 
+					DynamicProgrammingReduction.of(graph, 
 							SubconjuntosHeuristic::heuristic, 
 							PDType.Min);
 			pdr.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);

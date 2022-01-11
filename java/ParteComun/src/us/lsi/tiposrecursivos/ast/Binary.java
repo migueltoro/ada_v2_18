@@ -6,7 +6,6 @@ import java.util.Set;
 
 import us.lsi.common.Preconditions;
 import us.lsi.common.Set2;
-import us.lsi.common.String2;
 
 public record Binary(Exp left, Exp right, String name) implements Exp {
 	

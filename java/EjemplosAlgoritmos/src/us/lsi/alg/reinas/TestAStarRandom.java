@@ -2,34 +2,37 @@ package us.lsi.alg.reinas;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStarRandom;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.alg.AstarRandom;
+import us.lsi.graphs.alg.AStar.AStarType;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestAStarRandom {
 
 	public static void main(String[] args) {
 		ReinasVertex.n = 110;
-		AStarRandom.threshold = 15;
+		AstarRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
 		
-		EGraph<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphSum(v1,ReinasVertex.goal(),null,ReinasVertex.constraint());			
+		SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
+		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
+				SimpleVirtualGraph.last(v1,ReinasVertex.goal(),v->v.errores().doubleValue());			
 		
-		AStar<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> ms = GraphAlg.aStarRandom(
+		AStar<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> ms = AstarRandom.of(
 				graph, 
 				(e1,e2,e3)->0.,
+				AStarType.Min,
 				e->ReinasVertex.n-e.index());
 		
-		GraphPath<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> path = ms.search().orElse(null);
+		GraphPath<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> path = ms.search().get();
 		Integer n = 0;
 		while(path == null) {
-			ms = GraphAlg.aStarRandom(
+			ms = AstarRandom.of(
 					graph, 
 					(e1,e2,e3)->0.,
+					AStarType.Min,
 					e->ReinasVertex.n-e.index());
 			path = ms.search().orElse(null);
 			System.out.println(n);

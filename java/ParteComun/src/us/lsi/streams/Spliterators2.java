@@ -8,7 +8,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import us.lsi.common.List2;
 import us.lsi.common.View1;
@@ -16,12 +15,8 @@ import us.lsi.common.View2;
 
 public class Spliterators2 {
 	
-	public static <T> Spliterator<T> asSpliterator(Stream<T> stream) { 
+	public static <T> Spliterator<T> of(Stream<T> stream) { 
         return stream.spliterator(); 
-    }
-	
-	public static <T> Stream<T> asStream(Spliterator<T> iterator) {
-        return StreamSupport.stream(iterator, true);
     }
 	
 	public static <L, R, T> Spliterator<T> zip(Spliterator<L> lefts, Spliterator<R> rights, BiFunction<L, R, T> combiner) {
@@ -97,7 +92,7 @@ public class Spliterators2 {
 		}
 		
 		public Stream<E> stream(){
-			return Spliterators2.asStream(this);
+			return Stream2.of(this);
 		}
 	}
 

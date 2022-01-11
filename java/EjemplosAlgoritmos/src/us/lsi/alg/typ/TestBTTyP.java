@@ -1,17 +1,16 @@
 package us.lsi.alg.typ;
 
-import java.util.Comparator;
 import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
+import us.lsi.colors.GraphColors;
+import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestBTTyP {
@@ -21,34 +20,38 @@ public class TestBTTyP {
 		Locale.setDefault(new Locale("en", "US"));
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
-		TyPVertex e2 = TyPVertex.last();
-		EGraph<TyPVertex,ActionSimpleEdge<TyPVertex,Integer>> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,e->e.goal(),
-						null,v->true,v->v.maxCarga());		
-			
-		GreedySearchOnGraph<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> rr = 
-				GraphAlg.greedy(graph,TyPVertex::greadyEdge);
 		
-		GraphPath<TyPVertex, ActionSimpleEdge<TyPVertex,Integer>> path = rr.search().orElse(null);
-		SolucionTyP sm = TyPVertex.getSolucion(path);
+		EGraph<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> graph = 
+				SimpleVirtualGraph.last(e1,e->e.goal(),v->v.maxCarga());		
+			
+		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> rr = 
+				GreedyOnGraph.of(graph,TyPVertex::greadyEdge);
+		
+		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> path = rr.path();
 		Double bv = path.getWeight();
 		System.out.println(bv);
 		
-		BackTracking<TyPVertex, ActionSimpleEdge<TyPVertex, Integer>, SolucionTyP> ms = BT.backTracking(
-						graph,
-						
+		BackTracking<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BackTracking.of(
+						graph,				
 						Heuristica::heuristic,
 						TyPVertex::getSolucion,
-						TyPVertex::copy,
 						BTType.Min);		
 		
 		ms.bestValue = bv;
-		ms.solutions.add(sm);
-		
+		ms.optimalPath = path;
+		ms.withGraph = true;
 		ms.search();
 
-		System.out.println(ms.getSolutions().stream().min(Comparator.comparing(x->x.getMaxCarga())).get());
-//		System.out.println(ms.getSolutions());
+		System.out.println(ms.getSolution().get());
+		System.out.println(ms.getSolutions().size());
+		
+		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> sp = ms.optimalPath().get();
+		GraphColors.toDot(ms.graph(),"ficheros/TyPBT.gv",
+				v->String.format("(%d,%.1f)",v.index(),v.maxCarga()),
+				e->e.action().toString(),
+				v->GraphColors.colorIf(Color.red,v.goal()),
+				e->GraphColors.colorIf(Color.red,sp.getEdgeList().contains(e))
+				);
 
 	}
 

@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import us.lsi.common.Set2;
 import us.lsi.common.String2;
+import us.lsi.iterativorecursivos.IterativosyRecursivosSimples;
 import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.Tree;
-import us.lsi.tiposrecursivos.Tree.TreeLevel;
 import us.lsi.tiposrecursivos.Tree.TreeType;
 
 
@@ -121,7 +123,7 @@ public class Trees {
 	}
 	
 	public static <E> List<Boolean> niveles(Tree<E> tree, Predicate<Tree<E>> pd) {
-		Map<Integer,Boolean> m = Stream2.asStream(()->tree.byLevel())
+		Map<Integer,Boolean> m = Stream2.of(()->tree.byLevel())
 				.collect(Collectors.groupingBy(p->p.level(),
 						Collectors.collectingAndThen(Collectors.mapping(p->p.tree(),Collectors.toList()),
 								ls->ls.stream().allMatch(pd))));
@@ -131,7 +133,7 @@ public class Trees {
 	}
 	
 	public static <E> Map<Integer,List<E>> parDeHijos(Tree<E> tree, Predicate<Tree<E>> pd) {
-		return Stream2.asStream(()->tree.byLevel())
+		return Stream2.of(()->tree.byLevel())
 				.filter(t->!t.tree().isEmpty())
 				.filter(t->t.tree().getNumOfChildren()%2==0)
 				.collect(Collectors.groupingBy(p->p.level(),
@@ -142,11 +144,75 @@ public class Trees {
 		return tree.stream().collect(Collectors.groupingBy(t->t.getNumOfChildren()));
 	}
 	
-	public static void main(String[] args) {
-		Tree<Integer> t7 = Tree.parse("40(2,27(_,2,3,4),9(8,_))").map(e->Integer.parseInt(e));	
+	public static void test1() {
+		Tree<Integer> t7 = Tree.parse("34(2,27(_,2,3,4),9(8,_))").map(e->Integer.parseInt(e));	
 		System.out.println(minLabel(t7,Comparator.naturalOrder())+"=="+minLabel2(t7,Comparator.naturalOrder()));
 		Predicate<Tree<Integer>> pd = t->t.isEmpty() || t.getLabel()%2==0;
 		String2.toConsole("%s",niveles(t7,pd));
+	}
+	
+	public static Set<String> palindromas(Tree<Character> tree) {
+		Set<String> st = Set2.of();
+		palindromas(tree, "", st);
+		return st;
+	}
+	
+	public static void palindromas(Tree<Character> tree, String camino, Set<String> st) {
+		TreeType type = tree.getType();
+		switch(type) {	
+		case Empty: break;
+		case Leaf: 
+			Character label = tree.getLabel();
+			camino = camino+label;
+			if(IterativosyRecursivosSimples.esPalindromo1(camino)) st.add(camino);
+			break;
+		case Nary: 
+			label = tree.getLabel();
+			camino = camino+label;
+			for(Tree<Character> t: tree.getChildren()) 
+				palindromas(t,camino,st);
+			break;
+		}
+	}
+	
+	public static Set<String> palindromas2(Tree<Character> tree) {
+		return palindromas2(tree, "");
+	}
+	
+	public static Set<String> palindromas2(Tree<Character> tree, String camino) {
+		TreeType type = tree.getType();
+		return switch(type) {	
+		case Empty->Set2.of();
+		case Leaf -> {
+			Character label = tree.getLabel();
+			camino = camino+label;
+			if(IterativosyRecursivosSimples.esPalindromo1(camino)) yield Set2.of(camino);
+			else yield Set2.of();
+		}
+		case Nary -> {
+			Character label = tree.getLabel();
+			camino = camino+label;
+			Set<String> st = Set2.of();
+			for(Tree<Character> t: tree.getChildren()) {
+				Set<String> st1 = palindromas2(t,camino);
+				st.addAll(st1);
+			}
+			yield st;
+		}
+		};
+	}
+	
+	public static void test2() {
+		Tree<Character> tree = Tree.parse("r(a(p(a(r)),d(a(_,r),i(o,_)),t),t,u(t(a)))").map(t->t.charAt(0));
+		String2.toConsole("%s",tree);
+		String2.toConsole("%s",palindromas(tree));
+		String2.toConsole("%s",palindromas2(tree));
+		Tree<String> tree2 = Tree.parse("[2.;3.](a(p(a(r)),d(a(_,r),i(o,_)),t),t,u(t(a)))");
+		String2.toConsole("%s",tree2);
+	}
+	
+	public static void main(String[] args) {
+		test2();
 	}
 
 }

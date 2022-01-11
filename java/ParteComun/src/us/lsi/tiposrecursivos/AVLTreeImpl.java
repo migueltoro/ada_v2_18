@@ -165,7 +165,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean add(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		elements.forEach(e->{Boolean s = this.add(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 	
@@ -173,7 +173,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean add(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.stream().forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		elements.stream().forEach(e->{Boolean s = this.add(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 	
@@ -181,7 +181,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean add(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		Arrays.stream(elements).forEach(e->{Boolean s = this.add(e); r.newValue(r.value() || s);});
+		Arrays.stream(elements).forEach(e->{Boolean s = this.add(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 	
@@ -246,7 +246,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean remove(Stream<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		elements.forEach(e->{Boolean s = this.remove(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 	
@@ -254,7 +254,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean remove(Collection<E> elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		elements.stream().forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		elements.stream().forEach(e->{Boolean s = this.remove(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 
@@ -262,7 +262,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	@Override
 	public boolean remove(@SuppressWarnings("unchecked") E... elements) {
 		final MutableType<Boolean> r = MutableType.of(false);
-		Arrays.stream(elements).forEach(e->{Boolean s = this.remove(e); r.newValue(r.value() || s);});
+		Arrays.stream(elements).forEach(e->{Boolean s = this.remove(e); r.setValue(r.value() || s);});
 		return r.value();
 	}
 

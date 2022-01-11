@@ -24,13 +24,16 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.DephtSearch;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
 import us.lsi.math.Math2;
-import us.lsi.path.GraphPaths;
+import us.lsi.path.GraphPath2;
 
 public class AuxiliaryTsp {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 	
 	public static SimpleWeightedGraph<Ciudad,Carretera> leeGraph(String fichero) {
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
@@ -38,12 +41,12 @@ public class AuxiliaryTsp {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		return graph;
 	}
 	
 	public static Graph<Ciudad,Carretera> completeGraph(Graph<Ciudad,Carretera> graph){
-		return CompleteGraphView.of(graph,Carretera::ofWeight,2000.,Carretera::getSource,Carretera::getTarget);
+		return CompleteGraphView.of(graph,()->Carretera.of(2000.));
 	}
 	
 	public static SpanningTree<Carretera> spanningTree(Graph<Ciudad, Carretera> graph) {
@@ -57,7 +60,7 @@ public class AuxiliaryTsp {
 		Integer i = p.first();
 		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
-		GraphPath<Ciudad,Carretera> path = GraphPaths.of(graph,ciudades);
+		GraphPath<Ciudad,Carretera> path = GraphPath2.ofVertices(graph,ciudades);
 		Double w = path.getWeight();
 		Integer n = ciudades.size();
 		List<Ciudad> ls1 = List2.copy(ciudades.subList(0,i));
@@ -66,7 +69,7 @@ public class AuxiliaryTsp {
 		List<Ciudad> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
-		GraphPath<Ciudad,Carretera> path2 = GraphPaths.of(graph,ls1);	
+		GraphPath<Ciudad,Carretera> path2 = GraphPath2.ofVertices(graph,ls1);	
 		return w-path2.getWeight();
 	}
 	
@@ -75,7 +78,7 @@ public class AuxiliaryTsp {
 		Integer i = p.first();
 		Integer j = p.second();
 		Preconditions.checkArgument(i<j);
-		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPaths.of(graph,ciudades);
+		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPath2.ofVertices(graph,ciudades);
 		Double w = path.getWeight();
 		Integer n = ciudades.size();
 		List<Integer> ls1 = List2.copy(ciudades.subList(0,i));
@@ -84,7 +87,7 @@ public class AuxiliaryTsp {
 		List<Integer> ls3 = List2.copy(ciudades.subList(j,n));
 		ls1.addAll(ls2);
 		ls1.addAll(ls3);
-		GraphPath<Integer,SimpleEdge<Integer>> path2 = GraphPaths.of(graph,ls1);	
+		GraphPath<Integer,SimpleEdge<Integer>> path2 = GraphPath2.ofVertices(graph,ls1);	
 		return w-path2.getWeight();
 	}
 	
@@ -150,12 +153,13 @@ public class AuxiliaryTsp {
 				v->graph1.vertexSet().contains(v),
 				e->tree.getEdges().contains(e));
 //		System.out.println(graph3);
-		DephtSearch<Ciudad,Carretera> ms = GraphAlg.depth(graph3,Ciudad.ofName("Sevilla"));
+		DephtSearch<Ciudad,Carretera> ms = DephtSearch.of(graph3,ciudad(graph1,"Sevilla"));
 		List<Ciudad> camino = ms.stream().collect(Collectors.toList());
-		camino.add(Ciudad.ofName("Sevilla"));
-		GraphPath<Ciudad,Carretera> path = GraphPaths.of(graph2,camino);
+//		camino.add(ciudad(graph1,"Sevilla"));
+		GraphPath<Ciudad,Carretera> path = GraphPath2.ofVertices(graph2,camino);
 		System.out.println(path.getWeight());
 		Integer n = camino.size();
+		TravelVertex.graph = graph2;
 		for (int i = 0; i < n; i++) {
 			for (int j = i+1; j < n; j++) {
 				Double w = increment(camino, IntPair.of(i, j));
@@ -164,8 +168,8 @@ public class AuxiliaryTsp {
 		}
 		
 		DOTExporter<Ciudad,Carretera> de = new DOTExporter<Ciudad,Carretera>();
-		de.setVertexIdProvider(v->v.getNombre());
-		de.setEdgeIdProvider(e->String.format("%.2f",e.getKm()));
+		de.setVertexIdProvider(v->v.nombre());
+		de.setEdgeIdProvider(e->String.format("%.2f",e.km()));
 		
 		PrintWriter f1 = Files2.getWriter("ficheros/tourAndalucia1.gv");
 		de.exportGraph(graph1, f1);

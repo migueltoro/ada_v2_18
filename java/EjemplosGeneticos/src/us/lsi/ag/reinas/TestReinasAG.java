@@ -11,7 +11,6 @@ import us.lsi.ag.agchromosomes.ChromosomeFactory.CrossoverType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
 import us.lsi.common.Set2;
-import us.lsi.common.String2;
 import us.lsi.reinas.datos.Reina;
 
 

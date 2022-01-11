@@ -6,13 +6,11 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -31,26 +29,27 @@ public class TestPD {
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
 			EGraph<BufeteVertex, BufeteEdge> graph = 
-					Graphs2.simpleVirtualGraphLast(start,goal, null,v->true,v -> (double) v.maxCarga());
+					SimpleVirtualGraph.last(start,goal,v -> (double) v.maxCarga());
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 			
-			GreedySearchOnGraph<BufeteVertex, BufeteEdge> rr = 
-					GraphAlg.greedy(graph,
+			GreedyOnGraph<BufeteVertex, BufeteEdge> rr = 
+					GreedyOnGraph.of(graph,
 							BufeteVertex::greadyEdge);
 			
-			GraphPath<BufeteVertex, BufeteEdge> path = rr.search().orElse(null);
+			GraphPath<BufeteVertex, BufeteEdge> path = rr.path();
 			SolucionBufete sm = SolucionBufete.of(path);
-			Double bv = path.getWeight();
+			Double bv = path.getWeight();			
 			System.out.println(bv);
 			
 			// Algoritmo PD
 			DynamicProgrammingReduction<BufeteVertex, BufeteEdge> pdr = 
-					DPR.dynamicProgrammingReduction(graph,
+					DynamicProgrammingReduction.of(graph,
 					Heuristica::heuristic, 
 					PDType.Min);
 			
 			pdr.bestValue = bv;
+			pdr.optimalPath = path;
 
 			GraphPath<BufeteVertex, BufeteEdge> gp_pdr = pdr.search().orElse(null); // getEdgeList();
 			if ( gp_pdr != null) {

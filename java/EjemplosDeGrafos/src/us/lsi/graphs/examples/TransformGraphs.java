@@ -15,10 +15,10 @@ public class TransformGraphs {
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
-				Carretera::getKm);
+				Carretera::km);
 		System.out.println(graph.vertexSet());
 		System.out.println(graph.edgeSet());
-		Graph<Ciudad, Carretera> graph2 = Graphs2.toDirectedWeightedGraph(graph,Carretera::reverse);
+		Graph<Ciudad, Carretera> graph2 = Graphs2.toDirectedWeightedGraph(graph,x->x);
 		System.out.println("_______________");
 		System.out.println(graph2.vertexSet());
 		System.out.println(graph2.edgeSet());

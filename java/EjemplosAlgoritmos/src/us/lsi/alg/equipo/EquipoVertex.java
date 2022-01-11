@@ -10,9 +10,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.common.IntegerSet;
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record EquipoVertex(Integer index,IntegerSet players) implements ActionVirtualVertex<EquipoVertex, EquipoEdge, Integer> {
+public record EquipoVertex(Integer index,IntegerSet players) implements VirtualVertex<EquipoVertex, EquipoEdge, Integer> {
 	
 	public static EquipoVertex copy(EquipoVertex v) {
 		return new EquipoVertex(v.index(), v.players());

@@ -11,7 +11,7 @@ public interface Operator {
 	
 	public static Operator of0(String name,Type rt,Object value) {
 		OperatorId id = OperatorId.of0(name);
-		return new ArityZero(id,rt,value);
+		return new Zero(id,rt,value);
 	}
 	
 	public static Operator of1(String name,Type tp,Type rt,Function<Object,Object> function) {
@@ -29,7 +29,7 @@ public interface Operator {
 		return new Nary(id,tr,function);
 	}
 	
-	public record ArityZero(OperatorId id, Type resultType, Object value) implements Operator {}
+	public record Zero(OperatorId id, Type resultType, Object value) implements Operator {}
 	
 	public record Unary(OperatorId id, Type resultType, Function<Object,Object> function) implements Operator {}
 	

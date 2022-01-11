@@ -24,7 +24,7 @@ public class Collectors2 {
 			BinaryOperator<B> combiner,
 			Function<B,R> finisher){
 		return Collector.of(()->MutableType.of(supplier.get()),
-				(b,e)->b.newValue(consumer.apply(b.value(),e)),
+				(b,e)->b.setValue(consumer.apply(b.value(),e)),
 				(x,y)->MutableType.of(combiner.apply(x.value(),y.value())),
 				x->finisher.apply(x.value()));
 	}

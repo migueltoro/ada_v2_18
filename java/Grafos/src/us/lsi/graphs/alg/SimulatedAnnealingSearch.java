@@ -11,8 +11,12 @@ import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 import us.lsi.streams.Stream2;
 
-public class SimulatedAnnealingSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V> {
+public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 	
+	public static <V, E> SimulatedAnnealingSearch<V, E> simulatedAnnealing(EGraph<V, E> graph, V startVertex,
+			Function<V, Double> fitness) {
+		return new SimulatedAnnealingSearch<V, E>(graph, startVertex, fitness);
+	}
 
 	private EGraph<V,E> graph;
 	private V actualVertex;
@@ -71,9 +75,8 @@ public class SimulatedAnnealingSearch<V,E> implements GraphAlg<V,E>, Iterator<V>
 		// return temperaturaInicial/Math.log(2+3*i);
 	}
 	
-	@Override
 	public Stream<V> stream() {
-		return Stream2.asStream(this);
+		return Stream2.of(this);
 	}
 	
 	@Override
@@ -108,21 +111,20 @@ public class SimulatedAnnealingSearch<V,E> implements GraphAlg<V,E>, Iterator<V>
 		return this.actualVertex;
 	}
 
-	@Override
 	public E getEdgeToOrigin(V v) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public V startVertex() {
 		return this.startVertex;
 	}
 
 
-	@Override
-	public GraphAlg<V, E> copy() {
+	public SimulatedAnnealingSearch<V, E> copy() {
 		return new SimulatedAnnealingSearch<>(graph,startVertex,fitness);
 	}
+
+	
 	
 	
 }

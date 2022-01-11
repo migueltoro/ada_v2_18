@@ -5,11 +5,11 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 
 public class TestAStar {
@@ -21,19 +21,19 @@ public class TestAStar {
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
 		
-		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
+		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
 				PackVertex::greedyEdge);
 	
-		GraphPath<PackVertex, PackEdge> p = rr.search().orElse(null);
+		GraphPath<PackVertex, PackEdge> p = rr.path();
 		SolucionPack sp = SolucionPack.of(p);
 		System.out.println(sp);
 		PackVertex.m = sp.nc();
 		
 		AStar<PackVertex, PackEdge> ms = 
-				GraphAlg.aStar(graph,(v1,pd,v2)->0.);
+				AStar.of(graph,(v1,pd,v2)->0.,AStarType.Min);
 //		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,Heuristica::heuristic);
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);

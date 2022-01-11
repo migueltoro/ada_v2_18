@@ -1,6 +1,6 @@
 package us.lsi.alg.bufete;
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 
 public record BufeteVertex(Integer index,List<Integer> cargas) 
-      implements ActionVirtualVertex<BufeteVertex, BufeteEdge, Integer> {
+      implements VirtualVertex<BufeteVertex, BufeteEdge, Integer> {
 	
 	public static BufeteVertex of(Integer i, List<Integer> cargas) {
 		return new BufeteVertex(i,cargas);

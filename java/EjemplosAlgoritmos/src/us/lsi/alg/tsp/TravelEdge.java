@@ -1,11 +1,11 @@
 package us.lsi.alg.tsp;
 
 import us.lsi.common.IntPair;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 
 
 public record TravelEdge(TravelVertex source, TravelVertex target, IntPair action, Double weight) 
-           implements ActionSimpleEdge<TravelVertex,IntPair> {
+           implements SimpleEdgeAction<TravelVertex,IntPair> {
 
 	public static TravelEdge of(TravelVertex c1, TravelVertex c2, IntPair action) {
 		Double w = c2.weight();

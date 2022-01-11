@@ -6,9 +6,9 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) implements ActionVirtualVertex<MulticonjuntoVertex, MulticonjuntoEdge, Integer> {
+public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) implements VirtualVertex<MulticonjuntoVertex, MulticonjuntoEdge, Integer> {
 
 
 	public static Integer n_elementos = DatosMulticonjunto.NUM_E;

@@ -212,7 +212,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	@Override
 	public Stream<Tree<E>> stream(){
-		return Stream2.asStream(()->this.iterator());
+		return Stream2.of(()->this.iterator());
 	}
 	
 	public Iterator<TreeLevel<E>> byLevel(){
@@ -722,12 +722,16 @@ public class TreeImpl<E> implements MutableTree<E> {
 			return !this.queue.isEmpty();
 		}
 
+		private static <E> List<TreeLevel<E>> children(TreeLevel<E> actual){
+			return actual.tree().getChildren().stream().map(t->TreeLevel.of(actual.level()+1,t)).toList();
+		}
+		
 		@Override
 		public TreeLevel<E> next() {
 			TreeLevel<E> actual = queue.remove();
 			switch(actual.tree().getType()) {
 			case Nary: 
-				for(TreeLevel<E> v:actual.tree().getChildren().stream().map(t->TreeLevel.of(actual.level()+1,t)).toList()) {
+				for(TreeLevel<E> v:children(actual)) {
 					queue.add(v);
 				}
 				break;

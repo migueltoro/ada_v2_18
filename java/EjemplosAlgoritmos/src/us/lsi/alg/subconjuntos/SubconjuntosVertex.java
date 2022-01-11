@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import us.lsi.common.Set2;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 public record SubconjuntosVertex(Integer indice, Set<Integer> elementosCubiertos) 
-    implements ActionVirtualVertex<SubconjuntosVertex, SubconjuntosEdge, Integer>{
+    implements VirtualVertex<SubconjuntosVertex, SubconjuntosEdge, Integer>{
 	
 	public static SubconjuntosVertex of(Integer indice, Set<Integer> elementosCubiertos) {
 		return new SubconjuntosVertex(indice,elementosCubiertos);

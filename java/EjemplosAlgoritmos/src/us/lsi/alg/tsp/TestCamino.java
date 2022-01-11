@@ -8,29 +8,39 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestCamino {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		Graph<Ciudad,Carretera> graph1 = AuxiliaryTsp.leeGraph("ficheros/andalucia.txt");
 		Graph<Ciudad,Carretera> graph2 = AuxiliaryTsp.completeGraph(graph1);
+
+		
 		TravelVertex.graph = graph2;
-		List<Ciudad> camino = Arrays.asList(Ciudad.ofName("Sevilla"),
-				Ciudad.ofName("Huelva"),
-				Ciudad.ofName("Cordoba"),
-				Ciudad.ofName("Almeria"),
-				Ciudad.ofName("Malaga"),
-				Ciudad.ofName("Algeciras"),
-				Ciudad.ofName("Malaga"),
-				Ciudad.ofName("Granada"));
-		Collections.shuffle(camino);
+		List<Ciudad> camino = Arrays.asList(ciudad(graph2,"Sevilla"),
+				ciudad(graph1,"Huelva"),
+				ciudad(graph1,"Cordoba"),
+				ciudad(graph1,"Almeria"),
+				ciudad(graph1,"Malaga"),
+				ciudad(graph1,"Algeciras"),
+				ciudad(graph1,"Granada"),
+				ciudad(graph2,"Sevilla"));
+		Integer n = camino.size();
+		
+		Collections.shuffle(camino.subList(1,n-1));
+		System.out.println(camino.subList(1,n-1));
 		
 		TravelVertex v1 = TravelVertex.of(camino);
+		
 		EGraph<TravelVertex,TravelEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(v1,null,null,v->true,v->v.weight());
+				SimpleVirtualGraph.last(v1,null,v->v.weight());
 		
 		Double error = 0.1;
 		Double r;

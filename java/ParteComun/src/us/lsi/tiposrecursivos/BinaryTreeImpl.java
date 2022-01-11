@@ -564,7 +564,7 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 	
 	@Override
 	public Stream<BinaryTree<E>> stream() {
-		return Stream2.asStream(()->this.iterator());
+		return Stream2.of(()->this.iterator());
 	}
 
 	@Override
@@ -732,10 +732,10 @@ public class BinaryTreeImpl<E> implements MutableBinaryTree<E> {
 		String ex = "-43.7(2.1,abc(-27.3(_,2),78.2(3,4)))";
 		BinaryTree<String> t7 = BinaryTree.parse(ex);		
 		System.out.println(t7);
-		Stream2.asStream(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
+		Stream2.of(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
 		System.out.println("______________");
 		System.out.println(t7);
-		Stream2.asStream(()->t7.byLevel())
+		Stream2.of(()->t7.byLevel())
 			.map(t->Pair.of(t.level(),f.apply(t)))
 			.forEach(t->System.out.println(t));
 	}

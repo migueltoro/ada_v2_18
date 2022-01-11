@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.streams.Stream2;
 
-public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>{
+public class LocalSearch<V,E> implements  Iterator<V>, Iterable<V>{
 	
 	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Function<V,V> nextVertex, Double error) {
 		return new LocalSearch<V, E>(graph, nextVertex, error);
@@ -39,18 +39,12 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 		this.hasNext = true;
 	}
 	
-	public V search() {
-		return findEnd();
-	}
-	
-	@Override
 	public LocalSearch<V,E> copy(){
 		return LocalSearch.of(this.graph,this.nextVertex,this.error);	
 	}
 	
-	@Override
 	public Stream<V> stream() {
-		return Stream2.asStream(this);
+		return Stream2.of(this);
 	}
 	
 	public Iterator<V> iterator() {
@@ -67,7 +61,6 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 		return this.edgeToOrigin.containsKey(v);
 	}
 
-	@Override
 	public EGraph<V, E> getGraph() {
 		return graph;
 	}
@@ -87,9 +80,10 @@ public class LocalSearch<V,E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>
 		return this.oldVertex;
 	}
 	
-	@Override
 	public V startVertex() {
 		return this.startVertex;
 	}
+
+	
 	
 }

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.color.GreedyColoring;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
 import org.jgrapht.alg.interfaces.EulerianCycleAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
@@ -22,13 +23,17 @@ import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 
-import us.lsi.common.Map2;
+import us.lsi.colors.GraphColors;
 import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
+import us.lsi.graphs.SimpleEdge;
+import us.lsi.streams.Stream2;
 
 public class VariosEjemplos {
 	
@@ -37,7 +42,7 @@ public class VariosEjemplos {
 				Ciudad::ofFormat, 
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
-				Carretera::getKm);
+				Carretera::km);
 	}
 	
 	public static Graph<String,String> leeEuleriano(String file) {
@@ -150,10 +155,45 @@ public class VariosEjemplos {
 		Map<Integer, List<String>> r = m.keySet().stream().collect(Collectors.groupingBy(s->m.get(s)));
 		String2.toConsole("%s",r);
 	}
+	
+	public static <V,E> List<V> verticesPost(SimpleDirectedGraph<V,E> graph, V v){
+		return Stream2.ofIterator(new BreadthFirstIterator<>(graph,v)).toList();
+	}
+	
+	public static <V,E> List<V> verticesPre(SimpleDirectedGraph<V,E> graph, V v){
+		SimpleDirectedGraph<V,E> graph2 = Graphs2.inversedDirectedGraph(graph);	
+		return Stream2.ofIterator(new BreadthFirstIterator<>(graph2,v)).toList();
+	}
+	
+	public static void test7() {
+		SimpleDirectedGraph<Integer,SimpleEdge<Integer>> graph = GraphsReader.newGraph("data/topologico.txt", 
+				format->Integer.parseInt(format[0]), 
+				format->SimpleEdge.of(Integer.parseInt(format[0]),Integer.parseInt(format[1])), 
+				Graphs2::simpleDirectedGraph
+				);
+		CycleDetector<Integer, SimpleEdge<Integer>> cd = new CycleDetector<>(graph);
+		Boolean c = cd.detectCycles();
+		String2.toConsole("%s", c);
+		SimpleDirectedGraph<Integer,SimpleEdge<Integer>> graph2 = Graphs2.inversedDirectedGraph(graph);	
+		GraphColors.toDot(graph,
+				"ficheros/topologico.gv",
+				x->x.toString(),
+				e->""
+				);
+		GraphColors.toDot(graph2,
+				"ficheros/topologico2.gv",
+				x->x.toString(),
+				e->""
+				);
+		List<Integer> verticesPost = verticesPost(graph,7);
+		List<Integer> verticesPre = verticesPre(graph,10);
+		String2.toConsole("%s",verticesPost);
+		String2.toConsole("%s",verticesPre);
+	}
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		test6();
+		test7();
 	}
 
 }

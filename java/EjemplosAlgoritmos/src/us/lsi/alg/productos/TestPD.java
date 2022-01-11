@@ -7,11 +7,10 @@ import java.util.stream.Collectors;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -28,15 +27,15 @@ public class TestPD {
 			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
 			EGraph<ProductosVertex, ProductosEdge> graph = 
-					Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = Graphs2.simpleVirtualGraphSum(start,goal,null,v->true,x -> x.weight());
+			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
 			
 			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
-					DPR.dynamicProgrammingReduction(graph,
+					DynamicProgrammingReduction.of(graph,
 					(v1,p,v2)->0., 
 					PDType.Min);
 //			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
@@ -49,7 +48,7 @@ public class TestPD {
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.colorIf(Color.red,goal.test(v)),
-					e->GraphColors.colorIf(Color.red,pdr.optPath.get().getEdgeList().contains(e))
+					e->GraphColors.colorIf(Color.red,pdr.optimalPath().get().getEdgeList().contains(e))
 					);
 		}
 	}

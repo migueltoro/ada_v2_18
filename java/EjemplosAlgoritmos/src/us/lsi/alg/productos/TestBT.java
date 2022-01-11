@@ -8,11 +8,10 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -28,7 +27,7 @@ public class TestBT {
 			Predicate<ProductosVertex> goal = ProductosVertex.goal();
 
 			EGraph<ProductosVertex, ProductosEdge> graph = 
-					Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
 
 			GraphPath<ProductosVertex, ProductosEdge> path = 
 					ProductosHeuristic.graphPathVoraz(start,goal);
@@ -37,11 +36,9 @@ public class TestBT {
 			System.out.println("\n\n#### Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
-					BT.backTracking(graph, 
+			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = BackTracking.of(graph, 
 					ProductosHeuristic::heuristic,
 					ProductosVertex::getSolucion, 
-					ProductosVertex::copy, 
 					BTType.Min);
 			
 			bta.bestValue = path.getWeight();
@@ -53,7 +50,7 @@ public class TestBT {
 			
 			System.out.println(bta.getSolution());
 					
-			GraphColors.toDot(bta.outGraph,"ficheros/productosBTGraph.gv",
+			GraphColors.toDot(bta.graph(),"ficheros/productosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.colorIf(Color.red,goal.test(v)),

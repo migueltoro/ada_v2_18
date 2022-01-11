@@ -1,6 +1,8 @@
 package us.lsi.graphs.examples;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.traverse.BreadthFirstIterator;
@@ -8,10 +10,12 @@ import org.jgrapht.traverse.DepthFirstIterator;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.common.Map2;
+import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
+import us.lsi.streams.Stream2;
 
 /**
  * Calcula varios recorridos sobre un grafo
@@ -20,6 +24,10 @@ import us.lsi.graphs.GraphsReader;
  *
  */
 public class Recorridos {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 
 	public static void main(String[] args) {
 
@@ -28,27 +36,29 @@ public class Recorridos {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
-		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
-		Map<Ciudad,Integer> m = Map2.empty();
-		Integer n = 0;
-		while(rp.hasNext()){
-			m.put(rp.next(), n);
-			n++;
-		}	
+		Ciudad c = ciudad(graph,"Sevilla");
+		Ciudad c2 = ciudad(graph,"Almeria");
 		
-		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		DepthFirstIterator<Ciudad, Carretera> rp = new DepthFirstIterator<>(graph,c);
+		Stream<Ciudad> sp = Stream2.ofIterator(rp);
+		List<Ciudad> lp = sp.toList();
 		
-		BreadthFirstIterator<Ciudad, Carretera> ra = new BreadthFirstIterator<>(graph,Ciudad.ofName("Sevilla"));
-		m.clear();
-		n = 0;
-		while(ra.hasNext()){
-			m.put(ra.next(), n);
-			n++;
-		}	
+		String2.toConsole("%s", lp);
 		
-		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.nombre(),x->x.nombre()+"--"+x.km());
+		
+		BreadthFirstIterator<Ciudad, Carretera> ra = new BreadthFirstIterator<>(graph,c);
+		Stream<Ciudad> sa = Stream2.ofIterator(ra);
+		Integer pa = ra.getDepth(c2);
+		Ciudad pva = ra.getParent(c2);
+		Carretera sta = ra.getSpanningTreeEdge(c2);
+		List<Ciudad> la = sa.toList();
+		
+		String2.toConsole("%s", la);
+		
+		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andalucia.gv",x->x.nombre(),x->x.nombre()+"--"+x.km());
 		
 	}
 

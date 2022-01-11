@@ -9,38 +9,45 @@ import java.util.Set;
 
 import us.lsi.common.List2;
 
-
 public class TyPBT {
 	
-	public static record StateTyP(TyPProblem vertice, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
+	public static class StateTyP {
 		
-		public static StateTyP of(TyPProblem vertex, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
-			List<Integer> accionesC = List.copyOf(acciones);
-			List<TyPProblem> verticesC = List.copyOf(vertices);
-			return new StateTyP(vertex, valorAcumulado, accionesC,verticesC);
+		TyPProblem vertice; 
+		Integer valorAcumulado; 
+		List<Integer> acciones; 
+		List<TyPProblem> vertices;
+		
+		public StateTyP(TyPProblem vertice, Integer valorAcumulado, List<Integer> acciones, List<TyPProblem> vertices) {
+			super();
+			this.vertice = vertice;
+			this.valorAcumulado = valorAcumulado;
+			this.acciones = acciones;
+			this.vertices = vertices;
 		}
 		
 		public static StateTyP of(TyPProblem vertex) {
-			List<TyPProblem> vt = List.of(vertex);
+			List<TyPProblem> vt = List2.of(vertex);
 			return new StateTyP(vertex,0,new ArrayList<>(),vt);
 		}
 
-		StateTyP forward(Integer a) {
-			List<Integer> as = List2.addLast(this.acciones(),a);
-			TyPProblem vcn = this.vertice().vecino(a);
-			List<TyPProblem> vt = List2.addLast(this.vertices(),vcn);
-			return StateTyP.of(vcn,vcn.maxCarga(),as,vt);
+		void forward(Integer a) {
+			this.acciones.add(a);
+			TyPProblem vcn = this.vertice.vecino(a);		
+			this.vertices.add(vcn);
+			this.valorAcumulado =  vcn.maxCarga(); 
+			this.vertice = vcn;
 		}
 
-		StateTyP back(Integer a) {
-			List<Integer> as = List2.removeLast(this.acciones());
-			List<TyPProblem> vt = List2.removeLast(this.vertices());
-			TyPProblem van = List2.last(vt);
-			return StateTyP.of(van,van.maxCarga(),as,vt);
+		void back(Integer a) {
+			this.acciones.remove(this.acciones.size()-1);
+			this.vertices.remove(this.vertices.size()-1);
+			this.vertice = this.vertices.get(this.vertices.size()-1);
+			this.valorAcumulado = this.vertice.maxCarga(); 
 		}
 		
 		SolucionTyP solucion() {
-			return SolucionTyP.of(start,this.acciones());
+			return SolucionTyP.of(start,this.vertice.acciones());
 		}
 	}
 	
@@ -67,20 +74,20 @@ public class TyPBT {
 	}
 	
 	public static void btm() {
-		if(TyPBT.estado.vertice().index() == DatosTyP.n) {
-			Integer value = estado.valorAcumulado();
+		if(TyPBT.estado.vertice.index() == DatosTyP.n) {
+			Integer value = estado.valorAcumulado;
 			if(value < TyPBT.minValue) {
 				TyPBT.minValue = value;
 				TyPBT.soluciones.add(TyPBT.estado.solucion());
 			}
 		} else {
-			List<Integer> alternativas = TyPBT.estado.vertice().acciones();
+			List<Integer> alternativas = TyPBT.estado.vertice.acciones();
 			for(Integer a:alternativas) {	
-				Integer cota = Heuristica.cota(TyPBT.estado.vertice(),a);
+				Integer cota = Heuristica.cota(TyPBT.estado.vertice,a);
 				if(cota >= TyPBT.minValue) continue;
-				TyPBT.estado = TyPBT.estado.forward(a);
+				TyPBT.estado.forward(a);
 				btm();  
-				TyPBT.estado = TyPBT.estado.back(a);
+				TyPBT.estado.back(a);
 			}
 		}
 	}
@@ -102,6 +109,5 @@ public class TyPBT {
 		System.out.println("2 = "+1.*endTime2/endTime);
 		System.out.println(TyPBT.soluciones.stream().min(Comparator.comparing(x->x.maxCarga())).get());
 	}
-
 
 }

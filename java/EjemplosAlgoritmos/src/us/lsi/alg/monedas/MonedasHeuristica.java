@@ -2,83 +2,40 @@ package us.lsi.alg.monedas;
 
 
 import java.util.function.Predicate;
-
-
+import us.lsi.graphs.alg.Greedy;
 
 
 public class MonedasHeuristica {
-
-	record Sv(Integer valor, Integer peso) {}
-	record Sh(Double valor, Double peso) {}
 	
 	public static Double heuristic_negate(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex v2) {
-		return -heuristic_left(v1.index(), v1.valorRestante().doubleValue(),v2.index()).peso();
+		return -hu(Mnd.of(v1.index(), v1.valorRestante().doubleValue()),v->v.index() == v2.index());
 	}
 	
 	public static Double heuristic(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex v2) {
-		return heuristic_left(v1.index(), v1.valorRestante().doubleValue(), v2.index()).peso();
+		return hu(Mnd.of(v1.index(), v1.valorRestante().doubleValue()),v->v.index() == v2.index());
 	}
 	
-	public static Integer voraz(MonedaVertex v1, Predicate<MonedaVertex> goal, MonedaVertex v2) {
-		return voraz_left(v1.index(), v1.valorRestante(),v2.index()).peso();
-	}
-	
-	public static Sh heuristic_left(Integer index, Double valorRestante, Integer lastIndex) {
-		Double r = 0.;
-		Double p = 0.;
-//		if(index == MonedaVertex.n-1) return 0.;
-		while (valorRestante> 0 && index < lastIndex) {
-			Double a = valorRestante / Moneda.valor(index);
-			r = r + a * Moneda.valor(index);
-			p = p + a * Moneda.peso(index);
-			valorRestante = valorRestante - a * Moneda.valor(index);
-			index = index + 1;
+	public static record Mnd(Integer index, Double vr) {
+		public static Mnd of(Integer index, Double cr) {
+			return new Mnd(index,cr);
 		}
-		return new Sh(r,p);
+		public Double heuristicAction() {
+			return vr()/Moneda.valor(index());
+		}
+		public Mnd next() {
+			Double a = heuristicAction();
+			return new Mnd(index()+1, vr() - a * Moneda.valor(index()));
+		}
+		public Double weight() {
+			if(this.index >= Moneda.n) return 0.;
+			return heuristicAction()*Moneda.peso(index());
+		}
+	}
+
+	public static Double hu(Mnd v1, Predicate<Mnd> goal) {	
+		Greedy<Mnd> r = Greedy.of(v1,v->v.next(),goal);
+		return r.stream().mapToDouble(v->v.weight()).sum();
 	}
 	
-	public static Sv voraz_left(Integer index, Integer valorRestante, Integer lastIndex) {
-		Integer r = 0;
-		Integer p = 0;
-//		if(index == MonedaVertex.n) return 0;
-		while (valorRestante > 0 && index < lastIndex) {
-			Integer a = valorRestante / Moneda.valor(index);
-			r = r + a * Moneda.valor(index);
-			p = p + a * Moneda.peso(index);
-			valorRestante = valorRestante - a * Moneda.valor(index);
-			index = index + 1;
-		}
-		return new Sv(r,p);
-	}
-	
-	public static Sh heuristic_right(Integer index, Double valorRestante, Integer lastIndex) {
-		Double r = 0.;
-		Double p = 0.;
-//		if(index == MonedaVertex.n) return 0.;
-		Integer i = lastIndex-1;
-		while (valorRestante> 0 && i >= index) {
-			Double a = valorRestante / Moneda.valor(i);
-			r = r + a * Moneda.valor(i);
-			p = p + a * Moneda.peso(i);
-			valorRestante = valorRestante - a * Moneda.valor(i);
-			i = i - 1;
-		}
-		return new Sh(r,p);
-	}
-	
-	public static Sv voraz_right(Integer index, Integer valorRestante, Integer lastIndex) {
-		Integer r = 0;	
-		Integer p = 0;
-//		if(index == MonedaVertex.n) return 0;
-		Integer i = lastIndex-1;
-		while (valorRestante> 0 && i >= index) {
-			Integer a = valorRestante / Moneda.valor(i);
-			r = r + a * Moneda.valor(i);
-			p = p + a * Moneda.peso(i);
-			valorRestante = valorRestante - a * Moneda.valor(i);
-			i = i - 1;
-		}
-		return new Sv(r,p);
-	}
 
 }

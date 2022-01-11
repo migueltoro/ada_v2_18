@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import us.lsi.graphs.virtual.Action;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record JarrasVertex(Integer c1,Integer c2) implements ActionVirtualVertex<JarrasVertex,JarrasEdge,Action<JarrasVertex>> {
+public record JarrasVertex(Integer c1,Integer c2) implements VirtualVertex<JarrasVertex,JarrasEdge,Action<JarrasVertex>> {
 
 	public static void data(
 			Integer cantidadFinalEnJarra1,

@@ -20,6 +20,10 @@ import us.lsi.solve.AuxGrammar;
 
 public class Tsp {
 	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
+	
 	public static void tsp() throws IOException {	
 		
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
@@ -27,7 +31,7 @@ public class Tsp {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);	
+						Carretera::km);	
 		Graph<Integer,SimpleEdge<Integer>> graph3 = IntegerVertexGraphView.of(graph);
 		GraphData.graph = graph3;
 		GraphData.n = graph3.vertexSet().size();
@@ -44,7 +48,7 @@ public class Tsp {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		System.out.println(graph);	
 		IntegerVertexGraphView<Ciudad,Carretera> graph3 = IntegerVertexGraphView.of(graph);
 		GraphColors.toDot(graph3,"ficheros/andaluciaIndex.gv",v->v.toString(),e->e.toString());
@@ -53,8 +57,8 @@ public class Tsp {
 		System.out.println("============   "+graph3.containsEdge(6, 4));
 		GraphData.graph = graph3;
 		GraphData.n = graph3.vertexSet().size();
-		Ciudad origin = Ciudad.ofName("Sevilla");
-		Ciudad target = Ciudad.ofName("Almeria");
+		Ciudad origin = ciudad(graph,"Sevilla");
+		Ciudad target = ciudad(graph,"Almeria");
 		GraphData.origin= graph3.index(origin);
 		GraphData.target= graph3.index(target);
 		AuxGrammar.generate(GraphData.class,"models/shortest_path.lsi","ficheros/shortest_path.lp");

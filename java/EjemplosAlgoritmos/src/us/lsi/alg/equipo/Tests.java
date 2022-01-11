@@ -2,21 +2,22 @@ package us.lsi.alg.equipo;
 
 import java.util.Locale;
 
-import us.lsi.graphs.Graphs2;
+import org.jgrapht.GraphPath;
+
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.BackTracking.BTType;
-import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class Tests {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
+		
 		tests("ficheros/DatosEquipo1.txt");
 		tests("ficheros/DatosEquipo2.txt");
 		tests("ficheros/DatosEquipo3.txt");
@@ -26,13 +27,13 @@ public class Tests {
 		DatosEquipo.iniDatos(fichero);
 		
 		EGraph<EquipoVertex, EquipoEdge> grafoPDR = 
-		Graphs2.simpleVirtualGraphSum(EquipoVertex.first(),EquipoVertex::goal, null,v->true, e-> e.weight());
+				SimpleVirtualGraph.sum(EquipoVertex.first(),EquipoVertex::goal, e-> e.weight());
 		
 		EGraph<EquipoVertex, EquipoEdge> grafoBT = 
-				Graphs2.simpleVirtualGraphSum(EquipoVertex.first(),EquipoVertex::goal, null,v->true, e-> e.weight());
+				SimpleVirtualGraph.sum(EquipoVertex.first(),EquipoVertex::goal, e-> e.weight());
 		
 		EGraph<EquipoVertex, EquipoEdge> grafoAStar = 
-		Graphs2.simpleVirtualGraphSum(EquipoVertex.first(), EquipoVertex::goal, null,v->true, e-> -e.weight());
+		SimpleVirtualGraph.sum(EquipoVertex.first(), EquipoVertex::goal, e-> e.weight());
 		
 		testPDR(grafoPDR);
 		testBT(grafoBT);
@@ -42,35 +43,36 @@ public class Tests {
 	
 	private static void testPDR(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== PDR ======================== ");
-		DynamicProgrammingReduction<EquipoVertex, EquipoEdge> alg_pdr = DPR.dynamicProgrammingReduction( 
+		DynamicProgrammingReduction<EquipoVertex, EquipoEdge> alg_pdr = DynamicProgrammingReduction.of( 
 			grafo,
-		EquipoHeuristic::heuristica2,
+			(v1,p,v2)->1000.,
 			PDType.Max);
-		Double vr = EquipoHeuristic.voraz(EquipoVertex.first());
-		alg_pdr.bestValue = vr;
+		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
+		alg_pdr.bestValue = gp.getWeight();
+		alg_pdr.optimalPath = gp;
 		System.out.println(EquipoVertex.getSolucion(alg_pdr.search().get()));
 	}
 	
 	private static void testBT(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== BT ======================== ");
-		BackTracking<EquipoVertex, EquipoEdge,SolucionEquipo> alg_bt = BT.backTracking(
+		BackTracking<EquipoVertex, EquipoEdge,SolucionEquipo> alg_bt = BackTracking.of(
 			grafo,
-			EquipoHeuristic::heuristica2,
+			(v1,p,v2)->1000.,
 			EquipoVertex::getSolucion,
-    		EquipoVertex::copy,
 			BTType.Max);
-		Double vr = EquipoHeuristic.voraz(EquipoVertex.first());
-		alg_bt.bestValue = vr;
+		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
+		alg_bt.bestValue = gp.getWeight();
+		alg_bt.optimalPath = gp;
 		alg_bt.search();
 	    System.out.println(alg_bt.getSolution().get());
 	}
 
 	private static void testAStar(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== A* ======================== ");
-		AStar<EquipoVertex, EquipoEdge> alg_star = GraphAlg.aStar(
+		AStar<EquipoVertex, EquipoEdge> alg_star = AStar.of(
 			grafo,
-			EquipoHeuristic::heuristica_neg
-			);
+			(v1,p,v2)->1000.,
+			AStarType.Max);
 		System.out.println(EquipoVertex.getSolucion(alg_star.search().get()));
 	}
 

@@ -7,9 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -32,8 +36,45 @@ import us.lsi.math.Math2;
 
 public class Stream2 {
 	
+	public static <T> Stream<T> of(Spliterator<T> iterator) {
+        return StreamSupport.stream(iterator, true);
+    }
+	
+	public static <E> Stream<E> of(Iterable<E> iterable) {
+	    return StreamSupport.stream(
+	        Spliterators.spliteratorUnknownSize(
+	            iterable.iterator(),
+	            Spliterator.ORDERED
+	        ),
+	        false
+	    );
+	}
+	
+	public static <E> Stream<E> ofIterator(Iterator<E> iterator) {
+	    return StreamSupport.stream(
+	        Spliterators.spliteratorUnknownSize(
+	            iterator,
+	            Spliterator.ORDERED
+	        ),
+	        false
+	    );
+	}
+	
 	public static <E> Optional<E> findLast(Stream<E> stream){
 		return stream.reduce((first,second)->second);
+	}
+	
+	public static <E> Boolean allEquals(Stream<E> st) {
+		MutableType<E> first = MutableType.of(null);
+		return st.peek(e->{if(first.value()==null)first.setValue(e);})
+				.allMatch(e->e.equals(first.value()));
+	}
+	
+	public static <E> Boolean allDifferents(Stream<E> st) {
+		MutableType<Integer> n = MutableType.of(0);
+		Set<E> s = new HashSet<>();
+		st.forEach(e->{n.setValue(n.value()+1); s.add(e);});
+		return n.value().equals(s.size());
 	}
 	
 	/**
@@ -122,7 +163,7 @@ public class Stream2 {
 	 */
 	public static <E> Stream<Pair<E,E>> consecutivePairs(Stream<E> sm) {
 		MutableType<E> rf = MutableType.of(null);
-		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.newValue(e), e)).filter(p->p.first()!=null);
+		Stream<Pair<E,E>> r = sm.map(e->Pair.of(rf.setValue(e), e)).filter(p->p.first()!=null);
 		return r;
 	}
 	
@@ -314,10 +355,6 @@ public class Stream2 {
 		String[] r = s.split(delim);
 		return Arrays.stream(r).<String> map(x -> x.trim())
 				.filter(x-> x.length() > 0);
-	}
-	
-	public static <E> Stream<E> asStream(Iterable<E> iterable){
-		return StreamSupport.stream(iterable.spliterator(), false);
 	}
 	
 	public static <E,B,R> R collect(Stream<E> flow, Collector<E,B,R> c) {

@@ -70,10 +70,10 @@ public class TestTrees {
 		String ex = "39(2.,27(_,2,3,4),9(8.,_))";
 		Tree<String> t7 = Tree.parse(ex);		
 		System.out.println(t7);
-		Stream2.asStream(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
+		Stream2.of(t7).map(t->t.isEmpty()?"_":t.getLabel()).forEach(t->System.out.println(t));
 		System.out.println("______________");
 		System.out.println(t7);
-		Stream2.asStream(()->t7.byLevel())
+		Stream2.of(()->t7.byLevel())
 			.map(t->Pair.of(t.level(),f.apply(t)))
 			.forEach(t->System.out.println(t));
 	}

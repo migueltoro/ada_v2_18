@@ -5,10 +5,10 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 
 public class TestMainPuzzle {
@@ -30,10 +30,10 @@ public class TestMainPuzzle {
 		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
 		
 		EGraph<VertexPuzzle, EdgePuzzle> graph = 
-				Graphs2.simpleVirtualGraphSum(e1,v->v.equals(e2),e2,e->true);		
+				SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight());		
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = 
-				GraphAlg.aStar(graph,HeuristicaPuzzle::heuristicaManhattan);
+				AStar.of(graph,HeuristicaPuzzle::heuristicaManhattan,AStarType.Min);
 		
 //		ms.search();
 		

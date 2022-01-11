@@ -1,6 +1,7 @@
 package us.lsi.graphs.examples;
 
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -22,6 +23,10 @@ import us.lsi.graphs.GraphsReader;
  */
 
 public class CaminoMinimo {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 
 	public static void main(String[] args) {
 		SimpleWeightedGraph<Ciudad,Carretera> graph =  
@@ -29,11 +34,11 @@ public class CaminoMinimo {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		System.out.println(graph);
 		ShortestPathAlgorithm<Ciudad,Carretera> a = new DijkstraShortestPath<Ciudad,Carretera>(graph);
-		Ciudad from = Ciudad.ofName("Sevilla");
-		Ciudad to = Ciudad.ofName("Almeria");
+		Ciudad from = ciudad(graph,"Sevilla");
+		Ciudad to = ciudad(graph,"Almeria");
 		GraphPath<Ciudad,Carretera> gp =  a.getPath(from,to);
 		System.out.println(gp);
 		System.out.println(gp.getVertexList());	
@@ -43,13 +48,13 @@ public class CaminoMinimo {
 				Graphs2.subGraph(graph, 
 						null, 
 						e->gp.getEdgeList().contains(e),
-						()->new SimpleWeightedGraph<>(Ciudad::of,Carretera::of));
+						Graphs2::simpleWeightedGraph);
 		
-		GraphColors.toDot(graph,"ficheros/caminoMinimoAndalucia1.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
+		GraphColors.toDot(graph,"ficheros/caminoMinimoAndalucia1.gv",x->x.nombre(),x->x.nombre()+"--"+x.km());
 		
 		GraphColors.toDot(graph2,"ficheros/caminoMinimoAndalucia2.gv",
-				x->x.getNombre(),
-				x->x.getNombre()+"--"+x.getKm(),
+				x->x.nombre(),
+				x->x.nombre()+"--"+x.km(),
 				v->GraphColors.color(Color.black),
 				e->GraphColors.style(Style.bold));
 		

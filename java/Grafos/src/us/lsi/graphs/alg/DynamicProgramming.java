@@ -22,7 +22,7 @@ import us.lsi.hypergraphs.VirtualHyperVertex;
 
 
 public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
-			E extends SimpleHyperEdge<V,E,A>,A> implements DP<V, E, A> {
+			E extends SimpleHyperEdge<V,E,A>,A> {
 	
 
 	public enum PDType{Min,Max}
@@ -46,7 +46,6 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 		this.solutionsTree = new HashMap<>();
 	}
 	
-	@Override
 	public Sp<E> search(){
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
 		return search(this.startVertex);
@@ -56,8 +55,8 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 		Sp<E> r = null;
 		if (this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
-		} else if (actual.isBaseCase()) {
-			Double w = actual.baseCaseSolution();
+		} else if (graph.isBaseCase(actual)) {
+			Double w = graph.baseCaseSolution(actual);
 			if(w!=null) r = Sp.of(w,null);
 			else r = null;
 			this.solutionsTree.put(actual, r);
@@ -65,7 +64,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			List<Sp<E>> sps = new ArrayList<>();
 			for (E edge : graph.edgesOf(actual)) {
 				List<Sp<E>> spNeighbors = new ArrayList<>();
-				List<V> neighbords = edge.targets();
+				List<V> neighbords = graph.getEdgeTargets(edge);
 				for (V neighbor : neighbords) {
 					Sp<E> nb = search(neighbor);
 					if (nb == null) {
@@ -77,7 +76,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 				Sp<E> spa = null;
 				if(spNeighbors != null) {
 					List<Double> solutions = spNeighbors.stream().map(sp->sp.weight()).toList();
-					spa = Sp.of(edge.weight(solutions), edge);
+					spa = Sp.of(graph.getEdgeWeight(edge,solutions), edge);
 				}
 				sps.add(spa);
 				if(this.withGraph) this.completeGraph(actual,edge,neighbords);
@@ -101,6 +100,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 			outGraph.addEdge(ve, vn, SimpleEdge.of(ve, vn, 1.));
 		}
 	}
+
 	
 	public void toDot(String file,Function<V,String> stringVertex, Function<E,String> stringEdge, Set<V> s) {
 		GraphColors.toDot(this.outGraph,
@@ -112,11 +112,10 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 				);
 	}
 	
-	@Override
 	public SimpleVirtualHyperGraph<V, E, A> getGraph() {
 		return graph;
 	}
-	@Override
+	
 	public Map<V, Sp<E>> getSolutionsTree() {
 		return solutionsTree;
 	}	
@@ -124,15 +123,29 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 		return type;
 	}
 	
-	@Override
 	public GraphTree<V,E,A> searchTree(V vertex){
 		return GraphTree.of(this.solutionsTree,vertex);
 	}
 	
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, E, A>, A> 
+		DynamicProgramming<V, E, A> dynamicProgrammingSearch(
+			SimpleVirtualHyperGraph<V, E, A> graph, 
+			PDType type) {
+		return new DynamicProgramming<V, E, A>(graph, type);
+	}
+
 	public record Sp<E>(Double weight, E edge) implements Comparable<Sp<E>> {
 		
 		public static <E> Sp<E> of(Double weight,E edge) {
 			return new Sp<>(weight,edge);
+		}
+		
+		public static <E> Sp<E> of(Double weight) {
+			return new Sp<>(weight,null);
+		}
+		
+		public static <E> Comparator<Sp<E>> comparator() {
+			return Comparator.naturalOrder();
 		}
 
 		@Override

@@ -10,12 +10,12 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.mochila.datos.SolucionMochila;
 import us.lsi.mochila.datos.DatosMochila;
 
 public record MochilaVertex(Integer index, Integer capacidadRestante)
-          implements ActionVirtualVertex<MochilaVertex, MochilaEdge, Integer> {
+          implements VirtualVertex<MochilaVertex, MochilaEdge, Integer> {
 
 	public static MochilaVertex initialVertex() {
 		return of(0, capacidadInicial);

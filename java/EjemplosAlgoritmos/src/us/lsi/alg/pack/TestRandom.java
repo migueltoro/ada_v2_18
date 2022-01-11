@@ -2,16 +2,14 @@ package us.lsi.alg.pack;
 
 
 import java.util.Locale;
-import java.util.function.Predicate;
 
+import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestRandom {
 
@@ -20,30 +18,31 @@ public class TestRandom {
 		Data.data("ficheros/pack.txt",12);
 		Data.m = Data.n;
 		PackVertex e1 = PackVertex.first();
-		Predicate<PackVertex> goal  = PackVertex.goal();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				Graphs2.simpleVirtualGraphLast(e1,PackVertex.goal(),PackVertex.last(), v->true,v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
 		
-		GreedySearchOnGraph<PackVertex,PackEdge> rr = GraphAlg.greedy(
+		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
 				PackVertex::greedyEdge);
-				
-		Double bv = rr.weightToEnd().orElse(null);
+	
+		GraphPath<PackVertex, PackEdge> path = rr.path();
+		Double bv = path.getWeight();
 		System.out.println(bv);
 		
 		PackVertex.m = bv.intValue();
 		
-		BackTrackingRandom<PackVertex, PackEdge,SolucionPack> ms = BT.random(
+		BackTrackingRandom<PackVertex, PackEdge,SolucionPack> ms = BackTrackingRandom.of(
 				graph,
 				SolucionPack::of,
-				PackVertex::copy,
+				BTType.Min,
 				v->v.index);	
 		
 		BackTrackingRandom.threshold = 12;
 		BackTrackingRandom.solutionsNumber =  2;
 		
 		ms.bestValue = bv;
+		ms.optimalPath = path;
 		ms.search();
 
 		SolucionPack s1 = ms.getSolution().orElse(null);

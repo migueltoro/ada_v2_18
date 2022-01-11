@@ -10,9 +10,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public class PackVertex implements ActionVirtualVertex<PackVertex,PackEdge,Integer> {
+public class PackVertex implements VirtualVertex<PackVertex,PackEdge,Integer> {
 
 
 	public static PackVertex of(Integer index, List<Integer> as, Map<Integer, Integer> carga) {

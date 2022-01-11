@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import us.lsi.common.Enumerate;
 import us.lsi.common.Pair;
@@ -28,6 +29,8 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.View1;
 
 public class Iterables {
+	
+	
 	
 	/**
 	 * @param iterable Un iterable 
@@ -121,8 +124,12 @@ public class Iterables {
 		return new IteratorExplicit<>(t0,hn,nx1,nx2);
 	}
 	
-	public static <E> Iterable<E> asIterable(Iterator<E> it) { 
+	public static <E> Iterable<E> ofIterator(Iterator<E> it) { 
 	    return ()->it;
+	}
+	
+	public static <E> Iterable<E> ofStream(Stream<E> stream) { 
+	    return () -> stream.iterator();
 	}
 	
 	/**

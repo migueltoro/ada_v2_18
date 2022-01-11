@@ -5,10 +5,10 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestJarrasAstar {
 
@@ -18,11 +18,14 @@ public class TestJarrasAstar {
 			JarrasVertex.data(3,5,0,0,3,7);;
 			JarrasVertex e1 = JarrasVertex.first();
 			JarrasVertex e2 = JarrasVertex.last();
-			EGraph<JarrasVertex, JarrasEdge> graph = Graphs2.simpleVirtualGraphSum(e1,v->v.equals(e2),e2,v->true);		
 			
-			AStar<JarrasVertex, JarrasEdge> ms = GraphAlg.aStar(
+			SimpleVirtualGraph.endVertexG = e2;
+			EGraph<JarrasVertex, JarrasEdge> graph = SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->1.);		
+			
+			AStar<JarrasVertex, JarrasEdge> ms = AStar.of(
 					graph,
-					(v1,p,v2)->0.);
+					(v1,p,v2)->0.,
+					AStarType.Min);
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 			

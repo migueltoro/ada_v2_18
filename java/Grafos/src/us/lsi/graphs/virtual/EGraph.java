@@ -18,6 +18,8 @@ public interface EGraph<V, E> extends Graph<V,E> {
 	
 	EGraphPath<V, E> initialPath();
 	
+	V oppositeVertex(E edge, V v);
+	
 	V startVertex();
 	
 	Predicate<V> goal();
@@ -27,6 +29,4 @@ public interface EGraph<V, E> extends Graph<V,E> {
 	Predicate<V> constraint();
 	
 	PathType pathType(); 
-	
-
 }

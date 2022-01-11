@@ -1,53 +1,50 @@
 package us.lsi.alg.mochila;
 
-import java.util.function.Predicate;
 
+import java.util.function.Predicate;
+import org.jgrapht.GraphPath;
+import us.lsi.graphs.alg.Greedy;
+import us.lsi.graphs.alg.GreedyOnGraph;
+import us.lsi.graphs.virtual.EGraph;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.mochila.datos.SolucionMochila;
 
 public class MochilaHeuristic {
 	
 	
-	public static Double heuristic_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		return -heuristic(v1.index(), v1.capacidadRestante().doubleValue(),v2.index());
-	}
+//	public static Double heuristic_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
+//		return -hu(Md.of(v1.index(),(double)v1.capacidadRestante()),v->v.index()==v2.index() || v.cr()==0.);
+//	}
 	
 	public static Double heuristic(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		return heuristic(v1.index(), v1.capacidadRestante().doubleValue(), v2.index());
+		return hu(Md.of(v1.index(),(double)v1.capacidadRestante()),v->v.index()==v2.index()|| v.cr()==0.);
 	}
 	
-	public static Double heuristic2_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		if(goal.test(v1)) return 0.;
-		return -heuristic2(v1, goal, v2);
-	}
-	
-	public static Double heuristic2(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		Integer index = v1.index();
-		Integer capacidadRestante = v1.capacidadRestante();
-		Integer a = 1+ Math.min(capacidadRestante / DatosMochila.getPeso(index), DatosMochila.getNumMaxDeUnidades(index));
-		Integer valor = a * DatosMochila.getValor(index);
-		return valor.doubleValue();
+	public static record Md(Integer index, Double cr) {
+		public static Md of(Integer index, Double cr) {
+			return new Md(index,cr);
+		}
+		public Double heuristicAction() {
+			return Math.min(cr()/DatosMochila.getPeso(index()),DatosMochila.getNumMaxDeUnidades(index()));
+		}
+		public Md next() {
+			Double a = heuristicAction();
+			return new Md(index()+1, cr() - a * DatosMochila.getPeso(index()));
+		}
+		public Double weight() {
+			if(this.index >= DatosMochila.n) return 0.;
+			return heuristicAction()*DatosMochila.getValor(index());
+		}
 	}
 
-	public static Double heuristic(int index, Double capacidadRestante, Integer lastIndex) {
-		Double r = 0.;		
-		while (capacidadRestante> 0 && index < lastIndex) {
-			Double a = Math.min(capacidadRestante / DatosMochila.getPeso(index), DatosMochila.getNumMaxDeUnidades(index));
-			r = r + a * DatosMochila.getValor(index);
-			capacidadRestante = capacidadRestante - a * DatosMochila.getPeso(index);
-			index = index + 1;
-		}
-		return r;
-	}	
-	
-	public static Double voraz(MochilaVertex v, MochilaVertex lastVertex) {
-		Integer lastIndex = lastVertex.index();
-		Double r = 0.;		
-		while (v.capacidadRestante()> 0 && v.index() < lastIndex) {
-			Integer a = v.greedyEdge().action();
-			r = r + a * DatosMochila.getValor(v.index());
-			v = v.neighbor(a);
-		}
-		return r;
+	public static Double hu(Md v1, Predicate<Md> goal) {	
+		Greedy<Md> r = Greedy.of(v1,v->v.next(),goal);
+		return r.stream().mapToDouble(v->v.weight()).sum();
 	}
-
+	
+	public static SolucionMochila solucionVoraz(MochilaVertex v, EGraph<MochilaVertex, MochilaEdge> graph) {
+		GraphPath<MochilaVertex, MochilaEdge> r = 
+				GreedyOnGraph.of(graph,MochilaVertex::greedyEdge).path();
+		return MochilaVertex.getSolucion(r);
+	}
 }

@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAStar {
 	
@@ -30,12 +30,12 @@ public class TestAStar {
 		// Grafo
 
 		EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(start,SubconjuntosVertex.goal(),null,v->true, x-> x.weight());
+				SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x-> x.weight());
 
 		System.out.println("\n\n#### PI-7 Ej3 Algoritmo Astar ####");
 		
-		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = GraphAlg.aStar(graph, 
-				SubconjuntosHeuristic::heuristic);
+		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = AStar.of(graph, 
+				SubconjuntosHeuristic::heuristic,AStarType.Min);
 		
 		List<Integer> gp_as = aStar.search().get().getEdgeList().stream().map(x -> x.action())
 				.collect(Collectors.toList()); // getEdgeList();

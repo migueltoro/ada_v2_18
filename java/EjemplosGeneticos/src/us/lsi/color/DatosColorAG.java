@@ -33,7 +33,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
-				Carretera::getKm);
+				Carretera::km);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 		Map<Ciudad,Integer> m = solucion(solucion);			
   		Integer N = ciudades.size();
   		Long numAristasIlegales = grafo.edgeSet().stream()
-				.filter(c -> m.get(c.getSource())== m.get(c.getTarget()))
+				.filter(c -> m.get(grafo.getEdgeSource(c))== m.get(grafo.getEdgeTarget(c)))
 				.count();
   		Integer numeroDeColores = m.values().stream()
   				.collect(Collectors.toSet())

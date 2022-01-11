@@ -166,7 +166,7 @@ public class IntegerSet implements Set<Integer> {
 	@Override
 	public boolean addAll(Collection<? extends Integer> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->{Boolean r = this.add(x); change.newValue(change.value() || r);});
+		c.stream().forEach(x->{Boolean r = this.add(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 	
@@ -194,7 +194,7 @@ public class IntegerSet implements Set<Integer> {
 
 	public boolean addAll(Integer... elems) {
 		MutableType<Boolean> change = MutableType.of(false);
-		Arrays.stream(elems).forEach(x->{Boolean r = this.add(x); change.newValue(change.value() || r);});
+		Arrays.stream(elems).forEach(x->{Boolean r = this.add(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 
@@ -203,7 +203,7 @@ public class IntegerSet implements Set<Integer> {
 		MutableType<Boolean> change = MutableType.of(false);
 		IntegerSet cp = this.copy();
 		cp.stream().filter(x->!c.contains(x))
-			.forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+			.forEach(x->{Boolean r = this.remove(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 	
@@ -233,14 +233,14 @@ public class IntegerSet implements Set<Integer> {
 		MutableType<Boolean> change = MutableType.of(false);		
 		IntStream.range(0,bits.length()).map(x->x+infLimit).boxed()
 			.filter(x->!this.contains(x))
-			.forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+			.forEach(x->{Boolean r = this.remove(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		MutableType<Boolean> change = MutableType.of(false);
-		c.stream().forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		c.stream().forEach(x->{Boolean r = this.remove(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 	
@@ -276,7 +276,7 @@ public class IntegerSet implements Set<Integer> {
 	
 	public boolean removeAll(Integer... elems) {
 		MutableType<Boolean> change = MutableType.of(false);
-		Arrays.stream(elems).forEach(x->{Boolean r = this.remove(x); change.newValue(change.value() || r);});
+		Arrays.stream(elems).forEach(x->{Boolean r = this.remove(x); change.setValue(change.value() || r);});
 		return change.value();
 	}
 

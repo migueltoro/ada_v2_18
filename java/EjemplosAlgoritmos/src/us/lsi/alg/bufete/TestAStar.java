@@ -5,10 +5,10 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAStar {
 
@@ -28,12 +28,12 @@ public class TestAStar {
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
 			EGraph<BufeteVertex, BufeteEdge> graph = 
-					Graphs2.simpleVirtualGraphLast(start,goal, null,v->true, v -> (double) v.maxCarga());
+					SimpleVirtualGraph.last(start,goal, v -> (double) v.maxCarga());
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
 
-			AStar<BufeteVertex, BufeteEdge> aStar = GraphAlg.aStar(graph, Heuristica::heuristic);
+			AStar<BufeteVertex, BufeteEdge> aStar = AStar.of(graph, Heuristica::heuristic,AStarType.Min);
 			GraphPath<BufeteVertex, BufeteEdge> gp_as = aStar.search().get(); // getEdgeList();
 			
 			SolucionBufete s_as = SolucionBufete.of(gp_as);

@@ -58,9 +58,9 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 		return e.targets();
 	}
 
-//	public double getEdgeWeight(E e) {
-//		return e.weight();
-//	}	
+	public double getEdgeWeight(E e, List<Double> weights) {
+		return e.weight(weights);
+	}
 	
 	public E getEdge(V v1, V v2) {
 		return this.edgesOf(v1).stream().filter(e->e.targets().contains(v2)).findFirst().get();
@@ -72,7 +72,8 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 	
 	public Set<V> vertexSet(){
 		return Set.of(this.startVertex);
-	}	
+	}
+	
 	public List<E> edgesOf(V v) {
 		return v.edgesOf();
 	}	
@@ -85,4 +86,18 @@ public class SimpleVirtualHyperGraph<V extends VirtualHyperVertex<V,E,A>, E exte
 	public List<E> outgoingEdgesOf(V v) {
 		return edgesOf(v);
 	}
+	
+	public Boolean isBaseCase(V v) {
+		return v.isBaseCase();
+	}
+	
+	public Double baseCaseSolution(V v) {
+		return v.baseCaseSolution();
+	}
+
+	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V,E,A>, A> SimpleVirtualHyperGraph<V, E, A> 
+		simpleVirtualHyperGraph(V start) {
+		return new SimpleVirtualHyperGraph<V, E, A>(start);
+	}
+	
 }

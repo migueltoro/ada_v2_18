@@ -1,10 +1,10 @@
 package us.lsi.alg.secuencias;
 
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 
 
 public record SeqEdge(SeqVertex source, SeqVertex target, SeqAction action, Double weight) 
-          implements ActionSimpleEdge<SeqVertex,SeqAction> {
+          implements SimpleEdgeAction<SeqVertex,SeqAction> {
 
 	public static Double weight(SeqAction action) {
 		return switch(action) {

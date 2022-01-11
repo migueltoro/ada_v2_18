@@ -16,7 +16,18 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.streams.Stream2;
 
-public class DephtPostSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterable<V>  {
+public class DephtPostSearch<V, E> implements Iterator<V>, Iterable<V>  {
+	
+	/**
+	 * @param <V> El tipo de los v&eacute;rtices
+	 * @param <E> El tipo de las aristas
+	 * @param g Un grafo 
+	 * @param startVertex El vértice inicial
+	 * @return Una algoritmo de b&uacute;squeda en profundidad en postorden
+	 */
+	public static <V, E> DephtPostSearch<V, E> of(Graph<V, E> g, V startVertex) {
+		return new DephtPostSearch<V, E>(g, startVertex);
+	}
 
 	protected Map<V,E> edgeToOrigin;
 	public Graph<V,E> graph;
@@ -37,15 +48,13 @@ public class DephtPostSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterab
 		this.preorder();
 	}
 	
-	@Override
 	public Stream<V> stream() {
 		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		return Stream2.asStream(this);
+		return Stream2.of(this);
 	}
 	
-	@Override
 	public DephtSearch<V, E> copy() {
-		return GraphAlg.depth(this.graph, this.startVertex);
+		return DephtSearch.of(this.graph, this.startVertex);
 	}
 	
 	public Iterator<V> iterator() {
@@ -98,12 +107,10 @@ public class DephtPostSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterab
 		return this.edgeToOrigin.get(v);
 	}
 
-	@Override
 	public EGraph<V, E> getGraph() {
-		return Graphs2.eGraphSum(this.graph,startVertex());
+		return Graphs2.eGraphSum(this.graph,startVertex(),null,null);
 	}
 	
-	@Override
 	public V startVertex() {
 		return this.startVertex;
 	}
@@ -111,5 +118,7 @@ public class DephtPostSearch<V, E> implements GraphAlg<V,E>, Iterator<V>, Iterab
 	public Set<E> edges() {
 		return this.edgeToOrigin.values().stream().collect(Collectors.toSet());
 	}
+
+	
 
 }

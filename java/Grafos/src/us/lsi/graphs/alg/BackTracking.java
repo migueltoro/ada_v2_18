@@ -2,143 +2,145 @@ package us.lsi.graphs.alg;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
+import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
 import us.lsi.common.TriFunction;
+import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
-public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
+public class BackTracking<V,E,S> {
+
+	public static <V, E, S> BackTracking<V, E, S> of(
+			EGraph<V, E> graph,
+			TriFunction<V, Predicate<V>, V, Double> heuristic, 
+			Function<GraphPath<V, E>, S> solution,
+			BTType type) {
+		return new BackTracking<V, E, S>(graph, heuristic, solution, type);
+	}
 	
 	public enum BTType {Min,Max,All,One}
+	private Comparator<Double> comparator = Comparator.naturalOrder();
 	
+	public BTType type = BTType.Min;
 	public EGraph<V,E> graph;
-	protected V startVertex; 
-	protected Predicate<V> goal;
-	protected V end;
-	protected Predicate<V> constraint;
 	public Double bestValue;
 	public GraphPath<V,E> optimalPath;
 	protected TriFunction<V, Predicate<V>, V, Double> heuristic;
 	public Set<S> solutions;
 	protected Function<GraphPath<V,E>,S> solution;
-	protected Function<V,V> copy;
-	protected BTType type;
-	public Graph<V,E> outGraph;
+	private SimpleDirectedGraph<V,E> outGraph;
 	public Boolean withGraph = false;
-	public Function<E,Object> action;
 	
-	BackTracking(EGraph<V, E> graph, 
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			Function<GraphPath<V,E>,S> solution,
-			Function<V,V> copy,
-			BTType type) {
-		this.graph = graph;
-		this.startVertex = graph.startVertex();
-		this.goal = graph.goal();
-		this.end = graph.endVertex();
-		this.constraint = graph.constraint();
-		this.heuristic = heuristic;
-		this.copy = copy;
+	BackTracking(EGraph<V, E> graph, TriFunction<V, Predicate<V>, V, Double> heuristic,
+			Function<GraphPath<V, E>, S> solution, BTType type) {
 		this.type = type;
+		this.graph = graph;
+		this.heuristic = heuristic;
 		this.solutions = new HashSet<>();
 		this.solution = solution;
-		if(this.type == BTType.Max) this.bestValue = -Double.MAX_VALUE;
-		if(this.type == BTType.Min) this.bestValue = Double.MAX_VALUE;
-		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
+		this.comparator = switch(this.type) {
+		case All -> null;
+		case Max -> Comparator.reverseOrder();
+		case Min -> Comparator.naturalOrder();
+		case One -> null;
+		};
+		Preconditions.checkNotNull(graph.goal(), "El predicado no puede ser null");
 	}
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.getPath().boundaryFunction(state.getAccumulateValue(),state.getActualVertex(),edge,goal,end, heuristic);
-		if(this.bestValue != null && this.type == BTType.Max) r = w < this.bestValue;
-		if(this.bestValue != null && this.type == BTType.Min) r = w > this.bestValue;
+		Double w = state.getPath().boundedValue(state.getAccumulateValue(),state.getActualVertex(),
+				edge,graph.goal(),graph.endVertex(), heuristic);
+		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) > 0;
 		return r;
 	}
 	
 	protected void update(State<V, E> state) {
-		if(this.type == BTType.All ||
-		   (this.bestValue == null)||
-		   (this.type == BTType.Max && state.getAccumulateValue() >= this.bestValue) ||
-		   (this.type == BTType.Min && state.getAccumulateValue() <= this.bestValue)) {
-//				System.out.println("AC = "+state.getAccumulateValue());
-//				System.out.println("BV = "+this.bestValue);
-				this.bestValue = state.getAccumulateValue();
-				if (this.constraint.test(state.getActualVertex())) {
+		if (graph.constraint().test(state.getActualVertex())) {
+			if (this.type == BTType.All || this.type == BTType.One) {
+				S s = solution.apply(state.getPath());
+				this.solutions.add(s);
+			} else if (this.type == BTType.Min || this.type == BTType.Max) {
+				if (this.bestValue == null || this.comparator.compare(state.getAccumulateValue(),this.bestValue) < 0) {
+					this.bestValue = state.getAccumulateValue();
 					this.optimalPath = state.getPath();
-					S s = solution.apply(this.optimalPath);
-					this.solutions.add(s);
-//					System.out.println("Vertice = "+state.getActualVertex());
-//					System.out.println("Sol = "+s);
 				}
-				
+			}
 		}
 	}
 	
+	private void initialGraph() {
+		if (this.withGraph) this.outGraph = Graphs2.simpleDirectedGraph();
+	}
 	
-	@Override
+	private void addGraph(V v, E edge) {
+		if(withGraph) {
+			V v2 = Graphs.getOppositeVertex(graph,edge,v);
+			if(!this.outGraph.containsVertex(v)) this.outGraph.addVertex(v);
+			if(!this.outGraph.containsVertex(v2)) this.outGraph.addVertex(v2);
+			if(!this.outGraph.containsEdge(edge)) this.outGraph.addEdge(v, v2, edge);
+		}
+	}
+	
+	public SimpleDirectedGraph<V,E> graph() {
+		return this.outGraph;
+	}
+	
 	public void search() {	
-		if(this.withGraph) outGraph = new SimpleDirectedWeightedGraph<>(null,null);
-		State<V,E> initialState = StatePath.of(graph,this.goal,this.end);
+		initialGraph();
+		State<V,E> initialState = StatePath.of(graph,graph.goal(),graph.endVertex());
 		search(initialState);
 	}
 	
 	public void search(State<V, E> state) {
-		V actual = this.copy.apply(state.getActualVertex());
-		if(this.withGraph) outGraph.addVertex(actual);
-		if (goal.test(actual)) {
-//			System.out.println(state);
+		V actual = state.getActualVertex();
+		if (graph.goal().test(actual)) {
 			this.update(state);
-		}
-		else {
+		} else {
 			for (E edge : graph.edgesListOf(actual)) {	
-//				System.out.println(state);
 				if (this.forget(state,edge)) continue;
 				state.forward(edge);
 				search(state);
-				if(this.withGraph) outGraph.addEdge(actual,Graphs.getOppositeVertex(graph, edge,actual), edge);
+				addGraph(actual,edge);
 				state.back(edge);
 			}
 		}
 	}
 	
-	@Override
 	public Optional<S> getSolution(){
 		return switch(this.type) {
 		case All -> this.solutions.stream().findAny();
-		case Max -> this.solutions.stream().max(Comparator.naturalOrder());
-		case Min -> this.solutions.stream().min(Comparator.naturalOrder());
+		case Max -> this.optimalPath().map(x->this.solution.apply(x));
+		case Min -> this.optimalPath().map(x->this.solution.apply(x));
 		case One -> this.solutions.stream().findAny();
 		};
 	}
-	
-	@Override
+
 	public Set<S> getSolutions(){
 		return this.solutions;
 	}
 	
-	public String toStringSolutions() {
-		return this.solutions.stream().sorted().map(e->e.toString()).collect(Collectors.joining("\n"));
+	public Optional<GraphPath<V, E>> optimalPath(){
+		return Optional.ofNullable(this.optimalPath);		
 	}
 	
-	public V getStartVertex() {
-		return startVertex;
+	public String toStringSolutions() {
+		return this.solutions.stream().sorted().map(e->e.toString()).collect(Collectors.joining("\n"));
 	}
 
 	public interface State<V, E> {
@@ -154,7 +156,8 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 		private V actualVertex;
 		private EGraphPath<V, E> path;
 		private EGraph<V,E> graph;
-		private Map<V,E> edgeToOrigin;
+		private List<E> edges;
+		private List<Double> weights;
 		private Double accumulateValue;
 		
 		public static <V,E> State<V, E> of(EGraph<V,E> graph, Predicate<V> goal, V end){
@@ -166,28 +169,26 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 			this.actualVertex = graph.startVertex();
 			this.graph = graph;
 			this.path = graph.initialPath();
-			this.edgeToOrigin = new HashMap<>();
+			this.edges = new ArrayList<>();
+			this.weights = new ArrayList<>();
 			this.accumulateValue = this.path.getWeight();
 		}		
 	
 		@Override
 		public void forward(E edge) {
-//			System.out.println(this.edgeToOrigin.size());
-			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
+			E lastEdge = edges.isEmpty()?null:List2.last(edges);
 			this.accumulateValue = this.path.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
-			this.edgeToOrigin.put(this.actualVertex,edge);		
+			this.edges.add(edge);
+			this.weights.add(this.accumulateValue);
 		}
 		
 		@Override
 		public void back(E edge) {
-//			System.out.println(this.actualVertex);
-//			System.out.println(this.edgeToOrigin.size());
-			E lastEdge = this.edgeToOrigin.get(this.actualVertex);
-			this.accumulateValue = this.path.removeLast(this.accumulateValue,this.actualVertex,edge,lastEdge);
-			this.edgeToOrigin.remove(this.actualVertex); // repasar
-			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);			
-//			System.out.println(this.edgeToOrigin.size());
+			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);	
+			this.edges.remove(this.edges.size()-1);
+			this.weights.remove(this.weights.size()-1);
+			this.accumulateValue = !this.weights.isEmpty()? List2.last(this.weights): graph.initialPath().getWeight();
 		}
 		
 		@Override
@@ -195,29 +196,10 @@ public class BackTracking<V,E,S extends Comparable<S>> implements BT<V, E, S> {
 			return this.accumulateValue;
 		}	
 		
-		private E getEdgeToOrigin(V vertex) {
-			return this.edgeToOrigin.get(vertex);
-		}
-		
-		public Map<V,E> edgeToOrigin() {
-			return this.edgeToOrigin;
-		}
-		
 		@Override
 		public EGraphPath<V, E> getPath() {				
-			V end = this.actualVertex;
 			EGraphPath<V,E> ePath = graph.initialPath();
-			V startVertex = graph.startVertex();
-			if(end.equals(startVertex)) return ePath;
-			E edge = this.getEdgeToOrigin(end);
-			List<E> edges = new ArrayList<>();		
-			while(edge!=null) {				
-				edges.add(edge);
-				end = Graphs.getOppositeVertex(graph, edge, end);
-				edge = this.getEdgeToOrigin(end);			
-			}
-			Collections.reverse(edges);
-			for(E e:edges) {
+			for(E e:this.edges) {
 				ePath.add(e);
 			}
 			return ePath;

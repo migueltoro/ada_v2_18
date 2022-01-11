@@ -35,7 +35,7 @@ public class EjemplosDeStreams {
 	 * @return Crear una lista a partir de un Stream de valores
 	 */
 	public static <T> List<T> ejemploA(Stream<T> st){
-		return st.collect(Collectors.<T>toList());
+		return st.collect(Collectors.toList());
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Stream<Punto2D> ejemploP(Integer limit){
 		return Stream.iterate(1L, x-> x<=limit, x->Math2.siguientePrimo(x))
-					 .<Punto2D>map(x->Punto2D.of((double)x, (double)x));
+					 .map(x->Punto2D.of((double)x, (double)x));
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class EjemplosDeStreams {
 	 */
 	public static Map<Cuadrante,Double> ejemploU(Stream<Punto2D> st){
 		return st.collect(Collectors.groupingBy(Punto2D::getCuadrante, 
-							Collectors.<Punto2D,Double>reducing(0.,x->x.x(),(x,y)->x+y)));
+							Collectors.reducing(0.,x->x.x(),(x,y)->x+y)));
 	}
 		
 	/**
@@ -293,8 +293,8 @@ public class EjemplosDeStreams {
 	 */
 	public static boolean esPrimo1(Long n){
 		Long sqrt = (long)Math.sqrt((double)n);
-		return !LongStream.rangeClosed(2, sqrt)
-				          .anyMatch(x->Math2.esDivisible(n, x));
+		return LongStream.rangeClosed(2, sqrt)
+				          .noneMatch(x->Math2.esDivisible(n, x));
 	}
 	
 	/**

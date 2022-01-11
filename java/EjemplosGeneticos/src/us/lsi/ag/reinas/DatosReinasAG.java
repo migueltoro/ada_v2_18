@@ -2,7 +2,6 @@ package us.lsi.ag.reinas;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 import us.lsi.ag.AuxiliaryAg;
 import us.lsi.ag.SeqNormalData;

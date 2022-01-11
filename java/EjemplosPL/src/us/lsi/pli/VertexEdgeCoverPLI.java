@@ -29,11 +29,11 @@ public class VertexEdgeCoverPLI {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		g = IntegerVertexGraphView.of(graph);
 		GraphData.n = g.vertexSet().size();
 		GraphData.vertexWeight = g.vertexSet().stream()
-				.collect(Collectors.toMap(x->x,x->1./g.vertex(x).getHabitantes()));
+				.collect(Collectors.toMap(x->x,x->1./g.vertex(x).habitantes()));
 		GraphData.graph = g;
 	}
 	
@@ -55,8 +55,8 @@ public class VertexEdgeCoverPLI {
 				.collect(Collectors.toSet());
 		GraphColors.toDot(graph,
 				"ficheros/vertex_cover.gv", 
-				v->v.getNombre(), 
-				e->e.getNombre(), 
+				v->v.nombre(), 
+				e->e.nombre(), 
 				v->GraphColors.colorIf(Color.red,Color.black,ciudades.contains(v)),
 				e->GraphColors.style(Style.solid));
 	}
@@ -81,8 +81,8 @@ public class VertexEdgeCoverPLI {
 				.collect(Collectors.toSet());
 		GraphColors.toDot(graph,
 				"ficheros/edge_cover.gv", 
-				v->v.getNombre(), 
-				e->e.getNombre(), 
+				v->v.nombre(), 
+				e->e.nombre(), 
 				v->GraphColors.color(Color.black),
 				e->GraphColors.colorIf(Color.red,Color.black,carreteras.contains(e)));
 		

@@ -12,11 +12,11 @@ import org.jgrapht.Graph;
 
 import us.lsi.common.List2;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
 
 public record ColorVertex(Integer index, Map<Integer,Integer> cav) 
-           implements ActionVirtualVertex<ColorVertex,ColorEdge,Integer>{
+           implements VirtualVertex<ColorVertex,ColorEdge,Integer>{
 
 	public static ColorVertex of(Integer index, Map<Integer, Integer> cav) {
 		return new ColorVertex(index, cav);
@@ -84,6 +84,10 @@ public record ColorVertex(Integer index, Map<Integer,Integer> cav)
 		List<Integer> r = List2.difference(this.ca(),this.cv());
 		if(r.isEmpty()) r = List2.difference(ColorVertex.colors,this.cv());
 		return List2.randomUnitary(r).get(0);
+	}
+	
+	public ColorEdge greedyEdge() {
+		return this.edge(this.greedyAction());
 	}
 
 

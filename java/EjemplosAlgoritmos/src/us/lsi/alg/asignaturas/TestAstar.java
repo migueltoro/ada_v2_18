@@ -8,11 +8,10 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.alg.AStar;
-
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAstar {
 
@@ -25,12 +24,14 @@ public class TestAstar {
 		AsignaturasVertice ini = AsignaturasVertice.inicial();
 		Predicate<AsignaturasVertice> predicado = t ->AsignaturasVertice.goal(t);
 		
+		SimpleVirtualGraph.constraintG =  AsignaturasVertice.constraint();
+		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
-				Graphs2.simpleVirtualGraphLast(ini,predicado,null,v->v.constraint(),v->-(double)v.getPeso());
+				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso());
 	
 		
-		AStar<AsignaturasVertice, AsignaturasEdge> as = GraphAlg
-				.aStar(grafoAStar,Heuristica::heuristic_negate);
+		AStar<AsignaturasVertice, AsignaturasEdge> as = AStar
+				.of(grafoAStar,Heuristica::heuristic,AStarType.Max);
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
@@ -38,7 +39,7 @@ public class TestAstar {
 		
 		System.out.println("___________________");
 		
-		as = GraphAlg.aStar(grafoAStar,Heuristica::heuristic_negate);
+		as = AStar.of(grafoAStar,Heuristica::heuristic, AStarType.Max);
 		
 		List<SolucionAsignaturas> s3 = as.searchAll().stream()
 				.map(s->SolucionAsignaturas.of(s))

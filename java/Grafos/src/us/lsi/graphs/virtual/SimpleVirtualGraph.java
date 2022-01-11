@@ -35,9 +35,29 @@ import us.lsi.path.EGraphPath.PathType;
  * @param <E> El tipo de las aristas
  * 
  */
-public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends ActionSimpleEdge<V,?>> implements EGraph<V,E> {
+public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends SimpleEdgeAction<V,?>> implements EGraph<V,E> {
 	
+	public static Object constraintG = (Predicate<Object>) v->true;
+	public static Object endVertexG = null;
+	public static Object vertexPassWeightG = null;
 	
+
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
+			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight) {
+		return of(startVertex, goal, vertexWeight, null, PathType.Last);
+	}
+
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
+			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight) {
+		return of(startVertex, goal, null, edgeWeight, PathType.Sum);
+	}
+	
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> SimpleVirtualGraph<V, E> of(
+			V startVertex, Predicate<V> goal, Function<V, Double> vertexWeight,
+			Function<E, Double> edgeWeight, PathType type) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, type, vertexWeight, edgeWeight);
+	}
+
 	private Set<V> vertexSet;
 	private Function<E,Double> edgeWeight = null;
 	private Function<V,Double> vertexWeight = null;
@@ -50,23 +70,21 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	private PathType type;
 	
 	
-	public SimpleVirtualGraph(V startVertex,Predicate<V> goal,V endVertex,Predicate<V> constraint,
-			PathType type,			
-			Function<E, Double> edgeWeight, 
-			Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight) {
+	@SuppressWarnings("unchecked")
+	public SimpleVirtualGraph(V startVertex,Predicate<V> goal, PathType type, Function<V, Double> vertexWeight,
+			Function<E, Double> edgeWeight) {
 		super();
 		this.vertexSet = Set2.empty();;
-		this.edgeWeight = edgeWeight;
+		this.edgeWeight =  edgeWeight;
 		this.vertexWeight = vertexWeight;
-		this.vertexPassWeight = vertexPassWeight;
+		this.vertexPassWeight = (TriFunction<V, E, E, Double>) vertexPassWeightG;
 		this.startVertex = startVertex;
 		this.vertexSet = new HashSet<V>();
 		this.vertexSet.add(this.startVertex);
 		this.type = type;
 		this.goal = goal;
-		this.endVertex = endVertex;
-		this.constraint = constraint;
+		this.endVertex = (V) endVertexG;
+		this.constraint = (Predicate<V>) constraintG;
 		this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
 	}
 
@@ -148,12 +166,16 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	
 	@Override
 	public Set<E> edgesOf(V v) {
-		throw new UnsupportedOperationException();
+		return v.edgesOf();
 	}
 	
 	@Override
 	public List<E> edgesListOf(V v) {
 		return v.edgesListOf();
+	}
+	
+	public V oppositeVertex(E edge, V v) {
+		return edge.otherVertex(v);
 	}
 	
 	@Override
@@ -326,5 +348,6 @@ public class SimpleVirtualGraph<V extends ActionVirtualVertex<V,E,?>, E extends 
 	public Predicate<V> constraint() {
 		return constraint;
 	}
+
 	
 }

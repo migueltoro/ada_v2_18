@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 
 public class SolucionReinas implements Comparable<SolucionReinas> {
 	
-	public static SolucionReinas of(GraphPath<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> path) {		
+	public static SolucionReinas of(GraphPath<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> path) {		
 		SolucionReinas r = new SolucionReinas(path);
 		if(r.errores >0) r = null;
 		return r;
@@ -22,7 +22,7 @@ public class SolucionReinas implements Comparable<SolucionReinas> {
 	private Integer error3;
 	private Integer errores;
 
-	private SolucionReinas(GraphPath<ReinasVertex,ActionSimpleEdge<ReinasVertex,Integer>> path) {
+	private SolucionReinas(GraphPath<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> path) {
 		super();
 		this.last = List2.last(path.getVertexList());
 		this.error1 = (ReinasVertex.n - this.last.fo().stream().collect(Collectors.toSet()).size());

@@ -21,8 +21,12 @@ public class GraphColors {
 		blank, red, yellow, gray, cyan, orange, magenta, blue, black, green
 	}
 	
+	public enum ArrowHead {
+		none, normal, dot, inv, crow, tee, vee, diamond, box, curve, icurve
+	}
+	
 	public enum Style {
-		dotted, bold, filled, solid, invis
+		dotted, bold, filled, solid, invis, arrowhead
 	}
 	
 	public enum Shape {
@@ -81,13 +85,16 @@ public class GraphColors {
 	}
 	
 	public static Map<String, Attribute> shapeIf(Shape shape, Boolean test) {
-		Map<String,Attribute> m = new HashMap<>();
-		if(!test) m = Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
-		return m;
+		if(!test) shape = Shape.ellipse;
+		return Map.of("shape", DefaultAttribute.createAttribute(shape.name()));
 	}
 	
 	public static Map<String,Attribute> shape(Integer value) {		
 		return Map.of("shape", DefaultAttribute.createAttribute(Shape.values()[value].toString()));
+	}
+	
+	public static Map<String,Attribute> arrowHead(ArrowHead head) {		
+		return Map.of("arrowhead", DefaultAttribute.createAttribute(head.name()));
 	}
 	
 	@SafeVarargs

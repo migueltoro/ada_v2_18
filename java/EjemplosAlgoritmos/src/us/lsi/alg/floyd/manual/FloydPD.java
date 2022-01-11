@@ -78,7 +78,7 @@ public class FloydPD {
 				Ciudad::ofFormat, 
 				Carretera::ofFormat,
 				Graphs2::simpleWeightedGraph, 
-				Carretera::getKm);
+				Carretera::km);
 		return graph;
 	}
 	
@@ -154,6 +154,10 @@ public class FloydPD {
 		}
 	}
 	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
+	
 	
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
@@ -167,8 +171,8 @@ public class FloydPD {
 		System.out.println(g);
 		System.out.println(FloydPD.graph);
 		
-		Integer origen = g2.getIndex(Ciudad.ofName("Sevilla"));
-		Integer destino = g2.getIndex(Ciudad.ofName("Almeria"));
+		Integer origen = g2.getIndex(ciudad(g,"Sevilla"));
+		Integer destino = g2.getIndex(ciudad(g,"Almeria"));
 		
 		FloydProblem start = FloydProblem.of(origen,destino);
 		
@@ -176,7 +180,7 @@ public class FloydPD {
 		
 		List<Integer> ciudades = a.search();
 		
-		System.out.println(ciudades.stream().map(i->g2.vertex(i).getNombre()).toList());
+		System.out.println(ciudades.stream().map(i->g2.vertex(i).nombre()).toList());
 	}
 
 }

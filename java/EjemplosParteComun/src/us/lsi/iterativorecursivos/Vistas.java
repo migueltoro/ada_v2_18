@@ -2,17 +2,12 @@ package us.lsi.iterativorecursivos;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import us.lsi.common.Ranges.IntRange;
 import us.lsi.common.Ranges.LongRange;
 import us.lsi.common.String2;
 import us.lsi.iterables.Iterables;
-import us.lsi.streams.Stream2;
 import us.lsi.common.Matrix;
-import us.lsi.common.Pair;
-import us.lsi.common.IntPair;
 import us.lsi.common.View1;
 import us.lsi.common.View2E;
 

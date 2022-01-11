@@ -31,7 +31,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);	
+						Carretera::km);	
 		graph = IntegerVertexGraphView.of(g);
 		n = graph.vertexSet().size();	
 	}

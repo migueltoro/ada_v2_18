@@ -11,10 +11,14 @@ import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.BreadthSearch;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.streams.Stream2;
 
 public class RecorridoAnchuraTest {
+	
+	public static Ciudad ciudad(Graph<Ciudad,Carretera> graph, String nombre) {
+		return graph.vertexSet().stream().filter(c->c.nombre().equals(nombre)).findFirst().get();
+	}
 	
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
@@ -23,22 +27,17 @@ public class RecorridoAnchuraTest {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
-		graph.addVertex(Ciudad.ofName("Londres"));
+		graph.addVertex(Ciudad.of("Londres",2000000));
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,Ciudad.ofName("Sevilla"));
+		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
 		
-		BreadthSearch<Ciudad, Carretera> ra = GraphAlg.breadth(g,Ciudad.ofName("Sevilla"));
-		ra.withGraph = true;
-		ra.findEnd();
+		BreadthSearch<Ciudad, Carretera> ra = BreadthSearch.of(g,ciudad(graph,"Sevilla"));
+		Stream2.findLast(ra.stream());
 		Set<Carretera> carreteras = ra.edges();
 		
-		GraphColors.toDot(graph,"ficheros/andalucia.gv",x->x.getNombre(),x->x.getNombre()+"--"+x.getKm());
-		
-		GraphColors.toDot(ra.outGraph,"ficheros/andaluciaAnchura.gv",
-				x->String.format("%s",x.getNombre()+ra.position.get(x)),
-				x->String.format("%.2f",x.getKm()));
+		GraphColors.toDot(graph,"ficheros/andalucia.gv",x->x.nombre(),x->x.nombre()+"--"+x.km());
 		
 		
 		System.out.println(carreteras);

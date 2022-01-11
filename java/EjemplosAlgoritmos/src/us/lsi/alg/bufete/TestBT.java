@@ -5,13 +5,11 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.GraphAlg;
-import us.lsi.graphs.alg.GreedySearchOnGraph;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -32,28 +30,26 @@ public class TestBT {
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
 			EGraph<BufeteVertex, BufeteEdge> graph = 
-					Graphs2.simpleVirtualGraphLast(start,goal,null,v->true,v -> (double)v.maxCarga());
+					SimpleVirtualGraph.last(start,goal,v -> (double)v.maxCarga());
 			
 			System.out.println("\n\n#### Algoritmo BT ####");
 			
-			GreedySearchOnGraph<BufeteVertex, BufeteEdge> rr = 
-					GraphAlg.greedy(graph,
+			GreedyOnGraph<BufeteVertex, BufeteEdge> rr = 
+					GreedyOnGraph.of(graph,
 							BufeteVertex::greadyEdge);
 			
-			GraphPath<BufeteVertex, BufeteEdge> path = rr.search().orElse(null);
-			SolucionBufete sm = SolucionBufete.of(path);
+			GraphPath<BufeteVertex, BufeteEdge> path = rr.path();
 			Double bv = path.getWeight();
 			System.out.println(bv);
 			
 			// Algoritmo BT
-			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BT.backTracking(graph, 
+			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BackTracking.of(graph, 
 					Heuristica::heuristic, 
-					SolucionBufete::of,
-					BufeteVertex::copy, 
+					SolucionBufete::of, 
 					BTType.Min);
 
-			bta.bestValue = bv;
-			bta.solutions.add(sm);
+			bta.bestValue = path.getWeight();
+			bta.optimalPath = path;
 			
 			bta.search();
 

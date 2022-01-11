@@ -2,9 +2,9 @@ package us.lsi.alg.secuencias;
 
 import java.util.Arrays;
 import java.util.List;
-import us.lsi.graphs.virtual.ActionVirtualVertex;
+import us.lsi.graphs.virtual.VirtualVertex;
 
-public record SeqVertex(Integer	index,String s) implements ActionVirtualVertex<SeqVertex,SeqEdge,SeqAction>{
+public record SeqVertex(Integer	index,String s) implements VirtualVertex<SeqVertex,SeqEdge,SeqAction>{
 	
 	public static List<SeqAction> actions = Arrays.asList(SeqAction.values());
 	

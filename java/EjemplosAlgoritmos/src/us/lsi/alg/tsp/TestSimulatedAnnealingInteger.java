@@ -9,12 +9,11 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.alg.GraphAlg;
 import us.lsi.graphs.alg.SimulatedAnnealingSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.path.GraphPaths;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.path.GraphPath2;
 import us.lsi.streams.Stream2;
 
 public class TestSimulatedAnnealingInteger {
@@ -41,15 +40,15 @@ public class TestSimulatedAnnealingInteger {
 		camino.add(0);
 		Collections.shuffle(camino.subList(1,camino.size()-2));
 //		System.out.println(graph.getEdgeWeight(graph.getEdge(0,1)));
-		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPaths.of(graph,camino);
+		GraphPath<Integer,SimpleEdge<Integer>> path = GraphPath2.ofVertices(graph,camino);
 		System.out.println(path.getWeight());
 		TravelVertexInteger e1 = TravelVertexInteger.of(camino);
 		System.out.println(e1);
 		
 		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
-				Graphs2.simpleVirtualGraphLast(e1,null,null,null,v->v.weight());	
+				SimpleVirtualGraph.last(e1,null,v->v.weight());	
 		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
-				GraphAlg.simulatedAnnealing(graph2,e1,e->e.weight());
+				SimulatedAnnealingSearch.simulatedAnnealing(graph2,e1,e->e.weight());
 		
 //		m.search();
 		Optional<TravelVertexInteger> vr = 

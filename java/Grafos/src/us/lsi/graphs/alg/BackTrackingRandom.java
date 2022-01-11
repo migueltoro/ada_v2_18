@@ -2,6 +2,8 @@ package us.lsi.graphs.alg;
 
 import java.util.List;
 import java.util.function.Function;
+
+
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
@@ -11,17 +13,25 @@ import us.lsi.math.Math2;
 
 public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTracking<V,E,S> {
 	
+	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> of(
+			EGraph<V, E> graph, 
+			Function<GraphPath<V, E>, S> solution, 
+			BTType type, 
+			Function<V, Integer> size) {
+		return new BackTrackingRandom<V, E, S>(graph,solution,type, size);
+	}
+	
 	public static Integer threshold;
 	public static Integer solutionsNumber;
 	private static Boolean work = true;
 
 	BackTrackingRandom(EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution,
-			Function<V, V> copy,
+			BTType type,
 			Function<V,Integer> size) {
-		super(graph,null, solution, copy, BTType.All);
+		super(graph,null, solution, type);
 		this.size = size;
-		Preconditions.checkNotNull(goal,"El predicado no puede ser null");
+		Preconditions.checkNotNull(graph.goal(),"El predicado no puede ser null");
 	}
 		
 	protected Function<V,Integer> size;
@@ -36,7 +46,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	
 	@Override
 	public void search() {
-		State<V,E> initialState = StatePath.of(super.graph,super.goal,super.end);
+		State<V,E> initialState = StatePath.of(graph,graph.goal(),graph.endVertex());
 		this.iterations = 0;
 		Math2.initRandom();
 		while (BackTrackingRandom.work) {
@@ -47,8 +57,8 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	
 	@Override
 	public void search(State<V, E> state) {
-		V actual = this.copy.apply(state.getActualVertex());
-		if (goal.test(actual)) update(state);		
+		V actual = state.getActualVertex();
+		if (graph.goal().test(actual)) update(state);		
 		else {
 			List<E> edges = graph.edgesListOf(actual);
 			if(size.apply(actual) > BackTrackingRandom.threshold) edges = List2.randomUnitary(edges);
@@ -60,5 +70,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 			}
 		}
 	}
+
+	
 
 }

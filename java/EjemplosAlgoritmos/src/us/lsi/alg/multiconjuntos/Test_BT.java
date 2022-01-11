@@ -5,11 +5,10 @@ import java.util.function.Predicate;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class Test_BT {
 
@@ -35,12 +34,11 @@ public class Test_BT {
 			System.out.println("\n\n#### Algoritmo BT ####");
 			
 			// Algoritmo BT
-			graph = Graphs2.simpleVirtualGraphSum(start, goal,null,v->true,x -> x.weight());
+			graph = SimpleVirtualGraph.sum(start, goal,x -> x.weight());
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
-					BT.backTracking(graph, 
+					BackTracking.of(graph, 
 							MulticonjuntoHeuristic::heuristic,
 							MulticonjuntoVertex::getSolucion, 
-							MulticonjuntoVertex::copy, 
 							BTType.Min);
 
 			bta.bestValue = (double)MulticonjuntoHeuristic.valEntero(start,DatosMulticonjunto.NUM_E);
@@ -53,7 +51,8 @@ public class Test_BT {
 //			System.out.println(bta.path.getEdgeList().stream().map(x -> x.action())
 //					.collect(Collectors.toList()));
 			
-			GraphColors.toDot(bta.outGraph, "ficheros/multiconjuntosBTGraph.gv", 
+			
+			GraphColors.toDot(bta.graph(), "ficheros/multiconjuntosBTGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),

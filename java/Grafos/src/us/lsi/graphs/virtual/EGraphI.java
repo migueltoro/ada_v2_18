@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
+import org.jgrapht.Graphs;
 
 import us.lsi.common.TriFunction;
 import us.lsi.path.EGraphPath;
@@ -222,6 +223,11 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	@Override
 	public Predicate<V> constraint() {
 		return constraint;
+	}
+
+	@Override
+	public V oppositeVertex(E edge, V v) {
+		return Graphs.getOppositeVertex(graph, edge, v);
 	}
 
 }

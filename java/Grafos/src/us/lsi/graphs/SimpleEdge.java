@@ -1,5 +1,7 @@
 package us.lsi.graphs;
 
+import us.lsi.common.Preconditions;
+
 public interface SimpleEdge<V> {
 	
 	/**
@@ -33,6 +35,7 @@ public interface SimpleEdge<V> {
 	 */
 
 	public  default V otherVertex(V v){
+		Preconditions.checkNotNull(v,"El vértice no puede ser null");
 		V r = null;
 		if(v.equals(this.source())) r = this.target();
 		else if(v.equals(this.target())) r = this.source();

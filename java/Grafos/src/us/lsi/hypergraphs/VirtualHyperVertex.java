@@ -18,14 +18,14 @@ public interface VirtualHyperVertex<V,E,A> {
 	 * @pre La acci&oacute;n a debe ser aplicable
 	 * @post El v&eacute;rtice retornada debe ser distinto al original y v&aacute;lido
 	 */
-	public abstract List<V> neighbors(A a);
+	public List<V> neighbors(A a);
 	
 	/**
 	 * Este m&eacute;todo debe ser sobrescrito en la clase que refine el tipo
 	 * @param a Acci&oacute;n
 	 * @return La arista que lleva al vecino siguiendo esta acci&oacute;n
 	 */
-	public abstract E edge(A a); 
+	public E edge(A a); 
 	
 	/**
 	 * Este m&eacute;todo podr&iacute;a ser sobrescrito en la clase que refine al tipo

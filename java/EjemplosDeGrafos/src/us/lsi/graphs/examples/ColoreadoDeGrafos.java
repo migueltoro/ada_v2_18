@@ -9,6 +9,7 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Style;
+import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
@@ -29,14 +30,15 @@ public class ColoreadoDeGrafos {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
 		VertexColoringAlgorithm<Ciudad> vca = new GreedyColoring<>(graph);
 		VertexColoringAlgorithm.Coloring<Ciudad> vc = vca.getColoring();
 		Map<Ciudad,Integer> colorDeCiudad = vc.getColors();
-		System.out.println(vc.getNumberColors());
+		Integer nc = vc.getNumberColors();
+		String2.toConsole("%s,%s",nc,colorDeCiudad);
 		
-		GraphColors.toDot(graph,"ficheros/coloresAndalucia.gv",x->x.getNombre(),x->x.getNombre(),
+		GraphColors.toDot(graph,"ficheros/coloresAndalucia.gv",x->x.nombre(),x->x.nombre(),
 				x->GraphColors.color(colorDeCiudad.get(x)),
 				e->GraphColors.style(Style.solid));
 

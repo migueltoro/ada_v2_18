@@ -26,13 +26,9 @@ public class SubGraphsAndViews {
 				Ciudad::ofFormat,
 				Carretera::ofFormat, 
 				Graphs2::simpleWeightedGraph,
-				Carretera::getKm);	
+				Carretera::km);	
 		
-		Graph<Ciudad, Carretera> graph2 = CompleteGraphView.of(graph,
-				Carretera::ofWeight,
-				Double.valueOf(1000.),
-				Carretera::getSource,
-				Carretera::getTarget);
+		Graph<Ciudad, Carretera> graph2 = CompleteGraphView.of(graph,()->Carretera.of(1000.));
 		
 		HamiltonianCycleAlgorithm<Ciudad, Carretera> a = new HeldKarpTSP<>();
 		GraphPath<Ciudad, Carretera> r = a.getTour(graph2);
@@ -40,8 +36,8 @@ public class SubGraphsAndViews {
 		String2.toConsole(r.getEdgeList(), "Camino");	
 		
 		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
-				x->String.format("%s",x.getNombre()),
-				x->String.format("%.sf",x.getKm()),
+				x->String.format("%s",x.nombre()),
+				x->String.format("%.sf",x.km()),
 				v->GraphColors.color(Color.black),
 				e->GraphColors.styleIf(Style.bold,r.getEdgeList().contains(e)));
 		

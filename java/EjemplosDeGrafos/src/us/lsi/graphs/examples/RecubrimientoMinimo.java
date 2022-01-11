@@ -36,29 +36,28 @@ public class RecubrimientoMinimo {
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,
-						Carretera::getKm);
+						Carretera::km);
 		
 		SpanningTreeAlgorithm<Carretera> ast = new KruskalMinimumSpanningTree<>(graph);
 		SpanningTree<Carretera> r = ast.getSpanningTree();
+		System.out.println(r.getEdges());	
 		
-		System.out.println(r);	
-		
-		Map<Ciudad,Double> habitantes = Map2.of(x->1/x.getHabitantes());
-		
+		Map<Ciudad,Double> habitantes = Map2.of(x->1./x.habitantes());
 		VertexCoverAlgorithm<Ciudad> vc = new RecursiveExactVCImpl<>(graph,habitantes);
-		
 		VertexCover<Ciudad> r2 = vc.getVertexCover();
+		System.out.println(r2.toString());
 		
 		
-		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaSpanningTree.gv",
-				x->String.format("%s",x.getNombre()),
-				x->String.format("%.sf",x.getKm()),
+		GraphColors.<Ciudad,Carretera>toDot(graph,
+				"ficheros/andaluciaSpanningTree.gv",
+				x->String.format("%s",x.nombre()),
+				x->String.format("%.2f",x.km()),
 				v->GraphColors.color(Color.black),
 				e->GraphColors.styleIf(Style.bold,r.getEdges().contains(e)));
 		
 		GraphColors.<Ciudad,Carretera>toDot(graph,"ficheros/andaluciaVertexCover.gv",
-				x->String.format("%s",x.getNombre()),
-				x->String.format("%.sf",x.getKm()),
+				x->String.format("%s",x.nombre()),
+				x->String.format("%.2f",x.km()),
 				v->GraphColors.colorIf(Color.green,Color.blue,r2.contains(v)),
 				e->GraphColors.style(Style.solid));
 		

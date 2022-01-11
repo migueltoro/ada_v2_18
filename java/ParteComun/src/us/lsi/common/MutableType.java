@@ -20,7 +20,7 @@ public class MutableType<T> {
 		this.value = e;
 	}
 	
-	public T newValue(T e) {
+	public T setValue(T e) {
 		T old = this.value;
 		this.value = e;
 		return old;

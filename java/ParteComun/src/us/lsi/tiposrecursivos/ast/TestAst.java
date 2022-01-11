@@ -6,6 +6,7 @@ public class TestAst {
 
 	public static void main(String[] args) throws IOException {
 		Ast p = Ast.parse("ficheros/program.txt");
+		
 		if(p!=null) {
 //			System.out.println(p);
 			p.toDot("ficheros/program.gv");

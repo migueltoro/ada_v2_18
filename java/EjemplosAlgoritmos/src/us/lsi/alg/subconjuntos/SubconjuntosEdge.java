@@ -1,9 +1,9 @@
 package us.lsi.alg.subconjuntos;
 
-import us.lsi.graphs.virtual.ActionSimpleEdge;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
 
 public record SubconjuntosEdge(SubconjuntosVertex source, SubconjuntosVertex target, Integer action, Double weight) 
-			implements ActionSimpleEdge<SubconjuntosVertex,Integer> {
+			implements SimpleEdgeAction<SubconjuntosVertex,Integer> {
 
 	public static SubconjuntosEdge of(SubconjuntosVertex c1, SubconjuntosVertex c2, Integer action) {
 		Double w = (double) DatosSubconjuntos.peso(c1.indice())*action;

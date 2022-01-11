@@ -2,15 +2,13 @@ package us.lsi.alg.mochila;
 
 
 import java.util.Locale;
-import java.util.Optional;
-import java.util.function.Predicate;
 
+import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.GraphAlg;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.mochila.datos.DatosMochila;
-import us.lsi.path.EGraphPath;
 
 
 public class TestGreadyMochila {
@@ -21,18 +19,25 @@ public class TestGreadyMochila {
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 		MochilaVertex v2 = MochilaVertex.lastVertex();
-		Predicate<MochilaVertex> goal = v->v.equals(v2);
+//		Predicate<MochilaVertex> goal = v->v.equals(v2);
 //		System.out.println(e1);
 //		System.out.println(e2);			
-		Double r2 = MochilaHeuristic.heuristic(v1,v->v.equals(v2),v2);
-		System.out.println(r2);
+		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),v2);
+		System.out.println("1 "+r2);
+		
+		SimpleVirtualGraph.endVertexG = v2;
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = 
-				Graphs2.simpleVirtualGraphSum(v1,MochilaVertex.goal(),v2,v->true);
+				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
 		
-		Optional<EGraphPath<MochilaVertex, MochilaEdge>> r = 
-				GraphAlg.greedy(graph,MochilaVertex::greedyEdge).search();
-		System.out.println(r.get().getWeight());
+		GreedyOnGraph<MochilaVertex, MochilaEdge> gs = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		
+		GraphPath<MochilaVertex, MochilaEdge> gp = gs.path();
+		
+		System.out.println(gp.getWeight());
+		
+//		Optional<GraphPath<MochilaVertex, MochilaEdge>> r = gs.path();
+//		System.out.println("2 "+r.get().getWeight());
 //		System.out.println(r.getWeight());
 //		Double r3 = MochilaHeuristic.voraz(e1, e->e.equals(e2),e2);
 //		System.out.println(r3);
