@@ -40,8 +40,8 @@ public class BufetePLI {
 		DatosAbogados.toConsole();
 		SolucionAbogados.create(gs.objVal, gs.values).toConsole();
 		System.out.println(gs.values);
-		System.out.println(gs.values.entrySet().stream().filter(e->e.getKey().equals("T")).collect(Collectors.toList()));
-		System.out.println(gs.values.get("T"));
+		System.out.println(gs.values.entrySet().stream().filter(e->e.getKey().equals("T_0")).collect(Collectors.toList()));
+		System.out.println(gs.values.get("T_0"));
 	}
 	
 	
