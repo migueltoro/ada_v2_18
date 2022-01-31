@@ -60,14 +60,13 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 	
 	@Override
 	public Boolean isBaseCase() {
-		return this.i.equals(this.j) ||  k == n; //FloydVertex.graph.containsEdge(this.i,this.j) ;
+		return  k == n; //FloydVertex.graph.containsEdge(this.i,this.j) ;
 	}
 	
 	@Override
 	public Double baseCaseSolution() {
 		Double r = null;
-		if(this.i.equals(this.j)) r = 0.;
-		else if(k ==n && FloydVertex.graph.containsEdge(this.i, this.j)){
+		if(k ==n && FloydVertex.graph.containsEdge(this.i, this.j)){
 			Double w = FloydVertex.graph.getEdge(i, j).weight();
 			r = w;
 		} else if(k ==n && !FloydVertex.graph.containsEdge(this.i, this.j)) {

@@ -27,12 +27,13 @@ public record FloydVertex2(Integer i,Integer j,Integer k)
 	
 	@Override
 	public Boolean isValid() {
-		return true;
+		return 0 <= i && i < n && 0 <= j && j < n && 0<= k && j <= n;
 	}
 	@Override
 	public List<Boolean> actions() {
 		if(this.isBaseCase()) return List.of();
-		return List.of(false,true);
+		if(i == k || k ==j) return List.of(false);
+		else return List.of(false,true);
 	}
 	
 	@Override
@@ -50,14 +51,13 @@ public record FloydVertex2(Integer i,Integer j,Integer k)
 	
 	@Override
 	public Boolean isBaseCase() {
-		return this.i.equals(this.j) ||  k == n; //FloydVertex.graph.containsEdge(this.i,this.j) ;
+		return  k == n; //FloydVertex.graph.containsEdge(this.i,this.j) ;
 	}
 	
 	@Override
 	public Double baseCaseSolutionWeight() {
 		Double r = null;
-		if(this.i.equals(this.j)) r = 0.;
-		else if(k ==n && FloydVertex2.graph.containsEdge(this.i, this.j)){
+		if(k ==n && FloydVertex2.graph.containsEdge(this.i, this.j)){
 			r = FloydVertex2.graph.getEdge(i, j).weight();
 		} else if(k ==n && !FloydVertex2.graph.containsEdge(this.i, this.j)) {
 			r = null;

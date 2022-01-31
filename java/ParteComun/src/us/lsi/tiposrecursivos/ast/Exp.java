@@ -10,7 +10,7 @@ import java.util.Set;
 import us.lsi.common.Preconditions;
 import us.lsi.common.Printers;
 
-public sealed interface Exp permits Var, Const, Binary, Unary, Nary, CallFunction {
+public interface Exp {
 	
 	Set<Var> vars();
 	Operator operator();

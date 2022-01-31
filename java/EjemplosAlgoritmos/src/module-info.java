@@ -6,7 +6,6 @@
  *
  */
 
-
 module ejemplos_algoritmos {
 	
 	exports us.lsi.alg.floyd;
