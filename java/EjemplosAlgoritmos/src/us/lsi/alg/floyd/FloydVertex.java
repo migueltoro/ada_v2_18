@@ -36,12 +36,13 @@ public record FloydVertex(Integer i,Integer j,Integer k) implements VirtualHyper
 	
 	@Override
 	public Boolean isValid() {
-		return true;
+		return 0 <= i && i < n && 0 <= j && j < n && 0<= k && j <= n;
 	}
 	@Override
 	public List<Boolean> actions() {
 		if(this.isBaseCase()) return List.of();
-		return List.of(false,true);
+		if(i == k || k ==j) return List.of(false);
+		else return List.of(false,true);
 	}
 	
 	@Override

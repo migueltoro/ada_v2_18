@@ -24,7 +24,7 @@ public record MatrixVertex(Integer i,Integer j) implements VirtualHyperVertex<Ma
 
 	@Override
 	public Boolean isValid() {
-		return i>=0 && i<=n && j>=i && j<=n;
+		return 0 <= i && i < n && i < j && j<=n;
 	}
 
 	@Override
