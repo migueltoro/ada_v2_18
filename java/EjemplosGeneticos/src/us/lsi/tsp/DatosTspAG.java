@@ -27,7 +27,7 @@ public class DatosTspAG implements SeqNormalData<List<Ciudad>>{
 	public static void tsp(String fichero) throws IOException {	
 		
 		SimpleWeightedGraph<Ciudad,Carretera> g =  
-				GraphsReader.newGraph("ficheros/andalucia.txt",
+				GraphsReader.newGraph(fichero,
 						Ciudad::ofFormat, 
 						Carretera::ofFormat,
 						Graphs2::simpleWeightedGraph,

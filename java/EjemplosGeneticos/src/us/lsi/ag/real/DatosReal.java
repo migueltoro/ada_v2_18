@@ -18,13 +18,13 @@ public class DatosReal implements ValuesInRangeData<Double,List<Double>> {
 	
 	@Override
 	public Double max(Integer i) {		
-		Double[] r = {15.,15.};
+		Double[] r = {15.,30.,15.,30.};
 		return r[i];
 	}
 
 	@Override
 	public Double min(Integer i) {
-		Double[] r = {0.,-15.};
+		Double[] r = {0.,-15.,0.,-15.};
 		return r[i];
 	}
 
@@ -38,13 +38,13 @@ public class DatosReal implements ValuesInRangeData<Double,List<Double>> {
 
 	private double r1(Double a, Double b) {
 		// (-a + b) >=0;
-		Double r = -a + b - 1;
-		return r * r;
+		Double r = -a + b;
+		return r>0 ?0:r * r;
 	}
 
 	@Override
 	public Integer size() {
-		return 2;
+		return 4;
 	}
 	
 	@Override

@@ -57,7 +57,7 @@ public class DoubleChromosome extends RandomKey<Double>
 
 	@Override
 	public AbstractListChromosome<Double> newFixedLengthChromosome(List<Double> ls) {
-		return new RangeChromosome(ls);
+		return new DoubleChromosome(ls);
 	}
 	
 	private Double convert(Double e, Integer i) {
@@ -74,7 +74,7 @@ public class DoubleChromosome extends RandomKey<Double>
 	}
 	
 	public static DoubleChromosome getInitialChromosome() {
-		List<Double> ls = RandomKey.randomPermutation(RangeChromosome.DIMENSION);
+		List<Double> ls = RandomKey.randomPermutation(DoubleChromosome.DIMENSION);
 		return new DoubleChromosome(ls);
 	}
 

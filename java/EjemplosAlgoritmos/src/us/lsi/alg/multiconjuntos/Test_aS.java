@@ -29,6 +29,8 @@ public class Test_aS {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
+			
+			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 

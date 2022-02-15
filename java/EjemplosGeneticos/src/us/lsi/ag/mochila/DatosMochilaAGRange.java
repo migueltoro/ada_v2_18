@@ -3,15 +3,13 @@ package us.lsi.ag.mochila;
 import java.util.List;
 
 import us.lsi.ag.AuxiliaryAg;
-import us.lsi.ag.ChromosomeData;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
 
 
-public class DatosMochilaAGRange implements ValuesInRangeData<Integer,SolucionMochila>, 
- 		ChromosomeData<List<Integer>,SolucionMochila>{
+public class DatosMochilaAGRange implements ValuesInRangeData<Integer,SolucionMochila> {
 
 	
 	public DatosMochilaAGRange(String fichero) {

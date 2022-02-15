@@ -46,9 +46,8 @@ public interface SeqNormalData<S> extends ChromosomeData<List<Integer>,S> {
 	    default List<Integer> normalSequence() {
 			List<Integer> r = IntStream.range(0,itemsNumber())
 					.boxed()
-					.flatMap(x->List2.of(x,maxMultiplicity(x)).stream())
+					.flatMap(x->List2.ofTam(x,maxMultiplicity(x)).stream())
 					.collect(Collectors.toList());
-			String2.toConsole("r = %s",r);
 			return r;
 		}
 	    

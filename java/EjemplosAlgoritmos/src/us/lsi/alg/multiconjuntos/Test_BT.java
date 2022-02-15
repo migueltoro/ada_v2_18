@@ -3,9 +3,10 @@ package us.lsi.alg.multiconjuntos;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
+import org.jgrapht.GraphPath;
+
 import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -17,10 +18,13 @@ public class Test_BT {
 		// Set up
 		Locale.setDefault(new Locale("en", "US"));
 
-		for (Integer id_fichero = 0; id_fichero < 1; id_fichero++) {
+		for (Integer id_fichero = 0; id_fichero < 7; id_fichero++) {
 
 			DatosMulticonjunto.iniDatos("ficheros/multiconjuntos.txt", id_fichero);
-			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
+			System.out.println("=============");
+			System.out.println("\tResultados para el test " + id_fichero + "\n");
+			
+			DatosMulticonjunto.toConsole();
 
 			// Vértices clave
 
@@ -29,22 +33,35 @@ public class Test_BT {
 
 			// Grafo
 
-			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
+			
 
-			System.out.println("\n\n#### Algoritmo BT ####");
+			System.out.println("\n#### Algoritmo BT ####");
 			
 			// Algoritmo BT
-			graph = SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+			
+			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
+			
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+			
+			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
+					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
+			
+			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
+			
+			Boolean c = MulticonjuntoVertex.constraint().test(r.getEndVertex());
+			
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
 					BackTracking.of(graph, 
 							MulticonjuntoHeuristic::heuristic,
 							MulticonjuntoVertex::getSolucion, 
 							BTType.Min);
 
-			bta.bestValue = (double)MulticonjuntoHeuristic.valEntero(start,DatosMulticonjunto.NUM_E);
-			bta.solutions.add(MulticonjuntoHeuristic.sol(start,DatosMulticonjunto.NUM_E));
-			bta.withGraph = true;
-			
+			if (c) {
+				bta.bestValue = r.getWeight();
+				bta.optimalPath = r;
+				bta.withGraph = true;
+			}
 			bta.search();
 			System.out.println(bta.getSolution().get());
 			
@@ -52,11 +69,11 @@ public class Test_BT {
 //					.collect(Collectors.toList()));
 			
 			
-			GraphColors.toDot(bta.graph(), "ficheros/multiconjuntosBTGraph.gv", 
-					v -> v.toGraph(),
-					e -> e.action().toString(), 
-					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
-					e -> GraphColors.colorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
+//			GraphColors.toDot(bta.graph(), "ficheros/multiconjuntosBTGraph.gv", 
+//					v -> v.toGraph(),
+//					e -> e.action().toString(), 
+//					v -> GraphColors.colorIf(Color.red, MulticonjuntoVertex.goal().test(v)),
+//					e -> GraphColors.colorIf(Color.red, bta.optimalPath.getEdgeList().contains(e)));
 
 		}
 	}

@@ -16,7 +16,7 @@ public class TestMainPuzzle {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		
-		VertexPuzzle v1 = VertexPuzzle.of(1, 2, 3, 4, 5, 0, 6, 7, 8);
+		VertexPuzzle v1 = VertexPuzzle.of(1,2,3,4,5,0,6,7,8);
 		VertexPuzzle v2 = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
 		VertexPuzzle v3 = VertexPuzzle.of(1,2,3,4,6,5,8,7,0);
 		VertexPuzzle v4 = VertexPuzzle.of(1,2,3,4,5,6,7,8,0);
@@ -26,16 +26,16 @@ public class TestMainPuzzle {
 		VertexPuzzle v8 = VertexPuzzle.of(8,1,3,4,0,2,7,6,5);
 		
 		VertexPuzzle e1 = v1;
-		VertexPuzzle e2 = v8;
+		VertexPuzzle e2 = v3;
 		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
+		
+		SimpleVirtualGraph.endVertexG = e2;
 		
 		EGraph<VertexPuzzle, EdgePuzzle> graph = 
 				SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight());		
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = 
-				AStar.of(graph,HeuristicaPuzzle::heuristicaManhattan,AStarType.Min);
-		
-//		ms.search();
+				AStar.of(graph,HeuristicaPuzzle::heuristica,AStarType.Min);
 		
 		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();

@@ -21,7 +21,7 @@ public class TestTspAG {
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionFactory.StoppingConditionType.GenerationCount;
 		
 		
-		DatosTspAG p = new DatosTspAG("ficheros/objetosmochila.txt");
+		DatosTspAG p = new DatosTspAG("ficheros/andalucia.txt");
 		
 		AlgoritmoAG<List<Integer>, List<Ciudad>> ap = AlgoritmoAG.of(p);
 		ap.ejecuta();

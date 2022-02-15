@@ -4,8 +4,9 @@ public class Test {
 
 	public static void main(String[] args) {
 		VertexPuzzle v2 = VertexPuzzle.of(1, 2, 3, 4, 5, 0, 6, 7, 8);
-//		System.out.printf("_________\n%s\n",v2);
-		v2 = v2.neighbor(ActionPuzzle.of("Left"));
+		System.out.printf("_________\n%s\n",v2);
+		VertexPuzzle v3 = v2.neighbor(ActionPuzzle.of("Left"));
+		System.out.printf("_________\n%s\n",v3);
 		VertexPuzzle end = VertexPuzzle.of(1,2,3,4,0,5,6,7,8);
 		System.out.printf("_________\n%s\n",end);
 		System.out.printf("_________\n%s\n",v2);

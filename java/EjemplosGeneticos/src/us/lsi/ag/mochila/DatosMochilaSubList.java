@@ -38,9 +38,9 @@ public class DatosMochilaSubList implements SeqNormalData<SolucionMochila> {
 	}
 
 	@Override
-	public Double fitnessFunction(List<Integer> cr) {
-		calcula(cr);
-		fitness = valor - 100*AuxiliaryAg.distanceToGeZero(DatosMochila.capacidadInicial - peso);
+	public Double fitnessFunction(List<Integer> ls) {
+		calcula(ls);
+		fitness = valor - 10*AuxiliaryAg.distanceToGeZero(DatosMochila.capacidadInicial - peso);
 		return fitness;
 	}
 

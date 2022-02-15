@@ -17,7 +17,7 @@ public static void main(String[] args) {
 		AlgoritmoAG.MUTATION_RATE = 0.7;
 		AlgoritmoAG.POPULATION_SIZE = 50;
 		
-		StoppingConditionFactory.NUM_GENERATIONS = 10000;
+		StoppingConditionFactory.NUM_GENERATIONS = 20000;
 		StoppingConditionFactory.SOLUTIONS_NUMBER_MIN = 1;
 		StoppingConditionFactory.FITNESS_MIN = 623;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionFactory.StoppingConditionType.SolutionsNumber;

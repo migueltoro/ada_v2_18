@@ -12,6 +12,7 @@ import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
@@ -21,7 +22,7 @@ public class TestPD {
 
 		// Set up
 		Locale.setDefault(new Locale("en", "US"));
-		for (Integer id_fichero = 0; id_fichero < 1; id_fichero++) {
+		for (Integer id_fichero = 0; id_fichero < 7; id_fichero++) {
 
 			DatosMulticonjunto.iniDatos("ficheros/multiconjuntos.txt", id_fichero);
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
@@ -32,28 +33,39 @@ public class TestPD {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
+			
+			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
+			
 			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
+			
+			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
+					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
+			
+			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
+			
+			Boolean c = MulticonjuntoVertex.constraint().test(r.getEndVertex());
+			
 			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DynamicProgrammingReduction
-					.of(
-							graph, 
-							MulticonjuntoHeuristic::heuristic, 
-							PDType.Min);
+					.of(graph, 
+						MulticonjuntoHeuristic::heuristic, 
+						PDType.Min);
 			
 			pdr.withGraph = true;
-			pdr.bestValue = (double)MulticonjuntoHeuristic.valEntero(start,DatosMulticonjunto.NUM_E);
 			
-			System.out.println(pdr.bestValue);
+			if (c) {
+				pdr.bestValue = r.getWeight();
+			}
 			
 			
 			Optional<GraphPath<MulticonjuntoVertex, MulticonjuntoEdge>> gp = pdr.search();
 			
-			SolucionMulticonjunto s_pdr;
+			SolucionMulticonjunto s_pdr = null;
 			
 			if (gp.isPresent()) {
 				System.out.println(gp.get().getEdgeList().stream().map(x -> x.action()).collect(Collectors.toList()));
@@ -61,9 +73,7 @@ public class TestPD {
 
 				s_pdr = SolucionMulticonjunto.create(gp_pdr);
 
-			} else {
-				s_pdr = MulticonjuntoHeuristic.sol(start, DatosMulticonjunto.NUM_E);
-			}
+			} 
 			
 			
 			System.out.println(s_pdr);

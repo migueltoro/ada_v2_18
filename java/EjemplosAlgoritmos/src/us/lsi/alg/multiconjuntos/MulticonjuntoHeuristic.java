@@ -1,60 +1,47 @@
 package us.lsi.alg.multiconjuntos;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Locale;
 import java.util.function.Predicate;
+
+import org.jgrapht.GraphPath;
+
+import us.lsi.graphs.alg.Greedy;
+import us.lsi.graphs.alg.GreedyOnGraph;
+import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 
 public class MulticonjuntoHeuristic {
 
 	public static Double heuristic(MulticonjuntoVertex v1, Predicate<MulticonjuntoVertex> goal, MulticonjuntoVertex v2) {
-		return heuristic(v1, MulticonjuntoVertex.n_elementos);
+		return hu(Md.of(v1.indice(),(double)v1.sr_suma_restante()),
+				v->v.index()==DatosMulticonjunto.NUM_E|| v.cr()==0.);
+	}
+	
+	public static record Md(Integer index, Double cr) {
+		public static Md of(Integer index, Double cr) {
+			return new Md(index,cr);
+		}
+		public Double heuristicAction() {
+			return ((double)this.cr)/ DatosMulticonjunto.getElemento(this.index);
+		}
+		
+		public Md next() {
+			Double a = heuristicAction();
+			return new Md(this.index()+1,this.cr()-DatosMulticonjunto.getElemento(this.index()) * a);
+		}
+		public Double weight() {
+			if(this.index >= DatosMulticonjunto.NUM_E) return 0.;
+			return heuristicAction();
+		}
 	}
 
-	public static Double heuristic(MulticonjuntoVertex vertice, Integer lastIndex) {
-			return valReal(vertice,lastIndex);
+	public static Double hu(Md v1, Predicate<Md> goal) {	
+		Greedy<Md> r = Greedy.of(v1,v->v.next(),goal);
+		return r.stream().mapToDouble(v->v.weight()).sum();
 	}
 	
-	public static Integer valEntero(MulticonjuntoVertex vertice, Integer lastIndex) {
-		Integer r = 0;	
-		Integer index = vertice.indice();
-		Integer sr = vertice.sr_suma_restante();
-		while (sr > 0 && index < lastIndex) {
-		    Integer a = sr / DatosMulticonjunto.getElemento(index);
-			r = r + a ;
-			sr = sr - a * DatosMulticonjunto.getElemento(index);
-			index = index + 1;
-		}
-		return r;
-	}
-	
-	public static SolucionMulticonjunto sol(MulticonjuntoVertex vertice, Integer lastIndex) {
-		Integer index = vertice.indice();
-		List<Integer>  alt = new ArrayList<>();
-		Integer sr = vertice.sr_suma_restante();
-		while (index < lastIndex) {
-		    Integer a = sr / DatosMulticonjunto.getElemento(index);
-		    alt.add(a);
-			sr = sr - a * DatosMulticonjunto.getElemento(index);
-			index = index + 1;
-		}
-		return SolucionMulticonjunto.create(alt);
-	}
-	
-	
-	public static Double valReal(MulticonjuntoVertex vertice, Integer lastIndex) {
-		Double r = 0.;	
-		Integer index = vertice.indice();
-		Double sr = (double) vertice.sr_suma_restante();
-		while (sr > 0 && index < lastIndex) {
-		    Double a = sr / DatosMulticonjunto.getElemento(index);
-			r = r + a ;
-			sr = sr - a * DatosMulticonjunto.getElemento(index);
-			index = index + 1;
-		}
-		return r;
-	}
 	
 	public static void main(String[] args) {
 
@@ -65,14 +52,33 @@ public class MulticonjuntoHeuristic {
 
 			DatosMulticonjunto.iniDatos("ficheros/multiconjuntos.txt", id_fichero);
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
-
+			
+			DatosMulticonjunto.toConsole();
+			
 			// Vértices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
 //			Predicate<MulticonjuntoVertex> finalVertex = v -> MulticonjuntoVertex.goal(v);
+		
+			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
+
+			// Grafo
 			
-			System.out.println(valEntero(start,DatosMulticonjunto.NUM_E));
-			System.out.println(valReal(start,DatosMulticonjunto.NUM_E));
+			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
+
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+			
+			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
+					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
+			
+			
+			
+			System.out.println();
+//			System.out.println(valEntero(start,DatosMulticonjunto.NUM_E));
+			System.out.println(MulticonjuntoVertex.constraint().test(r.getEndVertex()));
+			System.out.println(r.getWeight());
+			System.out.println(heuristic(start,MulticonjuntoVertex.goal(),null));
 		}
 	}
 

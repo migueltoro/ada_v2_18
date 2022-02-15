@@ -33,7 +33,6 @@ public class TestMochilaAGRange {
 		ap.ejecuta();
 		
 		System.out.println(DatosMochila.getObjetos());
-//		System.out.println(RangeChromosome.bitsNumber);
 		System.out.println("================================");
 		List<Integer> dc = ap.getBestChromosome().decode();
 		System.out.println(dc);

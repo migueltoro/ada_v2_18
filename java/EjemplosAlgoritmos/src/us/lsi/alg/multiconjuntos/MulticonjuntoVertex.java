@@ -24,11 +24,15 @@ public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) imple
 	public static Predicate<MulticonjuntoVertex> goal() {
 		return  v->v.indice == DatosMulticonjunto.NUM_E;
 	}
-
-	public static MulticonjuntoVertex copy(MulticonjuntoVertex c) {
-		final MulticonjuntoVertex copia = new MulticonjuntoVertex(c.indice, c.sr_suma_restante);
-		return copia;
+	
+	public static Predicate<MulticonjuntoVertex> constraint() {
+		return  v->v.sr_suma_restante == 0;
 	}
+
+//	public static MulticonjuntoVertex copy(MulticonjuntoVertex c) {
+//		final MulticonjuntoVertex copia = new MulticonjuntoVertex(c.indice, c.sr_suma_restante);
+//		return copia;
+//	}
 	
 	public String toGraph() {
 		return String.format("(%d,%d)", this.indice, this.sr_suma_restante);
@@ -37,7 +41,7 @@ public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) imple
 	// Métodos auxiliares
 
 	public String toString() {
-		return String.format("(Indice: %d, Asignación actual: %d)", this.indice, this.sr_suma_restante);
+		return String.format("(%d,%d)", this.indice, this.sr_suma_restante);
 	}
 
 	// Métodos del grafo
@@ -74,15 +78,17 @@ public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) imple
 	public MulticonjuntoEdge edge(Integer a) {
 		return MulticonjuntoEdge.of(this, this.neighbor(a), a);
 	}
+	
+	public MulticonjuntoEdge greedyEdge() {
+		return edge(accionEntera());
+	}
 
 	public Integer accionEntera() {
-		return (int) (this.sr_suma_restante < 0 ? 0
-				: Math.floor(this.sr_suma_restante / DatosMulticonjunto.getElemento(this.indice)));
+		return this.sr_suma_restante / DatosMulticonjunto.getElemento(this.indice);
 	}
 	
 	public Double accionReal() {
-		return this.sr_suma_restante < 0 ? 0
-				: ((double)this.sr_suma_restante)/ DatosMulticonjunto.getElemento(this.indice);
+		return ((double)this.sr_suma_restante)/ DatosMulticonjunto.getElemento(this.indice);
 	}
 
 	public static SolucionMulticonjunto getSolucion(GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> path) {

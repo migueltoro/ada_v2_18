@@ -10,7 +10,7 @@ import us.lsi.common.IntPair;
 public class HeuristicaPuzzle {
 
 	
-	public static Double heuristica(VertexPuzzle v1, Predicate<VertexPuzzle> goal, VertexPuzzle end) {	
+	public static Double heuristica(VertexPuzzle v1, Predicate<VertexPuzzle> goal, VertexPuzzle end) {
 		return (double)v1.getNumDiferentes(end);
 	}
 	
