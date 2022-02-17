@@ -1,6 +1,6 @@
 Maximize
 
-x_4
+y_0_1 + y_0_2 + y_1_2 + y_1_5 + y_2_3 + y_3_5 + y_4_0 + y_4_2 + x_0 + x_1 + x_2 + x_3 + x_4 + x_5
 
 
 Subject To
