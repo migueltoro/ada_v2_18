@@ -29,15 +29,13 @@ public class Test_aS {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
-			
-			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
+			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight(), MulticonjuntoVertex.constraint());
 			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = AStar.of(graph,
 					MulticonjuntoHeuristic::heuristic,AStarType.Min);
 			

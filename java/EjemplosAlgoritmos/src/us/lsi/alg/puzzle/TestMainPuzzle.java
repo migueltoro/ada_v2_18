@@ -29,10 +29,8 @@ public class TestMainPuzzle {
 		VertexPuzzle e2 = v3;
 		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
 		
-		SimpleVirtualGraph.endVertexG = e2;
-		
 		EGraph<VertexPuzzle, EdgePuzzle> graph = 
-				SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight());		
+				SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight(),e2);		
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = 
 				AStar.of(graph,HeuristicaPuzzle::heuristica,AStarType.Min);

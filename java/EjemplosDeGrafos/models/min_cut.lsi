@@ -2,8 +2,8 @@ head section
 
 Integer getN()
 Boolean containsEdge(Integer i, Integer j)
-Double maxEdge(Integer i, Integer j)
-Double minEdge(Integer i, Integer j)
+Double edgeMax(Integer i, Integer j)
+Double edgeMin(Integer i, Integer j)
 Boolean isSource(Integer i)
 Boolean isSink(Integer i)
 Boolean isIntermediate(Integer i)
@@ -12,7 +12,7 @@ Integer n = getN()
 
 goal section
 
-min sum(maxEdge(i,j) y[i,j], i in 0 .. n, j in 0 .. n, j in 0 .. n | containsEdge(i,j))
+min sum(edgeMax(i,j) y[i,j], i in 0 .. n, j in 0 .. n, j in 0 .. n | containsEdge(i,j))
 
 constraints section
 

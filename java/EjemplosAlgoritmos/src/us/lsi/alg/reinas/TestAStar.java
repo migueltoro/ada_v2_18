@@ -13,9 +13,10 @@ public class TestAStar {
 	public static void main(String[] args) {
 		ReinasVertex.n = 10;	
 		ReinasVertex v1 = ReinasVertex.first();
-		SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
+		
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> 
-			graph = SimpleVirtualGraph.last(v1,ReinasVertex.goal(),v->v.errores().doubleValue());			
+			graph = SimpleVirtualGraph.last(v1,ReinasVertex.goal(),
+					v->v.errores().doubleValue(),ReinasVertex.constraint());			
 		
 		AStar<ReinasVertex, SimpleEdgeAction<ReinasVertex,Integer>> ms = AStar.of(
 				graph, 

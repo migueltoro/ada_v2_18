@@ -26,11 +26,8 @@ public class TestAsignaturasaStar {
 		AsignaturasVertice ini = AsignaturasVertice.inicial();
 		Predicate<AsignaturasVertice> predicado = t ->AsignaturasVertice.goal(t);
 		
-		
-		SimpleVirtualGraph.constraintG =  AsignaturasVertice.constraint();
-		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoAStar = 
-				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso());
+				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso(),AsignaturasVertice.constraint());
 	
 		
 		AStar<AsignaturasVertice, AsignaturasEdge> as = AStar
@@ -43,7 +40,7 @@ public class TestAsignaturasaStar {
 		System.out.println("___________________");
 		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoPDR = 
-				SimpleVirtualGraph.last(ini, predicado,v->(double)v.getPeso());
+				SimpleVirtualGraph.last(ini, predicado,v->(double)v.getPeso(),AsignaturasVertice.constraint());
 
 		DynamicProgrammingReduction<AsignaturasVertice, AsignaturasEdge> pd = DynamicProgrammingReduction
 						.of(grafoPDR, Heuristica::heuristic, PDType.Max);
@@ -56,7 +53,7 @@ public class TestAsignaturasaStar {
 		System.out.println("___________________");
 		
 		EGraph<AsignaturasVertice,AsignaturasEdge> grafoBT = 
-				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso());
+				SimpleVirtualGraph.last(ini,predicado,v->(double)v.getPeso(),AsignaturasVertice.constraint());
 
 		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BackTracking.of(
 				grafoBT, 

@@ -70,7 +70,7 @@ public class Flow1 {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {	
-		minCost();
+		maxFlow();
 	}
 	
 }

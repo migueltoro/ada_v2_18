@@ -5,6 +5,8 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
+import us.lsi.alg.monedas.MonedaEdge;
+import us.lsi.alg.monedas.MonedaVertex;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.BackTracking.BTType;
@@ -39,17 +41,14 @@ public class Test_BT {
 			
 			// Algoritmo BT
 			
-			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
-			
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
-					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight(), MulticonjuntoVertex.constraint());
 			
-			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
-					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
+			GreedyOnGraph<MulticonjuntoVertex, MulticonjuntoEdge> rr = GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge);
+			
+			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = rr.path();
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
-			
-			Boolean c = MulticonjuntoVertex.constraint().test(r.getEndVertex());
 			
 			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
 					BackTracking.of(graph, 
@@ -57,7 +56,7 @@ public class Test_BT {
 							MulticonjuntoVertex::getSolucion, 
 							BTType.Min);
 
-			if (c) {
+			if (rr.isSolution(r)) {
 				bta.bestValue = r.getWeight();
 				bta.optimalPath = r;
 				bta.withGraph = true;

@@ -24,10 +24,8 @@ public class TestGreedy {
 //		System.out.println("1 = "+e1);
 //		System.out.println("2 = "+e2);
 		
-		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
-		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight());
+				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
 		
 		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph,MonedaVertex::aristaVoraz);
 		
@@ -45,8 +43,7 @@ public class TestGreedy {
 //		System.out.println("3 = "+e1);
 //		System.out.println("4 = "+e2);
 		
-		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
-		graph = SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight());
+		graph = SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
 		
 		rr = GreedyOnGraph.of(graph,MonedaVertex::aristaVoraz);
 		

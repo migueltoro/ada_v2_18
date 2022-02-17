@@ -32,9 +32,8 @@ public class TestPDRMochila {
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		MochilaVertex e2 = MochilaVertex.lastVertex();
 		
-		SimpleVirtualGraph.endVertexG = e2;
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight());	
+				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight(),e2);	
 		
 		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);

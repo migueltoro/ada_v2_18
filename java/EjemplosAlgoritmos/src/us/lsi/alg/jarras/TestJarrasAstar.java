@@ -19,8 +19,7 @@ public class TestJarrasAstar {
 			JarrasVertex e1 = JarrasVertex.first();
 			JarrasVertex e2 = JarrasVertex.last();
 			
-			SimpleVirtualGraph.endVertexG = e2;
-			EGraph<JarrasVertex, JarrasEdge> graph = SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->1.);		
+			EGraph<JarrasVertex, JarrasEdge> graph = SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->1.,e2);		
 			
 			AStar<JarrasVertex, JarrasEdge> ms = AStar.of(
 					graph,

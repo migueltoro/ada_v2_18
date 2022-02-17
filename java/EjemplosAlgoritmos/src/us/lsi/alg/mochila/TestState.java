@@ -20,9 +20,8 @@ public class TestState {
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 		MochilaVertex v2 = MochilaVertex.lastVertex();
 		
-		SimpleVirtualGraph.endVertexG = v2;
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
+				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight(),v2);
 		State<MochilaVertex,MochilaEdge> initialState = StatePath.of(graph, e->e.equals(v2), v2);
 		System.out.println(initialState);
 		MochilaEdge e1 = initialState.getActualVertex().edge(2);

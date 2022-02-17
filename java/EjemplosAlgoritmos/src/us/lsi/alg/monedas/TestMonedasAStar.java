@@ -22,10 +22,10 @@ public class TestMonedasAStar {
 		MonedaVertex.datosIniciales("ficheros/monedas3.txt", 36);
 		MonedaVertex e1 = MonedaVertex.first();
 		
-		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
-		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
+//		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
+//		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),x->x.weight());		
+				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),x->x.weight(),MonedaVertex.constraint());		
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
 				AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Max);
@@ -56,7 +56,7 @@ public class TestMonedasAStar {
 		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 		
 		MonedaVertex e3 = MonedaVertex.first();
-		MonedaVertex e4 = MonedaVertex.last();
+//		MonedaVertex e4 = MonedaVertex.last();
 
 		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),x->x.weight());		
 		

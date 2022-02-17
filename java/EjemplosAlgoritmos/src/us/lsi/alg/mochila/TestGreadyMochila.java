@@ -25,10 +25,8 @@ public class TestGreadyMochila {
 		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),v2);
 		System.out.println("1 "+r2);
 		
-		SimpleVirtualGraph.endVertexG = v2;
-		
 		EGraph<MochilaVertex,MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
+				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight(),v2);
 		
 		GreedyOnGraph<MochilaVertex, MochilaEdge> gs = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
 		

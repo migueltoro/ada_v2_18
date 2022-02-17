@@ -20,7 +20,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		return new IntegerVertexGraphView<V, E>(graph);
 	}
 
-	private final Map<V,Integer> index;
+	private final Map<V,Integer> mapIndex;
 	private final List<V> vertices;
 	public final Integer n;
 	private Graph<V,E> graph;
@@ -29,7 +29,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 		super();
 		this.graph = graph;
 		this.vertices = graph.vertexSet().stream().collect(Collectors.toList());
-		this.index = IntStream.range(0,this.vertices.size()).boxed()
+		this.mapIndex = IntStream.range(0,this.vertices.size()).boxed()
 				.collect(Collectors.toMap(x->this.vertices.get(x),x->x));
 		this.n = vertices.size();
 	}
@@ -77,14 +77,14 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 	@Override
 	public Set<SimpleEdge<Integer>> edgeSet() {
 		return graph.edgeSet().stream()
-				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.map(e ->SimpleEdge.of(mapIndex.get(graph.getEdgeSource(e)),mapIndex.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<SimpleEdge<Integer>> edgesOf(Integer v) {
 		return graph.edgesOf(vertices.get(v)).stream()
-				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.map(e ->SimpleEdge.of(mapIndex.get(graph.getEdgeSource(e)),mapIndex.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
@@ -130,7 +130,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 	}
 	
 	public Integer getIndex(V v) {
-		return index.get(v);
+		return mapIndex.get(v);
 	}
 	
 	@Override
@@ -152,7 +152,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 	public Set<SimpleEdge<Integer>> incomingEdgesOf(Integer v) {
 		return graph.incomingEdgesOf(vertices.get(v))
 				.stream()
-				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.map(e ->SimpleEdge.of(mapIndex.get(graph.getEdgeSource(e)),mapIndex.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
@@ -165,7 +165,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 	public Set<SimpleEdge<Integer>> outgoingEdgesOf(Integer v) {
 		return graph.outgoingEdgesOf(vertices.get(v))
 				.stream()
-				.map(e ->SimpleEdge.of(index.get(graph.getEdgeSource(e)),index.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
+				.map(e ->SimpleEdge.of(mapIndex.get(graph.getEdgeSource(e)),mapIndex.get(graph.getEdgeTarget(e)), graph.getEdgeWeight(e)))
 				.collect(Collectors.toSet());
 	}
 
@@ -217,7 +217,7 @@ public class IntegerVertexGraphView<V,E> implements Graph<Integer,SimpleEdge<Int
 	}	
 	
 	public Integer index(V v) {
-		return this.index(v);
+		return this.mapIndex.get(v);
 	}
 	
 	public V vertex(Integer i) {

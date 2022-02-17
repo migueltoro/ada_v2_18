@@ -16,9 +16,10 @@ public class TestAStarRandom {
 		AstarRandom.threshold = 15;
 		ReinasVertex v1 = ReinasVertex.first();
 		
-		SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
+		
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(v1,ReinasVertex.goal(),v->v.errores().doubleValue());			
+				SimpleVirtualGraph.last(v1,ReinasVertex.goal(),
+						v->v.errores().doubleValue(),ReinasVertex.constraint());			
 		
 		AStar<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> ms = AstarRandom.of(
 				graph, 

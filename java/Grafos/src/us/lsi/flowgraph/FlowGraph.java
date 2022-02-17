@@ -180,7 +180,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 			this.integerGraph = IntegerVertexGraphView.of(this);;
 		}
 		Integer n = this.integerGraph.n;
-		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice %d no existe", i));
 		FlowVertex v1 = this.integerGraph.getVertex(i);
 		return  v1.max;
 	}
@@ -190,7 +190,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 			this.integerGraph = IntegerVertexGraphView.of(this);;
 		}
 		Integer n = this.integerGraph.n;
-		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice %d no existe", i));
 		FlowVertex v1 = this.integerGraph.getVertex(i);
 		return  v1.min;
 	}
@@ -200,7 +200,7 @@ public class FlowGraph extends SimpleDirectedGraph<FlowVertex, FlowEdge> {
 			this.integerGraph = IntegerVertexGraphView.of(this);;
 		}
 		Integer n = this.integerGraph.n;
-		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice (%d,%d) no existe", i));
+		Preconditions.checkArgument(0<=i && i<n, String.format("El vertice %d no existe", i));
 		FlowVertex v1 = this.integerGraph.getVertex(i);
 		return  v1.cost;
 	}

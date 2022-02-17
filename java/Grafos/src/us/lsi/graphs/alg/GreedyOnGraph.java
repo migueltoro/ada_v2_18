@@ -61,6 +61,15 @@ public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E
 		return path;
 	}
 	
+	public Optional<GraphPath<V,E>> solutionPath(){
+		GraphPath<V,E> r = path();
+		if(!r.getVertexList().isEmpty()) {
+			V last = r.getEndVertex();
+			if(this.graph.constraint().test(last)) return Optional.of(r);
+			else return Optional.empty();
+		} else return Optional.empty();
+	}
+	
 	public Boolean isSolution(GraphPath<V,E> gp) {
 		V last = gp.getEndVertex();
 		return graph.goal().test(last) && graph.constraint().test(last);

@@ -16,9 +16,9 @@ public class TestBTRandom {
 			BackTrackingRandom.solutionsNumber = 1;
 			ReinasVertex e1 = ReinasVertex.first();
 			
-			SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
 			EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
-					SimpleVirtualGraph.last(e1,ReinasVertex.goal(),v->v.errores().doubleValue());		
+					SimpleVirtualGraph.last(e1,ReinasVertex.goal(),
+							v->v.errores().doubleValue(),ReinasVertex.constraint());		
 			
 			BackTrackingRandom<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
 					BackTrackingRandom.of(

@@ -18,9 +18,8 @@ public class TestSudokuBTRandom {
 		SudokuVertex e1 = SudokuVertex.first(DatosSudoku.sudoku);
 		Predicate<SudokuVertex> goal = SudokuVertex.goal();
 		
-		SimpleVirtualGraph.constraintG = SudokuVertex.constraint();
 		EGraph<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,goal,v->(double)v.sudoku().errores());		
+				SimpleVirtualGraph.last(e1,goal,v->(double)v.sudoku().errores(),SudokuVertex.constraint());		
 		
 		BackTrackingRandom<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = BackTrackingRandom.of(
 				graph,

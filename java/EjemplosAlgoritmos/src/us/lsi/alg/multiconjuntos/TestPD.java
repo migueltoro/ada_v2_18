@@ -33,8 +33,6 @@ public class TestPD {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
-			
-			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 
@@ -42,14 +40,14 @@ public class TestPD {
 
 			// Algoritmo PD
 			
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
+			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight(),MulticonjuntoVertex.constraint());
 			
-			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
-					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
+			GreedyOnGraph<MulticonjuntoVertex, MulticonjuntoEdge> rr = 
+					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge);
+			
+			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = rr.path();
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
-			
-			Boolean c = MulticonjuntoVertex.constraint().test(r.getEndVertex());
 			
 			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DynamicProgrammingReduction
 					.of(graph, 
@@ -58,7 +56,7 @@ public class TestPD {
 			
 			pdr.withGraph = true;
 			
-			if (c) {
+			if (rr.isSolution(r)) {
 				pdr.bestValue = r.getWeight();
 			}
 			

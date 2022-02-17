@@ -24,10 +24,8 @@ public class TestMonedasPDR {
 
 		MonedaVertex e1 = MonedaVertex.first();
 		
-		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
-		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight());
+				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
 
 		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 		
@@ -52,10 +50,8 @@ public class TestMonedasPDR {
 		Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 
 		MonedaVertex e3 = MonedaVertex.first();
-		MonedaVertex e4 = MonedaVertex.last();
 		
-		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
-		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),e->e.weight());
+		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
 
 		rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 		

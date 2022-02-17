@@ -20,8 +20,9 @@ public class TestSeqAStar {
 		SeqVertex e1 = SeqVertex.first();
 		SeqVertex e2 = SeqVertex.last();
 		
-		SimpleVirtualGraph.endVertexG = e2;
-		EGraph<SeqVertex, SeqEdge> graph = SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight());		
+		
+		EGraph<SeqVertex, SeqEdge> graph = SimpleVirtualGraph.sum(e1,
+				v->v.equals(e2),e->e.weight(),e2);		
 		
 		AStar<SeqVertex, SeqEdge> ms = AStar.of(
 				graph,

@@ -37,31 +37,54 @@ import us.lsi.path.EGraphPath.PathType;
  */
 public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends SimpleEdgeAction<V,?>> implements EGraph<V,E> {
 	
-	public static Object constraintG = (Predicate<Object>) v->true;
-	public static Object endVertexG = null;
-	public static Object vertexPassWeightG = null;
-	
 
 	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
 			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight) {
-		return of(startVertex, goal, vertexWeight, null, PathType.Last);
+		return of(startVertex, goal, PathType.Last, vertexWeight, null,null,v->true,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
+			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight, Predicate<V> constraint) {
+		return of(startVertex, goal, PathType.Last, vertexWeight, null,null,constraint,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
+			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight, V endVertex) {
+		return of(startVertex, goal, PathType.Last, vertexWeight, null,endVertex,v->true,null);
 	}
 
 	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
 			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight) {
-		return of(startVertex, goal, null, edgeWeight, PathType.Sum);
+		return of(startVertex, goal, PathType.Sum, null, edgeWeight, null,v->true,null);
 	}
 	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> SimpleVirtualGraph<V, E> of(
-			V startVertex, Predicate<V> goal, Function<V, Double> vertexWeight,
-			Function<E, Double> edgeWeight, PathType type) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, type, vertexWeight, edgeWeight);
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
+			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight,Predicate<V> constraint) {
+		return of(startVertex, goal, PathType.Sum, null, edgeWeight, null,constraint,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
+			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight,V endVertex) {
+		return of(startVertex, goal, PathType.Sum, null, edgeWeight, endVertex,v->true,null);
+	}
+	
+	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> 
+	   SimpleVirtualGraph<V, E> of(
+			V startVertex, 
+			Predicate<V> goal, 
+			PathType type, 
+			Function<V, Double> vertexWeight,
+			Function<E, Double> edgeWeight, 
+			V endVertex, 
+			Predicate<V> constraint, 
+			TriFunction<V,E,E,Double> vertexPassWeight) {
+		return new SimpleVirtualGraph<V, E>(startVertex, goal, type, vertexWeight, edgeWeight, endVertex, constraint,vertexPassWeight);
 	}
 
 	private Set<V> vertexSet;
 	private Function<E,Double> edgeWeight = null;
 	private Function<V,Double> vertexWeight = null;
-	private TriFunction<V,E,E,Double> vertexPassWeight= null;
+	private TriFunction<V,E,E,Double> vertexPassWeight= null;	
 	private EGraphPath<V,E> path;
 	private V startVertex;
 	private Predicate<V> goal;
@@ -70,21 +93,21 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	private PathType type;
 	
 	
-	@SuppressWarnings("unchecked")
-	public SimpleVirtualGraph(V startVertex,Predicate<V> goal, PathType type, Function<V, Double> vertexWeight,
-			Function<E, Double> edgeWeight) {
+	public SimpleVirtualGraph(V startVertex,Predicate<V> goal,PathType type, Function<V, Double> vertexWeight,
+			Function<E, Double> edgeWeight, V endVertex, Predicate<V> constraint, 
+			TriFunction<V,E,E,Double> vertexPassWeight) {
 		super();
 		this.vertexSet = Set2.empty();;
 		this.edgeWeight =  edgeWeight;
 		this.vertexWeight = vertexWeight;
-		this.vertexPassWeight = (TriFunction<V, E, E, Double>) vertexPassWeightG;
+		this.vertexPassWeight = vertexPassWeight;
 		this.startVertex = startVertex;
 		this.vertexSet = new HashSet<V>();
 		this.vertexSet.add(this.startVertex);
 		this.type = type;
 		this.goal = goal;
-		this.endVertex = (V) endVertexG;
-		this.constraint = (Predicate<V>) constraintG;
+		this.endVertex = endVertex;
+		this.constraint = constraint;
 		this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
 	}
 

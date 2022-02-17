@@ -16,9 +16,8 @@ public class TestBT {
 		ReinasVertex e1 = ReinasVertex.first();
 		Predicate<ReinasVertex> goal = v -> v.index() == ReinasVertex.n;
 
-		SimpleVirtualGraph.constraintG = ReinasVertex.constraint();
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,goal,v->v.errores().doubleValue());
+				SimpleVirtualGraph.last(e1,goal,v->v.errores().doubleValue(),ReinasVertex.constraint());
 
 		BackTracking<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
 				BackTracking.of(graph, 

@@ -63,11 +63,9 @@ public class MulticonjuntoHeuristic {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
-			
-			SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
 			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
-					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+					SimpleVirtualGraph.sum(start, goal,x -> x.weight(),MulticonjuntoVertex.constraint());
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
 					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
