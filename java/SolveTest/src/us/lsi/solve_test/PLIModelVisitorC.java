@@ -390,7 +390,7 @@ public class PLIModelVisitorC extends PLIModelBaseVisitor<Object>{
 	@Override public Object visitIndicatorConstraint(PLIModelParser.IndicatorConstraintContext ctx) { 
 		String ge = AuxGrammar.asString(visit(ctx.var_id()));
 		String n = ctx.values.getText();
-		Preconditions.checkArgument(n=="0" | n=="1",String.format("El valor debe ser 0 0 1 y es %s",n));
+		Preconditions.checkArgument(n.equals("0") | n.equals("1"),String.format("El valor debe ser 0 0 1 y es %s",n));
 		String c = AuxGrammar.asString(visit(ctx.constraint()));
 		return String.format("%s = %s -> %s",ge,n,c);
 	}
