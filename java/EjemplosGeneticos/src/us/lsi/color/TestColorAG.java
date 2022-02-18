@@ -17,7 +17,9 @@ public class TestColorAG {
 	public static void main(String[] args){
 		setConstantes();
 		
-		ValuesInRangeData<Integer,Map<Ciudad,Integer>> problem = new DatosColorAG("./ficheros/Andalucia.txt");
+		
+		ValuesInRangeData<Integer,Map<Ciudad,Integer>> problem = new DatosColorAG("./ficheros/Andalucia.txt");		
+		DatosColorAG.maxNumColors = 5;
 		AlgoritmoAG<List<Integer>, Map<Ciudad, Integer>> alg = AlgoritmoAG.of(problem);
 		alg.ejecuta();
 		

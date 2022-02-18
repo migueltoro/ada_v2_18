@@ -22,6 +22,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	
 	private static SimpleWeightedGraph<Ciudad,Carretera> grafo; 
 	private static List<Ciudad> ciudades;
+	public static Integer maxNumColors;
 	
 	public DatosColorAG(String ficheroGrafo) { //"./ficheros/Andalucia.txt"
 		grafo = cargaGrafo(ficheroGrafo);
@@ -43,7 +44,7 @@ public class DatosColorAG implements ValuesInRangeData<Integer,Map<Ciudad,Intege
 	
 	@Override	
     public Integer max(Integer index){
-		return 5;		
+		return maxNumColors;		
 	}
 
 	@Override	

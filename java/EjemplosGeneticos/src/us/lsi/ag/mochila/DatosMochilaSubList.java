@@ -13,11 +13,6 @@ public class DatosMochilaSubList implements SeqNormalData<SolucionMochila> {
 	public DatosMochilaSubList(String fichero) {
 		DatosMochila.iniDatos(fichero);
 	}
-	
-	@Override
-	public Integer size() {
-		return DatosMochila.getObjetos().size();
-	}
 
 	@Override
 	public ChromosomeType type() {
