@@ -8,25 +8,25 @@ import java.util.TreeMap;
 
 import us.lsi.common.Pair;
 
-public class SolucionAbogados extends TipoSolucion {
+public class SolucionBufete extends TipoSolucion {
 
-	public static SolucionAbogados create(List<Integer> ls) {
-		return new SolucionAbogados(ls);
+	public static SolucionBufete create(List<Integer> ls) {
+		return new SolucionBufete(ls);
 	}
 
-	public static SolucionAbogados create(Double vo, Map<String, Double> vbles) {
-		return new SolucionAbogados(vo, vbles);
+	public static SolucionBufete create(Double vo, Map<String, Double> vbles) {
+		return new SolucionBufete(vo, vbles);
 	}	
 	
 	private double total;
 	private SortedMap<String,Pair<Integer,List<String>>> solucion;
 
-	private SolucionAbogados(List<Integer> ls) {
+	private SolucionBufete(List<Integer> ls) {
 		super(ls);
 		total = 0;
 		solucion = new TreeMap<>();
 		for(int i=0; i<ls.size(); i++) {
-			int tiempo = DatosAbogados.getHoras(ls.get(i), i);
+			int tiempo = DatosBufete.getHoras(ls.get(i), i);
 			String s = "Abogado_"+formato((ls.get(i)+1));
 			Pair<Integer,List<String>> casos = solucion.get(s);
 			if(casos!=null) {
@@ -36,17 +36,17 @@ public class SolucionAbogados extends TipoSolucion {
 				List<String> ls_casos = new ArrayList<>();
 				ls_casos.add("Caso "+(i+1));
 				casos = Pair.of(tiempo, ls_casos);
-				solucion.put(s, casos);
 			}
+			solucion.put(s, casos);
 			total += tiempo;
 		}
 	}
 
-	private String formato(int i) {
+	private String formato(int i) { 
 		return i<10? "0"+i: i+"";
 	}
 	
-	private SolucionAbogados(Double vo, Map<String, Double> vbles) {	
+	private SolucionBufete(Double vo, Map<String, Double> vbles) {	
 		super(vo, vbles);
 		total = 0;
 		solucion = new TreeMap<>();
@@ -56,16 +56,16 @@ public class SolucionAbogados extends TipoSolucion {
 				String[] tokens = par.getKey().substring(2).split("_");
 				Integer x = Integer.parseInt(tokens[0].trim())+1;
 				Integer y = Integer.parseInt(tokens[1].trim())+1;
-				int tiempo = DatosAbogados.getHoras(x-1, y-1);
+				int tiempo = DatosBufete.getHoras(x-1, y-1);
 				Pair<Integer,List<String>> p = solucion.get("Abogado_"+formato(x));
 				if(p!=null) {
 					p.second().add("Caso "+y);
 					p = Pair.of(p.first() + tiempo, p.second());
 				} else {
 					List<String> ls = new ArrayList<>();
-					ls.add("Caso "+y);
-					solucion.put("Abogado_"+formato(x), Pair.of(tiempo, ls));
+					ls.add("Caso "+y);				
 				}
+				solucion.put("Abogado_"+formato(x),p);
 				total += tiempo;
 			}
 		}

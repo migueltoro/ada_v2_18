@@ -16,8 +16,7 @@ public class TestAnunciosAG {
 	
 
 	public static void main(String[] args){
-		
-		
+				
 		AlgoritmoAG.ELITISM_RATE  = 0.30;
 		AlgoritmoAG.CROSSOVER_RATE = 0.8;
 		AlgoritmoAG.MUTATION_RATE = 0.7;

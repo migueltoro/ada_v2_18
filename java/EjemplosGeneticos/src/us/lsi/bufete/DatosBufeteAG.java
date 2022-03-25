@@ -8,18 +8,18 @@ import java.util.Map;
 import us.lsi.ag.ValuesInRangeData;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.bufete.datos.Abogado;
-import us.lsi.bufete.datos.DatosAbogados;
-import us.lsi.bufete.datos.SolucionAbogados;
+import us.lsi.bufete.datos.DatosBufete;
+import us.lsi.bufete.datos.SolucionBufete;
 
-public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogados> {
+public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionBufete> {
 
 	public static DatosBufeteAG create(String fichero) {
 		return new DatosBufeteAG(fichero);
 	}
 
 	private DatosBufeteAG(String fichero) {
-		DatosAbogados.iniDatos(fichero);
-		DatosAbogados.toConsole();
+		DatosBufete.iniDatos(fichero);
+		DatosBufete.toConsole();
 	}	
 
 	@Override
@@ -29,12 +29,12 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 
 	@Override
 	public Integer size() {
-		return DatosAbogados.NUM_CASOS;
+		return DatosBufete.NUM_CASOS;
 	}
 
 	@Override
 	public Integer max(Integer i) {
-		return DatosAbogados.NUM_ABOGADOS;
+		return DatosBufete.NUM_ABOGADOS;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 	public Double fitnessFunction(List<Integer> ls) {
 		this.horasAbogado = new HashMap<>();
 		for(int i=0; i<this.size(); i++) {
-			Abogado a = DatosAbogados.getAbogado(ls.get(i));
+			Abogado a = DatosBufete.getAbogado(ls.get(i));
 			Integer t_a = horasAbogado.get(a);
 			if(t_a==null) {
 				this.horasAbogado.put(a, a.getHoras(i));
@@ -65,8 +65,8 @@ public class DatosBufeteAG implements ValuesInRangeData<Integer, SolucionAbogado
 	}
 
 	@Override
-	public SolucionAbogados solucion(List<Integer> cr) {
-		return SolucionAbogados.create(cr);
+	public SolucionBufete solucion(List<Integer> cr) {
+		return SolucionBufete.create(cr);
 	}
 	
 	

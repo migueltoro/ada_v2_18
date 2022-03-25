@@ -7,13 +7,13 @@ import us.lsi.ag.Chromosome;
 import us.lsi.ag.agchromosomes.AlgoritmoAG;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
 import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.bufete.datos.SolucionAbogados;
+import us.lsi.bufete.datos.SolucionBufete;
 
 public class TestBufete {
 	
 	private static void test(String fichero) {		
 		DatosBufeteAG prob = DatosBufeteAG.create("ficheros/"+fichero);
-		AlgoritmoAG<List<Integer>, SolucionAbogados> alg = AlgoritmoAG.of(prob);
+		AlgoritmoAG<List<Integer>, SolucionBufete> alg = AlgoritmoAG.of(prob);
 		alg.ejecuta();
 		System.out.println(alg.bestSolution());		
 	}	

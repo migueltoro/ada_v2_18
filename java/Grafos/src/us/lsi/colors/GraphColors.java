@@ -2,8 +2,11 @@ package us.lsi.colors;
 
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import org.jgrapht.Graph;
 import org.jgrapht.nio.Attribute;
@@ -18,7 +21,7 @@ public class GraphColors {
 	
 	
 	public enum Color {
-		blank, red, yellow, gray, cyan, orange, magenta, blue, black, green
+		 green, yellow, red, gray, cyan, orange, magenta, blue, black,  blank
 	}
 	
 	public enum ArrowHead {
@@ -45,6 +48,15 @@ public class GraphColors {
 	
 	public static Map<String,Attribute> color(Integer c) {
 		return color(Color.values()[c]);
+	}
+	
+	public static Map<String,Attribute> colorIf(List<Boolean> test, List<Color> colors) {	
+		OptionalInt n = IntStream.range(0, test.size()).filter(i->test.get(i).equals(true)).findFirst();
+		Color c = Color.black;
+		if(n.isPresent()) c = colors.get(n.getAsInt());
+		String cl = c.toString();
+		Map<String,Attribute> m = Map.of("color", DefaultAttribute.createAttribute(cl));		
+		return m;
 	}
 	
 	public static Map<String,Attribute> colorIf(Color yesColor, Color noColor, Boolean test) {		

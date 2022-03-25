@@ -30,10 +30,9 @@ public class TestPDRMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
-		MochilaVertex e2 = MochilaVertex.lastVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight(),e2);	
+				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight());	
 		
 		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = 
 				GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);

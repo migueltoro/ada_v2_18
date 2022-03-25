@@ -1,5 +1,6 @@
 package us.lsi.hypergraphs2;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,20 @@ public class Datos<V extends HyperVertex2<V, E, A, ?>,E extends HyperEdge2<V,E,A
 		if(datos == null) datos = new Datos<>();
 		return (Datos<V, E, A>) datos;
 	}
+	
+	private Comparator<Sp<E>> cmp;
+	
 	private Datos() {
 		super();
+		this.cmp = Datos.type.equals(Datos.DpType.Min) ? Comparator.naturalOrder()
+				: Comparator.reverseOrder();
 	}
 	private Map<V,Sp<E>> memory = new HashMap<>();
 	public SetMultimap<V,Sp<E>> allProblems = SetMultimap.create();
 	
 	public static enum DpType{Max, Min}
 	public static DpType type = DpType.Min;
+	
 	
 	public Sp<E> get(V v){
 		return memory.get(v);
@@ -54,6 +61,10 @@ public class Datos<V extends HyperVertex2<V, E, A, ?>,E extends HyperEdge2<V,E,A
 	public Set<V> vertices(){
 		return memory.keySet();
 	}
+	public Comparator<Sp<E>> order(){
+		return cmp;
+	}
+	
 	public SimpleDirectedGraph<Union<V, E>, DefaultEdge> graph() {	
 		
 		SimpleDirectedGraph<Union<V, E>, DefaultEdge> graph = 

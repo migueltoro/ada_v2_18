@@ -2,14 +2,14 @@ package us.lsi.bufete.datos;
 
 import java.util.List;
 
-
+import us.lsi.common.List2;
 
 public class Abogado {
 
-	public static Abogado create(String s) {
+	public static Abogado parse(String s) {
 		String[] tokens = s.split(":");
 		return new Abogado(tokens[0].trim(),
-				Lists3.parse(tokens[1].trim().split(","), Integer::parseInt));
+				List2.parse(tokens[1].trim().split(","), Integer::parseInt));
 	}
 	
 	private final String nombre;

@@ -1,6 +1,5 @@
 package us.lsi.hypergraphs2;
 
-import java.util.Comparator;
 import java.util.List;
 import us.lsi.graphs.alg.DynamicProgramming.Sp;
 
@@ -23,24 +22,20 @@ public interface HyperVertex2<V extends HyperVertex2<V, E, A, S>, E extends Hype
 	}
 	
 	public default Sp<E> solutionWeight() {
-		Comparator<Sp<E>> cmp = Datos.type.equals(Datos.DpType.Min)?Comparator.naturalOrder():Comparator.reverseOrder();
 		Sp<E> r;
 		if (datos().contains(me()))
 			r = datos().get(me());
 		else {
+			r = null;
 			if (this.isBaseCase()) {
 				Double br = baseCaseSolutionWeight();
-				if (br == null)
-					r = null;
-				else
-					r = Sp.of(br, null);
-			} else if (this.edgesOf().isEmpty()) {
-				r = null;
-			} else {
-				this.edgesOf().stream().map(e -> e.solutionWeight()).filter(s -> s != null)
-						.forEach(e->datos().putAll(me(), e));
-				r = this.edgesOf().stream().map(e -> e.solutionWeight()).filter(s -> s != null)
-						.min(cmp).orElse(null);
+				if (br != null) r = Sp.of(br, null);
+			} else if (!this.edgesOf().isEmpty()) {
+				r = this.edgesOf().stream()
+						.map(e -> e.solutionWeight())
+						.filter(s -> s != null)
+						.peek(e -> datos().putAll(me(), e))
+						.min(datos().order()).orElse(null);
 			}
 			datos().put(me(), r);
 		}

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jgrapht.GraphPath;
@@ -69,6 +68,10 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		this.tree.put(graph.startVertex(),h);
 	}
 	
+	public Boolean closed(V v) {
+		return this.tree.get(v).getValue().closed();
+	}
+	
 	public Stream<V> stream() {
 		return Stream2.of(this);
 	}
@@ -103,6 +106,8 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 				hv.decreaseKey(newDistanceToEnd);
 			}
 		}
+		hActual.setValue(Data.toTrue(dActual));
+		tree.put(vertexActual, hActual);
 		return vertexActual;
 	}
 
@@ -146,14 +151,15 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		return path(startVertex,last);
 	}
 	
-	public List<GraphPath<V, E>> searchAll() {
+	public Optional<GraphPath<V, E>> searchAll() {
 		V startVertex = graph.startVertex();
-		if(graph.goal().test(startVertex)) return List.of(ePath);
+		if(graph.goal().test(startVertex)) return Optional.ofNullable(ePath);
 		List<V> lasts = this.stream().filter(graph.goal().and(graph.constraint())).toList();	
-		return lasts.stream().map(v->path(startVertex,Optional.of(v)))
-				.filter(p->p.isPresent())
-				.map(p->p.get())
-				.collect(Collectors.toList());
+		Integer t = this.type == AStarType.Min? 1: -1;
+		return lasts.stream()
+				.<GraphPath<V, E>>map(v->path(startVertex,Optional.of(v)).orElse(null))
+				.filter(p->p != null)
+				.min(Comparator.comparing(p->t*p.getWeight()));
 	}
 	
 	public SimpleDirectedGraph<V,E> graph(){
@@ -185,14 +191,14 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	}
 	
 
-	public static record Data<V, E> (V vertex, E edge, Double distanceToOrigin) {
-
+	public static record Data<V, E> (V vertex, E edge, Double distanceToOrigin, Boolean closed) {
+		
 		public static <V, E> Data<V, E> of(V vertex, E edge, Double distance) {
-			return new Data<>(vertex, edge, distance);
+			return new Data<>(vertex, edge, distance,false);
 		}
 
-		public static <V, E> Data<V, E> of(Data<V, E> d) {
-			return new Data<>(d.vertex, d.edge, d.distanceToOrigin);
+		public static <V, E> Data<V, E> toTrue(Data<V, E> d) {
+			return new Data<>(d.vertex, d.edge, d.distanceToOrigin,true);
 		}
 
 	}

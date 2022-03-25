@@ -15,10 +15,9 @@ public interface HyperEdge2<V extends HyperVertex2<V, E, A, S>,
 	}
 	default Sp<E> solutionWeight() {
 		List<Sp<E>> ls = this.targets().stream().map(v->v.solutionWeight()).toList();
-		Double weight;
 		if(ls.contains(null)) return null;
 		else {
-			weight = this.solutionWeight(ls.stream().map(e->e.weight()).toList());
+			Double weight = this.solutionWeight(ls.stream().map(e->e.weight()).toList());
 			return Sp.of(weight,me());
 		}
 	}

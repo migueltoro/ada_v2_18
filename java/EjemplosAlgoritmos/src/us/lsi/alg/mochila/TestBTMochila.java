@@ -24,10 +24,9 @@ public class TestBTMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
-		MochilaVertex e2 = MochilaVertex.lastVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight(),e2);		
+				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight());		
 		
 		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
 		
@@ -51,7 +50,7 @@ public class TestBTMochila {
 		GraphColors.toDot(ms.graph(),"ficheros/MochilaBTGraph2.gv",
 				v->String.format("(%d,%d)",v.index(),v.capacidadRestante()),
 				e->e.action().toString(),
-				v->GraphColors.colorIf(Color.red,v.equals(e2)),
+				v->GraphColors.colorIf(Color.red,MochilaVertex.goal().test(v)),
 				e->GraphColors.colorIf(Color.red,sp.getEdgeList().contains(e))
 				);
 	}

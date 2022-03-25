@@ -11,13 +11,8 @@ import us.lsi.mochila.datos.SolucionMochila;
 
 public class MochilaHeuristic {
 	
-	
-//	public static Double heuristic_negate(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-//		return -hu(Md.of(v1.index(),(double)v1.capacidadRestante()),v->v.index()==v2.index() || v.cr()==0.);
-//	}
-	
 	public static Double heuristic(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
-		return hu(Md.of(v1.index(),(double)v1.capacidadRestante()),v->v.index()==v2.index()|| v.cr()==0.);
+		return hu(Md.of(v1.index(),(double)v1.capacidadRestante()),v->v.index()==MochilaVertex.n|| v.cr()==0.);
 	}
 	
 	public static record Md(Integer index, Double cr) {

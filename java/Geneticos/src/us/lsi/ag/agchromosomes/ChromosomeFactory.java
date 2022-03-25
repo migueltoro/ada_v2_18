@@ -39,7 +39,7 @@ public class ChromosomeFactory {
 	 * Los diferentes tipos de cromosmomas implementados
 	 *
 	 */
-	public enum ChromosomeType {Binary,Range,Real,InSet,SubList,Permutation,PermutationSubList,Blocks,Expression}
+	public enum ChromosomeType {Binary,Range,Real,InSet,SubList,Permutation,PermutationSubList,PermutationSubList2,Blocks,Expression}
 	
 //	public static ChromosomeType tipo;
 
@@ -56,6 +56,7 @@ public class ChromosomeFactory {
 		case Range: chromosome = (Chromosome<E>) RangeChromosome.getInitialChromosome(); break;
 		case Permutation: chromosome = (Chromosome<E>) PermutationChromosome.getInitialChromosome(); break;
 		case PermutationSubList: chromosome = (Chromosome<E>) PermutationSubListChromosome.getInitialChromosome(); break;
+		case PermutationSubList2: chromosome = (Chromosome<E>) PermutationSubList2Chromosome.getInitialChromosome(); break;
 		case Real: chromosome = (Chromosome<E>) DoubleChromosome.getInitialChromosome(); break;
 		case InSet: chromosome = (Chromosome<E>) ValuesInSetChromosomeC.getInitialChromosome(); break;
 		case Blocks: chromosome = (Chromosome<E>) BlocksChromosomePermutation.getInitialChromosome(); break;
@@ -122,6 +123,7 @@ public class ChromosomeFactory {
 		case Range: crossOverPolicy = crossOverPolicyKey; break;
 		case Permutation: crossOverPolicy = crossOverPolicyKey; break;
 		case PermutationSubList: crossOverPolicy = new SubListCrossoverPolicy(crossOverPolicyBin,crossOverPolicyKey); break;
+		case PermutationSubList2: crossOverPolicy = crossOverPolicyKey; break;
 		case Real: crossOverPolicy = crossOverPolicyKey; break;
 		case InSet: crossOverPolicy = crossOverPolicyKey; break;	
 		case Blocks: crossOverPolicy = crossOverPolicyKey; break;
@@ -144,6 +146,7 @@ public class ChromosomeFactory {
 		case Range: mutationPolicy = new RandomKeyMutation();	; break;
 		case Permutation: mutationPolicy = new RandomKeyMutation(); break;
 		case PermutationSubList: mutationPolicy = new SubListMutationPolicy(); break;
+		case PermutationSubList2: mutationPolicy = new RandomKeyMutation(); break;
 		case Real: mutationPolicy = new RandomKeyMutation();	; break;
 		case InSet: mutationPolicy = new RandomKeyMutation(); break;
 		case Blocks: mutationPolicy = new RandomKeyMutation(); break;
@@ -189,6 +192,7 @@ public class ChromosomeFactory {
 		case Range: RangeChromosome.iniValues((ValuesInRangeData<Integer, Object>) data); break;
 		case Permutation: PermutationChromosome.iniValues((SeqNormalData<Object>) data);break;
 		case PermutationSubList: PermutationSubListChromosome.iniValues((SeqNormalData<Object>) data);break;
+		case PermutationSubList2: PermutationSubList2Chromosome.iniValues((SeqNormalData<Object>) data);break;
 		case Real: DoubleChromosome.iniValues((ValuesInRangeData<Double, Object>) data);break;
 		case InSet: ValuesInSetChromosomeC.iniValues((ValuesInSetData<Object>) data); break;
 		case Blocks: BlocksChromosomePermutation.iniValues((BlocksData<Object>) data); break;

@@ -5,14 +5,14 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.Files2;
 
-public class DatosAbogados {
+public class DatosBufete {
 	
 	public static int NUM_CASOS, NUM_ABOGADOS;
 	private static List<Abogado> abogados; 
 	
 	public static void iniDatos(String fichero) {
 		abogados = Files2.streamFromFile(fichero)
-		.map(s->Abogado.create(s)).collect(Collectors.toList());
+		.map(s->Abogado.parse(s)).collect(Collectors.toList());
 		
 		NUM_ABOGADOS = abogados.size();
 		NUM_CASOS = abogados.get(0).getHoras().size();		

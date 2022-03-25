@@ -18,15 +18,15 @@ public class TestGreadyMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex v1 = MochilaVertex.initialVertex();
-		MochilaVertex v2 = MochilaVertex.lastVertex();
+//		MochilaVertex v2 = MochilaVertex.lastVertex();
 //		Predicate<MochilaVertex> goal = v->v.equals(v2);
 //		System.out.println(e1);
 //		System.out.println(e2);			
-		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),v2);
+		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),null);
 		System.out.println("1 "+r2);
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight(),v2);
+				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
 		
 		GreedyOnGraph<MochilaVertex, MochilaEdge> gs = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
 		

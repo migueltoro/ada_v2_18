@@ -25,10 +25,9 @@ public class TestAStarMochila {
 //		DatosMochila.capacidadInicial = 78;	
 		MochilaVertex.capacidadInicial = 78;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
-		MochilaVertex e2 = MochilaVertex.lastVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-			SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),v->v.weight(),e2);		
+			SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),v->v.weight());		
 	
 		AStar<MochilaVertex, MochilaEdge> ms = 
 				AStar.of(graph,MochilaHeuristic::heuristic,AStarType.Max);
