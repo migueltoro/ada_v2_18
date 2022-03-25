@@ -11,12 +11,11 @@ public class TestPackVertex {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		Data.data("ficheros/pack.txt",12);
-		Data.m = Data.n;
 		PackVertex e1 = PackVertex.first();
 //		Predicate<PackVertex> goal  = PackVertex.goal;
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
 		
 		System.out.println(graph.startVertex());
 		System.out.println(graph.startVertex().actions());

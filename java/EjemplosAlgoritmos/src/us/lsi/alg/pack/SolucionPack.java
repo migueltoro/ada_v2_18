@@ -20,7 +20,7 @@ public class SolucionPack implements Comparable<SolucionPack>{
 
 	private SolucionPack(GraphPath<PackVertex,PackEdge> path) {
 		super();
-		List<Integer> as = path.getVertexList().get(path.getLength()).as;
+		List<Integer> as = path.getEdgeList().stream().map(e->e.action()).toList();
 		this.asignacion = IntStream.range(0,as.size()).boxed()
 				.map(i->IntPair.of(i, as.get(i)))
 				.collect(Collectors.toMap(
@@ -37,7 +37,7 @@ public class SolucionPack implements Comparable<SolucionPack>{
 
 	@Override
 	public String toString() {
-		return "SolucionPack [ nc ="+nc()+", carga ="+asignacion + "]";
+		return "SolucionPack [nc ="+nc()+", carga ="+asignacion + "]";
 	}
 
 	@Override
@@ -45,31 +45,6 @@ public class SolucionPack implements Comparable<SolucionPack>{
 		return this.nc().compareTo(other.nc());
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((asignacion == null) ? 0 : asignacion.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SolucionPack other = (SolucionPack) obj;
-		if (asignacion == null) {
-			if (other.asignacion != null)
-				return false;
-		} else if (!asignacion.equals(other.asignacion))
-			return false;
-		return true;
-	}
-	
 	
 
 }

@@ -12,7 +12,7 @@ public class Data {
 	public static List<Integer> volumenesObjetos;
 	public static Integer n;
 	public static Integer volumenContenedor;
-	public static Integer m; 
+//	public static Integer m; 
 	
 	public static void data(String file, Integer volumenContenedor) {
 		Data.volumenesObjetos = Files2.streamFromFile(file).map(e->Integer.parseInt(e)).collect(Collectors.toList());

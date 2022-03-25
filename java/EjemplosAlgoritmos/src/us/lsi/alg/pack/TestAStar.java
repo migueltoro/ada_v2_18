@@ -17,11 +17,10 @@ public class TestAStar {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		Data.data("ficheros/pack.txt",15);
-		Data.m = Data.n;
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc);	
+				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
 		
 		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
@@ -30,11 +29,11 @@ public class TestAStar {
 		GraphPath<PackVertex, PackEdge> p = rr.path();
 		SolucionPack sp = SolucionPack.of(p);
 		System.out.println(sp);
-		PackVertex.m = sp.nc();
 		
 		AStar<PackVertex, PackEdge> ms = 
-				AStar.of(graph,(v1,pd,v2)->0.,AStarType.Min);
-//		AStar<PackVertex, PackEdge> ms = GraphAlg.aStarGoal(graph,goal,Heuristica::heuristic);
+				AStar.of(graph,
+						Heuristica::heuristic,
+						AStarType.Min);
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);
 		SolucionPack s = SolucionPack.of(path);

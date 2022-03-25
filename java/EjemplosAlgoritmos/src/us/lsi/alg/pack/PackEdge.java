@@ -6,7 +6,8 @@ public record PackEdge(PackVertex source, PackVertex target, Integer action, Dou
            implements SimpleEdgeAction<PackVertex,Integer> {
 
 	public static PackEdge of(PackVertex c1, PackVertex c2, Integer action) {
-		return new PackEdge(c1, c2, action, 1.);
+		Double w = (double) (c2.nc()-c1.nc());
+		return new PackEdge(c1, c2, action, w);
 	}
 
 }
