@@ -13,5 +13,7 @@ public class BinaryTrees2 {
 		case BTree<E> t -> size(t.left())+size(t.right());
 		};
 	}
+	
+	
 
 }

@@ -14,6 +14,7 @@ public sealed interface BinaryTree2<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	public static <E> BinaryTree2<E> of(E label) {
 		return new BLeaf<E>(label);
 	}
+	
 	public static <E> BinaryTree2<E> of(E label, BinaryTree2<E> left, BinaryTree2<E> right) {
 		return new BTree<E>(label,left,right);
 	}
