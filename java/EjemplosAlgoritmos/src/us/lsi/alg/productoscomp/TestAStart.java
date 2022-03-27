@@ -26,7 +26,7 @@ public class TestAStart {
 			DatosProductos.iniDatos("ficheros/productoscomp"+ i +".txt");
 			System.out.println("\n\n>\tResultados para el test " + i + "\n");
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexProductos start = VertexProductos.initial();
 			Predicate<VertexProductos> goal = VertexProductos.goal();

@@ -14,11 +14,11 @@ public class TestPDR {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		Data.data("ficheros/pack.txt",15);
+		Data.data("ficheros/pack1.txt");
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
+				SimpleVirtualGraph.sum(e1,PackVertex.goal(),e->e.weight());	
 		
 		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
@@ -28,7 +28,8 @@ public class TestPDR {
 		SolucionPack sp = SolucionPack.of(path);
 	
 		Integer nc = sp.nc();
-		System.out.println(nc);
+		System.out.println("Valor Voraz = "+nc);
+		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
 		DynamicProgrammingReduction<PackVertex, PackEdge> ms = DynamicProgrammingReduction.of(
 				graph,
@@ -39,7 +40,8 @@ public class TestPDR {
 		ms.optimalPath = path;
 		
 		ms.search();
-
+		System.out.println(String.format("Volumen contenedor = %d,Numero de Objetos = %d",
+				Data.volumenContenedor,Data.n));
 		System.out.println(sp);
 
 	}

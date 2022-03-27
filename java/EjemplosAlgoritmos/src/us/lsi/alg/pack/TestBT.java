@@ -15,11 +15,11 @@ public class TestBT {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		Data.data("ficheros/pack.txt",15);
+		Data.data("ficheros/pack1.txt");
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
+				SimpleVirtualGraph.sum(e1,PackVertex.goal(),e->e.weight());	
 		
 		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
@@ -29,7 +29,8 @@ public class TestBT {
 		SolucionPack sp = SolucionPack.of(path);
 	
 		Integer nc = sp.nc();
-		System.out.println(nc);
+		System.out.println("Valor voraz = "+nc);
+		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
 		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BackTracking.of(
 				graph,
@@ -40,8 +41,11 @@ public class TestBT {
 		ms.bestValue = (double) nc;
 		ms.optimalPath = path;
 		
+		System.out.println(String.format("Volumen contenedor = %d,Numero de Objetos = %d",
+				Data.volumenContenedor,Data.n));
+		
 		ms.search();
-
+		
 		System.out.println(sp);
 	}
 

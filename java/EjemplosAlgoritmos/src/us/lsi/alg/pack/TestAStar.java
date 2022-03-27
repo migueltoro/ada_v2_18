@@ -16,11 +16,11 @@ public class TestAStar {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		Data.data("ficheros/pack.txt",15);
+		Data.data("ficheros/pack1.txt");
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
+				SimpleVirtualGraph.sum(e1,PackVertex.goal(),e->e.weight());	
 		
 		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
@@ -28,7 +28,8 @@ public class TestAStar {
 	
 		GraphPath<PackVertex, PackEdge> p = rr.path();
 		SolucionPack sp = SolucionPack.of(p);
-		System.out.println(sp);
+		System.out.println("Solucion Voraz = "+sp);
+		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
 		AStar<PackVertex, PackEdge> ms = 
 				AStar.of(graph,
@@ -37,8 +38,10 @@ public class TestAStar {
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);
 		SolucionPack s = SolucionPack.of(path);
+		System.out.println(String.format("Volumen contenedor = %d,Numero de Objetos = %d",
+				Data.volumenContenedor,Data.n));
 		System.out.println(s);
-
+		
 	}
 
 }

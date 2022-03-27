@@ -71,6 +71,7 @@ public record PackVertex(Integer index, Map<Integer, Integer> carga) implements 
 		Map<Integer,Integer> carga = new HashMap<>(this.carga());
 		carga.put(a,this.carga().getOrDefault(a,0)+volumen(this.index()));
 		PackVertex r= PackVertex.of(this.index()+1,carga);
+//		System.out.println(r);
 		return r;
 	}
 

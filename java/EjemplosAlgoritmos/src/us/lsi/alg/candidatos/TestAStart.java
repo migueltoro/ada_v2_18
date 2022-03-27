@@ -29,7 +29,7 @@ public class TestAStart {
 			DatosCandidatos.toConsole();
 			System.out.println("\n\n>\tResultados para el test " + i + "\n");
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexCandidatos start = VertexCandidatos.initial();
 			Predicate<VertexCandidatos> goal = VertexCandidatos.goal();
@@ -53,7 +53,7 @@ public class TestAStart {
 			    SolucionCandidatos s_as = SolucionCandidatos.of(gp.get());
 			    System.out.println(s_as);
 			} else {
-				System.out.println("No se encontro solución");
+				System.out.println("No se encontro soluciï¿½n");
 			}
 			
 			GraphColors.toDot(aStar.graph(), "ficheros/candidatosAStarGraph.gv", 
