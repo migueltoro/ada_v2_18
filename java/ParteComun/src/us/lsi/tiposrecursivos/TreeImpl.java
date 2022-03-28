@@ -24,6 +24,9 @@ import us.lsi.common.Preconditions;
 import us.lsi.common.Printers;
 import us.lsi.common.ViewL;
 import us.lsi.streams.Stream2;
+import us.lsi.tiposrecursivos.BinaryTree.BEmpty;
+import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
+import us.lsi.tiposrecursivos.BinaryTree.BTree;
 import us.lsi.tiposrecursivos.parsers.TreeLexer;
 import us.lsi.tiposrecursivos.parsers.TreeParser;
 
@@ -32,11 +35,11 @@ import java.io.PrintWriter;
 
 /**
  * 
- * Un árbol n-ario inmutable
+ * Un ï¿½rbol n-ario inmutable
  * 
  * @author Miguel Toro
  *
- * @param <E> El tipo de los elementos del árbol
+ * @param <E> El tipo de los elementos del ï¿½rbol
  * 
  */
 public class TreeImpl<E> implements MutableTree<E> {
@@ -85,14 +88,12 @@ public class TreeImpl<E> implements MutableTree<E> {
 	}
 	
 	
-	public static <R> Tree<R> toTree(BinaryTree<R> t){
-		Tree<R> r = null;
-		switch(t.getType()) {
-		case Empty: r = TreeImpl.empty(); break;
-		case Leaf: r = Tree.leaf(t.getLabel()); break;
-		case Binary: r = Tree.nary(t.getLabel(), List.of(toTree(t.getLeft()),toTree(t.getRight())));
-		}
-		return r;
+	public static <R> Tree<R> toTree(BinaryTree<R> tree){
+		return switch(tree) {
+		case BEmpty<R> t -> TreeImpl.empty(); 
+		case BLeaf<R> t -> Tree.leaf(t.label()); 
+		case BTree<R> t ->  Tree.nary(t.label(), List.of(toTree(t.left()),toTree(t.right())));
+		};
 	}
 	
 	protected E label;
@@ -121,7 +122,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 		
 	protected TreeImpl(E label, List<TreeImpl<E>> elements) {
 		super();
-		Preconditions.checkArgument(!elements.isEmpty(), "La lista no puede estar vacía");
+		Preconditions.checkArgument(!elements.isEmpty(), "La lista no puede estar vacï¿½a");
 		this.id = null;
 		this.label = label;
 		this.elements = new ArrayList<>(elements);
@@ -197,7 +198,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	@Override
 	public ViewL<Tree<E>,E> viewL() {
-		Preconditions.checkArgument(!this.isEmpty(),String.format("El árbol no puede ser vacío y es %s",this));
+		Preconditions.checkArgument(!this.isEmpty(),String.format("El ï¿½rbol no puede ser vacï¿½o y es %s",this));
 		return switch(this.type) {
 		case Nary -> ViewL.of(this.getLabel(),this.getChildren());
 		case Empty -> null;
@@ -283,7 +284,7 @@ public class TreeImpl<E> implements MutableTree<E> {
 	
 	/**
 	 * @post this pasa a ser un arbol raiz si no lo era antes
-	 * @param nTree Un árbol 
+	 * @param nTree Un ï¿½rbol 
 	 * @return Si this no es raiz devuelve el arbol padre con el hijo this cambiado por nTree. Si this es raiz devuelve nTree
 	 */
 	

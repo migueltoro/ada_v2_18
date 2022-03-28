@@ -18,7 +18,7 @@ import us.lsi.common.String2;
  *
  * @param <E> El tipo de los elementos del &aacute;rbol 
  * 
- * @inv La implementaci&oacute;n mantiene el invariante: getTree() está ordenado y equilibrado
+ * @inv La implementaci&oacute;n mantiene el invariante: getTree() estï¿½ ordenado y equilibrado
  */
 public class AVLTreeImpl<E> implements AVLTree<E>  {
 	
@@ -61,7 +61,7 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	
 	private boolean contains(BinaryTree<E> tree, E e) {
 		Boolean r = null;
-		switch(tree.getType()) {
+		switch(tree.type()) {
 		case Empty: r = false; break;
 		case Leaf: r = Comparator2.isEQ(e, tree.getLabel(), comparator); break;
 		case Binary: r = contains(tree.getLeft(),e) || contains(tree.getRight(),e); break;
@@ -189,9 +189,9 @@ public class AVLTreeImpl<E> implements AVLTree<E>  {
 	 * @pre El arbol es ordenado y equilibrado
 	 * @post El &aacute;rbol resultante contiene al elemento, est&aacute; ordenado y es equilibrado. El &aacute;rbol de entrada no se modifica
 	 * @param tree Un &aacute;rbol de entrada de entrada
-	 * @param element un elemento par añadir al &aacute;rbol
+	 * @param element un elemento par aï¿½adir al &aacute;rbol
 	 * @param comparator Un orden
-	 * @return El &aacute;rbol con el elemento añadido y si ha cambiado
+	 * @return El &aacute;rbol con el elemento aï¿½adido y si ha cambiado
 	 */
 	protected BinaryTree<E> add(BinaryTree<E> tree, E element, Comparator<E> comparator) {
 		BinaryTree<E> r = tree;		

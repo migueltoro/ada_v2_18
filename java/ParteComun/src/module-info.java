@@ -11,4 +11,6 @@ module partecomun {
 
 	requires commons.math3;
 	requires org.antlr.antlr4.runtime;
+	requires transitive org.jgrapht.core;
+	requires transitive org.jgrapht.io;
 }

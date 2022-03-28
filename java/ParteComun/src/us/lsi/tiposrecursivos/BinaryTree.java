@@ -1,235 +1,166 @@
 package us.lsi.tiposrecursivos;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import us.lsi.common.View2E;
-import us.lsi.tiposrecursivos.BinaryPatternImpl.Matches;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
+import us.lsi.common.MutableType;
+import us.lsi.tiposrecursivos.BinaryTree.BEmpty;
+import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
+import us.lsi.tiposrecursivos.BinaryTree.BTree;
+import us.lsi.tiposrecursivos.BinaryTrees.BinaryTreeLevel;
+import us.lsi.tiposrecursivos.parsers.BinaryTreeLexer;
+import us.lsi.tiposrecursivos.parsers.BinaryTreeParser;
 
-public interface BinaryTree<E> extends Iterable<BinaryTree<E>> {
+public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	
 	public enum BinaryType{Empty,Leaf,Binary}
-	public enum ChildType{Left,Right,Root}
-	public enum PathType{Depth,ByLevel}
 	
-	/**
-	 * @post isEmpty()
-	 * @return Construye un árbol vacío
-	 */
+	BinaryType type();
+	int size();
+	int height();
+	BinaryTree<E> copy();
+	BinaryTree<E> reverse();
+	<R> BinaryTree<R> map(Function<E, R> f);
+	
+	public default Stream<BinaryTree<E>> byDeph() {
+		return BinaryTrees.byDeph(this);
+	}
+	
+	public default Stream<BinaryTreeLevel<E>> byLevel() {
+		return BinaryTrees.byLevel(this);
+	}
+	
+	public default void toDot(String file) {
+		BinaryTrees.toDot(this,file);
+	}
+	
 	public static <E> BinaryTree<E> empty() {
-		return BinaryTreeImpl.empty();
+		return new BEmpty<E>();
 	}
 	
-	/**
-	 * @param label Una etiqueta
-	 * @post isLeaf()
-	 * @return Construye un árbol hoja
-	 */
 	public static <E> BinaryTree<E> leaf(E label) {
-		return BinaryTreeImpl.leaf(label);
+		return new BLeaf<E>(label);
 	}
 	
-	/**
-	 * @param label Una etiqueta
-	 * @param left Un arbol
-	 * @param right Un arbol
-	 * @post isBinary()
-	 * @return Construye un árbol binario
-	 */
 	public static <E> BinaryTree<E> binary(E label, BinaryTree<E> left, BinaryTree<E> right) {
-		return BinaryTreeImpl.binary(label, left, right);
+		return new BTree<E>(label,left,right);
 	}
 	
-	/**
-	 * @param s Una cadena
-	 * @return Construye un árbol a partir de su representación textual en s
-	 */
-	public static BinaryTree<String> parse(String s){
-		return BinaryTreeImpl.parse(s);
+	@SuppressWarnings("unchecked")
+	public static BinaryTree<String> parse(String s) {
+		BinaryTreeLexer lexer = new BinaryTreeLexer(CharStreams.fromString(s));
+		BinaryTreeParser parser = new BinaryTreeParser(new CommonTokenStream(lexer));
+		ParseTree parseTree = parser.binary_tree();
+		BinaryTree<String> tree = (BinaryTree<String>) parseTree.accept(new BinaryTreeVisitorC());
+		return tree;
 	}
 	
-	/**
-	 * @param s Una cadena que representa el árbol
-	 * @param f Una función de String al tipo E
-	 * @return Construye un árbol a partir de la cadena s y aplicando posteriormente la función f a las etiquetas
-	 */
 	public static <E> BinaryTree<E> parse(String s, Function<String,E> f) {
-		BinaryTree<String> tree = BinaryTreeImpl.parse(s);
+		BinaryTree<String> tree = BinaryTree.parse(s);
 		return tree.map(f);
 	}
 	
-	/**
-	 * @return Si es árbol es vacío
-	 */
-	boolean isEmpty();
-
-	/**
-	 * @return Si el árbol es hoja
-	 */
-	boolean isLeaf();
-
-	/**
-	 * @return Si el árbol es binario
-	 */
-	boolean isBinary();
-
-	/**
-	 * @return El tipo del árbol
-	 */
-	BinaryType getType();
-
-	/**
-	 * @return El ábol del cual this es hijo
-	 */
-	BinaryTree<E> getFather();
-
-	/**
-	 * @return Si no tiene padre
-	 */
-	boolean isRoot();
-
-	/**
-	 * @return Si es un hijo izquierdo
-	 */
-	Boolean isLeftChild();
-
-	/**
-	 * @return Si es un hijo derecho
-	 */
-	Boolean isRightChild();
-
-	/**
-	 * @return Si es hijo izquierdo, derecho o raiz
-	 */
-	ChildType getChildType();
-
-	/**
-	 * @pre isLeaf() || isBinary()
-	 * @return La etiqueta
-	 */
-	E getLabel();
-
-	/**
-	 * @pre isBinary()
-	 * @return El hijo izquierdo
-	 */
-	BinaryTree<E> getLeft();
-
-	/**
-	 * @pre isBinary()
-	 * @return El hijo derecho
-	 */
-	BinaryTree<E> getRight();
-
-	/**
-	 * @return El número de etiquetas del árbol
-	 */
-	int size();
-
-	/**
-	 * @return La altura del árbol: longitud del camino más largo a un árbol vacío o una de las hojas
-	 */
-	int getHeight();
-
-	/**
-	 * @param n Un entero mayor o igual a cero
-	 * @return Los árboles que están a nivel n
-	 */
-	List<BinaryTree<E>> getLevel(int n);
-
-	/**
-	 * @param n Un entero 
-	 * @return Las alturas de los árboles de nivel n
-	 */
-	List<Integer> getHeights(int n);
-
-	/**
-	 * @return Una copia del árbol
-	 */
-	BinaryTree<E> copy();
-
-	/**
-	 * @return Una copia simétrica del árbol
-	 */
-	BinaryTree<E> getReverse();
-
-	/**
-	 * @param f Una función
-	 * @return El árbol resultante tras aplicar la función de a cada una de las etiquetas
-	 */
-	<R> BinaryTree<R> map(Function<E, R> f);
-
-	/**
-	 * @param pattern Un patrón con el que se debe hacer matching
-	 * @param result Un patrón que será el esquema al que queremos transformar el árbol
-	 * @return Un árbol que se obtiene sustituyendo en result las variables obtenidas en el matching de this con pattern.
-	 * Si no hay matching se devuelve el árbol sin transformar
-	 */
-	BinaryTree<E> transform(BinaryPattern<E> pattern, BinaryPattern<E> result);
-
-	/**
-	 * @param pt Un patrón
-	 * @return Un matching que contiene si ha habido o no matching y los valores para las etiquetas 
-	 * y variables obtenidos en el matching
-	 */
-	Matches<E> match(BinaryPattern<E> pt);
-
-	/**
-	 * @return la representación de árbol en cadenas de caracteres
-	 */
-	String toString();
-
-	/**
-	 * @return Una lista con las etiquetas el árbol en preorden
-	 */
-	List<E> getPreOrder();
-	/**
-	 * @return Una lista con las etiquetas el árbol en postorden
-	 */
-	List<E> getPostOrder();
-	/**
-	 * @return Una lista con las etiquetad el árbol en ineorden
-	 */
-	List<E> getInOrder();
+	public static <E,R> BinaryTree<R> map(BinaryTree<E> tree, Function<E,R> f) {
+		return switch(tree) {
+		case BEmpty<E> t -> BinaryTree.empty();
+		case BLeaf<E> t -> BinaryTree.leaf(f.apply(t.label()));
+		case BTree<E> t -> BinaryTree.binary(f.apply(t.label()),
+				BinaryTree.map(t.left(),f),BinaryTree.map(t.right(),f));
+		};
+	}
 	
-	/**
-	 * @return Un árbol equilibrado con las mismas etiquetas
-	 */
-	BinaryTree<E> equilibrate();
-	
-	/**
-	 * @return Un flujo de datos en preorden
-	 */
-	
-	Stream<BinaryTree<E>> stream();
-
-	/**
-	 * @return Una vista de tipo 2E del arbol binario
-	 */
-	View2E<BinaryTree<E>,E> view();
-	
-	/**
-	 * @return Un iterador por niveles
-	 */
-	
-	Iterator<BinaryTreeLevel<E>> byLevel();
-	/**
-	 *  Genera un fichero en formato gv
-	 */
-	
-	void toDot(String file);
-	
-	public static record BinaryTreeLevel<E>(Integer level, BinaryTree<E> tree){
-		public static <R> BinaryTreeLevel<R> of(Integer level, BinaryTree<R> tree){
-			return new BinaryTreeLevel<R>(level,tree);
-		}
-		@Override
-		public String toString() {
-			return String.format("(%d,%s)",this.level,this.tree);
-		}
+	public default BinaryTree<E> equilibrate() {
+		return BinaryTree.equilibrate(this);
 	}
 
+	public static <E> BinaryTree<E> equilibrate(BinaryTree<E> tree) {
+		Patterns<E> pt = Patterns.of();
+		MutableType<Boolean> r = MutableType.of(true);
+		BinaryTree<E> t = BinaryPattern.transform(tree, pt.leftLeft, pt.result, r);
+		if (r.value()) return t;
+		t = BinaryPattern.transform(tree, pt.leftRight, pt.result, r);
+		if (r.value()) return t;
+		t = BinaryPattern.transform(tree, pt.rightLeft, pt.result, r);
+		if (r.value()) return t;
+		t = BinaryPattern.transform(tree, pt.rightRight, pt.result, r);
+		if (r.value()) return t;
+		return t;
+	}   
+	
+	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
+	
+	public static <E> TypeEquilibrate equilibrateType(BinaryTree<E> tree) {
+		Patterns<E> pt = Patterns.of();
+		TypeEquilibrate r;
+		if(pt.leftRight.match(tree).match) r = TypeEquilibrate.LeftRight;
+		else if(pt.leftLeft.match(tree).match) r = TypeEquilibrate.LeftLeft;
+		else if(pt.rightLeft.match(tree).match) r = TypeEquilibrate.RightLeft;
+		else if(pt.rightRight.match(tree).match) r = TypeEquilibrate.RightRight;
+		else r = TypeEquilibrate.Equilibrate;
+		return r;
+	}
+	
+	public default TypeEquilibrate equilibrateType() {
+		return BinaryTree.equilibrateType(this);
+	}
+	
+	static class Patterns<R> {
+		BinaryPattern<R> leftRight; 
+	    BinaryPattern<R> rightLeft;
+	    BinaryPattern<R> leftLeft;
+	    BinaryPattern<R> rightRight;
+	    BinaryPattern<R> result;
+	    private static Patterns<?> patterns = null;
+	    @SuppressWarnings("unchecked")
+		public static <R> Patterns<R> of(){
+	    	if(patterns==null) patterns = new Patterns<R>();
+	    	return (Patterns<R>)patterns;
+	    }
+	    public Patterns() {
+			super();
+			this.leftRight = BinaryPattern.parse("_e5(_e3(_A,_e4(_B,_C)),_D)");
+			this.rightLeft = BinaryPattern.parse("_e3(_A,_e5(_e4(_B,_C),_D))");
+			this.leftLeft = BinaryPattern.parse("_e5(_e4(_e3(_A,_B),_C),_D)");
+			this.rightRight = BinaryPattern.parse("_e3(_A,_e4(_B,_e5(_C,_D)))");
+			this.result = BinaryPattern.parse("_e4(_e3(_A,_B),_e5(_C,_D))");
+		} 
+	}
+	
+	public static record BEmpty<E>() implements BinaryTree<E> {
+		public BinaryType type() { return BinaryType.Empty;}
+		public int size() { return 0; }
+		public int height() { return 0; }
+		public BinaryTree<E> copy() { return BinaryTree.empty(); }
+		public BinaryTree<E> reverse() { return BinaryTree.empty(); }
+		public <R> BinaryTree<R> map(Function<E, R> f) { return BinaryTree.empty();}
+		public String toString() { return "_"; }
+	}
+	
+	public static record BLeaf<E>(E label) implements BinaryTree<E> {
+		public BinaryType type() { return BinaryType.Leaf;}
+		public int size() { return 1; }
+		public int height() { return 0; }
+		public BinaryTree<E> copy() { return BinaryTree.leaf(this.label()); }
+		public BinaryTree<E> reverse() { return BinaryTree.leaf(this.label()); }
+		public <R> BinaryTree<R> map(Function<E, R> f) { return BinaryTree.leaf(f.apply(this.label()));}
+		public String toString() { return this.label().toString(); }
+	}
+	
+	public static record BTree<E>(E label, BinaryTree<E> left, BinaryTree<E> right) 
+			implements BinaryTree<E> {
+		public BinaryType type() { return BinaryType.Binary;}
+		public int size() { return 1+this.left().size()+this.right().size();}
+		public int height() {return 1 + Math.max(this.left().height(), this.right().height());}
+		public BinaryTree<E> copy() { return BinaryTree.binary(this.label(),this.left().copy(),this.right().copy()); }
+		public BinaryTree<E> reverse() { return BinaryTree.binary(this.label(),this.right().copy(),this.left().copy()); }
+		public <R> BinaryTree<R> map(Function<E, R> f) { return BinaryTree.binary(f.apply(this.label()),
+				this.left().map(f),this.right().map(f));}
+		public String toString() { return String.format("%s(%s,%s)",
+				this.label().toString(),this.left().toString(),this.right().toString());}
+	}
+	
 }

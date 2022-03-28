@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 /**
  * @author migueltoro
  *
- * @param <E> Tipo de los elementos del árbol
+ * @param <E> Tipo de los elementos del ï¿½rbol
  * 
  */
 public interface AVLTree<E> {
@@ -18,7 +18,7 @@ public interface AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante el orden natural de E
 	 */
 	public static <E extends Comparable<? super E>> AVLTree<E> of() {
-		return new AVLTreeImpl<E>(BinaryTreeImpl.empty(), Comparator.naturalOrder());
+		return new AVLTreeImpl<E>(BinaryTree.empty(), Comparator.naturalOrder());
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public interface AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante comparator
 	 */
 	public static <E> AVLTree<E> of(Comparator<E> comparator) {
-		return new AVLTreeImpl<E>(BinaryTreeImpl.empty(), comparator);
+		return new AVLTreeImpl<E>(BinaryTree.empty(), comparator);
 	}
 	
 
@@ -44,7 +44,7 @@ public interface AVLTree<E> {
 
 	/**
 	 * @pre El &aacute;rbol no puede estar vac&iacute;o
-	 * @return El elemento m&aacute;s pequeño del &aacute;rbol
+	 * @return El elemento m&aacute;s pequeï¿½o del &aacute;rbol
 	 */
 	E first();
 
@@ -69,21 +69,21 @@ public interface AVLTree<E> {
 	/**
 	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
 	 * @param elements Una colecci&oacute;n de elementos
-	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
+	 * @return Si el &aacute;rbol ha cambiado al aï¿½adir los elementos
 	 */
 	boolean add(Stream<E> elements);
 
 	/**
 	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
 	 * @param elements Una colecci&oacute;n de elementos
-	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
+	 * @return Si el &aacute;rbol ha cambiado al aï¿½adir los elementos
 	 */
 	boolean add(Collection<E> elements);
 
 	/**
 	 * @post Todos los elementos est&aacute;n contenidos en el &aacute;rbol
 	 * @param elements Una serie de elementos
-	 * @return Si el &aacute;rbol ha cambiado al añadir los elementos
+	 * @return Si el &aacute;rbol ha cambiado al aï¿½adir los elementos
 	 */
 	boolean add(@SuppressWarnings("unchecked") E... elements);
 
@@ -121,7 +121,7 @@ public interface AVLTree<E> {
 	AVLTree<E> copy();
 
 	/**
-	 * @return El árbol que implementa el AVLTree
+	 * @return El ï¿½rbol que implementa el AVLTree
 	 */
 	BinaryTree<E> getTree();
 }

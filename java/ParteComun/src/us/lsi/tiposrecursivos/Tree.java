@@ -36,9 +36,9 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	}
 	
 	
-	public static <R> Tree<R> toTree(BinaryTree<R> t){
-		return TreeImpl.toTree(t);
-	}
+//	public static <R> Tree<R> toTree(BinaryTree<R> t){
+//		return TreeImpl.toTree(t);
+//	}
 
 	public static Tree<String> parse(String s){
 		return TreeImpl.parse(s);
@@ -49,17 +49,17 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	}
 	
 	/**
-	 * @return El tipo del árbol
+	 * @return El tipo del ï¿½rbol
 	 */
 	TreeType getType();
 
 	/**
-	 * @return Verdadero si el árbol es vacio. 
+	 * @return Verdadero si el ï¿½rbol es vacio. 
 	 */
 	boolean isEmpty();
 
 	/**
-	 * @return Verdadero si el árbol es hoja. 
+	 * @return Verdadero si el ï¿½rbol es hoja. 
 	 */
 	boolean isLeaf();
 
@@ -70,7 +70,7 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	boolean isChild(int i);
 
 	/**
-	 * @return Verdadero si el árbol es nario. 
+	 * @return Verdadero si el ï¿½rbol es nario. 
 	 */
 	boolean isNary();
 
@@ -95,7 +95,7 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	<R> Tree<R> map(Function<E, R> f);
 
 	/**
-	 * @return Un árbol que es la imagen especular de this
+	 * @return Un ï¿½rbol que es la imagen especular de this
 	 */
 	Tree<E> getReverse();
 
@@ -112,20 +112,20 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	List<E> getPostOrder();
 
 	/**
-	 * @post La etiqueta se insertará en al posición min(k,nh). Si k = 0 resulta el recorrido en preorden y si 
+	 * @post La etiqueta se insertarï¿½ en al posiciï¿½n min(k,nh). Si k = 0 resulta el recorrido en preorden y si 
 	 * k &ge; nh en postorden.
-	 * @param k Posición de inserción de la etiqueta
+	 * @param k Posiciï¿½n de inserciï¿½n de la etiqueta
 	 * @return Una lista con el recorrido en inorden. 
 	 */
 	List<E> getInOrder(int k);
 
 	/**
-	 * @return Una lista con los árboles por niveles. Versión iterativa
+	 * @return Una lista con los ï¿½rboles por niveles. Versiï¿½n iterativa
 	 */
 	List<Tree<E>> getByLevel();
 
 	/**
-	 * @return Una lista con las etiquetas por niveles. Versión iterativa
+	 * @return Una lista con las etiquetas por niveles. Versiï¿½n iterativa
 	 */
 	List<E> getLabelByLevel();
 
@@ -142,8 +142,8 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	List<Tree<E>> getLevel(Integer n);
 
 	/**
-	 * @param root La raiz del árbol dónde t es un subarbol
-	 * @return La profundidad de t en root o -1 si no está
+	 * @param root La raiz del ï¿½rbol dï¿½nde t es un subarbol
+	 * @return La profundidad de t en root o -1 si no estï¿½
 	 */
 	int getDepth(Tree<E> root);
 
@@ -156,7 +156,7 @@ public static Tree<Object> empty = new TreeImpl<Object>();
 	Stream<Tree<E>> stream();
 	
 	/**
-	 * @return Una vista de tipo L del árbol nario
+	 * @return Una vista de tipo L del ï¿½rbol nario
 	 */
 	ViewL<Tree<E>,E> viewL();
 	
