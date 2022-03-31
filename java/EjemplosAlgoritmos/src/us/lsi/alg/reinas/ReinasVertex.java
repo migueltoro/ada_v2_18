@@ -23,11 +23,11 @@ public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, Inte
 	}
 
 	public static ReinasVertex first() {
-		return new ReinasVertex(0,List2.empty(),IntegerSet.empty(),IntegerSet.empty(-n,10));
+		return new ReinasVertex(0,List2.empty(),IntegerSet.empty(-n,10),IntegerSet.empty());
 	}
 	
 	public static ReinasVertex last() {
-		return new ReinasVertex(n,List2.empty(),IntegerSet.empty(),IntegerSet.empty(-n,10));
+		return new ReinasVertex(n,List2.empty(),IntegerSet.empty(-n,10),IntegerSet.empty());
 	}
 	
 	public static Predicate<ReinasVertex> goal() {
@@ -59,7 +59,7 @@ public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, Inte
 	@Override
 	public List<Integer> actions() {
 		List<Integer> r = IntStream.range(0,ReinasVertex.n).boxed()
-				.filter(e->!this.fo.contains(e) && !this.dpo.contains(e+this.index) && !this.dso.contains(e-this.index))
+				.filter(e->!this.fo.contains(e) && !this.dpo.contains(e-this.index) && !this.dso.contains(e+this.index))
 				.collect(Collectors.toList());
 		return r;
 	}
@@ -68,8 +68,8 @@ public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, Inte
 	public ReinasVertex neighbor(Integer a) {
 		Integer index = this.index+1;
 		List<Integer> fo = new ArrayList<>(this.fo); fo.add(a);
-		IntegerSet dpo = this.dpo.addNew(a+this.index);
-		IntegerSet dso = this.dso.addNew(a-this.index);
+		IntegerSet dpo = this.dpo.addNew(a-this.index);
+		IntegerSet dso = this.dso.addNew(a+this.index);
 		return ReinasVertex.of(index, fo, dpo, dso);
 	}
 

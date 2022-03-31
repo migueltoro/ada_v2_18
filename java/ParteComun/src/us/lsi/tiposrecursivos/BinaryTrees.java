@@ -1,11 +1,13 @@
 package us.lsi.tiposrecursivos;
 
 import java.io.Writer;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Function;
@@ -20,13 +22,17 @@ import org.jgrapht.nio.DefaultAttribute;
 import org.jgrapht.nio.dot.DOTExporter;
 import us.lsi.common.Files2;
 import us.lsi.common.List2;
+import us.lsi.common.MutableType;
+import us.lsi.common.Preconditions;
 import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.BinaryTree.BEmpty;
 import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
 import us.lsi.tiposrecursivos.BinaryTree.BTree;
 
+
 public class BinaryTrees {
-	
+
+
 	public static <E> Stream<BinaryTree<E>> byDeph(BinaryTree<E> tree) {
 		return Stream2.ofIterator(DepthPathBinaryTree.of(tree));
 	}
@@ -40,7 +46,6 @@ public class BinaryTrees {
 				new SimpleDirectedGraph<Nv<E>,DefaultEdge>(null,()->new DefaultEdge(),true);
 		BinaryTree<Nv<E>> tt = BinaryTrees.map(tree);
 		toDot1(tt,graph);
-		System.out.println(graph);
 		toDot2(tt,graph);
 		toDot3(graph,file,v->v.v()!=null?v.v().toString().toString():"_",e->"");
 	}
@@ -106,6 +111,263 @@ public class BinaryTrees {
 		de.setEdgeAttributeProvider(e->BinaryTrees.label(edgeLabel.apply(e)));		
 		Writer f1 = Files2.getWriter(file);
 		de.exportGraph(graph, f1);
+	}
+	
+	public static <E> E minLabel(BinaryTree<E> tree, Comparator<E> cmp) {
+		return switch (tree) {
+		case BEmpty<E>  t -> null;
+		case BLeaf<E>  t -> t.label();
+		case BTree<E>  t -> {
+			E e1 = minLabel(t.left(), cmp);
+			E e2 = minLabel(t.right(), cmp);
+			yield Stream.of(t.label(),e1, e2).filter(e->e!=null).min(cmp).get();
+		}
+		};
+	}
+	
+	public static <E> Optional<E> minLabelOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
+		return switch (tree) {
+		case BEmpty<E>  t -> Optional.empty();
+		case BLeaf<E>  t ->  Optional.of(t.label());
+		case BTree<E>  t && t.left() instanceof BEmpty<E>  tl -> Optional.of(t.label());
+		case BTree<E>  t && t.left() instanceof BLeaf<E>  tl -> Optional.of(tl.label());
+		case BTree<E>  t && t.left() instanceof BTree<E>  tl -> minLabelOrdered(tl, cmp);
+		};
+	}
+	
+	public static <E> Optional<E> maxLabelOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
+		return switch (tree) {
+		case BEmpty<E>  t -> Optional.empty();
+		case BLeaf<E>  t ->  Optional.of(t.label());
+		case BTree<E>  t && t.right() instanceof BEmpty<E>  tr -> Optional.of(t.label());
+		case BTree<E>  t && t.right() instanceof BLeaf<E>  tr -> Optional.of(tr.label());
+		case BTree<E>  t && t.right() instanceof BTree<E>  tr -> maxLabelOrdered(tr, cmp);
+		};
+	}
+	
+	public static <E> Boolean containsLabel(BinaryTree<E> tree, E label) {
+		return switch (tree) {
+		case BEmpty<E>  t -> false;
+		case BLeaf<E>  t -> t.label().equals(label);
+		case BTree<E>  t -> t.label().equals(label) || containsLabel(t.left(), label)
+				|| containsLabel(t.right(), label);
+		};
+	}
+	
+	public static <E> Boolean containsLabelOrdered(BinaryTree<E> tree, E label, Comparator<E> cmp) {
+		return switch (tree) {
+		case BEmpty<E> t -> false;
+		case BLeaf<E> t -> t.label().equals(label);
+		case BTree<E> t -> cmp.compare(label, t.label()) ==0
+				|| cmp.compare(label, t.label()) < 0 && containsLabelOrdered(t.left(), label, cmp)
+				|| cmp.compare(label, t.label()) > 0  && containsLabelOrdered(t.right(), label, cmp);
+		};
+	}
+	
+	public static <E> BinaryTree<E> addOrdered(BinaryTree<E> tree, List<E> elements, Comparator<E> cmp) {
+		BinaryTree<E> t = BinaryTree.empty();
+		for(E e:elements) {
+			t = BinaryTrees.addOrdered(t, e, cmp);
+		}
+		return t;
+	}
+	
+	public static <E> BinaryTree<E> addOrdered(BinaryTree<E> tree, E element, Comparator<E> cmp) {
+		BinaryTree<E> s = switch (tree) {
+		case BEmpty<E> t -> BinaryTree.leaf(element);
+		case BLeaf<E> t && cmp.compare(element, t.label()) == 0 -> tree;
+		case BLeaf<E> t && cmp.compare(element, t.label()) < 0 ->
+			BinaryTree.binary(t.label(), BinaryTree.leaf(element), BinaryTree.empty());
+		case BLeaf<E> t && cmp.compare(element, t.label()) > 0 ->
+			BinaryTree.binary(t.label(), BinaryTree.empty(), BinaryTree.leaf(element));
+		case BTree<E> t && cmp.compare(element, t.label()) == 0 -> tree;
+		case BTree<E> t && cmp.compare(element, t.label()) < 0 -> {
+			BinaryTree<E> new_left = addOrdered(t.left(), element, cmp);
+			BinaryTree<E> r = tree;
+			if (t.left() != new_left) {
+				r = BinaryTree.binary(t.label(), new_left, t.right());
+				r = r.equilibrate();
+			}
+			r = r.equilibrate();
+			yield r;
+		}
+		case BTree<E> t && cmp.compare(element, t.label()) > 0 -> {
+			BinaryTree<E> new_right = addOrdered(t.right(), element, cmp);
+			BinaryTree<E> r = tree;
+			if (t.right() != new_right) {
+				r = BinaryTree.binary(t.label(), t.left(), new_right);
+				r = r.equilibrate();
+			}
+			r = r.equilibrate();
+			yield r;
+		}
+		};
+		return s;
+	}
+	
+	public static <E> BinaryTree<E> removeOrdered(BinaryTree<E> tree, E element, Comparator<E> cmp) {
+		BinaryTree<E> r = tree;
+		return switch(tree) {
+		case BEmpty<E> t  -> t;
+		case BLeaf<E> t && cmp.compare(element, t.label()) == 0 -> BinaryTree.empty();
+		case BLeaf<E> t && cmp.compare(element, t.label()) != 0 -> t;
+		case BTree<E> t && cmp.compare(element, t.label()) == 0 ->  
+				switch(t.left()) {
+				case BEmpty<E> tl  -> {
+					E label = BinaryTrees.minLabelOrdered(t.right(),cmp).get();
+					BinaryTree<E> rl = removeOrdered(t.right(),label,cmp);
+					r = BinaryTree.binary(label,tl,rl);
+					r = r.equilibrate();
+					yield r;
+				}
+				case BLeaf<E> tl  -> {
+					E label = BinaryTrees.maxLabelOrdered(t.left(),cmp).get();
+					BinaryTree<E> rr = removeOrdered(t.left(),label,cmp);
+					r = BinaryTree.binary(label,rr,t.right());
+					r = r.equilibrate();
+					yield r;
+				}
+				case BTree<E> tl  -> {
+					E label = BinaryTrees.maxLabelOrdered(t.left(),cmp).get();
+					BinaryTree<E> rr = removeOrdered(t.left(),label,cmp);
+					r = BinaryTree.binary(label,rr,t.right());
+					r = r.equilibrate();
+					yield r;
+				}
+				};
+		case BTree<E> t && cmp.compare(element, t.label()) < 0 -> {
+				BinaryTree<E> rl = removeOrdered(t.left(),element,cmp);
+				if(rl != t.left()) {
+					r = BinaryTree.binary(t.label(), rl, t.right()); 
+					r.equilibrate();
+				}
+				yield r;
+		}
+		case BTree<E> t && cmp.compare(element, t.label()) > 0 -> {
+				BinaryTree<E> rr = removeOrdered(t.right(),element,cmp);
+				if(rr != t.right()) {
+					r = BinaryTree.binary(t.label(), t.left(), rr); 
+					r.equilibrate();
+				}
+				yield r;
+		}
+		};
+	}
+	
+	public static <E> Boolean isOrdered(BinaryTree<E> tree, Comparator<E> cmp) {
+		return switch (tree) {
+		case BEmpty<E> t -> true;
+		case BLeaf<E> t -> true;
+		case BTree<E> t -> {
+			Optional<E> lfLabel = maxLabelOrdered(t.left(), cmp);
+			Optional<E> rgLabel = minLabelOrdered(t.right(), cmp);
+			Boolean r = (lfLabel.isEmpty() || cmp.compare(lfLabel.get(), t.label()) < 0)
+					&& (rgLabel.isEmpty() || cmp.compare(rgLabel.get(), t.label()) > 0);
+			yield r && isOrdered(t.left(), cmp) && isOrdered(t.right(), cmp);
+		}
+		};
+	}
+
+
+	public static <E> BinaryTree<E> equilibrate(BinaryTree<E> tree) {
+		Patterns<E> pt = Patterns.of();
+		TypeEquilibrate te = BinaryTrees.equilibrateType(tree); 
+		MutableType<Boolean> r = MutableType.of(true);
+		return switch(te) {
+		case Equilibrate -> tree;
+		case LeftLeft -> BinaryPattern.transform(tree, pt.leftLeft, pt.result, r);
+		case LeftRight -> BinaryPattern.transform(tree, pt.leftRight, pt.result, r);
+		case RightLeft -> BinaryPattern.transform(tree, pt.rightLeft, pt.result, r);
+		case RightRight -> BinaryPattern.transform(tree, pt.rightRight, pt.result, r);	
+		};
+	} 
+	
+	private static <E> List<BinaryTree<E>> nextExtendedLevel(List<BinaryTree<E>> ls) {
+		List<BinaryTree<E>> r = List2.empty();
+		for (BinaryTree<E> tree : ls) {
+			switch (tree) {
+			case BEmpty<E> t : 
+				r.add(BinaryTree.empty());
+				r.add(BinaryTree.empty());
+				break;
+			case BLeaf<E> t :
+				r.add(BinaryTree.empty());
+				r.add(BinaryTree.empty());
+				break;
+			case BTree<E> t :
+				r.add(t.left());
+				r.add(t.right());
+				break;
+			}
+		}
+		return r;
+	}
+	
+	public static <E> List<BinaryTree<E>> extendedLevel(BinaryTree<E> tree, int n){
+		List<BinaryTree<E>> r = List2.of(tree);
+		for(int i=0; i < n ; i++) {
+			r = nextExtendedLevel(r);
+		}
+		return r;
+	}
+	
+	public static <E> List<Integer> heights(BinaryTree<E> tree,int n){
+		return BinaryTrees.extendedLevel(tree,n).stream().map(x->x.height()).collect(Collectors.toList());
+	}
+	
+	public static <E> TypeEquilibrate equilibrateType(BinaryTree<E> tree) {
+		
+		TypeEquilibrate r = null;
+		List<Integer> n1 = BinaryTrees.heights(tree,1);
+		List<Integer> n2 = BinaryTrees.heights(tree,2);
+		int left = n1.get(0);
+		int right = n1.get(1);
+		int leftleft = n2.get(0);
+		int leftright = n2.get(1);	
+		int rightleft = n2.get(2);
+		int rightright = n2.get(3);
+		if (Math.abs(left - right) < 2) {
+			r = TypeEquilibrate.Equilibrate;
+		} else if (left - right >= 2) {
+			if (leftleft >= leftright) {
+				r = TypeEquilibrate.LeftLeft;
+			} else {
+				r = TypeEquilibrate.LeftRight;
+			}
+		} else if (left - right < 2) {
+			if (rightleft >= rightright) {
+				r = TypeEquilibrate.RightLeft;
+			} else {
+				r = TypeEquilibrate.RightRight;
+			}
+		}
+		Preconditions.checkArgument(r != null, String.format("%d,%d,%d,%d,%d,%d,%s", left, right, leftleft, leftright,
+				rightleft, rightright, tree.toString()));
+		return r;
+	}
+	
+	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
+	
+	static class Patterns<R> {
+		BinaryPattern<R> leftRight; 
+	    BinaryPattern<R> rightLeft;
+	    BinaryPattern<R> leftLeft;
+	    BinaryPattern<R> rightRight;
+	    BinaryPattern<R> result;
+	    private static Patterns<?> patterns = null;
+	    @SuppressWarnings("unchecked")
+		public static <R> Patterns<R> of(){
+	    	if(patterns==null) patterns = new Patterns<R>();
+	    	return (Patterns<R>)patterns;
+	    }
+	    public Patterns() {
+			super();
+			this.leftRight = BinaryPattern.parse("_e5(_e3(_A,_e4(_B,_C)),_D)");
+			this.rightLeft = BinaryPattern.parse("_e3(_A,_e5(_e4(_B,_C),_D))");
+			this.leftLeft = BinaryPattern.parse("_e5(_e4(_e3(_A,_B),_C),_D)");
+			this.rightRight = BinaryPattern.parse("_e3(_A,_e4(_B,_e5(_C,_D)))");
+			this.result = BinaryPattern.parse("_e4(_e3(_A,_B),_e5(_C,_D))");
+		} 
 	}
 
 	public static class DepthPathBinaryTree<E> implements Iterator<BinaryTree<E>>, Iterable<BinaryTree<E>> {
@@ -209,7 +471,7 @@ public class BinaryTrees {
 			System.out.println(tree);
 		}
 	}
-
+	
 	public static void test2() {
 		BinaryTree<Integer> t1 = BinaryTree.empty();
 		BinaryTree<Integer> t2 = BinaryTree.leaf(2);
@@ -246,8 +508,8 @@ public class BinaryTrees {
 		BinaryTree<String> t8 = BinaryTree.parse(ex2);	
 		System.out.println(t7);
 		System.out.println(t8);
-		System.out.println(t7.equilibrateType());
-		System.out.println(t8.equilibrateType());
+		System.out.println(BinaryTrees.equilibrateType(t7));
+		System.out.println(BinaryTrees.equilibrateType(t8));
 		t7.toDot("ficheros/binary_tree.gv");
 		BinaryTree<String> t9 = t7.equilibrate();
 		BinaryTree<String> t10 = t8.equilibrate();
@@ -258,8 +520,44 @@ public class BinaryTrees {
 		System.out.println(t11);
 	}
 	
+	public static void test5() {
+		String ex = "4(2(1(0,_),3),7(5(_,6),10(9(8,_),11(_,12))))";
+		BinaryTree<Integer> t0 = BinaryTree.parse(ex, e->Integer.parseInt(e));
+		System.out.println(BinaryTrees.equilibrateType(t0));
+		System.out.println(BinaryTrees.isOrdered(t0,Comparator.naturalOrder()));
+		BinaryTree<Integer> t1 = BinaryTrees.addOrdered(t0,13,Comparator.naturalOrder());
+		System.out.println("t1 = "+t1);
+		System.out.println(BinaryTrees.equilibrateType(t1));
+		System.out.println(BinaryTrees.isOrdered(t1,Comparator.naturalOrder()));
+		t1.toDot("ficheros/t1.gv");
+		BinaryTree<Integer> t2 = switch(t1) {
+		case BEmpty<Integer> t -> t;
+		case BLeaf<Integer> t  -> t;
+		case BTree<Integer> t -> BinaryTree.binary(t.label(),t.left(),t.right().equilibrate());
+		};
+		System.out.println("t2 = "+t2);
+		System.out.println(BinaryTrees.equilibrateType(t2));
+		System.out.println(BinaryTrees.isOrdered(t2,Comparator.naturalOrder()));
+		t2.toDot("ficheros/t2.gv");
+		String t4 = "10(_,11(_,12(_,13)))";
+		BinaryTree<Integer> t42 = BinaryTree.parse(t4, e->Integer.parseInt(e));
+		BinaryTree<Integer> t43 = t42.equilibrate();
+		System.out.println("t43 = "+t43);
+		t43.toDot("ficheros/t43.gv");
+	}
+	
+	public static void test6() {
+		BinaryTree<Integer> tree = BinaryTree.empty();
+		for (int i = 0; i < 50 ; i++) {
+			tree = BinaryTrees.addOrdered(tree, i, Comparator.naturalOrder());
+//			System.out.println(tree.tree().height()+" == "+tree.tree());
+		}	
+		tree = BinaryTrees.equilibrate(tree);
+		tree.toDot("ficheros/avl_tree.gv");
+	}
+	
 	public static void main(String[] args) {
-		test4();
+		test6();
 	}
 	
 	

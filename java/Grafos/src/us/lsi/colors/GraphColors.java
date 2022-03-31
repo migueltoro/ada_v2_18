@@ -38,7 +38,7 @@ public class GraphColors {
 	
 	/**
 	 * @param c color
-	 * @return Un Map para ser añadido en un exportToDot.
+	 * @return Un Map para ser aï¿½adido en un exportToDot.
 	 */
 	public static Map<String,Attribute> color(Color c) {
 		String cl = c == Color.blank? "" : c.toString();

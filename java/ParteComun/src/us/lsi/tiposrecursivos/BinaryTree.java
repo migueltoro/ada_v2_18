@@ -1,5 +1,6 @@
 package us.lsi.tiposrecursivos;
 
+import java.util.Comparator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -7,7 +8,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import us.lsi.common.MutableType;
 import us.lsi.tiposrecursivos.BinaryTree.BEmpty;
 import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
 import us.lsi.tiposrecursivos.BinaryTree.BTree;
@@ -25,6 +25,8 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	BinaryTree<E> copy();
 	BinaryTree<E> reverse();
 	<R> BinaryTree<R> map(Function<E, R> f);
+	boolean isEmpty();
+	E label();
 	
 	public default Stream<BinaryTree<E>> byDeph() {
 		return BinaryTrees.byDeph(this);
@@ -47,6 +49,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	}
 	
 	public static <E> BinaryTree<E> binary(E label, BinaryTree<E> left, BinaryTree<E> right) {
+		if(left.isEmpty() && right.isEmpty()) return new BLeaf<E>(label);
 		return new BTree<E>(label,left,right);
 	}
 	
@@ -73,65 +76,22 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 		};
 	}
 	
+	public default Boolean containsLabel(E label) {
+		return BinaryTrees.containsLabel(this,label);
+	}
+	
+	public default Boolean isOrdered(Comparator<E> cmp) {
+		return BinaryTrees.isOrdered(this,cmp);
+	}
+	
 	public default BinaryTree<E> equilibrate() {
-		return BinaryTree.equilibrate(this);
-	}
-
-	public static <E> BinaryTree<E> equilibrate(BinaryTree<E> tree) {
-		Patterns<E> pt = Patterns.of();
-		MutableType<Boolean> r = MutableType.of(true);
-		BinaryTree<E> t = BinaryPattern.transform(tree, pt.leftLeft, pt.result, r);
-		if (r.value()) return t;
-		t = BinaryPattern.transform(tree, pt.leftRight, pt.result, r);
-		if (r.value()) return t;
-		t = BinaryPattern.transform(tree, pt.rightLeft, pt.result, r);
-		if (r.value()) return t;
-		t = BinaryPattern.transform(tree, pt.rightRight, pt.result, r);
-		if (r.value()) return t;
-		return t;
-	}   
-	
-	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
-	
-	public static <E> TypeEquilibrate equilibrateType(BinaryTree<E> tree) {
-		Patterns<E> pt = Patterns.of();
-		TypeEquilibrate r;
-		if(pt.leftRight.match(tree).match) r = TypeEquilibrate.LeftRight;
-		else if(pt.leftLeft.match(tree).match) r = TypeEquilibrate.LeftLeft;
-		else if(pt.rightLeft.match(tree).match) r = TypeEquilibrate.RightLeft;
-		else if(pt.rightRight.match(tree).match) r = TypeEquilibrate.RightRight;
-		else r = TypeEquilibrate.Equilibrate;
-		return r;
-	}
-	
-	public default TypeEquilibrate equilibrateType() {
-		return BinaryTree.equilibrateType(this);
-	}
-	
-	static class Patterns<R> {
-		BinaryPattern<R> leftRight; 
-	    BinaryPattern<R> rightLeft;
-	    BinaryPattern<R> leftLeft;
-	    BinaryPattern<R> rightRight;
-	    BinaryPattern<R> result;
-	    private static Patterns<?> patterns = null;
-	    @SuppressWarnings("unchecked")
-		public static <R> Patterns<R> of(){
-	    	if(patterns==null) patterns = new Patterns<R>();
-	    	return (Patterns<R>)patterns;
-	    }
-	    public Patterns() {
-			super();
-			this.leftRight = BinaryPattern.parse("_e5(_e3(_A,_e4(_B,_C)),_D)");
-			this.rightLeft = BinaryPattern.parse("_e3(_A,_e5(_e4(_B,_C),_D))");
-			this.leftLeft = BinaryPattern.parse("_e5(_e4(_e3(_A,_B),_C),_D)");
-			this.rightRight = BinaryPattern.parse("_e3(_A,_e4(_B,_e5(_C,_D)))");
-			this.result = BinaryPattern.parse("_e4(_e3(_A,_B),_e5(_C,_D))");
-		} 
+		return BinaryTrees.equilibrate(this);
 	}
 	
 	public static record BEmpty<E>() implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Empty;}
+		public boolean isEmpty() {return true;}
+		public E label() { return null; }
 		public int size() { return 0; }
 		public int height() { return 0; }
 		public BinaryTree<E> copy() { return BinaryTree.empty(); }
@@ -142,6 +102,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	
 	public static record BLeaf<E>(E label) implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Leaf;}
+		public boolean isEmpty() {return false;}
 		public int size() { return 1; }
 		public int height() { return 0; }
 		public BinaryTree<E> copy() { return BinaryTree.leaf(this.label()); }
@@ -153,6 +114,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	public static record BTree<E>(E label, BinaryTree<E> left, BinaryTree<E> right) 
 			implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Binary;}
+		public boolean isEmpty() {return false;}
 		public int size() { return 1+this.left().size()+this.right().size();}
 		public int height() {return 1 + Math.max(this.left().height(), this.right().height());}
 		public BinaryTree<E> copy() { return BinaryTree.binary(this.label(),this.left().copy(),this.right().copy()); }

@@ -2,6 +2,7 @@ package us.lsi.tiposrecursivos;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -18,7 +19,7 @@ public interface AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante el orden natural de E
 	 */
 	public static <E extends Comparable<? super E>> AVLTree<E> of() {
-		return new AVLTreeImpl<E>(BinaryTree.empty(), Comparator.naturalOrder());
+		return new AVLTreeI<E>(BinaryTree.empty(), Comparator.naturalOrder());
 	}
 	
 	/**
@@ -27,7 +28,7 @@ public interface AVLTree<E> {
 	 * @return Un &aacute;rbol binario vac&iacute;o cuyos elementos se ordenar&aacute;n mediante comparator
 	 */
 	public static <E> AVLTree<E> of(Comparator<E> comparator) {
-		return new AVLTreeImpl<E>(BinaryTree.empty(), comparator);
+		return new AVLTreeI<E>(BinaryTree.empty(), comparator);
 	}
 	
 
@@ -41,23 +42,27 @@ public interface AVLTree<E> {
 	 * @return Si contiene al elemento
 	 */
 	boolean contains(E e);
-
+		
+	
 	/**
-	 * @pre El &aacute;rbol no puede estar vac&iacute;o
-	 * @return El elemento m&aacute;s peque�o del &aacute;rbol
-	 */
-	E first();
-
-	/**
-	 * @pre El &aacute;rbol no puede estar vac&iacute;o
 	 * @return El elemento m&aacute;s grande del &aacute;rbol
 	 */
-	E last();
-
+	Optional<E> lastLabel();
+	
+	/**
+	 * @return El elemento m&aacute;s pequeño del &aacute;rbol
+	 */
+	Optional<E> firstLabel();
+	
 	/**
 	 * @return El n&uacute;mero de elementos
 	 */
 	int size();
+	
+	/**
+	 * @return La altura del arbol
+	 */
+	int height();
 
 	/**
 	 * @post El elemento est&aacute; contenido en el &aacute;rbol
@@ -123,5 +128,7 @@ public interface AVLTree<E> {
 	/**
 	 * @return El �rbol que implementa el AVLTree
 	 */
-	BinaryTree<E> getTree();
+	BinaryTree<E> tree();
+	
+	
 }
