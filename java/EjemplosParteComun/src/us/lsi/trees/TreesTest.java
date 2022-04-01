@@ -47,18 +47,13 @@ public class TreesTest {
 		};
 	}
 	
-	private static <E> E nLabel(Tree<E> tt) {
-		return switch (tt) {
-		case TEmpty<E> t -> null;
-		case TLeaf<E> t -> t.label();
-		case TNary<E> t -> t.label();
-		};
-	}
+	
 	
 	public static <E> E minLabel2(Tree<E> tree, Comparator<E> cmp) {
 		return tree.byDepth()
-		.map(tt -> nLabel(tt))
-		.filter(x-> x!= null)
+		.map(tt -> tt.optionalLabel())
+		.filter(x-> x.isPresent())
+		.map(x->x.get())
 		.min(cmp).get();
 	}
 	
@@ -74,11 +69,7 @@ public class TreesTest {
 	
 	public static <E> Boolean containsLabel2(Tree<E> tree, E label)  {
 		return tree.byDepth()
-				.anyMatch(tt->switch (tt) {
-				case TEmpty<E> t -> true;
-				case TLeaf<E> t -> t.label().equals(label);
-				case TNary<E> t -> t.label().equals(label);
-				});
+				.anyMatch(tt->tt.optionalLabel().isEmpty()?false:tt.optionalLabel().get().equals(label));
 	}
 	
 	public static <E> Boolean equals(Tree<E> t1, Tree<E> t2) {
@@ -142,8 +133,6 @@ public class TreesTest {
 	public static <E> Map<Integer,List<Tree<E>>> parNumeroDeHijos(Tree<E> tree) {
 		return tree.byDepth().collect(Collectors.groupingBy(t->t.numElements()));
 	}
-	
-	
 	
 	public static Set<String> palindromas(Tree<Character> tree) {
 		Set<String> st = Set2.of();
@@ -214,7 +203,7 @@ public class TreesTest {
 	}
 	
 	public static void main(String[] args) {
-		test1();
+		test2();
 	}
 
 }

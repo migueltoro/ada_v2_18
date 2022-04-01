@@ -82,11 +82,7 @@ public class BinaryTreesTest {
 	
 	public static Integer sumIfPredicate2(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
 		return tree.byDeph()
-		.map(t -> switch (tree) {
-		case BEmpty<Integer> s -> 0;
-		case BLeaf<Integer> s -> s.label();
-		case BTree<Integer> s -> s.label();
-		})
+		.map(t -> t.optionalLabel().orElse(0))
 		.filter(predicate)
 		.mapToInt(lb -> lb).sum();
 	}
@@ -164,7 +160,7 @@ public class BinaryTreesTest {
 	}
 
 	public static void main(String[] args) {
-		test1();
+		test2();
 	}
 	
 	

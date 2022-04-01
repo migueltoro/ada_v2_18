@@ -153,6 +153,11 @@ public class AVLTreeI<E> implements AVLTree<E>  {
 		return tree.toString();
 	}
 	
+	@Override
+	public BinaryTree<E> tree() {
+		return this.tree;
+	}
+	
 	public static void test1() {
 		AVLTree<Integer> tree = AVLTree.of();
 		for (int i = 0; i < 500 ; i++) {
@@ -166,6 +171,7 @@ public class AVLTreeI<E> implements AVLTree<E>  {
 		}	
 		String2.toConsole(String.format("%d,%d,%d", tree.firstLabel().get(),tree.lastLabel().get(),tree.height()));
 		String2.toConsole(String.format("%s",tree.toString()));
+		tree.tree().toDot("ficheros/avl_tree.gv");
 	}
 	
 	public static void test2() {
@@ -186,12 +192,9 @@ public class AVLTreeI<E> implements AVLTree<E>  {
 	}
 	
 	public static void main(String[] args) {
-		test1();
+		test2();
 	}
 
-	@Override
-	public BinaryTree<E> tree() {
-		return this.tree();
-	}
+	
 
 }

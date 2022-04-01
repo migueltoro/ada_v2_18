@@ -23,7 +23,6 @@ import org.jgrapht.nio.dot.DOTExporter;
 import us.lsi.common.Files2;
 import us.lsi.common.List2;
 import us.lsi.common.MutableType;
-import us.lsi.common.Preconditions;
 import us.lsi.streams.Stream2;
 import us.lsi.tiposrecursivos.BinaryTree.BEmpty;
 import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
@@ -282,70 +281,48 @@ public class BinaryTrees {
 		};
 	} 
 	
-	private static <E> List<BinaryTree<E>> nextExtendedLevel(List<BinaryTree<E>> ls) {
-		List<BinaryTree<E>> r = List2.empty();
-		for (BinaryTree<E> tree : ls) {
-			switch (tree) {
-			case BEmpty<E> t : 
-				r.add(BinaryTree.empty());
-				r.add(BinaryTree.empty());
-				break;
-			case BLeaf<E> t :
-				r.add(BinaryTree.empty());
-				r.add(BinaryTree.empty());
-				break;
-			case BTree<E> t :
-				r.add(t.left());
-				r.add(t.right());
-				break;
-			}
-		}
-		return r;
-	}
-	
-	public static <E> List<BinaryTree<E>> extendedLevel(BinaryTree<E> tree, int n){
-		List<BinaryTree<E>> r = List2.of(tree);
-		for(int i=0; i < n ; i++) {
-			r = nextExtendedLevel(r);
-		}
-		return r;
-	}
-	
-	public static <E> List<Integer> heights(BinaryTree<E> tree,int n){
-		return BinaryTrees.extendedLevel(tree,n).stream().map(x->x.height()).collect(Collectors.toList());
+	public static <E> BinaryTree<Integer> heights(BinaryTree<E> tree,int n){
+		return switch(tree) {
+		case BEmpty<E> t -> BinaryTree.leaf(0);
+		case BLeaf<E> t -> BinaryTree.leaf(0);
+		case BTree<E> t -> 
+			n==0? BinaryTree.binary(t.height(),BinaryTree.leaf(t.left().height()),BinaryTree.leaf(t.right().height())) :
+				BinaryTree.binary(t.height(),BinaryTrees.heights(t.left(),n-1),BinaryTrees.heights(t.right(),n-1));
+		};
 	}
 	
 	public static <E> TypeEquilibrate equilibrateType(BinaryTree<E> tree) {
-		
+		BinaryTree<Integer> h = heights(tree, 2);
 		TypeEquilibrate r = null;
-		List<Integer> n1 = BinaryTrees.heights(tree,1);
-		List<Integer> n2 = BinaryTrees.heights(tree,2);
-		int left = n1.get(0);
-		int right = n1.get(1);
-		int leftleft = n2.get(0);
-		int leftright = n2.get(1);	
-		int rightleft = n2.get(2);
-		int rightright = n2.get(3);
-		if (Math.abs(left - right) < 2) {
+		int left = 0, right = 0, leftleft = 0, leftright = 0, rightleft = 0, rightright = 0;
+		if (h instanceof BTree<Integer> t)
+			left = t.left().optionalLabel().orElse(0);
+		if (h instanceof BTree<Integer> t)
+			right = t.right().optionalLabel().orElse(0);
+		if (h instanceof BTree<Integer> t && t.left() instanceof BTree<Integer> tl)
+			leftleft = tl.left().optionalLabel().orElse(0);
+		if (h instanceof BTree<Integer> t && t.left() instanceof BTree<Integer> tl)
+			leftright = tl.right().optionalLabel().orElse(0);
+		if (h instanceof BTree<Integer> t && t.right() instanceof BTree<Integer> tr)
+			rightleft = tr.left().optionalLabel().orElse(0);
+		if (h instanceof BTree<Integer> t && t.right() instanceof BTree<Integer> tr)
+			rightright = tr.right().optionalLabel().orElse(0);
+		if (Math.abs(left - right) < 2)
 			r = TypeEquilibrate.Equilibrate;
-		} else if (left - right >= 2) {
-			if (leftleft >= leftright) {
+		else if (left - right >= 2) {
+			if (leftleft >= leftright)
 				r = TypeEquilibrate.LeftLeft;
-			} else {
+			else
 				r = TypeEquilibrate.LeftRight;
-			}
-		} else if (left - right < 2) {
-			if (rightleft >= rightright) {
+		} else {
+			if (rightleft >= rightright)
 				r = TypeEquilibrate.RightLeft;
-			} else {
+			else
 				r = TypeEquilibrate.RightRight;
-			}
 		}
-		Preconditions.checkArgument(r != null, String.format("%d,%d,%d,%d,%d,%d,%s", left, right, leftleft, leftright,
-				rightleft, rightright, tree.toString()));
 		return r;
 	}
-	
+
 	public enum TypeEquilibrate{LeftRight, LeftLeft, RightLeft, RightRight, Equilibrate} 
 	
 	static class Patterns<R> {
