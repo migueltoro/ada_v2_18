@@ -104,3 +104,8 @@ exp : op='(int)' right=exp #unaryOpExpr
  DOUBLE : INT '.' INT? ; 
  
  WS : [ \t\r\n]+ -> skip ; 
+ 
+ COMMENT : '/*' .*? '*/' -> skip ;
+
+ LINE_COMMENT : '//' ~[\r\n]* -> skip
+;

@@ -51,6 +51,8 @@ ID=50
 INT=51
 DOUBLE=52
 WS=53
+COMMENT=54
+LINE_COMMENT=55
 'head section'=1
 '='=2
 '('=3

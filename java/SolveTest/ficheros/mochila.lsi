@@ -12,15 +12,19 @@ Integer n = getN()
 
 goal section
 
-max  sum(getValor(i) x[i], i in 0 .. n)
+max  sum(getValor(i) x[i], i in 0 .. n)  // comentarios
 
 constraints section
 
-sum(getPeso(i) x[i], i in 0 .. n) <= CI
+/*
+Otros comentarios
+*/
+
+sum(getPeso(i) x[i], i in 0 .. n) < CI
 
 bounds section
 
-x[i] <= getNMU(i), i in 0 .. n
+x[i] < getNMU(i), i in 0 .. n
 
 int  
 

@@ -361,7 +361,7 @@ public class AuxGrammar {
 	
 	public static Object result(String name, Object... parameters) {
 		Method m = functions.get(name);
-		Preconditions.checkNotNull(m,String.format("Método %s no encontrado",name));
+		Preconditions.checkNotNull(m,String.format("Mï¿½todo %s no encontrado",name));
 		Preconditions.checkNotNull(parameters,String.format("Parameters null"));	
 		Object r = null;
 		try {
@@ -371,22 +371,22 @@ public class AuxGrammar {
 			r = m.invoke(null,parameters);
 		} catch (IllegalAccessException e) {
 			Preconditions.checkNotNull(false,
-					String.format("IllegalAccessException en el método %s con %s",
+					String.format("IllegalAccessException en el mï¿½todo %s con %s",
 							name,AuxGrammar.toString(parameters)));
 		} catch (IllegalArgumentException e) {
 			Preconditions.checkNotNull(false,
-					String.format("IllegalArgumentException en el método %s con %s",
+					String.format("IllegalArgumentException en el mï¿½todo %s con %s",
 							name,AuxGrammar.toString(parameters)));
 		} catch (InvocationTargetException e) {
 			Preconditions.checkNotNull(false,
-					String.format("InvocationTargetException en el método %s con %s",
+					String.format("InvocationTargetException en el mï¿½todo %s con %s",
 							name,AuxGrammar.toString(parameters)));
 		}  catch (NullPointerException e) {
 			Preconditions.checkNotNull(false,
-					String.format("NullPointerException en el método %s con %s",
+					String.format("NullPointerException en el mï¿½todo %s con %s",
 							name,AuxGrammar.toString(parameters)));
 		}
-		Preconditions.checkNotNull(r,String.format("El resultado de invocar el método %s con %s es null",
+		Preconditions.checkNotNull(r,String.format("El resultado de invocar el mï¿½todo %s con %s es null",
 				name,AuxGrammar.toString(parameters)));
 	    return r;
 	}
@@ -401,10 +401,10 @@ public class AuxGrammar {
 		try {
 			m = AuxGrammar.dataClass.getDeclaredMethod(name,lc);
 		} catch (NoSuchMethodException e) {
-			Preconditions.checkArgument(false,String.format("Método no encontrado %s %s",
+			Preconditions.checkArgument(false,String.format("Mï¿½todo no encontrado %s %s",
 					name,AuxGrammar.toString(parameters)));
 		} catch (SecurityException e) {
-			Preconditions.checkArgument(false,String.format("Excepción de seguridad en %s %s",name,
+			Preconditions.checkArgument(false,String.format("Excepciï¿½n de seguridad en %s %s",name,
 					AuxGrammar.toString(parameters)));
 		}	
 		return m;
@@ -492,6 +492,9 @@ public class AuxGrammar {
 	    PLIModelParser parser = new PLIModelParser(new CommonTokenStream(lexer));
 	    ParseTree tree = parser.model();
 	    String answer = asString(tree.accept(new PLIModelVisitorC()));
+	    System.out.println("\n ==================== \n"
+	    		+ "Tenga en cuenta que el formato intermedio LP no distingue entre desigualdades estrictas y no estrictas en las restricciones "
+				+ "\nPor lo que, por ejemplo, < y <= son equivalentes. \n ==================== \n");
 	    Files2.toFile(answer,outFile);
 	}
 	

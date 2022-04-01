@@ -1,4 +1,4 @@
-// Generated from PLIModel.g4 by ANTLR 4.9.2
+// Generated from PLIModel.g4 by ANTLR 4.9.3
 package us.lsi.model_test;
 
 import org.antlr.v4.runtime.atn.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class PLIModelParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.9.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.9.3", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -24,7 +24,8 @@ public class PLIModelParser extends Parser {
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
 		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
-		T__45=46, T__46=47, T__47=48, T__48=49, ID=50, INT=51, DOUBLE=52, WS=53;
+		T__45=46, T__46=47, T__47=48, T__48=49, ID=50, INT=51, DOUBLE=52, WS=53, 
+		COMMENT=54, LINE_COMMENT=55;
 	public static final int
 		RULE_model = 0, RULE_head = 1, RULE_declaration = 2, RULE_formal_parameters = 3, 
 		RULE_formal_parameter = 4, RULE_goal = 5, RULE_constraints = 6, RULE_c_list = 7, 
@@ -64,7 +65,7 @@ public class PLIModelParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, "ID", "INT", "DOUBLE", "WS"
+			null, null, "ID", "INT", "DOUBLE", "WS", "COMMENT", "LINE_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -147,6 +148,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_model; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterModel(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitModel(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitModel(this);
@@ -250,6 +259,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_head; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterHead(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitHead(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitHead(this);
 			else return visitor.visitChildren(this);
@@ -315,6 +332,14 @@ public class PLIModelParser extends Parser {
 		}
 		public FunDeclarContext(DeclarationContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFunDeclar(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFunDeclar(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFunDeclar(this);
 			else return visitor.visitChildren(this);
@@ -332,6 +357,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ExpContext.class,0);
 		}
 		public VarDeclarContext(DeclarationContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterVarDeclar(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitVarDeclar(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitVarDeclar(this);
@@ -410,6 +443,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_formal_parameters; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFormal_parameters(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFormal_parameters(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFormal_parameters(this);
 			else return visitor.visitChildren(this);
@@ -465,6 +506,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_formal_parameter; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFormal_parameter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFormal_parameter(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFormal_parameter(this);
@@ -522,6 +571,14 @@ public class PLIModelParser extends Parser {
 		}
 		public GoalSectionContext(GoalContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterGoalSection(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitGoalSection(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitGoalSection(this);
 			else return visitor.visitChildren(this);
@@ -575,6 +632,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraints; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterConstraints(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitConstraints(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitConstraints(this);
@@ -635,6 +700,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_c_list; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterC_list(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitC_list(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitC_list(this);
@@ -712,6 +785,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_list; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterList(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitList(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitList(this);
 			else return visitor.visitChildren(this);
@@ -782,6 +863,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_indx; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIndx(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIndx(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIndx(this);
 			else return visitor.visitChildren(this);
@@ -831,6 +920,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_indexed_elem; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIndexed_elem(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIndexed_elem(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIndexed_elem(this);
@@ -901,6 +998,14 @@ public class PLIModelParser extends Parser {
 		}
 		public DifferentValueConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterDifferentValueConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitDifferentValueConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitDifferentValueConstraint(this);
 			else return visitor.visitChildren(this);
@@ -918,6 +1023,14 @@ public class PLIModelParser extends Parser {
 		}
 		public AtomConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterAtomConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitAtomConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitAtomConstraint(this);
 			else return visitor.visitChildren(this);
@@ -933,6 +1046,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public MaxConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterMaxConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitMaxConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitMaxConstraint(this);
@@ -950,6 +1071,14 @@ public class PLIModelParser extends Parser {
 		}
 		public OrBinConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterOrBinConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitOrBinConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitOrBinConstraint(this);
 			else return visitor.visitChildren(this);
@@ -965,6 +1094,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public MinConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterMinConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitMinConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitMinConstraint(this);
@@ -982,6 +1119,14 @@ public class PLIModelParser extends Parser {
 		}
 		public EqualsConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterEqualsConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitEqualsConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitEqualsConstraint(this);
 			else return visitor.visitChildren(this);
@@ -997,6 +1142,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public ValueInValuesConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterValueInValuesConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitValueInValuesConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitValueInValuesConstraint(this);
@@ -1014,6 +1167,14 @@ public class PLIModelParser extends Parser {
 		}
 		public AllInValuesConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterAllInValuesConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitAllInValuesConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitAllInValuesConstraint(this);
 			else return visitor.visitChildren(this);
@@ -1025,6 +1186,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public AllDifferentValuesConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterAllDifferentValuesConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitAllDifferentValuesConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitAllDifferentValuesConstraint(this);
@@ -1042,6 +1211,14 @@ public class PLIModelParser extends Parser {
 		}
 		public AbsConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterAbsConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitAbsConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitAbsConstraint(this);
 			else return visitor.visitChildren(this);
@@ -1058,6 +1235,14 @@ public class PLIModelParser extends Parser {
 		public TerminalNode INT() { return getToken(PLIModelParser.INT, 0); }
 		public IndicatorConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIndicatorConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIndicatorConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIndicatorConstraint(this);
 			else return visitor.visitChildren(this);
@@ -1073,6 +1258,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ConstraintContext.class,i);
 		}
 		public ImplyConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterImplyConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitImplyConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitImplyConstraint(this);
@@ -1092,6 +1285,14 @@ public class PLIModelParser extends Parser {
 		}
 		public TerminalNode INT() { return getToken(PLIModelParser.INT, 0); }
 		public OrConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterOrConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitOrConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitOrConstraint(this);
@@ -1116,6 +1317,14 @@ public class PLIModelParser extends Parser {
 		}
 		public PiecewiseConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterPiecewiseConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitPiecewiseConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitPiecewiseConstraint(this);
 			else return visitor.visitChildren(this);
@@ -1131,6 +1340,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public AndBinConstraintContext(ConstraintContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterAndBinConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitAndBinConstraint(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitAndBinConstraint(this);
@@ -1488,6 +1705,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_pair; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterPair(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitPair(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitPair(this);
 			else return visitor.visitChildren(this);
@@ -1546,6 +1771,14 @@ public class PLIModelParser extends Parser {
 		}
 		public FactorGenerateExpContext(Generate_expContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFactorGenerateExp(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFactorGenerateExp(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFactorGenerateExp(this);
 			else return visitor.visitChildren(this);
@@ -1562,6 +1795,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(S_factorContext.class,i);
 		}
 		public SumGenerateExpContext(Generate_expContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterSumGenerateExp(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitSumGenerateExp(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitSumGenerateExp(this);
@@ -1666,6 +1907,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_generate_exps; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterGenerate_exps(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitGenerate_exps(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitGenerate_exps(this);
 			else return visitor.visitChildren(this);
@@ -1716,6 +1965,14 @@ public class PLIModelParser extends Parser {
 		}
 		public MinusSumContext(S_factorContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterMinusSum(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitMinusSum(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitMinusSum(this);
 			else return visitor.visitChildren(this);
@@ -1726,6 +1983,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(FactorContext.class,0);
 		}
 		public PlusFactorContext(S_factorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterPlusFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitPlusFactor(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitPlusFactor(this);
@@ -1738,6 +2003,14 @@ public class PLIModelParser extends Parser {
 		}
 		public MinusFactorContext(S_factorContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterMinusFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitMinusFactor(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitMinusFactor(this);
 			else return visitor.visitChildren(this);
@@ -1748,6 +2021,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(ListContext.class,0);
 		}
 		public PlusSumContext(S_factorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterPlusSum(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitPlusSum(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitPlusSum(this);
@@ -1844,6 +2125,14 @@ public class PLIModelParser extends Parser {
 		}
 		public ExpFactorContext(FactorContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterExpFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitExpFactor(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitExpFactor(this);
 			else return visitor.visitChildren(this);
@@ -1854,6 +2143,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(Var_idContext.class,0);
 		}
 		public VarIdFactorContext(FactorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterVarIdFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitVarIdFactor(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitVarIdFactor(this);
@@ -1868,6 +2165,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(Var_idContext.class,0);
 		}
 		public VarFactorContext(FactorContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterVarFactor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitVarFactor(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitVarFactor(this);
@@ -1932,6 +2237,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_var_id; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterVar_id(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitVar_id(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitVar_id(this);
 			else return visitor.visitChildren(this);
@@ -1986,6 +2299,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_var_ids; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterVar_ids(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitVar_ids(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitVar_ids(this);
 			else return visitor.visitChildren(this);
@@ -2030,6 +2351,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_index_var_id; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIndex_var_id(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIndex_var_id(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIndex_var_id(this);
@@ -2101,6 +2430,14 @@ public class PLIModelParser extends Parser {
 		}
 		public TwoSideBoundContext(BoundContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterTwoSideBound(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitTwoSideBound(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitTwoSideBound(this);
 			else return visitor.visitChildren(this);
@@ -2119,6 +2456,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(Rel_opContext.class,0);
 		}
 		public OneSideBoundContext(BoundContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterOneSideBound(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitOneSideBound(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitOneSideBound(this);
@@ -2186,6 +2531,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_bounds; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterBounds(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitBounds(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitBounds(this);
 			else return visitor.visitChildren(this);
@@ -2239,6 +2592,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_bin_vars; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterBin_vars(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitBin_vars(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitBin_vars(this);
@@ -2294,6 +2655,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_int_vars; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterInt_vars(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitInt_vars(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitInt_vars(this);
 			else return visitor.visitChildren(this);
@@ -2348,6 +2717,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_free_vars; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFree_vars(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFree_vars(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFree_vars(this);
 			else return visitor.visitChildren(this);
@@ -2401,6 +2778,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_semi_continuous_vars; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterSemi_continuous_vars(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitSemi_continuous_vars(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitSemi_continuous_vars(this);
@@ -2463,6 +2848,14 @@ public class PLIModelParser extends Parser {
 		}
 		public UnaryOpExprContext(ExpContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterUnaryOpExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitUnaryOpExpr(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitUnaryOpExpr(this);
 			else return visitor.visitChildren(this);
@@ -2471,6 +2864,14 @@ public class PLIModelParser extends Parser {
 	public static class IntExprContext extends ExpContext {
 		public TerminalNode INT() { return getToken(PLIModelParser.INT, 0); }
 		public IntExprContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIntExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIntExpr(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIntExpr(this);
@@ -2489,6 +2890,14 @@ public class PLIModelParser extends Parser {
 		}
 		public OpExprContext(ExpContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterOpExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitOpExpr(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitOpExpr(this);
 			else return visitor.visitChildren(this);
@@ -2499,6 +2908,14 @@ public class PLIModelParser extends Parser {
 			return getRuleContext(Call_functionContext.class,0);
 		}
 		public FunExprContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterFunExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitFunExpr(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitFunExpr(this);
@@ -2511,6 +2928,14 @@ public class PLIModelParser extends Parser {
 		}
 		public ParenExprContext(ExpContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterParenExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitParenExpr(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitParenExpr(this);
 			else return visitor.visitChildren(this);
@@ -2519,6 +2944,14 @@ public class PLIModelParser extends Parser {
 	public static class DoubleExpContext extends ExpContext {
 		public TerminalNode DOUBLE() { return getToken(PLIModelParser.DOUBLE, 0); }
 		public DoubleExpContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterDoubleExp(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitDoubleExp(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitDoubleExp(this);
@@ -2529,6 +2962,14 @@ public class PLIModelParser extends Parser {
 		public Token id;
 		public TerminalNode ID() { return getToken(PLIModelParser.ID, 0); }
 		public IdExprContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterIdExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitIdExpr(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitIdExpr(this);
@@ -2801,6 +3242,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_call_function; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterCall_function(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitCall_function(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitCall_function(this);
 			else return visitor.visitChildren(this);
@@ -2855,6 +3304,14 @@ public class PLIModelParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_exps; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterExps(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitExps(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitExps(this);
 			else return visitor.visitChildren(this);
@@ -2906,6 +3363,14 @@ public class PLIModelParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_rel_op; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).enterRel_op(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PLIModelListener ) ((PLIModelListener)listener).exitRel_op(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PLIModelVisitor ) return ((PLIModelVisitor<? extends T>)visitor).visitRel_op(this);
@@ -2976,9 +3441,9 @@ public class PLIModelParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\67\u01af\4\2\t\2"+
-		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
-		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\39\u01af\4\2\t\2\4"+
+		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\3\2\5\2@"+
 		"\n\2\3\2\3\2\3\2\5\2E\n\2\3\2\5\2H\n\2\3\2\5\2K\n\2\3\2\5\2N\n\2\3\2\5"+

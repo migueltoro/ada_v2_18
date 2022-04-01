@@ -12,7 +12,11 @@ Integer n = getN()
 
 goal section
 
-max  sum(getValor(i) x[i], i in 0 .. n)
+/*
+Comentarios
+*/
+
+max  sum(getValor(i) x[i], i in 0 .. n) //mas comentarios
 
 constraints section
 

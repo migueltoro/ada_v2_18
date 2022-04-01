@@ -17,8 +17,12 @@ public class AuxGrammar2 {
 		AuxGrammar.dataClass = dataClass;
 	    PLIModelLexer lexer = new PLIModelLexer(CharStreams.fromFileName(model));
 	    PLIModelParser parser = new PLIModelParser(new CommonTokenStream(lexer));
+	    
 	    ParseTree tree = parser.model();
 	    String answer = AuxGrammar.asString(tree.accept(new PLIModelVisitorC()));
+	    System.out.println("\n ==================== \n"
+	    		+ "Tenga en cuenta que el formato LP no distingue entre desigualdades estrictas y no estrictas en las restricciones "
+				+ "\nPor lo que, por ejemplo, < y <= son equivalentes. \n ==================== \n");
 	    Files2.toFile(answer,outFile);
 	}
 

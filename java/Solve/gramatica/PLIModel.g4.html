@@ -164,6 +164,8 @@ footer {
   <li><a href="#INT">INT</a></li>
   <li><a href="#DOUBLE">DOUBLE</a></li>
   <li><a href="#WS">WS</a></li>
+  <li><a href="#COMMENT">COMMENT</a></li>
+  <li><a href="#LINE_COMMENT">LINE_COMMENT</a></li>
 </ol>
 </div>
 
@@ -745,6 +747,40 @@ footer {
   <div class="railroad">
   <h4>Visual notation:</h4>
   <img border="0" src="images/WS.png" />
+  </div>
+  </li>
+  <li class="rule" id="COMMENT">
+  <h3>COMMENT <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">COMMENT</span> :  <span class="literal">'/*'</span> <span class="operator">.</span><span class="operator">*</span><span class="operator">?</span> <span class="literal">'*/'</span> <span class="operator">-></span> <a href="#skip" class="rule">skip</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/COMMENT.png" />
+  </div>
+  </li>
+  <li class="rule" id="LINE_COMMENT">
+  <h3>LINE_COMMENT <a class="topLink" title="Go to top" href="PLIModel.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">LINE_COMMENT</span> :  <span class="literal">'//'</span> <span class="operator">~</span>[<span class="literal">\r\n</span>]<span class="operator">*</span> <span class="operator">-></span> <a href="#skip" class="rule">skip</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/LINE_COMMENT.png" />
   </div>
   </li>
 </ul>
