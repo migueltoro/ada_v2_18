@@ -38,12 +38,6 @@ public class AVLTreeI<E> implements AVLTree<E>  {
 		this.comparator = comparator;
 		this.tree = tree;
 	}	
-	
-	
-	@Override
-	public BinaryTree<E> tree() {
-		return this.tree;
-	}
 
 	@Override
 	public boolean isEmpty() {
@@ -193,6 +187,11 @@ public class AVLTreeI<E> implements AVLTree<E>  {
 	
 	public static void main(String[] args) {
 		test1();
+	}
+
+	@Override
+	public BinaryTree<E> tree() {
+		return this.tree();
 	}
 
 }

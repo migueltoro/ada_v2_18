@@ -124,11 +124,6 @@ public interface AVLTree<E> {
 	 * @return Una copia del &aacute;rbol
 	 */
 	AVLTree<E> copy();
-
-	/**
-	 * @return El �rbol que implementa el AVLTree
-	 */
+	
 	BinaryTree<E> tree();
-	
-	
 }
