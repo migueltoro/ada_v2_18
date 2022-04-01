@@ -1,6 +1,7 @@
 package us.lsi.tiposrecursivos;
 
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	BinaryTree<E> reverse();
 	<R> BinaryTree<R> map(Function<E, R> f);
 	boolean isEmpty();
-	E label();
+	Optional<E> optionalLabel();
 	
 	public default Stream<BinaryTree<E>> byDeph() {
 		return BinaryTrees.byDeph(this);
@@ -91,7 +92,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	public static record BEmpty<E>() implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Empty;}
 		public boolean isEmpty() {return true;}
-		public E label() { return null; }
+		public Optional<E> optionalLabel() { return Optional.empty(); }
 		public int size() { return 0; }
 		public int height() { return 0; }
 		public BinaryTree<E> copy() { return BinaryTree.empty(); }
@@ -103,6 +104,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 	public static record BLeaf<E>(E label) implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Leaf;}
 		public boolean isEmpty() {return false;}
+		public Optional<E> optionalLabel() { return Optional.of(this.label()); }
 		public int size() { return 1; }
 		public int height() { return 0; }
 		public BinaryTree<E> copy() { return BinaryTree.leaf(this.label()); }
@@ -115,6 +117,7 @@ public sealed interface BinaryTree<E> permits BEmpty<E>,BLeaf<E>,BTree<E> {
 			implements BinaryTree<E> {
 		public BinaryType type() { return BinaryType.Binary;}
 		public boolean isEmpty() {return false;}
+		public Optional<E> optionalLabel() { return Optional.of(this.label()); }
 		public int size() { return 1+this.left().size()+this.right().size();}
 		public int height() {return 1 + Math.max(this.left().height(), this.right().height());}
 		public BinaryTree<E> copy() { return BinaryTree.binary(this.label(),this.left().copy(),this.right().copy()); }

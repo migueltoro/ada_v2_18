@@ -93,8 +93,9 @@ public class BinaryTreesTest {
 
 	public static Boolean sumaEtiquetas(BinaryTree<Integer> tree) {
 		return tree.byDeph()
-				.filter(e->e instanceof BTree<Integer> t && t.left().isEmpty() && t.right().isEmpty())
-				.allMatch(e->e instanceof BTree<Integer> t && t.label().equals(t.left().label()+t.right().label()));
+				.filter(e->e instanceof BTree<Integer> t && !t.left().isEmpty() && !t.right().isEmpty())
+				.allMatch(e->e instanceof BTree<Integer> t && 
+						t.label().equals(t.left().optionalLabel().get()+t.right().optionalLabel().get()));
 	}
 	
 	public static Boolean existeLista(BinaryTree<Character> tree, List<Character> ls) {

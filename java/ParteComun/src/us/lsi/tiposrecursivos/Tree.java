@@ -4,6 +4,7 @@ package us.lsi.tiposrecursivos;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,6 +69,7 @@ public sealed interface Tree<E> permits TEmpty<E>, TLeaf<E>, TNary<E>{
 	List<Tree<E>> elements();
 	int numElements();
 	boolean equals(Object obj);
+	Optional<E> optionalLabel();
 	
 	public default Stream<Tree<E>> byDepth(){
 		return Trees.byDeph(this);
@@ -88,6 +90,7 @@ public sealed interface Tree<E> permits TEmpty<E>, TLeaf<E>, TNary<E>{
 	public static record TEmpty<E>() implements Tree<E> {
 		public TreeType type() { return TreeType.Empty;}
 		public boolean isEmpty() {return true;};
+		public Optional<E> optionalLabel() { return Optional.empty(); }
 		public List<Tree<E>> elements() {return new ArrayList<>();}
 		public int size() { return 0; }
 		public int height() { return 0; }
@@ -101,6 +104,7 @@ public sealed interface Tree<E> permits TEmpty<E>, TLeaf<E>, TNary<E>{
 	public static record TLeaf<E>(E label) implements Tree<E> {
 		public TreeType type() { return TreeType.Leaf;}
 		public boolean isEmpty() {return false;};
+		public Optional<E> optionalLabel() { return Optional.of(this.label()); }
 		public List<Tree<E>> elements() {return new ArrayList<>();}
 		public int size() { return 1; }
 		public int height() { return 0; }
@@ -114,6 +118,7 @@ public sealed interface Tree<E> permits TEmpty<E>, TLeaf<E>, TNary<E>{
 	public static record TNary<E>(E label, List<Tree<E>> elements) implements Tree<E> {
 		public TreeType type() { return TreeType.Nary;}
 		public boolean isEmpty() {return false;};
+		public Optional<E> optionalLabel() { return Optional.of(this.label()); }
 		public int size() { return  1+(int)elements().stream().mapToInt(x->x.size()).sum();}
 		public int height() {return 1+ elements.stream().mapToInt(x->x.height()).max().getAsInt();}
 		public Tree<E> copy() { return Tree.nary(label(),elements().stream().map(x->x.copy()).toList()); }
