@@ -2,6 +2,7 @@ package us.lsi.alg.mochila.manual;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -28,13 +29,15 @@ public class MochilaAStar {
 	public Map<MochilaProblem,Handle<Double,AStarMochila>> tree;
 	public FibonacciHeap<Double,AStarMochila> heap; 
 	public Boolean goal;
+	public Comparator<Double> cmp;
 	
 	private MochilaAStar(MochilaProblem start) {
 		super();
 		this.start = start;
 		Double distanceToEnd = Heuristica.heuristica(start);
 		AStarMochila a = AStarMochila.of(start, null,null,0.);
-		this.heap = new FibonacciHeap<>();
+		this.cmp = Comparator.reverseOrder();
+		this.heap = new FibonacciHeap<>(cmp);
 		Handle<Double, AStarMochila> h = this.heap.insert(distanceToEnd,a);
 		this.tree = new HashMap<>();
 		this.tree.put(start,h);
@@ -62,13 +65,13 @@ public class MochilaAStar {
 			vertexActual = dataActual.vertex();
 			for (Integer a : vertexActual.acciones()) {
 				MochilaProblem v = vertexActual.vecino(a);
-				Double newDistance = dataActual.distanceToOrigin()-a*DatosMochila.valor(vertexActual.index());
-				Double newDistanceToEnd = newDistance - Heuristica.heuristica(v);				
+				Double newDistance = dataActual.distanceToOrigin()+a*DatosMochila.valor(vertexActual.index());
+				Double newDistanceToEnd = newDistance + Heuristica.heuristica(v);				
 				if (!tree.containsKey(v)) {	
 					AStarMochila ac = AStarMochila.of(v, a, vertexActual, newDistance);
 					Handle<Double, AStarMochila> nh = heap.insert(newDistanceToEnd,ac);
 					tree.put(v,nh);	
-				}else if (newDistance < tree.get(v).getValue().distanceToOrigin()) {
+				}else if (cmp.compare(newDistance, tree.get(v).getValue().distanceToOrigin()) <0 ) {
 					AStarMochila ac = AStarMochila.of(v, a, vertexActual, newDistance);
 					Handle<Double, AStarMochila> hv = tree.get(v);
 					hv.setValue(ac);
