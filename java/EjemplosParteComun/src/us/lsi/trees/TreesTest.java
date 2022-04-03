@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import us.lsi.common.Set2;
 import us.lsi.common.String2;
@@ -18,7 +17,6 @@ import us.lsi.tiposrecursivos.Tree;
 import us.lsi.tiposrecursivos.Tree.TEmpty;
 import us.lsi.tiposrecursivos.Tree.TLeaf;
 import us.lsi.tiposrecursivos.Tree.TNary;
-
 
 
 public class TreesTest {
@@ -34,22 +32,16 @@ public class TreesTest {
 	public static <E> Integer size2(Tree<E> tree) {
 		return (int)tree.byDepth().filter(t->!t.isEmpty()).count();
 	}
-
-	public static <E> E minLabel(Tree<E> tree, Comparator<E> cmp) {
-		return switch (tree) {
-		case TEmpty<E> t -> null;
-		case TLeaf<E> t -> t.label();
-		case TNary<E> t -> {
-			E rl = t.label();
-			E r = t.elements().stream().map(x -> minLabel(x, cmp)).filter(x -> x != null).min(cmp).get();
-			yield r == null ? rl : Stream.of(rl, r).min(cmp).get();
-		}
-		};
+	
+	public static <E> Integer height(Tree<E> tree) {
+		return switch(tree) {
+		case TEmpty<E> t -> 0; 
+		case TLeaf<E> t -> 0; 
+		case TNary<E> t -> 1+ tree.elements().stream().mapToInt(x->x.height()).max().getAsInt(); 
+		};	
 	}
 	
-	
-	
-	public static <E> E minLabel2(Tree<E> tree, Comparator<E> cmp) {
+	public static <E> E minLabel(Tree<E> tree, Comparator<E> cmp) {
 		return tree.byDepth()
 		.map(tt -> tt.optionalLabel())
 		.filter(x-> x.isPresent())
@@ -133,6 +125,7 @@ public class TreesTest {
 	public static <E> Map<Integer,List<Tree<E>>> parNumeroDeHijos(Tree<E> tree) {
 		return tree.byDepth().collect(Collectors.groupingBy(t->t.numElements()));
 	}
+
 	
 	public static Set<String> palindromas(Tree<Character> tree) {
 		Set<String> st = Set2.of();
@@ -187,7 +180,6 @@ public class TreesTest {
 		Tree<Integer> t7 = Tree.parse("34(2,27(_,2,3,4),9(8,_))").map(e->Integer.parseInt(e));	
 		System.out.println(t7);
 		System.out.println(minLabel(t7,Comparator.naturalOrder()));
-		System.out.println(minLabel2(t7,Comparator.naturalOrder()));
 		Predicate<Tree<Integer>> pd = t->t.isEmpty() || t instanceof TLeaf<Integer> s &&  s.label()%2==0
 				|| t instanceof TNary<Integer> s &&  s.label()%2==0;
 		String2.toConsole("%s",niveles(t7,pd));

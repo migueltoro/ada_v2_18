@@ -68,9 +68,7 @@ public class BinaryTreesTest {
 		}
 		};
 	}
-	
-	
-	
+
 	public static Integer sumIfPredicate(BinaryTree<Integer> tree, Predicate<Integer> predicate) {
 		return switch (tree) {
 		case BEmpty<Integer> t -> 0;
@@ -104,6 +102,13 @@ public class BinaryTreesTest {
 		};
 	}
 	
+	public static record TT(Integer p, List<Integer> ls) {
+		public static TT of(List<Integer> ls) {
+			Integer p = ls.stream().reduce(1,(x,y)->x*y);
+			return new TT(p,ls);
+		}
+	}
+	
 	public static TT maxCamino(BinaryTree<Integer> tree) {
 		return maxCamino(tree,List.of());
 	}
@@ -111,14 +116,9 @@ public class BinaryTreesTest {
 	public static TT maxCamino(BinaryTree<Integer> tree, List<Integer> camino) {
 		return switch(tree) {	
 		case BEmpty<Integer> t -> null;
-		case BLeaf<Integer> t  -> {
-			Integer label = t.label();
-			camino = List2.addLast(camino,label);
-			yield TT.of(camino);
-		}
-		case BTree<Integer> t  -> {
-			Integer label = t.label();
-			camino = List2.addLast(camino,label);
+		case BLeaf<Integer> t -> TT.of(List2.addLast(camino,t.label()));
+		case BTree<Integer> t -> {
+			camino = List2.addLast(camino,t.label());
 			TT left = maxCamino(t.left(),camino);
 			TT right = maxCamino(t.right(),camino);
 			yield Stream.of(left,right).filter(x->x!=null).max(Comparator.comparing(x->x.p())).orElse(null);
@@ -143,13 +143,6 @@ public class BinaryTreesTest {
 		System.out.println(sumIfPredicate(tree3,x->x%2==0));
 		BinaryTree<Integer> tree4 = copy(tree);
 		System.out.println(equals(tree,tree4));
-	}
-
-	public static record TT(Integer p, List<Integer> ls) {
-		public static TT of(List<Integer> ls) {
-			Integer p = ls.stream().reduce(1,(x,y)->x*y);
-			return new TT(p,ls);
-		}
 	}
 	
 	public static void test2() {

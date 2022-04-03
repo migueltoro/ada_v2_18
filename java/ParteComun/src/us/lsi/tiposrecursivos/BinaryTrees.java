@@ -29,6 +29,7 @@ import us.lsi.tiposrecursivos.BinaryTree.BLeaf;
 import us.lsi.tiposrecursivos.BinaryTree.BTree;
 
 
+
 public class BinaryTrees {
 
 
@@ -112,14 +113,14 @@ public class BinaryTrees {
 		de.exportGraph(graph, f1);
 	}
 	
-	public static <E> E minLabel(BinaryTree<E> tree, Comparator<E> cmp) {
+	public static <E> Optional<E> minLabel(BinaryTree<E> tree, Comparator<Optional<E>> cmp) {
 		return switch (tree) {
-		case BEmpty<E>  t -> null;
-		case BLeaf<E>  t -> t.label();
+		case BEmpty<E>  t -> Optional.empty();
+		case BLeaf<E>  t -> Optional.of(t.label());
 		case BTree<E>  t -> {
-			E e1 = minLabel(t.left(), cmp);
-			E e2 = minLabel(t.right(), cmp);
-			yield Stream.of(t.label(),e1, e2).filter(e->e!=null).min(cmp).get();
+			Optional<E> e1 = minLabel(t.left(), cmp);
+			Optional<E> e2 = minLabel(t.right(), cmp);
+			yield Stream.of(Optional.of(t.label()),e1, e2).filter(e->!e.isEmpty()).min(cmp).get();
 		}
 		};
 	}
@@ -145,6 +146,13 @@ public class BinaryTrees {
 	}
 	
 	public static <E> Boolean containsLabel(BinaryTree<E> tree, E label) {
+		return tree.byDeph()
+				.filter(t->!t.isEmpty())
+				.map(t->t.optionalLabel().get())
+				.anyMatch(e->e.equals(label));
+	}
+	
+	public static <E> Boolean containsLabelr(BinaryTree<E> tree, E label) {
 		return switch (tree) {
 		case BEmpty<E>  t -> false;
 		case BLeaf<E>  t -> t.label().equals(label);
@@ -153,13 +161,21 @@ public class BinaryTrees {
 		};
 	}
 	
+	public static <E> BinaryTree<E> copy(BinaryTree<E> tree) {
+		return switch (tree) {
+		case BEmpty<E>  t -> BinaryTree.empty();
+		case BLeaf<E>  t -> BinaryTree.leaf(t.label());
+		case BTree<E>  t -> BinaryTree.binary(t.label(),t.left(), t.right());
+		};
+	}
+	
 	public static <E> Boolean containsLabelOrdered(BinaryTree<E> tree, E label, Comparator<E> cmp) {
 		return switch (tree) {
 		case BEmpty<E> t -> false;
 		case BLeaf<E> t -> t.label().equals(label);
-		case BTree<E> t -> cmp.compare(label, t.label()) ==0
-				|| cmp.compare(label, t.label()) < 0 && containsLabelOrdered(t.left(), label, cmp)
-				|| cmp.compare(label, t.label()) > 0  && containsLabelOrdered(t.right(), label, cmp);
+		case BTree<E> t && cmp.compare(label, t.label()) == 0 -> true;
+		case BTree<E> t && cmp.compare(label, t.label()) < 0 -> containsLabelOrdered(t.left(), label, cmp);
+		case BTree<E> t && cmp.compare(label, t.label()) > 0  -> containsLabelOrdered(t.right(), label, cmp);
 		};
 	}
 	
@@ -187,7 +203,6 @@ public class BinaryTrees {
 				r = BinaryTree.binary(t.label(), new_left, t.right());
 				r = r.equilibrate();
 			}
-			r = r.equilibrate();
 			yield r;
 		}
 		case BTree<E> t && cmp.compare(element, t.label()) > 0 -> {
@@ -197,7 +212,6 @@ public class BinaryTrees {
 				r = BinaryTree.binary(t.label(), t.left(), new_right);
 				r = r.equilibrate();
 			}
-			r = r.equilibrate();
 			yield r;
 		}
 		};

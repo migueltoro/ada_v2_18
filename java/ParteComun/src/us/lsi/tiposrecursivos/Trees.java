@@ -36,6 +36,14 @@ public class Trees {
 		return Stream2.ofIterator(BreadthPathTree.of(tree));
 	}
 	
+	public static <E> Tree<E> copy(Tree<E> tree) {
+		return switch (tree) {
+		case TEmpty<E>  t -> Tree.empty();
+		case TLeaf<E>  t -> Tree.leaf(t.label());
+		case TNary<E>  t -> Tree.nary(t.label(),t.elements().stream().map(x->Trees.copy(x)).toList());
+		};
+	}
+	
 	public static <E> void toDot(Tree<E> tree, String file) {
 		Graph<Nv<E>,DefaultEdge> graph = 
 				new SimpleDirectedGraph<Nv<E>,DefaultEdge>(null,()->new DefaultEdge(),true);
