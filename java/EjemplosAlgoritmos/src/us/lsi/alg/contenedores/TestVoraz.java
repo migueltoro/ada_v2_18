@@ -18,7 +18,7 @@ public class TestVoraz {
 			DatosContenedores.iniDatos("ficheros/contenedores"+ id_fichero +".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");	
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexContenedores start = VertexContenedores.initial();
 			Predicate<VertexContenedores> goal = VertexContenedores.goal();
@@ -28,11 +28,15 @@ public class TestVoraz {
 			EGraph<VertexContenedores, EdgeContenedores> graph =
 					SimpleVirtualGraph.last(start,goal,x -> (double)x.contenedoresCompletos().size());
 
-			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
+			System.out.println("\n\n#### PI-7 Ej3  ####");
 			
 			GraphPath<VertexContenedores, EdgeContenedores> max = ContenedoresHeuristic.caminoVoraz(graph,50);
-			GraphPath<VertexContenedores, EdgeContenedores> max2 = ContenedoresHeuristic.caminoVoraz(graph,50);
+			GraphPath<VertexContenedores, EdgeContenedores> max2 = ContenedoresHeuristic.caminoVoraz2(graph);
 			Double hu = ContenedoresHeuristic.heuristic(start,goal, null);
+			System.out.println(String.format("%.2f,%.2f,%.2f", max.getWeight(),max2.getWeight(),hu));
+			graph = SimpleVirtualGraph.last(start.neighbor(start.greadyAction()),goal,x -> (double)x.contenedoresCompletos().size());
+			max2 = ContenedoresHeuristic.caminoVoraz2(graph);
+			hu = ContenedoresHeuristic.heuristic(start.neighbor(start.greadyAction()),goal, null);
 			System.out.println(String.format("%.2f,%.2f,%.2f", max.getWeight(),max2.getWeight(),hu));
 		}
 

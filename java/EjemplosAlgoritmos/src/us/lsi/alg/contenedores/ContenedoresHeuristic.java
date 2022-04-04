@@ -13,7 +13,8 @@ public class ContenedoresHeuristic {
 			VertexContenedores  v2) {
 		//return (double)(DatosContenedores.getNumContenedores()-v1.index()+1);
 		//return (double)DatosContenedores.getNumContenedores()-v1.contenedoresCompletos().size();
-		return Math.min((double)DatosContenedores.getNumContenedores()-v1.contenedoresCompletos().size(),
+		return v1.contenedoresCompletos().size()+ 
+				Math.min((double)DatosContenedores.getNumContenedores()-v1.contenedoresCompletos().size(),
 				(double)DatosContenedores.getNumElementos()-v1.index());
 	}
 	
@@ -24,24 +25,18 @@ public class ContenedoresHeuristic {
 			GreedyOnGraph<VertexContenedores, EdgeContenedores> ga = GreedyOnGraph.random(graph);
 			GraphPath<VertexContenedores, EdgeContenedores> path = ga.path();
 			Integer m = path.getEndVertex().contenedoresCompletos().size();
-			if (m > max)
-				max = m;
-				gp = path;
+			if (m > max) max = m;
+			gp = path;
 		}
 		return gp;
 	}
 	
-	public static GraphPath<VertexContenedores, EdgeContenedores> caminoVoraz2(EGraph<VertexContenedores, EdgeContenedores> graph, Integer nv) {
-		Integer max = 0;
-		GraphPath<VertexContenedores, EdgeContenedores> gp = null;
-		for (int i = 0; i < nv; i++) {
-			GreedyOnGraph<VertexContenedores, EdgeContenedores> ga = GreedyOnGraph.of(graph,v->v.edge(v.greadyAction()));
+	public static GraphPath<VertexContenedores, EdgeContenedores> caminoVoraz2(
+			EGraph<VertexContenedores, EdgeContenedores> graph) {
+			GreedyOnGraph<VertexContenedores, EdgeContenedores> ga = GreedyOnGraph.of(graph,
+					v -> v.edge(v.greadyAction()));
 			GraphPath<VertexContenedores, EdgeContenedores> path = ga.path();
-			Integer m = path.getEndVertex().contenedoresCompletos().size();
-			if (m > max)
-				max = m;
-				gp = path;
-		}
-		return gp;
+//			Integer m = path.getEndVertex().contenedoresCompletos().size();
+		return path;
 	}
 }
