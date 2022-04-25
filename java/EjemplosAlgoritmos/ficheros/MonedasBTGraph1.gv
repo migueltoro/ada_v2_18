@@ -1,7 +1,2 @@
 strict digraph G {
-  1 [ label="(1,0)" ];
-  2 [ color="red" label="(9,0)" ];
-  3 [ label="(0,36)" ];
-  1 -> 2 [ color="black" label="0" ];
-  3 -> 1 [ color="black" label="12" ];
 }
