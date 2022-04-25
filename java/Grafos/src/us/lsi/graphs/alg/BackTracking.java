@@ -66,7 +66,7 @@ public class BackTracking<V,E,S> {
 		Boolean r = false;
 		Double w = state.getPath().boundedValue(state.getAccumulateValue(),state.getActualVertex(),
 				edge,graph.goal(),graph.endVertex(), heuristic);
-		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) > 0;
+		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) >= 0;
 		return r;
 	}
 	

@@ -57,12 +57,22 @@ public record PackVertex(Integer index, Map<Integer, Integer> carga) implements 
 	
 	@Override
 	public List<Integer> actions() {
-		if(this.index==n) return new ArrayList<>();
-		List<Integer> r =  IntStream.range(0,this.nc()+1).boxed()
-				.filter(c->this.carga().getOrDefault(c,0)+volumen(this.index())<= volumenContenedor())
+		if (this.index.equals(n))
+			return new ArrayList<>();
+		List<Integer> r = IntStream.range(0, this.nc() + 1).boxed()
+				.filter(c -> this.carga().getOrDefault(c, 0) + volumen(this.index()) <= volumenContenedor())
 				.collect(Collectors.toList());
-		Collections.sort(r,Comparator.comparing(c->this.carga().getOrDefault(c,0)).reversed());
-		if(this.index==n-1) List.of(r.get(0));
+
+		Map<Integer, List<Integer>> s = r.stream()
+				.collect(Collectors.groupingBy(c -> this.carga().getOrDefault(c, 0) + volumen(this.index())));
+
+		r = s.values().stream().map(ls -> ls.get(0)).collect(Collectors.toList());
+
+		Collections.sort(r,
+				Comparator.comparing(c -> this.carga().getOrDefault(c, 0) + volumen(this.index())).reversed());
+
+		if (this.index.equals(n - 1))
+			r = List.of(r.get(0));
 		return r;
 	}
 

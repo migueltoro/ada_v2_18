@@ -33,12 +33,13 @@ public class SubconjuntosPD {
 		return SubconjuntosPD.solucion();
 	}
 	
-	public static SolucionSubconjuntos pd(Double minValue) {
-		SubconjuntosPD.minValue = minValue;
+	public static SolucionSubconjuntos pd(SolucionSubconjuntos s) {
+		SubconjuntosPD.minValue = s.peso();
 		SubconjuntosPD.start = SubconjuntosProblem.initial();
 		SubconjuntosPD.memory = new HashMap<>();
 		pd(start,0.,memory);
-		return SubconjuntosPD.solucion();
+		if(SubconjuntosPD.memory.get(start) != null) return solucion();
+		else return s;
 	}
 	
 	public static Sps pd(SubconjuntosProblem vertex,Double accumulateValue, Map<SubconjuntosProblem,Sps> memory) {
@@ -53,7 +54,7 @@ public class SubconjuntosPD {
 			List<Sps> soluciones = new ArrayList<>();
 			for(Integer a:vertex.actions()) {	
 				Double cota = accumulateValue + SubconjuntosHeuristic.cota(vertex,a);
-				if(cota > SubconjuntosPD.minValue) continue;				
+				if(cota >= SubconjuntosPD.minValue) continue;				
 				Sps s = pd(vertex.neighbor(a),accumulateValue+a*DatosSubconjuntos.peso(vertex.indice()),memory);
 				if(s!=null) {
 					Sps sp = Sps.of(a,s.weight()+a*DatosSubconjuntos.peso(vertex.indice()));
@@ -85,7 +86,7 @@ public class SubconjuntosPD {
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //			DatosSubconjuntos.toConsole();
 			
-			Double mv = SubconjuntosHeuristic.voraz(SubconjuntosProblem.initial(),DatosSubconjuntos.NUM_SC);
+			SolucionSubconjuntos mv = SubconjuntosHeuristic.solucionVoraz(SubconjuntosProblem.initial(),DatosSubconjuntos.NUM_SC);
 			SolucionSubconjuntos s = SubconjuntosPD.pd(mv);
 			System.out.println(s);
 		}

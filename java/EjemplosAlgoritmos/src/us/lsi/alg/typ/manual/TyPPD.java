@@ -34,12 +34,13 @@ public class TyPPD {
 		return TyPPD.solucion();
 	}
 	
-	public static SolucionTyP pdr(Integer maxValue) {
-		TyPPD.minValue = maxValue;
+	public static SolucionTyP pdr(SolucionTyP s) {
+		TyPPD.minValue = s.maxCarga();
 		TyPPD.start = TyPProblem.first();
 		TyPPD.memory = new HashMap<>();
 		pd(start,0,memory);
-		return TyPPD.solucion();
+		if(memory.get(start) != null) return TyPPD.solucion();
+		else return s;
 	}
 	
 	private static Sptp pd(TyPProblem vertex,Integer accumulateValue, Map<TyPProblem,Sptp> memory) {
@@ -56,7 +57,7 @@ public class TyPPD {
 			List<Sptp> soluciones = new ArrayList<>();
 			for(Integer a:vertex.acciones()) {	
 				Integer cota = Heuristica.cota(vertex,a);
-				if(cota > TyPPD.minValue) continue;	
+				if(cota >= TyPPD.minValue) continue;	
 				TyPProblem vecino = vertex.vecino(a);
 				Sptp s = pd(vecino,vertex.maxCarga(),memory);
 				if(s!=null) {
@@ -93,7 +94,7 @@ public class TyPPD {
 		long endTime = System.nanoTime() - startTime;
 		System.out.println("1 = "+endTime);
 		startTime = System.nanoTime();
-		System.out.println(TyPPD.pdr(s.maxCarga()));
+		System.out.println(TyPPD.pdr(s));
 		long endTime2 = System.nanoTime() - startTime;
 		System.out.println("2 = "+1.*endTime2/endTime);
 	}

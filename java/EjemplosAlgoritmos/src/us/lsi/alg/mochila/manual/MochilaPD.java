@@ -54,7 +54,7 @@ public class MochilaPD {
 			List<Spm> soluciones = new ArrayList<>();
 			for(Integer a:vertex.acciones()) {	
 				Double cota = accumulateValue + Heuristica.cota(vertex,a);
-				if(cota < MochilaPD.maxValue) continue;				
+				if(cota <= MochilaPD.maxValue) continue;				
 				Spm s = pd(vertex.vecino(a),accumulateValue+a*DatosMochila.valor(vertex.index()),memory);
 				if(s!=null) {
 					Spm sp = Spm.of(a,s.weight()+a*DatosMochila.valor(vertex.index()));

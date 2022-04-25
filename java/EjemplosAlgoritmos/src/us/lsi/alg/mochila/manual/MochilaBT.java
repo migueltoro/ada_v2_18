@@ -91,7 +91,7 @@ public class MochilaBT {
 			List<Integer> alternativas = MochilaBT.estado.vertice().acciones();
 			for(Integer a:alternativas) {	
 				Double cota = MochilaBT.estado.valorAcumulado()+Heuristica.cota(MochilaBT.estado.vertice(),a);
-				if(cota < MochilaBT.maxValue) continue;
+				if(cota <= MochilaBT.maxValue) continue;
 				MochilaBT.estado.forward(a);
 				btm();  
 				MochilaBT.estado.back(a);

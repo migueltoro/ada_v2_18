@@ -58,7 +58,7 @@ public class DynamicProgrammingReduction<V, E> {
 	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {
 		Boolean r = false;
 		Double w = this.path.boundedValue(accumulateValue, actual, edge, goal, end, this.heuristic);
-		if(this.bestValue != null) r = comparator.compare(w, this.bestValue) > 0;
+		if(this.bestValue != null) r = comparator.compare(w, this.bestValue) >= 0;
 		return r;
 	}
 	
