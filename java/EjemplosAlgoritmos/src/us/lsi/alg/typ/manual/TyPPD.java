@@ -59,7 +59,7 @@ public class TyPPD {
 				Integer cota = Heuristica.cota(vertex,a);
 				if(cota >= TyPPD.minValue) continue;	
 				TyPProblem vecino = vertex.vecino(a);
-				Sptp s = pd(vecino,vertex.maxCarga(),memory);
+				Sptp s = pd(vecino,vecino.maxCarga(),memory);
 				if(s!=null) {
 					Sptp sp = Sptp.of(a,s.weight());
 					soluciones.add(sp);
