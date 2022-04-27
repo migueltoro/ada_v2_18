@@ -2,6 +2,8 @@ package us.lsi.alg.typ.manual;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
@@ -28,7 +30,11 @@ public record TyPProblem(Integer index,List<Integer> cargas, Integer maxCarga,In
 	
 	public List<Integer> acciones() {
 		if(this.index == DatosTyP.n) return List2.of();
-		return List2.rangeList(0,DatosTyP.m);
+		
+		Map<Integer, List<Integer>> s = IntStream.range(0, DatosTyP.m).boxed()
+				.collect(Collectors.groupingBy(p -> this.cargas().get(p)));
+
+		return  s.values().stream().map(ls -> ls.get(0)).collect(Collectors.toList());
 	}
 	
 	public Integer greadyAction() {

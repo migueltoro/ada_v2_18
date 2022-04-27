@@ -76,8 +76,12 @@ public record TyPVertex(Integer index, List<Double> cargas)
 
 	@Override
 	public List<Integer> actions() {
-		if(this.goal()) return List2.of();
-		return List2.rangeList(0,m);
+		if (this.goal()) return List2.of();
+
+		Map<Double, List<Integer>> s = IntStream.range(0, m).boxed()
+				.collect(Collectors.groupingBy(p -> this.cargas().get(p)));
+
+		return  s.values().stream().map(ls -> ls.get(0)).collect(Collectors.toList());
 	}
 	
 	public List<Double> cargasDespues(Integer a){

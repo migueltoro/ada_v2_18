@@ -64,7 +64,7 @@ public record PackVertex(Integer index, Map<Integer, Integer> carga) implements 
 				.collect(Collectors.toList());
 
 		Map<Integer, List<Integer>> s = r.stream()
-				.collect(Collectors.groupingBy(c -> this.carga().getOrDefault(c, 0) + volumen(this.index())));
+				.collect(Collectors.groupingBy(c -> this.carga().getOrDefault(c, 0)));
 
 		r = s.values().stream().map(ls -> ls.get(0)).collect(Collectors.toList());
 
@@ -81,7 +81,6 @@ public record PackVertex(Integer index, Map<Integer, Integer> carga) implements 
 		Map<Integer,Integer> carga = new HashMap<>(this.carga());
 		carga.put(a,this.carga().getOrDefault(a,0)+volumen(this.index()));
 		PackVertex r= PackVertex.of(this.index()+1,carga);
-//		System.out.println(r);
 		return r;
 	}
 
