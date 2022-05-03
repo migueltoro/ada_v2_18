@@ -11,6 +11,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.BreadthSearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 
 public class AnchuraTest {
 	
@@ -32,7 +33,7 @@ public class AnchuraTest {
 		System.out.println(graph);
 		System.out.println(graph.edgeSet());
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
+		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,ciudad(graph,"Sevilla"),null,null);
 		
 		BreadthSearch<Ciudad, Carretera> ra = BreadthSearch.of(g,ciudad(graph,"Sevilla"));
 		

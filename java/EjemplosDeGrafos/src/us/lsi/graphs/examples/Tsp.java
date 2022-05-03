@@ -9,7 +9,6 @@ import org.jgrapht.alg.interfaces.EulerianCycleAlgorithm;
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.SimpleWeightedGraph;
 

@@ -1,7 +1,6 @@
 package us.lsi.graphs.examples;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.jgrapht.Graph;
@@ -9,7 +8,6 @@ import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 import us.lsi.colors.GraphColors;
-import us.lsi.common.Map2;
 import us.lsi.common.String2;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;

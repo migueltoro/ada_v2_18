@@ -20,6 +20,27 @@ import us.lsi.path.EGraphPath.PathType;
 public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	
 	
+	
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> sum(G graph, V startVertex, Predicate<V> goal,Function<E, Double> edgeWeight) {
+		return of(graph, startVertex, goal,
+				null,v->true, PathType.Sum, edgeWeight,
+				null, null);
+	}
+
+	public static <V, E, G extends Graph<V, E>> EGraph<V, E> last(G graph, V startVertex, Predicate<V> goal,
+			Function<V, Double> vertexWeight) {
+		return of(graph,startVertex, goal,
+				null, v->true, PathType.Last, null,
+				vertexWeight, null);
+	}
+	
+	public static <V, E, G extends Graph<V, E>> EGraphI<V, E, G> of(G graph, V startVertex, Predicate<V> goal,
+			V endVertex, Predicate<V> constraint, PathType type, Function<E, Double> edgeWeight,
+			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight) {
+		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, type, edgeWeight, vertexWeight,
+				vertexPassWeight);
+	}
+
 	private G graph;
 	private Function<E,Double> edgeWeight = null;
 	private Function<V,Double> vertexWeight = null;
@@ -31,7 +52,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private Predicate<V> constraint;
 	private PathType type;
 	
-	public EGraphI(G graph, V startVertex, Predicate<V> goal,V endVertex,Predicate<V> constraint,
+	private EGraphI(G graph, V startVertex, Predicate<V> goal,V endVertex,Predicate<V> constraint,
 			PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
 			TriFunction<V, E, E, Double> vertexPassWeight) {
 		super();
@@ -171,7 +192,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	}
 	
 	/**
-	 * @param vertex es el vértice actual
+	 * @param vertex es el vï¿½rtice actual
 	 * @return El peso de vertex
 	 */
 	@Override
@@ -181,10 +202,10 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 		return r;
 	}
 	/**
-	 * @param vertex El vértice actual
-	 * @param edgeIn Una arista entrante o incidente en el vértice actual. Es null en el vértice inicial.
-	 * @param edgeOut Una arista saliente o incidente en el vértice actual. Es null en el vértice final.
-	 * @return El peso asociado al vértice suponiendo las dos aristas dadas. 
+	 * @param vertex El vï¿½rtice actual
+	 * @param edgeIn Una arista entrante o incidente en el vï¿½rtice actual. Es null en el vï¿½rtice inicial.
+	 * @param edgeOut Una arista saliente o incidente en el vï¿½rtice actual. Es null en el vï¿½rtice final.
+	 * @return El peso asociado al vï¿½rtice suponiendo las dos aristas dadas. 
 	 */
 	@Override
 	public double getVertexPassWeight(V vertex, E edgeIn, E edgeOut) {

@@ -12,8 +12,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
@@ -22,7 +22,7 @@ public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
 	 * @param <V> El tipo de los v&eacute;rtices
 	 * @param <E> El tipo de las aristas
 	 * @param g Un grafo 
-	 * @param startVertex El vértice inicial
+	 * @param startVertex El vï¿½rtice inicial
 	 * @return Una algoritmo de b&uacute;squeda en orden topologico
 	 */
 	public static <V, E> TopologicalSearch<V, E> topological(Graph<V, E> g, V startVertex) {
@@ -114,7 +114,7 @@ public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
 
 
 	public EGraph<V, E> getGraph() {
-		return Graphs2.eGraphSum(this.graph,startVertex(),null,null);
+		return EGraphI.sum(this.graph,startVertex(),null,null);
 	}
 	
 	public V startVertex() {

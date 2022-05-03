@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
-import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
@@ -21,7 +21,7 @@ public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
 	 * @param <V> El tipo de los v&eacute;rtices
 	 * @param <E> El tipo de las aristas
 	 * @param g Un grafo 
-	 * @param startVertex El vértice inicial
+	 * @param startVertex El vï¿½rtice inicial
 	 * @return Una algoritmo de b&uacute;squeda en profundidad en preorden
 	 */
 	public static <V, E> DephtSearch<V, E> of(Graph<V, E> g, V startVertex) {
@@ -80,7 +80,7 @@ public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
 	}
 
 	public EGraph<V, E> getGraph() {
-		return Graphs2.eGraphSum(this.graph,startVertex(),null,null);
+		return EGraphI.sum(this.graph,startVertex(),null,null);
 	}
 	
 	public V startVertex() {

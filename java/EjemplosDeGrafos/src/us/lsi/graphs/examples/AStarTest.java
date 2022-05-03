@@ -16,6 +16,7 @@ import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 
 
 public class AStarTest {
@@ -39,7 +40,7 @@ public class AStarTest {
 		Ciudad start = ciudad(graph,"Sevilla");
 		Ciudad end = ciudad(graph,"Almeria");
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,start,c->c.equals(end),c->c.km());
+		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,start,c->c.equals(end),c->c.km());
 		
 				
 		AStar<Ciudad, Carretera> ra = AStar.of(g,(v1,p,v2)->0.,AStarType.Min);

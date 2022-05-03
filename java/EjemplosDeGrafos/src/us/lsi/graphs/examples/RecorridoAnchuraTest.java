@@ -12,6 +12,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.BreadthSearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class RecorridoAnchuraTest {
@@ -31,7 +32,7 @@ public class RecorridoAnchuraTest {
 		
 		graph.addVertex(Ciudad.of("Londres",2000000));
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
+		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,ciudad(graph,"Sevilla"),null,null);
 		
 		BreadthSearch<Ciudad, Carretera> ra = BreadthSearch.of(g,ciudad(graph,"Sevilla"));
 		Stream2.findLast(ra.stream());

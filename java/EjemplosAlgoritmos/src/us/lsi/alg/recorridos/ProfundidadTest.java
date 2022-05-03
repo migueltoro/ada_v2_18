@@ -12,6 +12,7 @@ import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.DephtPostSearch;
 import us.lsi.graphs.alg.DephtSearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 
 public class ProfundidadTest {
 	
@@ -32,7 +33,7 @@ public class ProfundidadTest {
 		
 		System.out.println(graph);
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
+		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,ciudad(graph,"Sevilla"),null,null);
 		
 		DephtSearch<Ciudad, Carretera> ra = DephtSearch.of(g,ciudad(graph,"Sevilla"));
 		

@@ -12,6 +12,7 @@ import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.DephtSearch;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class RecorridoProfundidadTest {
@@ -32,7 +33,7 @@ public class RecorridoProfundidadTest {
 		
 		graph.addVertex(Ciudad.of("Londres",2000000));
 		
-		EGraph<Ciudad,Carretera> g = Graphs2.eGraphSum(graph,ciudad(graph,"Sevilla"),null,null);
+		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,ciudad(graph,"Sevilla"),null,null);
 		
 		DephtSearch<Ciudad, Carretera> rp = DephtSearch.of(g,ciudad(graph,"Sevilla"));
 		Stream2.findLast(rp.stream());

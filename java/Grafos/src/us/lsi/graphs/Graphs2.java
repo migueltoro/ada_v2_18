@@ -86,34 +86,7 @@ public class Graphs2 {
 	public static <V,E> Set<V> getVertices(Graph<V,E> graph, E edge){
 		return Set.of(graph.getEdgeSource(edge),graph.getEdgeTarget(edge));
 	}
-	
-	public static Object constraintG = (Predicate<Object>) v->true;
-	public static Object endVertexG = null;
-	public static Object vertexPassWeightG = null;
-	
-	@SuppressWarnings("unchecked")
-	public static <V, E, G extends Graph<V, E>> EGraph<V,E> eGraph(G graph, V startVertex,  
-			Predicate<V> goal,
-			Function<E, Double> edgeWeight,
-			Function<V, Double> vertexWeight, 
-			PathType type) {
-		return new EGraphI<V, E, G>(graph, 
-				startVertex, goal,
-				(V)endVertexG,
-				(Predicate<V>)constraintG,
-				type,edgeWeight,vertexWeight,
-				(TriFunction<V,E,E,Double>)vertexPassWeightG);
-	}
-	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphSum(G graph, V startVertex, Predicate<V> goal,Function<E, Double> edgeWeight) {
-		return eGraph(graph, startVertex, goal,  edgeWeight, null, PathType.Sum);
-	}
-
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> eGraphLast(G graph, V startVertex, Predicate<V> goal,
-			Function<V, Double> vertexWeight) {
-		return eGraph(graph, startVertex, goal,null,vertexWeight, PathType.Last);
-	}
-	
+		
 	public static <V, E> SimpleDirectedGraph<V, E> inversedDirectedGraph(SimpleDirectedGraph<V, E> graph){
 		SimpleDirectedGraph<V, E> gs = Graphs2.simpleDirectedGraph();
 		for (V v : graph.vertexSet()) {
@@ -240,10 +213,10 @@ public class Graphs2 {
 	
 	/**
 	 * @param graph Un grafo no dirigido
-	 * @param edgeReverse Una función que produce una arista inversa con el mismo peso
-	 * @param sources Los vértices que serán fuentes
-	 * @param targets Los vértices que serán sumideros
-	 * @return Un grafo dirigido donde los vértices fuente no tienen aristas de entrada y 
+	 * @param edgeReverse Una funciï¿½n que produce una arista inversa con el mismo peso
+	 * @param sources Los vï¿½rtices que serï¿½n fuentes
+	 * @param targets Los vï¿½rtices que serï¿½n sumideros
+	 * @return Un grafo dirigido donde los vï¿½rtices fuente no tienen aristas de entrada y 
 	 * los sumideros no tienen aristas de salida
 	 */
 	public static <V,E> SimpleDirectedWeightedGraph<V,E> toDirectedWeightedGraphFlow(
