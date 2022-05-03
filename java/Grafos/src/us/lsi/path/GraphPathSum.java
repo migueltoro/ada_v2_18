@@ -71,10 +71,10 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
 		E lastEdge = this.getEdgeList().isEmpty()?null:List2.last(edgeList);
 		V vertexActual = List2.last(vertexList);
-		Preconditions.checkNotNull(vertexActual,"El vértice actual no puede ser null");
+		Preconditions.checkNotNull(vertexActual,"El vï¿½rtice actual no puede ser null");
 		super.edgeList.add(edge);
 		V target = graph.oppositeVertex(edge,vertexActual);
-		Preconditions.checkNotNull(target,"El vértice destino no puede ser null");
+		Preconditions.checkNotNull(target,"El vï¿½rtice destino no puede ser null");
 		super.vertexList.add(target);
 		super.weight += graph.getEdgeWeight(edge);
 		super.weight += graph.getVertexWeight(target);
@@ -85,13 +85,10 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 	@Override
 	public GraphPathSum<V,E> remove(E edge) {
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
-//		E lastEdge = this.getEdgeList().isEmpty()?null:List2.last(edgeList);
 		V vertexActual = List2.last(vertexList);
-		Preconditions.checkNotNull(vertexActual,"El vértice actual no puede ser null");
+		Preconditions.checkNotNull(vertexActual,"El vï¿½rtice actual no puede ser null");
 		super.edgeList.remove(super.edgeList.size()-1);
 		E lastEdge = this.getEdgeList().isEmpty()?null:List2.last(edgeList);
-//		V target = graph.oppositeVertex(edge,vertexActual);
-//		Preconditions.checkNotNull(target,"El vértice destino no puede ser null");
 		super.vertexList.remove(super.vertexList.size()-1);
 		super.weight -= graph.getEdgeWeight(edge);
 		super.weight -= graph.getVertexWeight(vertexActual);
@@ -102,12 +99,10 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 	@Override
 	public Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge) {
 		Preconditions.checkNotNull(edge, "La arista no puede ser null");
-//		Preconditions.checkNotNull(lastEdge, "La arista anterior no puede ser null");
 		Double weight = acumulateValue;
 		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
 		weight += graph.getEdgeWeight(edge);
 		weight += graph.getVertexWeight(target);
-//		System.out.println("En 1 = "+graph.getVertexPassWeight(vertexActual, lastEdge, edge));
 		if (lastEdge != null) weight += graph.getVertexPassWeight(vertexActual, lastEdge, edge);
 		return weight;
 	}
@@ -152,13 +147,4 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 		return PathType.Sum;
 	}
 
-	@Override
-	public Double goalBaseSolution(V vertexActual) {
-		return 0.;
-	}
-
-	@Override
-	public Double fromNeighbordSolution(Double weight, V vertexActual, E edge, E lastEdge) {
-		return this.add(weight,vertexActual,edge,lastEdge);
-	}
 }

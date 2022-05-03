@@ -95,7 +95,7 @@ public class DynamicProgrammingReduction<V, E> {
 		} else if (graph.goal().test(actual)) {
 			if (graph.constraint().test(actual)) {
 				update(accumulateValue);
-				r = Sp.of(path.goalBaseSolution(actual), null);
+				r = Sp.of(graph.goalBaseSolution(actual), null);
 			} else r = null;
 			this.solutionsTree.put(actual, r);
 		} else {
@@ -107,7 +107,7 @@ public class DynamicProgrammingReduction<V, E> {
 				Sp<E> s = search(v,ac,edge);
 				if (s!=null) {
 					E lastEdge = this.solutionsTree.get(v).edge;
-					Double spv = this.path.fromNeighbordSolution(s.weight,v,edge,lastEdge);	
+					Double spv = this.graph.fromNeighbordSolution(s.weight,v,edge,lastEdge);	
 					Sp<E> sp = Sp.of(spv,edge);
 					rs.add(sp);
 				}

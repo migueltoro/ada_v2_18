@@ -76,7 +76,7 @@ public class GraphPathLast<V, E> extends GraphPath2<V,E> implements EGraphPath<V
 	public GraphPathLast<V,E> remove(E edge) {
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
 		V vertexActual = List2.last(vertexList);
-		Preconditions.checkNotNull(vertexActual,"El vértice actual no puede ser null");
+		Preconditions.checkNotNull(vertexActual,"El vï¿½rtice actual no puede ser null");
 		super.edgeList.remove(super.edgeList.size()-1);
 		super.vertexList.remove(super.vertexList.size()-1);
 		super.weight = graph.getVertexWeight(vertexActual);	
@@ -127,14 +127,5 @@ public class GraphPathLast<V, E> extends GraphPath2<V,E> implements EGraphPath<V
 		return PathType.Last;
 	}
 
-	@Override
-	public Double goalBaseSolution(V vertexActual) {
-		return graph.getVertexWeight(vertexActual);
-	}
-
-	@Override
-	public Double fromNeighbordSolution(Double weight, V vertexActual, E edge, E lastEdge) {
-		return weight;
-	}
 }
 
