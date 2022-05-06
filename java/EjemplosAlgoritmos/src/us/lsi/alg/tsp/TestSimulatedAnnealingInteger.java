@@ -23,19 +23,17 @@ public class TestSimulatedAnnealingInteger {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		
-		SimulatedAnnealingSearch.numIntentos = 1;
-		SimulatedAnnealingSearch.numPorIntento = 1000;
+		SimulatedAnnealingSearch.numPorIntento = 100;
 		SimulatedAnnealingSearch.numMismaTemperatura = 1;
 		SimulatedAnnealingSearch.temperaturaInicial = 100000;
 		SimulatedAnnealingSearch.alfa = 0.95;
-		SimulatedAnnealingSearch.stop = v->false;
 		
-		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(50);
+		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(100);
 		
 		TravelVertexInteger.graph = graph;
 		
 		System.out.println(graph);
-		System.out.println(graph.edgeSet());
+//		System.out.println(graph.edgeSet());
 		List<Integer> camino = graph.vertexSet().stream().collect(Collectors.toList());
 		camino.add(0);
 		Collections.shuffle(camino.subList(1,camino.size()-2));
@@ -50,10 +48,11 @@ public class TestSimulatedAnnealingInteger {
 		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
 				SimulatedAnnealingSearch.simulatedAnnealing(graph2,e1,e->e.weight());
 		
-//		m.search();
+//		Optional<TravelVertexInteger> vr = m.search();
 		Optional<TravelVertexInteger> vr = 
 				Stream2.findLast(m.stream().peek(v->System.out.println(String.format("%d === %.2f",m.i,v.weight()))));
 //		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
+		System.out.println(vr.get());
 		System.out.println(m.bestWeight);
 		System.out.println(m.bestVertex);
 	}

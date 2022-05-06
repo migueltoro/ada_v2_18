@@ -2,6 +2,7 @@ package us.lsi.graphs.alg;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -33,7 +34,6 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 		this.actualVertex = null;
 		this.startVertex = startVertex;
 		this.fitness = fitness;
-		this.n = 0;
 		this.i = 0;
 		this.s = 0;
 		this.temperatura = temperaturaInicial;
@@ -50,13 +50,11 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 		 return this.graph.getEdgeTarget(edge.get(0));
 	}
 	
-	public static Integer numIntentos = 10;
 	public static Integer numPorIntento = 200;
 	public static Integer numMismaTemperatura = 10;
 	public static double temperaturaInicial = 1000;
 	public static double alfa = 0.97;
 	public static Predicate<Double> stop = e->false;
-	public Integer n;
 	public Integer i;
 	public Integer s;
 	
@@ -79,6 +77,10 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 		return Stream2.of(this);
 	}
 	
+	public Optional<V> search(){
+		return Stream2.findLast(this.stream());
+	}
+	
 	@Override
 	public Iterator<V> iterator() {
 		return this;
@@ -87,7 +89,7 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 
 	@Override
 	public boolean hasNext() {
-		return this.n < numIntentos || SimulatedAnnealingSearch.stop.test(this.bestWeight);
+		return this.i < numPorIntento && !SimulatedAnnealingSearch.stop.test(this.bestWeight);
 	}
 
 	@Override
@@ -100,14 +102,8 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 			actualizaMejorValor();
 		}
 		this.s++;
-		if(this.s >= numMismaTemperatura) {
-			this.s = 0;
-			this.i++;
-			if(this.i >= numPorIntento) {
-				this.i = 0;
-				this.n++;
-			}
-		}
+		this.i++;
+		if(this.s >= numMismaTemperatura) this.s = 0;
 		return this.actualVertex;
 	}
 

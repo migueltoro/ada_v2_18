@@ -22,7 +22,7 @@ public class TestBTMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-		MochilaVertex.capacidadInicial = 78;
+		MochilaVertex.capacidadInicial = 101;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
@@ -31,6 +31,11 @@ public class TestBTMochila {
 		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = rr.path();
+		
+//		SolucionMochila s0 = MochilaVertex.getSolucion(path);
+//		
+//		System.out.println(s0);
+		System.out.println(path.getEdgeList().stream().map(e->e.action()).toList());
 		
 		BackTracking<MochilaVertex, MochilaEdge,SolucionMochila> ms = BackTracking.of(
 				graph,
@@ -44,7 +49,8 @@ public class TestBTMochila {
 		
 		ms.search();
 		SolucionMochila s = MochilaVertex.getSolucion(ms.optimalPath().get());
-		System.out.println(s);
+//		System.out.println(s);
+		System.out.println(ms.optimalPath().get().getEdgeList().stream().map(e->e.action()).toList());
 			
 		GraphPath<MochilaVertex, MochilaEdge> sp = ms.optimalPath().get();
 		GraphColors.toDot(ms.graph(),"ficheros/MochilaBTGraph2.gv",

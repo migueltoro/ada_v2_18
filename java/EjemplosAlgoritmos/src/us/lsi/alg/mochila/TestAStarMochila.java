@@ -23,7 +23,7 @@ public class TestAStarMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 //		Integer n = DatosMochila.numeroDeObjetos;
 //		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex.capacidadInicial = 78;
+		MochilaVertex.capacidadInicial = 101;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
