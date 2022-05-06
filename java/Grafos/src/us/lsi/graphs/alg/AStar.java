@@ -122,19 +122,20 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> path(V startVertex, Optional<V> last) {
 		if (!last.isPresent() || !graph.constraint().test(last.get())) return Optional.empty();
 		V endVertex = last.get();
-		Handle<Double, Data<V, E>> hav = this.tree.get(endVertex);
+		V v = endVertex;
+		Handle<Double, Data<V, E>> hav = this.tree.get(v);
 		Data<V, E> dav = hav.getValue();
 		Double weight = dav.distanceToOrigin;
 		E edge = dav.edge;
 		List<E> edges = new ArrayList<>();
 		while (edge != null) {
 			edges.add(edge);
-			endVertex = Graphs.getOppositeVertex(graph, edge, endVertex);
-			edge = this.getEdgeToOrigin(endVertex);
+			v = Graphs.getOppositeVertex(graph, edge, v);
+			edge = this.getEdgeToOrigin(v);
 		}
 		Collections.reverse(edges);
 		List<V> vertices = new ArrayList<>();
-		V v = startVertex;
+		v = startVertex;
 		vertices.add(v);
 		for (E e : edges) {
 			v = Graphs.getOppositeVertex(graph, e, v);
