@@ -18,10 +18,6 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import us.lsi.common.Preconditions;
-import us.lsi.common.TriFunction;
-import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.EGraphI;
-import us.lsi.path.EGraphPath.PathType;
 
 
 public class Graphs2 {

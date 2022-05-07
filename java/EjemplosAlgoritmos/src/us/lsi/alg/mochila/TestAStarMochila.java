@@ -46,7 +46,6 @@ public class TestAStarMochila {
 		SolucionMochila s = MochilaVertex.getSolucion(path);
 		System.out.println(s);
 		SimpleDirectedGraph<MochilaVertex, MochilaEdge> r = ms.graph();
-		System.out.println(ms.n);
 		System.out.println(ms.tree.keySet().size());
 		
 		GraphColors.toDot(r,"ficheros/MochilaAstarGraph.gv",

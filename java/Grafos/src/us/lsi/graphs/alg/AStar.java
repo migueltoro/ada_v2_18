@@ -53,7 +53,6 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	protected EGraphPath<V,E> ePath;
 	public Double bestValue = null; //mejor valor estimado
 	public GraphPath<V, E> optimalPath = null; //mejor camino estimado
-	public Integer n = 0; //vertices eliminados
 	
 
 	AStar(EGraph<V, E> graph,TriFunction<V,Predicate<V>, V,Double> heuristic, AStarType type) {
@@ -87,10 +86,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		Double w = ePath.estimatedWeightToEnd(actualDistance,v, graph.goal(), graph.endVertex(), heuristic);
 		Boolean r = false;
 		r = this.bestValue != null && comparator.compare(w,this.bestValue) >= 0;
-		if(r) {
-			this.tree.remove(v);
-			n++;
-		}
+		if(r) this.tree.remove(v);
 		return r;
 	}
 	
