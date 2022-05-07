@@ -51,6 +51,9 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
+	public Double bestValue = null; //mejor valor estimado
+	public GraphPath<V, E> optimalPath = null; //mejor camino estimado
+	public Integer n = 0; //vertices eliminados
 	
 
 	AStar(EGraph<V, E> graph,TriFunction<V,Predicate<V>, V,Double> heuristic, AStarType type) {
@@ -80,6 +83,17 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		return this;
 	}
 	
+	private Boolean forget(Double actualDistance, V v) {
+		Double w = ePath.estimatedWeightToEnd(actualDistance,v, graph.goal(), graph.endVertex(), heuristic);
+		Boolean r = false;
+		r = this.bestValue != null && comparator.compare(w,this.bestValue) >= 0;
+		if(r) {
+			this.tree.remove(v);
+			n++;
+		}
+		return r;
+	}
+	
 	public boolean hasNext() {
 		return !heap.isEmpty(); 
 	}
@@ -91,6 +105,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		V vertexActual = dActual.vertex;
 		Double actualDistance = dActual.distanceToOrigin;
 		E edgeToOrigen = dActual.edge;
+		if(forget(actualDistance,  vertexActual)) return null;
 		for (E backEdge : graph.edgesListOf(vertexActual)) {
 			V v = Graphs.getOppositeVertex(graph,backEdge,vertexActual);
 			Double newDistanceToOrigin = ePath.add(actualDistance,v,backEdge,edgeToOrigen);
@@ -123,6 +138,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		if (!last.isPresent() || !graph.constraint().test(last.get())) return Optional.empty();
 		V endVertex = last.get();
 		V v = endVertex;
+		if (!tree.containsKey(v)) return Optional.empty();
 		Handle<Double, Data<V, E>> hav = this.tree.get(v);
 		Data<V, E> dav = hav.getValue();
 		Double weight = dav.distanceToOrigin;
@@ -148,8 +164,9 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> search() {
 		V startVertex = graph.startVertex();
 		if(graph.goal().test(startVertex)) return Optional.of(ePath);
-		Optional<V> last = this.stream().filter(graph.goal().and(graph.constraint())).findFirst();	
-		return path(startVertex,last);
+		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.constraint())).findFirst();	
+		if(last.isPresent()) return path(startVertex,last);
+		else return Optional.ofNullable(this.optimalPath);
 	}
 	
 	public Optional<GraphPath<V, E>> searchAll() {

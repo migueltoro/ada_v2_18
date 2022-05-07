@@ -1,6 +1,6 @@
 package us.lsi.alg.mochila;
 
-import java.util.List;
+
 import java.util.Locale;
 
 import org.jgrapht.GraphPath;
@@ -9,6 +9,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -23,21 +24,30 @@ public class TestAStarMochila {
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
 //		Integer n = DatosMochila.numeroDeObjetos;
 //		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex.capacidadInicial = 101;
+		MochilaVertex.capacidadInicial = 2457;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-			SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),v->v.weight());		
+			SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),v->v.weight());	
+		
+		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		
+		GraphPath<MochilaVertex, MochilaEdge> gp = rr.path();
+		
+		System.out.println(gp.getWeight());
 	
 		AStar<MochilaVertex, MochilaEdge> ms = 
 				AStar.of(graph,MochilaHeuristic::heuristic,AStarType.Max);
 		
+		ms.bestValue = gp.getWeight();
+		ms.optimalPath = gp;
+		
 		GraphPath<MochilaVertex, MochilaEdge> path = ms.search().get();
-		List<MochilaEdge> edges = path.getEdgeList();
-		System.out.println(edges);
 		SolucionMochila s = MochilaVertex.getSolucion(path);
 		System.out.println(s);
 		SimpleDirectedGraph<MochilaVertex, MochilaEdge> r = ms.graph();
+		System.out.println(ms.n);
+		System.out.println(ms.tree.keySet().size());
 		
 		GraphColors.toDot(r,"ficheros/MochilaAstarGraph.gv",
 				v->String.format("((%d,%d)",v.index(),v.capacidadRestante()),

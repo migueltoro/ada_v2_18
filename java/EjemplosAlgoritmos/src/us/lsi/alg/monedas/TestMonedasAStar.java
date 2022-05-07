@@ -11,6 +11,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.SimpleVirtualGraph;
@@ -26,6 +27,7 @@ public class TestMonedasAStar {
 //		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
 				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),x->x.weight(),MonedaVertex.constraint());		
+
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
 				AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Max);
@@ -58,7 +60,7 @@ public class TestMonedasAStar {
 		MonedaVertex e3 = MonedaVertex.first();
 //		MonedaVertex e4 = MonedaVertex.last();
 
-		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),x->x.weight());		
+		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),x->x.weight());	
 		
 	    ms = AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Min);
 		
