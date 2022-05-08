@@ -1,13 +1,25 @@
 strict digraph G {
-  1 [ label="(1,17)" ];
-  2 [ label="(1,36)" ];
-  3 [ label="(0,36)" ];
-  4 [ color="red" label="(9,0)" ];
-  5 [ label="(2,0)" ];
-  6 [ label="(2,17)" ];
-  3 -> 1 [ color="black" label="1" ];
+  1 [ label="(4,4)" ];
+  2 [ label="(3,4)" ];
+  3 [ label="(2,4)" ];
+  4 [ label="(1,104)" ];
+  5 [ color="red" label="(9,0)" ];
+  6 [ label="(0,104)" ];
+  7 [ label="(1,74)" ];
+  8 [ label="(1,44)" ];
+  9 [ label="(3,14)" ];
+  10 [ label="(2,14)" ];
+  11 [ label="(1,14)" ];
+  12 [ label="(3,0)" ];
+  2 -> 1 [ color="black" label="0" ];
   3 -> 2 [ color="black" label="0" ];
-  5 -> 4 [ color="black" label="0" ];
-  1 -> 5 [ color="black" label="1" ];
-  1 -> 6 [ color="black" label="0" ];
+  11 -> 3 [ color="black" label="1" ];
+  6 -> 4 [ color="black" label="0" ];
+  12 -> 5 [ color="black" label="0" ];
+  6 -> 7 [ color="black" label="1" ];
+  6 -> 8 [ color="black" label="2" ];
+  10 -> 9 [ color="black" label="0" ];
+  11 -> 10 [ color="black" label="0" ];
+  6 -> 11 [ color="black" label="3" ];
+  10 -> 12 [ color="black" label="1" ];
 }

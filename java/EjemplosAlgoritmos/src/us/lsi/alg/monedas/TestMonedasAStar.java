@@ -20,19 +20,26 @@ public class TestMonedasAStar {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas3.txt", 36);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 104);
 		MonedaVertex e1 = MonedaVertex.first();
 		
-//		SimpleVirtualGraph.constraintG = MonedaVertex.constraint();
-//		SimpleVirtualGraph.endVertexG = MonedaVertex.last();
 		EGraph<MonedaVertex, MonedaEdge> graph = 
 				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),x->x.weight(),MonedaVertex.constraint());		
+		
+		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 
+		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 		
 		AStar<MonedaVertex, MonedaEdge> ms = 
 				AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Max);
 		
 //		ms.stream().limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
+		
+		if (rr.isSolution(path1)) {
+			System.out.println("Hay solucion voraz 1 = " +path1.getWeight());
+			ms.bestValue = path1.getWeight();
+			ms.optimalPath = path1;
+		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> path = ms.search();
 		
@@ -40,6 +47,7 @@ public class TestMonedasAStar {
 		if (path.isPresent()) {
 			s = SolucionMonedas.of(path.get());
 			System.out.println(s);
+			System.out.println(ms.tree.keySet().size());
 			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.graph();
 			GraphColors.toDot(g,"ficheros/MonedasAstarGraph1.gv",
 					v->String.format("(%d,%d)",v.index(),v.valorRestante()),
@@ -62,12 +70,24 @@ public class TestMonedasAStar {
 
 		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),x->x.weight());	
 		
-	    ms = AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Min);
+		rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
+
+		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.path();
 		
-	    Optional<GraphPath<MonedaVertex, MonedaEdge>> path2 = ms.search();
-		if (path.isPresent()) {
-			s = SolucionMonedas.of(path2.get());
+	    ms = AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Min);
+	    
+	    if (rr.isSolution(path2)) {
+			System.out.println("Hay solucion voraz 2 = "+path2.getWeight());
+			ms.bestValue = path2.getWeight();
+			ms.optimalPath = path2;
+		}
+		
+	    path = ms.search();
+		
+	    if (path.isPresent()) {
+			s = SolucionMonedas.of(path.get());
 			System.out.println(s);
+			System.out.println(ms.tree.keySet().size());
 			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.graph();
 			GraphColors.toDot(g,"ficheros/MonedasAstarGraph2.gv",
 					v->String.format("(%d,%d)",v.index(),v.valorRestante()),
