@@ -20,7 +20,7 @@ public class TestMonedasAStar {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 104);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 401);
 		MonedaVertex e1 = MonedaVertex.first();
 		
 		EGraph<MonedaVertex, MonedaEdge> graph = 
@@ -39,6 +39,9 @@ public class TestMonedasAStar {
 			System.out.println("Hay solucion voraz 1 = " +path1.getWeight());
 			ms.bestValue = path1.getWeight();
 			ms.optimalPath = path1;
+		} else {
+			ms.bestValue = 72360.0;
+			ms.optimalPath = null;
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> path = ms.search();
@@ -80,6 +83,9 @@ public class TestMonedasAStar {
 			System.out.println("Hay solucion voraz 2 = "+path2.getWeight());
 			ms.bestValue = path2.getWeight();
 			ms.optimalPath = path2;
+		} else {
+			ms.bestValue = 376.0;
+			ms.optimalPath = null;
 		}
 		
 	    path = ms.search();

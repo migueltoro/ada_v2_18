@@ -21,7 +21,7 @@ public class TestMonedasBT {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 104);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 401);
 
 		MonedaVertex e1 = MonedaVertex.first();
 
@@ -30,8 +30,10 @@ public class TestMonedasBT {
 
 		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 
+		graph = SimpleVirtualGraph.sum(e1, 
+				MonedaVertex.goal(), e -> e.weight(),MonedaVertex.constraint());
+
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
-		
 
 		BackTracking<MonedaVertex, MonedaEdge, SolucionMonedas> ms1 = BackTracking.of(graph,
 				MonedasHeuristica::heuristic, SolucionMonedas::of, BTType.Max);
@@ -40,7 +42,11 @@ public class TestMonedasBT {
 			System.out.println("Hay solucion voraz 1"+path1.getWeight());
 			ms1.bestValue = path1.getWeight();
 			ms1.optimalPath = path1;
+		} else {
+			ms1.bestValue = 72360.0;
+			ms1.optimalPath = null;
 		}
+		
 		ms1.withGraph = true;
 		ms1.search();
 
@@ -74,6 +80,9 @@ public class TestMonedasBT {
 			System.out.println("Hay solucion voraz 2 "+path2.getWeight());
 			ms2.bestValue = path2.getWeight();
 			ms2.optimalPath = path2;
+		} else {
+			ms2.bestValue = 376.0;
+			ms2.optimalPath = null;
 		}
 		ms2.search();
 
