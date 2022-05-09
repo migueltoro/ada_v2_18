@@ -88,6 +88,8 @@ public class DynamicProgrammingReduction<V, E> {
 		return pathFrom(graph.startVertex());
 	}
 	
+	
+	
 	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
 		Sp<E> r = null;
 		if(this.solutionsTree.containsKey(actual)) {
@@ -99,7 +101,7 @@ public class DynamicProgrammingReduction<V, E> {
 			} else r = null;
 			this.solutionsTree.put(actual, r);
 		} else {
-			List<Sp<E>> rs = new ArrayList<>();			
+			List<Sp<E>> rs = new ArrayList<>();	
 			for (E edge : graph.edgesListOf(actual)) {					
 				if (this.forget(edge,actual,accumulateValue,graph.goal(),graph.endVertex())) continue;
 				V v = Graphs.getOppositeVertex(graph,edge,actual);

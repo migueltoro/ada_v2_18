@@ -28,7 +28,8 @@ public class TestPDRMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-		MochilaVertex.capacidadInicial = 78;
+//		MochilaVertex.capacidadInicial = 78;
+		MochilaVertex.capacidadInicial = 457;
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
@@ -53,7 +54,6 @@ public class TestPDRMochila {
 		ms.withGraph = true;
 		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();
 		GraphPath<MochilaVertex, MochilaEdge> s1 = sp.get();
-		System.out.println(s1);
 		SolucionMochila s = MochilaVertex.getSolucion(s1);
 		System.out.println(s);
 		

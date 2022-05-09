@@ -22,9 +22,10 @@ public class TestAStarMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-//		Integer n = DatosMochila.numeroDeObjetos;
-//		DatosMochila.capacidadInicial = 78;	
-		MochilaVertex.capacidadInicial = 2457;
+		Integer n = DatosMochila.numeroDeObjetos;
+//		MochilaVertex.capacidadInicial = 2457;
+		MochilaVertex.capacidadInicial = 78;
+		System.out.println(Double.MAX_VALUE);
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 

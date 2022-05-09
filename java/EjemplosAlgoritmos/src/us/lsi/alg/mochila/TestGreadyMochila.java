@@ -16,14 +16,14 @@ public class TestGreadyMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-		MochilaVertex.capacidadInicial = 101;
+		MochilaVertex.capacidadInicial = 457;
 		MochilaVertex v1 = MochilaVertex.initialVertex();
 //		MochilaVertex v2 = MochilaVertex.lastVertex();
 //		Predicate<MochilaVertex> goal = v->v.equals(v2);
 //		System.out.println(e1);
 //		System.out.println(e2);			
 		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),null);
-		System.out.println("1 "+r2);
+		System.out.println("H "+r2);
 		
 		EGraph<MochilaVertex,MochilaEdge> graph = 
 				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
@@ -32,7 +32,7 @@ public class TestGreadyMochila {
 		
 		GraphPath<MochilaVertex, MochilaEdge> gp = gs.path();
 		
-		System.out.println(gp.getWeight());
+		System.out.println("G "+gp.getWeight());
 		
 //		Optional<GraphPath<MochilaVertex, MochilaEdge>> r = gs.path();
 //		System.out.println("2 "+r.get().getWeight());

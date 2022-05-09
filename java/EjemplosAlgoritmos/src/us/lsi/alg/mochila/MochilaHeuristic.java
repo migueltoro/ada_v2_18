@@ -18,6 +18,7 @@ public class MochilaHeuristic {
 	public static Double heuristic2(MochilaVertex v1, Predicate<MochilaVertex> goal, MochilaVertex v2) {
 		return 1000.*(MochilaVertex.n-v1.index());
 	}
+
 	
 	public static record Md(Integer index, Double cr) {
 		public static Md of(Integer index, Double cr) {
