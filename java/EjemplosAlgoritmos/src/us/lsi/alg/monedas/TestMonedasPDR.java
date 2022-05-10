@@ -20,7 +20,7 @@ public class TestMonedasPDR {
 
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
-		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 104);
+		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 401);
 
 		MonedaVertex e1 = MonedaVertex.first();
 		
@@ -40,6 +40,9 @@ public class TestMonedasPDR {
 			System.out.println("1 = " + SolucionMonedas.of(path1));
 			ms1.bestValue = path1.getWeight();
 			ms1.optimalPath = path1;
+		} else {
+			ms1.bestValue =  MonedaVoraz.voraz();
+			ms1.optimalPath = null;
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s1 = ms1.search();
@@ -66,6 +69,9 @@ public class TestMonedasPDR {
 			System.out.println("3 = " + SolucionMonedas.of(path2));
 			ms2.bestValue = path2.getWeight();
 			ms2.optimalPath = path2;
+		}else {
+			ms2.bestValue =  MonedaVoraz.voraz();
+			ms2.optimalPath = null;
 		}
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s2 = ms2.search();
 		if (s2.isPresent()) System.out.println("4 = " + SolucionMonedas.of(s2.get()));

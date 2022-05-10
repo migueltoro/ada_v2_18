@@ -24,7 +24,7 @@ public class TestGreedy {
 //		System.out.println("3 = "+e1);
 //		System.out.println("4 = "+e2);
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			
 			MonedaVertex.valorInicial = 400+i;
 			Collections.sort(Moneda.monedas, Comparator.comparing(m -> -m.pesoUnitario()));
@@ -35,19 +35,16 @@ public class TestGreedy {
 					MonedaVertex.constraint());
 			GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 			GraphPath<MonedaVertex, MonedaEdge> path = rr.path();
-			System.out.println(rr.isSolution(path));
-			System.out.println("G " + path.getWeight());
-			System.out.println("H " + MonedasHeuristica.heuristic(e1, MonedaVertex.goal(), null));
+			System.out.println(String.format("%d ,%s,%.2f,%.2f,",i,rr.isSolution(path),MonedaVoraz.voraz(),path.getWeight(),
+					MonedasHeuristica.heuristic(e1, MonedaVertex.goal(), null)));
 			Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 			//		System.out.println(Moneda.monedas);
 			e1 = MonedaVertex.first();
-			MonedaVertex e3 = MonedaVertex.last();
 			graph = SimpleVirtualGraph.sum(e1, MonedaVertex.goal(), e -> e.weight(), MonedaVertex.constraint());
 			rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 			path = rr.path();
-			System.out.println(rr.isSolution(path));
-			System.out.println("G " + path.getWeight());
-			System.out.println("H " + MonedasHeuristica.heuristic(e1, MonedaVertex.goal(), e3));
+			System.out.println(String.format("%d ,%s,%.2f,%.2f,",i,rr.isSolution(path),MonedaVoraz.voraz(),path.getWeight(),
+					MonedasHeuristica.heuristic(e1, MonedaVertex.goal(), null)));
 		}
 	}
 

@@ -43,7 +43,7 @@ public class TestMonedasBT {
 			ms1.bestValue = path1.getWeight();
 			ms1.optimalPath = path1;
 		} else {
-			ms1.bestValue = 72360.0;
+			ms1.bestValue = MonedaVoraz.voraz();
 			ms1.optimalPath = null;
 		}
 		
@@ -81,7 +81,7 @@ public class TestMonedasBT {
 			ms2.bestValue = path2.getWeight();
 			ms2.optimalPath = path2;
 		} else {
-			ms2.bestValue = 376.0;
+			ms2.bestValue =  MonedaVoraz.voraz();
 			ms2.optimalPath = null;
 		}
 		ms2.search();
