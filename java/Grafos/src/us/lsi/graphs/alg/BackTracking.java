@@ -64,8 +64,8 @@ public class BackTracking<V,E,S> {
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.getPath().boundedValue(state.getAccumulateValue(),state.getActualVertex(),
-				edge,graph.goal(),graph.endVertex(), heuristic);
+		Double w = state.getGraph().boundedValue(state.getAccumulateValue(),state.getActualVertex(),
+				edge, heuristic);
 		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) >= 0;
 		return r;
 	}
@@ -148,6 +148,7 @@ public class BackTracking<V,E,S> {
 		void back(E edge);
 		Double getAccumulateValue();
 		EGraphPath<V, E> getPath();
+		EGraph<V, E> getGraph();
 		V getActualVertex();
 	}
 	
@@ -195,7 +196,12 @@ public class BackTracking<V,E,S> {
 		public Double getAccumulateValue() {
 			return this.accumulateValue;
 		}	
-		
+	
+		@Override
+		public EGraph<V, E> getGraph() {
+			return graph;
+		}
+
 		@Override
 		public EGraphPath<V, E> getPath() {				
 			EGraphPath<V,E> ePath = graph.initialPath();

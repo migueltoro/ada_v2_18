@@ -65,7 +65,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		this.ePath = graph.initialPath();
 		this.heap = new FibonacciHeap<>(comparator);
 		Data<V,E> data = Data.of(graph.startVertex(),null,ePath.getWeight());	
-		Double d = ePath.estimatedWeightToEnd(data.distanceToOrigin,graph.startVertex(),graph.goal(),graph.endVertex(),heuristic);
+		Double d = this.graph.estimatedWeightToEnd(data.distanceToOrigin,graph.startVertex(),heuristic);
 		Handle<Double, Data<V, E>> h = this.heap.insert(d,data);
 		this.tree.put(graph.startVertex(),h);
 	}
@@ -83,7 +83,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	}
 	
 	private Boolean forget(Double actualDistance, V v) {
-		Double w = ePath.estimatedWeightToEnd(actualDistance,v, graph.goal(), graph.endVertex(), heuristic);
+		Double w = graph.estimatedWeightToEnd(actualDistance,v, heuristic);
 		Boolean r = false;
 		r = this.bestValue != null && comparator.compare(w,this.bestValue) >= 0;
 		if(r) this.tree.remove(v);
@@ -105,7 +105,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		for (E backEdge : graph.edgesListOf(vertexActual)) {
 			V v = Graphs.getOppositeVertex(graph,backEdge,vertexActual);
 			Double newDistanceToOrigin = ePath.add(actualDistance,v,backEdge,edgeToOrigen);
-			Double newDistanceToEnd =  ePath.estimatedWeightToEnd(newDistanceToOrigin,v, graph.goal(), graph.endVertex(), heuristic);
+			Double newDistanceToEnd =  graph.estimatedWeightToEnd(newDistanceToOrigin,v, heuristic);
 			if (!tree.containsKey(v)) {
 				Data<V, E> dv = Data.of(v, backEdge, newDistanceToOrigin);
 				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
