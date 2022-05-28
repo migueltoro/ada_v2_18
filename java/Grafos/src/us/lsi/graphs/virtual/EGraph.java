@@ -30,6 +30,10 @@ public interface EGraph<V, E> extends Graph<V, E> {
 	Predicate<V> constraint();
 
 	PathType pathType();
+	
+	public default Double add(Double acumulateValue, V vertexActual, E nextEdge, E lastEdge) {
+		return this.initialPath().add(acumulateValue, vertexActual, nextEdge, lastEdge);
+	}
 
 	public default Double boundedValue(Double acumulateValue, V vertexActual, E edge,
 			TriFunction<V, Predicate<V>, V, Double> heuristic) {

@@ -178,7 +178,7 @@ public class BackTracking<V,E,S> {
 		@Override
 		public void forward(E edge) {
 			E lastEdge = edges.isEmpty()?null:List2.last(edges);
-			this.accumulateValue = this.path.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
+			this.accumulateValue = this.graph.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
 			this.edges.add(edge);
 			this.weights.add(this.accumulateValue);

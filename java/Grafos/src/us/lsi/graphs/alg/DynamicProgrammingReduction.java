@@ -105,7 +105,7 @@ public class DynamicProgrammingReduction<V, E> {
 			for (E edge : graph.edgesListOf(actual)) {					
 				if (this.forget(edge,actual,accumulateValue,graph.goal(),graph.endVertex())) continue;
 				V v = Graphs.getOppositeVertex(graph,edge,actual);
-				Double ac = this.path.add(accumulateValue,actual,edge,edgeToOrigin); 
+				Double ac = this.graph.add(accumulateValue,actual,edge,edgeToOrigin); 
 				Sp<E> s = search(v,ac,edge);
 				if (s!=null) {
 					E lastEdge = this.solutionsTree.get(v).edge;

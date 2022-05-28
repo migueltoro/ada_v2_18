@@ -47,7 +47,7 @@ public class AstarRandom<V, E> extends AStar<V, E>{
 			edges = List2.randomUnitary(edges);
 		for (E backEdge : edges) {
 			V v = graph.getEdgeTarget(backEdge);
-			Double newDistance = ePath.add(actualDistance,v,backEdge,edgeToOrigen);
+			Double newDistance = graph.add(actualDistance,v,backEdge,edgeToOrigen);
 			double newDistanceToEnd =  graph.estimatedWeightToEnd(newDistance,v, heuristic);
 			if (!tree.containsKey(v)) {
 				Data<V, E> nd = Data.of(v, backEdge, newDistance);
