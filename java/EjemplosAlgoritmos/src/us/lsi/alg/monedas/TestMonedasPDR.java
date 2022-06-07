@@ -11,9 +11,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 
 public class TestMonedasPDR {
@@ -24,25 +24,23 @@ public class TestMonedasPDR {
 
 		MonedaVertex e1 = MonedaVertex.first();
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
+		EGraph<MonedaVertex, MonedaEdge> graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Max)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();
 
-		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
+		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 		
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1 = DynamicProgrammingReduction.of(
-				graph, 
-				MonedasHeuristica::heuristic, 
-				PDType.Max);
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1;
 
 		if (rr.isSolution(path1)) {
 			System.out.println("1 = " + SolucionMonedas.of(path1));
-			ms1.bestValue = path1.getWeight();
-			ms1.optimalPath = path1;
+			ms1 = DynamicProgrammingReduction.of(graph, path1.getWeight(), path1, false);
 		} else {
-			ms1.bestValue =  MonedaVoraz.voraz();
-			ms1.optimalPath = null;
+			ms1 = DynamicProgrammingReduction.of(graph, MonedaVoraz.voraz(), null, false);
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s1 = ms1.search();
@@ -54,24 +52,23 @@ public class TestMonedasPDR {
 
 		MonedaVertex e3 = MonedaVertex.first();
 		
-		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),e->e.weight(),MonedaVertex.constraint());
+		graph = EGraph.virtual(e3,MonedaVertex.goal(),PathType.Sum,Type.Min)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();
 
-		rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
+		rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.path();
 
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2 = DynamicProgrammingReduction.of(
-				graph, 
-				MonedasHeuristica::heuristic, 
-				PDType.Min);
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2;
 
 		if (rr.isSolution(path2)) {
 			System.out.println("3 = " + SolucionMonedas.of(path2));
-			ms2.bestValue = path2.getWeight();
-			ms2.optimalPath = path2;
+			ms2 = DynamicProgrammingReduction.of(graph, path2.getWeight(), path2, false);
 		}else {
-			ms2.bestValue =  MonedaVoraz.voraz();
-			ms2.optimalPath = null;
+			ms2 = DynamicProgrammingReduction.of(graph, MonedaVoraz.voraz(), null, false);
 		}
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s2 = ms2.search();
 		if (s2.isPresent()) System.out.println("4 = " + SolucionMonedas.of(s2.get()));

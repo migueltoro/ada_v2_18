@@ -5,9 +5,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAStar {
 	
@@ -23,19 +21,21 @@ public class TestAStar {
 //		DatosSubconjuntos.toConsole();
 		
 
-		// Vértices clave
+		// Vï¿½rtices clave
 
 		SubconjuntosVertex start = SubconjuntosVertex.initial();
 
 		// Grafo
-
+		
 		EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-				SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x-> x.weight());
+				EGraph.virtual(start,SubconjuntosVertex.goal())
+				.edgeWeight(x-> x.weight())
+				.heuristic(SubconjuntosHeuristic::heuristic)
+				.build();
 
 		System.out.println("\n\n#### PI-7 Ej3 Algoritmo Astar ####");
 		
-		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = AStar.of(graph, 
-				SubconjuntosHeuristic::heuristic,AStarType.Min);
+		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = AStar.of(graph);
 		
 		List<Integer> gp_as = aStar.search().get().getEdgeList().stream().map(x -> x.action())
 				.collect(Collectors.toList()); // getEdgeList();

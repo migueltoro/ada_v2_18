@@ -8,22 +8,20 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.DefaultGraphType;
-
-import us.lsi.common.Set2;
 import us.lsi.common.TriFunction;
 import us.lsi.path.EGraphPath;
 import us.lsi.path.EGraphPath.PathType;
 
 /**
- * <p> Implementación de un grafo virtual simple 
- * Asumimos que los vértices son subtipo de VirtualVertex &lt; V,E &gt;
+ * <p> Implementaciï¿½n de un grafo virtual simple 
+ * Asumimos que los vï¿½rtices son subtipo de VirtualVertex &lt; V,E &gt;
  * Asumimos que las aristas son subtipos de SimpleEdge &lt; V &gt; 
  * </p>
  * 
- * <p> El grafo es inmutable por lo que no están permitadas las operación de modificación. Tampoco
- * están permitidas las operaciones de consulta de todos los vértices o todas las aristas.
- *  Si se invocan alguna de ellas se disparará 
- * la excepción UnsupportedOperationException </p>
+ * <p> El grafo es inmutable por lo que no estï¿½n permitadas las operaciï¿½n de modificaciï¿½n. Tampoco
+ * estï¿½n permitidas las operaciones de consulta de todos los vï¿½rtices o todas las aristas.
+ *  Si se invocan alguna de ellas se dispararï¿½ 
+ * la excepciï¿½n UnsupportedOperationException </p>
  * 
  * @see us.lsi.graphs.virtual.VirtualVertex
  * 
@@ -31,55 +29,12 @@ import us.lsi.path.EGraphPath.PathType;
  * 
  * @author Miguel Toro
  *
- * @param <V> El tipo de los vértices
+ * @param <V> El tipo de los vï¿½rtices
  * @param <E> El tipo de las aristas
  * 
  */
 public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends SimpleEdgeAction<V,?>> implements EGraph<V,E> {
 	
-
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
-			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight) {
-		return of(startVertex, goal, PathType.Last, vertexWeight, null,null,v->true,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
-			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight, Predicate<V> constraint) {
-		return of(startVertex, goal, PathType.Last, vertexWeight, null,null,constraint,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> last(
-			V startVertex, Predicate<V> goal, Function<V,Double> vertexWeight, V endVertex) {
-		return of(startVertex, goal, PathType.Last, vertexWeight, null,endVertex,v->true,null);
-	}
-
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
-			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight) {
-		return of(startVertex, goal, PathType.Sum, null, edgeWeight, null,v->true,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
-			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight,Predicate<V> constraint) {
-		return of(startVertex, goal, PathType.Sum, null, edgeWeight, null,constraint,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> EGraph<V, E> sum(
-			V startVertex, Predicate<V> goal, Function<E,Double> edgeWeight,V endVertex) {
-		return of(startVertex, goal, PathType.Sum, null, edgeWeight, endVertex,v->true,null);
-	}
-	
-	public static <V extends VirtualVertex<V, E, A>, E extends SimpleEdgeAction<V, A>, A> 
-	   SimpleVirtualGraph<V, E> of(
-			V startVertex, 
-			Predicate<V> goal, 
-			PathType type, 
-			Function<V, Double> vertexWeight,
-			Function<E, Double> edgeWeight, 
-			V endVertex, 
-			Predicate<V> constraint, 
-			TriFunction<V,E,E,Double> vertexPassWeight) {
-		return new SimpleVirtualGraph<V, E>(startVertex, goal, type, vertexWeight, edgeWeight, endVertex, constraint,vertexPassWeight);
-	}
 
 	private Set<V> vertexSet;
 	private Function<E,Double> edgeWeight = null;
@@ -90,25 +45,43 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	private Predicate<V> goal;
 	private V endVertex;	
 	private Predicate<V> constraint;
-	private PathType type;
+	private PathType pathType;
+	private Function<V,E> greedyEdge;
+	private TriFunction<V, Predicate<V>, V, Double> heuristic;
+	private Type type;
 	
 	
-	public SimpleVirtualGraph(V startVertex,Predicate<V> goal,PathType type, Function<V, Double> vertexWeight,
-			Function<E, Double> edgeWeight, V endVertex, Predicate<V> constraint, 
-			TriFunction<V,E,E,Double> vertexPassWeight) {
-		super();
-		this.vertexSet = Set2.empty();;
-		this.edgeWeight =  edgeWeight;
-		this.vertexWeight = vertexWeight;
-		this.vertexPassWeight = vertexPassWeight;
-		this.startVertex = startVertex;
+	SimpleVirtualGraph(EGraphBuilderVirtual<V,E> builder) {
+		this.edgeWeight =  builder.edgeWeight;
+		this.vertexWeight = builder.vertexWeight;
+		this.vertexPassWeight = builder.vertexPassWeight;
+		this.startVertex = builder.startVertex;
 		this.vertexSet = new HashSet<V>();
 		this.vertexSet.add(this.startVertex);
-		this.type = type;
-		this.goal = goal;
-		this.endVertex = endVertex;
-		this.constraint = constraint;
-		this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
+		this.pathType = builder.pathType;
+		this.goal = builder.goal;
+		this.endVertex = builder.endVertex;
+		this.constraint = builder.goalHasSolution;
+		this.path = EGraphPath.ofVertex(this,this.startVertex,this.pathType);
+		this.greedyEdge = builder.greedyEdge;
+		this.heuristic = builder.heuristic;
+		this.type = builder.type;
+	}
+	
+	
+	@Override
+	public Type type() {
+		return type;
+	}
+
+	@Override
+	public Function<V, E> greedyEdge() {
+		return this.greedyEdge;
+	}
+
+	@Override
+	public TriFunction<V, Predicate<V>, V, Double> heuristic() {
+		return this.heuristic;
 	}
 
 	@Override
@@ -147,7 +120,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	}
 	
 	/**
-	 * @param vertex es el vértice actual
+	 * @param vertex es el vï¿½rtice actual
 	 * @return El peso de vertex
 	 */
 	public double getVertexWeight(V vertex) {
@@ -156,10 +129,10 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 		return r;
 	}
 	/**
-	 * @param vertex El vértice actual
-	 * @param edgeIn Una arista entrante o incidente en el vértice actual. Es null en el vértice inicial.
-	 * @param edgeOut Una arista saliente o incidente en el vértice actual. Es null en el vértice final.
-	 * @return El peso asociado al vértice suponiendo las dos aristas dadas. 
+	 * @param vertex El vï¿½rtice actual
+	 * @param edgeIn Una arista entrante o incidente en el vï¿½rtice actual. Es null en el vï¿½rtice inicial.
+	 * @param edgeOut Una arista saliente o incidente en el vï¿½rtice actual. Es null en el vï¿½rtice final.
+	 * @return El peso asociado al vï¿½rtice suponiendo las dos aristas dadas. 
 	 */
 	public double getVertexPassWeight(V vertex, E edgeIn, E edgeOut) {
 		Double r = 0.;
@@ -180,7 +153,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	}	
 	
 	/** 
-	 * @return Conjunto de vértices del grafo que se han hecho explícitos en el constructor.
+	 * @return Conjunto de vï¿½rtices del grafo que se han hecho explï¿½citos en el constructor.
 	 */
 	@Override
 	public Set<V> vertexSet(){
@@ -356,7 +329,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	
 	@Override
 	public PathType pathType() {
-		return type;
+		return pathType;
 	}
 	
 	@Override
@@ -368,7 +341,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 		return endVertex;
 	}
 	@Override
-	public Predicate<V> constraint() {
+	public Predicate<V> goalHasSolution() {
 		return constraint;
 	}
 

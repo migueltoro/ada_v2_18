@@ -6,9 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestJarrasAstar {
 
@@ -19,17 +17,18 @@ public class TestJarrasAstar {
 			JarrasVertex e1 = JarrasVertex.first();
 			JarrasVertex e2 = JarrasVertex.last();
 			
-			EGraph<JarrasVertex, JarrasEdge> graph = SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->1.,e2);		
+			EGraph<JarrasVertex, JarrasEdge> graph = EGraph.virtual(e1,v->v.equals(e2))
+					.endVertex(e2)
+					.heuristic((v1,p,v2)->0.)
+					.build();		
 			
 			AStar<JarrasVertex, JarrasEdge> ms = AStar.of(
-					graph,
-					(v1,p,v2)->0.,
-					AStarType.Min);
+					graph);
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 			
 			GraphPath<JarrasVertex, JarrasEdge> path = ms.search().orElse(null);
-			List<JarrasEdge> edges = path.getEdgeList();
+//			List<JarrasEdge> edges = path.getEdgeList();
 //			System.out.println(edges);
 			JarrasSolution s = JarrasSolution.of(path);
 			System.out.println(s);

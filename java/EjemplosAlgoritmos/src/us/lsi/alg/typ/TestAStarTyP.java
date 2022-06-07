@@ -8,10 +8,11 @@ import org.jgrapht.GraphPath;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
+import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.path.EGraphPath.PathType;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 
 public class TestAStarTyP {
 
@@ -20,13 +21,22 @@ public class TestAStarTyP {
 		TyPVertex.datos("ficheros/tareas.txt",5);
 		TyPVertex e1 = TyPVertex.first();
 		
+		
 		EGraph<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,v->v.goal(),v->v.maxCarga());		
+				EGraph.virtual(e1,v->v.goal(), PathType.Last, Type.Min)
+				.vertexWeight(v->v.maxCarga())
+				.greedyEdge(TyPVertex::greadyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();	
+		
+		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> rr = GreedyOnGraph.of(graph);
+		
+		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> pp = rr.path();
+		Double bv = pp.getWeight();
+		System.out.println(bv);
 		
 		
-		AStar<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> ms = AStar.of(
-				graph,
-				Heuristica::heuristic,AStarType.Min);
+		AStar<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> ms = AStar.of(graph,bv,pp);
 		
 //		ms.stream().forEach(v->System.out.println(v));
 		

@@ -4,10 +4,10 @@ import java.util.Locale;
 import java.util.function.Predicate;
 
 import us.lsi.alg.sudoku.DatosSudoku.SolucionSudoku;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.BackTrackingRandom;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestSudokuBTRandom {
@@ -19,12 +19,15 @@ public class TestSudokuBTRandom {
 		Predicate<SudokuVertex> goal = SudokuVertex.goal();
 		
 		EGraph<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,goal,v->(double)v.sudoku().errores(),SudokuVertex.constraint());		
+				EGraph.virtual(e1,goal,PathType.Last, Type.One)
+				.vertexWeight(v->(double)v.sudoku().errores())
+				.goalHasSolution(SudokuVertex.constraint())
+				.build();
+		
 		
 		BackTrackingRandom<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = BackTrackingRandom.of(
 				graph,
 				SudokuVertex::solucion,
-				BTType.One,
 				v->DatosSudoku.numeroDeCasillas-v.index());
 		
 		BackTrackingRandom.threshold = 15;

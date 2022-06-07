@@ -97,7 +97,7 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 	}
 	
 	@Override
-	public Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge) {
+	public Double add(V vertexActual, Double acumulateValue, E edge, E lastEdge) {
 		Preconditions.checkNotNull(edge, "La arista no puede ser null");
 		Double weight = acumulateValue;
 		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
@@ -121,7 +121,7 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 	}
 
 	@Override
-	public Double boundedValue(Double acumulateValue,V vertexActual, E edge, Predicate<V> goal, V end,  
+	public Double boundedValue(V vertexActual,Double acumulateValue, E edge, Predicate<V> goal, V end,  
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		Double weight = acumulateValue;
 		V target = Graphs.getOppositeVertex(graph,edge,vertexActual);
@@ -132,7 +132,7 @@ public class GraphPathSum<V, E> extends GraphPath2<V,E> implements EGraphPath<V,
 	}
 
 	@Override
-	public Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal, V end, 
+	public Double estimatedWeightToEnd(V vertexActual,Double acumulateValue,Predicate<V> goal, V end, 
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		return acumulateValue+heuristic.apply(vertexActual, goal, end);
 	}

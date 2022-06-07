@@ -13,7 +13,8 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestGreedyColor {
 	
@@ -39,10 +40,12 @@ public class TestGreedyColor {
 		
 //		Integer n = g2.vertexSet().size();
 		ColorVertex.data(9, g2);	
-		ColorVertex v1 = ColorVertex.first();
+		ColorVertex e1 = ColorVertex.first();
 		
 		EGraph<ColorVertex, ColorEdge> graph = 
-				SimpleVirtualGraph.last(v1,ColorVertex.goal(),v->v.nc().doubleValue());	
+				EGraph.virtual(e1,ColorVertex.goal(),PathType.Last,Type.Min)
+				.vertexWeight(v->v.nc().doubleValue())
+				.build();
 		
 		Integer m2 = GreedyOnGraph.of(graph,v->v.greedyEdge()).last().get().nc();
 		System.out.println("Voraz = "+m2);

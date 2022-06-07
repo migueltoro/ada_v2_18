@@ -7,9 +7,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestBT {
 
@@ -19,7 +19,12 @@ public class TestBT {
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.sum(e1,PackVertex.goal(),e->e.weight());	
+				EGraph.virtual(e1,PackVertex.goal(),PathType.Last,Type.Min)
+				.vertexWeight(v->(double)v.nc())
+				.edgeWeight(e->e.weight())
+				.greedyEdge(PackVertex::greedyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();		
 		
 		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
 				graph,
@@ -34,12 +39,9 @@ public class TestBT {
 		
 		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BackTracking.of(
 				graph,
-				Heuristica::heuristic,
 				SolucionPack::of,
-				BTType.Min);	
-		
-		ms.bestValue = (double) nc;
-		ms.optimalPath = path;
+				(double) nc,
+				path, false);	
 		
 		System.out.println(String.format("Volumen contenedor = %d,Numero de Objetos = %d",
 				Data.volumenContenedor,Data.n));

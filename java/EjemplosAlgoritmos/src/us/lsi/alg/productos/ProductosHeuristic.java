@@ -10,7 +10,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+
 
 public class ProductosHeuristic {
 
@@ -23,10 +23,13 @@ public class ProductosHeuristic {
 	}
 	
 	
-	public static GraphPath<ProductosVertex, ProductosEdge> graphPathVoraz(ProductosVertex vertice,
+	public static GraphPath<ProductosVertex, ProductosEdge> graphPathVoraz(ProductosVertex start,
 			Predicate<ProductosVertex> goal) {
 		EGraph<ProductosVertex, ProductosEdge> graph = 
-				SimpleVirtualGraph.sum(vertice, goal,x -> x.weight());
+				EGraph.virtual(start,goal)
+				.edgeWeight(x -> x.weight())
+				.heuristic(ProductosHeuristic::heuristic)
+				.build();
 		GreedyOnGraph<ProductosVertex, ProductosEdge> rr = 
 				GreedyOnGraph.of(graph, ProductosVertex::greedyEdge);
 		GraphPath<ProductosVertex, ProductosEdge> p = rr.path();

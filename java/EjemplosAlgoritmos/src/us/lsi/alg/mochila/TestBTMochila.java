@@ -8,11 +8,11 @@ import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
+import us.lsi.path.EGraphPath.PathType;
 
 
 
@@ -26,9 +26,12 @@ public class TestBTMochila {
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight());		
+				EGraph.virtual(e1,MochilaVertex.goal(), PathType.Sum, Type.Max)
+				.greedyEdge(MochilaVertex::greedyEdge)
+				.heuristic(MochilaHeuristic::heuristic)
+				.build();	
 		
-		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = rr.path();
 		
@@ -39,16 +42,11 @@ public class TestBTMochila {
 		
 		BackTracking<MochilaVertex, MochilaEdge,SolucionMochila> ms = BackTracking.of(
 				graph,
-				MochilaHeuristic::heuristic,
 				MochilaVertex::getSolucion,
-				BTType.Max);		
-		
-		ms.withGraph = true;
-		ms.bestValue = path.getWeight();
-		ms.optimalPath = path;
+				path.getWeight(),path,true);		
 		
 		ms.search();
-		SolucionMochila s = MochilaVertex.getSolucion(ms.optimalPath().get());
+//		SolucionMochila s = MochilaVertex.getSolucion(ms.optimalPath().get());
 //		System.out.println(s);
 		System.out.println(ms.optimalPath().get().getEdgeList().stream().map(e->e.action()).toList());
 			

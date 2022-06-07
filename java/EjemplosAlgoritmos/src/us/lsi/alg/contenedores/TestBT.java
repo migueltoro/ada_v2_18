@@ -6,9 +6,9 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestBT {
 
@@ -24,15 +24,18 @@ public class TestBT {
 //			DatosSubconjuntos.toConsole();
 			
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexContenedores start = VertexContenedores.initial();
 			Predicate<VertexContenedores> goal = VertexContenedores.goal();
 
 			// Grafo
-
-			EGraph<VertexContenedores, EdgeContenedores> graph =
-					SimpleVirtualGraph.last(start,goal,x -> (double)x.contenedoresCompletos().size());
+			
+			EGraph<VertexContenedores, EdgeContenedores> graph = 
+					EGraph.virtual(start,goal,PathType.Last,Type.Max)
+					.vertexWeight(x -> (double)x.contenedoresCompletos().size())
+					.heuristic(ContenedoresHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 			
@@ -44,13 +47,10 @@ public class TestBT {
 			System.out.println("Heuristica ="+ContenedoresHeuristic.heuristic(start, goal, null));
 			// Algoritmo BT
 			BackTracking<VertexContenedores, EdgeContenedores, SolucionContenedores> bta = 
-				BackTracking.of(graph, 
-					ContenedoresHeuristic::heuristic,
+					BackTracking.of(graph,
 					SolucionContenedores::of, 
-					BTType.Max);
+					max.getWeight(), max, false);
 			
-			bta.bestValue = max.getWeight();
-			bta.optimalPath = max;
 
 			bta.search();
 			

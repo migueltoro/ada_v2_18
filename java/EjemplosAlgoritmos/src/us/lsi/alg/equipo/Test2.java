@@ -16,8 +16,8 @@ public class Test2 {
 		
 		EquipoVertex v = EquipoVertex.first();
 		
-		EGraph<EquipoVertex, EquipoEdge> g = 
-				SimpleVirtualGraph.sum(EquipoVertex.first(),EquipoVertex::goal, e-> e.weight());
+		EGraph<EquipoVertex, EquipoEdge> g = EGraph.virtual(EquipoVertex.first(),EquipoVertex::goal)
+				.build();
 		
 		while (v.index()<DatosEquipo.M) {
 			GreedyOnGraph<EquipoVertex, EquipoEdge> vr2 = GreedyOnGraph.random(g);	

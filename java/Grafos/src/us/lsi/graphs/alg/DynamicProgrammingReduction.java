@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import us.lsi.common.TriFunction;
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.Graphs2;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
@@ -22,33 +21,34 @@ import org.jgrapht.Graphs;
 public class DynamicProgrammingReduction<V, E> {
 	
 	public static <V, E> DynamicProgrammingReduction<V, E> of(
-			EGraph<V, E> graph, 
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			PDType type) {
-		return new DynamicProgrammingReduction<V, E>(graph, heuristic, type);
+			EGraph<V, E> graph) {
+		return new DynamicProgrammingReduction<V, E>(graph,null,null,false);
+	}
+	
+	public static <V, E> DynamicProgrammingReduction<V, E> of(
+			EGraph<V, E> graph, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
+		return new DynamicProgrammingReduction<V, E>(graph,bestValue,optimalPath,withGraph);
 	}
 
-	public EGraph<V, E> graph;
-	public Double bestValue = null;
-	private TriFunction<V, Predicate<V>, V, Double> heuristic;
+	private EGraph<V, E> graph;
+	private Double bestValue = null;
 	private Comparator<Sp<E>> comparatorEdges;
 	private Comparator<Double> comparator;
 	public Map<V, Sp<E>> solutionsTree;
-	private PDType type;
-	private EGraphPath<V, E> path;
 	public GraphPath<V, E> optimalPath;
 	public Graph<V,E> outGraph;
-	public Boolean withGraph = false;
+	private Boolean withGraph = false;
 
-	DynamicProgrammingReduction(EGraph<V, E> g,
-			TriFunction<V, Predicate<V>, V, Double> heuristic, PDType type) {
+	DynamicProgrammingReduction(EGraph<V, E> g, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
 		this.graph = g;
-		this.heuristic = heuristic;
-		this.type = type;
-		this.comparatorEdges = this.type == PDType.Min?Comparator.naturalOrder():Comparator.reverseOrder();
-		this.comparator = this.type == PDType.Min?Comparator.naturalOrder():Comparator.reverseOrder();
+		Preconditions.checkArgument(this.graph.type().equals(EGraph.Type.Min) || 
+				this.graph.type().equals(EGraph.Type.Max), "El tipo debe ser Min o Max");
+		this.comparatorEdges = this.graph.type() == EGraph.Type.Min?Comparator.naturalOrder():Comparator.reverseOrder();
+		this.comparator = this.graph.type() == EGraph.Type.Min?Comparator.naturalOrder():Comparator.reverseOrder();
 		this.solutionsTree = new HashMap<>();
-		this.path = graph.initialPath();
+		this.bestValue = bestValue;
+		this.optimalPath = optimalPath;
+		this.withGraph = withGraph;
 	}
 	
 	public Optional<GraphPath<V,E>> optimalPath(){
@@ -57,7 +57,7 @@ public class DynamicProgrammingReduction<V, E> {
 
 	private Boolean forget(E edge, V actual,Double accumulateValue,Predicate<V> goal,V end) {
 		Boolean r = false;
-		Double w = this.graph.boundedValue(accumulateValue, actual, edge, this.heuristic);
+		Double w = this.graph.boundedValue(actual, accumulateValue, edge);
 		if(this.bestValue != null) r = comparator.compare(w, this.bestValue) >= 0;
 		return r;
 	}
@@ -95,9 +95,9 @@ public class DynamicProgrammingReduction<V, E> {
 		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (graph.goal().test(actual)) {
-			if (graph.constraint().test(actual)) {
+			if (graph.goalHasSolution().test(actual)) {
 				update(accumulateValue);
-				r = Sp.of(graph.goalBaseSolution(actual), null);
+				r = Sp.of(graph.goalSolution(actual), null);
 			} else r = null;
 			this.solutionsTree.put(actual, r);
 		} else {
@@ -105,11 +105,11 @@ public class DynamicProgrammingReduction<V, E> {
 			for (E edge : graph.edgesListOf(actual)) {					
 				if (this.forget(edge,actual,accumulateValue,graph.goal(),graph.endVertex())) continue;
 				V v = Graphs.getOppositeVertex(graph,edge,actual);
-				Double ac = this.graph.add(accumulateValue,actual,edge,edgeToOrigin); 
+				Double ac = this.graph.add(actual,accumulateValue,edge,edgeToOrigin); 
 				Sp<E> s = search(v,ac,edge);
 				if (s!=null) {
 					E lastEdge = this.solutionsTree.get(v).edge;
-					Double spv = this.graph.fromNeighbordSolution(s.weight,v,edge,lastEdge);	
+					Double spv = this.graph.fromNeighbordSolution(v,s.weight,edge,lastEdge);	
 					Sp<E> sp = Sp.of(spv,edge);
 					rs.add(sp);
 				}

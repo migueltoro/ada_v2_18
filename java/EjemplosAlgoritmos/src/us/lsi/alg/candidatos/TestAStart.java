@@ -8,10 +8,9 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
-
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 
@@ -38,14 +37,17 @@ public class TestAStart {
 			
 			//SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
 
-			EGraph<VertexCandidatos, EdgeCandidatos> graph;
-
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight(),VertexCandidatos.constraint());
-			AStar<VertexCandidatos, EdgeCandidatos> aStar = AStar.of(graph,
-					CandidatosHeuristic::heuristic,AStarType.Max);
+			EGraph<VertexCandidatos, EdgeCandidatos> graph = EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.goalHasSolution(VertexCandidatos.constraint())
+					.heuristic(CandidatosHeuristic::heuristic)
+					.build();
+			
+			
+			AStar<VertexCandidatos, EdgeCandidatos> aStar = AStar.of(graph);
 			
 			Optional<GraphPath<VertexCandidatos, EdgeCandidatos>> gp = aStar.search();
 

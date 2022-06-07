@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class Test_aS {
 
@@ -23,21 +23,24 @@ public class Test_aS {
 			DatosMulticonjunto.iniDatos("ficheros/multiconjuntos.txt", id_fichero);
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
 
-			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
-
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight(), MulticonjuntoVertex.constraint());
-			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = AStar.of(graph,
-					MulticonjuntoHeuristic::heuristic,AStarType.Min);
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph =
+					EGraph.virtual(start,goal,PathType.Sum, Type.Min)
+					.edgeWeight(x -> x.weight())
+					.goalHasSolution(MulticonjuntoVertex.goalHasSolution())
+					.heuristic(MulticonjuntoHeuristic::heuristic)
+					.build();
+					
+			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = AStar.of(graph);
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> gp = aStar.search().get();
 			

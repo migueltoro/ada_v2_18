@@ -8,7 +8,8 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestGreedy {
 
@@ -31,16 +32,23 @@ public class TestGreedy {
 			System.out.println(MonedaVertex.valorInicial + "--------");
 			MonedaVertex e1 = MonedaVertex.first();
 			//		MonedaVertex e2 = MonedaVertex.last();
-			EGraph<MonedaVertex, MonedaEdge> graph = SimpleVirtualGraph.sum(e1, MonedaVertex.goal(), e -> e.weight(),
-					MonedaVertex.constraint());
-			GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
+			EGraph<MonedaVertex, MonedaEdge> graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Max)
+					.goalHasSolution(MonedaVertex.goalHasSolution())
+					.greedyEdge(MonedaVertex::aristaVoraz)
+					.heuristic(MonedasHeuristica::heuristic)
+					.build();	
+			GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph);
 			GraphPath<MonedaVertex, MonedaEdge> path = rr.path();
 			System.out.println(String.format("%d ,%s,%.2f,%.2f,",i,rr.isSolution(path),MonedaVoraz.voraz(),path.getWeight(),
 					MonedasHeuristica.heuristic(e1, MonedaVertex.goal(), null)));
 			Collections.sort(Moneda.monedas, Comparator.comparing(m -> m.pesoUnitario()));
 			//		System.out.println(Moneda.monedas);
 			e1 = MonedaVertex.first();
-			graph = SimpleVirtualGraph.sum(e1, MonedaVertex.goal(), e -> e.weight(), MonedaVertex.constraint());
+			graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Min)
+					.goalHasSolution(MonedaVertex.goalHasSolution())
+					.greedyEdge(MonedaVertex::aristaVoraz)
+					.heuristic(MonedasHeuristica::heuristic)
+					.build();	
 			rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 			path = rr.path();
 			System.out.println(String.format("%d ,%s,%.2f,%.2f,",i,rr.isSolution(path),MonedaVoraz.voraz(),path.getWeight(),

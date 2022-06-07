@@ -1,14 +1,14 @@
 package us.lsi.alg.monedas;
 
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class MonedaVoraz {
 	
@@ -19,8 +19,10 @@ public class MonedaVoraz {
 		for (int i = 0; ; i++) {
 			MonedaVertex.valorInicial = valorInicial + i;		
 			MonedaVertex e1 = MonedaVertex.first();		
-			EGraph<MonedaVertex, MonedaEdge> graph = SimpleVirtualGraph.sum(e1, MonedaVertex.goal(), e -> e.weight(),
-					MonedaVertex.constraint());
+			EGraph<MonedaVertex, MonedaEdge> graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Max)
+					.greedyEdge(MonedaVertex::aristaVoraz)
+					.heuristic(MonedasHeuristica::heuristic)
+					.build();	
 			GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 			GraphPath<MonedaVertex, MonedaEdge> path = rr.path();
 			if(rr.isSolution(path)) {

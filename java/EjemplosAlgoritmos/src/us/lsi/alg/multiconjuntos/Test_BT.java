@@ -5,13 +5,12 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.alg.monedas.MonedaEdge;
-import us.lsi.alg.monedas.MonedaVertex;
+
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class Test_BT {
 
@@ -28,7 +27,7 @@ public class Test_BT {
 			
 			DatosMulticonjunto.toConsole();
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
@@ -41,25 +40,26 @@ public class Test_BT {
 			
 			// Algoritmo BT
 			
-			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
-					SimpleVirtualGraph.sum(start, goal,x -> x.weight(), MulticonjuntoVertex.constraint());
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph =
+					EGraph.virtual(start,goal,PathType.Sum, Type.Min)
+					.edgeWeight(x -> x.weight())
+					.greedyEdge(MulticonjuntoVertex::greedyEdge)
+					.goalHasSolution(MulticonjuntoVertex.goalHasSolution())
+					.heuristic(MulticonjuntoHeuristic::heuristic)
+					.build();
 			
-			GreedyOnGraph<MulticonjuntoVertex, MulticonjuntoEdge> rr = GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge);
+			
+			GreedyOnGraph<MulticonjuntoVertex, MulticonjuntoEdge> rr = GreedyOnGraph.of(graph);
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = rr.path();
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
 			
-			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge,SolucionMulticonjunto> bta = 
-					BackTracking.of(graph, 
-							MulticonjuntoHeuristic::heuristic,
-							MulticonjuntoVertex::getSolucion, 
-							BTType.Min);
+			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge, SolucionMulticonjunto> bta = BackTracking.of(graph,
+					MulticonjuntoVertex::getSolucion, null, null, true);
 
 			if (rr.isSolution(r)) {
-				bta.bestValue = r.getWeight();
-				bta.optimalPath = r;
-				bta.withGraph = true;
+				bta = BackTracking.of(graph, MulticonjuntoVertex::getSolucion, r.getWeight(), r, true);
 			}
 			bta.search();
 			System.out.println(bta.getSolution().get());

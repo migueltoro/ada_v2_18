@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestPD {
 
@@ -25,15 +25,18 @@ public class TestPD {
 			DatosContenedores.iniDatos("ficheros/contenedores"+ id_fichero +".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //			DatosSubconjuntos.toConsole();
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexContenedores start = VertexContenedores.initial();
 			Predicate<VertexContenedores> goal = VertexContenedores.goal();
 
 			// Grafo
-
-			EGraph<VertexContenedores, EdgeContenedores> graph =
-					SimpleVirtualGraph.last(start,goal,x -> (double)x.contenedoresCompletos().size());
+			
+			EGraph<VertexContenedores, EdgeContenedores> graph = 
+					EGraph.virtual(start,goal,PathType.Last,Type.Max)
+					.vertexWeight(x -> (double)x.contenedoresCompletos().size())
+					.heuristic(ContenedoresHeuristic::heuristic)
+					.build();
 			
 			
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
@@ -48,12 +51,8 @@ public class TestPD {
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<VertexContenedores, EdgeContenedores> pdr = 
-					DynamicProgrammingReduction.of(graph, 
-							ContenedoresHeuristic::heuristic, 
-							PDType.Max);
-			
-			pdr.bestValue = max.getWeight();
-			pdr.optimalPath = max;
+					DynamicProgrammingReduction.of(graph, max.getWeight(), max, false);
+
 
 			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = pdr.search();
 			SolucionContenedores s_pdr;

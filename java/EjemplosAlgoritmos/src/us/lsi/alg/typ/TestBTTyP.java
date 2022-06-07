@@ -8,9 +8,9 @@ import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestBTTyP {
@@ -22,10 +22,14 @@ public class TestBTTyP {
 		TyPVertex e1 = TyPVertex.first();
 		
 		EGraph<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,e->e.goal(),v->v.maxCarga());		
+				EGraph.virtual(e1,v->v.goal(), PathType.Last, Type.Min)
+				.vertexWeight(v->v.maxCarga())
+				.greedyEdge(TyPVertex::greadyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();
+				
 			
-		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> rr = 
-				GreedyOnGraph.of(graph,TyPVertex::greadyEdge);
+		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> path = rr.path();
 		Double bv = path.getWeight();
@@ -33,13 +37,9 @@ public class TestBTTyP {
 		
 		BackTracking<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BackTracking.of(
 						graph,				
-						Heuristica::heuristic,
 						TyPVertex::getSolucion,
-						BTType.Min);		
+						bv,path,true);		
 		
-		ms.bestValue = bv;
-		ms.optimalPath = path;
-		ms.withGraph = true;
 		ms.search();
 
 		System.out.println(ms.getSolution().get());

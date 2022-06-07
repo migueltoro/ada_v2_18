@@ -6,9 +6,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestSeqAStar {
 
@@ -21,13 +19,15 @@ public class TestSeqAStar {
 		SeqVertex e2 = SeqVertex.last();
 		
 		
-		EGraph<SeqVertex, SeqEdge> graph = SimpleVirtualGraph.sum(e1,
-				v->v.equals(e2),e->e.weight(),e2);		
+		EGraph<SeqVertex, SeqEdge> graph =
+				EGraph.virtual(e1,v->v.equals(e2))
+				.edgeWeight(e->e.weight())
+				.endVertex(e2)
+				.heuristic(SeqHeuristic::heuristic)
+				.build();	
 		
 		AStar<SeqVertex, SeqEdge> ms = AStar.of(
-				graph,
-				SeqHeuristic::heuristic,
-				AStarType.Min);
+				graph);
 		
 		GraphPath<SeqVertex, SeqEdge> path = ms.search().orElse(null);
 		SeqSolution s = SeqSolution.of(path);

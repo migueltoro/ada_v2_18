@@ -9,7 +9,8 @@ import org.jgrapht.GraphPath;
 import us.lsi.graphs.alg.Greedy;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 
 public class MulticonjuntoHeuristic {
@@ -55,7 +56,7 @@ public class MulticonjuntoHeuristic {
 			
 			DatosMulticonjunto.toConsole();
 			
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
 //			Predicate<MulticonjuntoVertex> finalVertex = v -> MulticonjuntoVertex.goal(v);
@@ -63,9 +64,13 @@ public class MulticonjuntoHeuristic {
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
-
-			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph = 
-					SimpleVirtualGraph.sum(start, goal,x -> x.weight(),MulticonjuntoVertex.constraint());
+			
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph =
+					EGraph.virtual(start,goal,PathType.Sum, Type.Min)
+					.edgeWeight(x -> x.weight())
+					.goalHasSolution(MulticonjuntoVertex.goalHasSolution())
+					.heuristic(MulticonjuntoHeuristic::heuristic)
+					.build();
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = 
 					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge).path();
@@ -74,7 +79,7 @@ public class MulticonjuntoHeuristic {
 			
 			System.out.println();
 //			System.out.println(valEntero(start,DatosMulticonjunto.NUM_E));
-			System.out.println(MulticonjuntoVertex.constraint().test(r.getEndVertex()));
+			System.out.println(MulticonjuntoVertex.goalHasSolution().test(r.getEndVertex()));
 			System.out.println(r.getWeight());
 			System.out.println(heuristic(start,MulticonjuntoVertex.goal(),null));
 		}

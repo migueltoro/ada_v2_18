@@ -36,7 +36,7 @@ public record MonedaVertex(Integer index,Integer valorRestante) implements Virtu
 		return v->v.index() == MonedaVertex.n;
 	}
 	
-	public static Predicate<MonedaVertex> constraint() {
+	public static Predicate<MonedaVertex> goalHasSolution() {
 		return v->v.valorRestante() == 0;
 	}
 

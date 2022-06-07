@@ -28,7 +28,7 @@ public record AsignaturasVertice(Integer index,List<Integer>diasAsignatura,Integ
 		return this.index>=0 &&this.index<=DatosAsignaturas.ND;
 	}
 	
-	public static Predicate<AsignaturasVertice> constraint() {
+	public static Predicate<AsignaturasVertice> goalHasSolution() {
 		return x->x.diasAsignatura.stream().allMatch(da->da>=1 && da<=4);
 	}
 	

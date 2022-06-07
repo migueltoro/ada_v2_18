@@ -6,9 +6,9 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestAStar {
 
@@ -27,13 +27,16 @@ public class TestAStar {
 			/**
 			 * IMPORTANTE. En este tipo se usa el tipo "Last".
 			 */
-			EGraph<BufeteVertex, BufeteEdge> graph = 
-					SimpleVirtualGraph.last(start,goal, v -> (double) v.maxCarga());
+			EGraph<BufeteVertex, BufeteEdge> graph = EGraph.virtual(start,goal,PathType.Last,Type.Min)
+					.vertexWeight(v -> (double) v.maxCarga())
+					.heuristic(Heuristica::heuristic)
+					.build();
+			
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
 
-			AStar<BufeteVertex, BufeteEdge> aStar = AStar.of(graph, Heuristica::heuristic,AStarType.Min);
+			AStar<BufeteVertex, BufeteEdge> aStar = AStar.of(graph);
 			GraphPath<BufeteVertex, BufeteEdge> gp_as = aStar.search().get(); // getEdgeList();
 			
 			SolucionBufete s_as = SolucionBufete.of(gp_as);

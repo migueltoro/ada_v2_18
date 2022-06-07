@@ -12,9 +12,10 @@ import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
+
 
 public class TestMonedasAStar {
 
@@ -23,25 +24,25 @@ public class TestMonedasAStar {
 		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 400);
 		MonedaVertex e1 = MonedaVertex.first();
 		
-		EGraph<MonedaVertex, MonedaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MonedaVertex.goal(),x->x.weight(),MonedaVertex.constraint());		
+		EGraph<MonedaVertex, MonedaEdge> graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Max)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();	
 		
-		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
+		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph);
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 		
-		AStar<MonedaVertex, MonedaEdge> ms = 
-				AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Max);
+		AStar<MonedaVertex, MonedaEdge> ms;
 		
 //		ms.stream().limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
 		
 		if (rr.isSolution(path1)) {
 			System.out.println("Hay solucion voraz 1 = " +path1.getWeight());
-			ms.bestValue = path1.getWeight();
-			ms.optimalPath = path1;
+			ms = AStar.of(graph,path1.getWeight(),path1);
 		} else {
-			ms.bestValue = MonedaVoraz.voraz();
-			ms.optimalPath = null;
+			ms = AStar.of(graph,MonedaVoraz.voraz(),null);
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> path = ms.search();
@@ -70,22 +71,24 @@ public class TestMonedasAStar {
 		
 		MonedaVertex e3 = MonedaVertex.first();
 //		MonedaVertex e4 = MonedaVertex.last();
+		
+		
 
-		graph = SimpleVirtualGraph.sum(e3,MonedaVertex.goal(),x->x.weight());	
+		graph = EGraph.virtual(e3,MonedaVertex.goal(),PathType.Sum,Type.Min)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();	
 		
 		rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.path();
-		
-	    ms = AStar.of(graph,MonedasHeuristica::heuristic,AStarType.Min);
 	    
 	    if (rr.isSolution(path2)) {
 			System.out.println("Hay solucion voraz 2 = "+path2.getWeight());
-			ms.bestValue = path2.getWeight();
-			ms.optimalPath = path2;
+			ms = AStar.of(graph,path2.getWeight(),path2);
 		} else {
-			ms.bestValue = MonedaVoraz.voraz();
-			ms.optimalPath = null;
+			ms = AStar.of(graph,MonedaVoraz.voraz(),null);
 		}
 		
 	    path = ms.search();

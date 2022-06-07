@@ -13,7 +13,6 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
@@ -25,13 +24,13 @@ public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
 	 * @param startVertex El v�rtice inicial
 	 * @return Una algoritmo de b&uacute;squeda en orden topologico
 	 */
-	public static <V, E> TopologicalSearch<V, E> topological(Graph<V, E> g, V startVertex) {
+	public static <V, E> TopologicalSearch<V, E> topological(EGraph<V, E> g, V startVertex) {
 		return new TopologicalSearch<V, E>(g, startVertex);
 	}
 
 	
 	protected Map<V,E> edgeToOrigin;
-	public Graph<V,E> graph;
+	public EGraph<V,E> graph;
 	protected Stack<V> stackPre;
 	protected Queue<V> queue;
 	protected V startVertex; 
@@ -41,7 +40,7 @@ public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
 	public Boolean withGraph = false;
 
 
-	TopologicalSearch(Graph<V, E> g, V startVertex) {
+	TopologicalSearch(EGraph<V, E> g, V startVertex) {
 		this.graph = g;
 		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
@@ -110,11 +109,6 @@ public class TopologicalSearch<V, E> implements Iterator<V>, Iterable<V> {
 
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
-	}
-
-
-	public EGraph<V, E> getGraph() {
-		return EGraphI.sum(this.graph,startVertex(),null,null);
 	}
 	
 	public V startVertex() {

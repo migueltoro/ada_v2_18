@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.jgrapht.GraphPath;
@@ -22,7 +21,7 @@ import org.jheaps.tree.FibonacciHeap;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.ArrowHead;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.common.TriFunction;
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
@@ -38,16 +37,16 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	 * @param heuristic La heur&iacute;stica 
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
-	public static <V, E> AStar<V, E> of(EGraph<V, E> graph,TriFunction<V,Predicate<V>,V,Double> heuristic, AStarType type) {
-		return new AStar<V, E>(graph, heuristic, type);
+	public static <V, E> AStar<V, E> of(EGraph<V, E> graph) {
+		return new AStar<V, E>(graph,null,null);
 	}
 	
-	public static enum AStarType{Min,Max}
+	public static <V, E> AStar<V, E> of(EGraph<V, E> graph,Double bestValue,GraphPath<V, E> optimalPath) {
+		return new AStar<V, E>(graph,bestValue,optimalPath);
+	}
 
 	public Comparator<Double> comparator = Comparator.naturalOrder();
-	public AStarType type;
 	public EGraph<V,E> graph; 
-	protected TriFunction<V,Predicate<V>,V,Double> heuristic;
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
@@ -55,19 +54,21 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public GraphPath<V, E> optimalPath = null; //mejor camino estimado
 	
 
-	AStar(EGraph<V, E> graph,TriFunction<V,Predicate<V>, V,Double> heuristic, AStarType type) {
+	protected AStar(EGraph<V, E> graph, Double bestValue,GraphPath<V, E> optimalPath) {
 		super();
-		this.type = type;
-		this.comparator = this.type.equals(AStarType.Min)?Comparator.naturalOrder():Comparator.reverseOrder();
 		this.graph = graph;
-		this.heuristic = heuristic;
+		Preconditions.checkArgument(this.graph.type().equals(EGraph.Type.Min) || 
+				this.graph.type().equals(EGraph.Type.Max), "El tipo debe ser Min o Max");
+		this.comparator = this.graph.type().equals(EGraph.Type.Min)?Comparator.naturalOrder():Comparator.reverseOrder();		
 		this.tree = new HashMap<>();
 		this.ePath = graph.initialPath();
 		this.heap = new FibonacciHeap<>(comparator);
 		Data<V,E> data = Data.of(graph.startVertex(),null,ePath.getWeight());	
-		Double d = this.graph.estimatedWeightToEnd(data.distanceToOrigin,graph.startVertex(),heuristic);
+		Double d = this.graph.estimatedWeightToEnd(graph.startVertex(),data.distanceToOrigin);
 		Handle<Double, Data<V, E>> h = this.heap.insert(d,data);
 		this.tree.put(graph.startVertex(),h);
+		this.bestValue = bestValue;
+		this.optimalPath = optimalPath;
 	}
 	
 	public Boolean closed(V v) {
@@ -83,7 +84,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	}
 	
 	private Boolean forget(Double actualDistance, V v) {
-		Double w = graph.estimatedWeightToEnd(actualDistance,v, heuristic);
+		Double w = graph.estimatedWeightToEnd(v,actualDistance);
 		Boolean r = false;
 		r = this.bestValue != null && comparator.compare(w,this.bestValue) >= 0;
 		if(r) this.tree.remove(v);
@@ -104,8 +105,8 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		if(forget(actualDistance,  vertexActual)) return null;
 		for (E backEdge : graph.edgesListOf(vertexActual)) {
 			V v = Graphs.getOppositeVertex(graph,backEdge,vertexActual);
-			Double newDistanceToOrigin = graph.add(actualDistance,v,backEdge,edgeToOrigen);
-			Double newDistanceToEnd =  graph.estimatedWeightToEnd(newDistanceToOrigin,v, heuristic);
+			Double newDistanceToOrigin = graph.add(v,actualDistance,backEdge,edgeToOrigen);
+			Double newDistanceToEnd =  graph.estimatedWeightToEnd(v,newDistanceToOrigin);
 			if (!tree.containsKey(v)) {
 				Data<V, E> dv = Data.of(v, backEdge, newDistanceToOrigin);
 				Handle<Double, Data<V, E>> hv = heap.insert(newDistanceToEnd, dv);
@@ -131,7 +132,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	}
 	
 	public Optional<GraphPath<V, E>> path(V startVertex, Optional<V> last) {
-		if (!last.isPresent() || !graph.constraint().test(last.get())) return Optional.empty();
+		if (!last.isPresent() || !graph.goalHasSolution().test(last.get())) return Optional.empty();
 		V endVertex = last.get();
 		V v = endVertex;
 		if (!tree.containsKey(v)) return Optional.empty();
@@ -160,7 +161,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> search() {
 		V startVertex = graph.startVertex();
 		if(graph.goal().test(startVertex)) return Optional.of(ePath);
-		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.constraint())).findFirst();	
+		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.goalHasSolution())).findFirst();	
 		if(last.isPresent()) return path(startVertex,last);
 		else return Optional.ofNullable(this.optimalPath);
 	}
@@ -168,8 +169,8 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> searchAll() {
 		V startVertex = graph.startVertex();
 		if(graph.goal().test(startVertex)) return Optional.ofNullable(ePath);
-		List<V> lasts = this.stream().filter(graph.goal().and(graph.constraint())).toList();	
-		Integer t = this.type == AStarType.Min? 1: -1;
+		List<V> lasts = this.stream().filter(graph.goal().and(graph.goalHasSolution())).toList();	
+		Integer t = this.graph.type() == EGraph.Type.Min? 1: -1;
 		return lasts.stream()
 				.<GraphPath<V, E>>map(v->path(startVertex,Optional.of(v)).orElse(null))
 				.filter(p->p != null)

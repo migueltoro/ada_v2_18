@@ -6,9 +6,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 
 public class TestMainPuzzle {
@@ -30,10 +28,14 @@ public class TestMainPuzzle {
 		System.out.println(VertexPuzzle.isSolvable2(e1.datos(),e2.datos()));
 		
 		EGraph<VertexPuzzle, EdgePuzzle> graph = 
-				SimpleVirtualGraph.sum(e1,v->v.equals(e2),e->e.weight(),e2);		
+				EGraph.virtual(e1,x->x.equals(e2))
+				.edgeWeight(x->x.weight())
+				.endVertex(e2)
+				.heuristic(HeuristicaPuzzle::heuristica)
+				.build();		
 		
 		AStar<VertexPuzzle, EdgePuzzle> ms = 
-				AStar.of(graph,HeuristicaPuzzle::heuristica,AStarType.Min);
+				AStar.of(graph);
 		
 		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();

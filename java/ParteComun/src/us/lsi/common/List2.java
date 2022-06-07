@@ -28,24 +28,24 @@ public class List2 {
 	}
 	
 	/**
-	 * @pre La lista no está vacía
+	 * @pre La lista no estï¿½ vacï¿½a
 	 * @param <E> Tipo de los elementos
 	 * @param ls Una lista
 	 * @return Su primer elemento
 	 */
 	public static <E> E first(List<E> ls){
-		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacï¿½a");
 		return ls.get(0);
 	}
 	
 	/**
-	 * @pre La lista no está vacía
+	 * @pre La lista no estï¿½ vacï¿½a
 	 * @param <E> Tipo de los elementos
 	 * @param ls Una lista
-	 * @return Su último elemento
+	 * @return Su ï¿½ltimo elemento
 	 */
 	public static <E> E last(List<E> ls){
-		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacï¿½a");
 		int n = ls.size();
 		return ls.get(n-1);
 	}
@@ -53,12 +53,12 @@ public class List2 {
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @pre La lista no puede estar vacía
-	 * @return Una copia de la lista con el último elemnto eliminado
+	 * @pre La lista no puede estar vacï¿½a
+	 * @return Una copia de la lista con el ï¿½ltimo elemnto eliminado
 	 */
 	public static <E> List<E> removeLast(List<E> ls){
 		Preconditions.checkNotNull(ls);
-		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacía");
+		Preconditions.checkArgument(!ls.isEmpty(), "La lista no puede estar vacï¿½a");
 		List<E> cp = new ArrayList<>(ls);
 		int last = cp.size()-1;
 		cp.remove(last);
@@ -69,7 +69,7 @@ public class List2 {
 	/**
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
-	 * @return Una copia de la lista con el elemento añadido en último lugar
+	 * @return Una copia de la lista con el elemento aï¿½adido en ï¿½ltimo lugar
 	 */
 	public static <E> List<E> addLast(List<E> ls, E e){
 		Preconditions.checkNotNull(ls);
@@ -83,7 +83,7 @@ public class List2 {
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @param e Un elemento
-	 * @return Una copia de la lista con el elemento añadido en último primer lugar
+	 * @return Una copia de la lista con el elemento aï¿½adido en ï¿½ltimo primer lugar
 	 */
 	public static <E> List<E> addFirst(List<E> ls, E e){
 		Preconditions.checkNotNull(ls);
@@ -97,7 +97,7 @@ public class List2 {
 	 * @param <E> tipo de los elementos de la lista
 	 * @param ls Una lista
 	 * @param e Un elemento
-	 * @param index Un índice
+	 * @param index Un ï¿½ndice
 	 * @return Una copia de la lista con el elemento cambiado en la posicion index
 	 */
 	public static <E> List<E> setElement(List<E> ls, int index, E e){
@@ -117,7 +117,7 @@ public class List2 {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] toArray(List<E> lis){
-		Preconditions.checkArgument(lis!=null && !lis.isEmpty(), "La lista no puede ser vacía ni null");	
+		Preconditions.checkArgument(lis!=null && !lis.isEmpty(), "La lista no puede ser vacï¿½a ni null");	
 		Class<E> type = (Class<E>) lis.get(0).getClass();
 		return lis.stream().toArray((int x)->(E[])Array.newInstance(type, x));
 	}
@@ -127,10 +127,10 @@ public class List2 {
 	/**
 	 * @param <E> Tipo de los elementos
 	 * @param lista Una lista
-	 * @param i Un índice de la lista
-	 * @param j Un índice de la lista
-	 * @post Quedan intercambiadas las casillas de índices i y j en la lista
-	 * @pre Tanto i como j deben ser índices de la lista
+	 * @param i Un ï¿½ndice de la lista
+	 * @param j Un ï¿½ndice de la lista
+	 * @post Quedan intercambiadas las casillas de ï¿½ndices i y j en la lista
+	 * @pre Tanto i como j deben ser ï¿½ndices de la lista
 	 */
 	public static <E> void intercambia(List<E> lista, int i, int j){
 		int size = lista.size();
@@ -145,10 +145,10 @@ public class List2 {
 	/**
 	 * @param <T> Tipo de los elementos
 	 * @param ls Un array
-	 * @param i Un índice de la lista
-	 * @param j Un índice de la lista
-	 * @post Quedan intercambiadas las casillas de índices i y j en el array
-	 * @pre Tanto i como j deben ser índices del array
+	 * @param i Un ï¿½ndice de la lista
+	 * @param j Un ï¿½ndice de la lista
+	 * @post Quedan intercambiadas las casillas de ï¿½ndices i y j en el array
+	 * @pre Tanto i como j deben ser ï¿½ndices del array
 	 */
 	public static <T> void intercambia(T[] ls, int i, int j){
 		int size = ls.length;
@@ -161,7 +161,7 @@ public class List2 {
 	
 	/**
 	 * @param <T> Tipo de los elementos
-	 * @return Devuelve una lista vacía
+	 * @return Devuelve una lista vacï¿½a
 	 */
 	public static <T> List<T> empty(){
 	    return new ArrayList<T>();
@@ -170,7 +170,7 @@ public class List2 {
 	
 	/**
 	 * @param <T> Tipo de los elementos
-	 * @param n Número de copias
+	 * @param n Nï¿½mero de copias
 	 * @param e Elemento a copiar
 	 * @return Devuelve una lista formada por n copias de e
 	 */
@@ -185,10 +185,10 @@ public class List2 {
 	/**
 	 * @pre n &gt; ls.size()
 	 * @param <T> Tipo de los elementos
-	 * @param n Número de copias
+	 * @param n Nï¿½mero de copias
 	 * @param e Elemento a copiar
 	 * @param ls Una lista de entrada
-	 * @return Devuelve una lista de tamaño n formada por una copia de ls ampliada con copias de e
+	 * @return Devuelve una lista de tamaï¿½o n formada por una copia de ls ampliada con copias de e
 	 */
 	public static <T> List<T> copy(List<T> ls, T e, int n){
 		Preconditions.checkArgument(n>ls.size());
@@ -261,7 +261,7 @@ public class List2 {
 	/**
 	 * @param <E> tipo de los elementos
 	 * @param elements Una serie de elementos
-	 * @return Una lista construida de first más los que están en elements
+	 * @return Una lista construida de first mï¿½s los que estï¿½n en elements
 	 */
 	@SafeVarargs
 	public static <E> List<E> of(E... elements){
@@ -270,9 +270,9 @@ public class List2 {
 	
 	/**
 	 * @param <E> Tipo de los elementos de la lista
-	 * @param <U> Tipo de la collección
-	 * @param collection Una colección
-	 * @return La colección convertida en lista
+	 * @param <U> Tipo de la collecciï¿½n
+	 * @param collection Una colecciï¿½n
+	 * @return La colecciï¿½n convertida en lista
 	 */
 	public static <E,U extends Collection<E>> List<E> ofCollection(U collection){
 		return collection.stream().collect(Collectors.toList());
@@ -282,7 +282,7 @@ public class List2 {
 	 * @param <E> Tipo de los elementos de la lista
 	 * @param ls1 Una lista
 	 * @param ls2 Una segunda lista
-	 * @return La concatenación d elas dos listas
+	 * @return La concatenaciï¿½n d elas dos listas
 	 */
 	public static <E> List<E> concat(List<E> ls1, List<E> ls2){
 		List<E> r = List2.ofCollection(ls1);
@@ -302,7 +302,7 @@ public class List2 {
 	
 	/**
 	 * @pre Las listas deben estar ordenadas
-	 * @post La lista resultante está ordenada
+	 * @post La lista resultante estï¿½ ordenada
 	 * @param <E> El tip de los elementos 
 	 * @param r1 Una lista ordenada
 	 * @param r2 Una lista ordenada
@@ -349,8 +349,8 @@ public class List2 {
 	}
 	
 	/**
-	 * @pre La lista está ordenada
-	 * @post La lista resultante está ordenada y contiene e
+	 * @pre La lista estï¿½ ordenada
+	 * @post La lista resultante estï¿½ ordenada y contiene e
 	 * @param <E> El tipo de los elementos de la lista
 	 * @param ls Una lista ordenada
 	 * @param e Un elemento
@@ -378,7 +378,7 @@ public class List2 {
 	 * @param <E> El tipo de los elementos de la lista
 	 * @param ls Una lista ordenada
 	 * @param cmp Un  orden
-	 * @return Si la lista está ordenada con respecto al orden
+	 * @return Si la lista estï¿½ ordenada con respecto al orden
 	 */
 
 	public static <E> Boolean isOrdered(List<E> ls, Comparator<? super E> cmp) {
@@ -389,13 +389,15 @@ public class List2 {
 	/**
 	 * @param <T> Tipo de los elementos
 	 * @param ls Una lista
-	 * @return Una lista unitaria escogida aleatoriamente o vacía si lo es la de entrada
+	 * @return Una lista unitaria escogida aleatoriamente o vacï¿½a si lo es la de entrada
 	 */
-	public static <T> List<T> randomUnitary(List<T> ls){
+	
+	public static <T> List<T> randomUnitary(Collection<T> ls){
+		List<T> rs = ls.stream().toList();
 		List<T> r = List2.empty();
-		if(!ls.isEmpty()){
+		if(!rs.isEmpty()){
 			int e = Math2.getEnteroAleatorio(0, ls.size());
-			r.add(ls.get(e));	
+			r.add(rs.get(e));	
 		}
 		return r;
 	}
@@ -403,8 +405,8 @@ public class List2 {
 	/**
 	 * @param <T> Tipo de los elementos
 	 * @param ls Una lista
-	 * @return Una lista con la casilla primera intercambiada por la última, 
-	 * la segunda por la penúltima, etc.
+	 * @return Una lista con la casilla primera intercambiada por la ï¿½ltima, 
+	 * la segunda por la penï¿½ltima, etc.
 	 */
 	public static <T> List<T> reverse(List<T> ls){
 		final int n = ls.size();
@@ -437,7 +439,7 @@ public class List2 {
 	 */
 	public static <E> View1<List<E>,E> view1(List<E> ls){
 		int n = ls.size();
-		Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaño mayor que 0 y es %d  ",n));
+		Preconditions.checkArgument(n>0,String.format("La lista debe ser de tamaï¿½o mayor que 0 y es %d  ",n));
 		return View1.of(ls.get(0),ls.subList(1,ls.size()));
 	}
 	
@@ -448,7 +450,7 @@ public class List2 {
 	 */
 	public static <E> View2E<List<E>,E> view2e(List<E> ls){		
 		int n = ls.size();
-		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamï¿½o mayor que 1 y es %d  ",n));
 		int k = n/2;
 		return View2E.of(ls.get(k),ls.subList(0, k), ls.subList(k,n));
 	}
@@ -459,7 +461,7 @@ public class List2 {
 	 */
 	public static <E> View2E<List<E>,E> view2eOverlap(List<E> ls){		
 		int n = ls.size();
-		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamï¿½o mayor que 1 y es %d  ",n));
 		int k = n/2;
 		return View2E.of(ls.get(k),ls.subList(0, k+1), ls.subList(k,n));
 	}
@@ -470,7 +472,7 @@ public class List2 {
 	 */
 	public static <E> View2<List<E>> view2(List<E> ls){		
 		int n = ls.size();
-		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamï¿½o mayor que 1 y es %d  ",n));
 		int k = n/2;
 		return View2.of(ls.subList(0, k), ls.subList(k,n));
 	}
@@ -481,7 +483,7 @@ public class List2 {
 	 */
 	public static <E> View2<List<E>> view2Overlap(List<E> ls){		
 		int n = ls.size();
-		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamño mayor que 1 y es %d  ",n));
+		Preconditions.checkArgument(n>1,String.format("La lista debe ser de tamï¿½o mayor que 1 y es %d  ",n));
 		int k = n/2;
 		return View2.of(ls.subList(0, k+1), ls.subList(k,n));
 	}

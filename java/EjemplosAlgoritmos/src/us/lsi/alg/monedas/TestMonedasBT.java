@@ -12,10 +12,10 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestMonedasBT {
 
@@ -24,30 +24,26 @@ public class TestMonedasBT {
 		MonedaVertex.datosIniciales("ficheros/monedas2.txt", 400);
 
 		MonedaVertex e1 = MonedaVertex.first();
+		
+		EGraph<MonedaVertex, MonedaEdge> graph = EGraph.virtual(e1,MonedaVertex.goal(),PathType.Sum,Type.Max)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();
 
-		EGraph<MonedaVertex, MonedaEdge> graph = SimpleVirtualGraph.sum(e1, 
-				MonedaVertex.goal(), e -> e.weight(),MonedaVertex.constraint());
-
-		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
-
-		graph = SimpleVirtualGraph.sum(e1, 
-				MonedaVertex.goal(), e -> e.weight(),MonedaVertex.constraint());
+		GreedyOnGraph<MonedaVertex, MonedaEdge> rr = GreedyOnGraph.of(graph);
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 
-		BackTracking<MonedaVertex, MonedaEdge, SolucionMonedas> ms1 = BackTracking.of(graph,
-				MonedasHeuristica::heuristic, SolucionMonedas::of, BTType.Max);
+		BackTracking<MonedaVertex, MonedaEdge, SolucionMonedas> ms1;
 
 		if (rr.isSolution(path1)) {
 			System.out.println("Hay solucion voraz 1"+path1.getWeight());
-			ms1.bestValue = path1.getWeight();
-			ms1.optimalPath = path1;
+			ms1 = BackTracking.of(graph,SolucionMonedas::of,path1.getWeight(),path1,true);
 		} else {
-			ms1.bestValue = MonedaVoraz.voraz();
-			ms1.optimalPath = null;
+			ms1 = BackTracking.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
 		}
 		
-		ms1.withGraph = true;
 		ms1.search();
 
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> ps = ms1.optimalPath();
@@ -67,26 +63,27 @@ public class TestMonedasBT {
 
 		MonedaVertex e3 = MonedaVertex.first();
 
-		graph = SimpleVirtualGraph.sum(e3, MonedaVertex.goal(), e -> e.weight(), MonedaVertex.constraint());
+		graph = EGraph.virtual(e3,MonedaVertex.goal(),PathType.Sum,Type.Min)
+				.goalHasSolution(MonedaVertex.goalHasSolution())
+				.greedyEdge(MonedaVertex::aristaVoraz)
+				.heuristic(MonedasHeuristica::heuristic)
+				.build();
 
 		rr = GreedyOnGraph.of(graph, MonedaVertex::aristaVoraz);
 
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.path();
 
-		BackTracking<MonedaVertex, MonedaEdge, SolucionMonedas> ms2 = BackTracking.of(graph,
-				MonedasHeuristica::heuristic, SolucionMonedas::of, BTType.Min);
-
-		if (rr.isSolution(path2)) {
-			System.out.println("Hay solucion voraz 2 "+path2.getWeight());
-			ms2.bestValue = path2.getWeight();
-			ms2.optimalPath = path2;
+		if (rr.isSolution(path1)) {
+			System.out.println("Hay solucion voraz 1"+path1.getWeight());
+			ms1 = BackTracking.of(graph,SolucionMonedas::of,path2.getWeight(),path2,true);
 		} else {
-			ms2.bestValue =  MonedaVoraz.voraz();
-			ms2.optimalPath = null;
+			ms1 = BackTracking.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
 		}
-		ms2.search();
+		
+		ms1.search();
+	
 
-		Optional<SolucionMonedas> s2 = ms2.getSolution();
+		Optional<SolucionMonedas> s2 = ms1.getSolution();
 
 		if (s2.isPresent()) {
 			System.out.println("4 = " + s2.get().toString());

@@ -10,11 +10,11 @@ import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestAStarMochila {
 
@@ -22,26 +22,27 @@ public class TestAStarMochila {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		DatosMochila.iniDatos("ficheros/objetosMochila.txt");
-		Integer n = DatosMochila.numeroDeObjetos;
+//		Integer n = DatosMochila.numeroDeObjetos;
 //		MochilaVertex.capacidadInicial = 2457;
 		MochilaVertex.capacidadInicial = 78;
 		System.out.println(Double.MAX_VALUE);
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-			SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),v->v.weight());	
+				EGraph.virtual(e1,MochilaVertex.goal(), PathType.Sum, Type.Max)
+				.greedyEdge(MochilaVertex::greedyEdge)
+				.heuristic(MochilaHeuristic::heuristic)
+				.build();
 		
-		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		
+		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> gp = rr.path();
 		
 		System.out.println(gp.getWeight());
 	
 		AStar<MochilaVertex, MochilaEdge> ms = 
-				AStar.of(graph,MochilaHeuristic::heuristic,AStarType.Max);
-		
-		ms.bestValue = gp.getWeight();
-		ms.optimalPath = gp;
+				AStar.of(graph,gp.getWeight(),gp);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = ms.search().get();
 		SolucionMochila s = MochilaVertex.getSolucion(path);

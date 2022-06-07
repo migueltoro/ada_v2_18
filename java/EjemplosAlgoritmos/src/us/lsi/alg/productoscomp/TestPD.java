@@ -3,17 +3,19 @@ package us.lsi.alg.productoscomp;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
+
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestPD {
 
@@ -27,14 +29,18 @@ public class TestPD {
 			DatosProductos.iniDatos("ficheros/productoscomp"+ id_fichero +".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //			DatosSubconjuntos.toConsole();
-			// Vértices clave
+			// Vï¿½rtices clave
 
-			VertexProductos start = VertexProductos.initial();
+			VertexProductos start = VertexProductos.initial();			
+			Predicate<VertexProductos> goal = VertexProductos.goal();
 
 			// Grafo
-
+			
 			EGraph<VertexProductos, EdgeProductos> graph = 
-					SimpleVirtualGraph.sum(start,VertexProductos.goal(), x -> x.weight());
+					EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.heuristic(ProductosHeuristic::heuristic)
+					.build();
 			
 			GraphPath<VertexProductos, EdgeProductos> path = GreedyOnGraph.of(graph,v->v.greedyEdge()).path();
 
@@ -42,13 +48,8 @@ public class TestPD {
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<VertexProductos, EdgeProductos> pdr = 
-					DynamicProgrammingReduction.of(graph, 
-							ProductosHeuristic::heuristic, 
-							PDType.Max);
+					DynamicProgrammingReduction.of(graph, path.getWeight(), path, true);
 			
-			pdr.withGraph = true;
-			pdr.bestValue = path.getWeight();
-			System.out.println(pdr.bestValue);
 			pdr.optimalPath = path;
 			Optional<GraphPath<VertexProductos, EdgeProductos>> gp = pdr.search();
 			SolucionProductos s_pdr;

@@ -6,7 +6,8 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestHeuristica {
 
@@ -16,11 +17,14 @@ public class TestHeuristica {
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
+				EGraph.virtual(e1,PackVertex.goal(),PathType.Last,Type.Min)
+				.vertexWeight(v->(double)v.nc())
+				.edgeWeight(e->e.weight())
+				.greedyEdge(PackVertex::greedyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();		
 		
-		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
-				graph,
-				PackVertex::greedyEdge);
+		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(graph);
 	
 		GraphPath<PackVertex, PackEdge> p = rr.path();
 		SolucionPack sp = SolucionPack.of(p);

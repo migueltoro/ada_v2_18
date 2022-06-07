@@ -12,7 +12,6 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.alg.LocalSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.streams.Stream2;
 
 public class TestLocalSearch {
@@ -32,8 +31,8 @@ public class TestLocalSearch {
 		
 		TravelVertex e1 = TravelVertex.of(camino);
 		System.out.println(e1);
-		EGraph<TravelVertex,TravelEdge> graph = 
-				SimpleVirtualGraph.last(e1,null,v->v.weight());
+		
+		EGraph<TravelVertex,TravelEdge> graph = EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 		
 		LocalSearch<TravelVertex,TravelEdge> ml = LocalSearch.of(graph,v->v.geedyVertex(),0.);
 		Optional<TravelVertex> vr = Stream2.findLast(ml.stream().peek(v->System.out.println(v.weight())));

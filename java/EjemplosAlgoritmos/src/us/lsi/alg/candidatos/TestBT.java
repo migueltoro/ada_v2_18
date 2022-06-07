@@ -1,11 +1,12 @@
 package us.lsi.alg.candidatos;
 
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestBT {
 
@@ -21,23 +22,25 @@ public class TestBT {
 //			DatosSubconjuntos.toConsole();
 			
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexCandidatos start = VertexCandidatos.initial();
+			Predicate<VertexCandidatos> goal = VertexCandidatos.goal();
 
 			// Grafo
-
-			EGraph<VertexCandidatos, EdgeCandidatos> graph = 
-					SimpleVirtualGraph.sum(start,VertexCandidatos.goal(),x -> x.weight(),VertexCandidatos.constraint());
+			
+			EGraph<VertexCandidatos, EdgeCandidatos> graph = EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.goalHasSolution(VertexCandidatos.constraint())
+					.heuristic(CandidatosHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
 			BackTracking<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> bta = 
 				BackTracking.of(graph, 
-					CandidatosHeuristic::heuristic,
-					SolucionCandidatos::of, 
-					BTType.Max);
+					SolucionCandidatos::of);
 /*
 			bta.withGraph = true;
 			bta.bestValue = SubconjuntoHeuristic.voraz(start,DatosSubconjunto.getNumSubconjuntos());
@@ -51,7 +54,7 @@ public class TestBT {
 			if (bta.getSolution().isPresent()) {
 			    System.out.println(bta.getSolution());
 			} else {
-				System.out.println("No hay solución");
+				System.out.println("No hay soluciï¿½n");
 			}
 			//System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
 			//List<SubconjuntoEdge> ls = bta.optimalPath != null?bta.optimalPath.getEdgeList():null;

@@ -6,9 +6,7 @@ import java.util.Locale;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestBT {
 
@@ -24,27 +22,26 @@ public class TestBT {
 //			DatosSubconjuntos.toConsole();
 			
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			SubconjuntosVertex start = SubconjuntosVertex.initial();
 
 			// Grafo
 
 			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-					SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x -> x.weight());
+					EGraph.virtual(start,SubconjuntosVertex.goal())
+					.edgeWeight(x-> x.weight())
+					.heuristic(SubconjuntosHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
 			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
 				BackTracking.of(graph, 
-					SubconjuntosHeuristic::heuristic,
 					SolucionSubconjuntos::of, 
-					BTType.Min);
+					SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC),null,true);
 
-			bta.withGraph = true;
-			bta.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);
-			System.out.println("Best = "+bta.bestValue);
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
 			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
 			System.out.println("Sv = "+sv);

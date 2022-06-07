@@ -7,7 +7,6 @@ import java.util.function.Function;
 import org.jgrapht.GraphPath;
 
 import us.lsi.common.List2;
-import us.lsi.common.Preconditions;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
@@ -16,9 +15,8 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> of(
 			EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution, 
-			BTType type, 
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph,solution,type, size);
+		return new BackTrackingRandom<V, E, S>(graph,solution, size);
 	}
 	
 	public static Integer threshold;
@@ -27,11 +25,9 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 
 	BackTrackingRandom(EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution,
-			BTType type,
 			Function<V,Integer> size) {
-		super(graph,null, solution, type);
+		super(graph, solution, null,null, false);
 		this.size = size;
-		Preconditions.checkNotNull(graph.goal(),"El predicado no puede ser null");
 	}
 		
 	protected Function<V,Integer> size;

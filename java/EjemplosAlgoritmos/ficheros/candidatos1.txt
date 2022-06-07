@@ -1,5 +1,5 @@
 Cualidades Deseadas: A, B, C, D, E
-Presupuesto Máximo: 5000
+Presupuesto Maximo: 5000
 C01: A, B; 1234.5; 5; C10,C09
 C02: C, D; 1098.7; 5; C09,C08
 C03: E, A; 1654.3; 5; C08,C07

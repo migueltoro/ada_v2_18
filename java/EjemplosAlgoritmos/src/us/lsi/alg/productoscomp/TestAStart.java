@@ -10,9 +10,9 @@ import org.jgrapht.GraphPath;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestAStart {
 
@@ -38,10 +38,13 @@ public class TestAStart {
 			// Algoritmo A*
 			
 			EGraph<VertexProductos, EdgeProductos> graph = 
-					SimpleVirtualGraph.sum(start,goal,x -> x.weight());
+					EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.heuristic(ProductosHeuristic::heuristic)
+					.build();
 			
-			AStar<VertexProductos, EdgeProductos> aStar = AStar.of(graph,
-					ProductosHeuristic::heuristic,AStarType.Max);
+			
+			AStar<VertexProductos, EdgeProductos> aStar = AStar.of(graph);
 			
 			GraphPath<VertexProductos, EdgeProductos> gp = aStar.search().get();
 			

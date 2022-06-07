@@ -84,7 +84,7 @@ public class GraphPathLast<V, E> extends GraphPath2<V,E> implements EGraphPath<V
 	}
 	
 	@Override
-	public Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge) {
+	public Double add(V vertexActual, Double acumulateValue, E edge, E lastEdge) {
 		Preconditions.checkNotNull(edge, "La arista no puede ser null");
 		V target = Graphs.getOppositeVertex(graph, edge, vertexActual);
 		return graph.getVertexWeight(target);
@@ -104,7 +104,7 @@ public class GraphPathLast<V, E> extends GraphPath2<V,E> implements EGraphPath<V
 	}
 
 	@Override
-	public Double boundedValue(Double accumulateValue,V vertexActual,E edge,Predicate<V> goal, V end, 
+	public Double boundedValue(V vertexActual,Double accumulateValue,E edge,Predicate<V> goal, V end, 
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		Preconditions.checkNotNull(edge,"La arista no puede ser null");
 		V target = Graphs.getOppositeVertex(super.graph,edge,vertexActual);	
@@ -112,7 +112,7 @@ public class GraphPathLast<V, E> extends GraphPath2<V,E> implements EGraphPath<V
 	}
 
 	@Override
-	public Double estimatedWeightToEnd(Double accumulateValue,V vertexActual,Predicate<V> goal, V end, 
+	public Double estimatedWeightToEnd(V vertexActual,Double accumulateValue,Predicate<V> goal, V end, 
 			TriFunction<V,Predicate<V>,V,Double> heuristic) {
 		return heuristic.apply(vertexActual, goal, end);
 	}

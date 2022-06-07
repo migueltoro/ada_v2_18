@@ -8,11 +8,9 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
@@ -24,17 +22,17 @@ public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
 	 * @param startVertex El v�rtice inicial
 	 * @return Una algoritmo de b&uacute;squeda en profundidad en preorden
 	 */
-	public static <V, E> DephtSearch<V, E> of(Graph<V, E> g, V startVertex) {
+	public static <V, E> DephtSearch<V, E> of(EGraph<V, E> g, V startVertex) {
 		return new DephtSearch<V, E>(g, startVertex);
 	}
 
 
 	protected Map<V,E> edgeToOrigin;
-	public Graph<V,E> graph;
+	public EGraph<V,E> graph;
 	protected Stack<V> stack;
 	protected V startVertex; 
 
-	DephtSearch(Graph<V, E> g, V startVertex) {
+	DephtSearch(EGraph<V, E> g, V startVertex) {
 		this.graph = g;
 		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
@@ -77,10 +75,6 @@ public class DephtSearch<V, E> implements Iterator<V>, Iterable<V> {
 
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
-	}
-
-	public EGraph<V, E> getGraph() {
-		return EGraphI.sum(this.graph,startVertex(),null,null);
 	}
 	
 	public V startVertex() {

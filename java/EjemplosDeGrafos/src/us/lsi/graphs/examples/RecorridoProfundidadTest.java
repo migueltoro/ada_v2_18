@@ -33,7 +33,8 @@ public class RecorridoProfundidadTest {
 		
 		graph.addVertex(Ciudad.of("Londres",2000000));
 		
-		EGraph<Ciudad,Carretera> g = EGraphI.sum(graph,ciudad(graph,"Sevilla"),null,null);
+		EGraph<Ciudad,Carretera> g = 
+				EGraph.ofGraph(graph,ciudad(graph,"Sevilla"),null).edgeWeight(e->e.km()).build();
 		
 		DephtSearch<Ciudad, Carretera> rp = DephtSearch.of(g,ciudad(graph,"Sevilla"));
 		Stream2.findLast(rp.stream());

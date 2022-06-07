@@ -1,16 +1,17 @@
 package us.lsi.alg.productoscomp;
 
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.BackTracking.BTType;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestBT {
 
@@ -26,14 +27,18 @@ public class TestBT {
 //			DatosSubconjuntos.toConsole();
 			
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexProductos start = VertexProductos.initial();
+			Predicate<VertexProductos> goal = VertexProductos.goal();
 
 			// Grafo
-
+			
 			EGraph<VertexProductos, EdgeProductos> graph = 
-					SimpleVirtualGraph.sum(start,VertexProductos.goal(), x -> x.weight());
+					EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.heuristic(ProductosHeuristic::heuristic)
+					.build();
 			
 			GraphPath<VertexProductos, EdgeProductos> gp = GreedyOnGraph.of(graph,v->v.greedyEdge()).path();
 
@@ -42,16 +47,13 @@ public class TestBT {
 			// Algoritmo BT
 			BackTracking<VertexProductos, EdgeProductos, SolucionProductos> bta = 
 				BackTracking.of(graph, 
-					ProductosHeuristic::heuristic,
 					SolucionProductos::of, 
-					BTType.Max);
+					gp.getWeight(),gp,true);
 
-			bta.withGraph = true;
-			bta.bestValue = gp.getWeight();
 			bta.search();
 			
 			System.out.println(bta.getSolution());
-			
+
 			GraphColors.toDot(bta.graph(), "ficheros/productosPDGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 

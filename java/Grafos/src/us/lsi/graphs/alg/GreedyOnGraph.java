@@ -15,8 +15,12 @@ import us.lsi.graphs.alg.GreedyOnGraph.Gog;
 
 public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E>> {
 	
-	public static <V,E> GreedyOnGraph<V,E> of(EGraph<V,E> graph,Function<V,E> nextEdge) {
-		return new GreedyOnGraph<V,E>(graph, nextEdge);
+	public static <V,E> GreedyOnGraph<V,E> of(EGraph<V,E> graph,Function<V,E> greedyEdge) {
+		return new GreedyOnGraph<V,E>(graph, greedyEdge);
+	}
+	
+	public static <V,E> GreedyOnGraph<V,E> of(EGraph<V,E> graph) {
+		return new GreedyOnGraph<V,E>(graph,graph.greedyEdge());
 	}
 	
 	public static <V,E> GreedyOnGraph<V,E> random(EGraph<V,E> graph) {
@@ -34,13 +38,13 @@ public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E
 	private EGraph<V,E> graph;
 	private V state;
 	private E edge;
-	private Function<V,E> nextEdge;
+	private Function<V,E> greedyEdge;
 
-	private GreedyOnGraph(EGraph<V,E> graph,Function<V,E> nextEdge) {
+	private GreedyOnGraph(EGraph<V,E> graph,Function<V,E> greedyEdge) {
 		super();
 		this.graph = graph;
 		this.state = graph.startVertex();
-		this.nextEdge = nextEdge;
+		this.greedyEdge = greedyEdge;
 	}
 
 	public Stream<V> stream() {
@@ -65,14 +69,14 @@ public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E
 		GraphPath<V,E> r = path();
 		if(!r.getVertexList().isEmpty()) {
 			V last = r.getEndVertex();
-			if(this.graph.constraint().test(last)) return Optional.of(r);
+			if(this.graph.goalHasSolution().test(last)) return Optional.of(r);
 			else return Optional.empty();
 		} else return Optional.empty();
 	}
 	
 	public Boolean isSolution(GraphPath<V,E> gp) {
 		V last = gp.getEndVertex();
-		return graph.goal().test(last) && graph.constraint().test(last);
+		return graph.goal().test(last) && graph.goalHasSolution().test(last);
 	}
 	
 	public Optional<V> last() {
@@ -80,7 +84,7 @@ public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E
 	}
 	
 	public GreedyOnGraph<V,E> copy() {
-		return of(this.graph,this.nextEdge);
+		return of(this.graph,this.greedyEdge);
 	}
 	
 	@Override
@@ -96,7 +100,7 @@ public class GreedyOnGraph<V,E> implements  Iterator<Gog<V,E>>, Iterable<Gog<V,E
 	@Override
 	public Gog<V,E> next() {
 		V old = state;
-		edge= this.nextEdge.apply(state);
+		edge= this.greedyEdge.apply(state);
 		if(edge !=null) this.state = graph.oppositeVertex(edge, old);
 		else this.state = null;
 		return Gog.of(old, edge);

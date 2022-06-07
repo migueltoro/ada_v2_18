@@ -7,9 +7,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 
 public class TestAStar {
@@ -20,21 +20,22 @@ public class TestAStar {
 		PackVertex e1 = PackVertex.first();
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.sum(e1,PackVertex.goal(),e->e.weight());	
+				EGraph.virtual(e1,PackVertex.goal(),PathType.Last,Type.Min)
+				.vertexWeight(v->(double)v.nc())
+				.edgeWeight(e->e.weight())
+				.greedyEdge(PackVertex::greedyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();	
 		
-		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(
-				graph,
-				PackVertex::greedyEdge);
+		GreedyOnGraph<PackVertex,PackEdge> rr = GreedyOnGraph.of(graph);
 	
 		GraphPath<PackVertex, PackEdge> p = rr.path();
 		SolucionPack sp = SolucionPack.of(p);
+		
 		System.out.println("Solucion Voraz = "+sp);
 		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
-		AStar<PackVertex, PackEdge> ms = 
-				AStar.of(graph,
-						Heuristica::heuristic,
-						AStarType.Min);
+		AStar<PackVertex, PackEdge> ms = AStar.of(graph,(double)sp.nc(),p);
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);
 		SolucionPack s = SolucionPack.of(path);

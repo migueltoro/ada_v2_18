@@ -111,7 +111,7 @@ public class TreesTest {
 				: 0 + tree.elements().stream().mapToInt(x -> sumIfPredicate(x, predicate)).sum();
 		};
 	}
-	
+
 	public static <E> List<Boolean> niveles(Tree<E> tree, Predicate<Tree<E>> pd) {
 		Map<Integer,Boolean> m = tree.byLevel()
 				.collect(Collectors.groupingBy(p->p.level(),

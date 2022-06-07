@@ -13,11 +13,11 @@ public interface EGraphPath<V, E> extends GraphPath<V, E> {
 	E lastEdge();
 	EGraphPath<V, E> add(E edge);
 	EGraphPath<V, E> remove(E edge);
-	Double add(Double acumulateValue, V vertexActual, E edge, E lastEdge);
+	Double add(V vertexActual, Double acumulateValue, E edge, E lastEdge);
 	EGraphPath<V, E> copy();
-	Double boundedValue(Double acumulateValue,V vertexActual,E edge,Predicate<V> goal,V end,
+	Double boundedValue(V vertexActual,Double acumulateValue,E edge,Predicate<V> goal,V end,
 			TriFunction<V,Predicate<V>,V,Double> heuristic);
-	Double estimatedWeightToEnd(Double acumulateValue,V vertexActual,Predicate<V> goal,V end,
+	Double estimatedWeightToEnd(V vertexActual,Double acumulateValue,Predicate<V> goal,V end,
 			TriFunction<V,Predicate<V>,V,Double> heuristic);
 	EGraphPath<V, E> concat(GraphPath<V,E> path);
 	GraphPath<V, E> reverse();
@@ -32,14 +32,6 @@ public interface EGraphPath<V, E> extends GraphPath<V, E> {
 	public static <V, E> GraphPathSum<V, E> ofMap(EGraph<V,E> graph, V vertex, Map<V,Sp<E>> solutions) {
 		return GraphPathSum.ofMap(graph, vertex, solutions);
 	}
-	
-//	public static <V, E> GraphWalkSum<V, E> ofEdge(EGraph<V, E> graph, E edge){
-//		return GraphWalkSum.ofEdge(graph, edge);
-//	}
-	
-//	public static <V, E> EGraphPath<V, E> ofVertex(EGraph<V, E> graph, V vertex){
-//		return EGraphPath.ofVertex(graph, vertex,PathType.Sum);
-//	}
 	
 	public static <V, E> EGraphPath<V, E> ofVertex(EGraph<V, E> graph, V vertex, PathType type){
 		EGraphPath<V, E> r = null;

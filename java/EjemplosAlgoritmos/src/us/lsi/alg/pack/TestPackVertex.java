@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestPackVertex {
 
@@ -15,7 +16,12 @@ public class TestPackVertex {
 //		Predicate<PackVertex> goal  = PackVertex.goal;
 		
 		EGraph<PackVertex,PackEdge> graph = 
-				SimpleVirtualGraph.last(e1,PackVertex.goal(),v->(double)v.nc());	
+				EGraph.virtual(e1,PackVertex.goal(),PathType.Last,Type.Min)
+				.vertexWeight(v->(double)v.nc())
+				.edgeWeight(e->e.weight())
+				.greedyEdge(PackVertex::greedyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();		
 		
 		System.out.println(graph.startVertex());
 		System.out.println(graph.startVertex().actions());

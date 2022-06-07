@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestAS {
 
@@ -24,15 +22,16 @@ public class TestAS {
 
 			ProductosVertex start = ProductosVertex.initial();
 			Predicate<ProductosVertex> goal = ProductosVertex.goal();
-
+			
 			EGraph<ProductosVertex, ProductosEdge> graph = 
-					SimpleVirtualGraph.sum(start,ProductosVertex.goal(), x -> x.weight());	
+					EGraph.virtual(start,goal)
+					.edgeWeight(x -> x.weight())
+					.heuristic(ProductosHeuristic::heuristic)
+					.build();
 
 			// Algoritmo A*
 			AStar<ProductosVertex, ProductosEdge> aStar = AStar.of(
-					graph, 
-					ProductosHeuristic::heuristic,
-					AStarType.Min);
+					graph);
 			
 			GraphPath<ProductosVertex, ProductosEdge> gp = aStar.search().get();
 

@@ -34,7 +34,7 @@ public record ReinasVertex(Integer index, List<Integer> fo, IntegerSet dpo, Inte
 		return v->v.index == ReinasVertex.n;
 	}
 	
-	public static Predicate<ReinasVertex> constraint() {
+	public static Predicate<ReinasVertex> goalHasSolution() {
 		return v->v.errores() == 0;
 	}
 	

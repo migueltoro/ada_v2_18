@@ -21,25 +21,6 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	
 	
 	
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> sum(G graph, V startVertex, Predicate<V> goal,Function<E, Double> edgeWeight) {
-		return of(graph, startVertex, goal,
-				null,v->true, PathType.Sum, edgeWeight,
-				null, null);
-	}
-
-	public static <V, E, G extends Graph<V, E>> EGraph<V, E> last(G graph, V startVertex, Predicate<V> goal,
-			Function<V, Double> vertexWeight) {
-		return of(graph,startVertex, goal,
-				null, v->true, PathType.Last, null,
-				vertexWeight, null);
-	}
-	
-	public static <V, E, G extends Graph<V, E>> EGraphI<V, E, G> of(G graph, V startVertex, Predicate<V> goal,
-			V endVertex, Predicate<V> constraint, PathType type, Function<E, Double> edgeWeight,
-			Function<V, Double> vertexWeight, TriFunction<V, E, E, Double> vertexPassWeight) {
-		return new EGraphI<V, E, G>(graph, startVertex, goal, endVertex, constraint, type, edgeWeight, vertexWeight,
-				vertexPassWeight);
-	}
 
 	private G graph;
 	private Function<E,Double> edgeWeight = null;
@@ -50,21 +31,40 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private Predicate<V> goal;
 	private V endVertex;	
 	private Predicate<V> constraint;
-	private PathType type;
+	private PathType pathType;
+	private Function<V,E> greedyEdge;
+	private TriFunction<V, Predicate<V>, V, Double> heuristic;
+	private Type type;
+
 	
-	private EGraphI(G graph, V startVertex, Predicate<V> goal,V endVertex,Predicate<V> constraint,
-			PathType type, Function<E, Double> edgeWeight, Function<V, Double> vertexWeight,
-			TriFunction<V, E, E, Double> vertexPassWeight) {
-		super();
-		this.graph = graph;
-		this.edgeWeight = edgeWeight;
-		this.vertexWeight = vertexWeight;
-		this.vertexPassWeight = vertexPassWeight;
-		this.startVertex = startVertex;
-		this.goal = goal;
-		this.endVertex = endVertex;
-		this.constraint = constraint;
-		this.type = type;
+	EGraphI(EGraphBuilderReal<G,V,E> builder){
+		this.graph = builder.graph;
+		this.edgeWeight = builder.edgeWeight;
+		this.vertexWeight = builder.vertexWeight;
+		this.vertexPassWeight = builder.vertexPassWeight;
+		this.startVertex = builder.startVertex;
+		this.goal = builder.goal;
+		this.endVertex = builder.endVertex;
+		this.constraint = builder.constraint;
+		this.pathType = builder.pathType;
+		this.greedyEdge = builder.greedyEdge;
+		this.heuristic = builder.heuristic;
+		this.type = builder.type;
+	}
+	
+	@Override
+	public Type type() {
+		return type;
+	}
+	
+	@Override
+	public Function<V, E> greedyEdge() {
+		return this.greedyEdge;
+	}
+
+	@Override
+	public TriFunction<V, Predicate<V>, V, Double> heuristic() {
+		return this.heuristic;
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	@Override
 	public EGraphPath<V, E> initialPath() {
 		if(this.path == null) {
-			this.path = EGraphPath.ofVertex(this,this.startVertex,this.type);
+			this.path = EGraphPath.ofVertex(this,this.startVertex,this.pathType);
 		}
 		return this.path.copy();
 	}
@@ -231,7 +231,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	}
 	@Override
 	public PathType pathType() {
-		return type;
+		return pathType;
 	}
 	@Override
 	public Predicate<V> goal() {
@@ -242,7 +242,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 		return endVertex;
 	}
 	@Override
-	public Predicate<V> constraint() {
+	public Predicate<V> goalHasSolution() {
 		return constraint;
 	}
 

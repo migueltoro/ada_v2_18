@@ -5,22 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jheaps.AddressableHeap.Handle;
 
 import us.lsi.common.List2;
-import us.lsi.common.TriFunction;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.EGraphPath;
 
 public class AstarRandom<V, E> extends AStar<V, E>{
 	
-	public static <V, E> AstarRandom<V, E> of(EGraph<V, E> graph,
-			TriFunction<V, Predicate<V>, V, Double> heuristic, AStarType type,Function<V, Integer> size) {
-		return new AstarRandom<V, E>(graph, heuristic, type, size);
+	public static <V, E> AstarRandom<V, E> of(EGraph<V, E> graph, Function<V, Integer> size) {
+		return new AstarRandom<V, E>(graph, size);
 	}
 
 	public static Integer threshold;
@@ -28,10 +25,8 @@ public class AstarRandom<V, E> extends AStar<V, E>{
 	public static Integer iterations = 0;
 
 	AstarRandom(EGraph<V, E> graph, 
-			TriFunction<V, Predicate<V>, V, Double> heuristic,
-			AStarType type,
 			Function<V,Integer> size) {
-		super(graph, heuristic,type);
+		super(graph,null,null);
 		this.size = size;
 	}
 	
@@ -47,8 +42,8 @@ public class AstarRandom<V, E> extends AStar<V, E>{
 			edges = List2.randomUnitary(edges);
 		for (E backEdge : edges) {
 			V v = graph.getEdgeTarget(backEdge);
-			Double newDistance = graph.add(actualDistance,v,backEdge,edgeToOrigen);
-			double newDistanceToEnd =  graph.estimatedWeightToEnd(newDistance,v, heuristic);
+			Double newDistance = graph.add(v,actualDistance,backEdge,edgeToOrigen);
+			double newDistanceToEnd =  graph.estimatedWeightToEnd(v,newDistance);
 			if (!tree.containsKey(v)) {
 				Data<V, E> nd = Data.of(v, backEdge, newDistance);
 				Handle<Double, Data<V, E>> h = heap.insert(newDistanceToEnd, nd);

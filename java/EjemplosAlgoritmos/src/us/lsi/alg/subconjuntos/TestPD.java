@@ -9,10 +9,8 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -26,28 +24,28 @@ public class TestPD {
 			DatosSubconjuntos.iniDatos("ficheros/subconjuntos" + id_fichero + ".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //			DatosSubconjuntos.toConsole();
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			SubconjuntosVertex start = SubconjuntosVertex.initial();
 
 			// Grafo
-
+			
 			EGraph<SubconjuntosVertex, SubconjuntosEdge> graph = 
-					SimpleVirtualGraph.sum(start,SubconjuntosVertex.goal(), x -> x.weight());
+					EGraph.virtual(start,SubconjuntosVertex.goal())
+					.edgeWeight(x-> x.weight())
+					.heuristic(SubconjuntosHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge> pdr = 
 					DynamicProgrammingReduction.of(graph, 
-							SubconjuntosHeuristic::heuristic, 
-							PDType.Min);
-			pdr.bestValue = SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC);
-			System.out.println("Best = "+pdr.bestValue);
+							SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC),null,true);
+			
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
 			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
 			System.out.println("Sv = "+sv);
-			pdr.withGraph = true;
 			Optional<GraphPath<SubconjuntosVertex, SubconjuntosEdge>> gp = pdr.search();
 			System.out.println(gp);
 			SolucionSubconjuntos s_pdr;

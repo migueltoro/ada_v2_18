@@ -2,13 +2,14 @@ package us.lsi.alg.candidatos;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestPD {
 
@@ -22,22 +23,24 @@ public class TestPD {
 			DatosCandidatos.iniDatos("ficheros/candidatos"+ id_fichero +".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //			DatosSubconjuntos.toConsole();
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexCandidatos start = VertexCandidatos.initial();
+			Predicate<VertexCandidatos> goal = VertexCandidatos.goal();
 
 			// Grafo
-
-			EGraph<VertexCandidatos, EdgeCandidatos> graph = 
-					SimpleVirtualGraph.sum(start,VertexCandidatos.goal(), x -> x.weight(),VertexCandidatos.constraint());
+			
+			EGraph<VertexCandidatos, EdgeCandidatos> graph = EGraph.virtual(start,goal,PathType.Sum,Type.Max)
+					.edgeWeight(x -> x.weight())
+					.goalHasSolution(VertexCandidatos.constraint())
+					.heuristic(CandidatosHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
 			DynamicProgrammingReduction<VertexCandidatos, EdgeCandidatos> pdr = 
-					DynamicProgrammingReduction.of(graph, 
-							CandidatosHeuristic::heuristic, 
-							PDType.Max);
+					DynamicProgrammingReduction.of(graph);
 			/*
 			pdr.bestValue = SubconjuntoHeuristic.voraz(start,DatosSubconjunto.getNumSubconjuntos());
 			System.out.println("Best = "+pdr.bestValue);

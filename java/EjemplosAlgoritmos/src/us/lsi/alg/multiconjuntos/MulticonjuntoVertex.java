@@ -25,7 +25,7 @@ public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) imple
 		return  v->v.indice == DatosMulticonjunto.NUM_E;
 	}
 	
-	public static Predicate<MulticonjuntoVertex> constraint() {
+	public static Predicate<MulticonjuntoVertex> goalHasSolution() {
 		return  v->v.sr_suma_restante == 0;
 	}
 
@@ -38,13 +38,13 @@ public record MulticonjuntoVertex(Integer indice,Integer sr_suma_restante) imple
 		return String.format("(%d,%d)", this.indice, this.sr_suma_restante);
 	}
 
-	// Métodos auxiliares
+	// Mï¿½todos auxiliares
 
 	public String toString() {
 		return String.format("(%d,%d)", this.indice, this.sr_suma_restante);
 	}
 
-	// Métodos del grafo
+	// Mï¿½todos del grafo
 
 	@Override
 	public Boolean isValid() {

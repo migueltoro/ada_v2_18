@@ -7,8 +7,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.mochila.datos.DatosMochila;
+import us.lsi.path.EGraphPath.PathType;
 
 
 public class TestGreadyMochila {
@@ -25,10 +26,13 @@ public class TestGreadyMochila {
 		Double r2 = MochilaHeuristic.heuristic(v1,MochilaVertex.goal(),null);
 		System.out.println("H "+r2);
 		
-		EGraph<MochilaVertex,MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(v1,MochilaVertex.goal(),x->x.weight());
+		EGraph<MochilaVertex, MochilaEdge> graph = 
+				EGraph.virtual(v1,MochilaVertex.goal(), PathType.Sum, Type.Max)
+				.greedyEdge(MochilaVertex::greedyEdge)
+				.heuristic(MochilaHeuristic::heuristic)
+				.build();
 		
-		GreedyOnGraph<MochilaVertex, MochilaEdge> gs = GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		GreedyOnGraph<MochilaVertex, MochilaEdge> gs = GreedyOnGraph.of(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> gp = gs.path();
 		

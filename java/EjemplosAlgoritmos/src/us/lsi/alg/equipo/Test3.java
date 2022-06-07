@@ -7,7 +7,6 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class Test3 {
 	
@@ -16,8 +15,8 @@ public class Test3 {
 		
 		DatosEquipo.iniDatos(file);
 		
-		EGraph<EquipoVertex, EquipoEdge> g = 
-				SimpleVirtualGraph.sum(EquipoVertex.first(),EquipoVertex::goal, e-> e.weight());
+		EGraph<EquipoVertex, EquipoEdge> g = EGraph.virtual(EquipoVertex.first(),EquipoVertex::goal)
+				.build();
 		
 		GreedyOnGraph<EquipoVertex, EquipoEdge> vr2 = GreedyOnGraph.random(g);
 		

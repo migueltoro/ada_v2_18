@@ -12,7 +12,6 @@ import org.jgrapht.GraphPath;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.SimulatedAnnealingSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.path.GraphPath2;
 import us.lsi.streams.Stream2;
 
@@ -44,7 +43,7 @@ public class TestSimulatedAnnealingInteger {
 		System.out.println(e1);
 		
 		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
-				SimpleVirtualGraph.last(e1,null,v->v.weight());	
+				EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
 				SimulatedAnnealingSearch.simulatedAnnealing(graph2,e1,e->e.weight());
 		

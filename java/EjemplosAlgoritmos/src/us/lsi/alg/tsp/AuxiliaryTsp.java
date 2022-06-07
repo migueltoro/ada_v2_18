@@ -26,6 +26,7 @@ import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.DephtSearch;
 import us.lsi.graphs.views.CompleteGraphView;
 import us.lsi.graphs.views.SubGraphView;
+import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 import us.lsi.path.GraphPath2;
 
@@ -153,7 +154,8 @@ public class AuxiliaryTsp {
 				v->graph1.vertexSet().contains(v),
 				e->tree.getEdges().contains(e));
 //		System.out.println(graph3);
-		DephtSearch<Ciudad,Carretera> ms = DephtSearch.of(graph3,ciudad(graph1,"Sevilla"));
+		EGraph<Ciudad,Carretera> g4 = EGraph.ofGraph(graph3).build();
+		DephtSearch<Ciudad,Carretera> ms = DephtSearch.of(g4,ciudad(graph1,"Sevilla"));
 		List<Ciudad> camino = ms.stream().collect(Collectors.toList());
 //		camino.add(ciudad(graph1,"Sevilla"));
 		GraphPath<Ciudad,Carretera> path = GraphPath2.ofVertices(graph2,camino);

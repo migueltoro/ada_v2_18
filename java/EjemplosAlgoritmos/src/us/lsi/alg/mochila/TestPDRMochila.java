@@ -15,11 +15,11 @@ import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.mochila.datos.SolucionMochila;
+import us.lsi.path.EGraphPath.PathType;
 
 
 public class TestPDRMochila {
@@ -33,10 +33,12 @@ public class TestPDRMochila {
 		MochilaVertex e1 = MochilaVertex.initialVertex();
 		
 		EGraph<MochilaVertex, MochilaEdge> graph = 
-				SimpleVirtualGraph.sum(e1,MochilaVertex.goal(),x->x.weight());	
+				EGraph.virtual(e1,MochilaVertex.goal(), PathType.Sum, Type.Max)
+				.greedyEdge(MochilaVertex::greedyEdge)
+				.heuristic(MochilaHeuristic::heuristic)
+				.build();	
 		
-		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = 
-				GreedyOnGraph.of(graph,MochilaVertex::greedyEdge);
+		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = rr.path();	
 		Double bv = path.getWeight();
@@ -44,14 +46,9 @@ public class TestPDRMochila {
 		System.out.println("1 = "+bv);
 		
 		DynamicProgrammingReduction<MochilaVertex, MochilaEdge> ms = 
-				DynamicProgrammingReduction.of(graph,
-						MochilaHeuristic::heuristic,
-						PDType.Max);
+				DynamicProgrammingReduction.of(graph,bv,path,true);
 		
-		ms.bestValue = bv;
-		ms.optimalPath = path;
 		
-		ms.withGraph = true;
 		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();
 		GraphPath<MochilaVertex, MochilaEdge> s1 = sp.get();
 		SolucionMochila s = MochilaVertex.getSolucion(s1);

@@ -10,11 +10,11 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestPD {
 
@@ -27,37 +27,39 @@ public class TestPD {
 			DatosMulticonjunto.iniDatos("ficheros/multiconjuntos.txt", id_fichero);
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			MulticonjuntoVertex start = MulticonjuntoVertex.initial();
 			Predicate<MulticonjuntoVertex> goal = MulticonjuntoVertex.goal();
 
 			// Grafo
 
-			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph;
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
 			
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight(),MulticonjuntoVertex.constraint());
+			EGraph<MulticonjuntoVertex, MulticonjuntoEdge> graph =
+					EGraph.virtual(start,goal,PathType.Sum, Type.Min)
+					.edgeWeight(x -> x.weight())
+					.greedyEdge(MulticonjuntoVertex::greedyEdge)
+					.goalHasSolution(MulticonjuntoVertex.goalHasSolution())
+					.heuristic(MulticonjuntoHeuristic::heuristic)
+					.build();
+			
 			
 			GreedyOnGraph<MulticonjuntoVertex, MulticonjuntoEdge> rr = 
-					GreedyOnGraph.of(graph,MulticonjuntoVertex::greedyEdge);
+					GreedyOnGraph.of(graph);
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> r = rr.path();
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
 			
 			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DynamicProgrammingReduction
-					.of(graph, 
-						MulticonjuntoHeuristic::heuristic, 
-						PDType.Min);
-			
-			pdr.withGraph = true;
-			
+					.of(graph, null, null, true);
+
 			if (rr.isSolution(r)) {
-				pdr.bestValue = r.getWeight();
+				pdr = DynamicProgrammingReduction.of(graph, r.getWeight(), r, true);
 			}
 			
 			

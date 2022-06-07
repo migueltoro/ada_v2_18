@@ -9,9 +9,9 @@ import org.jgrapht.GraphPath;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestAStar {
 
@@ -26,7 +26,7 @@ public class TestAStar {
 			DatosContenedores.toConsole();
 			System.out.println("\n\n>\tResultados para el test " + i + "\n");
 
-			// Vértices clave
+			// Vï¿½rtices clave
 
 			VertexContenedores start = VertexContenedores.initial();
 			Predicate<VertexContenedores> goal = VertexContenedores.goal();
@@ -40,11 +40,14 @@ public class TestAStar {
 			System.out.println("#### Algoritmo A* ####");
 
 			// Algoritmo A*
-			EGraph<VertexContenedores, EdgeContenedores> graph =
-					SimpleVirtualGraph.last(start,goal,x -> (double)x.contenedoresCompletos().size());
 			
-			AStar<VertexContenedores, EdgeContenedores> aStar = AStar.of(graph,
-					ContenedoresHeuristic::heuristic,AStarType.Max);
+			EGraph<VertexContenedores, EdgeContenedores> graph = 
+					EGraph.virtual(start,goal,PathType.Last,Type.Max)
+					.vertexWeight(x -> (double)x.contenedoresCompletos().size())
+					.heuristic(ContenedoresHeuristic::heuristic)
+					.build();
+			
+			AStar<VertexContenedores, EdgeContenedores> aStar = AStar.of(graph);
 			
 			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = aStar.search();
 			

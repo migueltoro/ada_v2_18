@@ -3,7 +3,6 @@ package us.lsi.alg.tsp;
 import us.lsi.graphs.SimpleEdge;
 import us.lsi.graphs.alg.LocalSearch;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 import us.lsi.streams.Stream2;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class TestLocalSearchInteger {
 		TravelVertexInteger e1 = TravelVertexInteger.of(camino);
 		
 		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
-				SimpleVirtualGraph.last(e1,null,v->v.weight());
+				EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 		
 		LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = LocalSearch.of(graph2,v->v.geedyVertex(),10.);
 		
@@ -43,7 +42,7 @@ public class TestLocalSearchInteger {
 		while (i< 5) {
 			Collections.shuffle(camino.subList(1, camino.size() - 2));
 			e1 = TravelVertexInteger.of(camino);
-			graph2 = SimpleVirtualGraph.last(e1,null, v -> v.weight());
+			graph2 = EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 			m = LocalSearch.of(graph2, v -> v.geedyVertex(), 1.);
 			vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
 			//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());

@@ -17,40 +17,42 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 import us.lsi.common.List2;
-import us.lsi.common.Preconditions;
-import us.lsi.common.TriFunction;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath;
 
 public class BackTracking<V,E,S> {
 
 	public static <V, E, S> BackTracking<V, E, S> of(
 			EGraph<V, E> graph,
-			TriFunction<V, Predicate<V>, V, Double> heuristic, 
-			Function<GraphPath<V, E>, S> solution,
-			BTType type) {
-		return new BackTracking<V, E, S>(graph, heuristic, solution, type);
+			Function<GraphPath<V, E>, S> solution) {
+		return new BackTracking<V, E, S>(graph, solution, null, null, false);
 	}
 	
-	public enum BTType {Min,Max,All,One}
+	public static <V, E, S> BackTracking<V, E, S> of(
+			EGraph<V, E> graph,
+			Function<GraphPath<V, E>, S> solution,
+			Double bestValue,GraphPath<V,E> optimalPath,
+			Boolean withGraph) {
+		return new BackTracking<V, E, S>(graph,solution,bestValue,optimalPath,withGraph);
+	}
+	
 	private Comparator<Double> comparator = Comparator.naturalOrder();
 	
-	public BTType type = BTType.Min;
+	private Type type;
 	public EGraph<V,E> graph;
-	public Double bestValue;
+	private Double bestValue;
 	public GraphPath<V,E> optimalPath;
-	protected TriFunction<V, Predicate<V>, V, Double> heuristic;
 	public Set<S> solutions;
 	protected Function<GraphPath<V,E>,S> solution;
 	private SimpleDirectedGraph<V,E> outGraph;
-	public Boolean withGraph = false;
+	private Boolean withGraph = false;
 	
-	BackTracking(EGraph<V, E> graph, TriFunction<V, Predicate<V>, V, Double> heuristic,
-			Function<GraphPath<V, E>, S> solution, BTType type) {
-		this.type = type;
+	BackTracking(EGraph<V, E> graph,Function<GraphPath<V, E>, S> solution, 
+			Double bestValue,GraphPath<V,E> optimalPath, Boolean withGraph) {
 		this.graph = graph;
-		this.heuristic = heuristic;
+		this.type = this.graph.type();
 		this.solutions = new HashSet<>();
 		this.solution = solution;
 		this.comparator = switch(this.type) {
@@ -59,23 +61,24 @@ public class BackTracking<V,E,S> {
 		case Min -> Comparator.naturalOrder();
 		case One -> null;
 		};
-		Preconditions.checkNotNull(graph.goal(), "El predicado no puede ser null");
+		this.bestValue = bestValue;
+		this.optimalPath = optimalPath;
+		this.withGraph = withGraph;
 	}
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
-		Double w = state.getGraph().boundedValue(state.getAccumulateValue(),state.getActualVertex(),
-				edge, heuristic);
+		Double w = state.getGraph().boundedValue(state.getActualVertex(),state.getAccumulateValue(),edge);
 		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) >= 0;
 		return r;
 	}
 	
 	protected void update(State<V, E> state) {
-		if (graph.constraint().test(state.getActualVertex())) {
-			if (this.type == BTType.All || this.type == BTType.One) {
+		if (graph.goalHasSolution().test(state.getActualVertex())) {
+			if (this.type == Type.All || this.type == Type.One) {
 				S s = solution.apply(state.getPath());
 				this.solutions.add(s);
-			} else if (this.type == BTType.Min || this.type == BTType.Max) {
+			} else if (this.type == Type.Min || this.type == Type.Max) {
 				if (this.bestValue == null || this.comparator.compare(state.getAccumulateValue(),this.bestValue) < 0) {
 					this.bestValue = state.getAccumulateValue();
 					this.optimalPath = state.getPath();
@@ -178,7 +181,7 @@ public class BackTracking<V,E,S> {
 		@Override
 		public void forward(E edge) {
 			E lastEdge = edges.isEmpty()?null:List2.last(edges);
-			this.accumulateValue = this.graph.add(this.accumulateValue,this.actualVertex,edge,lastEdge);
+			this.accumulateValue = this.graph.add(this.actualVertex,this.accumulateValue,edge,lastEdge);
 			this.actualVertex = Graphs.getOppositeVertex(graph,edge,this.actualVertex);
 			this.edges.add(edge);
 			this.weights.add(this.accumulateValue);

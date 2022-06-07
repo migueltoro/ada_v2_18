@@ -11,9 +11,8 @@ import org.jgrapht.graph.DirectedWeightedMultigraph;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.AStar.AStarType;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.EGraphI;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
 
 public class TestVuelos {
@@ -33,18 +32,12 @@ public class TestVuelos {
 		System.out.println(graph);
 		String end = "Malaga";
 		
-		EGraph<String, Vuelo> g = EGraphI.of(
-				graph,
-				"Sevilla",
-				v->v.equals(end),
-				end,
-				v->true,
-				PathType.Sum,
-				Vuelo::getDuracion,
-				null,
-				(v,e1,e2)-> Vuelo.getVertexPassWeight(v,e1,e2));	
+		EGraph<String, Vuelo> g = EGraph.ofGraph(graph,"Sevilla",v->v.equals(end),PathType.Sum,Type.Min)
+				.edgeWeight(Vuelo::getDuracion)
+				.vertexPassWeight((v,e1,e2)-> Vuelo.getVertexPassWeight(v,e1,e2))
+				.build();	
 		
-		AStar<String,Vuelo> ms = AStar.of(g,(v1,p,v2)->0.,AStarType.Min);
+		AStar<String,Vuelo> ms = AStar.of(g);
 		
 		GraphPath<String,Vuelo> path = ms.search().orElse(null);
 		System.out.printf("Timepo de Recorrido = %.2f\n",path.getWeight());

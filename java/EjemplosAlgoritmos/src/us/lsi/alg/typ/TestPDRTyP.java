@@ -6,9 +6,9 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestPDRTyP {
@@ -19,23 +19,21 @@ public class TestPDRTyP {
 		TyPVertex e1 = TyPVertex.first();
 		
 		EGraph<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> graph = 
-				SimpleVirtualGraph.last(e1,e->e.goal(),v->v.maxCarga());	
+				EGraph.virtual(e1,v->v.goal(), PathType.Last, Type.Min)
+				.vertexWeight(v->v.maxCarga())
+				.greedyEdge(TyPVertex::greadyEdge)
+				.heuristic(Heuristica::heuristic)
+				.build();	
 		
-		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> rr = 
-				GreedyOnGraph.of(graph,
-				TyPVertex::greadyEdge);
+		GreedyOnGraph<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> rr = GreedyOnGraph.of(graph);
 		
 		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> path = rr.path();
 		Double bv = path.getWeight();
 		
 		DynamicProgrammingReduction<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> ms = 
 				DynamicProgrammingReduction.of(graph,					
-						Heuristica::heuristic,
-						PDType.Min);
+						bv,path,true);
 		
-		
-		ms.bestValue = bv;
-		ms.optimalPath = path;
 		ms.search();
 //		System.out.println(ms.search());
 //		System.out.println(ms.solutionsTree);

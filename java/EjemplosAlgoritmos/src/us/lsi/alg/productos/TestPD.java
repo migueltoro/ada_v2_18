@@ -7,10 +7,8 @@ import java.util.stream.Collectors;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
 import us.lsi.graphs.alg.DynamicProgrammingReduction;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestPD {
 
@@ -25,21 +23,20 @@ public class TestPD {
 
 			ProductosVertex start = ProductosVertex.initial();
 			Predicate<ProductosVertex> goal = ProductosVertex.goal();
-
+			
 			EGraph<ProductosVertex, ProductosEdge> graph = 
-					SimpleVirtualGraph.sum(start, goal,x -> x.weight());
+					EGraph.virtual(start,goal)
+					.edgeWeight(x -> x.weight())
+					.heuristic(ProductosHeuristic::heuristic)
+					.build();
 
 			System.out.println("\n\n#### Algoritmo PD ####");
 
 			// Algoritmo PD
-			graph = SimpleVirtualGraph.sum(start,goal,x -> x.weight());
 			
 			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
-					DynamicProgrammingReduction.of(graph,
-					(v1,p,v2)->0., 
-					PDType.Min);
+					DynamicProgrammingReduction.of(graph,null,null,true);
 //			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
-			pdr.withGraph = true;
 			List<Integer> gp_pdr = pdr.search().get().getEdgeList().stream().map(x -> x.action())
 					.collect(Collectors.toList()); // getEdgeList();
 			SolucionProductos s_pdr = SolucionProductos.of(gp_pdr);

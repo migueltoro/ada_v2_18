@@ -13,7 +13,6 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.EGraphI;
 import us.lsi.streams.Stream2;
 
 public class DephtPostSearch<V, E> implements Iterator<V>, Iterable<V>  {
@@ -25,19 +24,19 @@ public class DephtPostSearch<V, E> implements Iterator<V>, Iterable<V>  {
 	 * @param startVertex El v�rtice inicial
 	 * @return Una algoritmo de b&uacute;squeda en profundidad en postorden
 	 */
-	public static <V, E> DephtPostSearch<V, E> of(Graph<V, E> g, V startVertex) {
+	public static <V, E> DephtPostSearch<V, E> of(EGraph<V, E> g, V startVertex) {
 		return new DephtPostSearch<V, E>(g, startVertex);
 	}
 
 	protected Map<V,E> edgeToOrigin;
-	public Graph<V,E> graph;
+	public EGraph<V,E> graph;
 	protected Stack<V> stackPre;
 	protected Stack<V> stackPost;
 	protected V startVertex; 
 	public Graph<V,E> outGraph;
 	public Boolean withGraph = false;
 
-	DephtPostSearch(Graph<V, E> g, V startVertex) {
+	DephtPostSearch(EGraph<V, E> g, V startVertex) {
 		this.graph = g;
 		this.startVertex = startVertex;
 		this.edgeToOrigin = new HashMap<>();
@@ -105,10 +104,6 @@ public class DephtPostSearch<V, E> implements Iterator<V>, Iterable<V>  {
 
 	public E getEdgeToOrigin(V v) {
 		return this.edgeToOrigin.get(v);
-	}
-
-	public EGraph<V, E> getGraph() {
-		return EGraphI.sum(this.graph,startVertex(),null,null);
 	}
 	
 	public V startVertex() {

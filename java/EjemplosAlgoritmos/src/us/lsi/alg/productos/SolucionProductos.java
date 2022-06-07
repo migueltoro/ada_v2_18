@@ -6,7 +6,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jgrapht.GraphPath;
+
 public record SolucionProductos(Double precioTotal,Set<Producto> productos,Set<String> funciones) implements Comparable<SolucionProductos>{
+	
+	public static SolucionProductos of(GraphPath<ProductosVertex, ProductosEdge> p) {
+		List<Integer> ls = p.getEdgeList().stream().map(x -> x.action()).collect(Collectors.toList());
+		return SolucionProductos.of(ls);
+	}
 	
 	public static SolucionProductos of(List<Integer> ls) {
 		List<Integer> lsC = new ArrayList<>(ls);

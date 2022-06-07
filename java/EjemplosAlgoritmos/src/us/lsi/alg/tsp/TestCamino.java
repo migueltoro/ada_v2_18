@@ -8,8 +8,6 @@ import java.util.Locale;
 import org.jgrapht.Graph;
 import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
-import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 
 public class TestCamino {
 	
@@ -39,8 +37,8 @@ public class TestCamino {
 		
 		TravelVertex v1 = TravelVertex.of(camino);
 		
-		EGraph<TravelVertex,TravelEdge> graph = 
-				SimpleVirtualGraph.last(v1,null,v->v.weight());
+//		EGraph<TravelVertex,TravelEdge> graph = 
+//				EGraph.virtual(v1,null).vertexWeight(v->v.weight()).build();
 		
 		Double error = 0.1;
 		Double r;
