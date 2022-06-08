@@ -43,9 +43,10 @@ public record TravelVertex(List<Ciudad> camino)
 	@Override
 	public List<IntPair> actions() {
 		Integer n = this.camino().size();
-		return Stream2.allPairs(1,n-1,1,n-1)
+		List<IntPair> r =  Stream2.allPairs(1,n-1,1,n-1)
 				.filter(p->p.second() > p.first()+2)
 				.collect(Collectors.toList());
+		return List2.random(r, 3);
 	}
 
 	@Override

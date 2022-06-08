@@ -21,6 +21,7 @@ public record TravelVertexInteger(List<Integer> camino) implements VirtualVertex
 	}
 
 	public static Graph<Integer,SimpleEdge<Integer>> graph;
+	public static Integer n;
 
 	@Override
 	public Boolean isValid() {
@@ -42,9 +43,10 @@ public record TravelVertexInteger(List<Integer> camino) implements VirtualVertex
 	@Override
 	public List<IntPair> actions() {
 		Integer n = camino.size()-1;
-		return Stream2.allPairs(1,n-1,1,n-1)
+		List<IntPair> r = Stream2.allPairs(1,n-1,1,n-1)
 				.filter(p->p.second()-p.first()>2)
 				.collect(Collectors.toList());
+		return List2.random(r, n);
 	}
 
 	@Override

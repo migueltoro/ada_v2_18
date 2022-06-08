@@ -34,7 +34,7 @@ public class TestLocalSearch {
 		
 		EGraph<TravelVertex,TravelEdge> graph = EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 		
-		LocalSearch<TravelVertex,TravelEdge> ml = LocalSearch.of(graph,v->v.geedyVertex(),0.);
+		LocalSearch<TravelVertex,TravelEdge> ml = LocalSearch.of(graph,0.,3);
 		Optional<TravelVertex> vr = Stream2.findLast(ml.stream().peek(v->System.out.println(v.weight())));
 		System.out.println(vr.get());
 	}

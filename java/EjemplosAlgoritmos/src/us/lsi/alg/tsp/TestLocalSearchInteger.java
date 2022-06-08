@@ -18,8 +18,9 @@ public class TestLocalSearchInteger {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		
-		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(50);
+		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(100);
 		TravelVertexInteger.graph = graph;
+		TravelVertexInteger.n = 10;
 		List<Integer> camino = new ArrayList<>(graph.vertexSet().stream().toList());
 		
 		camino.add(camino.get(0));
@@ -31,20 +32,16 @@ public class TestLocalSearchInteger {
 		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
 				EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
 		
-		LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = LocalSearch.of(graph2,v->v.geedyVertex(),10.);
-		
-		Optional<TravelVertexInteger> vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
-//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
-		System.out.println(vr.get());
 		
 		Double bb = 1000000000.;
 		int i = 0;
-		while (i< 5) {
+		while (i< 1) {
+			System.out.println("------------------ "+i);
 			Collections.shuffle(camino.subList(1, camino.size() - 2));
 			e1 = TravelVertexInteger.of(camino);
 			graph2 = EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
-			m = LocalSearch.of(graph2, v -> v.geedyVertex(), 1.);
-			vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
+			LocalSearch<TravelVertexInteger,TravelEdgeInteger> m = LocalSearch.of(graph2, 0.1, 3);
+			Optional<TravelVertexInteger> vr = Stream2.findLast(m.stream().peek(v->System.out.println(v.weight())));
 			//		System.out.println(GraphPaths.of(graph,v.camino()).getWeight());
 			if(vr.get().weight() < bb) bb = vr.get().weight();
 			System.out.println(vr.get());

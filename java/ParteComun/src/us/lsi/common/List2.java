@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -400,6 +401,12 @@ public class List2 {
 			r.add(rs.get(e));	
 		}
 		return r;
+	}
+	
+	public static <T> List<T> random(Collection<T> ls, Integer n){
+		List<T> rs = ls.stream().collect(Collectors.toList());
+		Collections.shuffle(rs, Math2.rnd);
+		return rs.subList(0, Math.min(n,rs.size()));
 	}
 
 	/**
