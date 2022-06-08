@@ -45,13 +45,13 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		return new AStar<V, E>(graph,bestValue,optimalPath);
 	}
 
-	public Comparator<Double> comparator = Comparator.naturalOrder();
+	public Comparator<Double> comparator;
 	public EGraph<V,E> graph; 
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
 	protected EGraphPath<V,E> ePath;
-	public Double bestValue = null; //mejor valor estimado
-	public GraphPath<V, E> optimalPath = null; //mejor camino estimado
+	private Double bestValue = null; //mejor valor estimado
+	private GraphPath<V, E> optimalPath = null; //mejor camino estimado
 	
 
 	protected AStar(EGraph<V, E> graph, Double bestValue,GraphPath<V, E> optimalPath) {
