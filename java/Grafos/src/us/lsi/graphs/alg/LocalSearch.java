@@ -5,17 +5,39 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import us.lsi.common.List2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.SimpleEdgeAction;
+import us.lsi.graphs.virtual.VirtualVertex;
 import us.lsi.streams.Stream2;
 
 public class LocalSearch<V,E> implements  Iterator<V>, Iterable<V>{
 	
 	public static <V, E> LocalSearch<V, E> of(EGraph<V, E> graph, Double error, Integer n) {
 		return new LocalSearch<V, E>(graph, error, n);
+	}
+	
+	public static <V extends VirtualVertex<V, E, ?>, E extends SimpleEdgeAction<V, ?>> V repeat(EGraph<V, E> graph,
+			Supplier<V> start, Double error, Integer n, Integer m) {
+		Double w = null;
+		V v = null;
+		int i = 0;
+		while (i < m) {
+			V s = start.get();
+			EGraph<V, E> g = EGraph.virtual(s, x -> true).vertexWeight(x -> graph.getVertexWeight(x)).build();
+			LocalSearch<V, E> ls = LocalSearch.of(g, error, n);
+			V vr = Stream2.findLast(ls.stream()).get();
+			if (v == null || graph.getVertexWeight(vr) < w) {
+				w = graph.getVertexWeight(vr);
+				v = vr;
+			}
+			i++;
+		}
+		return v;
 	}
 
 	private EGraph<V,E> graph;

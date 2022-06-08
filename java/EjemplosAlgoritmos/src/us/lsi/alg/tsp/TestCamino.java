@@ -45,7 +45,7 @@ public class TestCamino {
 		do {
 			System.out.println(v1);
 			Double w = v1.weight();
-			v1 = v1.neighbor(v1.greedyAction());
+			v1 = v1.neighbor(v1.actions().get(0));
 			Double nw = v1.weight();
 			r = Math.abs(w-nw);			
 		}while(r > error);

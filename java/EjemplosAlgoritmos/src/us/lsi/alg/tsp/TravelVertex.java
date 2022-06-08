@@ -1,6 +1,5 @@
 package us.lsi.alg.tsp;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jgrapht.Graph;
@@ -28,25 +27,12 @@ public record TravelVertex(List<Ciudad> camino)
 		return true;
 	}
 	
-	IntPair greedyAction() {
-		return this.actions().stream().min(Comparator.comparing(a->this.neighbor(a).weight())).get();
-	}
-	
-	TravelEdge geedyEdge() {
-		return this.edge(this.greedyAction());
-	}
-	
-	TravelVertex geedyVertex() {
-		return this.neighbor(this.greedyAction());
-	}
-	
 	@Override
 	public List<IntPair> actions() {
 		Integer n = this.camino().size();
-		List<IntPair> r =  Stream2.allPairs(1,n-1,1,n-1)
+		return Stream2.allPairs(1,n-1,1,n-1)
 				.filter(p->p.second() > p.first()+2)
 				.collect(Collectors.toList());
-		return List2.random(r, 3);
 	}
 
 	@Override
