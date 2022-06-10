@@ -40,7 +40,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public static <V, E> AStar<V, E> of(EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.solutionPath();
-		if(gp.isPresent()) return new AStar<V, E>(graph,gp.get().getWeight(),gp.get());
+		if(gp.isPresent()) return AStar.of(graph,gp.get().getWeight(),gp.get());
 		else return new AStar<V, E>(graph,null,null);
 	}
 	

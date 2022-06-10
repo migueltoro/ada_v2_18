@@ -24,8 +24,8 @@ public class DynamicProgrammingReduction<V, E> {
 			EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.solutionPath();
-		if(gp.isPresent()) return new DynamicProgrammingReduction<V, E>(graph,gp.get().getWeight(),gp.get(),false);
-		else return new DynamicProgrammingReduction<V, E>(graph,null,null,false);
+		if(gp.isPresent()) return DynamicProgrammingReduction.of(graph,gp.get().getWeight(),gp.get(),false);
+		else return DynamicProgrammingReduction.of(graph,null,null,false);
 	}
 	
 	public static <V, E> DynamicProgrammingReduction<V, E> of(
