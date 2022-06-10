@@ -32,7 +32,7 @@ public class TestPD {
 			
 			EGraph<VertexCandidatos, EdgeCandidatos> graph = EGraph.virtual(start,goal,PathType.Sum,Type.Max)
 					.edgeWeight(x -> x.weight())
-					.goalHasSolution(VertexCandidatos.constraint())
+					.goalHasSolution(VertexCandidatos.goalHasSolution())
 					.heuristic(CandidatosHeuristic::heuristic)
 					.build();
 

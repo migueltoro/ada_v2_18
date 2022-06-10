@@ -26,7 +26,7 @@ public record VertexCandidatos(Integer index,Set<Integer>seleccion,Integer pRest
 		return v-> v.index() == DatosCandidatos.getNumCandidatos();
 	}
 	
-	public static Predicate<VertexCandidatos> constraint() {
+	public static Predicate<VertexCandidatos> goalHasSolution() {
 		return v-> v.cualidadesCubiertas().size() == DatosCandidatos.getNumCualidades();
 	}
 	

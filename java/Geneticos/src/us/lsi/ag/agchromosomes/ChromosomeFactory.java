@@ -30,7 +30,7 @@ import us.lsi.common.Preconditions;
 /**
  * @author Miguel Toro
  * 
- * <p> Una factoría de cromosomas de los distintos tipos implementados. </p>
+ * <p> Una factorï¿½a de cromosomas de los distintos tipos implementados. </p>
  *
  */
 public class ChromosomeFactory {
@@ -86,7 +86,7 @@ public class ChromosomeFactory {
 	public static CrossoverType crossoverType = CrossoverType.OnePoint;
 	
 	/**
-	 * Número de puntos usados en la partición si se usa un operador de cruce de tipo NPointCrossover
+	 * Nï¿½mero de puntos usados en la particiï¿½n si se usa un operador de cruce de tipo NPointCrossover
 	 */
 	public static int NPOINTCROSSOVER = 3;
 	/**
@@ -136,7 +136,7 @@ public class ChromosomeFactory {
 	/**
 	 * @param tipo El tipo del cromosoma
 	 * @param problema El problema a resolver
-	 * @return Un operador de mutación adecuado para un cromosoma del tipo indicado
+	 * @return Un operador de mutaciï¿½n adecuado para un cromosoma del tipo indicado
 	 */
 	public static MutationPolicy getMutationPolicy(ChromosomeType tipo){
 		MutationPolicy mutationPolicy = null;
@@ -157,21 +157,21 @@ public class ChromosomeFactory {
 	}
 	
 	/**
-	 * <p> Para aplicar los operadores de mutación se escogen dos cromosomas. 
-	 * La técnica implementada para escoger cada uno de los dos cromosomas se denomina selección por torneo. 
+	 * <p> Para aplicar los operadores de mutaciï¿½n se escogen dos cromosomas. 
+	 * La tï¿½cnica implementada para escoger cada uno de los dos cromosomas se denomina selecciï¿½n por torneo. 
 	 * Se trata de organizar dos torneos. 
-	 * En cada uno se elige el mejor cromosoma de entrre <code> TOURNAMENT_ARITY </code> cromosomas de la población seleccionados al azar. 
-	 * Si el tamaño de <code> TOURNAMENT_ARITY </code> es más grande, los cromosomas
-	 *  débiles tienen menor probabilidad de ser seleccionados.</p>
+	 * En cada uno se elige el mejor cromosoma de entrre <code> TOURNAMENT_ARITY </code> cromosomas de la poblaciï¿½n seleccionados al azar. 
+	 * Si el tamaï¿½o de <code> TOURNAMENT_ARITY </code> es mï¿½s grande, los cromosomas
+	 *  dï¿½biles tienen menor probabilidad de ser seleccionados.</p>
 	 * 
-	 * <p> Número de participantes en el torneo para elegir los cromosomas que participarán en el cruce </p>
-	 * <p> Un valor típico es 2 </p>
+	 * <p> Nï¿½mero de participantes en el torneo para elegir los cromosomas que participarï¿½n en el cruce </p>
+	 * <p> Un valor tï¿½pico es 2 </p>
 	 */
 	
 	public static int TOURNAMENT_ARITY = 2;
 	
 	/**
-	 * @return Un operador que implementa la política de selección escogida
+	 * @return Un operador que implementa la polï¿½tica de selecciï¿½n escogida
 	 */
 	public static SelectionPolicy getSelectionPolicy(){	
 		SelectionPolicy selectionPolicy = new TournamentSelection(TOURNAMENT_ARITY);
@@ -182,7 +182,7 @@ public class ChromosomeFactory {
 	/**
 	 * @param tipo Tipo de cromosoma
 	 * @param problema El problema a resolver 
-	 * @post El método inicializa los parámetros relevantes de la clase que implementa el tipo indicado de cromosoma
+	 * @post El mï¿½todo inicializa los parï¿½metros relevantes de la clase que implementa el tipo indicado de cromosoma
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E,S> void iniValues(ChromosomeData<E,S> data, ChromosomeType tipo){

@@ -19,7 +19,7 @@ public class EGraphBuilderReal<G extends Graph<V,E>, V, E> implements EGraphBuil
 	Function<V,Double> vertexWeight = e -> 0.;
 	TriFunction<V,E,E,Double> vertexPassWeight= (v,e1,e2)->0.;
 	V endVertex = null;	
-	Predicate<V> constraint = v->true;
+	Predicate<V> goalHasSolution = v->true;
 	PathType pathType = PathType.Sum;
 	Function<V,E> greedyEdge = v -> this.graph.edgesOf(v).isEmpty() ? null : 
 		List2.randomUnitary(this.graph.edgesOf(v)).get(0);
@@ -80,8 +80,8 @@ public class EGraphBuilderReal<G extends Graph<V,E>, V, E> implements EGraphBuil
 		return this;
 	}
 	@Override
-	public EGraphBuilder<V, E> goalHasSolution(Predicate<V> constraint) {
-		this.constraint = constraint;
+	public EGraphBuilder<V, E> goalHasSolution(Predicate<V> goalHasSolution) {
+		this.goalHasSolution = goalHasSolution;
 		return this;
 	}
 	@Override

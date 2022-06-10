@@ -64,7 +64,7 @@ public class Sudoku {
 		.forEach(c->
 			Preconditions.checkArgument(
 				this.numValoresLibresEnCasilla(c) > 0 ,
-				"La casilla "+c+" está mal"));
+				"La casilla "+c+" estï¿½ mal"));
 	}
 	
 	public void sortIndices(Integer from, Integer to) {

@@ -23,7 +23,7 @@ public record SudokuVertex(Integer index, Sudoku sudoku)
 		return sv->sv.index == DatosSudoku.numeroDeCasillas;
 	}
 	
-	public static Predicate<SudokuVertex> constraint() {
+	public static Predicate<SudokuVertex> goalHasSolution() {
 		return sv->sv.sudoku.errores() == 0;
 	}
 	

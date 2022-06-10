@@ -41,7 +41,7 @@ public class MonedaPD {
 			r = memory.get(vertex);
 		} else if(vertex.index() == MonedaProblem.n) {
 			r = null;
-			if (MonedaProblem.constraint().test(vertex)) {
+			if (MonedaProblem.goalHasSolution().test(vertex)) {
 				r = Spm.of(null, 0);
 				memory.put(vertex, r);
 				if (accumulateValue > MonedaPD.maxValue) MonedaPD.maxValue = accumulateValue;

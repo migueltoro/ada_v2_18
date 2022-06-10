@@ -9,7 +9,6 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.mochila.datos.DatosMochila;
@@ -35,14 +34,13 @@ public class TestAStarMochila {
 				.build();
 		
 		
-		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph);
+//		GreedyOnGraph<MochilaVertex, MochilaEdge> rr = GreedyOnGraph.of(graph);
 		
-		GraphPath<MochilaVertex, MochilaEdge> gp = rr.path();
+//		GraphPath<MochilaVertex, MochilaEdge> gp = rr.path();
 		
-		System.out.println(gp.getWeight());
+//		System.out.println(gp.getWeight());
 	
-		AStar<MochilaVertex, MochilaEdge> ms = 
-				AStar.of(graph,gp.getWeight(),gp);
+		AStar<MochilaVertex, MochilaEdge> ms = AStar.of(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = ms.search().get();
 		SolucionMochila s = MochilaVertex.getSolucion(path);

@@ -30,7 +30,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private V startVertex;
 	private Predicate<V> goal;
 	private V endVertex;	
-	private Predicate<V> constraint;
+	private Predicate<V> goalHasSolution;
 	private PathType pathType;
 	private Function<V,E> greedyEdge;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
@@ -45,7 +45,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 		this.startVertex = builder.startVertex;
 		this.goal = builder.goal;
 		this.endVertex = builder.endVertex;
-		this.constraint = builder.constraint;
+		this.goalHasSolution = builder.goalHasSolution;
 		this.pathType = builder.pathType;
 		this.greedyEdge = builder.greedyEdge;
 		this.heuristic = builder.heuristic;
@@ -243,7 +243,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	}
 	@Override
 	public Predicate<V> goalHasSolution() {
-		return constraint;
+		return goalHasSolution;
 	}
 
 	@Override

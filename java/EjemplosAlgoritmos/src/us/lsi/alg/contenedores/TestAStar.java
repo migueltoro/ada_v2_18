@@ -32,10 +32,6 @@ public class TestAStar {
 			Predicate<VertexContenedores> goal = VertexContenedores.goal();
 
 			// Grafo
-			
-			//SimpleVirtualGraph.constraintG =  MulticonjuntoVertex.constraint();
-
-			
 
 			System.out.println("#### Algoritmo A* ####");
 

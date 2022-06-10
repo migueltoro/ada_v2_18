@@ -44,7 +44,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	private V startVertex;
 	private Predicate<V> goal;
 	private V endVertex;	
-	private Predicate<V> constraint;
+	private Predicate<V> goalHasSolution;
 	private PathType pathType;
 	private Function<V,E> greedyEdge;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
@@ -61,7 +61,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 		this.pathType = builder.pathType;
 		this.goal = builder.goal;
 		this.endVertex = builder.endVertex;
-		this.constraint = builder.goalHasSolution;
+		this.goalHasSolution = builder.goalHasSolution;
 		this.path = EGraphPath.ofVertex(this,this.startVertex,this.pathType);
 		this.greedyEdge = builder.greedyEdge;
 		this.heuristic = builder.heuristic;
@@ -342,7 +342,7 @@ public class SimpleVirtualGraph<V extends VirtualVertex<V,E,?>, E extends Simple
 	}
 	@Override
 	public Predicate<V> goalHasSolution() {
-		return constraint;
+		return goalHasSolution;
 	}
 
 	

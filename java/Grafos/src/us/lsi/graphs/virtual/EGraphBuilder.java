@@ -21,7 +21,7 @@ public interface EGraphBuilder<V, E> {
 
 	EGraphBuilder<V, E> endVertex(V endVertex);
 
-	EGraphBuilder<V, E> goalHasSolution(Predicate<V> constraint);
+	EGraphBuilder<V, E> goalHasSolution(Predicate<V> goalHasSolution);
 
 	EGraphBuilder<V, E> pathType(PathType pathType);
 

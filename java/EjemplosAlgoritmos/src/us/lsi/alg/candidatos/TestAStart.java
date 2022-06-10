@@ -42,7 +42,7 @@ public class TestAStart {
 			// Algoritmo A*
 			EGraph<VertexCandidatos, EdgeCandidatos> graph = EGraph.virtual(start,goal,PathType.Sum,Type.Max)
 					.edgeWeight(x -> x.weight())
-					.goalHasSolution(VertexCandidatos.constraint())
+					.goalHasSolution(VertexCandidatos.goalHasSolution())
 					.heuristic(CandidatosHeuristic::heuristic)
 					.build();
 			
@@ -63,7 +63,7 @@ public class TestAStart {
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(
 							List.of(!aStar.closed(v),
-									VertexCandidatos.goal().and(VertexCandidatos.constraint()).test(v),
+									VertexCandidatos.goal().and(VertexCandidatos.goalHasSolution()).test(v),
 									VertexCandidatos.goal().test(v)),
 						    List.of(Color.green,Color.red,Color.blue)),
 					e -> GraphColors.colorIf(Color.red, gp.get().getEdgeList().contains(e)));

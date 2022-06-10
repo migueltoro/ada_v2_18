@@ -34,7 +34,7 @@ public record MonedaProblem(Integer index,Integer valorRestante) {
 		return v->v.index() == MonedaProblem.n;
 	}
 	
-	public static Predicate<MonedaProblem> constraint() {
+	public static Predicate<MonedaProblem> goalHasSolution() {
 		return v->v.valorRestante() == 0;
 	}
 

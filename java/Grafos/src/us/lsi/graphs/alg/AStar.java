@@ -38,7 +38,10 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
 	public static <V, E> AStar<V, E> of(EGraph<V, E> graph) {
-		return new AStar<V, E>(graph,null,null);
+		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
+		Optional<GraphPath<V, E>> gp = ga.solutionPath();
+		if(gp.isPresent()) return new AStar<V, E>(graph,gp.get().getWeight(),gp.get());
+		else return new AStar<V, E>(graph,null,null);
 	}
 	
 	public static <V, E> AStar<V, E> of(EGraph<V, E> graph,Double bestValue,GraphPath<V, E> optimalPath) {

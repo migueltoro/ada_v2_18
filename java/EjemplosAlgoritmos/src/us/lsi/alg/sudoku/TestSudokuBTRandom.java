@@ -21,7 +21,7 @@ public class TestSudokuBTRandom {
 		EGraph<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> graph = 
 				EGraph.virtual(e1,goal,PathType.Last, Type.One)
 				.vertexWeight(v->(double)v.sudoku().errores())
-				.goalHasSolution(SudokuVertex.constraint())
+				.goalHasSolution(SudokuVertex.goalHasSolution())
 				.build();
 		
 		
