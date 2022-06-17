@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import us.lsi.common.Preconditions;
@@ -23,7 +24,7 @@ public class DynamicProgrammingReduction<V, E> {
 	public static <V, E> DynamicProgrammingReduction<V, E> of(
 			EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
-		Optional<GraphPath<V, E>> gp = ga.solutionPath();
+		Optional<GraphPath<V, E>> gp = ga.search();
 		if(gp.isPresent()) return DynamicProgrammingReduction.of(graph,gp.get().getWeight(),gp.get(),false);
 		else return DynamicProgrammingReduction.of(graph,null,null,false);
 	}
@@ -91,6 +92,10 @@ public class DynamicProgrammingReduction<V, E> {
 		return pathFrom(graph.startVertex());
 	}
 	
+	public <S> Optional<S> search(Function<GraphPath<V,E>,S> f) {
+		Optional<GraphPath<V, E>> p = search();
+		return p.map(f);
+	}
 	
 	
 	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {

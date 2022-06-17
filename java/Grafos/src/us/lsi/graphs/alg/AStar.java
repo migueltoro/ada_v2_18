@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.jgrapht.GraphPath;
@@ -39,7 +40,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	 */
 	public static <V, E> AStar<V, E> of(EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
-		Optional<GraphPath<V, E>> gp = ga.solutionPath();
+		Optional<GraphPath<V, E>> gp = ga.search();
 		if(gp.isPresent()) return AStar.of(graph,gp.get().getWeight(),gp.get());
 		else return new AStar<V, E>(graph,null,null);
 	}
@@ -167,6 +168,11 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.goalHasSolution())).findFirst();	
 		if(last.isPresent()) return path(startVertex,last);
 		else return Optional.ofNullable(this.optimalPath);
+	}
+	
+	public <S> Optional<S> search(Function<GraphPath<V,E>,S> f) {
+		Optional<GraphPath<V, E>> p = search();
+		return p.map(f);
 	}
 	
 	public Optional<GraphPath<V, E>> searchAll() {

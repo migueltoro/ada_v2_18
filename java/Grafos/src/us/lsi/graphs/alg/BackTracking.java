@@ -28,7 +28,7 @@ public class BackTracking<V,E,S> {
 			EGraph<V, E> graph,
 			Function<GraphPath<V, E>, S> solution) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
-		Optional<GraphPath<V, E>> gp = ga.solutionPath();
+		Optional<GraphPath<V, E>> gp = ga.search();
 		if(gp.isPresent()) return BackTracking.of(graph,solution,gp.get().getWeight(),gp.get(),false);
 		else return BackTracking.of(graph, solution, null, null, false);
 	}

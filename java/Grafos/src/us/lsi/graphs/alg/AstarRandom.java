@@ -92,4 +92,9 @@ public class AstarRandom<V, E> extends AStar<V, E>{
 		return gp;
 	}
 	
+	public <S> Optional<S> search(Function<GraphPath<V,E>,S> f) {
+		Optional<GraphPath<V, E>> p = search();
+		return p.map(f);
+	}
+	
 }
