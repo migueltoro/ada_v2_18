@@ -1,6 +1,7 @@
 package us.lsi.graphs.alg;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 
@@ -41,7 +42,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 	}
 	
 	@Override
-	public void search() {
+	public Optional<S> search() {
 		State<V,E> initialState = StatePath.of(graph,graph.goal(),graph.endVertex());
 		this.iterations = 0;
 		Math2.initRandom();
@@ -49,6 +50,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 			this.iterations++;
 			search(initialState);
 		}
+		return getSolution();
 	}
 	
 	@Override

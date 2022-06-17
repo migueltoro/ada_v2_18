@@ -107,10 +107,11 @@ public class BackTracking<V,E,S> {
 		return this.outGraph;
 	}
 	
-	public void search() {	
+	public Optional<S> search() {	
 		initialGraph();
 		State<V,E> initialState = StatePath.of(graph,graph.goal(),graph.endVertex());
 		search(initialState);
+		return this.getSolution();
 	}
 	
 	public void search(State<V, E> state) {

@@ -1,6 +1,7 @@
 package us.lsi.alg.mochila;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -45,9 +46,9 @@ public class TestBTMochila {
 				MochilaVertex::getSolucion,
 				path.getWeight(),path,true);		
 		
-		ms.search();
+		Optional<SolucionMochila> s = ms.search();
 //		SolucionMochila s = MochilaVertex.getSolucion(ms.optimalPath().get());
-//		System.out.println(s);
+		System.out.println(s);
 		System.out.println(ms.optimalPath().get().getEdgeList().stream().map(e->e.action()).toList());
 			
 		GraphPath<MochilaVertex, MochilaEdge> sp = ms.optimalPath().get();
