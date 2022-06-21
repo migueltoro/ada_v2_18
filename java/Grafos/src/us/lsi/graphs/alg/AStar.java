@@ -53,7 +53,6 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public EGraph<V,E> graph; 
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
-	protected EGraphPath<V,E> ePath;
 	private Double bestValue = null; //mejor valor estimado
 	private GraphPath<V, E> optimalPath = null; //mejor camino estimado
 	
@@ -65,7 +64,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 				this.graph.type().equals(EGraph.Type.Max), "El tipo debe ser Min o Max");
 		this.comparator = this.graph.type().equals(EGraph.Type.Min)?Comparator.naturalOrder():Comparator.reverseOrder();		
 		this.tree = new HashMap<>();
-		this.ePath = graph.initialPath();
+		EGraphPath<V, E> ePath = graph.initialPath();
 		this.heap = new FibonacciHeap<>(comparator);
 		Data<V,E> data = Data.of(graph.startVertex(),null,ePath.getWeight());	
 		Double d = this.graph.estimatedWeightToEnd(graph.startVertex(),data.distanceToOrigin);
@@ -164,6 +163,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 
 	public Optional<GraphPath<V, E>> search() {
 		V startVertex = graph.startVertex();
+		EGraphPath<V, E> ePath = graph.initialPath();
 		if(graph.goal().test(startVertex)) return Optional.of(ePath);
 		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.goalHasSolution())).findFirst();	
 		if(last.isPresent()) return path(startVertex,last);
@@ -177,6 +177,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	
 	public Optional<GraphPath<V, E>> searchAll() {
 		V startVertex = graph.startVertex();
+		EGraphPath<V, E> ePath = graph.initialPath();
 		if(graph.goal().test(startVertex)) return Optional.ofNullable(ePath);
 		List<V> lasts = this.stream().filter(graph.goal().and(graph.goalHasSolution())).toList();	
 		Integer t = this.graph.type() == EGraph.Type.Min? 1: -1;
