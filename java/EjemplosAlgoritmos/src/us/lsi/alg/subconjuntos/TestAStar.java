@@ -35,7 +35,7 @@ public class TestAStar {
 
 		System.out.println("\n\n#### PI-7 Ej3 Algoritmo Astar ####");
 		
-		AStar<SubconjuntosVertex, SubconjuntosEdge> aStar = AStar.of(graph);
+		AStar<SubconjuntosVertex, SubconjuntosEdge,?> aStar = AStar.ofGreedy(graph);
 		
 		List<Integer> gp_as = aStar.search().get().getEdgeList().stream().map(x -> x.action())
 				.collect(Collectors.toList()); // getEdgeList();

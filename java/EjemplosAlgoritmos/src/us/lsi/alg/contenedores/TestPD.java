@@ -50,8 +50,8 @@ public class TestPD {
 
 
 			// Algoritmo PD
-			DynamicProgrammingReduction<VertexContenedores, EdgeContenedores> pdr = 
-					DynamicProgrammingReduction.of(graph, max.getWeight(), max, false);
+			DynamicProgrammingReduction<VertexContenedores, EdgeContenedores, ?> pdr = 
+					DynamicProgrammingReduction.ofGreedy(graph);
 
 
 			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = pdr.search();

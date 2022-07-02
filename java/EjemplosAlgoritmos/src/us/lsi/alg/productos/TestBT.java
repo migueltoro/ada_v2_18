@@ -2,6 +2,7 @@ package us.lsi.alg.productos;
 
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -40,17 +41,17 @@ public class TestBT {
 			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
 					BackTracking.of(graph,SolucionProductos::of,path.getWeight(),path,true);
 			
-			GraphPath<ProductosVertex, ProductosEdge> gp = bta.optimalPath!=null?bta.optimalPath:path;
+//			GraphPath<ProductosVertex, ProductosEdge> gp = bta.optimalPath!=null?bta.optimalPath:path;
 			
-			bta.search();
+			Optional<GraphPath<ProductosVertex, ProductosEdge>> gp = bta.search();
 			
-			System.out.println(bta.getSolution());
+			System.out.println(SolucionProductos.of(gp.get()));
 					
-			GraphColors.toDot(bta.graph(),"ficheros/productosBTGraph.gv",
+			GraphColors.toDot(bta.outGraph(),"ficheros/productosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.colorIf(Color.red,goal.test(v)),
-					e->GraphColors.colorIf(Color.red,gp.getEdgeList().contains(e))
+					e->GraphColors.colorIf(Color.red,gp.get().getEdgeList().contains(e))
 					);
 
 		}

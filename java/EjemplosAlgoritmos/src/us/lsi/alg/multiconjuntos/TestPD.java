@@ -55,11 +55,11 @@ public class TestPD {
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
 			
-			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge> pdr = DynamicProgrammingReduction
-					.of(graph, null, null, true);
+			DynamicProgrammingReduction<MulticonjuntoVertex, MulticonjuntoEdge, ?> pdr = DynamicProgrammingReduction
+					.of(graph, null,null, null, true);
 
 			if (rr.isSolution(r)) {
-				pdr = DynamicProgrammingReduction.of(graph, r.getWeight(), r, true);
+				pdr = DynamicProgrammingReduction.of(graph, null,r.getWeight(), r, true);
 			}
 			
 			

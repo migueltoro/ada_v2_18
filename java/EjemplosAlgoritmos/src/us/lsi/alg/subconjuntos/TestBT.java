@@ -2,6 +2,9 @@ package us.lsi.alg.subconjuntos;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
+import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
@@ -45,12 +48,12 @@ public class TestBT {
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);
 			List<SubconjuntosEdge> le = SubconjuntosHeuristic.pathVoraz(start,DatosSubconjuntos.NUM_SC);
 			System.out.println("Sv = "+sv);
-			bta.search();
+			Optional<GraphPath<SubconjuntosVertex, SubconjuntosEdge>> gp = bta.search();
 			
-			System.out.println(bta.getSolution().isPresent()?bta.getSolution().get():sv);
+			System.out.println(gp.isPresent()?SolucionSubconjuntos.of(gp.get()):sv);
 			List<SubconjuntosEdge> ls = bta.optimalPath != null?bta.optimalPath.getEdgeList():null;
 			
-			GraphColors.toDot(bta.graph(),"ficheros/subconjuntosBTGraph.gv",
+			GraphColors.toDot(bta.outGraph(),"ficheros/subconjuntosBTGraph.gv",
 					v->v.toGraph(),
 					e->e.action().toString(),
 					v->GraphColors.colorIf(Color.red,SubconjuntosVertex.goal().test(v)),

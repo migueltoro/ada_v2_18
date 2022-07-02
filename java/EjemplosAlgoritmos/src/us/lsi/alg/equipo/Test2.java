@@ -6,7 +6,6 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
-import us.lsi.graphs.virtual.SimpleVirtualGraph;
 public class Test2 {
 
 	public static void main(String[] args) {

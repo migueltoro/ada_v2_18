@@ -25,6 +25,7 @@ public class EGraphBuilderReal<G extends Graph<V,E>, V, E> implements EGraphBuil
 		List2.randomUnitary(this.graph.edgesOf(v)).get(0);
 	TriFunction<V, Predicate<V>, V, Double> heuristic = (v1,p,v2) -> 0.;
 	Type type = Type.Min;
+	Integer solutionNumber = 1;
 	
 	public EGraphBuilderReal(G graph) {
 		super();
@@ -104,9 +105,18 @@ public class EGraphBuilderReal<G extends Graph<V,E>, V, E> implements EGraphBuil
 		this.type = type;
 		return this;
 	}
+	
+	@Override
+	public EGraphBuilder<V, E> solutionNumber(Integer n) {
+		this.solutionNumber = n;
+		return this;
+	}
+	
 	@Override
 	public EGraph<V,E> build() {
 		return new EGraphI<>(this);
 	}
+
+	
 
 }

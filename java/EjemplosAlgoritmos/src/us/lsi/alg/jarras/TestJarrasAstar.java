@@ -1,7 +1,8 @@
 package us.lsi.alg.jarras;
 
-import java.util.List;
+
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -22,15 +23,14 @@ public class TestJarrasAstar {
 					.heuristic((v1,p,v2)->0.)
 					.build();		
 			
-			AStar<JarrasVertex, JarrasEdge> ms = AStar.of(
-					graph);
+			AStar<JarrasVertex, JarrasEdge,JarrasSolution> ms = AStar.of(graph);
 			
 //			Optional<JarrasVertex> r = ms.stream().peek(e->System.out.println(e)).filter(e->e.equals(e2)).findFirst();
 			
-			GraphPath<JarrasVertex, JarrasEdge> path = ms.search().orElse(null);
+			Optional<GraphPath<JarrasVertex, JarrasEdge>> path = ms.search();
 //			List<JarrasEdge> edges = path.getEdgeList();
 //			System.out.println(edges);
-			JarrasSolution s = JarrasSolution.of(path);
+			JarrasSolution s = JarrasSolution.of(path.get());
 			System.out.println(s);
 			
 //			System.out.println(e1);

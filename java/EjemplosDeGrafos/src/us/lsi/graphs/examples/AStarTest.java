@@ -42,7 +42,7 @@ public class AStarTest {
 				EGraph.ofGraph(graph,start,v->v.equals(end)).edgeWeight(e->e.km()).build();
 		
 				
-		AStar<Ciudad, Carretera> ra = AStar.of(g);
+		AStar<Ciudad, Carretera,?> ra = AStar.ofGreedy(g);
 		
 		List<Carretera> carreteras = ra.search().orElse(null).getEdgeList();
 		

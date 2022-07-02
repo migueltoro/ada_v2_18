@@ -45,8 +45,8 @@ public class TestPDRMochila {
 		
 		System.out.println("1 = "+bv);
 		
-		DynamicProgrammingReduction<MochilaVertex, MochilaEdge> ms = 
-				DynamicProgrammingReduction.of(graph,bv,path,true);
+		DynamicProgrammingReduction<MochilaVertex, MochilaEdge, SolucionMochila> ms = 
+				DynamicProgrammingReduction.of(graph,null,bv,path,true);
 		
 		
 		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();

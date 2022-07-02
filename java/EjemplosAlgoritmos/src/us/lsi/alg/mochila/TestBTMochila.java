@@ -41,18 +41,18 @@ public class TestBTMochila {
 //		System.out.println(s0);
 		System.out.println(path.getEdgeList().stream().map(e->e.action()).toList());
 		
-		BackTracking<MochilaVertex, MochilaEdge,SolucionMochila> ms = BackTracking.of(
+		BackTracking<MochilaVertex,MochilaEdge,SolucionMochila> ms = BackTracking.of(
 				graph,
 				MochilaVertex::getSolucion,
 				path.getWeight(),path,true);		
 		
-		Optional<SolucionMochila> s = ms.search();
+		Optional<GraphPath<MochilaVertex, MochilaEdge>> gp = ms.search();
 //		SolucionMochila s = MochilaVertex.getSolucion(ms.optimalPath().get());
-		System.out.println(s);
+		System.out.println(MochilaVertex.getSolucion(gp.get()));
 		System.out.println(ms.optimalPath().get().getEdgeList().stream().map(e->e.action()).toList());
 			
-		GraphPath<MochilaVertex, MochilaEdge> sp = ms.optimalPath().get();
-		GraphColors.toDot(ms.graph(),"ficheros/MochilaBTGraph2.gv",
+		GraphPath<MochilaVertex, MochilaEdge> sp = gp.get();
+		GraphColors.toDot(ms.outGraph(),"ficheros/MochilaBTGraph2.gv",
 				v->String.format("(%d,%d)",v.index(),v.capacidadRestante()),
 				e->e.action().toString(),
 				v->GraphColors.colorIf(Color.red,MochilaVertex.goal().test(v)),

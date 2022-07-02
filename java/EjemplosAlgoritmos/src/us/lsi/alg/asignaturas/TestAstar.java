@@ -1,10 +1,9 @@
 package us.lsi.alg.asignaturas;
 
-import java.util.Comparator;
-import java.util.List;
+
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import us.lsi.graphs.alg.AStar;
@@ -32,7 +31,7 @@ public class TestAstar {
 				.build();
 	
 		
-		AStar<AsignaturasVertice, AsignaturasEdge> as = AStar.of(grafo);
+		AStar<AsignaturasVertice, AsignaturasEdge, SolucionAsignaturas> as = AStar.ofGreedy(grafo);
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
@@ -40,15 +39,11 @@ public class TestAstar {
 		
 		System.out.println("___________________");
 		
-		as = AStar.of(grafo);
+		as = AStar.ofGreedy(grafo);
 		
-		List<SolucionAsignaturas> s3 = as.searchAll().stream()
-				.map(s->SolucionAsignaturas.of(s))
-				.sorted(Comparator.comparing(s->-s.mejora()))
-				.toList()
-				.subList(0, 5);
+		Optional<GraphPath<AsignaturasVertice, AsignaturasEdge>> gp = as.search();
 		
-		System.out.println(s3.stream().map(s->s.toString()).collect(Collectors.joining("\n")));
+		System.out.println(SolucionAsignaturas.of(gp.get()));
 	}
 
 }

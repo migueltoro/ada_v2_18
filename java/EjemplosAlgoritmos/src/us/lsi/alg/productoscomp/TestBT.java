@@ -1,6 +1,7 @@
 package us.lsi.alg.productoscomp;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -50,11 +51,11 @@ public class TestBT {
 					SolucionProductos::of, 
 					gp.getWeight(),gp,true);
 
-			bta.search();
+			Optional<GraphPath<VertexProductos, EdgeProductos>> gps = bta.search();
 			
-			System.out.println(bta.getSolution());
+			System.out.println(SolucionProductos.of(gps.get()));
 
-			GraphColors.toDot(bta.graph(), "ficheros/productosPDGraph.gv", 
+			GraphColors.toDot(bta.outGraph(), "ficheros/productosPDGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(Color.red, VertexProductos.goal().test(v)),

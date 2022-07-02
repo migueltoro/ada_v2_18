@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.jgrapht.GraphPath;
 
-import us.lsi.common.IntPair;
 import us.lsi.common.List2;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
 import us.lsi.graphs.virtual.VirtualVertex;
@@ -112,16 +110,6 @@ public record TyPVertex(Integer index, List<Double> cargas)
 	
 	public static TyPVertex copy(TyPVertex vertex) {
 		return new TyPVertex(vertex.index,vertex.cargas);
-	}
-	
-	
-	public static SolucionTyP getSolucion(GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex,Integer>> path){	
-		Map<Integer,List<Tarea>> carga = path.getEdgeList().stream()
-				.map(e->IntPair.of(e.action(),e.source().index()))
-				.collect(Collectors.groupingBy(p->p.first(),Collectors.mapping(p->Tarea.getTarea(p.second()), Collectors.toList())));
-		
-		TyPVertex v = List2.last(path.getVertexList());
-		return SolucionTyP.of(carga, v.maxCarga(), v.npMin(), v.npMax());
 	}
 
 }

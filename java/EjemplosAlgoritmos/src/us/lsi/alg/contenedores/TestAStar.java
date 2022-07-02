@@ -43,7 +43,7 @@ public class TestAStar {
 					.heuristic(ContenedoresHeuristic::heuristic)
 					.build();
 			
-			AStar<VertexContenedores, EdgeContenedores> aStar = AStar.of(graph);
+			AStar<VertexContenedores, EdgeContenedores, ?> aStar = AStar.ofGreedy(graph);
 			
 			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = aStar.search();
 			
@@ -55,7 +55,7 @@ public class TestAStar {
 				System.out.println("Solucion no encontrada!!!!");
 			}
 
-			GraphColors.toDot(aStar.graph(), "ficheros/contenedoresAStarGraph.gv", 
+			GraphColors.toDot(aStar.outGraph(), "ficheros/contenedoresAStarGraph.gv", 
 					v -> v.toString(),
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(Color.red, VertexContenedores.goal().test(v)),

@@ -2,6 +2,7 @@ package us.lsi.alg.typ;
 
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -36,21 +37,21 @@ public class TestAStarTyP {
 		System.out.println(bv);
 		
 		
-		AStar<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> ms = AStar.of(graph,bv,pp);
+		AStar<TyPVertex,SimpleEdgeAction<TyPVertex, Integer>,SolucionTyP> ms = AStar.ofGreedy(graph);
 		
 //		ms.stream().forEach(v->System.out.println(v));
 		
-		GraphPath<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> path = ms.search().get();
+		Optional<GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>>> path = ms.search();
 //		List<MochilaEdge> edges = path.getEdgeList();
 //		System.out.println(path);
-		SolucionTyP s = TyPVertex.getSolucion(path);
+		SolucionTyP s = SolucionTyP.of(path.get());
 		System.out.println(s);
 		
-		GraphColors.toDot(ms.graph(),"ficheros/TyPAStar.gv",
+		GraphColors.toDot(ms.outGraph(),"ficheros/TyPAStar.gv",
 				v->String.format("(%d,%.1f)",v.index(),v.maxCarga()),
 				e->e.action().toString(),
 				v->GraphColors.colorIf(Color.red,v.goal()),
-				e->GraphColors.colorIf(Color.red,path.getEdgeList().contains(e))
+				e->GraphColors.colorIf(Color.red,path.get().getEdgeList().contains(e))
 				);
 	}
 

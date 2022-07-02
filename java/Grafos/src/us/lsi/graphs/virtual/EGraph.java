@@ -54,7 +54,7 @@ public interface EGraph<V, E> extends Graph<V, E> {
 	Predicate<V> goal();
 
 	V endVertex();
-
+	
 	Predicate<V> goalHasSolution();
 
 	PathType pathType();
@@ -66,6 +66,8 @@ public interface EGraph<V, E> extends Graph<V, E> {
 	public static enum Type{Min,Max,All,One}
 	
 	Type type();
+	
+	Integer solutionNumber();
 		
 	public default Double add(V vertexActual, Double acumulateValue, E nextEdge, E lastEdge) {
 		return this.initialPath().add(vertexActual, acumulateValue, nextEdge, lastEdge);

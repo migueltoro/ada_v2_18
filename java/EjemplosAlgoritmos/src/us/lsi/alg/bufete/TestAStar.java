@@ -36,7 +36,7 @@ public class TestAStar {
 
 			// Algoritmo A*
 
-			AStar<BufeteVertex, BufeteEdge> aStar = AStar.of(graph);
+			AStar<BufeteVertex, BufeteEdge, SolucionBufete> aStar = AStar.ofGreedy(graph);
 			GraphPath<BufeteVertex, BufeteEdge> gp_as = aStar.search().get(); // getEdgeList();
 			
 			SolucionBufete s_as = SolucionBufete.of(gp_as);

@@ -30,7 +30,7 @@ public class TestAS {
 					.build();
 
 			// Algoritmo A*
-			AStar<ProductosVertex, ProductosEdge> aStar = AStar.of(
+			AStar<ProductosVertex, ProductosEdge,?> aStar = AStar.ofGreedy(
 					graph);
 			
 			GraphPath<ProductosVertex, ProductosEdge> gp = aStar.search().get();

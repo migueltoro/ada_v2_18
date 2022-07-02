@@ -1,6 +1,7 @@
 package us.lsi.alg.equipo;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
@@ -38,10 +39,11 @@ public class Tests {
 	private static void testPDR(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== PDR ======================== ");
 		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
-		DynamicProgrammingReduction<EquipoVertex, EquipoEdge> alg_pdr = 
-				DynamicProgrammingReduction.of(grafo,gp.getWeight(),gp,false);
+		DynamicProgrammingReduction<EquipoVertex, EquipoEdge, ?> alg_pdr = 
+				DynamicProgrammingReduction.of(grafo,null,gp.getWeight(),gp,false);
 		
-		System.out.println(EquipoVertex.getSolucion(alg_pdr.search().get()));
+		Optional<GraphPath<EquipoVertex, EquipoEdge>> p = alg_pdr.search();
+		System.out.println(EquipoVertex.getSolucion(p.get()));
 	}
 	
 	private static void testBT(EGraph<EquipoVertex, EquipoEdge> grafo) {
@@ -51,17 +53,19 @@ public class Tests {
 			grafo,
 			EquipoVertex::getSolucion,
 			gp.getWeight(),gp,false);
-		alg_bt.search();
-	    System.out.println(alg_bt.getSolution().get());
+		Optional<GraphPath<EquipoVertex, EquipoEdge>> p = alg_bt.search();
+	    System.out.println(EquipoVertex.getSolucion(p.get()));
 	}
 
 	private static void testAStar(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== A* ======================== ");
 		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
-		AStar<EquipoVertex, EquipoEdge> alg_star = AStar.of(
+		AStar<EquipoVertex, EquipoEdge,?> alg_star = AStar.of(
 			grafo,
+			null,
 			gp.getWeight(),gp);
-		System.out.println(EquipoVertex.getSolucion(alg_star.search().get()));
+		Optional<GraphPath<EquipoVertex, EquipoEdge>> p = alg_star.search();
+		System.out.println(EquipoVertex.getSolucion(p.get()));
 	}
 
 }

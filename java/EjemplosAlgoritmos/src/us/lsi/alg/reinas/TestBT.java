@@ -17,14 +17,15 @@ public class TestBT {
 				EGraph.virtual(e1,ReinasVertex.goal(), PathType.Last, Type.All)
 				.goalHasSolution(ReinasVertex.goalHasSolution())
 				.vertexWeight(v->v.errores().doubleValue())
+				.solutionNumber(3)
 				.build();	
 
 		BackTracking<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
 				BackTracking.of(graph, 
-				SolucionReinas::of);
+				SolucionReinas::of,null,null,false);
 
 		ms.search();
-		System.out.println(ms.getSolutions());
+		ms.getSolutions().stream().forEach(s->System.out.println(s));
 
 	}
 }

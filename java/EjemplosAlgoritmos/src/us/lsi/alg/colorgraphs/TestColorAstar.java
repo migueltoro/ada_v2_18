@@ -51,10 +51,7 @@ public class TestColorAstar {
 		
 		ColorVertex.data(m, g2);
 		
-		AStar<ColorVertex, ColorEdge> ms = AStar.of(
-				graph,
-				m.doubleValue(),
-				p);
+		AStar<ColorVertex, ColorEdge,?> ms = AStar.ofGreedy(graph);
 		
 		GraphPath<ColorVertex, ColorEdge> path = ms.search().get();
 		ColorVertex lv = List2.last(path.getVertexList());

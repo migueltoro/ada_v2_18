@@ -39,8 +39,8 @@ public class TestPD {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
-			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge> pdr = 
-					DynamicProgrammingReduction.of(graph, 
+			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge,?> pdr = 
+					DynamicProgrammingReduction.of(graph, null,
 							SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC),null,true);
 			
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);

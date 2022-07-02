@@ -30,8 +30,8 @@ public class TestPDRTyP {
 		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> path = rr.path();
 		Double bv = path.getWeight();
 		
-		DynamicProgrammingReduction<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> ms = 
-				DynamicProgrammingReduction.of(graph,					
+		DynamicProgrammingReduction<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>,?> ms = 
+				DynamicProgrammingReduction.of(graph,null,					
 						bv,path,true);
 		
 		ms.search();
@@ -39,7 +39,7 @@ public class TestPDRTyP {
 //		System.out.println(ms.solutionsTree);
 		GraphPath<TyPVertex,SimpleEdgeAction<TyPVertex,Integer>> s1 = ms.search().get();
 //		System.out.println(s1);
-		SolucionTyP s = TyPVertex.getSolucion(s1);
+		SolucionTyP s = SolucionTyP.of(s1);
 		System.out.println(s);
 		
 	}

@@ -34,8 +34,8 @@ public class TestMainPuzzle {
 				.heuristic(HeuristicaPuzzle::heuristica)
 				.build();		
 		
-		AStar<VertexPuzzle, EdgePuzzle> ms = 
-				AStar.of(graph);
+		AStar<VertexPuzzle, EdgePuzzle,?> ms = 
+				AStar.ofGreedy(graph);
 		
 		GraphPath<VertexPuzzle,EdgePuzzle> path = ms.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();

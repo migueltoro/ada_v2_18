@@ -20,7 +20,7 @@ public interface EGraphBuilder<V, E> {
 	EGraphBuilder<V, E> goal(Predicate<V> goal);
 
 	EGraphBuilder<V, E> endVertex(V endVertex);
-
+	
 	EGraphBuilder<V, E> goalHasSolution(Predicate<V> goalHasSolution);
 
 	EGraphBuilder<V, E> pathType(PathType pathType);
@@ -30,6 +30,8 @@ public interface EGraphBuilder<V, E> {
 	EGraphBuilder<V, E> heuristic(TriFunction<V, Predicate<V>, V, Double> heuristic);
 
 	EGraphBuilder<V, E> type(Type type);
+	
+	EGraphBuilder<V, E> solutionNumber(Integer n);
 
 	EGraph<V, E> build();
 

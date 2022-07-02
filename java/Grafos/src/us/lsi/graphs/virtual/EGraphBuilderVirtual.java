@@ -22,6 +22,7 @@ public class EGraphBuilderVirtual<V extends VirtualVertex<V,E,?>, E extends Simp
 	Function<V,E> greedyEdge = v -> v.edgesListOf().isEmpty()? null : v.edgesListOf().get(0);
 	TriFunction<V, Predicate<V>, V, Double> heuristic = (v1,p,v2) -> 0.;
 	Type type = Type.Min;
+	Integer solutionNumber;
 	
 	public EGraphBuilderVirtual() {
 		super();
@@ -66,8 +67,8 @@ public class EGraphBuilderVirtual<V extends VirtualVertex<V,E,?>, E extends Simp
 		this.endVertex = endVertex;
 		return this;
 	}
-	public EGraphBuilderVirtual<V, E> goalHasSolution(Predicate<V> constraint) {
-		this.goalHasSolution = constraint;
+	public EGraphBuilderVirtual<V, E> goalHasSolution(Predicate<V> goalHasSolution) {
+		this.goalHasSolution = goalHasSolution;
 		return this;
 	}
 	public EGraphBuilderVirtual<V, E> pathType(PathType pathType) {
@@ -84,6 +85,11 @@ public class EGraphBuilderVirtual<V extends VirtualVertex<V,E,?>, E extends Simp
 	}
 	public EGraphBuilderVirtual<V, E> type(Type type) {
 		this.type = type;
+		return this;
+	}
+	@Override
+	public EGraphBuilder<V, E> solutionNumber(Integer n) {
+		this.solutionNumber = n;
 		return this;
 	}
 	public EGraph<V,E> build() {

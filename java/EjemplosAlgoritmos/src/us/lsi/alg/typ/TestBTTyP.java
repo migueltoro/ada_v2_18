@@ -1,11 +1,10 @@
 package us.lsi.alg.typ;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.colors.GraphColors;
-import us.lsi.colors.GraphColors.Color;
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
@@ -35,23 +34,20 @@ public class TestBTTyP {
 		Double bv = path.getWeight();
 		System.out.println(bv);
 		
-		BackTracking<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BackTracking.of(
-						graph,				
-						TyPVertex::getSolucion,
-						bv,path,true);		
+		BackTracking<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BackTracking.ofGreedy(
+						graph);		
 		
-		ms.search();
+		Optional<GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>>> gp = ms.search();
 
-		System.out.println(ms.getSolution().get());
-		System.out.println(ms.getSolutions().size());
+		System.out.println(SolucionTyP.of(gp.get()));
 		
-		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> sp = ms.optimalPath().get();
-		GraphColors.toDot(ms.graph(),"ficheros/TyPBT.gv",
-				v->String.format("(%d,%.1f)",v.index(),v.maxCarga()),
-				e->e.action().toString(),
-				v->GraphColors.colorIf(Color.red,v.goal()),
-				e->GraphColors.colorIf(Color.red,sp.getEdgeList().contains(e))
-				);
+//		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> sp = ms.optimalPath().get();
+//		GraphColors.toDot(ms.outGraph(),"ficheros/TyPBT.gv",
+//				v->String.format("(%d,%.1f)",v.index(),v.maxCarga()),
+//				e->e.action().toString(),
+//				v->GraphColors.colorIf(Color.red,v.goal()),
+//				e->GraphColors.colorIf(Color.red,sp.getEdgeList().contains(e))
+//				);
 
 	}
 

@@ -37,7 +37,7 @@ public class TestVuelos {
 				.vertexPassWeight((v,e1,e2)-> Vuelo.getVertexPassWeight(v,e1,e2))
 				.build();	
 		
-		AStar<String,Vuelo> ms = AStar.of(g);
+		AStar<String,Vuelo,?> ms = AStar.ofGreedy(g);
 		
 		GraphPath<String,Vuelo> path = ms.search().orElse(null);
 		System.out.printf("Timepo de Recorrido = %.2f\n",path.getWeight());

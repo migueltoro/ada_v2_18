@@ -3,6 +3,7 @@ package us.lsi.graphs.alg;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,27 +12,34 @@ import java.util.function.Predicate;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath;
 
 import java.util.Optional;
+import java.util.Set;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
-public class DynamicProgrammingReduction<V, E> {
+public class DynamicProgrammingReduction<V, E, S> {
 	
-	public static <V, E> DynamicProgrammingReduction<V, E> of(
+	public static <V, E, S> DynamicProgrammingReduction<V, E, S> ofGreedy(
 			EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.search();
-		if(gp.isPresent()) return DynamicProgrammingReduction.of(graph,gp.get().getWeight(),gp.get(),false);
-		else return DynamicProgrammingReduction.of(graph,null,null,false);
+		if(gp.isPresent()) return DynamicProgrammingReduction.of(graph,null,gp.get().getWeight(),gp.get(),false);
+		else return DynamicProgrammingReduction.of(graph,null,null,null,false);
 	}
 	
-	public static <V, E> DynamicProgrammingReduction<V, E> of(
-			EGraph<V, E> graph, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
-		return new DynamicProgrammingReduction<V, E>(graph,bestValue,optimalPath,withGraph);
+	public static <V, E, S> DynamicProgrammingReduction<V, E, S> of(
+			EGraph<V, E> graph) {
+		return DynamicProgrammingReduction.of(graph,null,null,null,false);
+	}
+	
+	public static <V, E, S> DynamicProgrammingReduction<V, E, S> of(
+			EGraph<V, E> graph, Function<GraphPath<V, E>, S> fsolution, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
+		return new DynamicProgrammingReduction<V, E, S>(graph,fsolution,bestValue,optimalPath,withGraph);
 	}
 
 	private EGraph<V, E> graph;
@@ -40,19 +48,34 @@ public class DynamicProgrammingReduction<V, E> {
 	private Comparator<Double> comparator;
 	public Map<V, Sp<E>> solutionsTree;
 	public GraphPath<V, E> optimalPath;
-	public Graph<V,E> outGraph;
+	public Set<S> solutions;
+	protected Function<GraphPath<V,E>,S> fsolution;
+	public SimpleDirectedGraph<V, E> outGraph;
 	private Boolean withGraph = false;
+	private Type type;
+	private Boolean stop = false;
 
-	DynamicProgrammingReduction(EGraph<V, E> g, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
+	DynamicProgrammingReduction(EGraph<V, E> g, Function<GraphPath<V, E>, S> fsolution, Double bestValue, GraphPath<V, E> optimalPath, Boolean withGraph) {
 		this.graph = g;
 		Preconditions.checkArgument(this.graph.type().equals(EGraph.Type.Min) || 
 				this.graph.type().equals(EGraph.Type.Max), "El tipo debe ser Min o Max");
 		this.comparatorEdges = this.graph.type() == EGraph.Type.Min?Comparator.naturalOrder():Comparator.reverseOrder();
-		this.comparator = this.graph.type() == EGraph.Type.Min?Comparator.naturalOrder():Comparator.reverseOrder();
+		this.type = g.type();
+		this.comparator = switch(this.type) {
+		case All -> {
+			Preconditions.checkNotNull(fsolution,"Para el caso All fsolution no puede ser null"); 
+			this.solutions = new HashSet<>();
+			yield null;}
+		case Max -> Comparator.reverseOrder();
+		case Min -> Comparator.naturalOrder();
+		case One -> null;
+		};	
 		this.solutionsTree = new HashMap<>();
 		this.bestValue = bestValue;
 		this.optimalPath = optimalPath;
 		this.withGraph = withGraph;
+		this.fsolution = fsolution;
+		
 	}
 	
 	public Optional<GraphPath<V,E>> optimalPath(){
@@ -66,9 +89,28 @@ public class DynamicProgrammingReduction<V, E> {
 		return r;
 	}
 	
-	protected void update(Double accumulateValue) {
-		if(this.bestValue == null || comparator.compare(accumulateValue,this.bestValue) < 0) {
+	protected void update(V actual, Double accumulateValue) {
+		if (graph.goalHasSolution().test(actual)) {
+			switch(this.type) {
+			case All:
+				this.optimalPath = pathFrom(actual).get();
+				S s = fsolution.apply(this.optimalPath);
+				this.solutions.add(s);
+				if (this.solutions.size() >= this.graph.solutionNumber())
+					this.stop = true;
+				break;
+			case One:
 				this.bestValue = accumulateValue;
+				this.optimalPath = pathFrom(actual).get();
+				this.stop = true;
+				break;
+			case Min:
+			case Max:
+				if (this.bestValue == null || this.comparator.compare(accumulateValue, this.bestValue) < 0) {
+					this.bestValue = accumulateValue;
+//					this.optimalPath = pathFrom(actual).get();
+				}
+			}
 		}
 	}
 	
@@ -84,6 +126,10 @@ public class DynamicProgrammingReduction<V, E> {
 			if(!this.outGraph.containsEdge(edge)) this.outGraph.addEdge(v, v2, edge);
 		}
 	}
+	
+	public SimpleDirectedGraph<V,E> outGraph() {
+		return this.outGraph;
+	}
 
 	public Optional<GraphPath<V, E>> search() {
 		iniciaGraph();
@@ -92,7 +138,7 @@ public class DynamicProgrammingReduction<V, E> {
 		return pathFrom(graph.startVertex());
 	}
 	
-	public <S> Optional<S> search(Function<GraphPath<V,E>,S> f) {
+	public Optional<S> search(Function<GraphPath<V,E>,S> f) {
 		Optional<GraphPath<V, E>> p = search();
 		return p.map(f);
 	}
@@ -100,11 +146,12 @@ public class DynamicProgrammingReduction<V, E> {
 	
 	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
 		Sp<E> r = null;
-		if(this.solutionsTree.containsKey(actual)) {
+		if(this.stop) {}
+		else if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (graph.goal().test(actual)) {
 			if (graph.goalHasSolution().test(actual)) {
-				update(accumulateValue);
+				update(actual,accumulateValue);
 				r = Sp.of(graph.goalSolution(actual), null);
 			} else r = null;
 			this.solutionsTree.put(actual, r);

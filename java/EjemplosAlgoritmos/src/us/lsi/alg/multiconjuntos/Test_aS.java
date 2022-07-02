@@ -40,7 +40,7 @@ public class Test_aS {
 					.heuristic(MulticonjuntoHeuristic::heuristic)
 					.build();
 					
-			AStar<MulticonjuntoVertex, MulticonjuntoEdge> aStar = AStar.of(graph);
+			AStar<MulticonjuntoVertex, MulticonjuntoEdge,?> aStar = AStar.ofGreedy(graph);
 			
 			GraphPath<MulticonjuntoVertex, MulticonjuntoEdge> gp = aStar.search().get();
 			

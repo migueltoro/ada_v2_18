@@ -56,7 +56,9 @@ public record JarrasVertex(Integer c1,Integer c2) implements VirtualVertex<Jarra
 
 	@Override
 	public JarrasVertex neighbor(Action<JarrasVertex> a) {
-		return a.neighbor(this);
+		JarrasVertex r = a.neighbor(this);
+		System.out.println(r);
+		return r;
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class TestAStart {
 					.build();
 			
 			
-			AStar<VertexProductos, EdgeProductos> aStar = AStar.of(graph);
+			AStar<VertexProductos, EdgeProductos, ?> aStar = AStar.ofGreedy(graph);
 			
 			GraphPath<VertexProductos, EdgeProductos> gp = aStar.search().get();
 			
@@ -57,7 +57,7 @@ public class TestAStart {
 			System.out.println(s_as);
 			System.out.println(gp_as);
 
-			GraphColors.toDot(aStar.graph(), "ficheros/productosAStarGraph.gv", 
+			GraphColors.toDot(aStar.outGraph(), "ficheros/productosAStarGraph.gv", 
 					v -> v.toGraph(),
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(Color.red, VertexProductos.goal().test(v)),

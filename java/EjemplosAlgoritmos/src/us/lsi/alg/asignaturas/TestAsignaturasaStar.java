@@ -31,7 +31,7 @@ public class TestAsignaturasaStar {
 				.heuristic(Heuristica::heuristic)
 				.build();
 		
-		AStar<AsignaturasVertice, AsignaturasEdge> as = AStar.of(grafo);
+		AStar<AsignaturasVertice, AsignaturasEdge, SolucionAsignaturas> as = AStar.ofGreedy(grafo);
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s1 = as.search().get();
 		
@@ -39,8 +39,8 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 
-		DynamicProgrammingReduction<AsignaturasVertice, AsignaturasEdge> pd = DynamicProgrammingReduction
-						.of(grafo);
+		DynamicProgrammingReduction<AsignaturasVertice,AsignaturasEdge,SolucionAsignaturas> pd = 
+				DynamicProgrammingReduction.ofGreedy(grafo);
 
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s2 = pd.search().get();
@@ -49,11 +49,10 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 
-		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BackTracking.of(
-				grafo, 
-				SolucionAsignaturas::of);
+		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BackTracking.ofGreedy(
+				grafo);
 		bt.search();
-		System.out.println(bt.getSolution().get());
+		System.out.println(bt.getSolution(SolucionAsignaturas::of));
 		System.out.println("___________________");
 
 	}

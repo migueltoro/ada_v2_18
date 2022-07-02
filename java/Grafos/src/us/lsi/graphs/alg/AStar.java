@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -25,11 +27,12 @@ import us.lsi.colors.GraphColors.Color;
 import us.lsi.common.Preconditions;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath;
 import us.lsi.streams.Stream2;
 
 
-public class AStar<V,E> implements Iterator<V>, Iterable<V> {
+public class AStar<V,E,S> implements Iterator<V>, Iterable<V> {
 	
 	/**
 	 * @param <V> El tipo de los v&eacute;rtices
@@ -38,30 +41,45 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	 * @param heuristic La heur&iacute;stica 
 	 * @return Una algoritmo de b&uacute;squeda de AStar
 	 */
-	public static <V, E> AStar<V, E> of(EGraph<V, E> graph) {
+	public static <V, E, S> AStar<V, E, S> ofGreedy(EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.search();
-		if(gp.isPresent()) return AStar.of(graph,gp.get().getWeight(),gp.get());
-		else return new AStar<V, E>(graph,null,null);
+		if(gp.isPresent()) return AStar.of(graph,null,gp.get().getWeight(),gp.get());
+		else return new AStar<V, E, S>(graph,null,null,null);
 	}
 	
-	public static <V, E> AStar<V, E> of(EGraph<V, E> graph,Double bestValue,GraphPath<V, E> optimalPath) {
-		return new AStar<V, E>(graph,bestValue,optimalPath);
+	public static <V, E, S> AStar<V, E, S> of(EGraph<V, E> graph) {
+		return new AStar<V, E, S>(graph,null,null,null);
+	}
+	
+	public static <V, E, S> AStar<V, E, S> of(EGraph<V, E> graph,
+			Function<GraphPath<V, E>, S> fsolution,Double bestValue,GraphPath<V, E> optimalPath) {
+		return new AStar<V, E, S>(graph,fsolution,bestValue,optimalPath);
 	}
 
+	private Type type;
 	public Comparator<Double> comparator;
 	public EGraph<V,E> graph; 
 	public Map<V,Handle<Double,Data<V,E>>> tree;
 	public AddressableHeap<Double,Data<V,E>> heap; 
 	private Double bestValue = null; //mejor valor estimado
 	private GraphPath<V, E> optimalPath = null; //mejor camino estimado
-	
+	protected Set<S> solutions;
+	protected Function<GraphPath<V,E>,S> fsolution;
 
-	protected AStar(EGraph<V, E> graph, Double bestValue,GraphPath<V, E> optimalPath) {
+	protected AStar(EGraph<V, E> graph, Function<GraphPath<V, E>, S> fsolution, Double bestValue, GraphPath<V, E> optimalPath) {
 		super();
 		this.graph = graph;
-		Preconditions.checkArgument(this.graph.type().equals(EGraph.Type.Min) || 
-				this.graph.type().equals(EGraph.Type.Max), "El tipo debe ser Min o Max");
+		this.type = this.graph.type();
+		this.comparator = switch(this.type) {
+		case All -> {
+			Preconditions.checkNotNull(fsolution,"Para el caso All fsolution no puede ser null"); 
+			this.solutions = new HashSet<>();
+			yield null;}
+		case Max -> Comparator.reverseOrder();
+		case Min -> Comparator.naturalOrder();
+		case One -> null;
+		};
 		this.comparator = this.graph.type().equals(EGraph.Type.Min)?Comparator.naturalOrder():Comparator.reverseOrder();		
 		this.tree = new HashMap<>();
 		EGraphPath<V, E> ePath = graph.initialPath();
@@ -72,6 +90,7 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		this.tree.put(graph.startVertex(),h);
 		this.bestValue = bestValue;
 		this.optimalPath = optimalPath;
+		this.fsolution = fsolution;
 	}
 	
 	public Boolean closed(V v) {
@@ -134,6 +153,10 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 		return this.graph;
 	}
 	
+	public Optional<GraphPath<V, E>> path(V startVertex, V last) {
+		return path(startVertex,Optional.of(last));
+	}
+	
 	public Optional<GraphPath<V, E>> path(V startVertex, Optional<V> last) {
 		if (!last.isPresent() || !graph.goalHasSolution().test(last.get())) return Optional.empty();
 		V endVertex = last.get();
@@ -164,30 +187,40 @@ public class AStar<V,E> implements Iterator<V>, Iterable<V> {
 	public Optional<GraphPath<V, E>> search() {
 		V startVertex = graph.startVertex();
 		EGraphPath<V, E> ePath = graph.initialPath();
-		if(graph.goal().test(startVertex)) return Optional.of(ePath);
-		Optional<V> last = this.stream().filter(v->v!=null).filter(graph.goal().and(graph.goalHasSolution())).findFirst();	
-		if(last.isPresent()) return path(startVertex,last);
-		else return Optional.ofNullable(this.optimalPath);
+		Optional<GraphPath<V, E>> r = Optional.empty();
+		if (graph.goal().test(startVertex))
+			return Optional.of(ePath);
+		switch (this.graph.type()) {
+		case All:
+			List<V> goals = this.stream()
+				.filter(v -> v != null)
+				.filter(graph.goal().and(graph.goalHasSolution()))
+				.limit(this.graph.solutionNumber())
+				.toList();
+			for (V v : goals) {
+				Optional<GraphPath<V, E>> p = this.path(startVertex, v);
+				r = p;
+				this.solutions.add(this.fsolution.apply(p.get()));
+			}
+			break;
+		case Max:
+		case Min:
+		case One:
+			Optional<V> last = this.stream().filter(v -> v != null).filter(graph.goal().and(graph.goalHasSolution()))
+					.findFirst();
+			if (last.isPresent())
+				r = path(startVertex, last);
+			else
+				r = Optional.ofNullable(this.optimalPath);
+		}
+		return r;
 	}
 	
-	public <S> Optional<S> search(Function<GraphPath<V,E>,S> f) {
-		Optional<GraphPath<V, E>> p = search();
-		return p.map(f);
+	public Set<S> getSolutions() {
+		return this.solutions;
 	}
 	
-	public Optional<GraphPath<V, E>> searchAll() {
-		V startVertex = graph.startVertex();
-		EGraphPath<V, E> ePath = graph.initialPath();
-		if(graph.goal().test(startVertex)) return Optional.ofNullable(ePath);
-		List<V> lasts = this.stream().filter(graph.goal().and(graph.goalHasSolution())).toList();	
-		Integer t = this.graph.type() == EGraph.Type.Min? 1: -1;
-		return lasts.stream()
-				.<GraphPath<V, E>>map(v->path(startVertex,Optional.of(v)).orElse(null))
-				.filter(p->p != null)
-				.min(Comparator.comparing(p->t*p.getWeight()));
-	}
-	
-	public SimpleDirectedGraph<V,E> graph(){
+	public SimpleDirectedGraph<V,E> outGraph(){
 		SimpleDirectedGraph<V,E> g = Graphs2.simpleDirectedGraph();
 		for(V v:tree.keySet()) {
 			g.addVertex(v);

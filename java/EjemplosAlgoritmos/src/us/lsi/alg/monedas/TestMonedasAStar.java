@@ -34,15 +34,15 @@ public class TestMonedasAStar {
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 		
-		AStar<MonedaVertex, MonedaEdge> ms;
+		AStar<MonedaVertex, MonedaEdge, SolucionMonedas> ms;
 		
 //		ms.stream().limit(100).forEach(v->System.out.printf("%s,actions = %s\n",v,v.actions()));
 		
 		if (rr.isSolution(path1)) {
 			System.out.println("Hay solucion voraz 1 = " +path1.getWeight());
-			ms = AStar.of(graph,path1.getWeight(),path1);
+			ms = AStar.of(graph,null,path1.getWeight(),path1);
 		} else {
-			ms = AStar.of(graph,MonedaVoraz.voraz(),null);
+			ms = AStar.of(graph,null,MonedaVoraz.voraz(),null);
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> path = ms.search();
@@ -52,7 +52,7 @@ public class TestMonedasAStar {
 			s = SolucionMonedas.of(path.get());
 			System.out.println(s);
 			System.out.println(ms.tree.keySet().size());
-			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.graph();
+			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.outGraph();
 			GraphColors.toDot(g,"ficheros/MonedasAstarGraph1.gv",
 					v->String.format("(%d,%d)",v.index(),v.valorRestante()),
 					e->e.action().toString(),
@@ -86,9 +86,9 @@ public class TestMonedasAStar {
 	    
 	    if (rr.isSolution(path2)) {
 			System.out.println("Hay solucion voraz 2 = "+path2.getWeight());
-			ms = AStar.of(graph,path2.getWeight(),path2);
+			ms = AStar.of(graph,null,path2.getWeight(),path2);
 		} else {
-			ms = AStar.of(graph,MonedaVoraz.voraz(),null);
+			ms = AStar.of(graph,null,MonedaVoraz.voraz(),null);
 		}
 		
 	    path = ms.search();
@@ -97,7 +97,7 @@ public class TestMonedasAStar {
 			s = SolucionMonedas.of(path.get());
 			System.out.println(s);
 			System.out.println(ms.tree.keySet().size());
-			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.graph();
+			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms.outGraph();
 			GraphColors.toDot(g,"ficheros/MonedasAstarGraph2.gv",
 					v->String.format("(%d,%d)",v.index(),v.valorRestante()),
 					e->e.action().toString(),

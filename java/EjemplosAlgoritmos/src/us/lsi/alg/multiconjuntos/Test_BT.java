@@ -1,6 +1,7 @@
 package us.lsi.alg.multiconjuntos;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -61,8 +62,8 @@ public class Test_BT {
 			if (rr.isSolution(r)) {
 				bta = BackTracking.of(graph, MulticonjuntoVertex::getSolucion, r.getWeight(), r, true);
 			}
-			bta.search();
-			System.out.println(bta.getSolution().get());
+			Optional<GraphPath<MulticonjuntoVertex, MulticonjuntoEdge>> gp = bta.search();
+			System.out.println(MulticonjuntoVertex.getSolucion(gp.get()));
 			
 //			System.out.println(bta.path.getEdgeList().stream().map(x -> x.action())
 //					.collect(Collectors.toList()));

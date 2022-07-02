@@ -31,7 +31,7 @@ public class TestGreadyTyP {
 		
 		GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>> path = ms.path();
 		
-		System.out.println(TyPVertex.getSolucion(path));
+		System.out.println(SolucionTyP.of(path));
 		
 		System.out.println(path.getWeight());
 	}

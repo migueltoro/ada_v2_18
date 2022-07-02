@@ -1,7 +1,10 @@
 package us.lsi.alg.candidatos;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.BackTracking;
 import us.lsi.graphs.virtual.EGraph;
@@ -38,9 +41,7 @@ public class TestBT {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> bta = 
-				BackTracking.of(graph, 
-					SolucionCandidatos::of);
+			BackTracking<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> bta = BackTracking.ofGreedy(graph);
 /*
 			bta.withGraph = true;
 			bta.bestValue = SubconjuntoHeuristic.voraz(start,DatosSubconjunto.getNumSubconjuntos());
@@ -49,10 +50,10 @@ public class TestBT {
 			List<SubconjuntoEdge> le = SubconjuntoHeuristic.pathVoraz(start,DatosSubconjunto.getNumSubconjuntos());
 			System.out.println("Sv = "+sv);
 			*/
-			bta.search();
+			Optional<GraphPath<VertexCandidatos, EdgeCandidatos>> gp = bta.search();
 			
-			if (bta.getSolution().isPresent()) {
-			    System.out.println(bta.getSolution());
+			if (gp.isPresent()) {
+			    System.out.println(SolucionCandidatos.of(gp.get()));
 			} else {
 				System.out.println("No hay soluci�n");
 			}

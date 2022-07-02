@@ -47,7 +47,7 @@ public class TestAStart {
 					.build();
 			
 			
-			AStar<VertexCandidatos, EdgeCandidatos> aStar = AStar.of(graph);
+			AStar<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> aStar = AStar.ofGreedy(graph);
 			
 			Optional<GraphPath<VertexCandidatos, EdgeCandidatos>> gp = aStar.search();
 
@@ -58,7 +58,7 @@ public class TestAStart {
 				System.out.println("No se encontro soluci�n");
 			}
 			
-			GraphColors.toDot(aStar.graph(), "ficheros/candidatosAStarGraph.gv", 
+			GraphColors.toDot(aStar.outGraph(), "ficheros/candidatosAStarGraph.gv", 
 					v -> v.toString(),
 					e -> e.action().toString(), 
 					v -> GraphColors.colorIf(

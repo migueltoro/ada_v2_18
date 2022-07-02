@@ -40,12 +40,12 @@ public class TestAStarMochila {
 		
 //		System.out.println(gp.getWeight());
 	
-		AStar<MochilaVertex, MochilaEdge> ms = AStar.of(graph);
+		AStar<MochilaVertex, MochilaEdge,SolucionMochila> ms = AStar.ofGreedy(graph);
 		
 		GraphPath<MochilaVertex, MochilaEdge> path = ms.search().get();
 		SolucionMochila s = MochilaVertex.getSolucion(path);
 		System.out.println(s);
-		SimpleDirectedGraph<MochilaVertex, MochilaEdge> r = ms.graph();
+		SimpleDirectedGraph<MochilaVertex, MochilaEdge> r = ms.outGraph();
 		System.out.println(ms.tree.keySet().size());
 		
 		GraphColors.toDot(r,"ficheros/MochilaAstarGraph.gv",

@@ -51,7 +51,7 @@ public class TestMonedasBT {
 		if (ps.isPresent()) {
 			SolucionMonedas s = SolucionMonedas.of(ps.get());
 			System.out.println("2 = " + s.toString());
-			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms1.graph();
+			SimpleDirectedGraph<MonedaVertex, MonedaEdge> g = ms1.outGraph();
 			GraphColors.toDot(g, "ficheros/MonedasBTGraph1.gv",
 					v -> String.format("(%d,%d)", v.index(), v.valorRestante()), e -> e.action().toString(),
 					v -> GraphColors.colorIf(Color.red, MonedaVertex.goal().test(v)),
@@ -80,13 +80,10 @@ public class TestMonedasBT {
 			ms1 = BackTracking.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
 		}
 		
-		ms1.search();
-	
+		Optional<GraphPath<MonedaVertex, MonedaEdge>> gp = ms1.search();
 
-		Optional<SolucionMonedas> s2 = ms1.getSolution();
-
-		if (s2.isPresent()) {
-			System.out.println("4 = " + s2.get().toString());
+		if (gp.isPresent()) {
+			System.out.println("4 = " + SolucionMonedas.of(gp.get()).toString());
 		} else
 			System.out.println("4 = No hay solucion");
 

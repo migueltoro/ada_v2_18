@@ -34,8 +34,8 @@ public class TestPD {
 
 			// Algoritmo PD
 			
-			DynamicProgrammingReduction<ProductosVertex, ProductosEdge> pdr = 
-					DynamicProgrammingReduction.of(graph,null,null,true);
+			DynamicProgrammingReduction<ProductosVertex, ProductosEdge,?> pdr = 
+					DynamicProgrammingReduction.of(graph,null,null,null,true);
 //			pdr.bestValue = ProductosHeuristic.entero(start,DatosProductos.NUM_PRODUCTOS);
 			List<Integer> gp_pdr = pdr.search().get().getEdgeList().stream().map(x -> x.action())
 					.collect(Collectors.toList()); // getEdgeList();

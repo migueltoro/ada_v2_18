@@ -1,6 +1,7 @@
 package us.lsi.alg.contenedores;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -47,14 +48,12 @@ public class TestBT {
 			System.out.println("Heuristica ="+ContenedoresHeuristic.heuristic(start, goal, null));
 			// Algoritmo BT
 			BackTracking<VertexContenedores, EdgeContenedores, SolucionContenedores> bta = 
-					BackTracking.of(graph,
-					SolucionContenedores::of, 
-					max.getWeight(), max, false);
+					BackTracking.ofGreedy(graph);
 			
 
-			bta.search();
+			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = bta.search();
 			
-			System.out.println(bta.getSolution());
+			System.out.println(SolucionContenedores.of(gp.get()));
 		}
 	}
 

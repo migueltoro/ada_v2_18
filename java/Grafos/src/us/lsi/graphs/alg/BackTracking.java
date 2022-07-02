@@ -17,6 +17,7 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 import us.lsi.common.List2;
+import us.lsi.common.Preconditions;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -24,21 +25,26 @@ import us.lsi.path.EGraphPath;
 
 public class BackTracking<V,E,S> {
 
-	public static <V, E, S> BackTracking<V, E, S> of(
-			EGraph<V, E> graph,
-			Function<GraphPath<V, E>, S> solution) {
+	public static <V, E, S> BackTracking<V, E, S> ofGreedy(
+			EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.search();
-		if(gp.isPresent()) return BackTracking.of(graph,solution,gp.get().getWeight(),gp.get(),false);
-		else return BackTracking.of(graph, solution, null, null, false);
+		if(gp.isPresent()) return BackTracking.of(graph,null,gp.get().getWeight(),gp.get(),false);
+		else return BackTracking.of(graph, null, null, null, false);
+	}
+	
+	public static <V, E, S> BackTracking<V, E, S> of(
+			EGraph<V, E> graph) {
+		return BackTracking.of(graph, null, null, null, false);
 	}
 	
 	public static <V, E, S> BackTracking<V, E, S> of(
 			EGraph<V, E> graph,
-			Function<GraphPath<V, E>, S> solution,
-			Double bestValue,GraphPath<V,E> optimalPath,
+			Function<GraphPath<V, E>, S> fsolution,
+			Double bestValue,
+			GraphPath<V,E> optimalPath,
 			Boolean withGraph) {
-		return new BackTracking<V, E, S>(graph,solution,bestValue,optimalPath,withGraph);
+		return new BackTracking<V, E, S>(graph,fsolution,bestValue,optimalPath,withGraph);
 	}
 	
 	private Comparator<Double> comparator = Comparator.naturalOrder();
@@ -48,22 +54,25 @@ public class BackTracking<V,E,S> {
 	private Double bestValue;
 	public GraphPath<V,E> optimalPath;
 	public Set<S> solutions;
-	protected Function<GraphPath<V,E>,S> solution;
+	protected Function<GraphPath<V,E>,S> fsolution;
 	private SimpleDirectedGraph<V,E> outGraph;
 	private Boolean withGraph = false;
+	protected Boolean stop = false;
 	
-	BackTracking(EGraph<V, E> graph,Function<GraphPath<V, E>, S> solution, 
+	BackTracking(EGraph<V, E> graph,Function<GraphPath<V, E>, S> fsolution, 
 			Double bestValue,GraphPath<V,E> optimalPath, Boolean withGraph) {
 		this.graph = graph;
 		this.type = this.graph.type();
-		this.solutions = new HashSet<>();
-		this.solution = solution;
 		this.comparator = switch(this.type) {
-		case All -> null;
+		case All -> {
+			Preconditions.checkNotNull(fsolution,"Para el caso All fsolution no puede ser null"); 
+			this.solutions = new HashSet<>();
+			yield null;}
 		case Max -> Comparator.reverseOrder();
 		case Min -> Comparator.naturalOrder();
 		case One -> null;
-		};
+		};	
+		this.fsolution = fsolution;
 		this.bestValue = bestValue;
 		this.optimalPath = optimalPath;
 		this.withGraph = withGraph;
@@ -78,11 +87,22 @@ public class BackTracking<V,E,S> {
 	
 	protected void update(State<V, E> state) {
 		if (graph.goalHasSolution().test(state.getActualVertex())) {
-			if (this.type == Type.All || this.type == Type.One) {
-				S s = solution.apply(state.getPath());
+			switch(this.type) {
+			case All: 
+				this.optimalPath = state.getPath();
+				S s = fsolution.apply(state.getPath());
 				this.solutions.add(s);
-			} else if (this.type == Type.Min || this.type == Type.Max) {
-				if (this.bestValue == null || this.comparator.compare(state.getAccumulateValue(),this.bestValue) < 0) {
+				if (this.solutions.size() >= this.graph.solutionNumber())
+					this.stop = true;
+				break;
+			case One:
+				this.bestValue = state.getAccumulateValue();
+				this.optimalPath = state.getPath();
+				this.stop = true;
+				break;
+			case Min:
+			case Max:
+				if (this.bestValue == null || this.comparator.compare(state.getAccumulateValue(), this.bestValue) < 0) {
 					this.bestValue = state.getAccumulateValue();
 					this.optimalPath = state.getPath();
 				}
@@ -103,39 +123,40 @@ public class BackTracking<V,E,S> {
 		}
 	}
 	
-	public SimpleDirectedGraph<V,E> graph() {
+	public SimpleDirectedGraph<V,E> outGraph() {
 		return this.outGraph;
 	}
 	
-	public Optional<S> search() {	
+	public Optional<GraphPath<V, E>> search() {	
 		initialGraph();
 		State<V,E> initialState = StatePath.of(graph,graph.goal(),graph.endVertex());
 		search(initialState);
-		return this.getSolution();
+		return this.optimalPath();
 	}
 	
 	public void search(State<V, E> state) {
-		V actual = state.getActualVertex();
-		if (graph.goal().test(actual)) {
-			this.update(state);
-		} else {
-			for (E edge : graph.edgesListOf(actual)) {	
-				if (this.forget(state,edge)) continue;
-				state.forward(edge);
-				search(state);
-				addGraph(actual,edge);
-				state.back(edge);
+		if (this.stop) {} 
+		else {
+			V actual = state.getActualVertex();
+			if (graph.goal().test(actual)) {
+				this.update(state);
+			} else {
+				for (E edge : graph.edgesListOf(actual)) {
+					if (this.forget(state, edge))
+						continue;
+					state.forward(edge);
+					search(state);
+					if (this.stop)
+						break;
+					addGraph(actual, edge);
+					state.back(edge);
+				}
 			}
 		}
 	}
 	
-	public Optional<S> getSolution(){
-		return switch(this.type) {
-		case All -> this.solutions.stream().findAny();
-		case Max -> this.optimalPath().map(x->this.solution.apply(x));
-		case Min -> this.optimalPath().map(x->this.solution.apply(x));
-		case One -> this.solutions.stream().findAny();
-		};
+	public S getSolution(Function<GraphPath<V, E>, S> solution){
+		return solution.apply(this.optimalPath);
 	}
 
 	public Set<S> getSolutions(){

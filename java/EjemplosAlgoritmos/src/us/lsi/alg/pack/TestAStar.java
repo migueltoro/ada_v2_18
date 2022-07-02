@@ -35,7 +35,7 @@ public class TestAStar {
 		System.out.println("Solucion Voraz = "+sp);
 		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
-		AStar<PackVertex, PackEdge> ms = AStar.of(graph,(double)sp.nc(),p);
+		AStar<PackVertex, PackEdge, ?> ms = AStar.of(graph,null,(double)sp.nc(),p);
 		
 		GraphPath<PackVertex,PackEdge> path = ms.search().orElse(null);
 		SolucionPack s = SolucionPack.of(path);

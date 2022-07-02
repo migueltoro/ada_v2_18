@@ -47,8 +47,8 @@ public class TestPD {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
-			DynamicProgrammingReduction<VertexProductos, EdgeProductos> pdr = 
-					DynamicProgrammingReduction.of(graph, path.getWeight(), path, true);
+			DynamicProgrammingReduction<VertexProductos, EdgeProductos,?> pdr = 
+					DynamicProgrammingReduction.of(graph, null,path.getWeight(), path, true);
 			
 			pdr.optimalPath = path;
 			Optional<GraphPath<VertexProductos, EdgeProductos>> gp = pdr.search();

@@ -2,6 +2,7 @@ package us.lsi.alg.bufete;
 
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -49,13 +50,14 @@ public class TestPD {
 			System.out.println(bv);
 			
 			// Algoritmo PD
-			DynamicProgrammingReduction<BufeteVertex, BufeteEdge> pdr = 
+			DynamicProgrammingReduction<BufeteVertex, BufeteEdge, SolucionBufete> pdr = 
 					DynamicProgrammingReduction.of(graph,
+					SolucionBufete::of,
 					bv,path,false);
 
-			GraphPath<BufeteVertex, BufeteEdge> gp_pdr = pdr.search().orElse(null); // getEdgeList();
-			if ( gp_pdr != null) {
-				SolucionBufete s_pdr = SolucionBufete.of(gp_pdr);
+			Optional<GraphPath<BufeteVertex, BufeteEdge>> gp_pdr = pdr.search(); // getEdgeList();
+			if (gp_pdr.isPresent()) {
+				SolucionBufete s_pdr = SolucionBufete.of(gp_pdr.get());
 				System.out.println(s_pdr.maxCarga());
 				System.out.println(s_pdr);
 			} else {

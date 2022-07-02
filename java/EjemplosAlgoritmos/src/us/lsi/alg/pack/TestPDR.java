@@ -34,8 +34,9 @@ public class TestPDR {
 		System.out.println("Valor Voraz = "+nc);
 		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
-		DynamicProgrammingReduction<PackVertex, PackEdge> ms = DynamicProgrammingReduction.of(
+		DynamicProgrammingReduction<PackVertex, PackEdge,?> ms = DynamicProgrammingReduction.of(
 				graph,
+				null,
 				(double) nc,
 				path,false);	
 		

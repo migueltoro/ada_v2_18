@@ -26,8 +26,7 @@ public class TestSeqAStar {
 				.heuristic(SeqHeuristic::heuristic)
 				.build();	
 		
-		AStar<SeqVertex, SeqEdge> ms = AStar.of(
-				graph);
+		AStar<SeqVertex, SeqEdge, ?> ms = AStar.ofGreedy(graph);
 		
 		GraphPath<SeqVertex, SeqEdge> path = ms.search().orElse(null);
 		SeqSolution s = SeqSolution.of(path);

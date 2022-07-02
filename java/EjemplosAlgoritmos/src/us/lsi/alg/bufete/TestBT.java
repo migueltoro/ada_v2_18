@@ -1,6 +1,7 @@
 package us.lsi.alg.bufete;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
@@ -54,9 +55,9 @@ public class TestBT {
 					false);
 
 			
-			bta.search();
+			Optional<GraphPath<BufeteVertex, BufeteEdge>> gp = bta.search();
 
-			SolucionBufete mejorSolucion = bta.getSolution().get();
+			SolucionBufete mejorSolucion = SolucionBufete.of(gp.get());
 			System.out.println("maxCarga = "+mejorSolucion.maxCarga());
 			System.out.println(mejorSolucion);
 		}

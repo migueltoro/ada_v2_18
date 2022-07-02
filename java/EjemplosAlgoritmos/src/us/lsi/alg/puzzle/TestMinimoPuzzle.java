@@ -19,7 +19,8 @@ public class TestMinimoPuzzle {
 				.heuristic((v1,p,v2)->0.)
 				.build();
 					
-		AStar<VertexPuzzle, EdgePuzzle> a = AStar.of(graph);
+		AStar<VertexPuzzle, EdgePuzzle,?> a = AStar.of(graph,null,null,null);
+		
 		GraphPath<VertexPuzzle,EdgePuzzle> path = a.search().orElse(null);
 		List<VertexPuzzle> vertices = path.getVertexList();
 		for (VertexPuzzle v: vertices) {

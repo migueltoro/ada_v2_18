@@ -43,7 +43,7 @@ public record SudokuVertex(Integer index, Sudoku sudoku)
 		return SudokuVertex.of(this.index(),this.sudoku());
 	}
 	
-	public static SolucionSudoku solucion(GraphPath<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> path) {
+	public static SolucionSudoku of(GraphPath<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>> path) {
 		return new SolucionSudoku(path.getVertexList().get(path.getVertexList().size()-1).sudoku());
 	}
 	

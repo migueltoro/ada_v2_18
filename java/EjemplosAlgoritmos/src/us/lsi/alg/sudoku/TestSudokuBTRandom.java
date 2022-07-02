@@ -1,7 +1,10 @@
 package us.lsi.alg.sudoku;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.jgrapht.GraphPath;
 
 import us.lsi.alg.sudoku.DatosSudoku.SolucionSudoku;
 import us.lsi.graphs.alg.BackTrackingRandom;
@@ -25,17 +28,18 @@ public class TestSudokuBTRandom {
 				.build();
 		
 		
-		BackTrackingRandom<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = BackTrackingRandom.of(
+		BackTrackingRandom<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = 
+				BackTrackingRandom.of(
 				graph,
-				SudokuVertex::solucion,
+				SudokuVertex::of,
 				v->DatosSudoku.numeroDeCasillas-v.index());
 		
 		BackTrackingRandom.threshold = 15;
-		BackTrackingRandom.solutionsNumber = 1;
+//		BackTrackingRandom.solutionsNumber = 1;
 		
-		ms.search();
+		Optional<GraphPath<SudokuVertex, SimpleEdgeAction<SudokuVertex, Integer>>> gp = ms.search();
 //		SudokuVertex lv = List2.last(path.getVertexList());
-		System.out.println("Solucion = \n"+ms.getSolution());
+		System.out.println("Solucion = \n"+SudokuVertex.of(gp.get()));
 		System.out.println("Iteraciones = \n"+ms.iterations);
 	}
 

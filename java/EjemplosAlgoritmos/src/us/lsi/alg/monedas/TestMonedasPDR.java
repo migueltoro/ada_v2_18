@@ -34,13 +34,13 @@ public class TestMonedasPDR {
 		
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 		
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms1;
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge, SolucionMonedas> ms1;
 
 		if (rr.isSolution(path1)) {
 			System.out.println("1 = " + SolucionMonedas.of(path1));
-			ms1 = DynamicProgrammingReduction.of(graph, path1.getWeight(), path1, false);
+			ms1 = DynamicProgrammingReduction.of(graph, null,path1.getWeight(), path1, false);
 		} else {
-			ms1 = DynamicProgrammingReduction.of(graph, MonedaVoraz.voraz(), null, false);
+			ms1 = DynamicProgrammingReduction.of(graph, null,MonedaVoraz.voraz(), null, false);
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s1 = ms1.search();
@@ -62,13 +62,13 @@ public class TestMonedasPDR {
 		
 		GraphPath<MonedaVertex, MonedaEdge> path2 = rr.path();
 
-		DynamicProgrammingReduction<MonedaVertex, MonedaEdge> ms2;
+		DynamicProgrammingReduction<MonedaVertex, MonedaEdge, SolucionMonedas> ms2;
 
 		if (rr.isSolution(path2)) {
 			System.out.println("3 = " + SolucionMonedas.of(path2));
-			ms2 = DynamicProgrammingReduction.of(graph, path2.getWeight(), path2, false);
+			ms2 = DynamicProgrammingReduction.of(graph, null,path2.getWeight(), path2, false);
 		}else {
-			ms2 = DynamicProgrammingReduction.of(graph, MonedaVoraz.voraz(), null, false);
+			ms2 = DynamicProgrammingReduction.of(graph, null,MonedaVoraz.voraz(), null, false);
 		}
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> s2 = ms2.search();
 		if (s2.isPresent()) System.out.println("4 = " + SolucionMonedas.of(s2.get()));

@@ -19,9 +19,6 @@ import us.lsi.path.EGraphPath.PathType;
 
 public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	
-	
-	
-
 	private G graph;
 	private Function<E,Double> edgeWeight = null;
 	private Function<V,Double> vertexWeight = null;
@@ -29,12 +26,13 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	private EGraphPath<V,E> path;
 	private V startVertex;
 	private Predicate<V> goal;
-	private V endVertex;	
+	private V endVertex;
 	private Predicate<V> goalHasSolution;
 	private PathType pathType;
 	private Function<V,E> greedyEdge;
 	private TriFunction<V, Predicate<V>, V, Double> heuristic;
 	private Type type;
+	private Integer solutionNumber;
 
 	
 	EGraphI(EGraphBuilderReal<G,V,E> builder){
@@ -50,6 +48,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 		this.greedyEdge = builder.greedyEdge;
 		this.heuristic = builder.heuristic;
 		this.type = builder.type;
+		this.solutionNumber = builder.solutionNumber;
 	}
 	
 	@Override
@@ -241,6 +240,7 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	public V endVertex() {
 		return endVertex;
 	}
+	
 	@Override
 	public Predicate<V> goalHasSolution() {
 		return goalHasSolution;
@@ -249,6 +249,11 @@ public class EGraphI<V,E,G extends Graph<V,E>> implements EGraph<V,E> {
 	@Override
 	public V oppositeVertex(E edge, V v) {
 		return Graphs.getOppositeVertex(graph, edge, v);
+	}
+
+	@Override
+	public Integer solutionNumber() {
+		return this.solutionNumber;
 	}
 
 }
