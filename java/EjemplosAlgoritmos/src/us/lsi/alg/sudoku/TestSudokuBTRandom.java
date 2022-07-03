@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.alg.sudoku.DatosSudoku.SolucionSudoku;
-import us.lsi.graphs.alg.BackTrackingRandom;
+import us.lsi.graphs.alg.BTR;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -28,13 +28,13 @@ public class TestSudokuBTRandom {
 				.build();
 		
 		
-		BackTrackingRandom<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = 
-				BackTrackingRandom.of(
+		BTR<SudokuVertex,SimpleEdgeAction<SudokuVertex,Integer>,SolucionSudoku> ms = 
+				BTR.of(
 				graph,
 				SudokuVertex::of,
 				v->DatosSudoku.numeroDeCasillas-v.index());
 		
-		BackTrackingRandom.threshold = 15;
+		BTR.threshold = 15;
 //		BackTrackingRandom.solutionsNumber = 1;
 		
 		Optional<GraphPath<SudokuVertex, SimpleEdgeAction<SudokuVertex, Integer>>> gp = ms.search();

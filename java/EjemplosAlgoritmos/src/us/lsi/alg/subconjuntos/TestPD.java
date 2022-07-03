@@ -9,7 +9,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestPD {
@@ -39,8 +39,8 @@ public class TestPD {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo PD ####");
 
 			// Algoritmo PD
-			DynamicProgrammingReduction<SubconjuntosVertex, SubconjuntosEdge,?> pdr = 
-					DynamicProgrammingReduction.of(graph, null,
+			DPR<SubconjuntosVertex, SubconjuntosEdge,?> pdr = 
+					DPR.of(graph, null,
 							SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC),null,true);
 			
 			SolucionSubconjuntos sv = SubconjuntosHeuristic.solucionVoraz(start,DatosSubconjuntos.NUM_SC);

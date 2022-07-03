@@ -13,7 +13,7 @@ import org.jgrapht.GraphPath;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Style;
-import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -45,8 +45,8 @@ public class TestPDRMochila {
 		
 		System.out.println("1 = "+bv);
 		
-		DynamicProgrammingReduction<MochilaVertex, MochilaEdge, SolucionMochila> ms = 
-				DynamicProgrammingReduction.of(graph,null,bv,path,true);
+		DPR<MochilaVertex, MochilaEdge, SolucionMochila> ms = 
+				DPR.of(graph,null,bv,path,true);
 		
 		
 		Optional<GraphPath<MochilaVertex, MochilaEdge>>  sp = ms.search();

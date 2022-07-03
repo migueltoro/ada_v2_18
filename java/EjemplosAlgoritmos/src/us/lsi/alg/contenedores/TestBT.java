@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -47,8 +47,8 @@ public class TestBT {
 			System.out.println("Solucion Voraz 2 ="+max2.getWeight());
 			System.out.println("Heuristica ="+ContenedoresHeuristic.heuristic(start, goal, null));
 			// Algoritmo BT
-			BackTracking<VertexContenedores, EdgeContenedores, SolucionContenedores> bta = 
-					BackTracking.ofGreedy(graph);
+			BT<VertexContenedores, EdgeContenedores, SolucionContenedores> bta = 
+					BT.ofGreedy(graph);
 			
 
 			Optional<GraphPath<VertexContenedores, EdgeContenedores>> gp = bta.search();

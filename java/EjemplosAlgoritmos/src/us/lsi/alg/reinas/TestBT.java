@@ -1,7 +1,11 @@
 package us.lsi.alg.reinas;
 
 
-import us.lsi.graphs.alg.BackTracking;
+import java.util.Optional;
+
+import org.jgrapht.GraphPath;
+
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -10,7 +14,7 @@ import us.lsi.graphs.virtual.EGraph;
 public class TestBT {
 
 	public static void main(String[] args) {
-		ReinasVertex.n = 8;
+		ReinasVertex.n = 10;
 		ReinasVertex e1 = ReinasVertex.first();
 		
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
@@ -20,12 +24,13 @@ public class TestBT {
 				.solutionNumber(3)
 				.build();	
 
-		BackTracking<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
-				BackTracking.of(graph, 
+		BT<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
+				BT.of(graph, 
 				SolucionReinas::of,null,null,false);
 
-		ms.search();
-		ms.getSolutions().stream().forEach(s->System.out.println(s));
+		Optional<GraphPath<ReinasVertex, SimpleEdgeAction<ReinasVertex, Integer>>> gp = ms.search();
+		System.out.println(SolucionReinas.of(gp.get()));
+//		ms.getSolutions().stream().forEach(s->System.out.println(s));
 
 	}
 }

@@ -17,7 +17,7 @@ import us.lsi.colors.GraphColors.Color;
 import us.lsi.colors.GraphColors.Shape;
 import us.lsi.common.SetMultimap;
 import us.lsi.common.Union;
-import us.lsi.graphs.alg.DynamicProgramming.Sp;
+import us.lsi.graphs.alg.DP.Sp;
 
 public class Datos<V extends HyperVertex2<V, E, A, ?>,E extends HyperEdge2<V,E,A,?>,A> {	
 	

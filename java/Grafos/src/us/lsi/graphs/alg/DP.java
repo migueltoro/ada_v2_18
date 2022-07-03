@@ -21,7 +21,7 @@ import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 
 
-public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
+public class DP<V extends VirtualHyperVertex<V,E,A>,
 			E extends SimpleHyperEdge<V,E,A>,A> {
 	
 
@@ -35,9 +35,7 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	public Graph<VertexGraph<V,E>,SimpleEdge<VertexGraph<V,E>>> outGraph;
 	public Boolean withGraph = false;
 	
-	DynamicProgramming(
-			SimpleVirtualHyperGraph<V,E, A> graph, 
-			PDType type) {
+	DP(SimpleVirtualHyperGraph<V,E, A> graph, PDType type) {
 		this.graph = graph;
 		this.startVertex = graph.getStartVertex();
 		this.type = type;
@@ -128,10 +126,10 @@ public class DynamicProgramming<V extends VirtualHyperVertex<V,E,A>,
 	}
 	
 	public static <V extends VirtualHyperVertex<V, E, A>, E extends SimpleHyperEdge<V, E, A>, A> 
-		DynamicProgramming<V, E, A> dynamicProgrammingSearch(
+		DP<V, E, A> dynamicProgrammingSearch(
 			SimpleVirtualHyperGraph<V, E, A> graph, 
 			PDType type) {
-		return new DynamicProgramming<V, E, A>(graph, type);
+		return new DP<V, E, A>(graph, type);
 	}
 
 	public record Sp<E>(Double weight, E edge) implements Comparable<Sp<E>> {

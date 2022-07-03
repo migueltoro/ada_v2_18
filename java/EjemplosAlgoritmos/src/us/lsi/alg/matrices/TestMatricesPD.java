@@ -2,8 +2,8 @@ package us.lsi.alg.matrices;
 
 import java.util.Locale;
 
-import us.lsi.graphs.alg.DynamicProgramming;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
+import us.lsi.graphs.alg.DP;
+import us.lsi.graphs.alg.DP.PDType;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
 
@@ -18,7 +18,7 @@ public class TestMatricesPD {
 		SimpleVirtualHyperGraph<MatrixVertex,MatrixEdge,Integer> graph = 
 				SimpleVirtualHyperGraph.simpleVirtualHyperGraph(initial);
 		
-		DynamicProgramming<MatrixVertex, MatrixEdge, Integer> a = DynamicProgramming.dynamicProgrammingSearch(graph,PDType.Min);
+		DP<MatrixVertex, MatrixEdge, Integer> a = DP.dynamicProgrammingSearch(graph,PDType.Min);
 		
 		a.withGraph = true;
 		a.search();

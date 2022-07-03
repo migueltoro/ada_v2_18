@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import us.lsi.common.List2;
 import us.lsi.common.Preconditions;
-import us.lsi.graphs.alg.DynamicProgramming.Sp;
+import us.lsi.graphs.alg.DP.Sp;
 
 
 public class GraphTree<V, E extends SimpleHyperEdge<V,E,A>, A> {

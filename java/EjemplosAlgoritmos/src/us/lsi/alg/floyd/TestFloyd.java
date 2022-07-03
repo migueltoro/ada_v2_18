@@ -11,8 +11,8 @@ import us.lsi.grafos.datos.Carretera;
 import us.lsi.grafos.datos.Ciudad;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
-import us.lsi.graphs.alg.DynamicProgramming;
-import us.lsi.graphs.alg.DynamicProgramming.PDType;
+import us.lsi.graphs.alg.DP;
+import us.lsi.graphs.alg.DP.PDType;
 import us.lsi.graphs.views.IntegerVertexGraphView;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.SimpleVirtualHyperGraph;
@@ -52,7 +52,7 @@ public class TestFloyd {
 		SimpleVirtualHyperGraph<FloydVertex,FloydEdge,Boolean> graph3 = 
 				SimpleVirtualHyperGraph.simpleVirtualHyperGraph(p);
 		
-		DynamicProgramming<FloydVertex, FloydEdge, Boolean> a = DynamicProgramming.dynamicProgrammingSearch(graph3,PDType.Min);
+		DP<FloydVertex, FloydEdge, Boolean> a = DP.dynamicProgrammingSearch(graph3,PDType.Min);
 		
 		a.withGraph = true;
 		a.search();

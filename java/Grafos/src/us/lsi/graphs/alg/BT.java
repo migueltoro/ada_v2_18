@@ -23,28 +23,28 @@ import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath;
 
-public class BackTracking<V,E,S> {
+public class BT<V,E,S> {
 
-	public static <V, E, S> BackTracking<V, E, S> ofGreedy(
+	public static <V, E, S> BT<V, E, S> ofGreedy(
 			EGraph<V, E> graph) {
 		GreedyOnGraph<V, E> ga = GreedyOnGraph.of(graph);
 		Optional<GraphPath<V, E>> gp = ga.search();
-		if(gp.isPresent()) return BackTracking.of(graph,null,gp.get().getWeight(),gp.get(),false);
-		else return BackTracking.of(graph, null, null, null, false);
+		if(gp.isPresent()) return BT.of(graph,null,gp.get().getWeight(),gp.get(),false);
+		else return BT.of(graph, null, null, null, false);
 	}
 	
-	public static <V, E, S> BackTracking<V, E, S> of(
+	public static <V, E, S> BT<V, E, S> of(
 			EGraph<V, E> graph) {
-		return BackTracking.of(graph, null, null, null, false);
+		return BT.of(graph, null, null, null, false);
 	}
 	
-	public static <V, E, S> BackTracking<V, E, S> of(
+	public static <V, E, S> BT<V, E, S> of(
 			EGraph<V, E> graph,
 			Function<GraphPath<V, E>, S> fsolution,
 			Double bestValue,
 			GraphPath<V,E> optimalPath,
 			Boolean withGraph) {
-		return new BackTracking<V, E, S>(graph,fsolution,bestValue,optimalPath,withGraph);
+		return new BT<V, E, S>(graph,fsolution,bestValue,optimalPath,withGraph);
 	}
 	
 	private Comparator<Double> comparator = Comparator.naturalOrder();
@@ -59,7 +59,7 @@ public class BackTracking<V,E,S> {
 	private Boolean withGraph = false;
 	protected Boolean stop = false;
 	
-	BackTracking(EGraph<V, E> graph,Function<GraphPath<V, E>, S> fsolution, 
+	BT(EGraph<V, E> graph,Function<GraphPath<V, E>, S> fsolution, 
 			Double bestValue,GraphPath<V,E> optimalPath, Boolean withGraph) {
 		this.graph = graph;
 		this.type = this.graph.type();
@@ -80,6 +80,7 @@ public class BackTracking<V,E,S> {
 	
 	protected Boolean forget(State<V,E> state, E edge) {
 		Boolean r = false;
+		if(graph.type().equals(Type.All) || graph.type().equals(Type.One))  return false;
 		Double w = state.getGraph().boundedValue(state.getActualVertex(),state.getAccumulateValue(),edge);
 		if(this.bestValue != null) r = comparator.compare(w,this.bestValue) >= 0;
 		return r;
@@ -135,28 +136,23 @@ public class BackTracking<V,E,S> {
 	}
 	
 	public void search(State<V, E> state) {
-		if (this.stop) {} 
-		else {
-			V actual = state.getActualVertex();
-			if (graph.goal().test(actual)) {
-				this.update(state);
-			} else {
-				for (E edge : graph.edgesListOf(actual)) {
-					if (this.forget(state, edge))
-						continue;
-					state.forward(edge);
-					search(state);
-					if (this.stop)
-						break;
-					addGraph(actual, edge);
-					state.back(edge);
-				}
+		if (this.stop)
+			return;
+		V actual = state.getActualVertex();
+		if (graph.goal().test(actual)) {
+			this.update(state);
+		} else {
+			for (E edge : graph.edgesListOf(actual)) {
+				if (this.forget(state, edge))
+					continue;
+				state.forward(edge);
+				search(state);
+				if (this.stop)
+					break;
+				addGraph(actual, edge);
+				state.back(edge);
 			}
 		}
-	}
-	
-	public S getSolution(Function<GraphPath<V, E>, S> solution){
-		return solution.apply(this.optimalPath);
 	}
 
 	public Set<S> getSolutions(){

@@ -8,7 +8,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -46,8 +46,8 @@ public class TestBT {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<VertexProductos, EdgeProductos, SolucionProductos> bta = 
-				BackTracking.of(graph, 
+			BT<VertexProductos, EdgeProductos, SolucionProductos> bta = 
+				BT.of(graph, 
 					SolucionProductos::of, 
 					gp.getWeight(),gp,true);
 

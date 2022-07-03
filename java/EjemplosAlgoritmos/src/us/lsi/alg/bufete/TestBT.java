@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -48,7 +48,7 @@ public class TestBT {
 			System.out.println(bv);
 			
 			// Algoritmo BT
-			BackTracking<BufeteVertex, BufeteEdge, SolucionBufete> bta = BackTracking.of(graph, 
+			BT<BufeteVertex, BufeteEdge, SolucionBufete> bta = BT.of(graph, 
 					SolucionBufete::of, 
 					path.getWeight(),
 					path,

@@ -6,8 +6,8 @@ import us.lsi.mochila.datos.DatosMochila;
 import us.lsi.path.EGraphPath.PathType;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
-import us.lsi.graphs.alg.BackTracking.State;
-import us.lsi.graphs.alg.BackTracking.StatePath;
+import us.lsi.graphs.alg.BT.State;
+import us.lsi.graphs.alg.BT.StatePath;
 
 
 public class TestState {

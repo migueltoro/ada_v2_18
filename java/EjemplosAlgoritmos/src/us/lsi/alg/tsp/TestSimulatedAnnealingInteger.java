@@ -10,7 +10,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.alg.SimulatedAnnealingSearch;
+import us.lsi.graphs.alg.SA;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.path.GraphPath2;
 import us.lsi.streams.Stream2;
@@ -22,10 +22,10 @@ public class TestSimulatedAnnealingInteger {
 	public static void main(String[] args) {
 		Locale.setDefault(new Locale("en", "US"));
 		
-		SimulatedAnnealingSearch.numPorIntento = 100;
-		SimulatedAnnealingSearch.numMismaTemperatura = 1;
-		SimulatedAnnealingSearch.temperaturaInicial = 100000;
-		SimulatedAnnealingSearch.alfa = 0.95;
+		SA.numPorIntento = 100;
+		SA.numMismaTemperatura = 1;
+		SA.temperaturaInicial = 100000;
+		SA.alfa = 0.95;
 		
 		Graph<Integer,SimpleEdge<Integer>> graph = AuxiliaryTsp.generate(100);
 		
@@ -44,8 +44,8 @@ public class TestSimulatedAnnealingInteger {
 		
 		EGraph<TravelVertexInteger,TravelEdgeInteger> graph2 = 
 				EGraph.virtual(e1,null).vertexWeight(v->v.weight()).build();
-		SimulatedAnnealingSearch<TravelVertexInteger, TravelEdgeInteger> m = 
-				SimulatedAnnealingSearch.simulatedAnnealing(graph2,e1,e->e.weight());
+		SA<TravelVertexInteger, TravelEdgeInteger> m = 
+				SA.simulatedAnnealing(graph2,e1,e->e.weight());
 		
 //		Optional<TravelVertexInteger> vr = m.search();
 		Optional<TravelVertexInteger> vr = 

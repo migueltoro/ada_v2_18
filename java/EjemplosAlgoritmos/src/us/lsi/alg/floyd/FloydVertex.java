@@ -8,7 +8,7 @@ import org.jgrapht.graph.GraphWalk;
 
 import us.lsi.common.List2;
 import us.lsi.graphs.SimpleEdge;
-import us.lsi.graphs.alg.DynamicProgramming.Sp;
+import us.lsi.graphs.alg.DP.Sp;
 import us.lsi.hypergraphs.GraphTree;
 import us.lsi.hypergraphs.VirtualHyperVertex;
 import us.lsi.path.EGraphPath;

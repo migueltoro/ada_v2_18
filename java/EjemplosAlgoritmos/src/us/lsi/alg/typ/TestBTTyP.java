@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.SimpleEdgeAction;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -34,7 +34,7 @@ public class TestBTTyP {
 		Double bv = path.getWeight();
 		System.out.println(bv);
 		
-		BackTracking<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BackTracking.ofGreedy(
+		BT<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>, SolucionTyP> ms = BT.ofGreedy(
 						graph);		
 		
 		Optional<GraphPath<TyPVertex, SimpleEdgeAction<TyPVertex, Integer>>> gp = ms.search();

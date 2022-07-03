@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -56,11 +56,11 @@ public class Test_BT {
 			
 			System.out.println("Voraz = "+r.getWeight()+"  == "+MulticonjuntoVertex.getSolucion(r));
 			
-			BackTracking<MulticonjuntoVertex, MulticonjuntoEdge, SolucionMulticonjunto> bta = BackTracking.of(graph,
+			BT<MulticonjuntoVertex, MulticonjuntoEdge, SolucionMulticonjunto> bta = BT.of(graph,
 					MulticonjuntoVertex::getSolucion, null, null, true);
 
 			if (rr.isSolution(r)) {
-				bta = BackTracking.of(graph, MulticonjuntoVertex::getSolucion, r.getWeight(), r, true);
+				bta = BT.of(graph, MulticonjuntoVertex::getSolucion, r.getWeight(), r, true);
 			}
 			Optional<GraphPath<MulticonjuntoVertex, MulticonjuntoEdge>> gp = bta.search();
 			System.out.println(MulticonjuntoVertex.getSolucion(gp.get()));

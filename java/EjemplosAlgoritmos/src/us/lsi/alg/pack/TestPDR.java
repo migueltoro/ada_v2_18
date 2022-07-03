@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.GreedyOnGraph;
-import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -34,7 +34,7 @@ public class TestPDR {
 		System.out.println("Valor Voraz = "+nc);
 		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
-		DynamicProgrammingReduction<PackVertex, PackEdge,?> ms = DynamicProgrammingReduction.of(
+		DPR<PackVertex, PackEdge,?> ms = DPR.of(
 				graph,
 				null,
 				(double) nc,

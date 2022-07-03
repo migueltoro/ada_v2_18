@@ -9,7 +9,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestBT {
@@ -38,8 +38,8 @@ public class TestBT {
 			System.out.println("\n\n#### Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
-					BackTracking.of(graph,SolucionProductos::of,path.getWeight(),path,true);
+			BT<ProductosVertex, ProductosEdge,SolucionProductos> bta = 
+					BT.of(graph,SolucionProductos::of,path.getWeight(),path,true);
 			
 //			GraphPath<ProductosVertex, ProductosEdge> gp = bta.optimalPath!=null?bta.optimalPath:path;
 			

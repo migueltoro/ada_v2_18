@@ -11,7 +11,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -35,13 +35,13 @@ public class TestMonedasBT {
 
 		GraphPath<MonedaVertex, MonedaEdge> path1 = rr.path();
 
-		BackTracking<MonedaVertex, MonedaEdge, SolucionMonedas> ms1;
+		BT<MonedaVertex, MonedaEdge, SolucionMonedas> ms1;
 
 		if (rr.isSolution(path1)) {
 			System.out.println("Hay solucion voraz 1"+path1.getWeight());
-			ms1 = BackTracking.of(graph,SolucionMonedas::of,path1.getWeight(),path1,true);
+			ms1 = BT.of(graph,SolucionMonedas::of,path1.getWeight(),path1,true);
 		} else {
-			ms1 = BackTracking.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
+			ms1 = BT.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
 		}
 		
 		ms1.search();
@@ -75,9 +75,9 @@ public class TestMonedasBT {
 
 		if (rr.isSolution(path1)) {
 			System.out.println("Hay solucion voraz 1"+path1.getWeight());
-			ms1 = BackTracking.of(graph,SolucionMonedas::of,path2.getWeight(),path2,true);
+			ms1 = BT.of(graph,SolucionMonedas::of,path2.getWeight(),path2,true);
 		} else {
-			ms1 = BackTracking.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
+			ms1 = BT.of(graph,SolucionMonedas::of,MonedaVoraz.voraz(),null,true);
 		}
 		
 		Optional<GraphPath<MonedaVertex, MonedaEdge>> gp = ms1.search();

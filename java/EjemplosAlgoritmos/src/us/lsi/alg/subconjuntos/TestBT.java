@@ -8,7 +8,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.virtual.EGraph;
 
 public class TestBT {
@@ -40,8 +40,8 @@ public class TestBT {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
-				BackTracking.of(graph, 
+			BT<SubconjuntosVertex, SubconjuntosEdge, SolucionSubconjuntos> bta = 
+				BT.of(graph, 
 					SolucionSubconjuntos::of, 
 					SubconjuntosHeuristic.voraz(start,DatosSubconjuntos.NUM_SC),null,true);
 

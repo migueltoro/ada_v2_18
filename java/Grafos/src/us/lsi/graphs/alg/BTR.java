@@ -11,18 +11,18 @@ import us.lsi.common.List2;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 
-public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTracking<V,E,S> {
+public class BTR<V,E,S extends Comparable<S>> extends BT<V,E,S> {
 	
-	public static <V, E, S extends Comparable<S>> BackTrackingRandom<V, E, S> of(
+	public static <V, E, S extends Comparable<S>> BTR<V, E, S> of(
 			EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution, 
 			Function<V, Integer> size) {
-		return new BackTrackingRandom<V, E, S>(graph,solution, size);
+		return new BTR<V, E, S>(graph,solution, size);
 	}
 	
 	public static Integer threshold;
 
-	BackTrackingRandom(EGraph<V, E> graph, 
+	BTR(EGraph<V, E> graph, 
 			Function<GraphPath<V, E>, S> solution,
 			Function<V,Integer> size) {
 		super(graph, solution, null,null, false);
@@ -52,7 +52,7 @@ public class BackTrackingRandom<V,E,S extends Comparable<S>> extends BackTrackin
 			update(state);		
 		else {
 			List<E> edges = graph.edgesListOf(actual);
-			if(size.apply(actual) > BackTrackingRandom.threshold) edges = List2.randomUnitary(edges);
+			if(size.apply(actual) > BTR.threshold) edges = List2.randomUnitary(edges);
 			for (E edge : edges) {				
 				state.forward(edge);
 				search(state);

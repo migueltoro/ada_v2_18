@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -41,7 +41,7 @@ public class TestBT {
 			System.out.println("\n\n#### PI-7 Ej3 Algoritmo BT ####");
 
 			// Algoritmo BT
-			BackTracking<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> bta = BackTracking.ofGreedy(graph);
+			BT<VertexCandidatos, EdgeCandidatos, SolucionCandidatos> bta = BT.ofGreedy(graph);
 /*
 			bta.withGraph = true;
 			bta.bestValue = SubconjuntoHeuristic.voraz(start,DatosSubconjunto.getNumSubconjuntos());

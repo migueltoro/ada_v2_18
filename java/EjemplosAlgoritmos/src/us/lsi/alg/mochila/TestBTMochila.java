@@ -7,7 +7,7 @@ import org.jgrapht.GraphPath;
 
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -41,7 +41,7 @@ public class TestBTMochila {
 //		System.out.println(s0);
 		System.out.println(path.getEdgeList().stream().map(e->e.action()).toList());
 		
-		BackTracking<MochilaVertex,MochilaEdge,SolucionMochila> ms = BackTracking.of(
+		BT<MochilaVertex,MochilaEdge,SolucionMochila> ms = BT.of(
 				graph,
 				MochilaVertex::getSolucion,
 				path.getWeight(),path,true);		

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -39,8 +39,8 @@ public class Tests {
 	private static void testPDR(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== PDR ======================== ");
 		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
-		DynamicProgrammingReduction<EquipoVertex, EquipoEdge, ?> alg_pdr = 
-				DynamicProgrammingReduction.of(grafo,null,gp.getWeight(),gp,false);
+		DPR<EquipoVertex, EquipoEdge, ?> alg_pdr = 
+				DPR.of(grafo,null,gp.getWeight(),gp,false);
 		
 		Optional<GraphPath<EquipoVertex, EquipoEdge>> p = alg_pdr.search();
 		System.out.println(EquipoVertex.getSolucion(p.get()));
@@ -49,7 +49,7 @@ public class Tests {
 	private static void testBT(EGraph<EquipoVertex, EquipoEdge> grafo) {
 		System.out.println("======================== BT ======================== ");
 		GraphPath<EquipoVertex, EquipoEdge> gp = GreedyOnGraph.random(grafo).path();
-		BackTracking<EquipoVertex, EquipoEdge,SolucionEquipo> alg_bt = BackTracking.of(
+		BT<EquipoVertex, EquipoEdge,SolucionEquipo> alg_bt = BT.of(
 			grafo,
 			EquipoVertex::getSolucion,
 			gp.getWeight(),gp,false);

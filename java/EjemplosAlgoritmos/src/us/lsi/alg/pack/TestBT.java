@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import org.jgrapht.GraphPath;
 
-import us.lsi.graphs.alg.BackTracking;
+import us.lsi.graphs.alg.BT;
 import us.lsi.graphs.alg.GreedyOnGraph;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
@@ -37,7 +37,7 @@ public class TestBT {
 		System.out.println("Valor voraz = "+nc);
 		System.out.println("Heuristica = "+Heuristica.heuristic(e1, PackVertex.goal(), null));
 		
-		BackTracking<PackVertex, PackEdge,SolucionPack> ms = BackTracking.of(
+		BT<PackVertex, PackEdge,SolucionPack> ms = BT.of(
 				graph,
 				SolucionPack::of,
 				(double) nc,

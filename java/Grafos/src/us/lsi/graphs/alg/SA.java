@@ -12,11 +12,11 @@ import us.lsi.graphs.virtual.EGraph;
 import us.lsi.math.Math2;
 import us.lsi.streams.Stream2;
 
-public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
+public class SA<V,E> implements Iterator<V>, Iterable<V> {
 	
-	public static <V, E> SimulatedAnnealingSearch<V, E> simulatedAnnealing(EGraph<V, E> graph, V startVertex,
+	public static <V, E> SA<V, E> simulatedAnnealing(EGraph<V, E> graph, V startVertex,
 			Function<V, Double> fitness) {
-		return new SimulatedAnnealingSearch<V, E>(graph, startVertex, fitness);
+		return new SA<V, E>(graph, startVertex, fitness);
 	}
 
 	private EGraph<V,E> graph;
@@ -28,7 +28,7 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 	public Double bestWeight;
 	
 		
-	SimulatedAnnealingSearch(EGraph<V, E> graph, V startVertex,Function<V, Double> fitness) {
+	SA(EGraph<V, E> graph, V startVertex,Function<V, Double> fitness) {
 		super();
 		this.graph = graph;
 		this.actualVertex = null;
@@ -89,7 +89,7 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 
 	@Override
 	public boolean hasNext() {
-		return this.i < numPorIntento && !SimulatedAnnealingSearch.stop.test(this.bestWeight);
+		return this.i < numPorIntento && !SA.stop.test(this.bestWeight);
 	}
 
 	@Override
@@ -116,8 +116,8 @@ public class SimulatedAnnealingSearch<V,E> implements Iterator<V>, Iterable<V> {
 	}
 
 
-	public SimulatedAnnealingSearch<V, E> copy() {
-		return new SimulatedAnnealingSearch<>(graph,startVertex,fitness);
+	public SA<V, E> copy() {
+		return new SA<>(graph,startVertex,fitness);
 	}
 
 	

@@ -1,7 +1,7 @@
 package us.lsi.hypergraphs2;
 
 import java.util.List;
-import us.lsi.graphs.alg.DynamicProgramming.Sp;
+import us.lsi.graphs.alg.DP.Sp;
 
 public interface HyperEdge2<V extends HyperVertex2<V, E, A, S>, 
 		E extends HyperEdge2<V,E,A,S>, A, S> {

@@ -2,12 +2,13 @@ package us.lsi.alg.asignaturas;
 
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.jgrapht.GraphPath;
 
 import us.lsi.graphs.alg.AStar;
-import us.lsi.graphs.alg.BackTracking;
-import us.lsi.graphs.alg.DynamicProgrammingReduction;
+import us.lsi.graphs.alg.BT;
+import us.lsi.graphs.alg.DPR;
 import us.lsi.graphs.virtual.EGraph;
 import us.lsi.graphs.virtual.EGraph.Type;
 import us.lsi.path.EGraphPath.PathType;
@@ -39,8 +40,8 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 
-		DynamicProgrammingReduction<AsignaturasVertice,AsignaturasEdge,SolucionAsignaturas> pd = 
-				DynamicProgrammingReduction.ofGreedy(grafo);
+		DPR<AsignaturasVertice,AsignaturasEdge,SolucionAsignaturas> pd = 
+				DPR.ofGreedy(grafo);
 
 		
 		GraphPath<AsignaturasVertice, AsignaturasEdge> s2 = pd.search().get();
@@ -49,10 +50,10 @@ public class TestAsignaturasaStar {
 		
 		System.out.println("___________________");
 
-		BackTracking<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BackTracking.ofGreedy(
+		BT<AsignaturasVertice, AsignaturasEdge,SolucionAsignaturas> bt = BT.ofGreedy(
 				grafo);
-		bt.search();
-		System.out.println(bt.getSolution(SolucionAsignaturas::of));
+		Optional<GraphPath<AsignaturasVertice, AsignaturasEdge>> gp = bt.search();
+		System.out.println(SolucionAsignaturas.of(gp.get()));
 		System.out.println("___________________");
 
 	}
