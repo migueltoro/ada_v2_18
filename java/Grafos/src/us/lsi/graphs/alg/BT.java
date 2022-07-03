@@ -93,8 +93,7 @@ public class BT<V,E,S> {
 				this.optimalPath = state.getPath();
 				S s = fsolution.apply(state.getPath());
 				this.solutions.add(s);
-				if (this.solutions.size() >= this.graph.solutionNumber())
-					this.stop = true;
+				if (this.solutions.size() >= this.graph.solutionNumber()) this.stop = true;
 				break;
 			case One:
 				this.bestValue = state.getAccumulateValue();
@@ -136,19 +135,14 @@ public class BT<V,E,S> {
 	}
 	
 	public void search(State<V, E> state) {
-		if (this.stop)
-			return;
 		V actual = state.getActualVertex();
 		if (graph.goal().test(actual)) {
 			this.update(state);
 		} else {
 			for (E edge : graph.edgesListOf(actual)) {
-				if (this.forget(state, edge))
-					continue;
+				if (this.forget(state, edge) || this.stop) continue;
 				state.forward(edge);
 				search(state);
-				if (this.stop)
-					break;
 				addGraph(actual, edge);
 				state.back(edge);
 			}
@@ -156,6 +150,7 @@ public class BT<V,E,S> {
 	}
 
 	public Set<S> getSolutions(){
+		if(this.solutions == null) return Set.of(this.fsolution.apply(this.optimalPath));
 		return this.solutions;
 	}
 	

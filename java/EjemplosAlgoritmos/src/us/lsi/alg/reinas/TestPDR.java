@@ -13,7 +13,7 @@ import us.lsi.path.EGraphPath.PathType;
 public class TestPDR {
 
 	public static void main(String[] args) {
-		ReinasVertex.n = 10;	
+		ReinasVertex.n = 20;	
 		ReinasVertex v1 = ReinasVertex.first();
 		
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
@@ -28,8 +28,9 @@ public class TestPDR {
 		
 		Optional<GraphPath<ReinasVertex, SimpleEdgeAction<ReinasVertex, Integer>>> path = ms.search();
 		System.out.println(SolucionReinas.of(path.get()));
+		System.out.println("_____________");
 //		System.out.println(ms.getSolutions().size());
-//		ms.getSolutions().stream().forEach(s->System.out.println(s));
+		ms.getSolutions().stream().forEach(s->System.out.println(s));
 
 	}
 

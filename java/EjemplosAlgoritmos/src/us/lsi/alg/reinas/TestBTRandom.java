@@ -38,7 +38,8 @@ public class TestBTRandom {
 			long endTime = System.nanoTime() - startTime;
 			System.out.println("1 = "+endTime);
 			System.out.println(SolucionReinas.of(gp.get()));
-
+			System.out.println("______");
+			ms.getSolutions().stream().forEach(s->System.out.println(s));
 	}
 
 }

@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 public class DPR<V, E, S> {
@@ -47,6 +48,7 @@ public class DPR<V, E, S> {
 	private Comparator<Sp<E>> comparatorEdges;
 	private Comparator<Double> comparator;
 	public Map<V, Sp<E>> solutionsTree;
+	private List<V> actualPath;
 	public GraphPath<V, E> optimalPath;
 	public Set<S> solutions;
 	protected Function<GraphPath<V,E>,S> fsolution;
@@ -69,6 +71,7 @@ public class DPR<V, E, S> {
 		case One -> null;
 		};	
 		this.solutionsTree = new HashMap<>();
+		this.actualPath = new ArrayList<>();
 		this.bestValue = bestValue;
 		this.optimalPath = optimalPath;
 		this.withGraph = withGraph;
@@ -92,22 +95,20 @@ public class DPR<V, E, S> {
 		if (graph.goalHasSolution().test(actual)) {
 			switch(this.type) {
 			case All:
-				this.optimalPath = pathFrom(actual).get();
+				this.optimalPath = pathToOrigin(actual,accumulateValue);
 				S s = fsolution.apply(this.optimalPath);
 				this.solutions.add(s);
-				if (this.solutions.size() >= this.graph.solutionNumber())
-					this.stop = true;
+				if (this.solutions.size() >= this.graph.solutionNumber()) this.stop = true;
 				break;
 			case One:
 				this.bestValue = accumulateValue;
-				this.optimalPath = pathFrom(actual).get();
+				this.optimalPath = pathToOrigin(actual,accumulateValue);
 				this.stop = true;
 				break;
 			case Min:
 			case Max:
 				if (this.bestValue == null || this.comparator.compare(accumulateValue, this.bestValue) < 0) {
 					this.bestValue = accumulateValue;
-//					this.optimalPath = pathFrom(actual).get();
 				}
 			}
 		}
@@ -141,16 +142,10 @@ public class DPR<V, E, S> {
 		return pathFrom(graph.startVertex());
 	}
 	
-	public Optional<S> search(Function<GraphPath<V,E>,S> f) {
-		Optional<GraphPath<V, E>> p = search();
-		return p.map(f);
-	}
-	
-	
 	private Sp<E> search(V actual, Double accumulateValue, E edgeToOrigin) {
+		this.actualPath.add(actual);
 		Sp<E> r = null;
-		if(this.stop) {}
-		else if(this.solutionsTree.containsKey(actual)) {
+		if(this.solutionsTree.containsKey(actual)) {
 			r = this.solutionsTree.get(actual);
 		} else if (graph.goal().test(actual)) {
 			if (graph.goalHasSolution().test(actual)) {
@@ -164,7 +159,7 @@ public class DPR<V, E, S> {
 		} else {
 			List<Sp<E>> rs = new ArrayList<>();	
 			for (E edge : graph.edgesListOf(actual)) {					
-				if (this.forget(edge,actual,accumulateValue,graph.goal(),graph.endVertex())) continue;
+				if (this.forget(edge,actual,accumulateValue,graph.goal(),graph.endVertex()) || this.stop) continue;
 				V v = Graphs.getOppositeVertex(graph,edge,actual);
 				Double ac = this.graph.add(actual,accumulateValue,edge,edgeToOrigin); 
 				Sp<E> s = search(v,ac,edge);
@@ -179,7 +174,12 @@ public class DPR<V, E, S> {
 			r = rs.stream().filter(s->s!=null).min(this.comparatorEdges).orElse(null);
 			this.solutionsTree.put(actual, r);
 		}
+		this.actualPath.remove(actual);
 		return r;
+	}
+	
+	private GraphPath<V, E> pathToOrigin(V vertex,Double accumulateValue) {
+		return new GraphWalk<>(this.graph,this.actualPath,accumulateValue);
 	}
 
 	private Optional<GraphPath<V, E>> pathFrom(V vertex) {	
@@ -197,8 +197,6 @@ public class DPR<V, E, S> {
 		return Optional.of(ePath);
 	}
 	
-	
-
 	public record Sp<E>(Double weight, E edge) implements Comparable<Sp<E>> {
 		
 		public static <E> Sp<E> of(Double weight,E edge) {
