@@ -18,10 +18,10 @@ public class TestBT {
 		ReinasVertex e1 = ReinasVertex.first();
 		
 		EGraph<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>> graph = 
-				EGraph.virtual(e1,ReinasVertex.goal(), PathType.Last, Type.One)
+				EGraph.virtual(e1,ReinasVertex.goal(), PathType.Last, Type.All)
 				.goalHasSolution(ReinasVertex.goalHasSolution())
 				.vertexWeight(v->v.errores().doubleValue())
-				.solutionNumber(3)
+				.solutionNumber(1000)
 				.build();
 
 		BT<ReinasVertex,SimpleEdgeAction<ReinasVertex,Integer>, SolucionReinas> ms = 
@@ -30,6 +30,7 @@ public class TestBT {
 
 		Optional<GraphPath<ReinasVertex, SimpleEdgeAction<ReinasVertex, Integer>>> gp = ms.search();
 		System.out.println(SolucionReinas.of(gp.get()));
-		ms.getSolutions().stream().forEach(s->System.out.println(s));
+//		ms.getSolutions().stream().forEach(s->System.out.println(s));
+		System.out.println(ms.getSolutions().size());
 	}
 }

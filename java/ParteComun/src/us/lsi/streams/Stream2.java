@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,6 +36,15 @@ import us.lsi.common.Preconditions;
 import us.lsi.math.Math2;
 
 public class Stream2 {
+	
+	public static void writeStream(Stream<String> s, String file) {
+		Iterable<String> it = ()->s.iterator();
+		try {
+			Files.write(Paths.get(file),it);
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		}
+	}
 	
 	public static <T> Stream<T> of(Spliterator<T> iterator) {
         return StreamSupport.stream(iterator, true);
@@ -83,7 +93,7 @@ public class Stream2 {
 	 * @param <L> El tipo de los elementos de la secuencia
 	 * @param <R> El tipo de los elementos de la secuencia
 	 * @param <T> El tipo de los elementos de la secuencia resultante
-	 * @param combiner Fución de combinación
+	 * @param combiner Fuciï¿½n de combinaciï¿½n
 	 * @return Un stream formado por los elementos obtenidos combinando 
 	 * uno a uno los elementos de las secuencias de entrada
 	 */	
@@ -100,7 +110,7 @@ public class Stream2 {
 	 * @param start Primer indice de la enumrracion
 	 * @param <E> El tipo de los elementos de la secuencia
 	 * @return Un stream formado por los pares de elementos 
-	 * formados por un elemento y el entero que indica su posición
+	 * formados por un elemento y el entero que indica su posiciï¿½n
 	 */
 	public static <E> Stream<Enumerate<E>> enumerate(Stream<E> stream, Integer start) {
 		Stream<Integer> st = Stream.iterate(start, e -> e + 1);
@@ -111,7 +121,7 @@ public class Stream2 {
 	 * @param stream Un String
 	 * @param <E> El tipo de los elementos de la secuencia
 	 * @return Un stream formado por los pares de elementos 
-	 * formados por un elemento y el entero que indica su posición
+	 * formados por un elemento y el entero que indica su posiciï¿½n
 	 */
 
 	public static <E> Stream<Enumerate<E>> enumerate(Stream<E> stream) {
@@ -126,7 +136,7 @@ public class Stream2 {
 	 * @param s2 Un Segundo Stream
 	 * @param f Una Bifunction que opera un elemento del primer stream con un del segundo para 
 	 * dar un resultado
-	 * @return El resultado de operar los pares posibles de s1 y s2 con la bifunción f
+	 * @return El resultado de operar los pares posibles de s1 y s2 con la bifunciï¿½n f
 	 */
 	public static <T, U, R> Stream<R> cartesianProduct(Stream<T> s1, Stream<U> s2, BiFunction<T, U, R> f) {
 		List<U> ls = s2.collect(Collectors.toList());
@@ -142,11 +152,11 @@ public class Stream2 {
 	 * @param <T> Tipo de los elementos del primer stream
 	 * @param <U> Tipo de los elementos del segundo stream
 	 * @param <R> Tipo de los elementos del stream resultado
-	 * @param s1 Una colección
-	 * @param s2 Una segunda colección
+	 * @param s1 Una colecciï¿½n
+	 * @param s2 Una segunda colecciï¿½n
 	 * @param f Una Bifunction que opera un elemento del primer stream con un del segundo para 
 	 * dar un resultado
-	 * @return El resultado de operar los pares posibles de s1 y s2 con la bifunción f
+	 * @return El resultado de operar los pares posibles de s1 y s2 con la bifunciï¿½n f
 	 */
 	public static <T, U, R> Stream<R> cartesianProduct(Collection<T> s1, Collection<U> s2, BiFunction<T, U, R> f) {
 		return s1.stream().flatMap(x->s2.stream().map(y->f.apply(x,y)));
@@ -203,7 +213,7 @@ public class Stream2 {
 	/**
 	 * @param s Una secuencia de streams
 	 * @param <T> El tipo de los elementos de la secuencia
-	 * @return Un stream fromado con los parámetros concatenados
+	 * @return Un stream fromado con los parï¿½metros concatenados
 	 */
 	@SafeVarargs
 	public static <T> Stream<T> concat(Stream<T>... s1) {
@@ -213,9 +223,9 @@ public class Stream2 {
 	/**
 	 * @param s1 Un stream
 	 * @param s2 Un segundo stream
-	 * @param f1 Una función que calcula una clave para los elementos de stream1
-	 * @param f2 Una función que calcula una clave para los elementos de stream2
-	 * @param fr Una función que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
+	 * @param f1 Una funciï¿½n que calcula una clave para los elementos de stream1
+	 * @param f2 Una funciï¿½n que calcula una clave para los elementos de stream2
+	 * @param fr Una funciï¿½n que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
 	 * @param <T> El tipo de los elementos de la primera secuencia
 	 * @param <U> El tipo de los elementos de la segunda secuencia
 	 * @param <K> El tipo de los elementos de la clave
@@ -235,9 +245,9 @@ public class Stream2 {
 	/**
 	 * @param s1 Una collection
 	 * @param s2 Un segundo collection
-	 * @param f1 Una función que calcula una clave para los elementos de stream1
-	 * @param f2 Una función que calcula una clave para los elementos de stream2
-	 * @param fr Una función que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
+	 * @param f1 Una funciï¿½n que calcula una clave para los elementos de stream1
+	 * @param f2 Una funciï¿½n que calcula una clave para los elementos de stream2
+	 * @param fr Una funciï¿½n que calcula un nuevo valor a partir  de uno procedente de stream1 y otro del stream2
 	 * @param <T> El tipo de los elementos de la primera secuencia
 	 * @param <U> El tipo de los elementos de la segunda secuencia
 	 * @param <K> El tipo de los elementos de la clave
@@ -258,8 +268,8 @@ public class Stream2 {
 	 * @param a Un entero
 	 * @param b Un entero
 	 * @param c Un entero
-	 * @return Un stream de enteros que forman una progresión 
-	 * aritmética desde a hasta b con razón c sin incluir el valor b.
+	 * @return Un stream de enteros que forman una progresiï¿½n 
+	 * aritmï¿½tica desde a hasta b con razï¿½n c sin incluir el valor b.
 	 */
 	public static IntStream range(Integer a, Integer b, Integer c){
 		Preconditions.checkArgument(a==b ||(b-a)*c > 0);
@@ -273,8 +283,8 @@ public class Stream2 {
 	 * @param a Un entero
 	 * @param b Un entero
 	 * @param c Un entero
-	 * @return Un stream de enteros que forman una progresión 
-	 * aritmética desde a hasta b con razón c incluyendo el valor b se es posible
+	 * @return Un stream de enteros que forman una progresiï¿½n 
+	 * aritmï¿½tica desde a hasta b con razï¿½n c incluyendo el valor b se es posible
 	 */
 	public static IntStream rangeClosed(Integer a, Integer b, Integer c){		
 		Preconditions.checkArgument(a==b || (b-a)*c > 0);
@@ -285,8 +295,8 @@ public class Stream2 {
 	 * @param a Un entero
 	 * @param b Un entero
 	 * @param c Un entero
-	 * @return Un stream de enteros que forman una progresión 
-	 * aritmética desde a hasta b con razón c sin incluir el valor b.
+	 * @return Un stream de enteros que forman una progresiï¿½n 
+	 * aritmï¿½tica desde a hasta b con razï¿½n c sin incluir el valor b.
 	 */
 	public static LongStream range(Long a, Long b, Long c){
 		Preconditions.checkArgument((b-a)*c > 0);
@@ -300,8 +310,8 @@ public class Stream2 {
 	 * @param a Un entero
 	 * @param b Un entero
 	 * @param c Un entero
-	 * @return Un stream de enteros que forman una progresión 
-	 * aritmética desde a hasta b con razón c incluyendo el valor b se es posible
+	 * @return Un stream de enteros que forman una progresiï¿½n 
+	 * aritmï¿½tica desde a hasta b con razï¿½n c incluyendo el valor b se es posible
 	 */
 	public static LongStream rangeClosed(Long a, Long b, Long c){
 		Preconditions.checkArgument((b-a)*c > 0);
@@ -328,7 +338,7 @@ public class Stream2 {
 	}
 		
 	/**
-	 * @return Un stream formado por las líneas escritas en la consola
+	 * @return Un stream formado por las lï¿½neas escritas en la consola
 	 */
 	public static Stream<String> console() {
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));

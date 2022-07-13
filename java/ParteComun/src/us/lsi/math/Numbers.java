@@ -9,7 +9,7 @@ public class Numbers {
 		try {
 			r = Long.parseLong(s);
 		} catch(NumberFormatException e){
-			throw new IllegalArgumentException("La cadena "+s+" no constiuyew un Long");
+			throw new IllegalArgumentException("La cadena "+s+" no constiuye un Long");
 		}
 		return r;
 	}
@@ -18,7 +18,7 @@ public class Numbers {
 		try {
 			r = Integer.parseInt(s);
 		} catch(NumberFormatException e){
-			throw new IllegalArgumentException("La cadena "+s+" no constiuyew un Integer");
+			throw new IllegalArgumentException("La cadena "+s+" no constiuye un Integer");
 		}
 		return r;
 	}
@@ -27,7 +27,7 @@ public class Numbers {
 		try {
 			r = Float.parseFloat(s);
 		} catch(NumberFormatException e){
-			throw new IllegalArgumentException("La cadena "+s+" no constiuyew un Float");
+			throw new IllegalArgumentException("La cadena "+s+" no constiuye un Float");
 		}
 		return r;
 	}
@@ -36,7 +36,7 @@ public class Numbers {
 		try {
 			r = Double.parseDouble(s);
 		} catch(NumberFormatException e){
-			throw new IllegalArgumentException("La cadena "+s+" no constiuyew un Double");
+			throw new IllegalArgumentException("La cadena "+s+" no constiuye un Double");
 		}
 		return r;
 	}
@@ -45,7 +45,7 @@ public class Numbers {
 		try {
 			r = new BigInteger(s);
 		} catch(NumberFormatException e){
-			throw new IllegalArgumentException("La cadena "+s+" no constiuyew un BigInteger");
+			throw new IllegalArgumentException("La cadena "+s+" no constiuye un BigInteger");
 		}
 		return r;
 	}

@@ -9,8 +9,9 @@ module partecomun {
 	exports us.lsi.common;
 	exports us.lsi.streams;
 
-	requires commons.math3;
+	requires transitive commons.math3;
 	requires org.antlr.antlr4.runtime;
 	requires transitive org.jgrapht.core;
 	requires transitive org.jgrapht.io;
+	requires transitive juniversalchardet;
 }

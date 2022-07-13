@@ -6,11 +6,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/commons-math3-3.2.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/antlr4-runtime-4.9.2.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -37,6 +32,16 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-text-1.8.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/juniversalchardet-1.0.3.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
