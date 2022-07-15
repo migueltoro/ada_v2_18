@@ -14,7 +14,6 @@ public abstract class TestPolinomialLog {
 		PolinomialLog.of().print(30,start);		
 		final double[] s_coeff = PolinomialLog.of().fit(points,start);
 		System.out.println(String.format("Solutions = a = %.2f,b = %.2f,c = %.2f,d = %.2f",s_coeff[0],s_coeff[1],s_coeff[2],s_coeff[3]));
-
 	}
 
 }
