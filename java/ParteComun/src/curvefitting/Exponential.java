@@ -51,12 +51,12 @@ public class Exponential implements ParametricUnivariateFunction {
 	
 	public void print(double n, double... p) {
 		String r = String.format("Values: n = %.2f,p = %s",n,Arrays.stream(p).boxed()
-				.map(x->x.toString()).collect(Collectors.joining(",")));
+				.map(x->String.format("%.2f", x)).collect(Collectors.joining(",")));
 		System.out.println(r);
 		System.out.println("Value = "+this.value(n, p));
 		double[] g = this.gradient(n, p);
 		System.out.println("Gradiente = "+String.format("%s",Arrays.stream(g).boxed()
-				.map(x->x.toString()).collect(Collectors.joining(","))));
+				.map(x->String.format("%.2f", x)).collect(Collectors.joining(","))));
 	}
 
 }

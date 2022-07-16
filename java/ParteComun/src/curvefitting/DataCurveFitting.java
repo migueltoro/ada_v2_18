@@ -51,4 +51,16 @@ public class DataCurveFitting {
 				.toList();
 		Stream2.writeStream(points.stream(), file);
 	}
+	public static void testFilePolynomial(String file) {
+		Locale.setDefault(new Locale("en", "us"));
+		Double a = 5.;
+		Double b = 2.5;
+		Double c = 2.;
+		List<String> points = IntStream.range(0, 100).boxed()
+				.map(n->n+10.)
+				.map(n->new WeightedObservedPoint(1.,n,a*n*n+b*n+c))
+				.map(n->String.format("%f,%f",n.getX(),n.getY()))
+				.toList();
+		Stream2.writeStream(points.stream(), file);
+	}
 }
