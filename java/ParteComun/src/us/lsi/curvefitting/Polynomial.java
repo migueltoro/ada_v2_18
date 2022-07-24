@@ -1,11 +1,11 @@
-package curvefitting;
+package us.lsi.curvefitting;
 
 import java.util.List;
 
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoint;
 
-public class Polynomial  {
+public class Polynomial {
 	
 	public static Polynomial of(Integer grado) {
 		return new Polynomial(grado);
@@ -22,6 +22,5 @@ public class Polynomial  {
 		PolynomialCurveFitter fitter = PolynomialCurveFitter.create(grado);
 		return fitter.fit(points);
 	}
-	
 	
 }

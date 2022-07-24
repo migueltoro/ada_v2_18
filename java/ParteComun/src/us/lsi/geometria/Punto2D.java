@@ -44,7 +44,7 @@ public record Punto2D(Double x,Double y) implements Comparable<Punto2D>, ObjetoG
     }
     
     public Vector2D minus(Punto2D p){
-    	return Vector2D.createCartesiano(this.x-p.x(),this.y-p.y());
+    	return Vector2D.of(this.x-p.x(),this.y-p.y());
     }
     
     public Double getDistanciaA(Punto2D p) {
@@ -52,7 +52,7 @@ public record Punto2D(Double x,Double y) implements Comparable<Punto2D>, ObjetoG
 	}
     
 	public Double getDistanciaAlOrigen() {
-		return Vector2D.create(this).getModulo();
+		return Vector2D.of(this).getModulo();
 	} 
 	
 	public Punto2D traslada(Vector2D v){

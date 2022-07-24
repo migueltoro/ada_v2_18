@@ -25,9 +25,9 @@ public class Poligono2D  implements ObjetoGeometrico2D {
 	public static Poligono2D createRectangulo(Punto2D p, Double base, Double altura) {
 		Poligono2D r = Poligono2D.create();
 		r.addVertice(p);
-		r.addVertice(p.add(Vector2D.createCartesiano(base, 0.)));
-		r.addVertice(p.add(Vector2D.createCartesiano(base, altura)));
-		r.addVertice(p.add(Vector2D.createCartesiano(0., altura)));
+		r.addVertice(p.add(Vector2D.of(base, 0.)));
+		r.addVertice(p.add(Vector2D.of(base, altura)));
+		r.addVertice(p.add(Vector2D.of(0., altura)));
 		return r;
 	}
 	

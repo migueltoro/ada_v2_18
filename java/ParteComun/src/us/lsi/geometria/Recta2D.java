@@ -38,16 +38,16 @@ public class Recta2D {
 	private Double distanciaAlOrigenConSigno;
 		
 	private Recta2D() {
-		this(Punto2D.getOrigen(),Vector2D.createPolarEnRadianes(1.,0.));
+		this(Punto2D.getOrigen(),Vector2D.ofRadians(1.,0.));
 	}
 	
 	private Recta2D(Punto2D p, Double angulo) {
-		this(p,Vector2D.createPolarEnRadianes(1., angulo));
+		this(p,Vector2D.ofRadians(1., angulo));
 	}
 
 	protected Recta2D(Punto2D p, Vector2D vector) {	
 		this.punto = Punto2D.of(p);
-		this.vector = Vector2D.create(vector);
+		this.vector = Vector2D.of(vector);
 		this.angulo = Math.atan2(vector.getY(), vector.getX());
 		this.angulo = this.angulo <0 ? this.angulo+Math.PI : this.angulo;
 		this.a = this.vector.getY();

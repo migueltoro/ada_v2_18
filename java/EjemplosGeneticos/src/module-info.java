@@ -7,10 +7,10 @@ module ejemplos_geneticos {
 	exports us.lsi.ag.real;
 	exports us.lsi.ag.sudoku;
 	exports us.lsi.ag.anuncios;
-
+	
 	requires transitive geneticos;
 	requires transitive datos_compartidos;
 	requires transitive partecomun;
-	requires grafos;
-	requires commons.math3;
+	requires transitive grafos;
+	requires transitive commons.math3;
 }

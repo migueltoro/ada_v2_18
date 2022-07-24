@@ -4,25 +4,25 @@ import us.lsi.common.Preconditions;
 
 public class Vector2D {
 
-	public static Vector2D createCartesiano(Double x, Double y) {
+	public static Vector2D of(Double x, Double y) {
 		return new Vector2D(x, y);
 	}
 
-	public static Vector2D create(Punto2D p) {
+	public static Vector2D of(Punto2D p) {
 		return new Vector2D(p.x(), p.y());
 	}
 	
-	public static Vector2D create(Vector2D p) {
+	public static Vector2D of(Vector2D p) {
 		return new Vector2D(p.getX(), p.getY());
 	}
 	
-	public static Vector2D createPolarEnGrados(Double modulo, Double angulo){
-		return createPolarEnRadianes(modulo, Math.toRadians(angulo));
+	public static Vector2D ofDegrees(Double modulo, Double angulo){
+		return ofRadians(modulo, Math.toRadians(angulo));
 	}
 	
-	public static Vector2D createPolarEnRadianes(Double modulo, Double angulo){
+	public static Vector2D ofRadians(Double modulo, Double angulo){
 		Preconditions.checkArgument(modulo >=0);
-		return createCartesiano(modulo*Math.cos(angulo),modulo*Math.sin(angulo));		
+		return of(modulo*Math.cos(angulo),modulo*Math.sin(angulo));		
 	}
 	
 	private Double x;
@@ -96,27 +96,27 @@ public class Vector2D {
 	}	
 	
 	public Vector2D getOrtogonal() {
-		return Vector2D.createCartesiano(-y, x);
+		return Vector2D.of(-y, x);
 	}
 	
 	public Vector2D getUnitario() {
-		return createPolarEnRadianes(1.,this.angulo);
+		return ofRadians(1.,this.angulo);
 	}
 	
 	public Vector2D getOpuesto() {
-		return Vector2D.createCartesiano(-x, -y);
+		return Vector2D.of(-x, -y);
 	}
 	
 	public Vector2D rota(Double angulo) {
-		return createPolarEnRadianes(this.modulo,this.angulo+angulo);
+		return ofRadians(this.modulo,this.angulo+angulo);
 	}
 	
 	public Vector2D suma(Vector2D v) {
-		return createCartesiano(this.x+v.getX(),this.y+v.getY());
+		return of(this.x+v.getX(),this.y+v.getY());
 	}
 		
 	public Vector2D multiplica(Double factor) {
-		return createCartesiano(this.x*factor,this.y*factor);
+		return of(this.x*factor,this.y*factor);
 	}
 	
 	public Double multiplicaVectorial(Vector2D v) {

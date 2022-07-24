@@ -547,8 +547,15 @@ public class BinaryTrees {
 		tree.toDot("ficheros/avl_tree.gv");
 	}
 	
+	public static void test7() {
+		String ex = "[4;7](2(1(0,_),3),7(5(_,6),10(9(8,_),11(_,12))))";
+		BinaryTree<String> t0 = BinaryTree.parse(ex);
+		System.out.println(t0);
+	}
+	
+	
 	public static void main(String[] args) {
-		test6();
+		test7();
 	}
 	
 	

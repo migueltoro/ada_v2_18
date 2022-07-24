@@ -1,4 +1,4 @@
-package curvefitting;
+package us.lsi.curvefitting;
 
 import java.util.List;
 
@@ -21,6 +21,10 @@ public class PolinomialLog implements ParametricUnivariateFunction {
 		return pl;
 	}
 	
+	public PolinomialLog() {
+		super();
+	}
+
 	@Override
 	public double[] gradient(double n, double... p) {
 		Double a = p[0];

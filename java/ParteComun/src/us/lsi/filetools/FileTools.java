@@ -1,4 +1,4 @@
-package filetools;
+package us.lsi.filetools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

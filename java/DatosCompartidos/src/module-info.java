@@ -1,7 +1,6 @@
 
 
 module datos_compartidos {
-	exports us.lsi.geometria;
 	exports us.lsi.tareasyprocesadores.datos;
 	exports us.lsi.reinas.datos;
 	exports us.lsi.jarras.datos;
