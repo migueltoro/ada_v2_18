@@ -1,5 +1,6 @@
 package us.lsi.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,7 +11,13 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 
 import javax.swing.*;
+
+import us.lsi.common.Preconditions;
+
 import java.awt.geom.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Class {@code Canvas} - a class to allow for simple graphical 
@@ -24,23 +31,29 @@ import java.awt.geom.*;
 public class Canvas {
 	
 	
-    public static Canvas of(String title) {
-		return new Canvas(title, 300, 300, Color.WHITE);
-	}
-
-	public static Canvas of(String title, int width, int height) {
-		return new Canvas(title, width, height, Color.WHITE);
-	}
-
-	public static Canvas of(String title, int width, int height, Color bgColor) {
-		return new Canvas(title, width, height, bgColor);
+	
+    public static Canvas of(String title, String cabecera) {
+		return new Canvas(title,cabecera);
 	}
 
 	private JFrame frame;
     private CanvasPane canvas;
     private Graphics2D graphic;
-    private Color backgroundColor;
+    private Color backgroundColor = Color.WHITE;
     private Image canvasImage;
+    public Integer width = 1040;
+    public Integer height = 640;
+    public Integer widthBorder = 75;
+    public Integer heightBorder = 70;
+    public IntPunto2D x0;
+    public IntPunto2D x1;
+    public IntPunto2D x2;
+    public IntPunto2D x3;
+    public Integer widthCentral;
+    public Integer heightCentral;
+    public IntPunto2D origin;
+    public Integer n = 1;
+    
 
     /**
      * Create a Canvas.
@@ -49,16 +62,75 @@ public class Canvas {
      * @param height  the desired height for the canvas
      * @param bgColor  the desired background color of the canvas
      */
-    private Canvas(String title, int width, int height, Color bgColor) {
+    private Canvas(String title, String cabecera) {
         frame = new JFrame();
         canvas = new CanvasPane();
         frame.setContentPane(canvas);
         frame.setTitle(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        canvas.setPreferredSize(new Dimension(width, height));
-        backgroundColor = bgColor;
+        canvas.setPreferredSize(new Dimension(this.width, this.height));
+        this.x0 = IntPunto2D.of(this.widthBorder, this.heightBorder);
+        this.x1 = IntPunto2D.of(this.width - this.widthBorder, this.heightBorder);
+        this.x2 = IntPunto2D.of(this.widthBorder, this.height - this.heightBorder);
+        this.x3 = IntPunto2D.of(this.width - this.widthBorder, this.height - this.heightBorder);
+        this.origin = this.x2;
+        this.widthCentral = this.width - 2*this.widthBorder;
+        this.heightCentral = this.height - 2*this.heightBorder;
         frame.pack();
         setVisible(true);
+        Graphics2D gc = this.graphic();
+		gc.setStroke(new BasicStroke(2));        
+        this.drawLine(x0.x(),x0.y(), x1.x(), x1.y());
+        this.drawLine(x0.x(),x0.y(), x2.x(), x2.y());
+        this.drawLine(x2.x(),x2.y(), x3.x(), x3.y());
+        this.drawLine(x1.x(),x1.y(), x3.x(), x3.y()); 
+        Integer dx = this.widthCentral/5;
+        Integer dy = this.heightCentral/5;
+        for (int i = 1; i < 5; i++) {
+			this.drawString("|",x2.x()+i*dx,x2.y()+7);
+		}
+        for (int i = 1; i < 5; i++) {
+			this.drawString("_",x0.x()-7,x0.y()+i*dy);
+		}
+        Font trb = new Font("Sans_serif", Font.BOLD, 20);
+    	this.setFont(trb);
+    	this.drawString(cabecera,x0.x()+2*dx, x0.y()-30);
+    }
+    
+    public void drawData(String label, Color color, List<Double> xs, List<Double> ys, Boolean withEscala) {
+    	Preconditions.checkArgument(xs.size() == ys.size(), "Los tamaños deben ser iguales");
+    	Double xMin = xs.stream().min(Comparator.naturalOrder()).get();
+    	Double xMax = xs.stream().max(Comparator.naturalOrder()).get();
+    	Double yMin = ys.stream().min(Comparator.naturalOrder()).get();
+    	Double yMax = ys.stream().max(Comparator.naturalOrder()).get();
+    	Double xEscala = (xMax-xMin)/this.widthCentral;
+    	Double yEscala = (yMax-yMin)/this.heightCentral;
+    	this.setForegroundColor(color);
+    	List<Integer> xst = xs.stream().map(x->(x-xMin)/xEscala + this.origin.x()).map(x->x.intValue()).toList();
+    	List<Integer> yst = ys.stream().map(y->-(y-yMin)/yEscala + this.origin.y()).map(x->x.intValue()).toList();
+    	for (int i = 0; i < xst.size()-1; i++) {
+    		this.drawLine(xst.get(i),yst.get(i), xst.get(i+1), yst.get(i+1));
+    	}
+    	this.setForegroundColor(color);
+    	Font trb = new Font("Sans_serif", Font.BOLD, 18);
+    	this.setFont(trb);
+    	this.drawString(label,x0.x()+20, x0.y()+30*this.n);
+    	this.n++;
+    	if (withEscala) {
+    		trb = new Font("Sans_serif", Font.TRUETYPE_FONT, 14);
+        	this.setFont(trb);
+    		this.setForegroundColor(Color.BLACK);
+			Integer dx = this.widthCentral / 5;
+			Integer dy = this.heightCentral / 5;
+			Double dxv = (xMax - xMin) / 5;
+			Double dyv = (yMax - yMin) / 5;
+			for (int i = 0; i < 6; i++) {
+				this.drawString(String.format(Locale.US,"%.3g", xMin + i * dxv), x2.x() + i * dx, x2.y() + 30);
+			}
+			for (int i = 0; i < 6; i++) {
+				this.drawString(String.format(Locale.US,"%.3g", yMax - i * dyv), x0.x() - 65, x0.y() + i * dy);
+			} 
+		}
     }
     
     public Graphics2D graphic() {
@@ -356,5 +428,9 @@ public class Canvas {
 		public void paint(Graphics g) {
             g.drawImage(canvasImage, 0, 0, null);
         }
+    }
+    
+    public static record IntPunto2D(Integer x, Integer y) {
+    	public static IntPunto2D of(Integer x, Integer y) { return new IntPunto2D(x,y);}
     }
 }

@@ -1,4 +1,4 @@
-package us.lsi.curvefitting;
+package us.lsi.graphics;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,6 +8,8 @@ import org.apache.commons.math3.fitting.WeightedObservedPoint;
 
 import com.github.sh0nk.matplotlib4j.Plot;
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
+
+import us.lsi.curvefitting.DataCurveFitting;
 
 public class MatPlotLib {
 	

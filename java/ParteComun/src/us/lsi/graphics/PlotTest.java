@@ -1,8 +1,10 @@
-package us.lsi.curvefitting;
+package us.lsi.graphics;
 
 import java.io.IOException;
 
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
+
+import us.lsi.curvefitting.PolinomialLog;
 
 public class PlotTest {
 
