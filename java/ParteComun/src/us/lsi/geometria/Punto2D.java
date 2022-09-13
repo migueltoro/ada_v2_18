@@ -1,5 +1,7 @@
 package us.lsi.geometria;
 
+import us.lsi.common.Preconditions;
+
 public record Punto2D(Double x,Double y) implements Comparable<Punto2D>, ObjetoGeometrico2D {	
 
 	private static Punto2D cero = Punto2D.of(0.,0.);
@@ -77,12 +79,10 @@ public record Punto2D(Double x,Double y) implements Comparable<Punto2D>, ObjetoG
 	
 	@Override
 	public int compareTo(Punto2D p) {
-		if(p==null){
-	           throw new NullPointerException();
-	    }
+		Preconditions.checkNotNull(p,"El punto no puede ser null");
 		int r = x().compareTo(p.x());
 		if(r==0){
-			r = x().compareTo(p.x());
+			r = y().compareTo(p.y());
 		}
 		return r;
 	}

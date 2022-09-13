@@ -139,7 +139,7 @@ public class OtrosEjemplos {
 	}
 
 	public static void main(String[] args) {
-		ejemplo8();
+		ejemplo9();
 	}
 	
 }
